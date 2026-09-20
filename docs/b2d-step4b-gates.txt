@@ -1,0 +1,30 @@
+==========================================================================
+Batch 2D step 4b — gates for `margin-inline: 0` on .sf-fdetail__grid--solo
+==========================================================================
+
+[0] inputs
+    base dir _backup/b2d-step4b-baselines/base : 75 pages
+    new  dir _backup/b2d-step4b-baselines/new : 75 pages
+
+[1] resource inventory (which cache tokens moved?)
+    style.css          2.10.48 -> 2.10.49   on 75 page(s)
+    asset SET changed on 0 page(s) (must be 0)
+
+[2] masked comparison of the 75 pages (?ver= folded)
+    identical 75/75
+
+[3] style.css reconstruction (undo the declared edits)
+    base bytes 257381 / new bytes 257903 / undone bytes 257381
+    every declaration applied : YES
+    undone == base : YES   (c546caa331f54c78 vs c546caa331f54c78)
+
+[4] functions.php reconstruction (undo the declared edits)
+    base bytes 168850 / new bytes 168850 / undone bytes 168850
+    every declaration applied : YES
+    undone == base : YES   (1a8a31342e81be88 vs 1a8a31342e81be88)
+
+==========================================================================
+PASS — style.css is base + the two declared edits, byte for byte;
+       functions.php is base + the enqueue bump;
+       75/75 pages identical once the version token is folded.
+==========================================================================

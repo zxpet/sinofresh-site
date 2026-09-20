@@ -1,0 +1,35 @@
+==========================================================================
+Batch 2D step 4b — rendered evidence  (/formulas/ear-care-drops/, header: X-SF-Preflight: 1)
+==========================================================================
+
+[1] 1440 — alignment of the single card
+  PASS stylesheet really is the pre-flight copy       expected=href contains -preflight     actual=https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/style.css?ver=2.10.49
+  PASS the stylesheet served is 2.10.49               expected=ver=2.10.49                  actual=https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/style.css?ver=2.10.49
+      {"found": true, "rs": "complete", "w": 1440, "sheet": "https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/style.css?ver=2.10.49", "cls": "sf-fdetail__grid sf-fdetail__grid--solo", "gridLeft": 440, "gridRight": 1000, "gridW": 560, "h2Left": 120, "deltaVsH2": 320, "marginInlineStart": "402px", "maxWidth": "560px", "cardCount": 1, "cardLeft": 440, "cardW": 560, "hScroll": false}
+  PASS render is complete at 1440                     expected=complete / 1440              actual=complete / 1440
+  PASS exactly one card (the --solo state)            expected=1                            actual=1
+  PASS grid carries the --solo modifier               expected=--solo                       actual=sf-fdetail__grid sf-fdetail__grid--solo
+  PASS cap still 560px                                expected=560px                        actual=560px
+  FAIL grid left edge == Specification h2 left edge   expected=0px                          actual=320px
+  FAIL card left == h2 left (card does not float inside its track) expected=cardLeft == h2Left           actual=440 / 120
+  PASS no horizontal scroll at 1440                   expected=False                        actual=False
+
+[2] 1440 — negative control (neutralise the rule in-page)
+      "injected"
+      {"found": true, "rs": "complete", "w": 1440, "sheet": "https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/style.css?ver=2.10.49", "cls": "sf-fdetail__grid sf-fdetail__grid--solo", "gridLeft": 440, "gridRight": 1000, "gridW": 560, "h2Left": 120, "deltaVsH2": 320, "marginInlineStart": "402px", "maxWidth": "560px", "cardCount": 1, "cardLeft": 440, "cardW": 560, "hScroll": false}
+  FAIL card travels back to centre when the rule is neutralised expected=> +200px                     actual=0 px (440 -> 440)
+  PASS neutralised state is genuinely centred         expected=non-zero                     actual=402px
+
+[3] 375 — the same page on a phone
+      {"found": true, "rs": "complete", "w": 375, "sheet": "https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/style.css?ver=2.10.49", "cls": "sf-fdetail__grid sf-fdetail__grid--solo", "gridLeft": 20, "gridRight": 355, "gridW": 335, "h2Left": 20, "deltaVsH2": 0, "marginInlineStart": "0px", "maxWidth": "560px", "cardCount": 1, "cardLeft": 20, "cardW": 335, "hScroll": false}
+  PASS render is complete at 375                      expected=complete / 375               actual=complete / 375
+  PASS no horizontal scroll at 375                    expected=False                        actual=False
+  PASS card fits the phone measure                    expected=<= 375px                     actual=335px
+  PASS grid left edge still on the h2 edge at 375     expected=0px                          actual=0px
+
+==========================================================================
+FAIL — 12/15 checks pass
+  * grid left edge == Specification h2 left edge
+  * card left == h2 left (card does not float inside its track)
+  * card travels back to centre when the rule is neutralised
+==========================================================================

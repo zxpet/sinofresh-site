@@ -1,0 +1,118 @@
+{
+  "1440": {
+    "found": true,
+    "rs": "complete",
+    "w": 1440,
+    "sheet": "https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/style.css?ver=2.10.49",
+    "cls": "sf-fdetail__grid sf-fdetail__grid--solo",
+    "gridLeft": 440,
+    "gridRight": 1000,
+    "gridW": 560,
+    "h2Left": 120,
+    "deltaVsH2": 320,
+    "marginInlineStart": "402px",
+    "maxWidth": "560px",
+    "cardCount": 1,
+    "cardLeft": 440,
+    "cardW": 560,
+    "hScroll": false
+  },
+  "1440_neutralised": {
+    "found": true,
+    "rs": "complete",
+    "w": 1440,
+    "sheet": "https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/style.css?ver=2.10.49",
+    "cls": "sf-fdetail__grid sf-fdetail__grid--solo",
+    "gridLeft": 440,
+    "gridRight": 1000,
+    "gridW": 560,
+    "h2Left": 120,
+    "deltaVsH2": 320,
+    "marginInlineStart": "402px",
+    "maxWidth": "560px",
+    "cardCount": 1,
+    "cardLeft": 440,
+    "cardW": 560,
+    "hScroll": false
+  },
+  "375": {
+    "found": true,
+    "rs": "complete",
+    "w": 375,
+    "sheet": "https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/style.css?ver=2.10.49",
+    "cls": "sf-fdetail__grid sf-fdetail__grid--solo",
+    "gridLeft": 20,
+    "gridRight": 355,
+    "gridW": 335,
+    "h2Left": 20,
+    "deltaVsH2": 0,
+    "marginInlineStart": "0px",
+    "maxWidth": "560px",
+    "cardCount": 1,
+    "cardLeft": 20,
+    "cardW": 335,
+    "hScroll": false
+  },
+  "checks": [
+    {
+      "name": "stylesheet really is the pre-flight copy",
+      "ok": true
+    },
+    {
+      "name": "the stylesheet served is 2.10.49",
+      "ok": true
+    },
+    {
+      "name": "render is complete at 1440",
+      "ok": true
+    },
+    {
+      "name": "exactly one card (the --solo state)",
+      "ok": true
+    },
+    {
+      "name": "grid carries the --solo modifier",
+      "ok": true
+    },
+    {
+      "name": "cap still 560px",
+      "ok": true
+    },
+    {
+      "name": "grid left edge == Specification h2 left edge",
+      "ok": false
+    },
+    {
+      "name": "card left == h2 left (card does not float inside its track)",
+      "ok": false
+    },
+    {
+      "name": "no horizontal scroll at 1440",
+      "ok": true
+    },
+    {
+      "name": "card travels back to centre when the rule is neutralised",
+      "ok": false
+    },
+    {
+      "name": "neutralised state is genuinely centred",
+      "ok": true
+    },
+    {
+      "name": "render is complete at 375",
+      "ok": true
+    },
+    {
+      "name": "no horizontal scroll at 375",
+      "ok": true
+    },
+    {
+      "name": "card fits the phone measure",
+      "ok": true
+    },
+    {
+      "name": "grid left edge still on the h2 edge at 375",
+      "ok": true
+    }
+  ]
+}

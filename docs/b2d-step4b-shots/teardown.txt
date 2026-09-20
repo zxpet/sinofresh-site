@@ -1,0 +1,8 @@
+--- preflight log (/var/www/dev.zxpet.com/public/wp-content/mu-plugins/zz-sf-preflight.log) ---
+  83 /var/www/dev.zxpet.com/public/wp-content/mu-plugins/zz-sf-preflight.log
+  83 total
+--- removed; residual scan ---
+theme dir gone
+mu-plugin gone
+log gone
+zz-sf-dev-lockdown.php

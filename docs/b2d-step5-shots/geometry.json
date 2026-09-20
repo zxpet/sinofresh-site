@@ -1,0 +1,546 @@
+{
+  "soft-chews": {
+    "1440": {
+      "band": {
+        "bottom": 1209,
+        "h": 736,
+        "top": 472,
+        "w": 1440
+      },
+      "bandFirstHeading": {
+        "text": "Standard Formulas",
+        "top": 520
+      },
+      "breadcrumb": {
+        "bottom": 186,
+        "h": 18,
+        "top": 168,
+        "w": 1200
+      },
+      "buttons": [
+        {
+          "border": "0px",
+          "h": 48,
+          "text": "Browse Standard Formulas",
+          "w": 243
+        },
+        {
+          "border": "2px",
+          "h": 48,
+          "text": "Build Custom Formula",
+          "w": 203
+        }
+      ],
+      "docH": 7184,
+      "gapHeroToBand": 24,
+      "h1": {
+        "bottom": 268,
+        "h": 57,
+        "top": 210,
+        "w": 1200
+      },
+      "h2s": [
+        {
+          "id": "sf-sec-0",
+          "text": "Standard Formulas",
+          "top": 520
+        },
+        {
+          "id": "sf-sec-1",
+          "text": "Build Your Soft Chews Formula",
+          "top": 1281
+        },
+        {
+          "id": "sf-sec-2",
+          "text": "Active Ingredients & Guaranteed Analysis",
+          "top": 3188
+        },
+        {
+          "id": "sf-sec-3",
+          "text": "How We Work",
+          "top": 4528
+        },
+        {
+          "id": "sf-sec-4",
+          "text": "Frequently Asked Questions",
+          "top": 5158
+        },
+        {
+          "id": "sf-sec-5",
+          "text": "Related Dosage Forms",
+          "top": 5469
+        },
+        {
+          "id": "sf-sec-6",
+          "text": "Request a Soft Chews Quote",
+          "top": 6219
+        }
+      ],
+      "hScroll": false,
+      "hero": {
+        "bottom": 448,
+        "h": 328,
+        "top": 120,
+        "w": 1440
+      },
+      "innerHeight": 900,
+      "innerWidth": 1440,
+      "readyState": "complete",
+      "secOrder": [
+        "wp-block-group@120",
+        "formulas@472",
+        "configurator@1233",
+        "wp-block-group@2967",
+        "actives@3140",
+        "wp-block-group@4480",
+        "wp-block-group@5110",
+        "wp-block-group@5421",
+        "inquiry-form@5948"
+      ],
+      "spectable": {
+        "bottom": 3116,
+        "h": 149,
+        "top": 2967,
+        "w": 1440
+      },
+      "subtitle": {
+        "fontSize": "18px",
+        "text": "8 dosage forms · FDA, cGMP, ISO 9001, FSSC 22000, HACCP, BRC · Flexible MOQ · Export to 30+ countries"
+      },
+      "tocRail": {
+        "count": 14,
+        "display": "block",
+        "dots": [
+          374,
+          374,
+          374,
+          398,
+          398,
+          398,
+          422,
+          422,
+          422,
+          446,
+          446,
+          446,
+          470,
+          470,
+          470,
+          494,
+          494,
+          494,
+          518,
+          518,
+          518
+        ]
+      }
+    },
+    "375": {
+      "band": {
+        "bottom": 2727,
+        "h": 2113,
+        "top": 614,
+        "w": 375
+      },
+      "bandFirstHeading": {
+        "text": "Standard Formulas",
+        "top": 662
+      },
+      "breadcrumb": {
+        "bottom": 148,
+        "h": 17,
+        "top": 131,
+        "w": 335
+      },
+      "buttons": [
+        {
+          "border": "0px",
+          "h": 48,
+          "text": "Browse Standard Formulas",
+          "w": 243
+        },
+        {
+          "border": "2px",
+          "h": 48,
+          "text": "Build Custom Formula",
+          "w": 203
+        }
+      ],
+      "docH": 11732,
+      "gapHeroToBand": 24,
+      "h1": {
+        "bottom": 291,
+        "h": 119,
+        "top": 172,
+        "w": 335
+      },
+      "h2s": [
+        {
+          "id": "sf-sec-0",
+          "text": "Standard Formulas",
+          "top": 662
+        },
+        {
+          "id": "sf-sec-1",
+          "text": "Build Your Soft Chews Formula",
+          "top": 2783
+        },
+        {
+          "id": "sf-sec-2",
+          "text": "Active Ingredients & Guaranteed Analysis",
+          "top": 6196
+        },
+        {
+          "id": "sf-sec-3",
+          "text": "How We Work",
+          "top": 7853
+        },
+        {
+          "id": "sf-sec-4",
+          "text": "Frequently Asked Questions",
+          "top": 8719
+        },
+        {
+          "id": "sf-sec-5",
+          "text": "Related Dosage Forms",
+          "top": 9096
+        },
+        {
+          "id": "sf-sec-6",
+          "text": "Request a Soft Chews Quote",
+          "top": 9950
+        }
+      ],
+      "hScroll": false,
+      "hero": {
+        "bottom": 590,
+        "h": 499,
+        "top": 91,
+        "w": 375
+      },
+      "innerHeight": 900,
+      "innerWidth": 375,
+      "readyState": "complete",
+      "secOrder": [
+        "wp-block-group@91",
+        "formulas@614",
+        "configurator@2751",
+        "wp-block-group@5810",
+        "actives@6148",
+        "wp-block-group@7805",
+        "wp-block-group@8671",
+        "wp-block-group@9048",
+        "inquiry-form@9902"
+      ],
+      "spectable": {
+        "bottom": 6124,
+        "h": 314,
+        "top": 5810,
+        "w": 375
+      },
+      "subtitle": {
+        "fontSize": "18px",
+        "text": "8 dosage forms · FDA, cGMP, ISO 9001, FSSC 22000, HACCP, BRC · Flexible MOQ · Export to 30+ countries"
+      },
+      "tocRail": {
+        "count": 14,
+        "display": "none",
+        "dots": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      }
+    }
+  },
+  "tablets": {
+    "1440": {
+      "band": {
+        "bottom": 1231,
+        "h": 759,
+        "top": 472,
+        "w": 1440
+      },
+      "bandFirstHeading": {
+        "text": "Standard Formulas",
+        "top": 520
+      },
+      "breadcrumb": {
+        "bottom": 186,
+        "h": 18,
+        "top": 168,
+        "w": 1200
+      },
+      "buttons": [
+        {
+          "border": "0px",
+          "h": 48,
+          "text": "Browse Standard Formulas",
+          "w": 243
+        },
+        {
+          "border": "2px",
+          "h": 48,
+          "text": "Build Custom Formula",
+          "w": 203
+        }
+      ],
+      "docH": 6665,
+      "gapHeroToBand": 24,
+      "h1": {
+        "bottom": 268,
+        "h": 57,
+        "top": 210,
+        "w": 1200
+      },
+      "h2s": [
+        {
+          "id": "sf-sec-0",
+          "text": "Standard Formulas",
+          "top": 520
+        },
+        {
+          "id": "sf-sec-1",
+          "text": "Build Your Tablets Formula",
+          "top": 1303
+        },
+        {
+          "id": "sf-sec-2",
+          "text": "Active Ingredients & Guaranteed Analysis",
+          "top": 2850
+        },
+        {
+          "id": "sf-sec-3",
+          "text": "How We Work",
+          "top": 3953
+        },
+        {
+          "id": "sf-sec-4",
+          "text": "Frequently Asked Questions",
+          "top": 4583
+        },
+        {
+          "id": "sf-sec-5",
+          "text": "Related Dosage Forms",
+          "top": 4951
+        },
+        {
+          "id": "sf-sec-6",
+          "text": "Request a Tablets Quote",
+          "top": 5700
+        }
+      ],
+      "hScroll": false,
+      "hero": {
+        "bottom": 448,
+        "h": 328,
+        "top": 120,
+        "w": 1440
+      },
+      "innerHeight": 900,
+      "innerWidth": 1440,
+      "readyState": "complete",
+      "secOrder": [
+        "wp-block-group@120",
+        "formulas@472",
+        "configurator@1255",
+        "wp-block-group@2630",
+        "actives@2802",
+        "wp-block-group@3905",
+        "wp-block-group@4535",
+        "wp-block-group@4903",
+        "inquiry-form@5430"
+      ],
+      "spectable": {
+        "bottom": 2778,
+        "h": 149,
+        "top": 2630,
+        "w": 1440
+      },
+      "subtitle": {
+        "fontSize": "18px",
+        "text": "8 dosage forms · FDA, cGMP, ISO 9001, FSSC 22000, HACCP, BRC · Flexible MOQ · Export to 30+ countries"
+      },
+      "tocRail": {
+        "count": 14,
+        "display": "block",
+        "dots": [
+          374,
+          374,
+          374,
+          398,
+          398,
+          398,
+          422,
+          422,
+          422,
+          446,
+          446,
+          446,
+          470,
+          470,
+          470,
+          494,
+          494,
+          494,
+          518,
+          518,
+          518
+        ]
+      }
+    },
+    "375": {
+      "band": {
+        "bottom": 2267,
+        "h": 1653,
+        "top": 614,
+        "w": 375
+      },
+      "bandFirstHeading": {
+        "text": "Standard Formulas",
+        "top": 662
+      },
+      "breadcrumb": {
+        "bottom": 148,
+        "h": 17,
+        "top": 131,
+        "w": 335
+      },
+      "buttons": [
+        {
+          "border": "0px",
+          "h": 48,
+          "text": "Browse Standard Formulas",
+          "w": 243
+        },
+        {
+          "border": "2px",
+          "h": 48,
+          "text": "Build Custom Formula",
+          "w": 203
+        }
+      ],
+      "docH": 10191,
+      "gapHeroToBand": 24,
+      "h1": {
+        "bottom": 291,
+        "h": 119,
+        "top": 172,
+        "w": 335
+      },
+      "h2s": [
+        {
+          "id": "sf-sec-0",
+          "text": "Standard Formulas",
+          "top": 662
+        },
+        {
+          "id": "sf-sec-1",
+          "text": "Build Your Tablets Formula",
+          "top": 2323
+        },
+        {
+          "id": "sf-sec-2",
+          "text": "Active Ingredients & Guaranteed Analysis",
+          "top": 4925
+        },
+        {
+          "id": "sf-sec-3",
+          "text": "How We Work",
+          "top": 6290
+        },
+        {
+          "id": "sf-sec-4",
+          "text": "Frequently Asked Questions",
+          "top": 7156
+        },
+        {
+          "id": "sf-sec-5",
+          "text": "Related Dosage Forms",
+          "top": 7574
+        },
+        {
+          "id": "sf-sec-6",
+          "text": "Request a Tablets Quote",
+          "top": 8409
+        }
+      ],
+      "hScroll": false,
+      "hero": {
+        "bottom": 590,
+        "h": 499,
+        "top": 91,
+        "w": 375
+      },
+      "innerHeight": 900,
+      "innerWidth": 375,
+      "readyState": "complete",
+      "secOrder": [
+        "wp-block-group@91",
+        "formulas@614",
+        "configurator@2291",
+        "wp-block-group@4539",
+        "actives@4877",
+        "wp-block-group@6242",
+        "wp-block-group@7108",
+        "wp-block-group@7526",
+        "inquiry-form@8361"
+      ],
+      "spectable": {
+        "bottom": 4853,
+        "h": 314,
+        "top": 4539,
+        "w": 375
+      },
+      "subtitle": {
+        "fontSize": "18px",
+        "text": "8 dosage forms · FDA, cGMP, ISO 9001, FSSC 22000, HACCP, BRC · Flexible MOQ · Export to 30+ countries"
+      },
+      "tocRail": {
+        "count": 14,
+        "display": "none",
+        "dots": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      }
+    }
+  }
+}
