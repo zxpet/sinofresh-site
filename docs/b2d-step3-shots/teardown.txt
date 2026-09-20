@@ -1,0 +1,67 @@
+=== BEFORE teardown ===
+-- mu-plugins --
+zz-sf-dev-lockdown.php
+zz-sf-preflight.php
+-- debug.log (size mtime) --
+594 2026-09-19 22:56:08.893472585 +0000
+-- httpd error_log --
+2072 2026-09-20 14:18:42.092740676 +0000
+-- anonymous --
+http=401
+-- credentialed: style dir + ver --
+themes/sinofresh-theme/style.css?ver=2.10.47
+-- credentialed + X-SF-Preflight: style dir + ver --
+themes/sinofresh-theme-preflight/style.css?ver=2.10.47
+
+=== REMOVE ===
+--- preflight log (/var/www/dev.zxpet.com/public/wp-content/mu-plugins/zz-sf-preflight.log) ---
+  1 /var/www/dev.zxpet.com/public/wp-content/mu-plugins/zz-sf-preflight.log
+  1 total
+--- removed; residual scan ---
+theme dir gone
+mu-plugin gone
+log gone
+zz-sf-dev-lockdown.php
+
+=== AFTER teardown ===
+-- status --
+no preflight theme
+no preflight mu-plugin
+no preflight log
+zz-sf-dev-lockdown.php
+-- anonymous --
+http=401
+-- credentialed: style dir + ver --
+themes/sinofresh-theme/style.css?ver=2.10.47
+-- credentialed + X-SF-Preflight: style dir + ver (must NOT be a preflight copy) --
+themes/sinofresh-theme/style.css?ver=2.10.47
+-- detail page still carries the moved-in band --
+1
+-- gallery section present --
+<section id="gallery" class="wp-block-group sf-gallery has-bg-light-background-color has-background is-layout-constrained wp-block-group-is-layout-constrained" style="padding-top:var(--wp--preset--spacing--80);padding-bottom:var(--wp--preset--spacing--80)"
+-- dosage page: the band is gone again --
+0
+-- logs after --
+debug.log 594 2026-09-19 22:56:08.893472585 +0000
+error_log 2072 2026-09-20 14:18:42.092740676 +0000
+
+-- dev.zxpet.com-ssl-error.log (the step-0 baseline file) --
+   before step 3: 1494 bytes  mtime 2026-09-20 19:31:11
+   after step 3:  1494 bytes  mtime 2026-09-20 19:31:11.736660376 +0000
+   verdict: byte-identical — zero lines logged across push, pull, preflight install, four gates, E2E and teardown
+
+=== RE-VERIFY (after the quick check) ===
+-- preflight status --
+no preflight theme
+no preflight mu-plugin
+no preflight log
+zz-sf-dev-lockdown.php
+-- anonymous / credentialed --
+   anonymous: 401
+   credentialed: 200
+-- with the preflight header (must be the live theme) --
+themes/sinofresh-theme/style.css?ver=2.10.47
+-- which theme dir the gallery script comes from --
+themes/sinofresh-theme/assets/js/formula-gallery.js?ver=1.0.0
+-- log baseline --
+   dev.zxpet.com-ssl-error.log: 1494 bytes  mtime 2026-09-20 19:31:11.736660376 +0000

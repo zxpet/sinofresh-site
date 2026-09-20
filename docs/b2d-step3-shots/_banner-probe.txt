@@ -1,0 +1,257 @@
+A. desktop, first load  (1440x900)
+{
+  "vw": 1440,
+  "vh": 900,
+  "banner": {
+    "sel": ".sf-cookie-banner",
+    "w": 0,
+    "h": 0,
+    "top": 0,
+    "left": 0,
+    "display": "none",
+    "visibility": "visible",
+    "opacity": "1",
+    "position": "fixed",
+    "zIndex": "9999",
+    "inViewport": false,
+    "hit": "DIV.wp-block-group sf-topbar has-t",
+    "topmost": false
+  },
+  "accept": {
+    "sel": ".sf-cookie-banner__btn--accept",
+    "w": 0,
+    "h": 0,
+    "top": 0,
+    "left": 0,
+    "display": "block",
+    "visibility": "visible",
+    "opacity": "1",
+    "position": "static",
+    "zIndex": "auto",
+    "inViewport": false,
+    "hit": "DIV.wp-block-group sf-topbar has-t",
+    "topmost": false
+  },
+  "topbar": {
+    "sel": ".sf-topbar",
+    "w": 1440,
+    "h": 39,
+    "top": 0,
+    "left": 0,
+    "display": "flex",
+    "visibility": "visible",
+    "opacity": "1",
+    "position": "static",
+    "zIndex": "auto",
+    "inViewport": true,
+    "hit": "DIV.wp-block-group sf-topbar has-t",
+    "topmost": true
+  }
+}
+
+B. small, fresh load  (375x667)
+{
+  "vw": 375,
+  "vh": 667,
+  "banner": {
+    "sel": ".sf-cookie-banner",
+    "w": 0,
+    "h": 0,
+    "top": 0,
+    "left": 0,
+    "display": "none",
+    "visibility": "visible",
+    "opacity": "1",
+    "position": "fixed",
+    "zIndex": "9999",
+    "inViewport": false,
+    "hit": "DIV.wp-block-group sf-topbar has-t",
+    "topmost": false
+  },
+  "accept": {
+    "sel": ".sf-cookie-banner__btn--accept",
+    "w": 0,
+    "h": 0,
+    "top": 0,
+    "left": 0,
+    "display": "block",
+    "visibility": "visible",
+    "opacity": "1",
+    "position": "static",
+    "zIndex": "auto",
+    "inViewport": false,
+    "hit": "DIV.wp-block-group sf-topbar has-t",
+    "topmost": false
+  },
+  "topbar": {
+    "sel": ".sf-topbar",
+    "w": 375,
+    "h": 26,
+    "top": 0,
+    "left": 0,
+    "display": "flex",
+    "visibility": "visible",
+    "opacity": "1",
+    "position": "static",
+    "zIndex": "auto",
+    "inViewport": true,
+    "hit": "DIV.wp-block-group sf-topbar has-t",
+    "topmost": true
+  }
+}
+
+C. desktop again, fresh load  (1280x900)
+{
+  "vw": 1280,
+  "vh": 900,
+  "banner": {
+    "sel": ".sf-cookie-banner",
+    "w": 0,
+    "h": 0,
+    "top": 0,
+    "left": 0,
+    "display": "none",
+    "visibility": "visible",
+    "opacity": "1",
+    "position": "fixed",
+    "zIndex": "9999",
+    "inViewport": false,
+    "hit": "DIV.wp-block-group sf-topbar has-t",
+    "topmost": false
+  },
+  "accept": {
+    "sel": ".sf-cookie-banner__btn--accept",
+    "w": 0,
+    "h": 0,
+    "top": 0,
+    "left": 0,
+    "display": "block",
+    "visibility": "visible",
+    "opacity": "1",
+    "position": "static",
+    "zIndex": "auto",
+    "inViewport": false,
+    "hit": "DIV.wp-block-group sf-topbar has-t",
+    "topmost": false
+  },
+  "topbar": {
+    "sel": ".sf-topbar",
+    "w": 1280,
+    "h": 39,
+    "top": 0,
+    "left": 0,
+    "display": "flex",
+    "visibility": "visible",
+    "opacity": "1",
+    "position": "static",
+    "zIndex": "auto",
+    "inViewport": true,
+    "hit": "DIV.wp-block-group sf-topbar has-t",
+    "topmost": true
+  }
+}
+
+D. after accepting (clicked=False), same load
+{
+  "vw": 1280,
+  "vh": 900,
+  "banner": {
+    "sel": ".sf-cookie-banner",
+    "w": 0,
+    "h": 0,
+    "top": 0,
+    "left": 0,
+    "display": "none",
+    "visibility": "visible",
+    "opacity": "1",
+    "position": "fixed",
+    "zIndex": "9999",
+    "inViewport": false,
+    "hit": "DIV.wp-block-group sf-topbar has-t",
+    "topmost": false
+  },
+  "accept": {
+    "sel": ".sf-cookie-banner__btn--accept",
+    "w": 0,
+    "h": 0,
+    "top": 0,
+    "left": 0,
+    "display": "block",
+    "visibility": "visible",
+    "opacity": "1",
+    "position": "static",
+    "zIndex": "auto",
+    "inViewport": false,
+    "hit": "DIV.wp-block-group sf-topbar has-t",
+    "topmost": false
+  },
+  "topbar": {
+    "sel": ".sf-topbar",
+    "w": 1280,
+    "h": 39,
+    "top": 0,
+    "left": 0,
+    "display": "flex",
+    "visibility": "visible",
+    "opacity": "1",
+    "position": "static",
+    "zIndex": "auto",
+    "inViewport": true,
+    "hit": "DIV.wp-block-group sf-topbar has-t",
+    "topmost": true
+  }
+}
+
+E. after accepting, RELOADED at 1280x900
+{
+  "vw": 1280,
+  "vh": 900,
+  "banner": {
+    "sel": ".sf-cookie-banner",
+    "w": 0,
+    "h": 0,
+    "top": 0,
+    "left": 0,
+    "display": "none",
+    "visibility": "visible",
+    "opacity": "1",
+    "position": "fixed",
+    "zIndex": "9999",
+    "inViewport": false,
+    "hit": "DIV.wp-block-group sf-topbar has-t",
+    "topmost": false
+  },
+  "accept": {
+    "sel": ".sf-cookie-banner__btn--accept",
+    "w": 0,
+    "h": 0,
+    "top": 0,
+    "left": 0,
+    "display": "block",
+    "visibility": "visible",
+    "opacity": "1",
+    "position": "static",
+    "zIndex": "auto",
+    "inViewport": false,
+    "hit": "DIV.wp-block-group sf-topbar has-t",
+    "topmost": false
+  },
+  "topbar": {
+    "sel": ".sf-topbar",
+    "w": 1280,
+    "h": 39,
+    "top": 0,
+    "left": 0,
+    "display": "flex",
+    "visibility": "visible",
+    "opacity": "1",
+    "position": "static",
+    "zIndex": "auto",
+    "inViewport": true,
+    "hit": "DIV.wp-block-group sf-topbar has-t",
+    "topmost": true
+  }
+}
+
+E. real_click on the accept button after reload: False
+

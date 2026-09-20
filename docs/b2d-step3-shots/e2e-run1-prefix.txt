@@ -1,0 +1,71 @@
+=== E. no-JS contract, from the server HTML (static) ===
+  [PASS] server HTML: four frames                                     expect=4 got=4
+  [PASS] server HTML: frames 2-4 carry hidden                         expect=3 got=3
+  [PASS] server HTML: frame 1 has no hidden                           expect=0 got=0
+  [PASS] server HTML: thumbnail strip is not shipped                  expect=0 got=0
+  [PASS] server HTML: frame 1 image is eager                          expect=True got=True
+       (the strip is built by formula-gallery.js; absent it, the band
+        is the main photo + heading — that is the documented contract)
+  [PASS] cookie banner out of the way before gallery clicks           expect=True got=True
+
+=== A. detail band at 1440x900 ===
+  [PASS] no dot track on a formula detail page                        expect=True got=True
+  [PASS] no section ids named sf-sec-*                                expect=0 got=0
+       dom: {"roots": 1, "frames": 4, "thumbs": 4, "stripRole": "tablist", "stageRole": "tabpanel", "firstTag": "FIGURE", "firstDisplay": "block", "firstVisibility": "visible", "firstHidden": false, "firstOff": false, "imgW": 680, "imgH": 680, "imgDisplay": "block", "natural": 720, "depth": 1}
+  [PASS] exactly one gallery root                                     expect=1 got=1
+  [PASS] four frames in the stage                                     expect=4 got=4
+  [PASS] four thumbs derived by the script                            expect=4 got=4
+  [PASS] strip exposes role=tablist                                   expect='tablist' got='tablist'
+  [PASS] stage exposes role=tabpanel                                  expect='tabpanel' got='tabpanel'
+  [PASS] frame 1 is a <figure> and is the visible one                 expect=(True, False, False) got=(True, False, False)
+  [PASS] frame 1 image visible with a real bitmap                     expect=True got=True
+  [PASS] the band is a top-level section                              expect=1 got=1
+  [PASS] actives band rendered                                        expect=True got=True
+  [PASS] composition band absent (its meta is empty)                  expect=False got=False
+
+=== B. thumbnail clicks (real mouse, hit-validated) ===
+  [PASS] initial frame is 1                                           expect=('1', 'soft-chews.webp') got=('1', 'soft-chews.webp')
+  [PASS] thumb 2 brings frame 2, fac-placeholder.webp                 expect=('2', 'fac-placeholder.webp') got=('2', 'fac-placeholder.webp')
+  [PASS]   panel label tracks frame 2                                 expect=True got=True
+  [PASS] thumb 3 brings frame 3, fac-packaging.webp                   expect=('3', 'fac-packaging.webp') got=('3', 'fac-packaging.webp')
+  [PASS]   panel label tracks frame 3                                 expect=True got=True
+  [PASS] thumb 4 brings frame 4, fac-line.webp                        expect=('4', 'fac-line.webp') got=('4', 'fac-line.webp')
+  [PASS]   panel label tracks frame 4                                 expect=True got=True
+  [PASS] thumb 1 returns to the product photo                         expect=('1', 'soft-chews.webp') got=('1', 'soft-chews.webp')
+
+=== C. keyboard roaming ===
+       focused: sf-gallery-tab-soft-chews-1
+  [PASS] ArrowRight -> frame 2                                        expect='2' got='2'
+  [PASS] ArrowRight -> frame 3                                        expect='3' got='3'
+  [PASS] ArrowLeft -> frame 2                                         expect='2' got='2'
+  [PASS] End -> frame 4                                               expect='4' got='4'
+  [PASS] Home -> frame 1                                              expect='1' got='1'
+
+=== D. drag direction ===
+  [PASS] drag right goes back a frame                                 expect=('1', '4') got=('1', '4')
+  [PASS] drag left goes forward a frame                               expect=('4', '1') got=('4', '1')
+  [PASS] a vertical drag switches nothing                             expect='1' got='1'
+
+=== F. 375x667 ===
+      !! real_click: .sf-cookie-banner__btn--accept centre outside the viewport {'x': 0, 'y': 0, 'inViewport': False, 'hitTag': 'DIV', 'hitCls': 'wp-block-group sf-topbar has-text-second', 'reachable': False}
+      !! cookie banner not dismissed — later click checks may fail for this reason alone
+       small: {"vw": 375, "docScrollW": 375, "bodyScrollW": 375, "overflowX": false, "wideCount": 0, "wide": [], "strip": {"clientW": 299, "scrollW": 372, "scrollable": true, "snap": "x mandatory", "overflowXcss": "auto"}}
+  [PASS] 375px: no horizontal overflow                                expect=False got=False
+  [PASS] 375px: nothing wider than the viewport                       expect=0 got=0
+  [PASS] 375px: the strip scrolls inside itself                       expect=True got=True
+  [FAIL] 375px: the strip uses scroll-snap                            expect=True got=False
+  [PASS] 375px: the band still has four thumbs                        expect=4 got=4
+
+=== G. zh detail page ===
+      !! real_click: .sf-cookie-banner__btn--accept centre outside the viewport {'x': 0, 'y': 0, 'inViewport': False, 'hitTag': 'DIV', 'hitCls': 'wp-block-group sf-topbar has-text-second', 'reachable': False}
+      !! cookie banner not dismissed — later click checks may fail for this reason alone
+       zh: {"roots": 1, "frames": 4, "thumbs": 4, "hasToc": false, "label": "SINO FRESH Soft Chews private label pet supplement product"}
+  [PASS] zh: one gallery root                                         expect=1 got=1
+  [PASS] zh: four frames                                              expect=4 got=4
+  [PASS] zh: four thumbs                                              expect=4 got=4
+  [PASS] zh: no dot track                                             expect=False got=False
+  [PASS] zh: thumb 3 brings frame 3 (fac-packaging)                   expect=('3', 'fac-packaging.webp') got=('3', 'fac-packaging.webp')
+
+==========================================================================
+FAIL  browser E2E: 44 checks, 1 failed
+==========================================================================

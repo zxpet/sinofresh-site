@@ -1,0 +1,53 @@
+==========================================================================
+Batch 2D Step 3 — confinement gates
+base=_backup/b2d-s3-baselines/base (75 pages)   new=_backup/b2d-s3-baselines/new (75 pages)
+==========================================================================
+
+[1] ver inventory
+    ADDED   formula-gallery.js         1.0.0      on 42 page(s)
+    REMOVED formula-gallery.js         1.0.0      on 16 page(s)
+    CHANGED style.css                  2.10.46 -> 2.10.47 on 75 page(s)
+    verdict: PASS — style.css 2.10.46 -> 2.10.47 on 75; formula-gallery.js 1.0.0 arrives on 42 detail pages and leaves the 16 dosage pages; no other asset token moved
+
+[2] confinement, [3] script tag, [4] structure
+
+    -- dosage-en (8 pages) --
+       products__dental-chews.html                    pure deletion (2186 B)
+       products__drops.html                           pure deletion (2067 B)
+       products__fish-oil.html                        pure deletion (2118 B)
+       ... 5 more, all see report
+
+    -- dosage-zh (8 pages) --
+       zh__products__dental-chews.html                pure deletion (2186 B)
+       zh__products__drops.html                       pure deletion (2067 B)
+       zh__products__fish-oil.html                    pure deletion (2118 B)
+       ... 5 more, all see report
+
+    -- detail-en (21 pages) --
+       formulas__bladder-support-powder.html          moved+added (mid 905/3628 B)
+       formulas__calcium-phosphorus-tablets.html      moved+added (mid 987/3928 B)
+       formulas__calming-soft-chews.html              moved+added (mid 977/3993 B)
+       ... 18 more, all see report
+
+    -- detail-zh (21 pages) --
+       zh__formulas__bladder-support-powder.html      moved+added (mid 905/3628 B)
+       zh__formulas__calcium-phosphorus-tablets.html  moved+added (mid 987/3928 B)
+       zh__formulas__calming-soft-chews.html          moved+added (mid 977/3993 B)
+       ... 18 more, all see report
+
+    -- other (17 pages) --
+       about.html                                     identical
+       blog.html                                      identical
+       contact.html                                   identical
+       ... 14 more, all same verdict
+
+[3] script tag summary
+    new has it on exactly the 42 detail pages: yes
+
+[4] structure summary
+    42/42 gallery+actives units match their patterns, composition empty, band data == card data: yes
+
+==========================================================================
+PASS — 75/75 pages: 16 pure deletions, 42 move+add, 17 untouched;
+       42/42 added units match their patterns and carry the record's own data.
+==========================================================================

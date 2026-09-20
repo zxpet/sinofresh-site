@@ -1,0 +1,14 @@
+  S0 freshly loaded, 2.5s            {"bannerDisplay": "block", "bannerH": 76, "btnW": 104, "btnH": 44, "cx": 858, "cy": 862, "hit": "BUTTON.sf-cookie-banner__btn sf", "reachable": true}
+  S1 after scrollIntoView + 0.4s     {"bannerDisplay": "block", "bannerH": 76, "btnW": 104, "btnH": 44, "cx": 858, "cy": 862, "hit": "BUTTON.sf-cookie-banner__btn sf", "reachable": true}
+  S1 reachability probe              {"x": 858, "y": 862, "inViewport": true, "hitTag": "BUTTON", "reachable": true}
+  S2 after mouse move + 0.15s        {"bannerDisplay": "block", "bannerH": 76, "btnW": 104, "btnH": 44, "cx": 858, "cy": 862, "hit": "BUTTON.sf-cookie-banner__btn sf", "reachable": true}
+  S2 reachability probe              {"x": 858, "y": 862, "inViewport": true, "hitTag": "BUTTON", "reachable": true}
+  S3 after mouse down/up + 0.8s      {"bannerDisplay": "none", "bannerH": 0, "btnW": 0, "btnH": 0, "cx": 0, "cy": 0, "hit": "DIV.wp-block-group sf-topbar", "reachable": false}
+
+  --- later navigation in the same session ---
+  S4 reloaded, 2.5s                  {"bannerDisplay": "none", "bannerH": 0, "btnW": 0, "btnH": 0, "cx": 0, "cy": 0, "hit": "DIV.wp-block-group sf-topbar", "reachable": false}
+  S4 real_click returned False
+  S5 after real_click on the reload  {"bannerDisplay": "none", "bannerH": 0, "btnW": 0, "btnH": 0, "cx": 0, "cy": 0, "hit": "DIV.wp-block-group sf-topbar", "reachable": false}
+
+  --- does a fresh daemon reset it? ---
+  S6 new session, 2.5s               {"bannerDisplay": "block", "bannerH": 76, "btnW": 104, "btnH": 44, "cx": 858, "cy": 862, "hit": "BUTTON.sf-cookie-banner__btn sf", "reachable": true}

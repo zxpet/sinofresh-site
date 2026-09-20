@@ -1,0 +1,26 @@
+=== 1. thumbnail click at 1440x900 ===
+       initial: {"slot": "1", "file": "drops.webp"}
+  [PASS] starts on frame 1 (drops.webp)                       expect=('1', 'drops.webp') got=('1', 'drops.webp')
+       thumb id prefix (data-gallery): drops
+  [PASS] the strip is 4 thumbs                                expect=4 got=4
+       after clicking thumb 2: {"slot": "2", "file": "fac-placeholder.webp"}
+  [PASS] clicking thumb 2 switches the main image             expect=('2', 'fac-placeholder.webp') got=('2', 'fac-placeholder.webp')
+
+=== 4. keyboard ===
+       focused: sf-gallery-tab-drops-1
+  [PASS] keyboard starts from frame 1                         expect='1' got='1'
+  [PASS] ArrowRight moves to frame 2                          expect='2' got='2'
+  [PASS] ArrowRight moves to frame 3                          expect='3' got='3'
+  [PASS] ArrowLeft moves back to frame 2                      expect='2' got='2'
+  [PASS] Home returns to frame 1                              expect='1' got='1'
+
+=== 2. 375px horizontal overflow ===
+       measured: {"innerWidth": 375, "ready": "complete", "thumbs": 4, "scrollWidth": 375, "clientWidth": 375, "bodyScrollWidth": 375, "overflow": false, "bannerShown": true, "bannerBox": [375, 266], "strip": {"client": 299, "scroll": 372}}
+  [PASS] the page is fully loaded at 375                      expect='complete' got='complete'
+  [PASS] the viewport really is 375 wide                      expect=375 got=375
+  [PASS] at 375 the strip exists (4 thumbs)                   expect=4 got=4
+  [PASS] document.scrollWidth == clientWidth                  expect=True got=True
+
+==========================================================================
+PASS  quick check: 12 checks, 0 failed
+==========================================================================

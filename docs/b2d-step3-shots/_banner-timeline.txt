@@ -1,0 +1,43 @@
+  t= 0.17s  display=block   h=76   btnH=44   top=824   scrollY=0
+  t= 0.61s  display=block   h=76   btnH=44   top=824   scrollY=0
+  t= 1.04s  display=block   h=76   btnH=44   top=824   scrollY=0
+  t= 1.47s  display=block   h=76   btnH=44   top=824   scrollY=0
+  t= 1.91s  display=block   h=76   btnH=44   top=824   scrollY=0
+  t= 2.34s  display=block   h=76   btnH=44   top=824   scrollY=0
+  t= 2.78s  display=block   h=76   btnH=44   top=824   scrollY=0
+  t= 3.22s  display=block   h=76   btnH=44   top=824   scrollY=0
+  t= 3.66s  display=block   h=76   btnH=44   top=824   scrollY=0
+  t= 4.09s  display=block   h=76   btnH=44   top=824   scrollY=0
+  t= 4.52s  display=block   h=76   btnH=44   top=824   scrollY=0
+  t= 4.96s  display=block   h=76   btnH=44   top=824   scrollY=0
+  t= 5.39s  display=block   h=76   btnH=44   top=824   scrollY=0
+  t= 5.82s  display=block   h=76   btnH=44   top=824   scrollY=0
+  t= 6.25s  display=block   h=76   btnH=44   top=824   scrollY=0
+  t= 6.69s  display=block   h=76   btnH=44   top=824   scrollY=0
+  t= 7.12s  display=block   h=76   btnH=44   top=824   scrollY=0
+  t= 7.56s  display=block   h=76   btnH=44   top=824   scrollY=0
+  t= 8.00s  display=block   h=76   btnH=44   top=824   scrollY=0
+  t= 8.43s  display=block   h=76   btnH=44   top=824   scrollY=0
+  t= 8.87s  display=block   h=76   btnH=44   top=824   scrollY=0
+  t= 9.31s  display=block   h=76   btnH=44   top=824   scrollY=0
+  t= 9.74s  display=block   h=76   btnH=44   top=824   scrollY=0
+  t=10.17s  display=block   h=76   btnH=44   top=824   scrollY=0
+  t=10.61s  display=block   h=76   btnH=44   top=824   scrollY=0
+  t=11.04s  display=block   h=76   btnH=44   top=824   scrollY=0
+  t=11.48s  display=block   h=76   btnH=44   top=824   scrollY=0
+  t=11.90s  display=block   h=76   btnH=44   top=824   scrollY=0
+  t=12.34s  display=block   h=76   btnH=44   top=824   scrollY=0
+  t=12.77s  display=block   h=76   btnH=44   top=824   scrollY=0
+  t=13.20s  display=block   h=76   btnH=44   top=824   scrollY=0
+  t=13.65s  display=block   h=76   btnH=44   top=824   scrollY=0
+  t=14.08s  display=block   h=76   btnH=44   top=824   scrollY=0
+  t=14.52s  display=block   h=76   btnH=44   top=824   scrollY=0
+  t=14.95s  display=block   h=76   btnH=44   top=824   scrollY=0
+  t=15.39s  display=block   h=76   btnH=44   top=824   scrollY=0
+  t=15.83s  display=block   h=76   btnH=44   top=824   scrollY=0
+  t=16.27s  display=block   h=76   btnH=44   top=824   scrollY=0
+  t=16.71s  display=block   h=76   btnH=44   top=824   scrollY=0
+  t=17.14s  display=block   h=76   btnH=44   top=824   scrollY=0
+  after a manual window.scrollTo(0,400): {'display': 'block', 'h': 76, 'btnH': 44, 'top': 824, 'scrollY': 400}
+  after scrolling back to 0:              {'display': 'block', 'h': 76, 'btnH': 44, 'top': 824, 'scrollY': 0}
+  fresh reload, 2.0s in:                  {'display': 'block', 'h': 76, 'btnH': 44, 'top': 824, 'scrollY': 0}
