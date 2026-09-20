@@ -122,3 +122,61 @@
 
 `sinofresh-theme/screenshots/batch2c-step2-formulas/`（7 张，共 2.84 MB）：
 `01-desktop-bar-viewport.png`、`02-desktop-filtered-soft-chews.png`、`03-mobile-chips-rail.png`、`04-mobile-filtered-dental-chews.png`、`05-desktop-1440-full.jpg`、`06-mobile-375-full.jpg`、`07-nojs-bar-hidden-full.jpg`（全页大图用 `sips` 转 jpg 72 压体积）。
+
+## 九、子项⑤⑥（8 剂型页内链 + 首次 pull）验证全档 —— 2026-09-20
+
+> 提交：⑤ `2f63c88`（8 个 `page-*.html` 各 +3 行）、`ab938c4`（三件套预检工具 + 截图）。
+> 云端 `git pull` 首次执行：`d9b80dd → ab938c4`（fast-forward）。
+> **线上 `/formulas/` = 200 / 131108 B**（pull 前 114403 B）、`/zh/formulas/` = 200 / 139432 B。
+
+### 9.1 子项⑤ 静态检查
+
+| 检查 | 结果 |
+|---|---|
+| `git diff --numstat` | 8 文件 **各 +3 / −0**，共 24 插入、0 删除 |
+| 插入内容一致性 | 8 页**逐字节同一**三行（`uniq -c` 各为 8） |
+| 块结构 lint | 8 文件 stack balanced、3 self-closing、无畸形斜杠/花括号 |
+| `grep -rn "/ -->" templates/` | **0**（全主题仅 1 处，是旧测试脚本 `_gf5_submit_test.php` 里的断言字面量） |
+| 插入点 | 公式短代码 `wp:html` 块与 `</section>` 之间（第 39/40 行之间），`.sf-explore__btn` 复用 `configurator.css:899`，**零新增 CSS** |
+
+### 9.2 子项⑤ 预检（基线 `098afe8` × 候选 `2f63c88`，同一请求头门 + 独立主题目录）
+
+- 快照 34 页（8 剂型页 + 21 详情页 + `/formulas/`、`/zh/formulas/`、`/blog/`、`/products/`、`/`）。
+- **A/A 掩码自检** 3 页 PASS（`/formulas/`、`/products/soft-chews/`、`/formulas/ear-care-drops/`，两次抓取字节完全相同）。
+- 原始比对：**8 DIFF / 26 SAME**，8 个 DIFF 全是剂型页，首个差异点**都在插入位置**，字节增量**每页一致 +181 B**。
+- 归一化（删掉新段落连同其前导空行 → 恰好还原基线的空行）后：**34/34 SAME**，且归一化后的候选**字节数逐页等于基线**。
+- 定向证据 106/106：每页恰好 2 个描边按钮（`/formulas/` + `/products/`）、文案与标记 8 页同一、位置在最后一张卡之后且仍在公式 section 内、卡片数/卡序（`data-sf-form` 与 K1 `data-formula` 双序列）逐字节不变、5 个 JSON-LD blob **逐字节相同**、新锚点不在任何 JSON-LD 内。
+- 浏览器 113/113：8 页桌面均为 `inline-block` + `2px rgb(27,77,62)` 描边 + 18px/… 内边距 + `margin-top:32px`（`spacing|40`）+ 居中 + 段落是 `#formulas` 最后一子元素、其后兄弟是 `configurator`；375px 档 `display:block` 且按钮宽＝段落宽 299px、高 ≥44px；真实点击跳转 `/formulas/`；gated 目标页 9 chip / 21 卡 / 0 剂型按钮；控制台零错误。
+
+### 9.3 方法级新发现（两条，均为预检装置纪律）
+
+1. **浏览器缓存会串「变体」**：CF 给 HTML 盖 `cache-control: max-age=86400`，浏览器**按 URL** 缓存；请求头门只在 PHP 层生效，缓存层不知情 ⇒ 同一 URL 若**先被不带门访问过**，之后带门也会命中旧缓存（本轮表现为「点击后跳去的 `/formulas/` 是未改造的线上版」）。
+   ⇒ **纪律：预检期间所有带门访问排在任何不带门访问之前；点击类测试放最后。** 已写入 `b2c_s2s5_browser_check.py` 的分节顺序与注释。
+2. **DB 层改动主题预检带不到**：用户用 Edit Site 给 Products 下拉加了 `All Formulas`（`wp_navigation` post 16），发生在预检快照之后 ⇒ pull 后线上每页比预检基线多 **196 B**（全 34 页各一处，位于 header）。
+   ⇒ 归一化工具 `b2c_s2s6_norm_nav.py` 精确删该 `<li>` 并**断言每页命中恰好 1 次**（命中 0 = FAIL，防止「悄悄丢导航」被当成 SAME）；`/zh/` 页面上 TP 把 href 改写成 `/zh/formulas/`，故路径按 `/(?:zh/)?formulas/` 匹配。
+
+### 9.4 子项⑥ pull 后线上验收
+
+| 组 | 结论 |
+|---|---|
+| 工作区 ↔ 云端 md5 | **146 个文件全等**（`sinofresh-theme/` 全树，排除 `_backup*`/`screenshots`/`.DS_Store`） |
+| `/formulas/` | 200、21 卡、9 chip（序 = menu_order）、`{{`/`[sf_` 残留 0、计数「21 formulas」、`sf-js` ×1、`formulas.js` ×1、`formula-filter.js` ×1、`style.css?ver=2.10.44`、状态行 role=status |
+| 卡序 | 渲染顺序 **deep-equal** DB（`menu_order ASC, post_title ASC`） |
+| JSON-LD | 块类型集 {BreadcrumbList, ItemList, Organization}；ItemList 21 条 position 1..21；BreadcrumbList 2 项 = 可见面包屑 Home / Formulas |
+| 301/404 | `/formulas/page/2|3/` → 301 `/formulas/`；`/formulas/page/4/` → 404；`/zh/formulas/page/2/` → 301 `/zh/formulas/`（**恰好一个 `/zh/` 前缀**）；`/zh/formulas/` 200 |
+| 剂型页（线上） | 8 页各 2 个描边按钮（`/formulas/` + `/products/`）、链接标记精确 1 处；卡数 4/3/3/2/2/2/2/3；`data-form` 集合 = 自身 slug |
+| 详情页 | related K1 只有 1 种 `data-form`（如 `drops`），非 formula slug |
+| 资产 | 线上 `style.css?ver=2.10.44` 含 37c；`formula-filter.js?ver=1.0.0` 200 且内容为筛选脚本 |
+| **合计** | **67/67 PASS**（`tools/b2c_s2s6_live_check.py`，跑在 dev box 上、**不带门**） |
+| 回归 | 线上 vs pull 前基线：归一化两类预期差异（预检主题目录名、DB 导航项）后 **34/34 逐页 SAME**；8 剂型页定向证据 **106/106**（含卡片与 JSON-LD 逐字节不变） |
+| 日志 | `error.log` pull 后（UTC 11:40+）**非 pool 行 0**；全日志 `PHP Fatal/Warning` 计数 **0** |
+| 残留 | mu-plugins 空、无 `-preflight` 目录、`/tmp` 传输文件清；预检期线上始终 200 / 114403 B（带门同样） |
+
+### 9.5 截图
+
+- 预检：`docs/b2c-step2s5-shots/`（3 张：桌面剂型页新按钮、桌面档案页、375 剂型页）。
+- 线上：`sinofresh-theme/screenshots/batch2c-step2-formulas-live/`（5 张：`01-live-desktop-formulas`、`02-live-desktop-filtered-soft-chews`、`03-live-mobile375-chips-rail`、`04-live-desktop-dosage-entry-link`、`05-live-nav-products-dropdown`）。
+
+### 9.6 导航（§A，用户用 Edit Site 自行完成）
+
+实测 Products 下拉 **9 项**，序为 8 个剂型 + **`All Formulas` 末位**，href = `/formulas/`（`/zh/` 页上 TP 自动改写为 `/zh/formulas/`，正确）；与剂型页末尾的 `Browse All Formulas →` 构成「列表读完 → 去总览」的同构收束。
