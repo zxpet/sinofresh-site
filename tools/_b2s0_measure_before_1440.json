@@ -1,0 +1,236 @@
+{
+  "soft-chews": {
+    "imgsDone": true,
+    "imgsTotal": 11,
+    "gridW": 1200,
+    "gridH": 221,
+    "bandH": 445,
+    "bandTop": 472,
+    "cols": 4,
+    "gap": "24px",
+    "cardCount": 4,
+    "cardH": [
+      221,
+      221,
+      221,
+      221
+    ],
+    "cardW": [
+      282,
+      282,
+      282,
+      282
+    ],
+    "mediaCount": 0,
+    "mediaBox": [],
+    "mediaRatio": [],
+    "mediaFit": [],
+    "imgSrc": [],
+    "docH": 5973,
+    "slug": "soft-chews",
+    "url": "https://dev.zxpet.com/products/soft-chews/",
+    "viewport": "1440x900"
+  },
+  "tablets": {
+    "imgsDone": true,
+    "imgsTotal": 11,
+    "gridW": 1200,
+    "gridH": 243,
+    "bandH": 468,
+    "bandTop": 472,
+    "cols": 4,
+    "gap": "24px",
+    "cardCount": 3,
+    "cardH": [
+      243,
+      243,
+      243
+    ],
+    "cardW": [
+      282,
+      282,
+      282
+    ],
+    "mediaCount": 0,
+    "mediaBox": [],
+    "mediaRatio": [],
+    "mediaFit": [],
+    "imgSrc": [],
+    "docH": 5692,
+    "slug": "tablets",
+    "url": "https://dev.zxpet.com/products/tablets/",
+    "viewport": "1440x900"
+  },
+  "powders": {
+    "imgsDone": true,
+    "imgsTotal": 11,
+    "gridW": 1200,
+    "gridH": 201,
+    "bandH": 425,
+    "bandTop": 472,
+    "cols": 4,
+    "gap": "24px",
+    "cardCount": 3,
+    "cardH": [
+      201,
+      201,
+      201
+    ],
+    "cardW": [
+      282,
+      282,
+      282
+    ],
+    "mediaCount": 0,
+    "mediaBox": [],
+    "mediaRatio": [],
+    "mediaFit": [],
+    "imgSrc": [],
+    "docH": 5640,
+    "slug": "powders",
+    "url": "https://dev.zxpet.com/products/powders/",
+    "viewport": "1440x900"
+  },
+  "liquids": {
+    "imgsDone": true,
+    "imgsTotal": 11,
+    "gridW": 1200,
+    "gridH": 221,
+    "bandH": 445,
+    "bandTop": 472,
+    "cols": 4,
+    "gap": "24px",
+    "cardCount": 2,
+    "cardH": [
+      221,
+      221
+    ],
+    "cardW": [
+      282,
+      282
+    ],
+    "mediaCount": 0,
+    "mediaBox": [],
+    "mediaRatio": [],
+    "mediaFit": [],
+    "imgSrc": [],
+    "docH": 5604,
+    "slug": "liquids",
+    "url": "https://dev.zxpet.com/products/liquids/",
+    "viewport": "1440x900"
+  },
+  "pastes": {
+    "imgsDone": true,
+    "imgsTotal": 11,
+    "gridW": 1200,
+    "gridH": 221,
+    "bandH": 445,
+    "bandTop": 472,
+    "cols": 4,
+    "gap": "24px",
+    "cardCount": 2,
+    "cardH": [
+      221,
+      221
+    ],
+    "cardW": [
+      282,
+      282
+    ],
+    "mediaCount": 0,
+    "mediaBox": [],
+    "mediaRatio": [],
+    "mediaFit": [],
+    "imgSrc": [],
+    "docH": 5519,
+    "slug": "pastes",
+    "url": "https://dev.zxpet.com/products/pastes/",
+    "viewport": "1440x900"
+  },
+  "dental-chews": {
+    "imgsDone": true,
+    "imgsTotal": 11,
+    "gridW": 1200,
+    "gridH": 243,
+    "bandH": 468,
+    "bandTop": 472,
+    "cols": 4,
+    "gap": "24px",
+    "cardCount": 3,
+    "cardH": [
+      243,
+      243,
+      243
+    ],
+    "cardW": [
+      282,
+      282,
+      282
+    ],
+    "mediaCount": 0,
+    "mediaBox": [],
+    "mediaRatio": [],
+    "mediaFit": [],
+    "imgSrc": [],
+    "docH": 5901,
+    "slug": "dental-chews",
+    "url": "https://dev.zxpet.com/products/dental-chews/",
+    "viewport": "1440x900"
+  },
+  "drops": {
+    "imgsDone": true,
+    "imgsTotal": 11,
+    "gridW": 1200,
+    "gridH": 221,
+    "bandH": 445,
+    "bandTop": 472,
+    "cols": 4,
+    "gap": "24px",
+    "cardCount": 2,
+    "cardH": [
+      221,
+      221
+    ],
+    "cardW": [
+      282,
+      282
+    ],
+    "mediaCount": 0,
+    "mediaBox": [],
+    "mediaRatio": [],
+    "mediaFit": [],
+    "imgSrc": [],
+    "docH": 5613,
+    "slug": "drops",
+    "url": "https://dev.zxpet.com/products/drops/",
+    "viewport": "1440x900"
+  },
+  "fish-oil": {
+    "imgsDone": true,
+    "imgsTotal": 11,
+    "gridW": 1200,
+    "gridH": 221,
+    "bandH": 445,
+    "bandTop": 472,
+    "cols": 4,
+    "gap": "24px",
+    "cardCount": 2,
+    "cardH": [
+      221,
+      221
+    ],
+    "cardW": [
+      282,
+      282
+    ],
+    "mediaCount": 0,
+    "mediaBox": [],
+    "mediaRatio": [],
+    "mediaFit": [],
+    "imgSrc": [],
+    "docH": 5718,
+    "slug": "fish-oil",
+    "url": "https://dev.zxpet.com/products/fish-oil/",
+    "viewport": "1440x900"
+  }
+}

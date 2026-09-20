@@ -2,7 +2,7 @@
 Theme Name: SINO FRESH
 Author: Shandong SINO FRESH Pet Food Co., Ltd.
 Text Domain: sinofresh
-Version: 2.10.40
+Version: 2.10.41
 Requires at least: 6.0
 Requires PHP: 7.4
 License: GNU General Public License v2 or later
@@ -5569,7 +5569,12 @@ body.page-id-28 .wp-block-columns:has(> .wp-block-column > .wp-block-group.has-c
    with a 24px gap on desktop.
 
    The .sf-formula__cta button keeps its class (K1 — formulas.js binds it,
-   configurator.js reads data-formula back via sessionStorage). */
+   configurator.js reads data-formula back via sessionStorage).
+
+   2C Step0 adds the dosage still: .sf-fcard__media is a full-bleed 4:3
+   frame (the uploads/2026/09/{form}.webp 720x720 renders, cropped by
+   object-fit), and the copy moved into .sf-fcard__body. Cards whose still
+   is missing keep the 2B geometry because the padding lives on __body. */
 .sf-fgrid {
 	display: grid;
 	grid-template-columns: repeat(var(--sf-fgrid-cols, 4), minmax(0, 1fr));
@@ -5580,10 +5585,41 @@ body.page-id-28 .wp-block-columns:has(> .wp-block-column > .wp-block-group.has-c
 	display: flex;
 	flex-direction: column;
 	box-sizing: border-box;
-	padding: 20px 22px;
+	/* 2C Step0: the card itself carries no padding. The dosage still bleeds
+	   to the border on top and both sides (same construction as .sf-tile),
+	   and .sf-fcard__body holds the copy inset — so a card whose still is
+	   missing is geometrically identical to the 2B text-only card. */
+	padding: 0;
 	border: 1px solid var(--wp--preset--color--border-light);
 	border-radius: 10px;
 	background: var(--wp--preset--color--card-white);
+}
+/* Full-bleed 4:3 dosage still. The ratio lives on the IMG, not on the
+   figure: WebKit mis-computes an aspect-ratio box that is also a flex item
+   with a percentage-height img inside — the same reason .sf-tile__media
+   puts it here. The eight source renders are 720x720 squares, so
+   object-fit:cover crops top/bottom into the 4:3 band. flex:0 0 auto keeps
+   the frame rigid when the row stretches a shorter card to match. */
+.sf-fcard__media {
+	margin: 0;
+	flex: 0 0 auto;
+	border-radius: 10px 10px 0 0;
+	overflow: hidden;
+	background: var(--wp--preset--color--bg-light);
+}
+.sf-fcard__media img {
+	display: block;
+	width: 100%;
+	height: auto;
+	aspect-ratio: 4 / 3;
+	object-fit: cover;
+}
+/* the still bleeds, so the copy block carries the padding */
+.sf-fcard__body {
+	display: flex;
+	flex-direction: column;
+	flex: 1 1 auto;
+	padding: 20px 22px;
 }
 .sf-fcard__use {
 	font-size: 11px;

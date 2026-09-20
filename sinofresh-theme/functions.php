@@ -23,7 +23,7 @@ add_action('after_setup_theme', function() {
 });
 
 add_action('wp_enqueue_scripts', function() {
-	wp_enqueue_style('sinofresh-style', get_stylesheet_uri(), array(), '2.10.40');
+	wp_enqueue_style('sinofresh-style', get_stylesheet_uri(), array(), '2.10.41');
 	// Sticky nav: every template renders parts/header.html, so this is site-wide.
 	wp_enqueue_script('sinofresh-sticky-header', get_template_directory_uri() . '/assets/js/sticky-header.js', array(), '1.0.0', true);
 	wp_enqueue_script('sinofresh-ui-components', get_template_directory_uri() . '/assets/js/ui-components.js', array(), '1.0.0', true);
@@ -529,6 +529,60 @@ function sinofresh_formula_list_name($form) {
 }
 
 /**
+ * Dosage-form still for the [sf_formula_grid] cards.
+ *
+ * The eight uploads/<yyyy>/<mm>/<form>.webp renders are the same square
+ * dosage shots the dosage pages already show in their tile grids, so the
+ * card image is derived from the form slug instead of a hand-kept map.
+ * The year/month subdirectory is discovered with a glob rather than
+ * hardcoded (the uploads tree moves as media is re-imported), and the
+ * answer is memoised per form for the request.
+ *
+ * A form with no file returns '' and the card renders with no media block.
+ * The alternative — always emitting <img src=""> — would still cost a
+ * request and paint a broken-image icon.
+ *
+ * Known limitation, deliberate: every card on a dosage page repeats that
+ * page's own still. Real formula photography does not exist yet, so the
+ * dosage render is the placeholder; swapping it in later is a filter
+ * (sinofresh_formula_card_image) or a per-form file, not a rewrite.
+ */
+function sinofresh_formula_card_image($form) {
+	$form = sanitize_title($form);
+	if ($form === '') {
+		return '';
+	}
+	static $cache = array();
+	if (array_key_exists($form, $cache)) {
+		return $cache[$form];
+	}
+	$cache[$form] = '';
+
+	$uploads = wp_upload_dir();
+	if (!empty($uploads['error']) || empty($uploads['basedir'])) {
+		return '';
+	}
+	$base    = trailingslashit($uploads['basedir']);
+	$matches = array_merge(
+		(array) glob($base . '*/*/' . $form . '.webp'),
+		(array) glob($base . $form . '.webp')
+	);
+	if (!$matches) {
+		return '';
+	}
+	/* Newest upload wins if the same basename exists in two month folders. */
+	sort($matches);
+	$relative = ltrim(str_replace($base, '', (string) end($matches)), '/');
+
+	$cache[$form] = (string) apply_filters(
+		'sinofresh_formula_card_image',
+		trailingslashit($uploads['baseurl']) . $relative,
+		$form
+	);
+	return $cache[$form];
+}
+
+/**
  * wp_json_encode() for the body of an inline <script>.
  *
  * JSON_UNESCAPED_SLASHES keeps "/" raw, so a title containing "</script"
@@ -577,6 +631,11 @@ function sinofresh_formula_script_json($data) {
  *       <h2> sequence, so a card heading would shift every downstream anchor.
  *   K4  JSON inside <script> is written raw ("&", not "&amp;") — see
  *       sinofresh_formula_script_json().
+ *   K7  card anatomy is fixed: .sf-fcard > [.sf-fcard__media]? + .sf-fcard__body
+ *       > (.sf-fcard__use, h3.sf-fcard__name, p.sf-fcard__spec, .sf-fcard__actions).
+ *       The media block is omitted (not emitted empty) when no still exists;
+ *       the copy lives in __body so the image can bleed to the card border
+ *       while a text-only card stays visually identical to the 2B one.
  *
  * Attributes:
  *   form     dosage form slug. Default: resolved from the queried object.
@@ -648,6 +707,7 @@ function sinofresh_formula_grid($atts = array()) {
 		$url = get_permalink($formula);
 
 		$form_slugs = wp_get_post_terms($formula->ID, 'sf_formula_form', array('fields' => 'slugs'));
+		$form_slug  = (!is_wp_error($form_slugs) && $form_slugs) ? (string) $form_slugs[0] : '';
 		$use_terms  = wp_get_post_terms($formula->ID, 'sf_formula_use');
 		$use_name   = (!is_wp_error($use_terms) && $use_terms) ? $use_terms[0]->name : '';
 		$ingredients = (string) get_post_meta($formula->ID, 'sf_formula_ingredients', true);
@@ -665,7 +725,7 @@ function sinofresh_formula_grid($atts = array()) {
 			'name'     => $name,
 			'slug'     => $formula->post_name,
 			'url'      => $url,
-			'form'     => (!is_wp_error($form_slugs) && $form_slugs) ? (string) $form_slugs[0] : '',
+			'form'     => $form_slug,
 			/* K4 — decode before JSON: wp_terms stores "Skin &amp; coat";
 			   the .sf-formulas-data payload must carry the raw label. */
 			'use'      => wp_specialchars_decode($use_name),
@@ -690,8 +750,23 @@ function sinofresh_formula_grid($atts = array()) {
 			);
 		}
 
+		$media = '';
+		$image = sinofresh_formula_card_image($form_slug);
+		if ($image !== '') {
+			/* The alt mirrors the dosage-page tile convention exactly
+			   ("SINO FRESH Soft Chews private label pet supplement
+			   product") so the formula stills are described the same way
+			   as the identical renders in the dosage catalogue. */
+			$media = sprintf(
+				'<figure class="sf-fcard__media"><img src="%s" alt="%s" width="720" height="720" loading="lazy" decoding="async"/></figure>',
+				esc_url($image),
+				esc_attr(sprintf('SINO FRESH %s private label pet supplement product', sinofresh_formula_label($form_slug)))
+			);
+		}
+
 		$cards .= sprintf(
-			'<article class="sf-fcard"><span class="sf-fcard__use">%s</span><h3 class="sf-fcard__name">%s</h3><p class="sf-fcard__spec">%s</p>%s</article>',
+			'<article class="sf-fcard">%s<div class="sf-fcard__body"><span class="sf-fcard__use">%s</span><h3 class="sf-fcard__name">%s</h3><p class="sf-fcard__spec">%s</p>%s</div></article>',
+			$media,
 			/* 2B Stage1 pit #2: term names are entity-encoded in wp_terms
 			   ("Skin &amp; coat") — output verbatim so the browser shows
 			   "Skin & coat". esc_html() here would double-escape. */
