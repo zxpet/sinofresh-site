@@ -2,7 +2,7 @@
 Theme Name: SINO FRESH
 Author: Shandong SINO FRESH Pet Food Co., Ltd.
 Text Domain: sinofresh
-Version: 2.10.48
+Version: 2.10.49
 Requires at least: 6.0
 Requires PHP: 7.4
 License: GNU General Public License v2 or later
@@ -5803,9 +5803,18 @@ body.page-id-28 .wp-block-columns:has(> .wp-block-column > .wp-block-group.has-c
    renders both. The remaining value is short, so a full-width track would
    stretch a 350px line across a 1200px measure. The cap lives on the
    --solo modifier, never on .sf-fdetail__grid, so a grid that grows back
-   to several cards keeps its unconstrained auto-fit behaviour. */
+   to several cards keeps its unconstrained auto-fit behaviour.
+
+   margin-inline is not redundant. The block sits inside a core
+   `is-layout-constrained` container, and core sets
+   `margin-left/-right: auto` on such children (via :where(), so specificity
+   is 0 and this rule wins). With a 560px cap inside a 1200px measure that
+   auto pair parked the single card at x=440 — measured on /formulas/ear-care-drops/
+   at 1440. Left-aligning keeps the card on the same left edge as the
+   Specification heading, the gallery band and every other band on the page. */
 .sf-fdetail__grid--solo {
 	max-width: 560px;
+	margin-inline: 0;
 }
 .sf-fdetail__card {
 	padding: 22px 24px;
