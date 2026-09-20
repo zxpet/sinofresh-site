@@ -549,6 +549,13 @@ function sinofresh_formula_script_json($data) {
 		error_log('[sinofresh] sf_formula_grid: JSON payload still contained </script after escaping.');
 		return '';
 	}
+	/* K4 — JSON inside <script> must be entity-free. Raw "&" is fine (JSON
+	   is not HTML), but "&amp;" means an entity-encoded string (e.g. a term
+	   name straight from wp_terms) leaked into the payload. Fail closed. */
+	if (strpos($json, '&amp;') !== false) {
+		error_log('[sinofresh] sf_formula_grid: JSON payload contained HTML entities (&amp;).');
+		return '';
+	}
 	return $json;
 }
 
@@ -659,7 +666,9 @@ function sinofresh_formula_grid($atts = array()) {
 			'slug'     => $formula->post_name,
 			'url'      => $url,
 			'form'     => (!is_wp_error($form_slugs) && $form_slugs) ? (string) $form_slugs[0] : '',
-			'use'      => $use_name,
+			/* K4 — decode before JSON: wp_terms stores "Skin &amp; coat";
+			   the .sf-formulas-data payload must carry the raw label. */
+			'use'      => wp_specialchars_decode($use_name),
 			'sections' => array(
 				array('label' => 'Ingredients',         'value' => $ingredients),
 				array('label' => 'Guaranteed Analysis', 'value' => $analysis),
@@ -683,7 +692,10 @@ function sinofresh_formula_grid($atts = array()) {
 
 		$cards .= sprintf(
 			'<article class="sf-fcard"><span class="sf-fcard__use">%s</span><h3 class="sf-fcard__name">%s</h3><p class="sf-fcard__spec">%s</p>%s</article>',
-			esc_html($use_name),
+			/* 2B Stage1 pit #2: term names are entity-encoded in wp_terms
+			   ("Skin &amp; coat") — output verbatim so the browser shows
+			   "Skin & coat". esc_html() here would double-escape. */
+			$use_name,
 			$links ? '<a href="' . esc_url($url) . '">' . esc_html($name) . '</a>' : esc_html($name),
 			esc_html($specs),
 			$actions === '' ? '' : '<div class="sf-fcard__actions">' . $actions . '</div>'
