@@ -5818,7 +5818,9 @@ body.page-id-28 .wp-block-columns:has(> .wp-block-column > .wp-block-group.has-c
 /* 37b-v. Long copy. Emitted only when post_content is non-empty, so this
    band does not exist on any of the 21 current formulas — it is here for
    the first record that gets real copy. 800px measure and the 35d rhythm,
-   which is what .sf-single-body uses for the same job. */
+   which is what .sf-single-body uses for the same job.
+   The 800px measure needs no inset until the viewport is narrower than the
+   measure itself, so the gutter is a separate, wider breakpoint. */
 .sf-fdetail-body {
 	padding: 48px 0;
 	background-color: var(--wp--preset--color--card-white);
@@ -5826,6 +5828,9 @@ body.page-id-28 .wp-block-columns:has(> .wp-block-column > .wp-block-group.has-c
 .sf-fdetail-body__inner {
 	max-width: 800px;
 	margin-inline: auto;
+}
+@media (max-width: 840px) {
+	.sf-fdetail-body__inner { padding-left: 20px; padding-right: 20px; }
 }
 .sf-fdetail-body__inner > p {
 	margin-top: 0;
@@ -5844,15 +5849,13 @@ body.page-id-28 .wp-block-columns:has(> .wp-block-column > .wp-block-group.has-c
 /* 37b-vi. Phone: core pads has-background bands 38px per side (299px of text
    at 375). 20px per side -> 335px, the same inset 35e uses for the article
    body. The hero is not in this list — it is .sf-hero-inner and 27s already
-   sets that inset for it. .sf-fdetail-body is emitted outside WP's block
-   wrapper, so it gets its own. */
+   sets that inset for it. */
 @media (max-width: 768px) {
 	.sf-fdetail,
 	.sf-fdetail-more {
 		padding-left: 20px !important;
 		padding-right: 20px !important;
 	}
-	.sf-fdetail-body { padding-left: 20px; padding-right: 20px; }
 	.sf-fdetail__card { padding: 18px 18px 20px; }
 	.sf-formula-hero__actions { margin-top: 22px; }
 }
