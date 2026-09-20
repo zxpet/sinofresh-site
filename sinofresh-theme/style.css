@@ -2,7 +2,7 @@
 Theme Name: SINO FRESH
 Author: Shandong SINO FRESH Pet Food Co., Ltd.
 Text Domain: sinofresh
-Version: 2.10.45
+Version: 2.10.46
 Requires at least: 6.0
 Requires PHP: 7.4
 License: GNU General Public License v2 or later
@@ -7961,3 +7961,120 @@ body.sf-certmodal-lock {
 .sf-actives .sf-spec-list { margin: 10px 0 0; }
 .sf-actives .sf-spec-term,
 .sf-actives .sf-spec-value { margin: 0; }
+
+/* B2D Step2 — dosage page product gallery, between the hero and #formulas.
+   The section is a bg-light band because #formulas and the three bands after
+   it are all white: a white gallery would have read as one five-block slab.
+
+   The visual language is taken from .sf-fac ("Inside Our Factory",
+   page-about) on purpose — same 8px radius, same object-fit/object-position
+   pair, same soft resting shadow, same focus-visible token, same
+   reduced-motion off-switch. The one thing deliberately NOT taken is
+   .sf-fac's !important: those exist only because .sf-fac is a core Gallery
+   block and core's own sheet sizes the tiles with
+   `width: calc(33.33% - 16px)`. This markup is plain <figure>, so that rule
+   cannot match and nothing here has to win a specificity fight. No img rule
+   in this file carries !important; keep it that way. ------------------- */
+.sf-gallery__title { margin: 0; }
+.sf-gallery__stage {
+	position: relative;
+	max-width: 680px;
+	margin: 30px auto 0;
+	overflow: hidden;
+	border-radius: 8px;
+	/* The main photo is 720x720, so a 1:1 box holds it with zero crop; the
+	   three facility frames are cropped from the centre instead. The box is
+	   fixed either way, so changing photo moves nothing on the page. */
+	aspect-ratio: 1 / 1;
+	box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+	/* Horizontal drags are ours (the swipe); vertical panning and
+	   pinch-to-zoom stay with the browser. Dropping pinch-zoom would take
+	   pinch-to-zoom away from anyone reading the page on a phone. */
+	touch-action: pan-y pinch-zoom;
+}
+.sf-gallery__slide {
+	position: absolute;
+	inset: 0;
+	margin: 0;
+	opacity: 1;
+	/* `display:none` cannot transition, which is why the frames are hidden
+	   with this class rather than with the attribute once JS is running. */
+	transition: opacity 0.28s ease;
+}
+/* Belt and braces: the `hidden` attribute is the no-JS switch, and any plain
+   `display` declaration would outrank the UA's own [hidden] rule. */
+.sf-gallery__slide[hidden] { display: none; }
+.sf-gallery__slide--off {
+	opacity: 0;
+	pointer-events: none;
+}
+.sf-gallery__slide img {
+	display: block;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	object-position: center;
+}
+/* Built by formula-gallery.js from the frames above; absent without JS. */
+.sf-gallery__thumbs {
+	display: flex;
+	gap: 12px;
+	justify-content: center;
+	margin-top: 16px;
+	/* room for the selected ring and the focus outline inside the scroll box */
+	padding: 4px 0;
+}
+.sf-gallery__thumb {
+	flex: 0 0 auto;
+	width: 104px;
+	height: 104px;
+	padding: 0;
+	overflow: hidden;
+	border: 1px solid var(--wp--preset--color--border-light);
+	border-radius: 6px;
+	background: none;
+	cursor: pointer;
+	transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.sf-gallery__thumb img {
+	display: block;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	object-position: center;
+}
+/* 1px border plus a 1px ring reads as the 2px accent outline without the
+   border-width change that would nudge the whole strip sideways. */
+.sf-gallery__thumb[aria-selected="true"] {
+	border-color: var(--wp--preset--color--accent);
+	box-shadow: 0 0 0 1px var(--wp--preset--color--accent);
+}
+.sf-gallery__thumb:focus-visible {
+	outline: 2px solid var(--wp--preset--color--accent);
+	outline-offset: 2px;
+}
+/* On a phone the strip scrolls instead of shrinking: four 84px tiles plus
+   three gaps come to 372px against ~343px of content width, so a sliver of
+   the next photo stays in view and the strip is visibly swipeable. */
+@media (max-width: 768px) {
+	.sf-gallery__thumbs {
+		justify-content: flex-start;
+		overflow-x: auto;
+		scroll-snap-type: x mandatory;
+		scroll-padding-left: 4px;
+		-webkit-overflow-scrolling: touch;
+	}
+	.sf-gallery__thumb {
+		flex: 0 0 84px;
+		width: 84px;
+		height: 84px;
+		scroll-snap-align: start;
+	}
+}
+@media (prefers-reduced-motion: reduce) {
+	.sf-gallery__slide,
+	.sf-gallery__thumb {
+		transition: none;
+	}
+}
+

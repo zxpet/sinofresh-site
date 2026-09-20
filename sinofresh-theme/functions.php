@@ -23,7 +23,7 @@ add_action('after_setup_theme', function() {
 });
 
 add_action('wp_enqueue_scripts', function() {
-	wp_enqueue_style('sinofresh-style', get_stylesheet_uri(), array(), '2.10.45');
+	wp_enqueue_style('sinofresh-style', get_stylesheet_uri(), array(), '2.10.46');
 	// Sticky nav: every template renders parts/header.html, so this is site-wide.
 	wp_enqueue_script('sinofresh-sticky-header', get_template_directory_uri() . '/assets/js/sticky-header.js', array(), '1.0.0', true);
 	wp_enqueue_script('sinofresh-ui-components', get_template_directory_uri() . '/assets/js/ui-components.js', array(), '1.0.0', true);
@@ -182,6 +182,10 @@ add_action('wp_enqueue_scripts', function() {
 	if ($is_dosage_page) {
 		wp_enqueue_style('sinofresh-configurator', get_template_directory_uri() . '/assets/css/configurator.css', array(), '2.9');
 		wp_enqueue_script('sinofresh-configurator', get_template_directory_uri() . '/assets/js/configurator.js', array(), '2.3', true);
+		// Product gallery: builds the thumbnail strip under the main photo.
+		// Absent, the band still shows the main photo and its heading — that
+		// is the no-JS contract, not a fallback path.
+		wp_enqueue_script('sinofresh-formula-gallery', get_template_directory_uri() . '/assets/js/formula-gallery.js', array(), '1.0.0', true);
 	}
 	// Standard Formulas CTAs (K1): the card grid on the eight dosage pages,
 	// the hero button on a formula detail page, and — since 2C Step2 — the
@@ -1106,6 +1110,158 @@ function sinofresh_formula_actives($atts = array()) {
 		. '</div>';
 }
 add_shortcode('sf_formula_actives', 'sinofresh_formula_actives');
+
+/**
+ * [sf_formula_gallery form="soft-chews"] — the product-gallery band on the
+ * eight dosage pages.
+ *
+ * The band closes a gap in the page, not a gap in the data: a dosage page
+ * described its formulas in detail and never showed the product, so a visitor
+ * could read the whole thing without once seeing what that dosage form looks
+ * like. The hero above it is a flat colour band with no image, and the only
+ * other copy of the dosage's own photo is the formula-card thumbnail,
+ * repeated once per card.
+ *
+ * Four frames, one data source. Slot 1 is the dosage's own photo and the only
+ * frame the server renders visible; slots 2-4 ship `hidden`, and
+ * formula-gallery.js is what turns them into a thumbnail strip. Nothing here
+ * emits K2 (the .sf-formulas-data mirror) or an ItemList — the gallery is
+ * presentation, not a second copy of the product data.
+ *
+ * Placeholder notice: slots 2-4 are stock facility photographs, not this
+ * product's own line, and every photo in the library still carries an AI
+ * watermark. They exist so the band's geometry can be built and verified;
+ * the real shoot is a tracked pre-launch item.
+ */
+function sinofresh_formula_gallery_file_url($filename) {
+	$filename = sanitize_file_name($filename);
+	if ($filename === '') {
+		return '';
+	}
+	$uploads = wp_upload_dir();
+	if (!empty($uploads['error']) || empty($uploads['basedir'])) {
+		return '';
+	}
+	$base    = trailingslashit($uploads['basedir']);
+	$matches = array_merge(
+		(array) glob($base . '*/*/' . $filename),
+		(array) glob($base . $filename)
+	);
+	if (!$matches) {
+		return '';
+	}
+	/* Newest upload wins if the same basename exists in two month folders. */
+	sort($matches);
+	return trailingslashit($uploads['baseurl']) . ltrim(str_replace($base, '', (string) end($matches)), '/');
+}
+
+/**
+ * The gallery's four slots for one dosage form.
+ *
+ * `width`/`height` are the photographs' real pixel sizes, read off the
+ * uploads folder with getimagesize on the server — not copied from markup
+ * elsewhere in this theme, which carries a stale width="800" height="600" on
+ * a 720x720 file. They are declared rather than measured per render so the
+ * frame is sized before the bytes arrive. **Replacing a photo at a different
+ * size means updating its row here**: this table is the only place those
+ * numbers live. tools/b2d_s2_dimensions.py asserts every row against the
+ * server so the two cannot drift apart unnoticed.
+ */
+function sinofresh_formula_gallery_slots($form) {
+	$form = sanitize_title($form);
+	if ($form === '') {
+		return array();
+	}
+	$label = sinofresh_formula_label($form);
+	if ($label === '') {
+		return array();
+	}
+
+	$slots = array(
+		array(
+			'file'   => $form . '.webp',
+			'url'    => sinofresh_formula_card_image($form),
+			'width'  => 720,
+			'height' => 720,
+			'alt'    => sprintf('SINO FRESH %s private label pet supplement product', $label),
+		),
+		array(
+			'file'   => 'fac-placeholder.webp',
+			'url'    => sinofresh_formula_gallery_file_url('fac-placeholder.webp'),
+			'width'  => 1100,
+			'height' => 733,
+			'alt'    => sprintf('%s production line at the SINO FRESH GMP facility in Linyi, China', $label),
+		),
+		array(
+			'file'   => 'fac-packaging.webp',
+			'url'    => sinofresh_formula_gallery_file_url('fac-packaging.webp'),
+			'width'  => 800,
+			'height' => 600,
+			'alt'    => sprintf('%s packaging line at the SINO FRESH GMP facility in Linyi, China', $label),
+		),
+		array(
+			'file'   => 'fac-line.webp',
+			'url'    => sinofresh_formula_gallery_file_url('fac-line.webp'),
+			'width'  => 800,
+			'height' => 600,
+			'alt'    => sprintf('%s moving along the tray line inside the SINO FRESH GMP facility', $label),
+		),
+	);
+
+	/* A slot whose file is missing is dropped rather than rendered as a broken
+	   image, and if slot 1 ever went missing the next one becomes the main
+	   photo. The band returns '' only once all four are gone. */
+	$out = array();
+	foreach ($slots as $slot) {
+		if ($slot['url'] !== '') {
+			$out[] = $slot;
+		}
+	}
+	return $out;
+}
+
+function sinofresh_formula_gallery($atts = array()) {
+	$atts = shortcode_atts(array('form' => ''), $atts, 'sf_formula_gallery');
+	$form = sinofresh_formula_current_form($atts['form']);
+
+	$slots = sinofresh_formula_gallery_slots($form);
+	if (!$slots) {
+		return '';
+	}
+
+	$label = sinofresh_formula_label($form);
+	if ($label === '') {
+		$label = 'dosage';
+	}
+
+	$frames = '';
+	foreach ($slots as $index => $slot) {
+		$n = $index + 1;
+		$frames .= '<figure class="sf-gallery__slide" id="sf-gallery-slide-' . esc_attr($form) . '-' . $n . '"'
+			. ' data-slot="' . $n . '"'
+			. ' data-label="' . esc_attr($slot['alt']) . '"'
+			. ($n === 1 ? '' : ' hidden') . '>'
+			. '<img src="' . esc_url($slot['url']) . '"'
+			. ' alt="' . esc_attr($slot['alt']) . '"'
+			. ' width="' . (int) $slot['width'] . '" height="' . (int) $slot['height'] . '"'
+			/* Only the main photo is worth fetching early: the other three sit
+			   behind `hidden` and a click, so eager-loading them would just
+			   compete with the hero. No fetchpriority="high" anywhere — the
+			   LCP element on these pages is the hero's heading text. */
+			. ' loading="' . ($n === 1 ? 'eager' : 'lazy') . '" decoding="async">'
+			. '</figure>';
+	}
+
+	/* The stage's aria-label starts as the main photo's alt so the band is
+	   named before any script runs, and formula-gallery.js keeps it in step
+	   with whichever photo is showing. */
+	return '<div class="sf-gallery__inner" data-gallery="' . esc_attr($form) . '">'
+		. '<h2 class="sf-gallery__title">' . esc_html(sprintf('Inside Our %s Production', $label)) . '</h2>'
+		. '<div class="sf-gallery__stage" role="tabpanel" id="sf-gallery-panel-' . esc_attr($form) . '"'
+		. ' aria-label="' . esc_attr($slots[0]['alt']) . '">' . $frames . '</div>'
+		. '</div>';
+}
+add_shortcode('sf_formula_gallery', 'sinofresh_formula_gallery');
 
 /**
  * [sf_formula_filters] — dosage-form filter bar for archive-sf_formula.html.
