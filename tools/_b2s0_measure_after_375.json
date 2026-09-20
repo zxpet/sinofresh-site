@@ -1,0 +1,352 @@
+{
+  "soft-chews": {
+    "imgsDone": false,
+    "imgsTotal": 15,
+    "gridW": 299,
+    "gridH": 1822,
+    "bandH": 2032,
+    "bandTop": 614,
+    "cols": 1,
+    "gap": "16px",
+    "cardCount": 4,
+    "cardH": [
+      444,
+      444,
+      444,
+      444
+    ],
+    "cardW": [
+      299,
+      299,
+      299,
+      299
+    ],
+    "mediaCount": 4,
+    "mediaBox": [
+      "297x223",
+      "297x223",
+      "297x223",
+      "297x223"
+    ],
+    "mediaRatio": [
+      "1.333",
+      "1.333",
+      "1.333",
+      "1.333"
+    ],
+    "mediaFit": [
+      "cover",
+      "cover",
+      "cover",
+      "cover"
+    ],
+    "imgSrc": [
+      "https://dev.zxpet.com/wp-content/uploads/2026/09/soft-chews.webp",
+      "https://dev.zxpet.com/wp-content/uploads/2026/09/soft-chews.webp",
+      "https://dev.zxpet.com/wp-content/uploads/2026/09/soft-chews.webp",
+      "https://dev.zxpet.com/wp-content/uploads/2026/09/soft-chews.webp"
+    ],
+    "docH": 10134,
+    "slug": "soft-chews",
+    "url": "https://dev.zxpet.com/products/soft-chews/",
+    "viewport": "375x900"
+  },
+  "tablets": {
+    "imgsDone": false,
+    "imgsTotal": 14,
+    "gridW": 299,
+    "gridH": 1363,
+    "bandH": 1572,
+    "bandTop": 614,
+    "cols": 1,
+    "gap": "16px",
+    "cardCount": 3,
+    "cardH": [
+      444,
+      444,
+      444
+    ],
+    "cardW": [
+      299,
+      299,
+      299
+    ],
+    "mediaCount": 3,
+    "mediaBox": [
+      "297x223",
+      "297x223",
+      "297x223"
+    ],
+    "mediaRatio": [
+      "1.333",
+      "1.333",
+      "1.333"
+    ],
+    "mediaFit": [
+      "cover",
+      "cover",
+      "cover"
+    ],
+    "imgSrc": [
+      "https://dev.zxpet.com/wp-content/uploads/2026/09/tablets.webp",
+      "https://dev.zxpet.com/wp-content/uploads/2026/09/tablets.webp",
+      "https://dev.zxpet.com/wp-content/uploads/2026/09/tablets.webp"
+    ],
+    "docH": 8885,
+    "slug": "tablets",
+    "url": "https://dev.zxpet.com/products/tablets/",
+    "viewport": "375x900"
+  },
+  "powders": {
+    "imgsDone": false,
+    "imgsTotal": 14,
+    "gridW": 299,
+    "gridH": 1302,
+    "bandH": 1512,
+    "bandTop": 614,
+    "cols": 1,
+    "gap": "16px",
+    "cardCount": 3,
+    "cardH": [
+      423,
+      423,
+      423
+    ],
+    "cardW": [
+      299,
+      299,
+      299
+    ],
+    "mediaCount": 3,
+    "mediaBox": [
+      "297x223",
+      "297x223",
+      "297x223"
+    ],
+    "mediaRatio": [
+      "1.333",
+      "1.333",
+      "1.333"
+    ],
+    "mediaFit": [
+      "cover",
+      "cover",
+      "cover"
+    ],
+    "imgSrc": [
+      "https://dev.zxpet.com/wp-content/uploads/2026/09/powders.webp",
+      "https://dev.zxpet.com/wp-content/uploads/2026/09/powders.webp",
+      "https://dev.zxpet.com/wp-content/uploads/2026/09/powders.webp"
+    ],
+    "docH": 8909,
+    "slug": "powders",
+    "url": "https://dev.zxpet.com/products/powders/",
+    "viewport": "375x900"
+  },
+  "liquids": {
+    "imgsDone": false,
+    "imgsTotal": 13,
+    "gridW": 299,
+    "gridH": 903,
+    "bandH": 1113,
+    "bandTop": 575,
+    "cols": 1,
+    "gap": "16px",
+    "cardCount": 2,
+    "cardH": [
+      444,
+      444
+    ],
+    "cardW": [
+      299,
+      299
+    ],
+    "mediaCount": 2,
+    "mediaBox": [
+      "297x223",
+      "297x223"
+    ],
+    "mediaRatio": [
+      "1.333",
+      "1.333"
+    ],
+    "mediaFit": [
+      "cover",
+      "cover"
+    ],
+    "imgSrc": [
+      "https://dev.zxpet.com/wp-content/uploads/2026/09/liquids.webp",
+      "https://dev.zxpet.com/wp-content/uploads/2026/09/liquids.webp"
+    ],
+    "docH": 8380,
+    "slug": "liquids",
+    "url": "https://dev.zxpet.com/products/liquids/",
+    "viewport": "375x900"
+  },
+  "pastes": {
+    "imgsDone": false,
+    "imgsTotal": 13,
+    "gridW": 299,
+    "gridH": 903,
+    "bandH": 1113,
+    "bandTop": 575,
+    "cols": 1,
+    "gap": "16px",
+    "cardCount": 2,
+    "cardH": [
+      444,
+      444
+    ],
+    "cardW": [
+      299,
+      299
+    ],
+    "mediaCount": 2,
+    "mediaBox": [
+      "297x223",
+      "297x223"
+    ],
+    "mediaRatio": [
+      "1.333",
+      "1.333"
+    ],
+    "mediaFit": [
+      "cover",
+      "cover"
+    ],
+    "imgSrc": [
+      "https://dev.zxpet.com/wp-content/uploads/2026/09/pastes.webp",
+      "https://dev.zxpet.com/wp-content/uploads/2026/09/pastes.webp"
+    ],
+    "docH": 8417,
+    "slug": "pastes",
+    "url": "https://dev.zxpet.com/products/pastes/",
+    "viewport": "375x900"
+  },
+  "dental-chews": {
+    "imgsDone": false,
+    "imgsTotal": 14,
+    "gridW": 299,
+    "gridH": 1363,
+    "bandH": 1572,
+    "bandTop": 614,
+    "cols": 1,
+    "gap": "16px",
+    "cardCount": 3,
+    "cardH": [
+      444,
+      444,
+      444
+    ],
+    "cardW": [
+      299,
+      299,
+      299
+    ],
+    "mediaCount": 3,
+    "mediaBox": [
+      "297x223",
+      "297x223",
+      "297x223"
+    ],
+    "mediaRatio": [
+      "1.333",
+      "1.333",
+      "1.333"
+    ],
+    "mediaFit": [
+      "cover",
+      "cover",
+      "cover"
+    ],
+    "imgSrc": [
+      "https://dev.zxpet.com/wp-content/uploads/2026/09/dental-chews.webp",
+      "https://dev.zxpet.com/wp-content/uploads/2026/09/dental-chews.webp",
+      "https://dev.zxpet.com/wp-content/uploads/2026/09/dental-chews.webp"
+    ],
+    "docH": 9609,
+    "slug": "dental-chews",
+    "url": "https://dev.zxpet.com/products/dental-chews/",
+    "viewport": "375x900"
+  },
+  "drops": {
+    "imgsDone": true,
+    "imgsTotal": 13,
+    "gridW": 299,
+    "gridH": 903,
+    "bandH": 1113,
+    "bandTop": 575,
+    "cols": 1,
+    "gap": "16px",
+    "cardCount": 2,
+    "cardH": [
+      444,
+      444
+    ],
+    "cardW": [
+      299,
+      299
+    ],
+    "mediaCount": 2,
+    "mediaBox": [
+      "297x223",
+      "297x223"
+    ],
+    "mediaRatio": [
+      "1.333",
+      "1.333"
+    ],
+    "mediaFit": [
+      "cover",
+      "cover"
+    ],
+    "imgSrc": [
+      "https://dev.zxpet.com/wp-content/uploads/2026/09/drops.webp",
+      "https://dev.zxpet.com/wp-content/uploads/2026/09/drops.webp"
+    ],
+    "docH": 8509,
+    "slug": "drops",
+    "url": "https://dev.zxpet.com/products/drops/",
+    "viewport": "375x900"
+  },
+  "fish-oil": {
+    "imgsDone": true,
+    "imgsTotal": 13,
+    "gridW": 299,
+    "gridH": 903,
+    "bandH": 1113,
+    "bandTop": 575,
+    "cols": 1,
+    "gap": "16px",
+    "cardCount": 2,
+    "cardH": [
+      444,
+      444
+    ],
+    "cardW": [
+      299,
+      299
+    ],
+    "mediaCount": 2,
+    "mediaBox": [
+      "297x223",
+      "297x223"
+    ],
+    "mediaRatio": [
+      "1.333",
+      "1.333"
+    ],
+    "mediaFit": [
+      "cover",
+      "cover"
+    ],
+    "imgSrc": [
+      "https://dev.zxpet.com/wp-content/uploads/2026/09/fish-oil.webp",
+      "https://dev.zxpet.com/wp-content/uploads/2026/09/fish-oil.webp"
+    ],
+    "docH": 8666,
+    "slug": "fish-oil",
+    "url": "https://dev.zxpet.com/products/fish-oil/",
+    "viewport": "375x900"
+  }
+}

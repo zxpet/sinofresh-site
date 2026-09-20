@@ -7,10 +7,10 @@ import subprocess
 import time
 
 SLUGS = ["soft-chews", "tablets", "powders", "liquids", "pastes", "dental-chews", "drops", "fish-oil"]
-BASELINE = {  # band_grid px measured at end of Stage-3 Step 2 (1440x900)
-    "soft-chews": (445, 221, 4), "tablets": (468, 243, 3), "powders": (425, 201, 3),
-    "liquids": (445, 221, 2), "pastes": (445, 221, 2), "dental-chews": (468, 243, 3),
-    "drops": (445, 221, 2), "fish-oil": (445, 221, 2),
+BASELINE = {  # band_grid px, batch 2C Step0 (card stills), 1440x900
+    "soft-chews": (655, 431, 4), "tablets": (678, 453, 3), "powders": (635, 411, 3),
+    "liquids": (655, 431, 2), "pastes": (655, 431, 2), "dental-chews": (678, 453, 3),
+    "drops": (655, 431, 2), "fish-oil": (655, 431, 2),
 }
 
 
