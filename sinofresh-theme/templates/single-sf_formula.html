@@ -1,0 +1,76 @@
+<!-- wp:template-part {"slug":"header","tagName":"header"} /-->
+
+<!-- Formula detail hero. Forest band, same recipe as the other inner-page
+     heroes. The four-level trail is class-first/href-second on every <a>: the
+     BreadcrumbList generator in functions.php matches
+     class="sf-breadcrumb__crumb…" before href="…", and the current page has to
+     keep the exact class order "sf-breadcrumb__crumb sf-breadcrumb__current"
+     with aria-current="page" or the JSON-LD silently loses its last element.
+     {{FORMULA_USE}} is printed verbatim (wp_terms stores "Skin &amp; coat"). -->
+<!-- wp:group {"tagName":"section","className":"sf-formula-hero","backgroundColor":"primary","textColor":"card-white","layout":{"type":"constrained"},"style":{"spacing":{"padding":{"top":"var:preset|spacing|80","bottom":"var:preset|spacing|80"}}}} -->
+<section class="wp-block-group sf-formula-hero has-card-white-color has-text-color has-primary-background-color has-background" style="padding-top:var(--wp--preset--spacing--80);padding-bottom:var(--wp--preset--spacing--80)">
+<!-- wp:html -->
+<nav class="sf-breadcrumb sf-breadcrumb--d4" aria-label="Breadcrumb"><a class="sf-breadcrumb__crumb sf-breadcrumb__crumb--home" href="/">Home</a><span class="sf-breadcrumb__sep sf-breadcrumb__sep--home" aria-hidden="true">/</span><a class="sf-breadcrumb__crumb sf-breadcrumb__crumb--products" href="/products/">Products</a><span class="sf-breadcrumb__sep sf-breadcrumb__sep--products" aria-hidden="true">/</span><a class="sf-breadcrumb__crumb sf-breadcrumb__crumb--form" href="{{FORM_HREF}}">{{FORM_CRUMB}}</a><span class="sf-breadcrumb__sep" aria-hidden="true">/</span><span class="sf-breadcrumb__crumb sf-breadcrumb__current" aria-current="page">{{TITLE}}</span></nav>
+<span class="sf-fcard__use">{{FORMULA_USE}}</span>
+<h1 class="sf-formula-hero__title">{{TITLE}}</h1>
+<p class="sf-formula-hero__meta">{{FORMULA_META}}</p>
+<div class="sf-formula-hero__actions"><button type="button" class="sf-formula__cta sf-formula__cta--solid" data-formula="{{TITLE}}" data-form="{{FORM_SLUG}}">Reference this formula →</button><a class="sf-formula-hero__build" href="{{FORM_HREF}}#configurator">Build Custom Formula</a></div>
+<!-- /wp:html -->
+</section>
+<!-- /wp:group -->
+
+<!-- Specification: three field cards from the formula's own meta.
+     [sf_formula_detail] reads get_post_meta directly and skips any empty
+     field, so a formula with two filled fields renders two cards. -->
+<!-- wp:group {"tagName":"section","className":"sf-fdetail","backgroundColor":"card-white","layout":{"type":"constrained"},"style":{"spacing":{"padding":{"top":"var:preset|spacing|80","bottom":"var:preset|spacing|80"}}}} -->
+<section class="wp-block-group sf-fdetail has-card-white-background-color has-background" style="padding-top:var(--wp--preset--spacing--80);padding-bottom:var(--wp--preset--spacing--80)">
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Specification</h2>
+<!-- /wp:heading -->
+<!-- wp:html -->
+[sf_formula_detail]
+<!-- /wp:html -->
+</section>
+<!-- /wp:group -->
+
+<!-- Long-form copy, when the record has any. All 21 published formulas carry
+     an empty post_content today, and the band has to vanish entirely in that
+     state — a static wp:post-content would always render its wrapper, so the
+     band is emitted by [sf_formula_body] and simply returns nothing. -->
+<!-- wp:html -->
+[sf_formula_body]
+<!-- /wp:html -->
+
+<!-- More formulas from the same dosage form. form= is omitted on purpose:
+     sinofresh_formula_current_form() resolves it from the queried object's
+     sf_formula_form term, which is the same "queried object is the source of
+     truth" rule the dosage grids follow. The current formula is excluded in
+     PHP — a block template runs do_shortcode() before do_blocks(), so
+     exclude="{{...}}" would still be the raw token here. -->
+<!-- wp:group {"tagName":"section","className":"sf-fdetail-more","backgroundColor":"bg-light","layout":{"type":"constrained"},"style":{"spacing":{"padding":{"top":"var:preset|spacing|80","bottom":"var:preset|spacing|80"}}}} -->
+<section class="wp-block-group sf-fdetail-more has-bg-light-background-color has-background" style="padding-top:var(--wp--preset--spacing--80);padding-bottom:var(--wp--preset--spacing--80)">
+<!-- wp:html -->
+<h2 class="wp-block-heading">More {{FORM_CRUMB}} Formulas</h2>
+<!-- /wp:html -->
+<!-- wp:html -->
+[sf_formula_grid limit="4"]
+<!-- /wp:html -->
+</section>
+<!-- /wp:group -->
+
+<!-- wp:group {"tagName":"section","backgroundColor":"primary","textColor":"card-white","layout":{"type":"constrained"},"style":{"spacing":{"padding":{"top":"var:preset|spacing|80","bottom":"var:preset|spacing|80"}}}} -->
+<section class="wp-block-group has-card-white-color has-text-color has-primary-background-color has-background" style="padding-top:var(--wp--preset--spacing--80);padding-bottom:var(--wp--preset--spacing--80)">
+<!-- wp:heading {"textAlign":"center","textColor":"card-white"} -->
+<h2 class="has-text-align-center wp-block-heading has-card-white-color has-text-color">Ready to Launch Your Product?</h2>
+<!-- /wp:heading -->
+<!-- wp:buttons {"layout":{"type":"flex","justifyContent":"center"},"style":{"spacing":{"margin":{"top":"var:preset|spacing|40"}}}} -->
+<div class="wp-block-buttons" style="margin-top:var(--wp--preset--spacing--40)">
+<!-- wp:button {"backgroundColor":"cta","textColor":"card-white"} -->
+<div class="wp-block-button"><a class="wp-block-button__link has-card-white-color has-cta-background-color has-text-color has-background wp-element-button" href="/contact/">Request a Quote</a></div>
+<!-- /wp:button -->
+</div>
+<!-- /wp:buttons -->
+</section>
+<!-- /wp:group -->
+
+<!-- wp:template-part {"slug":"footer","tagName":"footer"} /-->

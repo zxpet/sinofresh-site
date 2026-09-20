@@ -2,7 +2,7 @@
 Theme Name: SINO FRESH
 Author: Shandong SINO FRESH Pet Food Co., Ltd.
 Text Domain: sinofresh
-Version: 2.10.41
+Version: 2.10.42
 Requires at least: 6.0
 Requires PHP: 7.4
 License: GNU General Public License v2 or later
@@ -1835,6 +1835,17 @@ body.admin-bar .sf-header.is-sticky {
 	.sf-breadcrumb--d3 .sf-breadcrumb__crumb--mid::before { content: "←\00a0"; }
 	/* 2-level trails keep Home as ← Home */
 	.sf-breadcrumb--d2 .sf-breadcrumb__crumb--home::before { content: "←\00a0"; }
+	/* 4-level trails (Home / Products / Form / Formula, i.e. single-sf_formula)
+	   fold TWO levels: Home and Products are both implied by "← Form". The
+	   3-level rule above cannot be reused — its prefix is a different trail —
+	   so the pair of hidden crumbs is spelled out here. The visible result is
+	   the same shape as the 3-level fold, one level deeper: ← Soft Chews /
+	   <formula name>. */
+	.sf-breadcrumb--d4 .sf-breadcrumb__crumb--home,
+	.sf-breadcrumb--d4 .sf-breadcrumb__sep--home,
+	.sf-breadcrumb--d4 .sf-breadcrumb__crumb--products,
+	.sf-breadcrumb--d4 .sf-breadcrumb__sep--products { display: none; }
+	.sf-breadcrumb--d4 .sf-breadcrumb__crumb--form::before { content: "←\00a0"; }
 }
 
 /* === 25. Header-to-hero seam ---------------------------------------------
@@ -5686,6 +5697,164 @@ body.page-id-28 .wp-block-columns:has(> .wp-block-column > .wp-block-group.has-c
 		gap: 16px;
 	}
 }
+
+/* === 37b. Formula detail page (single-sf_formula.html) ====================
+   One standard formula as its own record page: Forest hero, a three-field
+   specification grid, the record's own long copy when it has any, then the
+   sibling formulas of the same dosage form.
+
+   Geometry lives here rather than in the template for the same reason
+   .sf-fgrid does: the blocks that could carry a wp-container-core-* layout
+   class are shortcode outputs, and a block template runs do_shortcode()
+   before do_blocks(), so a shortcode can never own a layout class. The two
+   bands that come from PHP ([sf_formula_detail] / [sf_formula_body]) are
+   plain elements for the same reason.
+
+   The K1 contract is unchanged: the hero button keeps
+   class="sf-formula__cta" + data-formula + data-form (now data-form is
+   actually used — formulas.js 1.1.0 prefers it over parsing the card link,
+   and the detail page has no card link to parse). */
+
+/* 37b-i. Hero. Same construction as the article hero in single.html:
+   breadcrumb, a tag, the title, a meta line, then the actions. The tag is
+   .sf-fcard__use so the card and the page it opens label the same term with
+   the same type treatment; on Forest it has to go light, exactly like
+   .sf-eyebrow under .has-primary-background-color — brand-green on #1B4D3E
+   is 3.8:1, which fails AA at 11px even at weight 700. */
+.sf-formula-hero .sf-fcard__use {
+	display: inline-block;
+	color: var(--wp--preset--color--card-white);
+	opacity: 0.72;
+}
+.sf-formula-hero__title {
+	margin: 14px 0 0;
+	font-size: clamp(30px, 3.4vw, 44px);
+	line-height: 1.15;
+	letter-spacing: -0.01em;
+	color: var(--wp--preset--color--card-white);
+}
+.sf-formula-hero__meta {
+	margin: 12px 0 0;
+	font-size: 13.5px;
+	line-height: 1.5;
+	color: rgba(255, 255, 255, 0.75);
+}
+/* {{FORMULA_META}} is composed in PHP and can legitimately come back empty
+   (a formula with no dosage term); :empty keeps that from leaving a gap. */
+.sf-formula-hero__meta:empty { display: none; }
+.sf-formula-hero__actions {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 14px 22px;
+	margin-top: 26px;
+}
+/* 37b-ii. The K1 button inverts on the dark band. The base .sf-formula__cta
+   is Forest-on-white for the card grid; Forest-on-Forest would be invisible
+   here, so the --solid modifier puts ink on brand-green (5.8:1) and flips to
+   white-on-Forest on hover. Markup, data attributes and the click behaviour
+   are untouched — only the surface colours change. */
+.sf-formula-hero .sf-formula__cta--solid {
+	border-color: var(--wp--preset--color--brand-green);
+	background-color: var(--wp--preset--color--brand-green);
+	color: var(--wp--preset--color--text-primary);
+}
+.sf-formula-hero .sf-formula__cta--solid:hover {
+	border-color: var(--wp--preset--color--card-white);
+	background-color: var(--wp--preset--color--card-white);
+	color: var(--wp--preset--color--primary);
+}
+.sf-formula-hero__build {
+	font-size: 14px;
+	font-weight: 600;
+	color: var(--wp--preset--color--card-white);
+	text-decoration: underline;
+	text-underline-offset: 3px;
+}
+.sf-formula-hero__build:hover { color: var(--wp--preset--color--brand-green); }
+
+/* 37b-iii. Specification: three ruled cards, one per filled meta field.
+   auto-fit + minmax needs no media query — the 1200px measure gives
+   (1200 - 2*20) / 3 = 386 >= 280 so three tracks; a phone gives one.
+   The 3px brand-green top edge echoes the .sf-cell rule used by the
+   dosage spec panels, keeping the two "specification" surfaces related. */
+.sf-fdetail__grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+	gap: 20px;
+	margin-top: 28px;
+}
+.sf-fdetail__card {
+	padding: 22px 24px;
+	border: 1px solid var(--wp--preset--color--border-light);
+	border-top: 3px solid var(--wp--preset--color--brand-green);
+	border-radius: 8px;
+	background-color: var(--wp--preset--color--bg-light);
+}
+.sf-fdetail__label {
+	margin: 0 0 10px;
+	font-size: 12px;
+	font-weight: 700;
+	line-height: 1.4;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: var(--wp--preset--color--text-secondary);
+}
+.sf-fdetail__value {
+	margin: 0;
+	font-size: 15px;
+	line-height: 1.6;
+	color: var(--wp--preset--color--text-primary);
+}
+
+/* 37b-iv. Related formulas band: the h2 and the grid are separate wp:html
+   blocks, so the gap between them is a layout guess (the block gap) rather
+   than a decision. Pin it. */
+.sf-fdetail-more .sf-fgrid { margin-top: 28px; }
+
+/* 37b-v. Long copy. Emitted only when post_content is non-empty, so this
+   band does not exist on any of the 21 current formulas — it is here for
+   the first record that gets real copy. 800px measure and the 35d rhythm,
+   which is what .sf-single-body uses for the same job. */
+.sf-fdetail-body {
+	padding: 48px 0;
+	background-color: var(--wp--preset--color--card-white);
+}
+.sf-fdetail-body__inner {
+	max-width: 800px;
+	margin-inline: auto;
+}
+.sf-fdetail-body__inner > p {
+	margin-top: 0;
+	margin-bottom: 16px;
+}
+.sf-fdetail-body__inner > h2 {
+	margin-top: 48px;
+	margin-bottom: 16px;
+}
+.sf-fdetail-body__inner > h3 {
+	margin-top: 32px;
+	margin-bottom: 12px;
+}
+.sf-fdetail-body__inner > :first-child { margin-top: 0; }
+
+/* 37b-vi. Phone: core pads has-background bands 38px per side (299px of text
+   at 375). 20px per side -> 335px, the same inset 35e uses for the article
+   body. Only these three classes are affected; .sf-fdetail-body is emitted
+   outside WP's block wrapper and gets its own inset here for the same
+   reason. */
+@media (max-width: 768px) {
+	.sf-formula-hero,
+	.sf-fdetail,
+	.sf-fdetail-more {
+		padding-left: 20px !important;
+		padding-right: 20px !important;
+	}
+	.sf-fdetail-body { padding-left: 20px; padding-right: 20px; }
+	.sf-fdetail__card { padding: 18px 18px 20px; }
+	.sf-formula-hero__actions { margin-top: 22px; }
+}
+
 /* lightweight toast (formulas.js): fixed above the bottom edge, no layout shift */
 .sf-toast {
 	position: fixed;

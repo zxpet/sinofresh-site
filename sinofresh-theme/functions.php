@@ -23,7 +23,7 @@ add_action('after_setup_theme', function() {
 });
 
 add_action('wp_enqueue_scripts', function() {
-	wp_enqueue_style('sinofresh-style', get_stylesheet_uri(), array(), '2.10.41');
+	wp_enqueue_style('sinofresh-style', get_stylesheet_uri(), array(), '2.10.42');
 	// Sticky nav: every template renders parts/header.html, so this is site-wide.
 	wp_enqueue_script('sinofresh-sticky-header', get_template_directory_uri() . '/assets/js/sticky-header.js', array(), '1.0.0', true);
 	wp_enqueue_script('sinofresh-ui-components', get_template_directory_uri() . '/assets/js/ui-components.js', array(), '1.0.0', true);
@@ -182,8 +182,14 @@ add_action('wp_enqueue_scripts', function() {
 	if ($is_dosage_page) {
 		wp_enqueue_style('sinofresh-configurator', get_template_directory_uri() . '/assets/css/configurator.css', array(), '2.9');
 		wp_enqueue_script('sinofresh-configurator', get_template_directory_uri() . '/assets/js/configurator.js', array(), '2.3', true);
-		// Standard Formulas accordion CTAs: copy formula name + scroll to configurator.
-		wp_enqueue_script('sinofresh-formulas', get_template_directory_uri() . '/assets/js/formulas.js', array(), '1.0.0', true);
+	}
+	// Standard Formulas CTAs (K1): the card grid on the eight dosage pages and
+	// the hero button on a formula detail page. Enqueued independently of the
+	// configurator because single-sf_formula.html has no #configurator — 1.1.0
+	// reads data-form off the button and simply does not scroll when the
+	// target is absent.
+	if ($is_dosage_page || is_singular('sf_formula')) {
+		wp_enqueue_script('sinofresh-formulas', get_template_directory_uri() . '/assets/js/formulas.js', array(), '1.1.0', true);
 	}
 });
 
@@ -583,6 +589,48 @@ function sinofresh_formula_card_image($form) {
 }
 
 /**
+ * One cell of a dosage page's "Typical specifications" table, by row label.
+ *
+ * The formula detail hero needs the MOQ and the lead time of the dosage form
+ * the formula belongs to. Both already exist as rows of the sf-spectable
+ * table on /products/<form>/, so the hero reads them from that template file
+ * instead of restating them — same single-source-of-truth rule the FAQPage,
+ * BreadcrumbList and Product schema generators follow. Editing the table on
+ * the dosage page updates every formula hero of that form.
+ *
+ * $label is the data-label attribute ("MOQ", "Lead time"), not the header
+ * text, because data-label is the stable machine-readable twin of the
+ * column head (it also drives the stacked mobile table).
+ *
+ * Returns a decoded string; callers escape per context. Memoised per
+ * form+label, and returns '' for anything it cannot resolve so the caller
+ * can drop the clause rather than print an empty "MOQ".
+ */
+function sinofresh_formula_spec_cell($form, $label) {
+	$form  = sanitize_title($form);
+	$label = (string) $label;
+	if ($form === '' || $label === '') {
+		return '';
+	}
+	static $cache = array();
+	$key = $form . '|' . $label;
+	if (array_key_exists($key, $cache)) {
+		return $cache[$key];
+	}
+	$cache[$key] = '';
+
+	$file = get_stylesheet_directory() . '/templates/page-' . $form . '.html';
+	if (!file_exists($file)) {
+		return '';
+	}
+	$html = (string) file_get_contents($file);
+	if (preg_match('/<td[^>]*data-label="' . preg_quote($label, '/') . '"[^>]*>(.*?)<\/td>/s', $html, $m)) {
+		$cache[$key] = html_entity_decode(trim(wp_strip_all_tags($m[1])), ENT_QUOTES, 'UTF-8');
+	}
+	return $cache[$key];
+}
+
+/**
  * wp_json_encode() for the body of an inline <script>.
  *
  * JSON_UNESCAPED_SLASHES keeps "/" raw, so a title containing "</script"
@@ -641,18 +689,29 @@ function sinofresh_formula_script_json($data) {
  *   form     dosage form slug. Default: resolved from the queried object.
  *   use      sf_formula_use slug to narrow to one function. Default: all.
  *   limit    max cards (-1 = all).
+ *   exclude  comma/space separated post IDs to leave out. The formula being
+ *            viewed is ALWAYS excluded when the grid renders on its own
+ *            single page — see below.
  *   columns  grid tracks, clamped to 1–6. Default: 4.
  *   cta      'reference' (default) renders the K1 button; 'none' omits it.
  *            Any other value falls back to 'reference'.
  *   links    'true' (default) links the title and adds "View formula →";
  *            'false'/'0'/'no' render the name as plain text.
  *   empty    only 'hide' is implemented; any other value behaves as 'hide'.
+ *
+ * Why the current formula is excluded in PHP rather than passed by the
+ * template: the related grid on single-sf_formula.html wants
+ * exclude="<current id>", but a block template runs do_shortcode() before
+ * do_blocks(), so a {{placeholder}} in a shortcode attribute is still the
+ * literal token at this point — the template cannot know the ID. Deriving it
+ * from the queried object here is both correct and impossible to forget.
  */
 function sinofresh_formula_grid($atts = array()) {
 	$atts = shortcode_atts(array(
 		'form'    => '',
 		'use'     => '',
 		'limit'   => -1,
+		'exclude' => '',
 		'columns' => 4,
 		'cta'     => 'reference',
 		'links'   => 'true',
@@ -665,6 +724,16 @@ function sinofresh_formula_grid($atts = array()) {
 	$links   = !in_array(strtolower((string) $atts['links']), array('false', '0', 'no'), true);
 	$cta_on  = !in_array(strtolower((string) $atts['cta']), array('none', ''), true);
 
+	/* Exclusions: the caller's IDs, plus the formula being viewed. Without
+	   the latter the "more from this range" grid would list the formula the
+	   visitor is already reading. */
+	$exclude = preg_split('/[,\s]+/', (string) $atts['exclude'], -1, PREG_SPLIT_NO_EMPTY);
+	$exclude = array_map('intval', is_array($exclude) ? $exclude : array());
+	if (is_singular('sf_formula')) {
+		$exclude[] = (int) get_queried_object_id();
+	}
+	$exclude = array_values(array_unique(array_filter($exclude)));
+
 	$args      = array(
 		'post_type'           => 'sf_formula',
 		'post_status'         => 'publish',
@@ -673,6 +742,9 @@ function sinofresh_formula_grid($atts = array()) {
 		'ignore_sticky_posts' => true,
 		'no_found_rows'       => true,
 	);
+	if ($exclude) {
+		$args['post__not_in'] = $exclude;
+	}
 	$tax_query = array();
 	if ($form !== '') {
 		$tax_query[] = array('taxonomy' => 'sf_formula_form', 'field' => 'slug', 'terms' => $form);
@@ -796,6 +868,92 @@ function sinofresh_formula_grid($atts = array()) {
 		. '</div>';
 }
 add_shortcode('sf_formula_grid', 'sinofresh_formula_grid');
+
+/**
+ * [sf_formula_detail] — the three-field specification of the current formula.
+ *
+ * The fields are the same three the card JSON mirror carries (K2), read
+ * straight from post meta rather than from the .sf-formulas-data payload:
+ * on a detail page that payload belongs to the related grid, not to this
+ * formula. A field with no value is skipped, never rendered as an empty
+ * card — several formulas legitimately carry fewer than three.
+ *
+ * Framework-free by design: it renders one .sf-fdetail__grid of
+ * .sf-fdetail__card boxes and style.css owns the geometry, the same split
+ * .sf-fgrid uses (block templates run do_shortcode() before do_blocks(), so
+ * a shortcode can never carry a wp-container-core-* layout class).
+ *
+ * Returns '' outside a single sf_formula, so a stray shortcode in an editor
+ * cannot leak another formula's spec into an article.
+ */
+function sinofresh_formula_detail() {
+	if (!is_singular('sf_formula')) {
+		return '';
+	}
+	$post_id = (int) get_queried_object_id();
+	if (!$post_id) {
+		return '';
+	}
+	$fields = array(
+		array('label' => 'Ingredients',         'key' => 'sf_formula_ingredients'),
+		array('label' => 'Guaranteed Analysis', 'key' => 'sf_formula_analysis'),
+		array('label' => 'Standard Specs',      'key' => 'sf_formula_specs'),
+	);
+	$cards = '';
+	foreach ($fields as $field) {
+		$value = trim((string) get_post_meta($post_id, $field['key'], true));
+		if ($value === '') {
+			continue;
+		}
+		$cards .= sprintf(
+			'<div class="sf-fdetail__card"><h3 class="sf-fdetail__label">%s</h3><p class="sf-fdetail__value">%s</p></div>',
+			esc_html($field['label']),
+			esc_html($value)
+		);
+	}
+	if ($cards === '') {
+		return '';
+	}
+	return '<div class="sf-fdetail__grid">' . $cards . '</div>';
+}
+add_shortcode('sf_formula_detail', 'sinofresh_formula_detail');
+
+/**
+ * [sf_formula_body] — the formula's own long-form copy (post_content).
+ *
+ * A formula is a catalogue record, not an article: all 21 published instances
+ * have an empty post_content today, and the brief requires the band to
+ * disappear in that state rather than leave an empty padded section behind.
+ * A static block template cannot express that — wp:post-content always
+ * renders its wrapper, and a {{placeholder}} cannot gate a block because
+ * block templates run do_shortcode() before do_blocks(), so placeholders are
+ * substituted after the block tree is decided. Hence a shortcode, which is
+ * the theme's existing answer for "server-side conditional rendering inside
+ * a static template" (see sf_formula_grid).
+ *
+ * The band markup lives here rather than in the template (with plain
+ * .sf-fdetail-body classes, not wp-block-group) for the same reason: an
+ * empty band is exactly what must not be emitted. Prose rhythm is in
+ * style.css 37b, mirroring 35d for .sf-single-body.
+ */
+function sinofresh_formula_body() {
+	if (!is_singular('sf_formula')) {
+		return '';
+	}
+	$post = get_post((int) get_queried_object_id());
+	if (!($post instanceof WP_Post)) {
+		return '';
+	}
+	if (trim((string) $post->post_content) === '') {
+		return '';
+	}
+	$html = (string) apply_filters('the_content', $post->post_content);
+	if (trim($html) === '') {
+		return '';
+	}
+	return '<section class="sf-fdetail-body"><div class="sf-fdetail-body__inner">' . $html . '</div></section>';
+}
+add_shortcode('sf_formula_body', 'sinofresh_formula_body');
 
 /**
  * Article pattern library (block patterns).
@@ -1889,6 +2047,20 @@ add_action('wp_head', function() {
  *                        the current sf_formula, from its sf_formula_form term
  *   {{FORM_HREF}}        matching href (/products/<term slug>/), falling back
  *                        to /products/ when the formula carries no term
+ *   {{FORM_SLUG}}        formula detail pages only — the bare term slug
+ *                        (e.g. "soft-chews") for data-form attributes, '' when
+ *                        the formula carries no term
+ *   {{FORMULA_USE}}      formula detail pages only — the current formula's
+ *                        sf_formula_use term name, written VERBATIM (wp_terms
+ *                        stores "Skin &amp; coat"; esc_html here would
+ *                        double-escape, the same pit 2B Stage1 hit)
+ *   {{FORMULA_META}}     formula detail pages only — the hero's one-line meta
+ *                        summary, composed here rather than in the template so
+ *                        a missing piece can never leave a dangling "· ":
+ *                        "<form> · MOQ <row> · Lead time <row>", where the two
+ *                        rows come from the form's /products/<form>/
+ *                        specification table (sinofresh_formula_spec_cell).
+ *                        Falls back to the form label alone, or to ''.
  *   {{LAST_UPDATED}}     "· Last updated: M j, Y" from the sf_last_reviewed
  *                        custom field, or '' when unset (only posts with a
  *                        real content review show the second date)
@@ -1938,12 +2110,39 @@ function sinofresh_template_placeholders($html) {
 	   disappearing entirely. */
 	$form_crumb = '';
 	$form_href  = '/products/';
+	$form_slug  = '';
+	$formula_use = '';
+	$formula_meta = '';
 	if (is_singular('sf_formula')) {
-		$form_terms = wp_get_post_terms((int) get_queried_object_id(), 'sf_formula_form');
+		$formula_id = (int) get_queried_object_id();
+		$form_terms = wp_get_post_terms($formula_id, 'sf_formula_form');
 		if (!is_wp_error($form_terms) && $form_terms) {
 			$form_crumb = sinofresh_formula_label($form_terms[0]->slug, $form_terms[0]->name);
 			$form_href  = '/products/' . $form_terms[0]->slug . '/';
+			$form_slug  = (string) $form_terms[0]->slug;
 		}
+		$use_terms = wp_get_post_terms($formula_id, 'sf_formula_use');
+		if (!is_wp_error($use_terms) && $use_terms) {
+			$formula_use = (string) $use_terms[0]->name;
+		}
+		/* The hero meta line: form label plus the form's own MOQ / lead time
+		   rows. Composed as a list so an absent row shortens the line instead
+		   of printing "MOQ " with nothing after it. */
+		$meta_bits = array();
+		if ($form_crumb !== '') {
+			$meta_bits[] = $form_crumb;
+		}
+		if ($form_slug !== '') {
+			$moq  = sinofresh_formula_spec_cell($form_slug, 'MOQ');
+			$lead = sinofresh_formula_spec_cell($form_slug, 'Lead time');
+			if ($moq !== '') {
+				$meta_bits[] = 'MOQ ' . $moq;
+			}
+			if ($lead !== '') {
+				$meta_bits[] = 'Lead time ' . $lead;
+			}
+		}
+		$formula_meta = implode(' · ', $meta_bits);
 	}
 	$map = array(
 		'{{TITLE}}'           => esc_html($title),
@@ -1952,6 +2151,10 @@ function sinofresh_template_placeholders($html) {
 		'{{MID_CRUMB}}'       => $case ? 'Case Studies' : 'Blog',
 		'{{FORM_CRUMB}}'      => esc_html($form_crumb),
 		'{{FORM_HREF}}'       => esc_url($form_href),
+		'{{FORM_SLUG}}'       => esc_attr($form_slug),
+		/* Verbatim, not esc_html: see the docblock and the 2B Stage1 pit. */
+		'{{FORMULA_USE}}'     => $formula_use,
+		'{{FORMULA_META}}'    => esc_html($formula_meta),
 		'{{LAST_UPDATED}}'    => esc_html($last),
 		'{{SHARE_URL}}'       => esc_url($permalink),
 		'{{SHARE_URL_ENC}}'   => rawurlencode($permalink),
@@ -2482,6 +2685,94 @@ add_action('wp_head', function () {
 		. wp_json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE)
 		. "</script>\n";
 }, 21);
+
+/**
+ * Product JSON-LD (schema.org) for a formula detail page (batch 2C, D4).
+ *
+ * Built from the formula record itself, not from the template: name = the
+ * post title, the three specification fields = post meta, image = the same
+ * dosage still the cards and the hero resolve (sinofresh_formula_card_image,
+ * by form slug — never "the first <img> on the page", which would latch onto
+ * a related card's photo).
+ *
+ * description is assembled from the record's own fields. An excerpt was not
+ * an option: excerpts are empty across all 21 formulas, and so is
+ * post_content, so the sentence is generated from the dosage form plus the
+ * three spec values, dropping any clause whose field is empty.
+ *
+ * No offers / price: a standard formula is an OEM reference, not a priced
+ * SKU, and inventing a price would be worse than omitting the property.
+ * brand/manufacturer/category stay on the eight dosage-page schemas where
+ * they describe the product line; here the subject is one recipe.
+ */
+add_action('wp_head', function () {
+	if (is_admin() || defined('REST_REQUEST') || !is_singular('sf_formula')) {
+		return;
+	}
+	$post_id = (int) get_queried_object_id();
+	$post    = get_post($post_id);
+	if (!($post instanceof WP_Post)) {
+		return;
+	}
+	$name = html_entity_decode(get_the_title($post), ENT_QUOTES, 'UTF-8');
+	if ($name === '') {
+		return;
+	}
+
+	$form_slug  = '';
+	$form_label = '';
+	$form_terms = wp_get_post_terms($post_id, 'sf_formula_form');
+	if (!is_wp_error($form_terms) && $form_terms) {
+		$form_slug  = (string) $form_terms[0]->slug;
+		$form_label = sinofresh_formula_label($form_terms[0]->slug, $form_terms[0]->name);
+	}
+
+	$ingredients = trim((string) get_post_meta($post_id, 'sf_formula_ingredients', true));
+	$analysis    = trim((string) get_post_meta($post_id, 'sf_formula_analysis', true));
+	$specs       = trim((string) get_post_meta($post_id, 'sf_formula_specs', true));
+
+	$description = $form_label !== ''
+		? sprintf('%s — a standard %s formula from the SINO FRESH OEM/ODM range for private-label pet supplements.', $name, $form_label)
+		: sprintf('%s — a standard formula from the SINO FRESH OEM/ODM range for private-label pet supplements.', $name);
+	if ($ingredients !== '') {
+		$description .= ' Ingredients: ' . $ingredients . '.';
+	}
+	if ($analysis !== '') {
+		$description .= ' Guaranteed analysis: ' . $analysis . '.';
+	}
+	if ($specs !== '') {
+		$description .= ' Specifications: ' . $specs . '.';
+	}
+
+	$schema = array(
+		'@context'    => 'https://schema.org',
+		'@type'       => 'Product',
+		'name'        => $name,
+		'description' => $description,
+	);
+	$image = sinofresh_formula_card_image($form_slug);
+	if ($image !== '') {
+		$schema['image'] = $image;
+	}
+	$props = array();
+	foreach (array(
+		'Ingredients'         => $ingredients,
+		'Guaranteed Analysis' => $analysis,
+		'Standard Specs'      => $specs,
+	) as $label => $value) {
+		if ($value === '') {
+			continue;
+		}
+		$props[] = array('@type' => 'PropertyValue', 'name' => $label, 'value' => $value);
+	}
+	if ($props) {
+		$schema['additionalProperty'] = $props;
+	}
+
+	echo "\n" . '<script type="application/ld+json">'
+		. wp_json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE)
+		. "</script>\n";
+}, 22);
 
 /**
  * Organization JSON-LD (schema.org) — once, site-wide. sameAs is built from
