@@ -23,7 +23,15 @@ Two traps this file exists to avoid, both of which produce a confident
     like content differences. The remote side returns raw `md5sum` output and
     all matching happens locally, in a dict.
 
-    python3 tools/sf_repo_md5.py [--root DIR] [--json F]
+    python3 tools/sf_repo_md5.py [--exclude PATH]... [--root DIR] [--json F]
+
+A report that is written INSIDE the repository cannot be part of the set it
+reports on. The content of such a file depends on the hashes it contains,
+including its own — there is no stable value for it to settle on, and a run that
+writes the report before hashing will hash a half-written file. Both were
+observed: capturing the output with a shell redirect into a tracked path made
+the tool report one mismatch, against the file it was writing. Pass the report
+path to --exclude and the set becomes stable and reproducible.
 """
 import argparse
 import hashlib
@@ -44,14 +52,24 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--host", default=HOST)
     ap.add_argument("--root", default=REPO, help="repository root on the dev box")
+    ap.add_argument("--exclude", action="append", default=[],
+                    help="tracked path to leave out of the comparison on BOTH "
+                         "sides (repeatable) — required for the report itself")
     ap.add_argument("--json", default=None)
     args = ap.parse_args()
 
     p = sh(["git", "-c", "core.quotePath=false", "ls-files", "-z"])
-    files = [f for f in p.stdout.split("\0") if f]
-    if not files:
+    tracked = [f for f in p.stdout.split("\0") if f]
+    if not tracked:
         print("no tracked files — refusing to report a comparison of nothing")
         return 2
+
+    unmatched = [e for e in args.exclude if e not in tracked]
+    if unmatched:
+        print("--exclude path(s) not tracked, so the exclusion would silently "
+              "shrink nothing: %s" % ", ".join(unmatched))
+        return 2
+    files = [f for f in tracked if f not in args.exclude]
 
     weird = [f for f in files if "\n" in f]
     if weird:
@@ -80,7 +98,11 @@ def main():
     nonascii = [f for f in files if not f.isascii()]
     bad = [f for f in files if f in local and remote.get(f) != local[f]]
 
-    print("tracked files            : %d" % len(files))
+    print("tracked files            : %d" % len(tracked))
+    if args.exclude:
+        print("excluded (both sides)    : %d  (%s)"
+              % (len(args.exclude), ", ".join(args.exclude)))
+    print("compared                 : %d" % len(files))
     print("hashed locally           : %d  (unreadable: %d)" % (len(local), len(missing_local)))
     print("hashed on the dev box    : %d" % len(remote))
     print("non-ASCII paths          : %d" % len(nonascii))
