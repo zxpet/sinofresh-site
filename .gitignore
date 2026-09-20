@@ -5,6 +5,12 @@
 /ai-images-raw/
 /.workbuddy/
 
+# 主题内的批次备份。原来的 /_backup/ 是根目录锚定的，匹配不到
+# sinofresh-theme/_backup/ —— 于是 93 个批次备份全被提交进了仓库
+# （348 个文件、22.86MB），每次 push 都要重新传一遍。这条规则从下一批
+# 开始止血；已入库的历史文件需要单独的 git rm -r --cached 清理。
+**/_backup/
+
 # 根目录一次性截图/草稿
 /*.png
 
