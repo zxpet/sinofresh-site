@@ -71,3 +71,54 @@
 2. **CSS 37c 新段 + 36a 选择器列表加 `.sf-fchips`**；`style.css` 版本 2.10.43 → **2.10.44**；新建 `assets/js/formula-filter.js` 1.0.0（仅档案页入队，无库无框架）。
 3. **8 个剂型页内部链接**（文件改动，Edit Site 无效）—— 见 `batch2c-step2-internal-links.md` §B，单独 commit 便于单独 revert。
 4. **首次云端 pull + md5 + 14 项验收 + 截图**（桌面／手机／过滤后）。
+
+## 八、子项③④（grid 数据属性 + 前端筛选）验证全档 —— 2026-09-20
+
+> 提交：③ `f6baf96`（grid K1 `data-form` + 卡片 `data-sf-form`）、④ `be08814`（`formula-filter.js` 1.0.0 + `style.css` 37c/36a + 2.10.44 + 截图 + 5 个预检工具）。
+> 两者都已 push（`origin/main = be08814`）；**云端 HEAD 仍 `d9b80dd`、未 pull**，线上主题与 DB 一字未动。
+
+### 8.1 预检装置（方法在本轮升级）
+
+- **只验 PHP 渲染**：mu-plugin 过滤 `theme_root` → 指向 `cp -a` 副本。够用于模板/短代码/钩子核验。
+- **要验 CSS/JS ⇒ 必须换成「装成另一个主题」**：副本放 `public/wp-content/themes/sinofresh-theme-preflight/`，mu-plugin 过滤 `stylesheet` + `template`。
+  **根因**：入队的样式/脚本 URL 由 **stylesheet directory URI** 拼出（`get_stylesheet_uri()` / `get_template_directory_uri()`），换 `theme_root` 只改 PHP 找模板的路径，HTTP 交付的仍是线上那份 `style.css`，新 `formula-filter.js` 直接 404。
+  **误判形态**：页面 HTML 看起来全对（21 卡、9 chip、双脚本都入队），但浏览器里 `computed display` 全是基础值、点击毫无反应 —— 极易归咎于 JS 写错。本轮就是这个现象。
+- **浏览器带门**：`agent-browser open <url> --headers '{"X-SF-Preflight":"1"}'`（按 origin 生效，同源后续导航继续带）。
+- 用完即删：mu-plugin、预检主题目录、`/tmp` 传输文件；复验 `mu-plugins` 空、`/formulas/` = 200 / 114403 B、云端 `git status` 干净、带 header 也回到旧页。
+
+### 8.2 服务端断言 50/50
+
+| 组 | 结论 |
+|---|---|
+| `/formulas/` | 200、21 卡、9 chip（All + soft-chews/tablets/powders/pastes/drops/liquids/fish-oil/dental-chews＝menu_order 序） |
+| 数据属性 | 21 `data-formula`、21 `data-form`、21 `data-sf-form`；各剂型卡数 4/3/3/2/2/2/2/3 |
+| 卡序 | 渲染顺序 **deep-equal** `SELECT post_title … ORDER BY menu_order ASC, post_title ASC` |
+| 入队/标记 | `sf-js` ×1、`formulas.js` ×1、`formula-filter.js` ×1、`style.css?ver=2.10.44` |
+| 残留 | `{{` = 0、`[sf_` = 0 |
+| 文案 | 计数「21 formulas」；计数 span = 21；`sf-fchips-status` role=status ×1 |
+| JSON-LD | ItemList 21 条 position 1..21；BreadcrumbList 2 项 = 可见面包屑（Home / Formulas）；Organization |
+| 301/404 | `/formulas/page/2|3/` → 301 `/formulas/`；`/zh/formulas/page/2/` → 301 `/zh/formulas/`；`/formulas/page/4/` → 404；`/zh/formulas/` = 200 |
+| 8 剂型页 | 每页 `data-form` 值集合 = {自身 slug}，与 URL 回退值相同 ⇒ 零行为变化 |
+| 详情页 | `/formulas/ear-care-drops/` 的 related 按钮 `data-form="drops"`（不再是 formula slug） |
+| 资源交付 | 预检主题的 `style.css` 与 `formula-filter.js` 均 200，且内容含 37c 规则 |
+
+### 8.3 浏览器断言 34/34（agent-browser，预检主题）
+
+- **桌面 1440**：筛选带 `display:flex` 渲染；9 chip 顺序正确；All 默认 `aria-pressed="true"` + `.is-active`；21 卡全可见、0 隐藏；状态「Showing 21 of 21 formulas」；网格 4 列；rail `flex-wrap: wrap`。
+- **过滤（真实点击）**：Soft Chews → **4 可见 / 17 隐藏**、可见剂型集合 = {soft-chews}、`aria-pressed` 与 `.is-active` 都只有 soft-chews、状态「Showing 4 of 21 formulas」、文档高度下降（无幽灵行）；点 All → 21 复原。
+- **无 JS**：服务端 `<html lang="en-US">` **不带** `sf-js`（由 head 内联脚本加）；抹掉该 class 后筛选带 `display:none`、21 卡仍 4 列全可见、无死按钮、网格不动（文档高度 −72px ＝ 白色筛选带自身内边距，即已记录的已知外观代价）。
+- **移动 375**：rail `flex-wrap:nowrap` + `overflow-x:auto` 且 `scrollWidth > clientWidth`（真的可横滑，宽 299px）；网格 1 列；点 Tablets → 3 可见 / 18 隐藏。
+- 控制台无 page error。
+
+### 8.4 掩码回归（15 页）
+
+- **A/A 掩码自检 PASS**（/blog/、/formulas/）。
+- 原始比对：15/15 DIFF —— 首个差异**每页都是** `style.css?ver=2.10.44` vs `2.10.43`。
+- **入队资源清单**（独立报告）：**仅** `style.css 2.10.43 → 2.10.44` 一个令牌移动（15 页），其余 33 个资源令牌全同，**资源集合每页相同**。⇒ 「只掩不报」的风险被排除。
+- **归一化三类预期差异**后：**15/15 逐页 SAME**。三类 = ①`?ver=` 令牌 ②预检主题目录名（每个资源 URL + `wp-theme-<name>` body class）③本次故意新增的两个属性。
+  ⇒ 结论：8 剂型页与 2 详情页的**唯一** DOM 变化就是那两个属性；/blog/、/category/、/tag/、/、/contact/ 五页除版本令牌外**逐字节不变**。
+
+### 8.5 截图
+
+`sinofresh-theme/screenshots/batch2c-step2-formulas/`（7 张，共 2.84 MB）：
+`01-desktop-bar-viewport.png`、`02-desktop-filtered-soft-chews.png`、`03-mobile-chips-rail.png`、`04-mobile-filtered-dental-chews.png`、`05-desktop-1440-full.jpg`、`06-mobile-375-full.jpg`、`07-nojs-bar-hidden-full.jpg`（全页大图用 `sips` 转 jpg 72 压体积）。
