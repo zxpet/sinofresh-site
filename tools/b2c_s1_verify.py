@@ -58,6 +58,24 @@ def ld_blocks(doc):
     return out
 
 
+def check_template_hygiene(c, path='sinofresh-theme/templates/single-sf_formula.html'):
+    """A block template's HTML comments are echoed into the page source.
+
+    So: no placeholder tokens, and no multi-paragraph rationale in a comment —
+    keep them short and structural, like page-soft-chews.html's
+    "<!-- Block 2: Hero -->". Reasoning belongs in functions.php / the commit
+    message, where it cannot render.
+    """
+    src = open(path, encoding='utf-8').read()
+    for comment in re.findall(r'<!--(.*?)-->', src, re.S):
+        body = ' '.join(comment.split())
+        if body.startswith('wp:'):
+            continue
+        c.ok('{{' not in body, f'template comment has no token', body[:60])
+        c.ok(len(body) <= 200, f'template comment is short', f'{len(body)} chars: {body[:60]}')
+    c.ok('/ -->' not in src, 'template has no broken block comment')
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--truth', default='/tmp/sf_truth.json')
@@ -66,6 +84,7 @@ def main():
 
     truth = json.load(open(args.truth, encoding='utf-8'))
     c = Checks()
+    check_template_hygiene(c)
     form_totals = {}
     for r in truth:
         form_totals[r['form_slug']] = form_totals.get(r['form_slug'], 0) + 1
@@ -86,16 +105,14 @@ def main():
         for needle in ('Fatal error', 'Warning: ', 'Notice: ', 'Deprecated: '):
             c.ok(needle not in doc, f'{slug} no "{needle}"')
         # No leftover placeholder tokens. Block templates emit their HTML
-        # comments into the page source, so a {{token}} or a multi-paragraph
-        # internal note written in one ends up in production HTML — the theme
-        # convention is short structural comments only (page-soft-chews.html).
+        # comments into the page source, so a {{token}} written in one ends up
+        # in production HTML. (Comment length is checked against the template
+        # file itself, not here: parts/header.html carries a long-standing
+        # multi-line "Top bar:" note that renders on every page of the site,
+        # so a page-level length gate would fail everywhere for something this
+        # batch does not own.)
         leftovers = re.findall(r'\{\{[^}]{0,40}\}\}', doc)
         c.ok(not leftovers, f'{slug} placeholders resolved', str(leftovers[:5]))
-        long_comments = [
-            ' '.join(x.split())[:70] for x in re.findall(r'<!--(.*?)-->', doc, re.S)
-            if len(x) > 160 and not x.strip().startswith('wp:')
-        ]
-        c.ok(not long_comments, f'{slug} no long HTML comment leaked', str(long_comments[:3]))
         # Self-closing block residue (the classic kses/editor artefact).
         c.ok('/ -->' not in doc, f'{slug} no self-closing residue')
 
