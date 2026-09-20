@@ -15,6 +15,20 @@
 </section>
 <!-- /wp:group -->
 
+<!-- B2D-S3: gallery -->
+<!-- wp:group {"tagName":"section","anchor":"gallery","className":"sf-gallery","backgroundColor":"bg-light","layout":{"type":"constrained"},"style":{"spacing":{"padding":{"top":"var:preset|spacing|80","bottom":"var:preset|spacing|80"}}}} -->
+<section id="gallery" class="wp-block-group sf-gallery has-bg-light-background-color has-background" style="padding-top:var(--wp--preset--spacing--80);padding-bottom:var(--wp--preset--spacing--80)">
+<!-- wp:html -->
+[sf_formula_gallery]
+<!-- /wp:html -->
+</section>
+<!-- /wp:group -->
+
+<!-- Block 3: long copy (emitted only when the record has some) -->
+<!-- wp:html -->
+[sf_formula_body]
+<!-- /wp:html -->
+
 <!-- Block 2: Specification -->
 <!-- wp:group {"tagName":"section","className":"sf-fdetail","backgroundColor":"card-white","layout":{"type":"constrained"},"style":{"spacing":{"padding":{"top":"var:preset|spacing|80","bottom":"var:preset|spacing|80"}}}} -->
 <section class="wp-block-group sf-fdetail has-card-white-background-color has-background" style="padding-top:var(--wp--preset--spacing--80);padding-bottom:var(--wp--preset--spacing--80)">
@@ -27,9 +41,14 @@
 </section>
 <!-- /wp:group -->
 
-<!-- Block 3: long copy (emitted only when the record has some) -->
+<!-- B2D-S3: actives -->
 <!-- wp:html -->
-[sf_formula_body]
+[sf_formula_detail_actives]
+<!-- /wp:html -->
+
+<!-- B2D-S3: composition -->
+<!-- wp:html -->
+[sf_formula_detail_composition]
 <!-- /wp:html -->
 
 <!-- Block 4: related formulas -->

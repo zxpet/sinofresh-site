@@ -23,7 +23,7 @@ add_action('after_setup_theme', function() {
 });
 
 add_action('wp_enqueue_scripts', function() {
-	wp_enqueue_style('sinofresh-style', get_stylesheet_uri(), array(), '2.10.46');
+	wp_enqueue_style('sinofresh-style', get_stylesheet_uri(), array(), '2.10.47');
 	// Sticky nav: every template renders parts/header.html, so this is site-wide.
 	wp_enqueue_script('sinofresh-sticky-header', get_template_directory_uri() . '/assets/js/sticky-header.js', array(), '1.0.0', true);
 	wp_enqueue_script('sinofresh-ui-components', get_template_directory_uri() . '/assets/js/ui-components.js', array(), '1.0.0', true);
@@ -182,9 +182,13 @@ add_action('wp_enqueue_scripts', function() {
 	if ($is_dosage_page) {
 		wp_enqueue_style('sinofresh-configurator', get_template_directory_uri() . '/assets/css/configurator.css', array(), '2.9');
 		wp_enqueue_script('sinofresh-configurator', get_template_directory_uri() . '/assets/js/configurator.js', array(), '2.3', true);
-		// Product gallery: builds the thumbnail strip under the main photo.
-		// Absent, the band still shows the main photo and its heading — that
-		// is the no-JS contract, not a fallback path.
+	}
+	// Product gallery: builds the thumbnail strip under the main photo of the
+	// formula detail band. Step 2 put that band on the eight dosage pages and
+	// hung the script there; Step 3 moved the band to the 21 detail pages, so
+	// the script follows it. Absent, the band still shows the main photo and
+	// its heading — that is the no-JS contract, not a fallback path.
+	if (is_singular('sf_formula')) {
 		wp_enqueue_script('sinofresh-formula-gallery', get_template_directory_uri() . '/assets/js/formula-gallery.js', array(), '1.0.0', true);
 	}
 	// Standard Formulas CTAs (K1): the card grid on the eight dosage pages,
@@ -441,6 +445,8 @@ function sinofresh_register_formula_types() {
 		'sf_formula_analysis'    => 'Guaranteed Analysis figures for the formula detail page.',
 		'sf_formula_specs'       => 'Standard Specs line shown on the card.',
 		'sf_formula_source'      => 'Admin-only note recording where this record was migrated from.',
+		'sf_formula_base'        => 'Base / carrier, for the "Ingredients & composition" band on the formula detail page. Empty on all 21 records today.',
+		'sf_formula_other_ingredients' => 'Other ingredients, for the "Ingredients & composition" band on the formula detail page. Empty on all 21 records today.',
 	) as $key => $desc) {
 		register_post_meta('sf_formula', $key, array(
 			'type'          => 'string',
@@ -1460,6 +1466,128 @@ function sinofresh_formula_body() {
 	return '<section class="sf-fdetail-body"><div class="sf-fdetail-body__inner">' . $html . '</div></section>';
 }
 add_shortcode('sf_formula_body', 'sinofresh_formula_body');
+
+/**
+ * [sf_formula_detail_actives] — the "Formula & nutrition" band on a formula
+ * detail page.
+ *
+ * The Specification cards above it already print the same two fields as plain
+ * text; this band is that record read as data instead of prose — the
+ * ingredient list as pills and the guaranteed analysis as the compact
+ * term/value grid — so a buyer comparing two formulas can scan levels rather
+ * than parse a sentence. Both readings are deliberate: the card is the record,
+ * the band is the comparison.
+ *
+ * Reads post meta directly rather than the K2 mirror ([sf_formula_grid]'s
+ * by-product): this page has no grid to keep alive, and post meta stays
+ * editable in wp-admin while the template does not (authority guard).
+ *
+ * Parsing is [sf_formula_actives]' own two helpers, unchanged — the same
+ * split that band uses on the same fields, so the two pages cannot disagree
+ * about where an ingredient ends.
+ *
+ * Emits its own <section> and returns '' when both fields are empty, so the
+ * band collapses to zero bytes: no empty padded section, no orphan heading.
+ * Same convention as [sf_formula_body] above.
+ */
+function sinofresh_formula_detail_actives() {
+	if (!is_singular('sf_formula')) {
+		return '';
+	}
+	$post_id = (int) get_queried_object_id();
+	if (!$post_id) {
+		return '';
+	}
+	$ingredients = trim((string) get_post_meta($post_id, 'sf_formula_ingredients', true));
+	$analysis    = trim((string) get_post_meta($post_id, 'sf_formula_analysis', true));
+	if ($ingredients === '' && $analysis === '') {
+		return '';
+	}
+
+	$body  = '';
+	$pills = '';
+	foreach (sinofresh_formula_split_top_level($ingredients) as $term) {
+		$pills .= '<li class="sf-actives__pill">' . esc_html($term) . '</li>';
+	}
+	if ($pills !== '') {
+		$body .= '<p class="sf-actives__label">' . esc_html('Ingredients') . '</p>'
+			. '<ul class="sf-actives__ing">' . $pills . '</ul>';
+	}
+
+	/* A segment with no level, or with no subject, is not a row — the dry run
+	   (tools/b2d1_parser_dryrun.php §2/§3) finds none in the 21 live records,
+	   and rendering one would emit an empty <dd>. */
+	$rows = '';
+	foreach (sinofresh_formula_analysis_pairs($analysis) as $pair) {
+		if ($pair['term'] === '' || $pair['value'] === '') {
+			continue;
+		}
+		$rows .= '<div class="sf-spec-row">'
+			. '<dt class="sf-spec-term">' . esc_html($pair['term']) . '</dt>'
+			. '<dd class="sf-spec-value">' . esc_html($pair['value']) . '</dd>'
+			. '</div>';
+	}
+	if ($rows !== '') {
+		$body .= '<p class="sf-actives__label">' . esc_html('Guaranteed Analysis') . '</p>'
+			. '<dl class="sf-spec-list">' . $rows . '</dl>';
+	}
+	if ($body === '') {
+		return '';
+	}
+
+	return '<section class="sf-fdetail-actives"><div class="sf-fdetail-actives__inner">'
+		. '<h2 class="sf-fdetail-actives__title">' . esc_html('Formula & nutrition') . '</h2>'
+		. $body
+		. '</div></section>';
+}
+add_shortcode('sf_formula_detail_actives', 'sinofresh_formula_detail_actives');
+
+/**
+ * [sf_formula_detail_composition] — the "Ingredients & composition" band.
+ *
+ * Reads two meta fields that are empty on all 21 records today. They are
+ * registered with show_in_rest (see sinofresh_register_formula_types), so the
+ * band can be filled from wp-admin without touching this template.
+ *
+ * Deliberately does NOT fall back to sf_formula_ingredients: that field is
+ * free text whose meaning differs per record (an active list on "Ear Care
+ * Drops", a percentage bill of materials on "Hairball Remedy Paste") and it
+ * is already shown twice on this page above. A third printing of the same
+ * string would not be a composition section.
+ *
+ * Returns '' with no values, so the page carries nothing at all.
+ */
+function sinofresh_formula_detail_composition() {
+	if (!is_singular('sf_formula')) {
+		return '';
+	}
+	$post_id = (int) get_queried_object_id();
+	if (!$post_id) {
+		return '';
+	}
+	$rows = '';
+	foreach (array(
+		'Base'              => 'sf_formula_base',
+		'Other ingredients' => 'sf_formula_other_ingredients',
+	) as $label => $key) {
+		$value = trim((string) get_post_meta($post_id, $key, true));
+		if ($value === '') {
+			continue;
+		}
+		$rows .= '<div class="sf-spec-row">'
+			. '<dt class="sf-spec-term">' . esc_html($label) . '</dt>'
+			. '<dd class="sf-spec-value">' . esc_html($value) . '</dd>'
+			. '</div>';
+	}
+	if ($rows === '') {
+		return '';
+	}
+	return '<section class="sf-fdetail-composition"><div class="sf-fdetail-composition__inner">'
+		. '<h2 class="sf-fdetail-composition__title">' . esc_html('Ingredients & composition') . '</h2>'
+		. '<dl class="sf-spec-list">' . $rows . '</dl>'
+		. '</div></section>';
+}
+add_shortcode('sf_formula_detail_composition', 'sinofresh_formula_detail_composition');
 
 /**
  * Article pattern library (block patterns).

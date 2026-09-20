@@ -2,7 +2,7 @@
 Theme Name: SINO FRESH
 Author: Shandong SINO FRESH Pet Food Co., Ltd.
 Text Domain: sinofresh
-Version: 2.10.46
+Version: 2.10.47
 Requires at least: 6.0
 Requires PHP: 7.4
 License: GNU General Public License v2 or later
@@ -8075,6 +8075,65 @@ body.sf-certmodal-lock {
 	.sf-gallery__slide,
 	.sf-gallery__thumb {
 		transition: none;
+	}
+}
+
+/* B2D Step3 — "Formula & nutrition" and "Ingredients & composition", the two
+   bands between the Specification cards and the related-formulas grid on a
+   formula detail page.
+
+   Both are emitted whole by their shortcode (section + heading + body) and
+   return nothing at all when the record has no data, so they are styled here
+   rather than in the template: a band with no data must not leave a padded
+   empty section or an orphan heading behind. Same contract as
+   .sf-fdetail-body above, which emits itself for the same reason.
+
+   White, like .sf-fdetail above them: the three read as one "this formula's
+   data" surface, each run separated by its own H2. Padding sits on the
+   section, not on the inner box, so the background covers the gutter at every
+   width regardless of box-sizing. Pill and term/value vocabulary is the
+   2D-S1 set, unchanged. ------------------------------------------------ */
+.sf-fdetail-actives,
+.sf-fdetail-composition {
+	padding: 48px 0;
+	background-color: var(--wp--preset--color--card-white);
+}
+.sf-fdetail-actives__inner,
+.sf-fdetail-composition__inner {
+	max-width: var(--wp--style--global--content-size, 1200px);
+	margin-inline: auto;
+}
+/* Matches the 0 top margin core's layout gives the "Specification" heading
+   in the band above, so all three headings sit on the same baseline. */
+.sf-fdetail-actives__title,
+.sf-fdetail-composition__title { margin: 0; }
+/* The reused pill list and spec grid carry their own spacing; <dl> ships
+   margin-block 1em and <dd> margin-inline-start 40px, which the grid needs
+   neutralised inside these bands — the same pair .sf-actives sets. */
+.sf-fdetail-actives .sf-spec-list,
+.sf-fdetail-composition .sf-spec-list { margin: 10px 0 0; }
+.sf-fdetail-actives .sf-spec-term,
+.sf-fdetail-actives .sf-spec-value,
+.sf-fdetail-composition .sf-spec-term,
+.sf-fdetail-composition .sf-spec-value { margin: 0; }
+/* Composition values are prose, not figures: the bold primary-green weight is
+   the guaranteed-analysis treatment and would read as a level on a sentence. */
+.sf-fdetail-composition .sf-spec-value {
+	font-weight: 400;
+	color: var(--wp--preset--color--text-primary);
+}
+@media (max-width: 1240px) {
+	.sf-fdetail-actives,
+	.sf-fdetail-composition {
+		padding-left: 38px;
+		padding-right: 38px;
+	}
+}
+@media (max-width: 768px) {
+	.sf-fdetail-actives,
+	.sf-fdetail-composition {
+		padding-left: 20px;
+		padding-right: 20px;
 	}
 }
 
