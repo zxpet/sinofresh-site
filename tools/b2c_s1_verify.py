@@ -85,14 +85,17 @@ def main():
         # No PHP diagnostics leaked into the body.
         for needle in ('Fatal error', 'Warning: ', 'Notice: ', 'Deprecated: '):
             c.ok(needle not in doc, f'{slug} no "{needle}"')
-        # No leftover placeholder tokens. Template-level HTML comments are
-        # emitted into the page source, so a {{token}} or an internal note
-        # written in one shows up in production HTML — keep the templates to
-        # short structural comments (the convention page-soft-chews.html uses).
-        c.ok('{{' not in doc and '}}' not in doc, f'{slug} placeholders resolved',
-             str([t for t in re.findall(r'\{\{[^}]{0,30}\}\}', doc)][:5]))
-        c.ok('class-before-href' not in doc and 'queried object' not in doc,
-             f'{slug} no internal doc comment leaked')
+        # No leftover placeholder tokens. Block templates emit their HTML
+        # comments into the page source, so a {{token}} or a multi-paragraph
+        # internal note written in one ends up in production HTML — the theme
+        # convention is short structural comments only (page-soft-chews.html).
+        leftovers = re.findall(r'\{\{[^}]{0,40}\}\}', doc)
+        c.ok(not leftovers, f'{slug} placeholders resolved', str(leftovers[:5]))
+        long_comments = [
+            ' '.join(x.split())[:70] for x in re.findall(r'<!--(.*?)-->', doc, re.S)
+            if len(x) > 160 and not x.strip().startswith('wp:')
+        ]
+        c.ok(not long_comments, f'{slug} no long HTML comment leaked', str(long_comments[:3]))
         # Self-closing block residue (the classic kses/editor artefact).
         c.ok('/ -->' not in doc, f'{slug} no self-closing residue')
 
