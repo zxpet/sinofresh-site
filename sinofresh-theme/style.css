@@ -2,7 +2,7 @@
 Theme Name: SINO FRESH
 Author: Shandong SINO FRESH Pet Food Co., Ltd.
 Text Domain: sinofresh
-Version: 2.10.43
+Version: 2.10.44
 Requires at least: 6.0
 Requires PHP: 7.4
 License: GNU General Public License v2 or later
@@ -5433,8 +5433,12 @@ section:has(> .sf-faq) > :where(:not(.alignwide):not(.alignfull)) {
 	   header CTA lives inside <header>, so this selector cannot reach it.
 	   The strip is now [sf_blog_chips] output on /blog/ AND the archive
 	   templates, so the rail targets its own sf-blog-chips class (kept as
-	   a plain class, not body-scoped, so both scopes share one rule). */
-	.sf-blog-chips {
+	   a plain class, not body-scoped, so both scopes share one rule).
+	   2C Step2 adds .sf-fchips: the /formulas/ filter bar is the same kind
+	   of strip (a row of pills, nine of them) and needs the same phone
+	   behaviour — see 37c for its own geometry. */
+	.sf-blog-chips,
+	.sf-fchips {
 		flex-wrap: nowrap !important;
 		overflow-x: auto;
 		justify-content: flex-start !important;
@@ -5442,7 +5446,8 @@ section:has(> .sf-faq) > :where(:not(.alignwide):not(.alignfull)) {
 		-webkit-overflow-scrolling: touch;
 		scrollbar-width: none;
 	}
-	.sf-blog-chips::-webkit-scrollbar {
+	.sf-blog-chips::-webkit-scrollbar,
+	.sf-fchips::-webkit-scrollbar {
 		display: none;
 	}
 	.sf-blog-chips .wp-block-button {
@@ -5894,6 +5899,96 @@ body.page-id-28 .wp-block-columns:has(> .wp-block-column > .wp-block-group.has-c
 	   padding-top = 56px from band edge to the "Build Your …" title. */
 	.sf-formulas { padding-bottom: 0 !important; }
 	#configurator { padding-top: 32px !important; }
+}
+
+/* === 37c. Formula archive filter bar (/formulas/, formula-filter.js) ======
+   Nine chips — All plus the eight dosage forms — above the 21-card grid. The
+   bar narrows what is already on screen, so the chips are <button>s, not
+   links: that is the honest control for "hide some of this list", and it
+   keeps the row out of the tab order as nine navigations. The pressed chip is
+   filled ink-green, so the state is painted as well as announced
+   (aria-pressed on the button, the count in the role="status" line).
+
+   Geometry mirrors .sf-explore__chip from the dosage pages — same 6px radius,
+   same border-medium outline, same fill when current — but the type has to be
+   re-declared here: a <button> does not inherit font-family the way an <a>
+   does, and left alone it would fall back to the UA's 13.33px Arial.
+
+   JavaScript-only, twice over. The bar is hidden under html:not(.sf-js) — the
+   class lands via an inline head script on this template only, before the
+   body paints — so a visitor without scripting reads the plain 21-card list
+   instead of nine buttons that do nothing. And the cards are filtered with a
+   class, never [hidden]: .sf-fcard is display:flex and an author display rule
+   beats the hidden attribute's UA style, so the card would stay painted. */
+.sf-fchips {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	margin: 0 0 12px;
+	padding: 0;
+}
+.sf-fchip {
+	flex: 0 0 auto;
+	display: inline-flex;
+	align-items: center;
+	min-height: 40px;
+	box-sizing: border-box;
+	padding: 8px 14px;
+	background-color: var(--wp--preset--color--card-white);
+	border: 1px solid var(--wp--preset--color--border-medium);
+	border-radius: 6px;
+	-webkit-appearance: none;
+	appearance: none;
+	font-family: inherit;
+	font-size: 13px;
+	font-weight: 600;
+	line-height: 1.4;
+	color: var(--wp--preset--color--text-primary);
+	white-space: nowrap;
+	cursor: pointer;
+	transition: border-color 0.15s ease, background-color 0.15s ease, color 0.15s ease;
+}
+.sf-fchip:hover {
+	border-color: var(--wp--preset--color--primary);
+}
+.sf-fchip:focus-visible {
+	outline: 2px solid var(--wp--preset--color--accent);
+	outline-offset: 2px;
+}
+/* Pressed = filled ink-green, mirroring .sf-explore__chip.is-current. */
+.sf-fchip.is-active {
+	border-color: var(--wp--preset--color--primary);
+	background-color: var(--wp--preset--color--primary);
+	color: var(--wp--preset--color--card-white);
+}
+.sf-fchips-status {
+	margin: 0;
+	font-size: 13px;
+	line-height: 1.5;
+	color: var(--wp--preset--color--text-secondary);
+}
+/* Filtered out (formula-filter.js). */
+.sf-fcard.is-sf-off {
+	display: none;
+}
+/* No scripting: the strip has nothing to drive it, so it is not shown. Set
+   before the body paints, so there is no flash of buttons. */
+html:not(.sf-js) .sf-fchips-wrap {
+	display: none;
+}
+/* Screen-reader-only text — the standard recipe, available to this bar (and
+   anything else that needs to announce without painting). */
+.sf-visually-hidden {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	margin: -1px;
+	padding: 0;
+	border: 0;
+	overflow: hidden;
+	clip: rect(0 0 0 0);
+	clip-path: inset(50%);
+	white-space: nowrap;
 }
 
 /* === 45. Inquiry basket: header bag + badge + slide-in drawer ============
