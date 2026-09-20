@@ -117,7 +117,11 @@ if ($title === '') {
   → **三方同 SHA**；`site-repo` 仍 `root:root`，主题 691 文件重新 `apache:apache`
   （本批 pull **触及主题文件**，所以 chown 是必需的，与第 3 批不同）。
 - 云端落盘复验：`style.css` `Version: 2.10.48`、`functions.php` `'2.10.48'`；`git status` 干净。
-- **仓库级 md5**：工作区 ↔ 云端逐文件比对，见 §7；排序只在本地做，中文名逐条证明参与比对。
+- **仓库级 md5**：工作区 ↔ 云端逐文件比对 —— **1210 跟踪文件，only-local 0 / only-cloud 0 / differs 0**；
+  **13 个中文名文件逐条证明参与比对并匹配**（云端 `md5sum` 无 escaped-name 行）。
+  原始输出 `docs/b2d-step4-shots/cloud-md5.txt`（该文件描述的是 `17df165` 那一版状态，本身就比它晚一笔）。
+  排序与比对只在本地做：两侧各自 `sort` 会因 macOS/Linux locale 不同造出假差异；
+  只报"0 差异"也证明不了什么——它区分不了"比过了"与"两边都解析失败而对称跳过"。
 
 ## 6. 无回归的证据（不变量）
 

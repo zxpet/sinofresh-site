@@ -1,0 +1,28 @@
+# Repository-level md5: worktree vs the cloud repo
+#
+# State compared: commit 17df165 — 1210 tracked files (this file is added after
+# that state, so it is not one of them; the count for the commit that contains
+# this file is 1211, re-verified separately after the pull).
+#
+# cloud : ssh root@... 'cd site-repo && git -c core.quotePath=false ls-files -z | xargs -0 md5sum'
+# local : same file list via the same ls-files call, md5'd in Python
+# Sorting and comparison happen only on the local side. Sorting each side
+# separately would manufacture differences out of the macOS/Linux locale gap,
+# and a bare "0 differences" proves nothing on its own: it cannot tell "compared
+# and equal" from "both sides failed to parse and skipped symmetrically", which
+# is why the 13 non-ASCII paths are named and shown matching.
+#
+worktree vs cloud — repository level
+tracked files  local=1210  cloud=1210  (md5sum escaped-name lines: 0)
+only in worktree : 0
+only in cloud    : 0
+hash differs     : 0
+unreadable local : 0
+
+non-ASCII tracked files: 13
+non-ASCII compared and matching: 13
+   sample: sinofresh-theme/docs/官网开发文档-全文.md  local=cdec856f cloud=cdec856f
+   sample: sinofresh-theme/docs/视觉重设计方案-v2.md  local=b14f534f cloud=b14f534f
+   sample: sinofresh-theme/screenshots/batch1-step2-hero/s2-liquids-1440-Hero特写.png  local=2f47a770 cloud=2f47a770
+
+VERDICT: PASS - worktree and cloud are byte-identical on every tracked file
