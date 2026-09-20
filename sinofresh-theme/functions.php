@@ -850,10 +850,19 @@ function sinofresh_formula_grid($atts = array()) {
 		if ($cta_on) {
 			/* K1 — formulas.js binds clicks on .sf-formula__cta to the
 			   sessionStorage key configurator.js later reads back, so
-			   data-formula must carry the name verbatim. */
+			   data-formula must carry the name verbatim.
+			   2C Step2 adds data-form: without it the script fell back to
+			   the last path segment, which happens to be the dosage form on
+			   a dosage page but is the FORMULA slug on a detail page — the
+			   related grid therefore wrote sinofresh_formula_<formula-slug>,
+			   a key configurator.js never reads. On /formulas/ the fallback
+			   was worse still: the key sinofresh_formula_formulas. The
+			   value here equals what the fallback already produced on the
+			   eight dosage pages, so those pages change no behaviour. */
 			$actions .= sprintf(
-				'<button type="button" class="sf-formula__cta" data-formula="%s">Reference this formula →</button>',
-				esc_attr($name)
+				'<button type="button" class="sf-formula__cta" data-formula="%s" data-form="%s">Reference this formula →</button>',
+				esc_attr($name),
+				esc_attr($form_slug)
 			);
 		}
 
@@ -872,7 +881,11 @@ function sinofresh_formula_grid($atts = array()) {
 		}
 
 		$cards .= sprintf(
-			'<article class="sf-fcard">%s<div class="sf-fcard__body"><span class="sf-fcard__use">%s</span><h3 class="sf-fcard__name">%s</h3><p class="sf-fcard__spec">%s</p>%s</div></article>',
+			/* data-sf-form is what formula-filter.js reads on /formulas/.
+			   K7's element/class order is untouched — the attribute is
+			   additive, so every existing .sf-fcard consumer is unaffected. */
+			'<article class="sf-fcard" data-sf-form="%s">%s<div class="sf-fcard__body"><span class="sf-fcard__use">%s</span><h3 class="sf-fcard__name">%s</h3><p class="sf-fcard__spec">%s</p>%s</div></article>',
+			esc_attr($form_slug),
 			$media,
 			/* 2B Stage1 pit #2: term names are entity-encoded in wp_terms
 			   ("Skin &amp; coat") — output verbatim so the browser shows
