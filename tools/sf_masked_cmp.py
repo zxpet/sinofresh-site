@@ -23,6 +23,11 @@ baselines.
   python3 tools/sf_masked_cmp.py --fetch /tmp/pre/live --base https://dev.zxpet.com \\
       --header 'X-SF-Preflight: 1' /blog/ /products/soft-chews/
 
+Since 2026-09-20 dev.zxpet.com is behind HTTP Basic Auth, so every dev fetch
+also needs credentials — pass --user 'sfdev:PASS' or export SF_DEV_AUTH.
+There is no silent fallback: without them curl stores the 401 body and both
+sides agree on it.
+
 Exit code 0 = every pair matched, 1 = at least one difference (so it can be
 used directly as a gate in a shell pipeline).
 """
@@ -49,6 +54,15 @@ MASKS = [
     (re.compile(r'sfcap=[A-Za-z0-9._-]+'), 'sfcap=MASK', 'cache_buster'),
     (re.compile(r'email-protection#[0-9a-f]+'), 'email-protection#MASK', 'cf_email_link'),
     (re.compile(r'data-cfemail="[0-9a-f]+"'), 'data-cfemail="MASK"', 'cf_email_attr'),
+    # Gravity Forms derives the phone-field dropdown's DOM id from a
+    # microtime-seeded hash, so it changes on EVERY request of a page that
+    # carries a phone field. Measured 2026-09-20: three consecutive fetches of
+    # /services/ produced three different ids, and the A/A self-test failed on
+    # that page with no change in play at all. Without this mask the gate can
+    # never certify any page with a phone field — every run reports it as a
+    # regression forever. (The 12h GF nonce window and this id are the two
+    # per-request artefacts GF contributes.)
+    (re.compile(r'gform_phone_dropdown_[0-9a-f]+'), 'gform_phone_dropdown_MASK', 'gf_phone_id'),
     (re.compile(r"'[A-Za-z0-9+/=]{16,}'"), "'MASK'", 'quoted_blob'),
     (re.compile(r'[A-Za-z0-9+/]{40,}={0,2}'), 'MASK', 'long_b64_run'),
 ]
@@ -74,8 +88,14 @@ def digest(path):
     }
 
 
-def curl(url, header=None):
+def curl(url, header=None, user=None):
     cmd = ['curl', '-s', '-L', url]
+    if user:
+        # 2026-09-20: the dev host answers 401 without credentials (the
+        # four-layer lockdown), so every fetch of dev.zxpet.com carries
+        # --user. Without it curl returns the 401 body and both sides hash
+        # the same error page — a silent all-green.
+        cmd[1:1] = ['--user', user]
     if header:
         cmd[1:1] = ['-H', header]
     return subprocess.run(cmd, capture_output=True, text=True).stdout
@@ -92,6 +112,11 @@ def main():
     ap.add_argument('--fetch', metavar='DIR', help='fetch the given paths into DIR')
     ap.add_argument('--base', default='https://dev.zxpet.com', help='base URL for --fetch')
     ap.add_argument('--header', default=None, help='extra request header (e.g. preflight gate)')
+    ap.add_argument('--user', default=os.environ.get('SF_DEV_AUTH', ''), metavar='USER:PASS',
+                    help='HTTP Basic credentials for the dev lockdown '
+                         '(defaults to $SF_DEV_AUTH). Required for dev.zxpet.com '
+                         'since 2026-09-20 — without it every page 401s and the '
+                         'comparison passes on the error page.')
     ap.add_argument('--bust', action='store_true',
                     help='append a unique ?sfcap= to each --fetch URL so Cloudflare '
                          '(max-age=86400, keyed by URL) cannot answer with a snapshot '
@@ -102,7 +127,7 @@ def main():
     args = ap.parse_args()
 
     if args.aa:
-        a, b = curl(args.aa, args.header), curl(args.aa, args.header)
+        a, b = curl(args.aa, args.header, args.user), curl(args.aa, args.header, args.user)
         ma, _ = masked(a)
         mb, _ = masked(b)
         ok = ma == mb
@@ -126,7 +151,7 @@ def main():
             if args.bust:
                 sep = '&' if '?' in url else '?'
                 url += sep + 'sfcap=s' + str(int(time.time() * 1000))
-            body = curl(url, args.header)
+            body = curl(url, args.header, args.user)
             out = os.path.join(args.fetch, slug_of(p) + '.html')
             open(out, 'w', encoding='utf-8').write(body)
             print(f"  fetched {url} -> {out} ({len(body.encode())} bytes)")
