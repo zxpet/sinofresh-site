@@ -1,0 +1,50 @@
+<!-- wp:template-part {"slug":"header","tagName":"header"} /-->
+
+<!-- Block 1: Hero -->
+<!-- wp:group {"tagName":"section","className":"sf-hero-inner","textColor":"card-white","layout":{"type":"constrained"},"style":{"spacing":{"padding":{"top":"var:preset|spacing|80","bottom":"var:preset|spacing|80"}}}} -->
+<section class="wp-block-group has-card-white-color has-text-color sf-hero-inner" style="padding-top:var(--wp--preset--spacing--80);padding-bottom:var(--wp--preset--spacing--80)">
+<!-- wp:html -->
+<nav class="sf-breadcrumb sf-breadcrumb--d2" aria-label="Breadcrumb"><a class="sf-breadcrumb__crumb sf-breadcrumb__crumb--home" href="/">Home</a><span class="sf-breadcrumb__sep sf-breadcrumb__sep--home" aria-hidden="true">/</span><span class="sf-breadcrumb__crumb sf-breadcrumb__current" aria-current="page">{{ARCHIVE_TITLE}}</span></nav>
+<!-- /wp:html -->
+<!-- wp:query-title {"type":"archive","showPrefix":false,"textColor":"card-white"} /-->
+<!-- wp:html -->
+<p class="sf-archive-count has-card-white-color" style="font-size:14px;margin:14px 0 0;opacity:.85">[sf_archive_count noun="formula"]</p>
+<!-- /wp:html -->
+</section>
+<!-- /wp:group -->
+
+<!-- Block 2: Dosage form filter (client-side, no page reload) -->
+<!-- wp:group {"tagName":"section","backgroundColor":"card-white","layout":{"type":"constrained"},"style":{"spacing":{"padding":{"top":"var:preset|spacing|40","bottom":"var:preset|spacing|40"}}}} -->
+<section class="wp-block-group has-card-white-background-color has-background" style="padding-top:var(--wp--preset--spacing--40);padding-bottom:var(--wp--preset--spacing--40)">
+<!-- wp:html -->
+[sf_formula_filters]
+<!-- /wp:html -->
+</section>
+<!-- /wp:group -->
+
+<!-- Block 3: All standard formulas, one page -->
+<!-- wp:group {"tagName":"section","backgroundColor":"bg-light","layout":{"type":"constrained"},"style":{"spacing":{"padding":{"top":"var:preset|spacing|80","bottom":"var:preset|spacing|80"}}}} -->
+<section class="wp-block-group has-bg-light-background-color has-background" style="padding-top:var(--wp--preset--spacing--80);padding-bottom:var(--wp--preset--spacing--80)">
+<!-- wp:html -->
+[sf_formula_grid columns="4"]
+<!-- /wp:html -->
+</section>
+<!-- /wp:group -->
+
+<!-- Block 4: CTA -->
+<!-- wp:group {"tagName":"section","backgroundColor":"primary","textColor":"card-white","layout":{"type":"constrained"},"style":{"spacing":{"padding":{"top":"var:preset|spacing|80","bottom":"var:preset|spacing|80"}}}} -->
+<section class="wp-block-group has-card-white-color has-text-color has-primary-background-color has-background" style="padding-top:var(--wp--preset--spacing--80);padding-bottom:var(--wp--preset--spacing--80)">
+<!-- wp:heading {"textAlign":"center","textColor":"card-white"} -->
+<h2 class="has-text-align-center wp-block-heading has-card-white-color has-text-color">Ready to Launch Your Product?</h2>
+<!-- /wp:heading -->
+<!-- wp:buttons {"layout":{"type":"flex","justifyContent":"center"},"style":{"spacing":{"margin":{"top":"var:preset|spacing|40"}}}} -->
+<div class="wp-block-buttons" style="margin-top:var(--wp--preset--spacing--40)">
+<!-- wp:button {"backgroundColor":"cta","textColor":"card-white"} -->
+<div class="wp-block-button"><a class="wp-block-button__link has-card-white-color has-cta-background-color has-text-color has-background wp-element-button" href="/contact/">Request a Quote</a></div>
+<!-- /wp:button -->
+</div>
+<!-- /wp:buttons -->
+</section>
+<!-- /wp:group -->
+
+<!-- wp:template-part {"slug":"footer","tagName":"footer"} /-->
