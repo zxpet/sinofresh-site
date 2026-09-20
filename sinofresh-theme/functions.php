@@ -2255,11 +2255,19 @@ function sinofresh_template_placeholders($html) {
 	} elseif (is_search()) {
 		$archive_title = get_search_query();
 	} elseif (is_archive()) {
-		$archive_title = wp_strip_all_tags(get_the_archive_title());
-		/* "Archives" is the prefix WP puts on a post type archive title
-		   ("Archives: Formulas") — 2C Step2 turns it into the /formulas/
-		   crumb and H1. 归档 is the same prefix in a zh_CN string set. */
-		$archive_title = trim(preg_replace('/^(?:Category|Tag|Author|Year|Month|Day|Week|Post Format|Classification|Classification|Archives|分类|标签|作者|年|月|日|归档)\s*[^:：]*:\s*/iu', '', $archive_title));
+		/* Core composes an archive title as "<prefix> <title>" and exposes the
+		   prefix to a filter — which is exactly how the query-title block
+		   implements showPrefix:false. Suppressing it at the source is the
+		   only route that works on /zh/: there the prefix is a gettext
+		   string, so TranslatePress hands it back wrapped in its own
+		   #!trpst#trp-gettext … #!trpen# markers, which puts "归档：" behind a
+		   marker instead of at the start of the string — and zh_CN writes the
+		   separator as a full-width colon. Both defeat a post-hoc strip, which
+		   is why the breadcrumb kept its "归档： " prefix on every /zh/ archive
+		   (the H1 was always clean because the block filters the prefix). */
+		add_filter('get_the_archive_title_prefix', '__return_empty_string', 1);
+		$archive_title = trim(wp_strip_all_tags(get_the_archive_title()));
+		remove_filter('get_the_archive_title_prefix', '__return_empty_string', 1);
 	}
 	if ($archive_title === '') {
 		$archive_title = 'Archive';
