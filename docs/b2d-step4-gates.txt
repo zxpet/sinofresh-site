@@ -1,0 +1,50 @@
+==========================================================================
+Batch 2D Step 4 — gates for the two detail-page edits
+base=_backup/b2d-step4-baselines/base (75 pages)   new=_backup/b2d-step4-baselines/new (75 pages)
+==========================================================================
+
+[1] ver inventory
+    CHANGED style.css                  2.10.47 -> 2.10.48 on 75 page(s)
+    verdict: PASS — style.css 2.10.47 -> 2.10.48 on 75 pages; no asset appeared or disappeared (formula-gallery.js stays on the same 42 detail pages); no other token moved
+
+[2] confinement by reconstruction, [3] script tag, [4] cross-version data
+
+    -- detail-en (21 pages) --
+       formulas__bladder-support-powder.html          rebuilt (1 card | Powders -> A Closer Look at Bladder Support Powder)
+       formulas__calcium-phosphorus-tablets.html      rebuilt (1 card | Tablets -> A Closer Look at Calcium &#038; Phosphorus Tablets)
+       formulas__calming-soft-chews.html              rebuilt (1 card | Soft Chews -> A Closer Look at Calming Soft Chews)
+       ... 18 more, all see report
+
+    -- detail-zh (21 pages) --
+       zh__formulas__bladder-support-powder.html      rebuilt (1 card | Powders -> A Closer Look at Bladder Support Powder)
+       zh__formulas__calcium-phosphorus-tablets.html  rebuilt (1 card | Tablets -> A Closer Look at Calcium &#038; Phosphorus Tablets)
+       zh__formulas__calming-soft-chews.html          rebuilt (1 card | Soft Chews -> A Closer Look at Calming Soft Chews)
+       ... 18 more, all see report
+
+    -- dosage-en (8 pages) --
+       products__dental-chews.html                    identical
+       products__drops.html                           identical
+       products__fish-oil.html                        identical
+       ... 5 more, all same verdict
+
+    -- dosage-zh (8 pages) --
+       zh__products__dental-chews.html                identical
+       zh__products__drops.html                       identical
+       zh__products__fish-oil.html                    identical
+       ... 5 more, all same verdict
+
+    -- other (17 pages) --
+       about.html                                     identical
+       blog.html                                      identical
+       contact.html                                   identical
+       ... 14 more, all same verdict
+
+[3] script tag — formula-gallery.js on exactly the 42 detail pages: yes
+
+[4] cross-version data — every band equals the base page's own cards, and the Product JSON-LD still carries them: yes
+
+==========================================================================
+PASS — 75/75 pages: 42 rebuilt from the base region by the two declared edits,
+       33 byte-identical (16 dosage + 17 other);
+       42/42 bands equal the base page's own card values.
+==========================================================================

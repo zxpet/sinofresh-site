@@ -1,0 +1,31 @@
+  [PASS] cookie banner out of the way before gallery clicks           expect=True got=True
+=== 1440x900 ===
+       measured: {"h1": "Ear Care Drops", "h2": "A Closer Look at Ear Care Drops", "gridClass": "sf-fdetail__grid sf-fdetail__grid--solo", "nCards": 1, "labels": ["Standard Specs"], "vals": ["30ml/50ml dropper bottle · 24 months shelf life"], "gridWidth": 560, "bandPills": ["Organic Aloe Vera", "Tea Tree Oil", "Calendula"], "bandTerms": ["Aloe Vera"], "bandValues": ["≥10%"], "ready": "complete", "docScrollW": 1440, "docClientW": 1440}
+  [PASS] the page is loaded at 1440                           expect='complete' got='complete'
+  [PASS] the hero h1 is the formula name                      expect='Ear Care Drops' got='Ear Care Drops'
+  [PASS] the gallery heading names the formula                expect='A Closer Look at Ear Care Drops' got='A Closer Look at Ear Care Drops'
+  [PASS] the heading is the h1 with one prefix                expect=True got=True
+  [PASS] the heading no longer names the dosage form          expect=False got=False
+  [PASS] the Specification band holds one card                expect=1 got=1
+  [PASS] and it is Standard Specs                             expect=['Standard Specs'] got=['Standard Specs']
+  [PASS] the surviving card is the pre-change Standard Specs value expect='30ml/50ml dropper bottle · 24 months shelf life' got='30ml/50ml dropper bottle · 24 months shelf life'
+  [PASS] the grid carries the --solo modifier                 expect=['sf-fdetail__grid', 'sf-fdetail__grid--solo'] got=['sf-fdetail__grid', 'sf-fdetail__grid--solo']
+  [PASS] the --solo cap measures 560px                        expect=560 got=560
+  [PASS] Ingredients left the Specification band              expect=False got=False
+  [PASS] Guaranteed Analysis left the Specification band      expect=False got=False
+  [PASS] the band still lists every ingredient the card held  expect=True got=True
+  [PASS] the band still lists every guaranteed figure the card held expect=True got=True
+
+=== 375x667 ===
+       solo grid width at 375: 335 px
+       measured: {"ready": "complete", "nCards": 1, "gridWidth": 335, "h2": "A Closer Look at Ear Care Drops", "docScrollW": 375, "docClientW": 375}
+  [PASS] 375: the page is loaded                              expect='complete' got='complete'
+  [PASS] 375: the measurement really is at 375                expect=375 got=375
+  [PASS] 375: still one card                                  expect=1 got=1
+  [PASS] 375: no horizontal overflow                          expect=True got=True
+  [PASS] 375: the solo grid fits the viewport                 expect=True got=True
+  [PASS] 375: the heading still names the formula             expect='A Closer Look at Ear Care Drops' got='A Closer Look at Ear Care Drops'
+
+==========================================================================
+PASS  step 4 evidence: 20 checks, 0 failed
+==========================================================================

@@ -1,0 +1,61 @@
+=== BEFORE teardown ===
+-- mu-plugins --
+zz-sf-dev-lockdown.php
+zz-sf-preflight.log
+zz-sf-preflight.php
+-- preflight log --
+78 /var/www/dev.zxpet.com/public/wp-content/mu-plugins/zz-sf-preflight.log
+-- log baseline --
+   dev.zxpet.com-ssl-error.log: 1494 bytes  mtime 2026-09-20 19:31:11.736660376 +0000
+-- anonymous --
+http=401
+-- credentialed: which theme serves style.css --
+themes/sinofresh-theme/style.css?ver=2.10.48
+-- credentialed + X-SF-Preflight: 1 (must be the COPY while armed) --
+themes/sinofresh-theme-preflight/style.css?ver=2.10.48
+-- the changed markup, as the header render serves it --
+<h2 class="sf-gallery__title">A Closer Look at Ear Care Drops</h2>
+class="sf-fdetail__grid sf-fdetail__grid--solo"
+
+=== REMOVE ===
+--- preflight log (/var/www/dev.zxpet.com/public/wp-content/mu-plugins/zz-sf-preflight.log) ---
+  80 /var/www/dev.zxpet.com/public/wp-content/mu-plugins/zz-sf-preflight.log
+  80 total
+--- removed; residual scan ---
+theme dir gone
+mu-plugin gone
+log gone
+zz-sf-dev-lockdown.php
+
+=== AFTER teardown ===
+-- status --
+no preflight theme
+no preflight mu-plugin
+no preflight log
+zz-sf-dev-lockdown.php
+-- anonymous --
+http=401
+-- credentialed: theme + ver --
+themes/sinofresh-theme/style.css?ver=2.10.48
+-- credentialed + X-SF-Preflight: 1 (the switch must be inert -> live theme) --
+themes/sinofresh-theme/style.css?ver=2.10.48
+-- gallery script still from the live theme --
+themes/sinofresh-theme/assets/js/formula-gallery.js?ver=1.0.0
+-- the two edits are live --
+<h2 class="sf-gallery__title">A Closer Look at Ear Care Drops</h2>
+class="sf-fdetail__grid sf-fdetail__grid--solo"
+   Specification cards on the page: 1
+   dosage page's old band marker (expect 0): 0
+-- 375 baseline sanity: dosage page unchanged shape --
+-- log baseline --
+   dev.zxpet.com-ssl-error.log: 1494 bytes  mtime 2026-09-20 19:31:11.736660376 +0000
+
+=== follow-up: the dosage-page line above came back blank ===
+The curl on /products/soft-chews/ produced no matching line in that one run.
+It is re-checked here rather than left ambiguous — a blank could mean either
+'the band is gone' (expected) or 'the page was empty' (would prove nothing).
+   http=200 bytes=177547
+   style.css: themes/sinofresh-theme/style.css?ver=2.10.48
+   h1: <h1 class="has-text-align-center wp-block-heading has-card-white-color has-text-color" style="font-size:clamp(36px, 4vw, 52px)">Private Label Soft Chews for Dogs &amp; Cats</h1>
+   sf-gallery occurrences (expect 0): 0
+   -> the page is served and carries no gallery band: the 0 stands.

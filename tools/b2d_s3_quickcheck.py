@@ -33,8 +33,9 @@ The viewport is asserted alongside the measurement for the same reason: a
 measurement taken at the wrong width is an empty check, and `open` has been
 observed to reset the viewport on this box.
 
-    python3 tools/b2d_s3_quickcheck.py
+    python3 tools/b2d_s3_quickcheck.py [--out DIR]
 """
+import argparse
 import json
 import os
 import subprocess
@@ -50,6 +51,10 @@ _auth = os.environ.get("SF_DEV_AUTH") or "sfdev:VkEws18Kl5V1qp3TpZ6s"
 USER, PASS = _auth.split(":", 1)
 PAGE = "/formulas/ear-care-drops/"
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# Overridable because the tool is reused by later batches: the two screenshots
+# are evidence for whichever batch ran it, and dropping them into the batch that
+# first wrote the tool would file them under the wrong change. Batch 4 hit
+# exactly that on its first run.
 SHOTS = os.path.join(ROOT, "docs", "b2d-step3-shots")
 
 results = []
@@ -133,7 +138,13 @@ def click_thumb(n, slug):
     return True
 
 
-def main():
+def main(argv=None):
+    global SHOTS
+    ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    ap.add_argument("--out", default=SHOTS,
+                    help="where the two screenshots go (default: %(default)s)")
+    args = ap.parse_args(argv)
+    SHOTS = args.out
     os.makedirs(SHOTS, exist_ok=True)
     ab("set", "credentials", USER, PASS)
 
