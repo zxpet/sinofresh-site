@@ -23,7 +23,7 @@ add_action('after_setup_theme', function() {
 });
 
 add_action('wp_enqueue_scripts', function() {
-	wp_enqueue_style('sinofresh-style', get_stylesheet_uri(), array(), '2.10.47');
+	wp_enqueue_style('sinofresh-style', get_stylesheet_uri(), array(), '2.10.48');
 	// Sticky nav: every template renders parts/header.html, so this is site-wide.
 	wp_enqueue_script('sinofresh-sticky-header', get_template_directory_uri() . '/assets/js/sticky-header.js', array(), '1.0.0', true);
 	wp_enqueue_script('sinofresh-ui-components', get_template_directory_uri() . '/assets/js/ui-components.js', array(), '1.0.0', true);
@@ -1258,11 +1258,23 @@ function sinofresh_formula_gallery($atts = array()) {
 			. '</figure>';
 	}
 
+	/* The heading names the formula, not the dosage form. get_the_title() is
+	   the same call the hero h1 ends up with ({{TITLE}} in
+	   sinofresh_template_placeholders), so the two cannot disagree; before
+	   2D-S4 this read "Inside Our {dosage} Production", which on a detail
+	   page named the wrong noun. The shortcode itself stays generic, so a
+	   context that is not a single formula — or an untitled post — falls
+	   back to the dosage label rather than rendering a dangling heading. */
+	$title = is_singular('sf_formula') ? trim((string) get_the_title()) : '';
+	if ($title === '') {
+		$title = $label;
+	}
+
 	/* The stage's aria-label starts as the main photo's alt so the band is
 	   named before any script runs, and formula-gallery.js keeps it in step
 	   with whichever photo is showing. */
 	return '<div class="sf-gallery__inner" data-gallery="' . esc_attr($form) . '">'
-		. '<h2 class="sf-gallery__title">' . esc_html(sprintf('Inside Our %s Production', $label)) . '</h2>'
+		. '<h2 class="sf-gallery__title">' . esc_html(sprintf('A Closer Look at %s', $title)) . '</h2>'
 		. '<div class="sf-gallery__stage" role="tabpanel" id="sf-gallery-panel-' . esc_attr($form) . '"'
 		. ' aria-label="' . esc_attr($slots[0]['alt']) . '">' . $frames . '</div>'
 		. '</div>';
@@ -1382,13 +1394,21 @@ add_action('wp_head', function () {
 }, 1);
 
 /**
- * [sf_formula_detail] — the three-field specification of the current formula.
+ * [sf_formula_detail] — the standard specification of the current formula.
  *
- * The fields are the same three the card JSON mirror carries (K2), read
- * straight from post meta rather than from the .sf-formulas-data payload:
- * on a detail page that payload belongs to the related grid, not to this
- * formula. A field with no value is skipped, never rendered as an empty
- * card — several formulas legitimately carry fewer than three.
+ * One field is rendered: Standard Specs. Ingredients and Guaranteed Analysis
+ * are deliberately left out, because the "Formula & nutrition" band below
+ * already carries both from the same meta — they were being rendered twice
+ * on every detail page. Only the rendering changed: all three meta keys are
+ * still written, and the Product JSON-LD builds its additionalProperty from
+ * the meta directly, so the machine-readable copy is untouched.
+ *
+ * The field is read straight from post meta rather than from the
+ * .sf-formulas-data payload: on a detail page that payload belongs to the
+ * related grid, not to this formula. A field with no value is skipped,
+ * never rendered as an empty card. When exactly one card is rendered the
+ * grid takes the --solo modifier — style.css caps that variant's width, so
+ * the cap can never reach a multi-card grid.
  *
  * Framework-free by design: it renders one .sf-fdetail__grid of
  * .sf-fdetail__card boxes and style.css owns the geometry, the same split
@@ -1406,12 +1426,15 @@ function sinofresh_formula_detail() {
 	if (!$post_id) {
 		return '';
 	}
+	/* One card is the intended state, not a degenerate one: the ⑤ actives
+	   band carries Ingredients and Guaranteed Analysis. The loop and the
+	   grid stay multi-card so the array can grow again without touching
+	   anything downstream; $count only decides the --solo modifier. */
 	$fields = array(
-		array('label' => 'Ingredients',         'key' => 'sf_formula_ingredients'),
-		array('label' => 'Guaranteed Analysis', 'key' => 'sf_formula_analysis'),
 		array('label' => 'Standard Specs',      'key' => 'sf_formula_specs'),
 	);
 	$cards = '';
+	$count = 0;
 	foreach ($fields as $field) {
 		$value = trim((string) get_post_meta($post_id, $field['key'], true));
 		if ($value === '') {
@@ -1422,11 +1445,13 @@ function sinofresh_formula_detail() {
 			esc_html($field['label']),
 			esc_html($value)
 		);
+		$count++;
 	}
 	if ($cards === '') {
 		return '';
 	}
-	return '<div class="sf-fdetail__grid">' . $cards . '</div>';
+	$grid_class = 'sf-fdetail__grid' . ($count === 1 ? ' sf-fdetail__grid--solo' : '');
+	return '<div class="' . $grid_class . '">' . $cards . '</div>';
 }
 add_shortcode('sf_formula_detail', 'sinofresh_formula_detail');
 

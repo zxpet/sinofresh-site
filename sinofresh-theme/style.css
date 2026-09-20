@@ -2,7 +2,7 @@
 Theme Name: SINO FRESH
 Author: Shandong SINO FRESH Pet Food Co., Ltd.
 Text Domain: sinofresh
-Version: 2.10.47
+Version: 2.10.48
 Requires at least: 6.0
 Requires PHP: 7.4
 License: GNU General Public License v2 or later
@@ -5787,7 +5787,7 @@ body.page-id-28 .wp-block-columns:has(> .wp-block-column > .wp-block-group.has-c
 }
 .sf-formula-hero__build:hover { color: var(--wp--preset--color--brand-green); }
 
-/* 37b-iii. Specification: three ruled cards, one per filled meta field.
+/* 37b-iii. Specification: ruled cards, one per filled meta field.
    auto-fit + minmax needs no media query — the 1200px measure gives
    (1200 - 2*20) / 3 = 386 >= 280 so three tracks; a phone gives one.
    The 3px brand-green top edge echoes the .sf-cell rule used by the
@@ -5797,6 +5797,15 @@ body.page-id-28 .wp-block-columns:has(> .wp-block-column > .wp-block-group.has-c
 	grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
 	gap: 20px;
 	margin-top: 28px;
+}
+/* 2D-S4: one card is the intended state — Ingredients and Guaranteed
+   Analysis moved out because the "Formula & nutrition" band below already
+   renders both. The remaining value is short, so a full-width track would
+   stretch a 350px line across a 1200px measure. The cap lives on the
+   --solo modifier, never on .sf-fdetail__grid, so a grid that grows back
+   to several cards keeps its unconstrained auto-fit behaviour. */
+.sf-fdetail__grid--solo {
+	max-width: 560px;
 }
 .sf-fdetail__card {
 	padding: 22px 24px;
