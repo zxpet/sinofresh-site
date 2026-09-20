@@ -1,0 +1,149 @@
+<!-- wp:template-part {"slug":"header","tagName":"header"} /-->
+
+<!-- wp:group {"tagName":"section","backgroundColor":"primary","textColor":"card-white","layout":{"type":"constrained"},"style":{"spacing":{"padding":{"top":"var:preset|spacing|80","bottom":"var:preset|spacing|80"}}}} -->
+<section class="wp-block-group has-card-white-color has-text-color has-primary-background-color has-background" style="padding-top:var(--wp--preset--spacing--80);padding-bottom:var(--wp--preset--spacing--80)">
+<!-- wp:html -->
+<nav class="sf-breadcrumb sf-breadcrumb--d3" aria-label="Breadcrumb"><a class="sf-breadcrumb__crumb sf-breadcrumb__crumb--home" href="/">Home</a><span class="sf-breadcrumb__sep sf-breadcrumb__sep--home" aria-hidden="true">/</span><a class="sf-breadcrumb__crumb sf-breadcrumb__crumb--mid" href="{{MID_HREF}}">{{MID_CRUMB}}</a><span class="sf-breadcrumb__sep" aria-hidden="true">/</span><span class="sf-breadcrumb__crumb sf-breadcrumb__current" aria-current="page">{{TITLE}}</span></nav>
+<!-- /wp:html -->
+<!-- wp:post-terms {"term":"category","style":{"typography":{"fontSize":"12px","fontWeight":"600","letterSpacing":"1.5px"}}} /-->
+<!-- wp:post-title {"level":1,"textColor":"card-white"} /-->
+<!-- wp:group {"className":"sf-single-meta","layout":{"type":"flex","flexWrap":"wrap"},"style":{"spacing":{"blockGap":"10px","margin":{"top":"var:preset|spacing|20"}}}} -->
+<div class="wp-block-group sf-single-meta" style="margin-top:var(--wp--preset--spacing--20);gap:10px">
+<!-- wp:post-date {"format":"M j, Y","style":{"typography":{"fontSize":"13.5px"}}} /-->
+<!-- wp:html -->
+<p class="sf-single-meta__updated" style="margin-top:0;margin-bottom:0;font-size:13.5px">{{LAST_UPDATED}}</p>
+<!-- /wp:html -->
+<!-- wp:paragraph {"style":{"typography":{"fontSize":"13.5px"},"spacing":{"margin":{"top":"0","bottom":"0"}}}} -->
+<p style="margin-top:0;margin-bottom:0;font-size:13.5px">·</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph {"style":{"typography":{"fontSize":"13.5px"},"spacing":{"margin":{"top":"0","bottom":"0"}}}} -->
+<p style="margin-top:0;margin-bottom:0;font-size:13.5px">SINO FRESH Team</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph {"style":{"typography":{"fontSize":"13.5px"},"spacing":{"margin":{"top":"0","bottom":"0"}}}} -->
+<p style="margin-top:0;margin-bottom:0;font-size:13.5px">· <span class="sf-rt">1 min read</span></p>
+<!-- /wp:paragraph -->
+<!-- wp:html -->
+<button type="button" class="sf-copy-link" aria-label="Copy article link" title="Copy link"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button>
+<!-- /wp:html -->
+</div>
+<!-- /wp:group -->
+</section>
+<!-- /wp:group -->
+
+<!-- wp:group {"tagName":"section","className":"sf-single-body","backgroundColor":"card-white","layout":{"type":"constrained"},"style":{"spacing":{"padding":{"top":"var:preset|spacing|60","bottom":"var:preset|spacing|60"}}}} -->
+<section class="wp-block-group sf-single-body has-card-white-background-color has-background" style="padding-top:var(--wp--preset--spacing--60);padding-bottom:var(--wp--preset--spacing--60)">
+<!-- wp:group {"className":"sf-single-cover-wrap","layout":{"type":"constrained","contentSize":"900px"}} -->
+<div class="wp-block-group sf-single-cover-wrap">
+<!-- wp:post-featured-image {"className":"sf-single-cover","aspectRatio":"16/9","style":{"border":{"radius":"8px"}}} /-->
+</div>
+<!-- /wp:group -->
+<!-- wp:group {"layout":{"type":"constrained","contentSize":"800px"},"style":{"spacing":{"margin":{"top":"var:preset|spacing|60"}}}} -->
+<div class="wp-block-group" style="margin-top:var(--wp--preset--spacing--60)">
+<!-- wp:html -->
+<div class="sf-mobile-toc" hidden></div>
+<!-- /wp:html -->
+<!-- wp:post-content /-->
+</div>
+<!-- /wp:group -->
+<!-- wp:html -->
+<div class="sf-article-actions">
+	<div class="sf-article-feedback">
+		<span class="sf-article-feedback__q">Was this article helpful?</span>
+		<button type="button" class="sf-fb-btn" data-vote="up" aria-label="Yes, this was helpful" title="Yes, helpful"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M2 10h4v11H2zM22 11c0-1.1-.9-2-2-2h-5.6l.9-4.3c.2-.9-.2-1.8-1-2.2L13.1 2 6.6 9.2c-.4.4-.6.9-.6 1.4V19c0 1.1.9 2 2 2h8.4c.8 0 1.5-.5 1.8-1.2l2.7-6.3c.1-.2.1-.4.1-.6v-1.9z"/></svg></button>
+		<button type="button" class="sf-fb-btn" data-vote="down" aria-label="No, this needs work" title="No, needs work"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><g transform="rotate(180 12 12)"><path d="M2 10h4v11H2zM22 11c0-1.1-.9-2-2-2h-5.6l.9-4.3c.2-.9-.2-1.8-1-2.2L13.1 2 6.6 9.2c-.4.4-.6.9-.6 1.4V19c0 1.1.9 2 2 2h8.4c.8 0 1.5-.5 1.8-1.2l2.7-6.3c.1-.2.1-.4.1-.6v-1.9z"/></g></svg></button>
+		<span class="sf-article-feedback__thanks" hidden>Thank you for your feedback!</span>
+	</div>
+	<form class="sf-fb-form" hidden novalidate>
+		<p class="sf-fb-form__lead">Help us improve. Tell us what&rsquo;s missing?</p>
+		<input type="email" class="sf-fb-form__email" placeholder="Email (optional)" aria-label="Email (optional)">
+		<textarea class="sf-fb-form__msg" rows="3" placeholder="What was missing or unclear?" aria-label="Your feedback (optional)"></textarea>
+		<label class="sf-fb-form__consent"><input type="checkbox" class="sf-fb-form__consent-box"> I agree to the Privacy Policy</label>
+		<div class="sf-fb-form__row">
+			<button type="submit" class="sf-fb-form__send">Send</button>
+			<button type="button" class="sf-fb-form__cancel">Cancel</button>
+		</div>
+		<p class="sf-fb-form__error" role="alert" hidden></p>
+	</form>
+	<div class="sf-article-share">
+		<span class="sf-article-share__label">Share this article</span>
+		<a class="sf-share-btn" href="https://www.linkedin.com/sharing/share-offsite/?url={{SHARE_URL_ENC}}" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+		<a class="sf-share-btn" href="https://twitter.com/intent/tweet?url={{SHARE_URL_ENC}}&amp;text={{SHARE_TITLE_ENC}}" target="_blank" rel="noopener noreferrer">X&nbsp;/&nbsp;Twitter</a>
+		<button type="button" class="sf-share-btn sf-share-btn--copy">Copy Link</button>
+	</div>
+</div>
+<!-- /wp:html -->
+<!-- wp:group {"layout":{"type":"constrained","contentSize":"800px"},"style":{"spacing":{"margin":{"top":"var:preset|spacing|60"}}}} -->
+<div class="wp-block-group" style="margin-top:var(--wp--preset--spacing--60)">
+<!-- wp:columns {"className":"sf-prevnext"} -->
+<div class="wp-block-columns sf-prevnext">
+<!-- wp:column -->
+<div class="wp-block-column">
+<!-- wp:post-navigation-link {"type":"previous","label":"Previous","showTitle":true,"className":"sf-prevnext__cell sf-prevnext__cell--prev"} /-->
+</div>
+<!-- /wp:column -->
+<!-- wp:column -->
+<div class="wp-block-column">
+<!-- wp:post-navigation-link {"type":"next","label":"Next","showTitle":true,"className":"sf-prevnext__cell sf-prevnext__cell--next"} /-->
+</div>
+<!-- /wp:column -->
+</div>
+<!-- /wp:columns -->
+</div>
+<!-- /wp:group -->
+<!-- wp:html -->
+<script>
+(function () {
+	var c = document.querySelector('.sf-single-body .wp-block-post-content');
+	var t = document.querySelector('.sf-rt');
+	if (!c || !t) return;
+	var words = (c.textContent || '').trim().split(/\s+/).filter(Boolean).length;
+	t.textContent = Math.max(1, Math.round(words / 200)) + ' min read';
+})();
+</script>
+<!-- /wp:html -->
+</section>
+<!-- /wp:group -->
+
+<!-- wp:group {"tagName":"section","className":"sf-related","backgroundColor":"bg-light","layout":{"type":"constrained"},"style":{"spacing":{"padding":{"top":"var:preset|spacing|80","bottom":"var:preset|spacing|80"}}}} -->
+<section class="wp-block-group sf-related has-bg-light-background-color has-background" style="padding-top:var(--wp--preset--spacing--80);padding-bottom:var(--wp--preset--spacing--80)">
+<!-- wp:heading {"textAlign":"center"} -->
+<h2 class="has-text-align-center wp-block-heading">Related Articles</h2>
+<!-- /wp:heading -->
+<!-- wp:query {"queryId":20,"className":"sf-related-articles","query":{"perPage":3,"pages":0,"offset":0,"postType":"post","order":"desc","orderBy":"date","author":"","search":"","exclude":[],"sticky":"","inherit":false}} -->
+<div class="wp-block-query">
+<!-- wp:post-template {"layout":{"type":"grid","columnCount":3}} -->
+<!-- wp:group {"backgroundColor":"card-white","layout":{"type":"constrained"},"style":{"border":{"radius":"8px"},"spacing":{"padding":{"top":"30px","bottom":"30px","left":"30px","right":"30px"}}}} -->
+<div class="wp-block-group has-card-white-background-color has-background" style="border-radius:8px;padding-top:30px;padding-right:30px;padding-bottom:30px;padding-left:30px">
+<!-- wp:post-featured-image {"isLink":true,"aspectRatio":"4/3","style":{"border":{"radius":"6px"}}} /-->
+<!-- wp:post-terms {"term":"category","textColor":"accent","style":{"typography":{"fontSize":"12px","fontWeight":"600","letterSpacing":"1.5px"}}} /-->
+<!-- wp:post-title {"level":3,"isLink":true,"style":{"typography":{"fontSize":"20px"}}} /-->
+<!-- wp:read-more {"content":"Read More →"} /-->
+</div>
+<!-- /wp:group -->
+<!-- /wp:post-template -->
+<!-- wp:query-no-results -->
+<!-- wp:paragraph {"align":"center","textColor":"text-secondary"} -->
+<p class="has-text-align-center has-text-secondary-color has-text-color">More articles will appear here once published.</p>
+<!-- /wp:paragraph -->
+<!-- /wp:query-no-results -->
+</div>
+<!-- /wp:query -->
+</section>
+<!-- /wp:group -->
+
+<!-- wp:group {"tagName":"section","backgroundColor":"primary","textColor":"card-white","layout":{"type":"constrained"},"style":{"spacing":{"padding":{"top":"var:preset|spacing|80","bottom":"var:preset|spacing|80"}}}} -->
+<section class="wp-block-group has-card-white-color has-text-color has-primary-background-color has-background" style="padding-top:var(--wp--preset--spacing--80);padding-bottom:var(--wp--preset--spacing--80)">
+<!-- wp:heading {"textAlign":"center","textColor":"card-white"} -->
+<h2 class="has-text-align-center wp-block-heading has-card-white-color has-text-color">Ready to Launch Your Product?</h2>
+<!-- /wp:heading -->
+<!-- wp:buttons {"layout":{"type":"flex","justifyContent":"center"},"style":{"spacing":{"margin":{"top":"var:preset|spacing|40"}}}} -->
+<div class="wp-block-buttons" style="margin-top:var(--wp--preset--spacing--40)">
+<!-- wp:button {"backgroundColor":"cta","textColor":"card-white"} -->
+<div class="wp-block-button"><a class="wp-block-button__link has-card-white-color has-cta-background-color has-text-color has-background wp-element-button" href="/contact/">Request a Quote</a></div>
+<!-- /wp:button -->
+</div>
+<!-- /wp:buttons -->
+</section>
+<!-- /wp:group -->
+
+<!-- wp:template-part {"slug":"footer","tagName":"footer"} /-->

@@ -1,0 +1,167 @@
+
+==============================================================================
+== 1. 已注册 post_type（含内置）
+==============================================================================
+总计 17
+  post                     builtin  public=true  archive=false rewrite=false                  rest=true
+  page                     builtin  public=true  archive=false rewrite=false                  rest=true
+  attachment               builtin  public=true  archive=false rewrite=false                  rest=true
+  language_switcher        CUSTOM   public=false archive=false rewrite=language_switcher      rest=false
+
+==============================================================================
+== 1b. 已注册 taxonomy（含内置）
+==============================================================================
+总计 8
+  category                   builtin  public=true  ui=true  objects=post
+  post_tag                   builtin  public=true  ui=true  objects=post
+  nav_menu                   builtin  public=false ui=false objects=nav_menu_item
+  link_category              builtin  public=false ui=true  objects=link
+  post_format                builtin  public=true  ui=false objects=post
+  wp_theme                   builtin  public=false ui=false objects=wp_template,wp_template_part,wp_global_styles
+  wp_template_part_area      builtin  public=false ui=false objects=wp_template_part
+  wp_pattern_category        builtin  public=false ui=true  objects=wp_block
+
+==============================================================================
+== 1c. sf_formula / sf_formula_form / sf_formula_use 是否已存在（应为 false）
+==============================================================================
+  post_type_exists(sf_formula)       ) = false | taxonomy_exists = false
+  post_type_exists(sf_formula_form)  ) = false | taxonomy_exists = false
+  post_type_exists(sf_formula_use)   ) = false | taxonomy_exists = false
+
+==============================================================================
+== 1d. 已注册 meta（register_meta 面）
+==============================================================================
+post 对象已注册 meta 数 = 0
+post_type=sf_formula 已注册 meta 数 = 0（注册前应为 0）
+
+==============================================================================
+== 2. rewrite 规则现状
+==============================================================================
+permalink_structure        = '/%postname%/'
+permalink_structure(home)  = http://sinofresh.local/
+rewrite_rules 选项类型     = array，条目数 = 112
+含 'formulas' 的规则数     = 0
+  --- 抽样 12 条（判断是否默认结构）---
+    ^wp-json/?$                                                -> index.php?rest_route=/
+    ^wp-json/(.*)?                                             -> index.php?rest_route=/$matches[1]
+    ^index.php/wp-json/?$                                      -> index.php?rest_route=/
+    ^index.php/wp-json/(.*)?                                   -> index.php?rest_route=/$matches[1]
+    ^wp-sitemap\.xml$                                          -> index.php?sitemap=index
+    ^wp-sitemap\.xsl$                                          -> index.php?sitemap-stylesheet=sitemap
+    ^wp-sitemap-index\.xsl$                                    -> index.php?sitemap-stylesheet=index
+    ^wp-sitemap-([a-z]+?)-([a-z\d_-]+?)-(\d+?)\.xml$           -> index.php?sitemap=$matches[1]&sitemap-subtype=$matches[2]&paged=$matches[3]
+    ^wp-sitemap-([a-z]+?)-(\d+?)\.xml$                         -> index.php?sitemap=$matches[1]&paged=$matches[2]
+    category/(.+?)/feed/(feed|rdf|rss|rss2|atom)/?$            -> index.php?category_name=$matches[1]&feed=$matches[2]
+    category/(.+?)/(feed|rdf|rss|rss2|atom)/?$                 -> index.php?category_name=$matches[1]&feed=$matches[2]
+    category/(.+?)/embed/?$                                    -> index.php?category_name=$matches[1]&embed=true
+  非标准（疑似自定义）规则数 = 14
+    ^wp-sitemap\.xml$                                          -> index.php?sitemap=index
+    ^wp-sitemap\.xsl$                                          -> index.php?sitemap-stylesheet=sitemap
+    ^wp-sitemap-index\.xsl$                                    -> index.php?sitemap-stylesheet=index
+    ^wp-sitemap-([a-z]+?)-([a-z\d_-]+?)-(\d+?)\.xml$           -> index.php?sitemap=$matches[1]&sitemap-subtype=$matches[2]&paged=$matches[3]
+    ^wp-sitemap-([a-z]+?)-(\d+?)\.xml$                         -> index.php?sitemap=$matches[1]&paged=$matches[2]
+    robots\.txt$                                               -> index.php?robots=1
+    favicon\.ico$                                              -> index.php?favicon=1
+    sitemap\.xml                                               -> index.php?sitemap=index
+    .*wp-app\.php(/.*)?$                                       -> index.php?error=403
+    .*wp-register.php$                                         -> index.php?register=true
+    ([0-9]{4})/([0-9]{1,2})/([0-9]{1,2})/?$                    -> index.php?year=$matches[1]&monthnum=$matches[2]&day=$matches[3]
+    ([0-9]{4})/([0-9]{1,2})/?$                                 -> index.php?year=$matches[1]&monthnum=$matches[2]
+    ([0-9]{4})/?$                                              -> index.php?year=$matches[1]
+    (.?.+?)(?:/([0-9]+))?/?$                                   -> index.php?pagename=$matches[1]&page=$matches[2]
+wp_rewrite 已注册的 extra permastructs = array (
+  0 => 'category',
+  1 => 'post_tag',
+  2 => 'post_format',
+  3 => 'language_switcher',
+)
+
+==============================================================================
+== 3. 现有页面（8 剂型 + 关键父页）
+==============================================================================
+页面总数 = 22
+  ID     slug                       status    parent   permalink
+  3      privacy-policy             publish   0        http://sinofresh.local/privacy-policy/
+  11     home                       publish   0        http://sinofresh.local/
+  14     about                      publish   0        http://sinofresh.local/about/
+  15     quality                    publish   0        http://sinofresh.local/quality/
+  17     factory-tour               publish   0        http://sinofresh.local/factory-tour/
+  19     products                   publish   0        http://sinofresh.local/products/
+  28     contact                    publish   0        http://sinofresh.local/contact/
+  29     services                   publish   0        http://sinofresh.local/services/
+  30     cooperation                publish   0        http://sinofresh.local/cooperation/
+  31     blog                       publish   0        http://sinofresh.local/blog/
+  37     cookie-policy              publish   0        http://sinofresh.local/cookie-policy/
+  38     terms                      publish   0        http://sinofresh.local/terms/
+  76     faq                        publish   0        http://sinofresh.local/faq/
+  20     soft-chews                 publish   19       http://sinofresh.local/products/soft-chews/
+  21     tablets                    publish   19       http://sinofresh.local/products/tablets/
+  22     powders                    publish   19       http://sinofresh.local/products/powders/
+  23     pastes                     publish   19       http://sinofresh.local/products/pastes/
+  24     drops                      publish   19       http://sinofresh.local/products/drops/
+  25     liquids                    publish   19       http://sinofresh.local/products/liquids/
+  26     fish-oil                   publish   19       http://sinofresh.local/products/fish-oil/
+  27     dental-chews               publish   19       http://sinofresh.local/products/dental-chews/
+  97     feedback                   publish   0        http://sinofresh.local/feedback/
+
+  --- 8 剂型 slug 核对 ---
+    soft-chews       => ** 缺失 **
+    tablets          => ** 缺失 **
+    powders          => ** 缺失 **
+    pastes           => ** 缺失 **
+    drops            => ** 缺失 **
+    liquids          => ** 缺失 **
+    fish-oil         => ** 缺失 **
+    dental-chews     => ** 缺失 **
+  products 父页 => ID 19
+  products 的 published 子页 = 8 个
+
+==============================================================================
+== 4. sf_last_reviewed 现状（meta 先例的实际形态）
+==============================================================================
+postmeta 中 sf_last_reviewed 行数 = '6'
+register_post_meta 是否注册 'sf_last_reviewed' = false
+→ 说明：该字段靠 WP 内置「自定义字段」面板读写，主题**未**注册 meta（因此 register_post_meta 在本主题是首次）
+
+==============================================================================
+== 5. 主题与环境
+==============================================================================
+stylesheet       = sinofresh-theme
+template         = sinofresh-theme
+theme dir        = /Users/meng/Local Sites/sinofresh/app/public/wp-content/themes/sinofresh-theme
+theme version    = 2.10.39
+WP version       = 7.1.1
+PHP version      = 8.2.29
+siteurl          = http://sinofresh.local
+home             = http://sinofresh.local
+blog_public      = 1
+WP_DEBUG         = false
+WP_DEBUG_LOG     = false
+SAVEQUERIES      = NULL
+did_action('after_switch_theme') 触发次数 = 0
+after_switch_theme 是否有回调 = true
+
+==============================================================================
+== 5b. 已注册 shortcode
+==============================================================================
+sf_* shortcode 数 = 3
+  sf_explore_chips       => sinofresh_explore_chips
+  sf_archive_count       => closure
+  sf_blog_chips          => sinofresh_blog_chips
+shortcode 总数 = 17
+sf_formula_grid 是否已存在 = false
+
+==============================================================================
+== 5c. 已注册 block pattern / pattern category
+==============================================================================
+pattern 总数 = 21
+pattern 分类 = sinofresh-patterns, banner, buttons, columns, text, query, featured, call-to-action, team, testimonials, services, contact, about, portfolio, gallery, media, videos, audio, posts, footer, header, navigation
+
+==============================================================================
+== 6. 调试日志状态
+==============================================================================
+  /Users/meng/Local Sites/sinofresh/app/public/wp-content/debug.log => 存在，594 B，mtime 2026-09-19 22:56:08
+  /Users/meng/Local Sites/sinofresh/app/public/debug.log => 不存在
+
+==============================================================================
+扫描完成（只读，未写 DB）

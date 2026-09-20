@@ -1,0 +1,133 @@
+{
+ "rows": [
+  [
+   "soft-chews",
+   "Joint Support Soft Chews",
+   "joint-support-soft-chews",
+   "joint-care"
+  ],
+  [
+   "soft-chews",
+   "Calming Soft Chews",
+   "calming-soft-chews",
+   "calming"
+  ],
+  [
+   "soft-chews",
+   "Digestive Soft Chews",
+   "digestive-soft-chews",
+   "digestive-care"
+  ],
+  [
+   "soft-chews",
+   "Skin & Coat Soft Chews",
+   "skin-coat-soft-chews",
+   "skin-coat"
+  ],
+  [
+   "tablets",
+   "Joint Support Tablets",
+   "joint-support-tablets",
+   "joint-care"
+  ],
+  [
+   "tablets",
+   "Multivitamin Tablets",
+   "multivitamin-tablets",
+   "daily-nutrition"
+  ],
+  [
+   "tablets",
+   "Calcium & Phosphorus Tablets",
+   "calcium-phosphorus-tablets",
+   "bone-health"
+  ],
+  [
+   "powders",
+   "Probiotic Powder",
+   "probiotic-powder",
+   "digestive-care"
+  ],
+  [
+   "powders",
+   "Pumpkin Digestive Powder",
+   "pumpkin-digestive-powder",
+   "digestive-care"
+  ],
+  [
+   "powders",
+   "Bladder Support Powder",
+   "bladder-support-powder",
+   "urinary-care"
+  ],
+  [
+   "pastes",
+   "Hairball Remedy Paste",
+   "hairball-remedy-paste",
+   "hairball-control"
+  ],
+  [
+   "pastes",
+   "Nutrition Paste",
+   "nutrition-paste",
+   "daily-nutrition"
+  ],
+  [
+   "drops",
+   "Ear Care Drops",
+   "ear-care-drops",
+   "ear-care"
+  ],
+  [
+   "drops",
+   "Urinary Care Drops",
+   "urinary-care-drops",
+   "urinary-care"
+  ],
+  [
+   "liquids",
+   "Liquid Joint Support",
+   "liquid-joint-support",
+   "joint-care"
+  ],
+  [
+   "liquids",
+   "Liquid Skin & Coat",
+   "liquid-skin-coat",
+   "skin-coat"
+  ],
+  [
+   "fish-oil",
+   "Wild Alaskan Salmon Oil",
+   "wild-alaskan-salmon-oil",
+   "skin-coat"
+  ],
+  [
+   "fish-oil",
+   "Pure Fish Oil Blend",
+   "pure-fish-oil-blend",
+   "skin-coat"
+  ],
+  [
+   "dental-chews",
+   "Plaque Control Dental Chews",
+   "plaque-control-dental-chews",
+   "plaque-control"
+  ],
+  [
+   "dental-chews",
+   "Oral Care Dental Sticks",
+   "oral-care-dental-sticks",
+   "oral-care"
+  ],
+  [
+   "dental-chews",
+   "Natural Cleaning Dental Sticks",
+   "natural-cleaning-dental-sticks",
+   "oral-care"
+  ]
+ ],
+ "dup": {},
+ "tot_before": 26085,
+ "tot_after": 6358
+}

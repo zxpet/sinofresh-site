@@ -1,0 +1,119 @@
+
+==============================================================================
+== A. post_type 解析结果
+==============================================================================
+  name                   = 'sf_formula'
+  label                  = 'Formulas'
+  public                 = true
+  publicly_queryable     = true
+  exclude_from_search    = false
+  show_ui                = true
+  show_in_menu           = true
+  show_in_rest           = true
+  has_archive            = true
+  hierarchical           = false
+  query_var              = 'sf_formula'
+  menu_position          = 21
+  menu_icon              = 'dashicons-clipboard'
+  capability_type        = 'post'
+  map_meta_cap           = true
+  supports = ["title","editor","thumbnail","excerpt","revisions","page-attributes","custom-fields","autosave"]
+  rewrite  = {"slug":"formulas","with_front":false,"pages":true,"feeds":true,"ep_mask":1}
+  REST base = sf_formula
+
+==============================================================================
+== B. taxonomy 解析结果（重点看 query_var / rewrite / public 的实际值）
+==============================================================================
+  --- sf_formula_form ---
+      label                  = 'Dosage Forms'
+      public                 = false
+      publicly_queryable     = false
+      show_ui                = true
+      show_in_menu           = true
+      show_in_nav_menus      = false
+      show_in_rest           = true
+      hierarchical           = false
+      query_var              = false
+      rewrite                = false
+      rest_base              = false
+      object_type           = ["sf_formula"]
+      ** 是否产生前台归档/重写规则 = 否 ✓ **
+  --- sf_formula_use ---
+      label                  = 'Functions'
+      public                 = false
+      publicly_queryable     = false
+      show_ui                = true
+      show_in_menu           = true
+      show_in_nav_menus      = false
+      show_in_rest           = true
+      hierarchical           = false
+      query_var              = false
+      rewrite                = false
+      rest_base              = false
+      object_type           = ["sf_formula"]
+      ** 是否产生前台归档/重写规则 = 否 ✓ **
+
+  注册后 extra_permastructs = category, post_tag, post_format, language_switcher, sf_formula
+  （taxonomy 未进 permastruct → 无 term 前台 URL，符合 public:false 预期）
+
+==============================================================================
+== C. meta 解析结果
+==============================================================================
+  sf_formula 已注册 meta 数 = 4
+    sf_formula_ingredients     type=string  single=true  rest=true  auth=Closure
+    sf_formula_analysis        type=string  single=true  rest=true  auth=Closure
+    sf_formula_specs           type=string  single=true  rest=true  auth=Closure
+    sf_formula_source          type=string  single=true  rest=true  auth=Closure
+  auth 过滤器是否已挂 = auth_post_meta_sf_formula_ingredients_for_sf_formula: true
+
+  —— auth_callback 语义核对（capabilities.php:477-518）——
+
+Warning: Undefined variable $allowed in /Users/meng/Workbuddy/sinofresh外贸网站建设/sinofresh-theme/tools/_cpt2a_probe6.php on line 85
+  默认  = !is_protected_meta(key,'post')；未加下划线前缀 → true
+
+Warning: Undefined variable $allowed in /Users/meng/Workbuddy/sinofresh外贸网站建设/sinofresh-theme/tools/_cpt2a_probe6.php on line 86
+
+Warning: Undefined variable $post_id in /Users/meng/Workbuddy/sinofresh外贸网站建设/sinofresh-theme/tools/_cpt2a_probe6.php on line 86
+  auth_callback 返回 true → =true → 仍走 map_meta_cap('edit_post',) 的映射能力
+  ⇒ 本 spec 的 auth_callback 与「不写 auth_callback」实际等价，**不弱于 WP 默认** ✓
+
+==============================================================================
+== D. 是否会被 REST 暴露
+==============================================================================
+  rest_get_server() 可用 = true
+
+==============================================================================
+== E. CPT 模板回退链（WP 7.1.1 实测）
+==============================================================================
+
+Warning: Undefined variable $template_type in /Users/meng/Workbuddy/sinofresh外贸网站建设/sinofresh-theme/tools/_cpt2a_probe6.php on line 96
+  单条 sf_formula 的回退顺序（get_template_hierarchy，=wp_template）:
+    page                         磁盘存在=** 是 **
+    singular                     磁盘存在=否
+    index                        磁盘存在=** 是 **
+
+  归档 sf_formula 的回退顺序:
+    page                         磁盘存在=** 是 **
+    singular                     磁盘存在=否
+    index                        磁盘存在=** 是 **
+
+==============================================================================
+== F. 现有 single.html / archive.html 会不会被 CPT 命中（=2A 的可见副作用）
+==============================================================================
+  single.html       10821 B  首行块注释：<!-- wp:template-part {"slug":"header","tagName":"header"} /
+  archive.html       5497 B  首行块注释：<!-- wp:template-part {"slug":"header","tagName":"header"} /
+  index.html         1248 B  首行块注释：<!-- wp:group {"tagName":"header","backgroundColor":"primary
+  page.html          1771 B  首行块注释：<!-- wp:template-part {"slug":"header","tagName":"header"} /
+
+  ⇒ 2A 只注册不建模板：/formulas/ 会用 archive.html、/formulas/<slug>/ 会用 single.html
+
+==============================================================================
+== G. 占位符令牌现状（2A.6 需新增 FORM_* ）
+==============================================================================
+  functions.php 中出现的占位符令牌 = {{TITLE}}, {{ARCHIVE_TITLE}}, {{MID_HREF}}, {{MID_CRUMB}}, {{LAST_UPDATED}}, {{SHARE_URL}}, {{SHARE_URL_ENC}}, {{SHARE_TITLE_ENC}}
+  single.html 中出现的占位符令牌 = {{MID_HREF}}, {{MID_CRUMB}}, {{TITLE}}, {{LAST_UPDATED}}, {{SHARE_URL_ENC}}, {{SHARE_TITLE_ENC}}
+  {{FORM_CRUMB}} 是否已存在 = 否（可新增 ✓）
+  {{FORM_HREF}} 是否已存在 = 否（可新增 ✓）
+
+==============================================================================
+探针 #6 完成（只读）

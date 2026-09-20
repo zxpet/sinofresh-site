@@ -1,0 +1,568 @@
+- generic [ref=f4e2]:
+  - banner [ref=f4e3]:
+    - generic [ref=f4e4]:
+      - generic [ref=f4e5]:
+        - paragraph [ref=f4e6]:
+          - link "info@zxpet.com" [ref=f4e10]:
+            - /url: mailto:info@zxpet.com
+        - paragraph [ref=f4e11]:
+          - link "+86 539 866 9539" [ref=f4e14]:
+            - /url: tel:+865398669539
+        - paragraph [ref=f4e15]:
+          - link "WhatsApp +86 133 8539 7805" [ref=f4e19]:
+            - /url: https://wa.me/8613385397805
+      - generic [ref=f4e20]:
+        - paragraph [ref=f4e21]: Linyi, Shandong, China
+        - paragraph [ref=f4e25]: Mon–Fri · 9:00–18:00 GMT+8
+      - generic [ref=f4e29]:
+        - paragraph [ref=f4e30]:
+          - generic [ref=f4e31]: FDA
+          - generic [ref=f4e32]: cGMP
+          - generic [ref=f4e33]: ISO 9001
+          - generic [ref=f4e34]: ISO 22000
+        - paragraph [ref=f4e35]:
+          - link "EN" [ref=f4e36]:
+            - /url: /
+          - text: /
+          - link "DE" [ref=f4e37]:
+            - /url: /de/
+          - text: /
+          - link "FR" [ref=f4e38]:
+            - /url: /fr/
+        - paragraph [ref=f4e39]:
+          - link "X" [ref=f4e40]:
+            - /url: "#"
+          - link "YouTube" [ref=f4e43]:
+            - /url: "#"
+          - link "WeChat" [ref=f4e47]:
+            - /url: "#"
+          - link "Instagram" [ref=f4e51]:
+            - /url: "#"
+          - link "TikTok" [ref=f4e56]:
+            - /url: "#"
+          - link "Facebook" [ref=f4e60]:
+            - /url: "#"
+    - banner [ref=f4e63]:
+      - link [ref=f4e65]:
+        - /url: http://sinofresh.local/
+        - img "SINO FRESH - Private Label Pet Supplement Manufacturer" [ref=f4e66]
+      - navigation "Main Menu" [ref=f4e67]:
+        - list [ref=f4e72]:
+          - listitem [ref=f4e73]:
+            - link "Products" [ref=f4e74]:
+              - /url: /products/
+            - button "Products submenu" [ref=f4e75] [cursor=pointer]
+          - listitem [ref=f4e78]:
+            - link "OEM/ODM" [ref=f4e79]:
+              - /url: /services/
+          - listitem [ref=f4e80]:
+            - link "Quality" [ref=f4e81]:
+              - /url: /quality/
+          - listitem [ref=f4e82]:
+            - link "About" [ref=f4e83]:
+              - /url: /about/
+          - listitem [ref=f4e84]:
+            - link "Factory Tour" [ref=f4e85]:
+              - /url: /factory-tour/
+          - listitem [ref=f4e86]:
+            - link "Blog" [ref=f4e87]:
+              - /url: /blog/
+          - listitem [ref=f4e88]:
+            - link "Contact" [ref=f4e89]:
+              - /url: /contact/
+      - link "Get a Quote" [ref=f4e92] [cursor=pointer]:
+        - /url: "#quote"
+  - generic [ref=f4e93]:
+    - navigation "Breadcrumb" [ref=f4e94]:
+      - link "Home" [ref=f4e95]:
+        - /url: /
+      - generic [aria-hidden] [ref=f4e96]: /
+      - link "Products" [ref=f4e97]:
+        - /url: /products/
+      - generic [aria-hidden] [ref=f4e98]: /
+      - generic [ref=f4e99]: Soft Chews
+    - generic [ref=f4e100]:
+      - generic [ref=f4e101]:
+        - heading "Private Label Soft Chews for Dogs & Cats" [level=1] [ref=f4e102]
+        - paragraph [ref=f4e103]: Custom soft chews for joint, skin, calming, and digestive support. OEM/ODM with flexible MOQ, fast sampling, and full regulatory support.
+        - paragraph [ref=f4e104]: FDA · cGMP · ISO 9001 · ISO 22000
+        - generic [ref=f4e105]:
+          - link "Request a Quote" [ref=f4e107] [cursor=pointer]:
+            - /url: "#inquiry-form"
+          - link "Download Catalog" [ref=f4e109] [cursor=pointer]:
+            - /url: "#"
+      - figure [ref=f4e112]:
+        - img "SINO FRESH Soft Chews private label pet supplement product" [ref=f4e113]
+  - generic [ref=f4e115]:
+    - generic [ref=f4e116]:
+      - heading "Specifications" [level=3] [ref=f4e117]
+      - generic [ref=f4e118]:
+        - generic [ref=f4e119]:
+          - generic [ref=f4e120]: MOQ
+          - generic [ref=f4e121]: 500–1,000 units
+        - generic [ref=f4e122]:
+          - generic [ref=f4e123]: Sampling
+          - generic [ref=f4e124]: 3–7 working days
+        - generic [ref=f4e125]:
+          - generic [ref=f4e126]: Bulk Lead Time
+          - generic [ref=f4e127]: 7–15 working days after packaging ready
+        - generic [ref=f4e128]:
+          - generic [ref=f4e129]: Dosage Form
+          - generic [ref=f4e130]: Soft Chews
+        - generic [ref=f4e131]:
+          - generic [ref=f4e132]: Certifications
+          - generic [ref=f4e133]: FDA, cGMP, ISO 9001, ISO 22000
+        - generic [ref=f4e134]:
+          - generic [ref=f4e135]: Packaging
+          - generic [ref=f4e136]: Pouch, Bottle, Jar, Blister, Custom
+        - generic [ref=f4e137]:
+          - generic [ref=f4e138]: Payment
+          - generic [ref=f4e139]: 30% deposit, 70% before shipment
+        - generic [ref=f4e140]:
+          - generic [ref=f4e141]: Trade Terms
+          - generic [ref=f4e142]: FOB / CIF / EXW / DDP
+    - generic [ref=f4e143]:
+      - heading "Formula Options" [level=3] [ref=f4e144]
+      - list [ref=f4e145]:
+        - listitem [ref=f4e146]: Standard formulas for joint, skin, calming, digestive, and urinary support
+        - listitem [ref=f4e147]: Custom formulas based on your requirements or reference samples
+        - listitem [ref=f4e148]: Gluten-free, corn-free, soy-free
+        - listitem [ref=f4e149]: No artificial flavors
+        - listitem [ref=f4e150]: Non-GMO
+    - generic [ref=f4e151]:
+      - heading "Packaging Options" [level=3] [ref=f4e152]
+      - list [ref=f4e153]:
+        - listitem [ref=f4e154]: Aluminum stand-up pouch
+        - listitem [ref=f4e155]: Aluminum foil pouch with zipper
+        - listitem [ref=f4e156]: Plastic bottle
+        - listitem [ref=f4e157]: Jar
+        - listitem [ref=f4e158]: Blister pack
+        - listitem [ref=f4e159]: Box + foil
+        - listitem [ref=f4e160]: Custom packaging with label compliance support
+  - generic [ref=f4e161]:
+    - heading "Build Your Soft Chews Formula" [level=2] [ref=f4e162]
+    - paragraph [ref=f4e163]: Select your preferred shape, color, flavor, weight, count, packaging, function, and shelf life. Send us your configuration directly — we’ll respond within 24 hours.
+    - generic [ref=f4e164]:
+      - generic [ref=f4e165]:
+        - generic [ref=f4e166]:
+          - generic [ref=f4e167]:
+            - heading "Shape" [level=4] [ref=f4e168]
+            - paragraph [ref=f4e169]: Bone for joint, Paw for calming, Star for skin & coat.
+          - generic [ref=f4e170]:
+            - button "Bone" [ref=f4e171] [cursor=pointer]
+            - button "Round" [ref=f4e172] [cursor=pointer]
+            - button "Square" [ref=f4e173] [cursor=pointer]
+            - button "Heart" [ref=f4e174] [cursor=pointer]
+            - button "Star" [ref=f4e175] [cursor=pointer]
+            - button "Paw" [ref=f4e176] [cursor=pointer]
+            - button "Cylinder" [ref=f4e177] [cursor=pointer]
+            - button "Custom" [ref=f4e178] [cursor=pointer]
+        - generic [ref=f4e179]:
+          - generic [ref=f4e180]:
+            - heading "Color" [level=4] [ref=f4e181]
+            - paragraph [ref=f4e182]: Natural brown and beige have the highest acceptance among US pet owners.
+          - generic [ref=f4e183]:
+            - button "Brown" [ref=f4e184] [cursor=pointer]
+            - button "Beige" [ref=f4e185] [cursor=pointer]
+            - button "Red" [ref=f4e186] [cursor=pointer]
+            - button "Green" [ref=f4e187] [cursor=pointer]
+            - button "Yellow" [ref=f4e188] [cursor=pointer]
+            - button "Orange" [ref=f4e189] [cursor=pointer]
+            - button "Purple" [ref=f4e190] [cursor=pointer]
+            - button "Multi-color" [ref=f4e191] [cursor=pointer]
+            - button "Custom" [ref=f4e192] [cursor=pointer]
+        - generic [ref=f4e193]:
+          - generic [ref=f4e194]:
+            - heading "Flavor" [level=4] [ref=f4e195]
+            - paragraph [ref=f4e196]: Chicken and peanut butter are the top sellers on Amazon US.
+          - generic [ref=f4e197]:
+            - button "Chicken" [ref=f4e198] [cursor=pointer]
+            - button "Beef" [ref=f4e199] [cursor=pointer]
+            - button "Lamb" [ref=f4e200] [cursor=pointer]
+            - button "Salmon" [ref=f4e201] [cursor=pointer]
+            - button "Peanut Butter" [ref=f4e202] [cursor=pointer]
+            - button "Cheese" [ref=f4e203] [cursor=pointer]
+            - button "Mint" [ref=f4e204] [cursor=pointer]
+            - button "Sweet Potato" [ref=f4e205] [cursor=pointer]
+            - button "Pumpkin" [ref=f4e206] [cursor=pointer]
+            - button "Blueberry" [ref=f4e207] [cursor=pointer]
+            - button "Mixed" [ref=f4e208] [cursor=pointer]
+            - button "Unflavored" [ref=f4e209] [cursor=pointer]
+        - generic [ref=f4e210]:
+          - heading "Piece Weight" [level=4] [ref=f4e212]
+          - generic [ref=f4e213]:
+            - button "0.5g" [ref=f4e214] [cursor=pointer]
+            - button "1g" [ref=f4e215] [cursor=pointer]
+            - button "1.5g" [ref=f4e216] [cursor=pointer]
+            - button "2g" [ref=f4e217] [cursor=pointer]
+            - button "2.5g" [ref=f4e218] [cursor=pointer]
+            - button "3g" [ref=f4e219] [cursor=pointer]
+            - button "4g" [ref=f4e220] [cursor=pointer]
+            - button "5g" [ref=f4e221] [cursor=pointer]
+            - button "Custom" [ref=f4e222] [cursor=pointer]
+        - generic [ref=f4e223]:
+          - heading "Count per Container" [level=4] [ref=f4e225]
+          - generic [ref=f4e226]:
+            - button "30" [ref=f4e227] [cursor=pointer]
+            - button "60" [ref=f4e228] [cursor=pointer]
+            - button "90" [ref=f4e229] [cursor=pointer]
+            - button "120" [ref=f4e230] [cursor=pointer]
+            - button "150" [ref=f4e231] [cursor=pointer]
+            - button "180" [ref=f4e232] [cursor=pointer]
+            - button "250" [ref=f4e233] [cursor=pointer]
+            - button "500" [ref=f4e234] [cursor=pointer]
+            - button "Custom" [ref=f4e235] [cursor=pointer]
+        - generic [ref=f4e236]:
+          - generic [ref=f4e237]:
+            - heading "Packaging" [level=4] [ref=f4e238]
+            - paragraph [ref=f4e239]: Aluminum stand-up pouches offer the best shelf life and label visibility.
+          - generic [ref=f4e240]:
+            - button "Aluminum Stand-up Pouch" [ref=f4e241] [cursor=pointer]
+            - button "Aluminum Foil Pouch with Zipper" [ref=f4e242] [cursor=pointer]
+            - button "Plastic Bottle" [ref=f4e243] [cursor=pointer]
+            - button "Jar" [ref=f4e244] [cursor=pointer]
+            - button "Blister Pack" [ref=f4e245] [cursor=pointer]
+            - button "Box + Foil" [ref=f4e246] [cursor=pointer]
+            - button "Custom" [ref=f4e247] [cursor=pointer]
+        - generic [ref=f4e248]:
+          - generic [ref=f4e249]:
+            - heading "Functions" [level=4] [ref=f4e250]
+            - paragraph [ref=f4e251]: Joint and calming formulas dominate the US/EU pet supplement market.
+          - generic [ref=f4e252]:
+            - button "Joint Support" [ref=f4e253] [cursor=pointer]
+            - button "Skin & Coat" [ref=f4e254] [cursor=pointer]
+            - button "Digestive" [ref=f4e255] [cursor=pointer]
+            - button "Calming" [ref=f4e256] [cursor=pointer]
+            - button "Urinary Care" [ref=f4e257] [cursor=pointer]
+            - button "Oral Care" [ref=f4e258] [cursor=pointer]
+            - button "Multivitamin" [ref=f4e259] [cursor=pointer]
+            - button "Immune Support" [ref=f4e260] [cursor=pointer]
+        - generic [ref=f4e261]:
+          - heading "Shelf Life" [level=4] [ref=f4e263]
+          - generic [ref=f4e264]:
+            - button "12 months" [ref=f4e265] [cursor=pointer]
+            - button "18 months" [ref=f4e266] [cursor=pointer]
+            - button "24 months" [ref=f4e267] [cursor=pointer]
+            - button "Custom" [ref=f4e268] [cursor=pointer]
+      - complementary [ref=f4e270]:
+        - heading "Your Configuration" [level=3] [ref=f4e271]
+        - generic [ref=f4e272]: 2 of 8 selected
+        - generic [ref=f4e273]:
+          - generic [ref=f4e274]: Shape
+          - generic [ref=f4e275]: Star
+        - generic [ref=f4e276]:
+          - generic [ref=f4e277]: Color
+          - generic [ref=f4e278]: Green
+        - generic [ref=f4e279]:
+          - generic [ref=f4e280]: Flavor
+          - generic [ref=f4e281]: —
+        - generic [ref=f4e282]:
+          - generic [ref=f4e283]: Piece Weight
+          - generic [ref=f4e284]: —
+        - generic [ref=f4e285]:
+          - generic [ref=f4e286]: Count per Container
+          - generic [ref=f4e287]: —
+        - generic [ref=f4e288]:
+          - generic [ref=f4e289]: Packaging
+          - generic [ref=f4e290]: —
+        - generic [ref=f4e291]:
+          - generic [ref=f4e292]: Functions
+          - generic [ref=f4e293]: —
+        - generic [ref=f4e294]:
+          - generic [ref=f4e295]: Shelf Life
+          - generic [ref=f4e296]: —
+        - button "Submit This Configuration" [ref=f4e297] [cursor=pointer]
+        - generic [ref=f4e298]:
+          - button "Reset" [ref=f4e299] [cursor=pointer]
+          - button "Copy configuration summary" [ref=f4e300] [cursor=pointer]:
+            - generic [ref=f4e301]: Copy
+        - paragraph [ref=f4e302]: Need multiple colors, flavors, or specifications for the same product? Describe in Notes below in the quote form.
+  - generic [ref=f4e303]:
+    - heading "Overview" [level=2] [ref=f4e304]
+    - paragraph [ref=f4e305]: Soft chews are one of the most popular dosage forms for pet supplements — easy to administer, highly palatable, and suitable for a wide range of functional formulas. We manufacture custom soft chews for dogs and cats, from joint and skin support to calming and digestive health. Our soft chews are produced in a 10,000-class cleanroom, with every batch tested and documented.
+  - generic [ref=f4e306]:
+    - heading "Compliance & Quality" [level=2] [ref=f4e307]
+    - paragraph [ref=f4e308]: Every batch comes with a Certificate of Analysis (COA). Our facility is FDA registered, cGMP compliant, and certified to ISO 9001 and ISO 22000. We support regulatory documentation for your target market.
+    - link "View Full Quality & Compliance" [ref=f4e311] [cursor=pointer]:
+      - /url: /quality/
+  - generic [ref=f4e312]:
+    - heading "How We Work" [level=2] [ref=f4e313]
+    - paragraph [ref=f4e314]: A clear, documented process from your first message to repeat orders.
+    - generic [ref=f4e315]:
+      - generic [ref=f4e317]:
+        - paragraph [ref=f4e318]: "01"
+        - heading "Inquiry" [level=3] [ref=f4e319]
+        - paragraph [ref=f4e320]: Send us your product idea, target market, and reference.
+      - generic [ref=f4e322]:
+        - paragraph [ref=f4e323]: "02"
+        - heading "Requirement Confirmation" [level=3] [ref=f4e324]
+        - paragraph [ref=f4e325]: We confirm dosage form, formula direction, and specifications.
+      - generic [ref=f4e327]:
+        - paragraph [ref=f4e328]: "03"
+        - heading "Quotation & Sampling" [level=3] [ref=f4e329]
+        - paragraph [ref=f4e330]: Detailed quotation plus samples delivered in 3–7 days.
+      - generic [ref=f4e332]:
+        - paragraph [ref=f4e333]: "04"
+        - heading "Contract & Payment" [level=3] [ref=f4e334]
+        - paragraph [ref=f4e335]: Clear terms, production schedule, and payment milestones.
+    - generic [ref=f4e336]:
+      - generic [ref=f4e338]:
+        - paragraph [ref=f4e339]: "05"
+        - heading "Production & QC" [level=3] [ref=f4e340]
+        - paragraph [ref=f4e341]: Batch production with in-process and finished-goods QC.
+      - generic [ref=f4e343]:
+        - paragraph [ref=f4e344]: "06"
+        - heading "Shipping & Delivery" [level=3] [ref=f4e345]
+        - paragraph [ref=f4e346]: Export packing, full documentation, and door-to-door options.
+      - generic [ref=f4e348]:
+        - paragraph [ref=f4e349]: "07"
+        - heading "After-Sales & Reorder" [level=3] [ref=f4e350]
+        - paragraph [ref=f4e351]: Market feedback, restocking, and continuous support.
+  - generic [ref=f4e353]:
+    - heading "Frequently Asked Questions" [level=2] [ref=f4e354]
+    - group [ref=f4e355]:
+      - heading "What is the MOQ for soft chews?" [level=3] [ref=f4e357] [cursor=pointer]
+      - paragraph [ref=f4e359]: Standard formulas start from 500–1,000 units. New brands can start with small trial orders.
+    - group [ref=f4e360]:
+      - heading "How long does sampling take?" [level=3] [ref=f4e362] [cursor=pointer]
+    - group [ref=f4e364]:
+      - heading "Can you customize shape, color, flavor, and weight?" [level=3] [ref=f4e366] [cursor=pointer]
+    - group [ref=f4e368]:
+      - heading "Do you provide COA for each batch?" [level=3] [ref=f4e370] [cursor=pointer]
+    - group [ref=f4e372]:
+      - heading "What certifications do you hold?" [level=3] [ref=f4e374] [cursor=pointer]
+    - group [ref=f4e376]:
+      - heading "What payment terms do you offer?" [level=3] [ref=f4e378] [cursor=pointer]
+    - group [ref=f4e380]:
+      - heading "Can I visit your factory?" [level=3] [ref=f4e382] [cursor=pointer]
+    - group [ref=f4e384]:
+      - heading "Do you support private label?" [level=3] [ref=f4e386] [cursor=pointer]
+  - generic [ref=f4e388]:
+    - heading "Related Dosage Forms" [level=2] [ref=f4e389]
+    - generic [ref=f4e390]:
+      - generic [ref=f4e392]:
+        - figure:
+          - img "SINO FRESH Tablets private label pet supplement product"
+        - heading "Tablets" [level=3] [ref=f4e393]
+        - paragraph [ref=f4e394]: Precise dosing in a classic form, ideal for functional actives.
+        - paragraph [ref=f4e395]:
+          - link "Learn More →" [ref=f4e396]:
+            - /url: /products/tablets/
+      - generic [ref=f4e398]:
+        - figure:
+          - img "SINO FRESH Powders private label pet supplement product"
+        - heading "Powders" [level=3] [ref=f4e399]
+        - paragraph [ref=f4e400]: Easy to mix with food, flexible dosing across sizes.
+        - paragraph [ref=f4e401]:
+          - link "Learn More →" [ref=f4e402]:
+            - /url: /products/powders/
+      - generic [ref=f4e404]:
+        - figure:
+          - img "SINO FRESH Pastes private label pet supplement product"
+        - heading "Pastes" [level=3] [ref=f4e405]
+        - paragraph [ref=f4e406]: High palatability oral pastes for cats and dogs.
+        - paragraph [ref=f4e407]:
+          - link "Learn More →" [ref=f4e408]:
+            - /url: /products/pastes/
+      - generic [ref=f4e410]:
+        - figure:
+          - img "SINO FRESH Drops private label pet supplement product"
+        - heading "Drops" [level=3] [ref=f4e411]
+        - paragraph [ref=f4e412]: Fast-absorbing liquid drops with accurate dosing.
+        - paragraph [ref=f4e413]:
+          - link "Learn More →" [ref=f4e414]:
+            - /url: /products/drops/
+    - generic [ref=f4e415]:
+      - generic [ref=f4e417]:
+        - figure:
+          - img "SINO FRESH Liquids private label pet supplement product"
+        - heading "Liquids" [level=3] [ref=f4e418]
+        - paragraph [ref=f4e419]: Pourable liquid supplements for daily support.
+        - paragraph [ref=f4e420]:
+          - link "Learn More →" [ref=f4e421]:
+            - /url: /products/liquids/
+      - generic [ref=f4e423]:
+        - figure:
+          - img "SINO FRESH Fish Oil private label pet supplement product"
+        - heading "Fish Oil" [level=3] [ref=f4e424]
+        - paragraph [ref=f4e425]: Omega-3 rich oils for skin, coat, and heart health.
+        - paragraph [ref=f4e426]:
+          - link "Learn More →" [ref=f4e427]:
+            - /url: /products/fish-oil/
+      - generic [ref=f4e429]:
+        - figure:
+          - img "SINO FRESH Dental Chews private label pet supplement product"
+        - heading "Dental Chews" [level=3] [ref=f4e430]
+        - paragraph [ref=f4e431]: Daily dental care with functional actives.
+        - paragraph [ref=f4e432]:
+          - link "Learn More →" [ref=f4e433]:
+            - /url: /products/dental-chews/
+  - generic [ref=f4e435]:
+    - generic [ref=f4e436]:
+      - heading "Request a Soft Chews Quote" [level=2] [ref=f4e437]
+      - paragraph [ref=f4e438]: Send us your configuration and we’ll respond within 24 hours.
+      - generic [ref=f4e439]:
+        - generic [ref=f4e440]:
+          - paragraph [ref=f4e441]: ✓
+          - paragraph [ref=f4e442]: 24-hour response on business days
+        - generic [ref=f4e443]:
+          - paragraph [ref=f4e444]: ✓
+          - paragraph [ref=f4e445]: Formula and branding stay confidential
+        - generic [ref=f4e446]:
+          - paragraph [ref=f4e447]: ✓
+          - paragraph [ref=f4e448]: Small trial orders welcome
+    - generic [ref=f4e452]:
+      - generic [ref=f4e454]:
+        - generic [ref=f4e455]:
+          - generic [ref=f4e456]: Company Name
+          - textbox "Company Name" [ref=f4e458]
+        - generic [ref=f4e459]:
+          - generic [ref=f4e460]: Contact Person
+          - textbox "Contact Person" [ref=f4e462]
+        - generic [ref=f4e463]:
+          - generic [ref=f4e464]: Email
+          - textbox "Email" [ref=f4e466]
+        - group "Phone / WhatsApp" [ref=f4e467]:
+          - application [ref=f4e470]:
+            - generic [ref=f4e471]:
+              - generic [ref=f4e472]:
+                - generic [ref=f4e473]: Country
+                - button "Select country" [ref=f4e474] [cursor=pointer]:
+                  - generic [ref=f4e476]: "+1"
+              - generic [ref=f4e477]:
+                - generic [ref=f4e478]: Phone Number
+                - textbox "Phone Number" [ref=f4e479]:
+                  - /placeholder: (201) 555-0123
+        - generic [ref=f4e481]:
+          - generic [ref=f4e482]: Country
+          - combobox "Country" [ref=f4e484]:
+            - option "United States" [selected]
+            - option "United Kingdom"
+            - option "Germany"
+            - option "France"
+            - option "Australia"
+            - option "Canada"
+            - option "Japan"
+            - option "Other"
+        - generic [ref=f4e485]:
+          - generic [ref=f4e486]: Target Market
+          - combobox "Target Market" [ref=f4e488]:
+            - option "US" [selected]
+            - option "EU"
+            - option "UK"
+            - option "JP"
+            - option "AU"
+            - option "CA"
+            - option "Other"
+        - generic [ref=f4e489]:
+          - generic [ref=f4e490]: Interested Dosage Form
+          - combobox "Interested Dosage Form" [ref=f4e492]:
+            - option "Soft Chews" [selected]
+            - option "Tablets"
+            - option "Powders"
+            - option "Pastes"
+            - option "Drops"
+            - option "Liquids"
+            - option "Fish Oil"
+            - option "Dental Chews"
+        - generic [ref=f4e493]:
+          - generic [ref=f4e494]: Estimated Quantity
+          - combobox "Estimated Quantity" [ref=f4e496]:
+            - option "Under 500" [selected]
+            - option "500-1,000"
+            - option "1,000-5,000"
+            - option "5,000+"
+        - generic [ref=f4e497]:
+          - generic [ref=f4e498]: Packaging Preference
+          - combobox "Packaging Preference" [ref=f4e500]:
+            - option "Pouch" [selected]
+            - option "Bottle"
+            - option "Jar"
+            - option "Blister"
+            - option "Custom"
+        - generic [ref=f4e501]:
+          - generic [ref=f4e502]: Notes
+          - textbox "Notes" [ref=f4e504]
+        - group "Privacy Consent" [ref=f4e505]:
+          - generic [ref=f4e509]:
+            - checkbox "I agree to the Privacy Policy" [ref=f4e510]: 
+            - generic [ref=f4e511]: I agree to the Privacy Policy
+      - button "Send Inquiry" [ref=f4e513] [cursor=pointer]
+  - contentinfo [ref=f4e514]:
+    - contentinfo [ref=f4e515]:
+      - generic [ref=f4e516]:
+        - generic [ref=f4e517]:
+          - link [ref=f4e519]:
+            - /url: http://sinofresh.local/
+            - img "SINO FRESH - Private Label Pet Supplement Manufacturer" [ref=f4e520]
+          - paragraph [ref=f4e521]: Shandong SINO FRESH Pet Food Co., Ltd. — Private label pet supplement manufacturer with 8 dosage forms, FDA, cGMP, ISO 9001, ISO 22000.
+          - paragraph [ref=f4e522]:
+            - link "X" [ref=f4e523]:
+              - /url: "#"
+            - link "YouTube" [ref=f4e526]:
+              - /url: "#"
+            - link "WeChat" [ref=f4e530]:
+              - /url: "#"
+            - link "Instagram" [ref=f4e534]:
+              - /url: "#"
+            - link "TikTok" [ref=f4e539]:
+              - /url: "#"
+            - link "WhatsApp" [ref=f4e543]:
+              - /url: https://wa.me/8613385397805
+            - link "Facebook" [ref=f4e547]:
+              - /url: "#"
+        - group [ref=f4e551]:
+          - generic "Products"
+          - paragraph [ref=f4e552]:
+            - link "Soft Chews" [ref=f4e553]:
+              - /url: /soft-chews/
+            - link "Tablets" [ref=f4e554]:
+              - /url: /tablets/
+            - link "Powders" [ref=f4e555]:
+              - /url: /powders/
+            - link "Pastes" [ref=f4e556]:
+              - /url: /pastes/
+            - link "Drops" [ref=f4e557]:
+              - /url: /drops/
+            - link "Liquids" [ref=f4e558]:
+              - /url: /liquids/
+            - link "Fish Oil" [ref=f4e559]:
+              - /url: /fish-oil/
+            - link "Dental Chews" [ref=f4e560]:
+              - /url: /dental-chews/
+        - group [ref=f4e562]:
+          - generic "Company"
+          - paragraph [ref=f4e563]:
+            - link "About Us" [ref=f4e564]:
+              - /url: /about/
+            - link "Quality & Compliance" [ref=f4e565]:
+              - /url: /quality/
+            - link "Book a Factory Tour" [ref=f4e566]:
+              - /url: /factory-tour/
+            - link "Blog" [ref=f4e567]:
+              - /url: /blog/
+            - link "Team" [ref=f4e568]:
+              - /url: /about/#team
+        - group [ref=f4e570]:
+          - generic "Contact Us"
+          - paragraph [ref=f4e571]:
+            - link "info@zxpet.com" [ref=f4e572]:
+              - /url: mailto:info@zxpet.com
+            - link "+86 539 866 9539" [ref=f4e573]:
+              - /url: tel:+865398669539
+            - link "WhatsApp" [ref=f4e574]:
+              - /url: https://wa.me/8613385397805
+            - generic [ref=f4e575]: No. 22 Zhongshan Road B3, Yihe New District, Linyi, Shandong, China
+          - link "Get a Quote" [ref=f4e578] [cursor=pointer]:
+            - /url: "#quote"
+      - generic [ref=f4e579]:
+        - paragraph [ref=f4e580]: © 2026 Shandong SINO FRESH Pet Food Co., Ltd. All rights reserved.
+        - paragraph [ref=f4e581]:
+          - link "Privacy Policy" [ref=f4e582]:
+            - /url: /privacy-policy/
+          - text: "|"
+          - link "Cookie Policy" [ref=f4e583]:
+            - /url: /cookie-policy/
+          - text: "|"
+          - link "Terms" [ref=f4e584]:
+            - /url: /terms/

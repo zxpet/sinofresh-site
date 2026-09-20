@@ -1,0 +1,231 @@
+- generic [ref=f7e2]:
+  - banner [ref=f7e3]:
+    - generic [ref=f7e4]:
+      - generic [ref=f7e5]:
+        - paragraph [ref=f7e6]:
+          - link "info@zxpet.com" [ref=f7e10]:
+            - /url: mailto:info@zxpet.com
+        - paragraph [ref=f7e11]:
+          - link "+86 539 866 9539" [ref=f7e14]:
+            - /url: tel:+865398669539
+        - paragraph [ref=f7e15]:
+          - link "WhatsApp +86 133 8539 7805" [ref=f7e19]:
+            - /url: https://wa.me/8613385397805
+      - generic [ref=f7e20]:
+        - paragraph [ref=f7e21]: Linyi, Shandong, China
+        - paragraph [ref=f7e25]: Mon–Fri · 9:00–18:00 GMT+8
+      - generic [ref=f7e29]:
+        - paragraph [ref=f7e30]:
+          - generic [ref=f7e31]: FDA
+          - generic [ref=f7e32]: cGMP
+          - generic [ref=f7e33]: ISO 9001
+          - generic [ref=f7e34]: ISO 22000
+        - paragraph [ref=f7e35]:
+          - link "EN" [ref=f7e36]:
+            - /url: /
+          - text: /
+          - link "DE" [ref=f7e37]:
+            - /url: /de/
+          - text: /
+          - link "FR" [ref=f7e38]:
+            - /url: /fr/
+        - paragraph [ref=f7e39]:
+          - link "YouTube" [ref=f7e40]:
+            - /url: "#"
+          - link "Instagram" [ref=f7e44]:
+            - /url: "#"
+          - link "Facebook" [ref=f7e49]:
+            - /url: "#"
+    - banner [ref=f7e52]:
+      - paragraph [ref=f7e53]:
+        - link "sinofresh" [ref=f7e54]:
+          - /url: http://sinofresh.local
+      - navigation "Main Menu" [ref=f7e55]:
+        - list [ref=f7e60]:
+          - listitem [ref=f7e61]:
+            - link "Products" [ref=f7e62]:
+              - /url: /products/
+            - button "Products submenu" [ref=f7e63] [cursor=pointer]
+          - listitem [ref=f7e66]:
+            - link "OEM/ODM" [ref=f7e67]:
+              - /url: /services/
+          - listitem [ref=f7e68]:
+            - link "Quality" [ref=f7e69]:
+              - /url: /quality/
+          - listitem [ref=f7e70]:
+            - link "About" [ref=f7e71]:
+              - /url: /about/
+          - listitem [ref=f7e72]:
+            - link "Factory Tour" [ref=f7e73]:
+              - /url: /factory-tour/
+          - listitem [ref=f7e74]:
+            - link "Blog" [ref=f7e75]:
+              - /url: /blog/
+          - listitem [ref=f7e76]:
+            - link "Contact" [ref=f7e77]:
+              - /url: /contact/
+      - link "Get a Quote" [ref=f7e80] [cursor=pointer]:
+        - /url: "#quote"
+  - generic [ref=f7e81]:
+    - heading "Page Not Found" [level=1] [ref=f7e82]
+    - paragraph [ref=f7e83]: The page you are looking for does not exist or has been moved.
+  - generic [ref=f7e84]:
+    - heading "Browse Our Products" [level=2] [ref=f7e85]
+    - generic [ref=f7e86]:
+      - generic [ref=f7e88]:
+        - figure [ref=f7e89]:
+          - img "Private label soft chews manufacturing" [ref=f7e90]
+        - paragraph [ref=f7e91]: BESTSELLER
+        - heading "Soft Chews" [level=3] [ref=f7e92]
+        - paragraph [ref=f7e93]: Joint, skin, calming & digestive support.
+        - paragraph [ref=f7e94]: MOQ from 500 units · Sampling 3–7 days
+        - paragraph [ref=f7e95]:
+          - link "Learn More →" [ref=f7e96]:
+            - /url: /products/soft-chews/
+      - generic [ref=f7e98]:
+        - figure [ref=f7e99]:
+          - img "Private label tablets manufacturing" [ref=f7e100]
+        - paragraph [ref=f7e101]: HOT
+        - heading "Tablets" [level=3] [ref=f7e102]
+        - paragraph [ref=f7e103]: Joint, multivitamin & specialty formulas.
+        - paragraph [ref=f7e104]: MOQ from 1,000 units · Sampling 3–7 days
+        - paragraph [ref=f7e105]:
+          - link "Learn More →" [ref=f7e106]:
+            - /url: /products/tablets/
+      - generic [ref=f7e108]:
+        - figure [ref=f7e109]:
+          - img "Private label powders manufacturing" [ref=f7e110]
+        - heading "Powders" [level=3] [ref=f7e111]
+        - paragraph [ref=f7e112]: Probiotics, digestive & daily nutrition.
+        - paragraph [ref=f7e113]: MOQ from 500 units · Sampling 3–7 days
+        - paragraph [ref=f7e114]:
+          - link "Learn More →" [ref=f7e115]:
+            - /url: /products/powders/
+      - generic [ref=f7e117]:
+        - figure [ref=f7e118]:
+          - img "Private label pastes manufacturing" [ref=f7e119]
+        - heading "Pastes" [level=3] [ref=f7e120]
+        - paragraph [ref=f7e121]: Hairball, digestive & nutrient support.
+        - paragraph [ref=f7e122]: MOQ from 500 units · Sampling 3–7 days
+        - paragraph [ref=f7e123]:
+          - link "Learn More →" [ref=f7e124]:
+            - /url: /products/pastes/
+    - generic [ref=f7e125]:
+      - generic [ref=f7e127]:
+        - figure [ref=f7e128]:
+          - img "Private label drops manufacturing" [ref=f7e129]
+        - paragraph [ref=f7e130]: NEW
+        - heading "Drops" [level=3] [ref=f7e131]
+        - paragraph [ref=f7e132]: Oral care, calming & precise dosing.
+        - paragraph [ref=f7e133]: MOQ from 500 units · Sampling 3–7 days
+        - paragraph [ref=f7e134]:
+          - link "Learn More →" [ref=f7e135]:
+            - /url: /products/drops/
+      - generic [ref=f7e137]:
+        - figure [ref=f7e138]:
+          - img "Private label liquids manufacturing" [ref=f7e139]
+        - paragraph [ref=f7e140]: NEW
+        - heading "Liquids" [level=3] [ref=f7e141]
+        - paragraph [ref=f7e142]: Easy administration & fast absorption.
+        - paragraph [ref=f7e143]: MOQ from 500 units · Sampling 3–7 days
+        - paragraph [ref=f7e144]:
+          - link "Learn More →" [ref=f7e145]:
+            - /url: /products/liquids/
+      - generic [ref=f7e147]:
+        - figure [ref=f7e148]:
+          - img "Private label fish oil manufacturing" [ref=f7e149]
+        - paragraph [ref=f7e150]: BESTSELLER
+        - heading "Fish Oil" [level=3] [ref=f7e151]
+        - paragraph [ref=f7e152]: Skin, coat, joint & heart support.
+        - paragraph [ref=f7e153]: MOQ from 1,000 units · Sampling 3–7 days
+        - paragraph [ref=f7e154]:
+          - link "Learn More →" [ref=f7e155]:
+            - /url: /products/fish-oil/
+      - generic [ref=f7e157]:
+        - figure [ref=f7e158]:
+          - img "Private label dental chews manufacturing" [ref=f7e159]
+        - paragraph [ref=f7e160]: HOT
+        - heading "Dental Chews" [level=3] [ref=f7e161]
+        - paragraph [ref=f7e162]: Oral hygiene & chewing support.
+        - paragraph [ref=f7e163]: MOQ from 1,000 units · Sampling 3–7 days
+        - paragraph [ref=f7e164]:
+          - link "Learn More →" [ref=f7e165]:
+            - /url: /products/dental-chews/
+    - link "Back to Home" [ref=f7e168] [cursor=pointer]:
+      - /url: /
+  - contentinfo [ref=f7e169]:
+    - contentinfo [ref=f7e170]:
+      - generic [ref=f7e171]:
+        - generic [ref=f7e172]:
+          - paragraph [ref=f7e173]: SINO FRESH
+          - paragraph [ref=f7e174]: Shandong SINO FRESH Pet Food Co., Ltd. — Private label pet supplement manufacturer with 8 dosage forms, FDA, cGMP, ISO 9001, ISO 22000.
+          - paragraph [ref=f7e175]:
+            - link "X" [ref=f7e176]:
+              - /url: "#"
+            - link "YouTube" [ref=f7e179]:
+              - /url: "#"
+            - link "WeChat" [ref=f7e183]:
+              - /url: "#"
+            - link "Instagram" [ref=f7e187]:
+              - /url: "#"
+            - link "TikTok" [ref=f7e192]:
+              - /url: "#"
+            - link "WhatsApp" [ref=f7e196]:
+              - /url: https://wa.me/8613385397805
+            - link "Facebook" [ref=f7e200]:
+              - /url: "#"
+        - group [ref=f7e204]:
+          - generic "Products"
+          - paragraph [ref=f7e205]:
+            - link "Soft Chews" [ref=f7e206]:
+              - /url: /soft-chews/
+            - link "Tablets" [ref=f7e207]:
+              - /url: /tablets/
+            - link "Powders" [ref=f7e208]:
+              - /url: /powders/
+            - link "Pastes" [ref=f7e209]:
+              - /url: /pastes/
+            - link "Drops" [ref=f7e210]:
+              - /url: /drops/
+            - link "Liquids" [ref=f7e211]:
+              - /url: /liquids/
+            - link "Fish Oil" [ref=f7e212]:
+              - /url: /fish-oil/
+            - link "Dental Chews" [ref=f7e213]:
+              - /url: /dental-chews/
+        - group [ref=f7e215]:
+          - generic "Company"
+          - paragraph [ref=f7e216]:
+            - link "About Us" [ref=f7e217]:
+              - /url: /about/
+            - link "Quality & Compliance" [ref=f7e218]:
+              - /url: /quality/
+            - link "Book a Factory Tour" [ref=f7e219]:
+              - /url: /factory-tour/
+            - link "Blog" [ref=f7e220]:
+              - /url: /blog/
+            - link "Team" [ref=f7e221]:
+              - /url: /about/#team
+        - group [ref=f7e223]:
+          - generic "Contact Us"
+          - paragraph [ref=f7e224]:
+            - link "info@zxpet.com" [ref=f7e225]:
+              - /url: mailto:info@zxpet.com
+            - link "+86 539 866 9539" [ref=f7e226]:
+              - /url: tel:+865398669539
+            - link "WhatsApp" [ref=f7e227]:
+              - /url: https://wa.me/8613385397805
+            - generic [ref=f7e228]: No. 22 Zhongshan Road B3, Yihe New District, Linyi, Shandong, China
+          - link "Get a Quote" [ref=f7e231] [cursor=pointer]:
+            - /url: "#quote"
+      - generic [ref=f7e232]:
+        - paragraph [ref=f7e233]: © 2026 Shandong SINO FRESH Pet Food Co., Ltd. All rights reserved.
+        - paragraph [ref=f7e234]:
+          - link "Privacy Policy" [ref=f7e235]:
+            - /url: /privacy-policy/
+          - text: "|"
+          - link "Cookie Policy" [ref=f7e236]:
+            - /url: /cookie-policy/
+          - text: "|"
+          - link "Terms" [ref=f7e237]:
+            - /url: /terms/

@@ -1,0 +1,223 @@
+{
+ "375": {
+  "journeySectionH": 798.2,
+  "rail": {
+   "content": "none",
+   "left": "auto",
+   "width": "auto",
+   "top": "auto",
+   "bottom": "auto"
+  },
+  "rows": [
+   {
+    "i": 0,
+    "year": "2025",
+    "title": "Company Founded",
+    "sameLine": true,
+    "yearLeft": 64,
+    "bodyLeft": 134,
+    "bodyW": 203,
+    "rowH": 134.1,
+    "dot": {
+     "w": "14px",
+     "h": "14px",
+     "border": "2px rgb(27, 77, 62)",
+     "bg": "rgb(255, 255, 255)",
+     "top": "3px",
+     "left": "0px"
+    },
+    "opacity": "1"
+   },
+   {
+    "i": 1,
+    "year": "2025",
+    "title": "Factory Commissioned",
+    "sameLine": true,
+    "yearLeft": 64,
+    "bodyLeft": 134,
+    "bodyW": 203,
+    "rowH": 134.1,
+    "dot": {
+     "w": "14px",
+     "h": "14px",
+     "border": "2px rgb(27, 77, 62)",
+     "bg": "rgb(255, 255, 255)",
+     "top": "3px",
+     "left": "0px"
+    },
+    "opacity": "1"
+   },
+   {
+    "i": 2,
+    "year": "2026",
+    "title": "Certifications Completed",
+    "sameLine": true,
+    "yearLeft": 64,
+    "bodyLeft": 134,
+    "bodyW": 203,
+    "rowH": 157.5,
+    "dot": {
+     "w": "14px",
+     "h": "14px",
+     "border": "2px rgb(27, 77, 62)",
+     "bg": "rgb(255, 255, 255)",
+     "top": "3px",
+     "left": "0px"
+    },
+    "opacity": "1"
+   },
+   {
+    "i": 3,
+    "year": "2026",
+    "title": "Exporting Worldwide",
+    "sameLine": true,
+    "yearLeft": 64,
+    "bodyLeft": 134,
+    "bodyW": 203,
+    "rowH": 112.5,
+    "dot": {
+     "w": "14px",
+     "h": "14px",
+     "border": "2px rgb(27, 77, 62)",
+     "bg": "rgb(255, 255, 255)",
+     "top": "3px",
+     "left": "0px"
+    },
+    "opacity": "1"
+   }
+  ],
+  "hScroll": 0,
+  "docH": 5634,
+  "sections": {
+   "(no h2)": 450.9,
+   "Who We Are": 1217.9,
+   "Our Journey": 798.2,
+   "Our Core Values": 652.2,
+   "Our Team": 1088.1,
+   "Inside Our Factory": 679.9,
+   "Ready to Start?": 219.9
+  }
+ },
+ "1440": {
+  "journeySectionH": 605.4,
+  "rail": {
+   "content": "none",
+   "left": "auto",
+   "width": "auto",
+   "top": "auto",
+   "bottom": "auto"
+  },
+  "rows": [
+   {
+    "i": 0,
+    "year": "2025",
+    "title": "Company Founded",
+    "sameLine": true,
+    "yearLeft": 354,
+    "bodyLeft": 454,
+    "bodyW": 666,
+    "rowH": 94.8,
+    "dot": {
+     "w": "18px",
+     "h": "18px",
+     "border": "3px rgb(27, 77, 62)",
+     "bg": "rgb(255, 255, 255)",
+     "top": "4px",
+     "left": "0px"
+    },
+    "opacity": "1"
+   },
+   {
+    "i": 1,
+    "year": "2025",
+    "title": "Factory Commissioned",
+    "sameLine": true,
+    "yearLeft": 354,
+    "bodyLeft": 454,
+    "bodyW": 666,
+    "rowH": 72.4,
+    "dot": {
+     "w": "18px",
+     "h": "18px",
+     "border": "3px rgb(27, 77, 62)",
+     "bg": "rgb(255, 255, 255)",
+     "top": "4px",
+     "left": "0px"
+    },
+    "opacity": "1"
+   },
+   {
+    "i": 2,
+    "year": "2026",
+    "title": "Certifications Completed",
+    "sameLine": true,
+    "yearLeft": 354,
+    "bodyLeft": 454,
+    "bodyW": 666,
+    "rowH": 94.8,
+    "dot": {
+     "w": "18px",
+     "h": "18px",
+     "border": "3px rgb(27, 77, 62)",
+     "bg": "rgb(255, 255, 255)",
+     "top": "4px",
+     "left": "0px"
+    },
+    "opacity": "1"
+   },
+   {
+    "i": 3,
+    "year": "2026",
+    "title": "Exporting Worldwide",
+    "sameLine": true,
+    "yearLeft": 354,
+    "bodyLeft": 454,
+    "bodyW": 666,
+    "rowH": 72.4,
+    "dot": {
+     "w": "18px",
+     "h": "18px",
+     "border": "3px rgb(27, 77, 62)",
+     "bg": "rgb(255, 255, 255)",
+     "top": "4px",
+     "left": "0px"
+    },
+    "opacity": "1"
+   }
+  ],
+  "hScroll": 0,
+  "docH": 4042,
+  "sections": {
+   "(no h2)": 409.1,
+   "Who We Are": 605.4,
+   "Our Journey": 605.4,
+   "Our Core Values": 372.7,
+   "Our Team": 479.5,
+   "Inside Our Factory": 766.1,
+   "Ready to Start?": 231.1
+  }
+ },
+ "reducedMotion": {
+  "live": false,
+  "opacities": [
+   "1",
+   "1",
+   "1",
+   "1"
+  ],
+  "transforms": [
+   "none",
+   "none",
+   "none",
+   "none"
+  ]
+ },
+ "scripts": {
+  "/about/": 1,
+  "/": 0,
+  "/products/": 0,
+  "/quality/": 0,
+  "/faq/": 0,
+  "/contact/": 0
+ }
+}

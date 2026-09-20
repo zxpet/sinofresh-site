@@ -1,0 +1,177 @@
+==============================================================================
+# screenshots/entity-abc-A-single.pdf
+  size=30480B  pages=2  bytes contain b"&amp" ? False
+
+  [1] 内容流里的文本算子（真实写入的码元）
+      p1: ...b'  \x14\x00 \x00H\x00i\x00p\x00 \x00&\x00 \x00j\x00o\x00i\x00n\x00t\x00 \x00'...
+      p1: ...b':\x00 \x00F\x00i\x00s\x00h\x00 \x00&\x00 \x00C\x00h\x00i\x00p\x00s)] '...
+      p1: ...b'm\x00:\x00 \x00H\x00i\x00p\x00 \x00&\x00 \x00j\x00o\x00i\x00n\x00t)] '...
+      p1: ...b'[(\x00O\x00u\x00r\x00 \x00R\x00&\x00D\x00 \x00t\x00e\x00a\x00m\x00 \x00'...
+      p2: ...b'0\x000\x00 \x00m\x00\xb2\x00 \x00R\x00&\x00D\x00 \x00l\x00a\x00b\x00o\x00r\x00'...
+
+  [2] ToUnicode CMap（决定复制粘贴取到哪个字符）
+      p1 /F1: bfchar=0 bfrange=1 (恒等 <0000><FFFF><0000>)
+          多字符映射（实体泄漏真凶）: 无
+          U+0026(&) 的映射: 见 bfrange 恒等区间
+      p1 /F2: bfchar=0 bfrange=1 (恒等 <0000><FFFF><0000>)
+          多字符映射（实体泄漏真凶）: 无
+          U+0026(&) 的映射: 见 bfrange 恒等区间
+      p2 /F1: bfchar=0 bfrange=1 (恒等 <0000><FFFF><0000>)
+          多字符映射（实体泄漏真凶）: 无
+          U+0026(&) 的映射: 见 bfrange 恒等区间
+      p2 /F2: bfchar=0 bfrange=1 (恒等 <0000><FFFF><0000>)
+          多字符映射（实体泄漏真凶）: 无
+          U+0026(&) 的映射: 见 bfrange 恒等区间
+
+  [3] 多引擎交叉提取（同一行，原样打印）
+      「Flavor」
+        pypdf           : ['Flavor Custom: Fish & Chips']
+        pdfium(Chrome)  : ['Flavor Custom: Fish & Chips']
+        pdfminer        : ['Flavor']
+      「Functions」
+        pypdf           : ['Functions Custom: Hip & joint']
+        pdfium(Chrome)  : ['Functions Custom: Hip & joint']
+        pdfminer        : ['Functions']
+
+  [判决]
+      文本层含 "&amp;" 的引擎: 无 —— 文本层干净
+      ⚠ 裸串 "amp" 命中 2 行，全部来自单词 sample，不可作为判据: ['Retention samples kept per batch', '→ Request a sample']
+==============================================================================
+# screenshots/entity-abc-B-single.pdf
+  size=30418B  pages=2  bytes contain b"&amp" ? False
+
+  [1] 内容流里的文本算子（真实写入的码元）
+      p1: ...b'  \x14\x00 \x00H\x00i\x00p\x00 \x00&\x00 \x00j\x00o\x00i\x00n\x00t\x00 \x00'...
+      p1: ...b':\x00 \x00F\x00i\x00s\x00h\x00 \x00&\x00 \x00C\x00h\x00i\x00p\x00s)] '...
+      p1: ...b'm\x00:\x00 \x00H\x00i\x00p\x00 \x00&\x00 \x00j\x00o\x00i\x00n\x00t)] '...
+      p1: ...b'[(\x00O\x00u\x00r\x00 \x00R\x00&\x00D\x00 \x00t\x00e\x00a\x00m\x00 \x00'...
+      p2: ...b'0\x000\x00 \x00m\x00\xb2\x00 \x00R\x00&\x00D\x00 \x00l\x00a\x00b\x00o\x00r\x00'...
+
+  [2] ToUnicode CMap（决定复制粘贴取到哪个字符）
+      p1 /F1: bfchar=0 bfrange=1 (恒等 <0000><FFFF><0000>)
+          多字符映射（实体泄漏真凶）: 无
+          U+0026(&) 的映射: 见 bfrange 恒等区间
+      p1 /F2: bfchar=0 bfrange=1 (恒等 <0000><FFFF><0000>)
+          多字符映射（实体泄漏真凶）: 无
+          U+0026(&) 的映射: 见 bfrange 恒等区间
+      p2 /F1: bfchar=0 bfrange=1 (恒等 <0000><FFFF><0000>)
+          多字符映射（实体泄漏真凶）: 无
+          U+0026(&) 的映射: 见 bfrange 恒等区间
+      p2 /F2: bfchar=0 bfrange=1 (恒等 <0000><FFFF><0000>)
+          多字符映射（实体泄漏真凶）: 无
+          U+0026(&) 的映射: 见 bfrange 恒等区间
+
+  [3] 多引擎交叉提取（同一行，原样打印）
+      「Flavor」
+        pypdf           : ['Flavor Custom: Fish & Chips']
+        pdfium(Chrome)  : ['Flavor Custom: Fish & Chips']
+        pdfminer        : ['Flavor']
+      「Functions」
+        pypdf           : ['Functions Custom: Hip & joint']
+        pdfium(Chrome)  : ['Functions Custom: Hip & joint']
+        pdfminer        : ['Functions']
+
+  [判决]
+      文本层含 "&amp;" 的引擎: 无 —— 文本层干净
+      ⚠ 裸串 "amp" 命中 2 行，全部来自单词 sample，不可作为判据: ['Retention samples kept per batch', '→ Request a sample']
+==============================================================================
+# screenshots/entity-abc-C-single.pdf
+  size=30169B  pages=2  bytes contain b"&amp" ? False
+
+  [1] 内容流里的文本算子（真实写入的码元）
+      p1: ...b'  \x14\x00 \x00H\x00i\x00p\x00 \x00&\x00 \x00j\x00o\x00i\x00n\x00t\x00 \x00'...
+      p1: ...b':\x00 \x00F\x00i\x00s\x00h\x00 \x00&\x00 \x00C\x00h\x00i\x00p\x00s)] '...
+      p1: ...b'm\x00:\x00 \x00H\x00i\x00p\x00 \x00&\x00 \x00j\x00o\x00i\x00n\x00t)] '...
+      p1: ...b'[(\x00O\x00u\x00r\x00 \x00R\x00&\x00D\x00 \x00t\x00e\x00a\x00m\x00 \x00'...
+      p2: ...b'0\x000\x00 \x00m\x00\xb2\x00 \x00R\x00&\x00D\x00 \x00l\x00a\x00b\x00o\x00r\x00'...
+
+  [2] ToUnicode CMap（决定复制粘贴取到哪个字符）
+      p1 /F1: bfchar=0 bfrange=1 (恒等 <0000><FFFF><0000>)
+          多字符映射（实体泄漏真凶）: 无
+          U+0026(&) 的映射: 见 bfrange 恒等区间
+      p1 /F2: bfchar=0 bfrange=1 (恒等 <0000><FFFF><0000>)
+          多字符映射（实体泄漏真凶）: 无
+          U+0026(&) 的映射: 见 bfrange 恒等区间
+      p2 /F1: bfchar=0 bfrange=1 (恒等 <0000><FFFF><0000>)
+          多字符映射（实体泄漏真凶）: 无
+          U+0026(&) 的映射: 见 bfrange 恒等区间
+      p2 /F2: bfchar=0 bfrange=1 (恒等 <0000><FFFF><0000>)
+          多字符映射（实体泄漏真凶）: 无
+          U+0026(&) 的映射: 见 bfrange 恒等区间
+
+  [3] 多引擎交叉提取（同一行，原样打印）
+      「Flavor」
+        pypdf           : ['Flavor Custom: Fish & Chips']
+        pdfium(Chrome)  : ['Flavor Custom: Fish & Chips']
+        pdfminer        : ['Flavor']
+      「Functions」
+        pypdf           : ['Functions Custom: Hip & joint']
+        pdfium(Chrome)  : ['Functions Custom: Hip & joint']
+        pdfminer        : ['Functions']
+
+  [判决]
+      文本层含 "&amp;" 的引擎: 无 —— 文本层干净
+      ⚠ 裸串 "amp" 命中 2 行，全部来自单词 sample，不可作为判据: ['Retention samples kept per batch', '→ Request a sample']
+==============================================================================
+# screenshots/entity-abc-C-basket.pdf
+  size=32125B  pages=3  bytes contain b"&amp" ? False
+
+  [1] 内容流里的文本算子（真实写入的码元）
+      p2: ...b':\x00 \x00F\x00i\x00s\x00h\x00 \x00&\x00 \x00C\x00h\x00i\x00p\x00s)] '...
+      p2: ...b'm\x00:\x00 \x00H\x00i\x00p\x00 \x00&\x00 \x00j\x00o\x00i\x00n\x00t)] '...
+      p2: ...b'[(\x00O\x00u\x00r\x00 \x00R\x00&\x00D\x00 \x00t\x00e\x00a\x00m\x00 \x00'...
+      p3: ...b'0\x000\x00 \x00m\x00\xb2\x00 \x00R\x00&\x00D\x00 \x00l\x00a\x00b\x00o\x00r\x00'...
+
+  [2] ToUnicode CMap（决定复制粘贴取到哪个字符）
+      p1 /F1: bfchar=0 bfrange=1 (恒等 <0000><FFFF><0000>)
+          多字符映射（实体泄漏真凶）: 无
+          U+0026(&) 的映射: 见 bfrange 恒等区间
+      p1 /F2: bfchar=0 bfrange=1 (恒等 <0000><FFFF><0000>)
+          多字符映射（实体泄漏真凶）: 无
+          U+0026(&) 的映射: 见 bfrange 恒等区间
+      p2 /F1: bfchar=0 bfrange=1 (恒等 <0000><FFFF><0000>)
+          多字符映射（实体泄漏真凶）: 无
+          U+0026(&) 的映射: 见 bfrange 恒等区间
+      p2 /F2: bfchar=0 bfrange=1 (恒等 <0000><FFFF><0000>)
+          多字符映射（实体泄漏真凶）: 无
+          U+0026(&) 的映射: 见 bfrange 恒等区间
+      p3 /F1: bfchar=0 bfrange=1 (恒等 <0000><FFFF><0000>)
+          多字符映射（实体泄漏真凶）: 无
+          U+0026(&) 的映射: 见 bfrange 恒等区间
+      p3 /F2: bfchar=0 bfrange=1 (恒等 <0000><FFFF><0000>)
+          多字符映射（实体泄漏真凶）: 无
+          U+0026(&) 的映射: 见 bfrange 恒等区间
+
+  [3] 多引擎交叉提取（同一行，原样打印）
+      「Flavor」
+        pypdf           : ['Flavor Custom: Fish & Chips']
+        pdfium(Chrome)  : ['Flavor Custom: Fish & Chips']
+        pdfminer        : ['Flavor']
+      「Functions」
+        pypdf           : ['Functions Custom: Hip & joint']
+        pdfium(Chrome)  : ['Functions Custom: Hip & joint']
+        pdfminer        : ['Functions']
+
+  [判决]
+      文本层含 "&amp;" 的引擎: 无 —— 文本层干净
+      ⚠ 裸串 "amp" 命中 2 行，全部来自单词 sample，不可作为判据: ['Retention samples kept per batch', '→ Request samples']
+
+==============================================================================
+# 引擎 4/4: macOS PDFKit / CoreGraphics  (PDFDocument.string() = Preview 全选复制的同一层)
+
+--- entity-abc-A-single.pdf
+
+--- entity-abc-B-single.pdf
+
+--- entity-abc-C-single.pdf
+
+--- entity-abc-C-basket.pdf
+
+==============================================================================
+# 内容流字节级证据（Dompdf 实际写入的码元，UTF-16BE）
+  Flavor    : [( F i s h   &   C h i p s)] TJ   ← & = U+0026 单字符
+  Functions : [( C u s t o m :   H i p   &   j o i n t)] TJ
+  内部对照  : [( O u r   R & D   t e a m...)] TJ      ← 硬编码 R&D 同样单字符
+  ToUnicode : 1 beginbfrange <0000> <FFFF> <0000>  ← 恒等映射，码元即 Unicode
+
+# 判决：4/4 引擎 + 字节层 + CMap 全部干净。文本层不含 &amp;，含 &。

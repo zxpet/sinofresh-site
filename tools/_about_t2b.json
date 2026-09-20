@@ -1,0 +1,693 @@
+{
+ "375": {
+  "geom": {
+   "rows": [
+    {
+     "i": 0,
+     "year": "2023",
+     "title": "Production began",
+     "gapTop": 0,
+     "sameLine": true,
+     "itemLeft": 38,
+     "itemW": 299,
+     "itemRight": 337,
+     "rowH": 177.5,
+     "yearLeft": 64,
+     "yearRel": 26,
+     "yearW": 56,
+     "dotLeft": 38,
+     "dotRel": 0,
+     "dotTop": 3,
+     "dotW": 14,
+     "dotH": 14,
+     "dotPos": "absolute",
+     "dotBg": "rgb(255, 255, 255)",
+     "dotBorder": "2px rgb(27, 77, 62)",
+     "dotTransition": "0.25s",
+     "rail": {
+      "display": "block",
+      "left": "6px",
+      "width": "2px",
+      "top": "17px",
+      "bottom": "-34px",
+      "bg": "rgb(199, 208, 203)"
+     },
+     "delayInline": ""
+    },
+    {
+     "i": 1,
+     "year": "2024",
+     "title": "OEM projects expanded",
+     "gapTop": 0,
+     "sameLine": true,
+     "itemLeft": 38,
+     "itemW": 299,
+     "itemRight": 337,
+     "rowH": 200.9,
+     "yearLeft": 64,
+     "yearRel": 26,
+     "yearW": 56,
+     "dotLeft": 38,
+     "dotRel": 0,
+     "dotTop": 3,
+     "dotW": 14,
+     "dotH": 14,
+     "dotPos": "absolute",
+     "dotBg": "rgb(255, 255, 255)",
+     "dotBorder": "2px rgb(27, 77, 62)",
+     "dotTransition": "0.25s",
+     "rail": {
+      "display": "block",
+      "left": "6px",
+      "width": "2px",
+      "top": "17px",
+      "bottom": "-34px",
+      "bg": "rgb(199, 208, 203)"
+     },
+     "delayInline": ""
+    },
+    {
+     "i": 2,
+     "year": "2025",
+     "title": "SINO FRESH founded",
+     "gapTop": 0,
+     "sameLine": true,
+     "itemLeft": 38,
+     "itemW": 299,
+     "itemRight": 337,
+     "rowH": 155.8,
+     "yearLeft": 64,
+     "yearRel": 26,
+     "yearW": 56,
+     "dotLeft": 38,
+     "dotRel": 0,
+     "dotTop": 3,
+     "dotW": 14,
+     "dotH": 14,
+     "dotPos": "absolute",
+     "dotBg": "rgb(255, 255, 255)",
+     "dotBorder": "2px rgb(27, 77, 62)",
+     "dotTransition": "0.25s",
+     "rail": {
+      "display": "block",
+      "left": "6px",
+      "width": "2px",
+      "top": "17px",
+      "bottom": "-34px",
+      "bg": "rgb(199, 208, 203)"
+     },
+     "delayInline": ""
+    },
+    {
+     "i": 3,
+     "year": "2025",
+     "title": "Factory commissioned",
+     "gapTop": 0,
+     "sameLine": true,
+     "itemLeft": 38,
+     "itemW": 299,
+     "itemRight": 337,
+     "rowH": 199.2,
+     "yearLeft": 64,
+     "yearRel": 26,
+     "yearW": 56,
+     "dotLeft": 38,
+     "dotRel": 0,
+     "dotTop": 3,
+     "dotW": 14,
+     "dotH": 14,
+     "dotPos": "absolute",
+     "dotBg": "rgb(255, 255, 255)",
+     "dotBorder": "2px rgb(27, 77, 62)",
+     "dotTransition": "0.25s",
+     "rail": {
+      "display": "block",
+      "left": "6px",
+      "width": "2px",
+      "top": "17px",
+      "bottom": "-34px",
+      "bg": "rgb(199, 208, 203)"
+     },
+     "delayInline": ""
+    },
+    {
+     "i": 4,
+     "year": "2025",
+     "title": "R&D center established",
+     "gapTop": 0,
+     "sameLine": true,
+     "itemLeft": 38,
+     "itemW": 299,
+     "itemRight": 337,
+     "rowH": 177.5,
+     "yearLeft": 64,
+     "yearRel": 26,
+     "yearW": 56,
+     "dotLeft": 38,
+     "dotRel": 0,
+     "dotTop": 3,
+     "dotW": 14,
+     "dotH": 14,
+     "dotPos": "absolute",
+     "dotBg": "rgb(255, 255, 255)",
+     "dotBorder": "2px rgb(27, 77, 62)",
+     "dotTransition": "0.25s",
+     "rail": {
+      "display": "block",
+      "left": "6px",
+      "width": "2px",
+      "top": "17px",
+      "bottom": "-34px",
+      "bg": "rgb(199, 208, 203)"
+     },
+     "delayInline": ""
+    },
+    {
+     "i": 5,
+     "year": "2026",
+     "title": "Certifications completed",
+     "gapTop": 0,
+     "sameLine": true,
+     "itemLeft": 38,
+     "itemW": 299,
+     "itemRight": 337,
+     "rowH": 157.5,
+     "yearLeft": 64,
+     "yearRel": 26,
+     "yearW": 56,
+     "dotLeft": 38,
+     "dotRel": 0,
+     "dotTop": 3,
+     "dotW": 14,
+     "dotH": 14,
+     "dotPos": "absolute",
+     "dotBg": "rgb(255, 255, 255)",
+     "dotBorder": "2px rgb(27, 77, 62)",
+     "dotTransition": "0.25s",
+     "rail": {
+      "display": "block",
+      "left": "6px",
+      "width": "2px",
+      "top": "17px",
+      "bottom": "-34px",
+      "bg": "rgb(199, 208, 203)"
+     },
+     "delayInline": ""
+    },
+    {
+     "i": 6,
+     "year": "2026",
+     "title": "Exporting worldwide",
+     "gapTop": 0,
+     "sameLine": true,
+     "itemLeft": 38,
+     "itemW": 299,
+     "itemRight": 337,
+     "rowH": 134.1,
+     "yearLeft": 64,
+     "yearRel": 26,
+     "yearW": 56,
+     "dotLeft": 38,
+     "dotRel": 0,
+     "dotTop": 3,
+     "dotW": 14,
+     "dotH": 14,
+     "dotPos": "absolute",
+     "dotBg": "rgb(255, 255, 255)",
+     "dotBorder": "2px rgb(27, 77, 62)",
+     "dotTransition": "0.25s",
+     "rail": {
+      "display": "block",
+      "left": "6px",
+      "width": "2px",
+      "top": "17px",
+      "bottom": "-34px",
+      "bg": "rgb(199, 208, 203)"
+     },
+     "delayInline": ""
+    },
+    {
+     "i": 7,
+     "year": "2026",
+     "title": "Ongoing growth",
+     "gapTop": 0,
+     "sameLine": true,
+     "itemLeft": 38,
+     "itemW": 299,
+     "itemRight": 337,
+     "rowH": 134.1,
+     "yearLeft": 64,
+     "yearRel": 26,
+     "yearW": 56,
+     "dotLeft": 38,
+     "dotRel": 0,
+     "dotTop": 3,
+     "dotW": 14,
+     "dotH": 14,
+     "dotPos": "absolute",
+     "dotBg": "rgb(255, 255, 255)",
+     "dotBorder": "2px rgb(27, 77, 62)",
+     "dotTransition": "0.25s",
+     "rail": {
+      "display": "none",
+      "left": "6px",
+      "width": "2px",
+      "top": "17px",
+      "bottom": "-34px",
+      "bg": "rgb(199, 208, 203)"
+     },
+     "delayInline": ""
+    }
+   ],
+   "wrapCls": "wp-block-group sf-journey is-layout-constrained wp-container-core-group-is-layout-688aed3a wp-block-group-is-layout-constrained sf-journey--live",
+   "dotCount": 8,
+   "itemCount": 8,
+   "itemTransition": "0.55s, 0.25s / opacity 0.55s, transform 0.25s",
+   "transformOrigin": "0px 88.7578px",
+   "journeySectionH": 1692.7,
+   "sections": [
+    {
+     "cls": "wp-block-template-part",
+     "h": 91
+    },
+    {
+     "cls": "wp-block-group sf-hero-inner is-layout",
+     "h": 268.1
+    },
+    {
+     "cls": "wp-block-group has-bg-light-background",
+     "h": 986.1
+    },
+    {
+     "cls": "wp-block-group has-card-white-backgrou",
+     "h": 1692.7
+    },
+    {
+     "cls": "wp-block-group has-bg-light-background",
+     "h": 652.2
+    },
+    {
+     "cls": "wp-block-group has-card-white-backgrou",
+     "h": 1088.1
+    },
+    {
+     "cls": "wp-block-group has-bg-light-background",
+     "h": 679.9
+    },
+    {
+     "cls": "wp-block-group has-primary-background-",
+     "h": 219.9
+    },
+    {
+     "cls": "wp-block-template-part",
+     "h": 450.9
+    }
+   ],
+   "docH": 6297,
+   "hScroll": 0
+  },
+  "hover3": {
+   "idx": 3,
+   "itemTransform": "matrix(1.04, 0, 0, 1.04, 0, 0)",
+   "dotTransform": "matrix(1.5, 0, 0, 1.5, 0, 0)",
+   "itemW": 311,
+   "itemRight": 349,
+   "viewport": 375,
+   "hScroll": 0,
+   "dotW": 21.8
+  },
+  "hover7": {
+   "idx": 7,
+   "itemTransform": "matrix(1.04, 0, 0, 1.04, 0, 0)",
+   "dotTransform": "matrix(1.5, 0, 0, 1.5, 0, 0)",
+   "itemW": 311,
+   "itemRight": 349,
+   "viewport": 375,
+   "hScroll": 0,
+   "dotW": 21.8
+  }
+ },
+ "1440": {
+  "geom": {
+   "rows": [
+    {
+     "i": 0,
+     "year": "2023",
+     "title": "Production began",
+     "gapTop": 0,
+     "sameLine": true,
+     "itemLeft": 320,
+     "itemW": 800,
+     "itemRight": 1120,
+     "rowH": 94.8,
+     "yearLeft": 354,
+     "yearRel": 34,
+     "yearW": 76,
+     "dotLeft": 320,
+     "dotRel": 0,
+     "dotTop": 4,
+     "dotW": 18,
+     "dotH": 18,
+     "dotPos": "absolute",
+     "dotBg": "rgb(255, 255, 255)",
+     "dotBorder": "3px rgb(27, 77, 62)",
+     "dotTransition": "0.25s",
+     "rail": {
+      "display": "block",
+      "left": "8px",
+      "width": "2px",
+      "top": "22px",
+      "bottom": "-37px",
+      "bg": "rgb(199, 208, 203)"
+     },
+     "delayInline": ""
+    },
+    {
+     "i": 1,
+     "year": "2024",
+     "title": "OEM projects expanded",
+     "gapTop": 0,
+     "sameLine": true,
+     "itemLeft": 320,
+     "itemW": 800,
+     "itemRight": 1120,
+     "rowH": 94.8,
+     "yearLeft": 354,
+     "yearRel": 34,
+     "yearW": 76,
+     "dotLeft": 320,
+     "dotRel": 0,
+     "dotTop": 4,
+     "dotW": 18,
+     "dotH": 18,
+     "dotPos": "absolute",
+     "dotBg": "rgb(255, 255, 255)",
+     "dotBorder": "3px rgb(27, 77, 62)",
+     "dotTransition": "0.25s",
+     "rail": {
+      "display": "block",
+      "left": "8px",
+      "width": "2px",
+      "top": "22px",
+      "bottom": "-37px",
+      "bg": "rgb(199, 208, 203)"
+     },
+     "delayInline": ""
+    },
+    {
+     "i": 2,
+     "year": "2025",
+     "title": "SINO FRESH founded",
+     "gapTop": 0,
+     "sameLine": true,
+     "itemLeft": 320,
+     "itemW": 800,
+     "itemRight": 1120,
+     "rowH": 94.8,
+     "yearLeft": 354,
+     "yearRel": 34,
+     "yearW": 76,
+     "dotLeft": 320,
+     "dotRel": 0,
+     "dotTop": 4,
+     "dotW": 18,
+     "dotH": 18,
+     "dotPos": "absolute",
+     "dotBg": "rgb(255, 255, 255)",
+     "dotBorder": "3px rgb(27, 77, 62)",
+     "dotTransition": "0.25s",
+     "rail": {
+      "display": "block",
+      "left": "8px",
+      "width": "2px",
+      "top": "22px",
+      "bottom": "-37px",
+      "bg": "rgb(199, 208, 203)"
+     },
+     "delayInline": ""
+    },
+    {
+     "i": 3,
+     "year": "2025",
+     "title": "Factory commissioned",
+     "gapTop": 0,
+     "sameLine": true,
+     "itemLeft": 320,
+     "itemW": 800,
+     "itemRight": 1120,
+     "rowH": 94.8,
+     "yearLeft": 354,
+     "yearRel": 34,
+     "yearW": 76,
+     "dotLeft": 320,
+     "dotRel": 0,
+     "dotTop": 4,
+     "dotW": 18,
+     "dotH": 18,
+     "dotPos": "absolute",
+     "dotBg": "rgb(255, 255, 255)",
+     "dotBorder": "3px rgb(27, 77, 62)",
+     "dotTransition": "0.25s",
+     "rail": {
+      "display": "block",
+      "left": "8px",
+      "width": "2px",
+      "top": "22px",
+      "bottom": "-37px",
+      "bg": "rgb(199, 208, 203)"
+     },
+     "delayInline": ""
+    },
+    {
+     "i": 4,
+     "year": "2025",
+     "title": "R&D center established",
+     "gapTop": 0,
+     "sameLine": true,
+     "itemLeft": 320,
+     "itemW": 800,
+     "itemRight": 1120,
+     "rowH": 94.8,
+     "yearLeft": 354,
+     "yearRel": 34,
+     "yearW": 76,
+     "dotLeft": 320,
+     "dotRel": 0,
+     "dotTop": 4,
+     "dotW": 18,
+     "dotH": 18,
+     "dotPos": "absolute",
+     "dotBg": "rgb(255, 255, 255)",
+     "dotBorder": "3px rgb(27, 77, 62)",
+     "dotTransition": "0.25s",
+     "rail": {
+      "display": "block",
+      "left": "8px",
+      "width": "2px",
+      "top": "22px",
+      "bottom": "-37px",
+      "bg": "rgb(199, 208, 203)"
+     },
+     "delayInline": ""
+    },
+    {
+     "i": 5,
+     "year": "2026",
+     "title": "Certifications completed",
+     "gapTop": 0,
+     "sameLine": true,
+     "itemLeft": 320,
+     "itemW": 800,
+     "itemRight": 1120,
+     "rowH": 94.8,
+     "yearLeft": 354,
+     "yearRel": 34,
+     "yearW": 76,
+     "dotLeft": 320,
+     "dotRel": 0,
+     "dotTop": 4,
+     "dotW": 18,
+     "dotH": 18,
+     "dotPos": "absolute",
+     "dotBg": "rgb(255, 255, 255)",
+     "dotBorder": "3px rgb(27, 77, 62)",
+     "dotTransition": "0.25s",
+     "rail": {
+      "display": "block",
+      "left": "8px",
+      "width": "2px",
+      "top": "22px",
+      "bottom": "-37px",
+      "bg": "rgb(199, 208, 203)"
+     },
+     "delayInline": ""
+    },
+    {
+     "i": 6,
+     "year": "2026",
+     "title": "Exporting worldwide",
+     "gapTop": 0,
+     "sameLine": true,
+     "itemLeft": 320,
+     "itemW": 800,
+     "itemRight": 1120,
+     "rowH": 94.8,
+     "yearLeft": 354,
+     "yearRel": 34,
+     "yearW": 76,
+     "dotLeft": 320,
+     "dotRel": 0,
+     "dotTop": 4,
+     "dotW": 18,
+     "dotH": 18,
+     "dotPos": "absolute",
+     "dotBg": "rgb(255, 255, 255)",
+     "dotBorder": "3px rgb(27, 77, 62)",
+     "dotTransition": "0.25s",
+     "rail": {
+      "display": "block",
+      "left": "8px",
+      "width": "2px",
+      "top": "22px",
+      "bottom": "-37px",
+      "bg": "rgb(199, 208, 203)"
+     },
+     "delayInline": ""
+    },
+    {
+     "i": 7,
+     "year": "2026",
+     "title": "Ongoing growth",
+     "gapTop": 0,
+     "sameLine": true,
+     "itemLeft": 320,
+     "itemW": 800,
+     "itemRight": 1120,
+     "rowH": 72.4,
+     "yearLeft": 354,
+     "yearRel": 34,
+     "yearW": 76,
+     "dotLeft": 320,
+     "dotRel": 0,
+     "dotTop": 4,
+     "dotW": 18,
+     "dotH": 18,
+     "dotPos": "absolute",
+     "dotBg": "rgb(255, 255, 255)",
+     "dotBorder": "3px rgb(27, 77, 62)",
+     "dotTransition": "0.25s",
+     "rail": {
+      "display": "none",
+      "left": "8px",
+      "width": "2px",
+      "top": "22px",
+      "bottom": "-37px",
+      "bg": "rgb(199, 208, 203)"
+     },
+     "delayInline": ""
+    }
+   ],
+   "wrapCls": "wp-block-group sf-journey is-layout-constrained wp-container-core-group-is-layout-688aed3a wp-block-group-is-layout-constrained sf-journey--live",
+   "dotCount": 8,
+   "itemCount": 8,
+   "itemTransition": "0.55s, 0.25s / opacity 0.55s, transform 0.25s",
+   "transformOrigin": "0px 47.3906px",
+   "journeySectionH": 1103,
+   "sections": [
+    {
+     "cls": "wp-block-template-part",
+     "h": 120.2
+    },
+    {
+     "cls": "wp-block-group sf-hero-inner is-layout",
+     "h": 284.6
+    },
+    {
+     "cls": "wp-block-group has-bg-light-background",
+     "h": 605.4
+    },
+    {
+     "cls": "wp-block-group has-card-white-backgrou",
+     "h": 1103
+    },
+    {
+     "cls": "wp-block-group has-bg-light-background",
+     "h": 372.7
+    },
+    {
+     "cls": "wp-block-group has-card-white-backgrou",
+     "h": 479.5
+    },
+    {
+     "cls": "wp-block-group has-bg-light-background",
+     "h": 766.1
+    },
+    {
+     "cls": "wp-block-group has-primary-background-",
+     "h": 231.1
+    },
+    {
+     "cls": "wp-block-template-part",
+     "h": 409.1
+    }
+   ],
+   "docH": 4540,
+   "hScroll": 0
+  },
+  "hover3": {
+   "idx": 3,
+   "itemTransform": "matrix(1.04, 0, 0, 1.04, 0, 0)",
+   "dotTransform": "matrix(1.5, 0, 0, 1.5, 0, 0)",
+   "itemW": 832,
+   "itemRight": 1152,
+   "viewport": 1440,
+   "hScroll": 0,
+   "dotW": 28.1
+  },
+  "hover7": {
+   "idx": 7,
+   "itemTransform": "matrix(1.04, 0, 0, 1.04, 0, 0)",
+   "dotTransform": "matrix(1.5, 0, 0, 1.5, 0, 0)",
+   "itemW": 832,
+   "itemRight": 1152,
+   "viewport": 1440,
+   "hScroll": 0,
+   "dotW": 28.1
+  }
+ },
+ "reducedMotion": {
+  "live": false,
+  "opacities": [
+   "1",
+   "1",
+   "1",
+   "1",
+   "1",
+   "1",
+   "1",
+   "1"
+  ],
+  "hoverItemTransform": "none",
+  "hoverDotTransform": "none",
+  "itemTransition": "1e-05s",
+  "dotTransition": "1e-05s"
+ },
+ "scripts": [
+  {
+   "p": "/about/",
+   "about": 1
+  },
+  {
+   "p": "/",
+   "about": 0
+  },
+  {
+   "p": "/products/",
+   "about": 0
+  },
+  {
+   "p": "/quality/",
+   "about": 0
+  }
+ ]
+}

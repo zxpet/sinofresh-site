@@ -1,0 +1,1716 @@
+[
+ {
+  "width": 440,
+  "page": "home",
+  "url": "http://sinofresh.local/",
+  "heroFound": true,
+  "heroClass": "wp-block-group sf-hero-slider is-layout-flow wp-block-group-is-layout-flow",
+  "heroRect": {
+   "left": 0,
+   "right": 440,
+   "width": 440
+  },
+  "heroPadding": {
+   "left": "0px",
+   "right": "0px"
+  },
+  "heroOverflow": false,
+  "breadcrumb": null,
+  "h1": {
+   "sel": "h1",
+   "left": 36,
+   "right": 404,
+   "width": 368,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "sub": {
+   "sel": ".sf-hero-inner p, .sf-hero-slider p",
+   "left": 36,
+   "right": 284.3,
+   "width": 248.3,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "leftmostText": {
+   "tag": "A",
+   "cls": "wp-block-button__link wp-element-button",
+   "left": 20
+  },
+  "docHScroll": 0,
+  "shot": "/Users/meng/Workbuddy/sinofresh外贸网站建设/screenshots/hero-scan-after/home_440_hero.png"
+ },
+ {
+  "width": 440,
+  "page": "products",
+  "url": "http://sinofresh.local/products/",
+  "heroFound": true,
+  "heroClass": "wp-block-group has-card-white-color has-text-color sf-hero-inner is-layout-const",
+  "heroRect": {
+   "left": 0,
+   "right": 440,
+   "width": 440
+  },
+  "heroPadding": {
+   "left": "20px",
+   "right": "20px"
+  },
+  "heroOverflow": false,
+  "breadcrumb": {
+   "sel": ".sf-breadcrumb",
+   "left": 20,
+   "right": 420,
+   "width": 400,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "h1": {
+   "sel": "h1",
+   "left": 20,
+   "right": 420,
+   "width": 400,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "sub": {
+   "sel": ".sf-hero-inner p, .sf-hero-slider p",
+   "left": 20,
+   "right": 420,
+   "width": 400,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "leftmostText": {
+   "tag": "A",
+   "cls": "sf-breadcrumb__crumb sf-breadcrumb__crumb--home",
+   "left": 20
+  },
+  "docHScroll": 0,
+  "shot": "/Users/meng/Workbuddy/sinofresh外贸网站建设/screenshots/hero-scan-after/products_440_hero.png"
+ },
+ {
+  "width": 440,
+  "page": "about",
+  "url": "http://sinofresh.local/about/",
+  "heroFound": true,
+  "heroClass": "wp-block-group sf-hero-inner is-layout-constrained wp-block-group-is-layout-cons",
+  "heroRect": {
+   "left": 0,
+   "right": 440,
+   "width": 440
+  },
+  "heroPadding": {
+   "left": "20px",
+   "right": "20px"
+  },
+  "heroOverflow": false,
+  "breadcrumb": {
+   "sel": ".sf-breadcrumb",
+   "left": 20,
+   "right": 420,
+   "width": 400,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "h1": {
+   "sel": "h1",
+   "left": 20,
+   "right": 420,
+   "width": 400,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "sub": {
+   "sel": ".sf-hero-inner p, .sf-hero-slider p",
+   "left": 20,
+   "right": 420,
+   "width": 400,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "leftmostText": {
+   "tag": "A",
+   "cls": "sf-breadcrumb__crumb sf-breadcrumb__crumb--home",
+   "left": 20
+  },
+  "docHScroll": 0,
+  "shot": "/Users/meng/Workbuddy/sinofresh外贸网站建设/screenshots/hero-scan-after/about_440_hero.png"
+ },
+ {
+  "width": 440,
+  "page": "quality",
+  "url": "http://sinofresh.local/quality/",
+  "heroFound": true,
+  "heroClass": "wp-block-group has-card-white-color has-text-color sf-hero-inner is-layout-const",
+  "heroRect": {
+   "left": 0,
+   "right": 440,
+   "width": 440
+  },
+  "heroPadding": {
+   "left": "20px",
+   "right": "20px"
+  },
+  "heroOverflow": false,
+  "breadcrumb": {
+   "sel": ".sf-breadcrumb",
+   "left": 20,
+   "right": 420,
+   "width": 400,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "h1": {
+   "sel": "h1",
+   "left": 20,
+   "right": 420,
+   "width": 400,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "sub": {
+   "sel": ".sf-hero-inner p, .sf-hero-slider p",
+   "left": 20,
+   "right": 420,
+   "width": 400,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "leftmostText": {
+   "tag": "A",
+   "cls": "sf-breadcrumb__crumb sf-breadcrumb__crumb--home",
+   "left": 20
+  },
+  "docHScroll": 0,
+  "shot": "/Users/meng/Workbuddy/sinofresh外贸网站建设/screenshots/hero-scan-after/quality_440_hero.png"
+ },
+ {
+  "width": 440,
+  "page": "factory-tour",
+  "url": "http://sinofresh.local/factory-tour/",
+  "heroFound": true,
+  "heroClass": "wp-block-group has-card-white-color has-text-color sf-hero-inner is-layout-const",
+  "heroRect": {
+   "left": 0,
+   "right": 440,
+   "width": 440
+  },
+  "heroPadding": {
+   "left": "20px",
+   "right": "20px"
+  },
+  "heroOverflow": false,
+  "breadcrumb": {
+   "sel": ".sf-breadcrumb",
+   "left": 20,
+   "right": 420,
+   "width": 400,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "h1": {
+   "sel": "h1",
+   "left": 20,
+   "right": 420,
+   "width": 400,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "sub": {
+   "sel": ".sf-hero-inner p, .sf-hero-slider p",
+   "left": 20,
+   "right": 420,
+   "width": 400,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "leftmostText": {
+   "tag": "A",
+   "cls": "sf-breadcrumb__crumb sf-breadcrumb__crumb--home",
+   "left": 20
+  },
+  "docHScroll": 0,
+  "shot": "/Users/meng/Workbuddy/sinofresh外贸网站建设/screenshots/hero-scan-after/factory-tour_440_hero.png"
+ },
+ {
+  "width": 440,
+  "page": "services",
+  "url": "http://sinofresh.local/services/",
+  "heroFound": true,
+  "heroClass": "wp-block-group has-card-white-color has-text-color sf-hero-inner is-layout-const",
+  "heroRect": {
+   "left": 0,
+   "right": 440,
+   "width": 440
+  },
+  "heroPadding": {
+   "left": "20px",
+   "right": "20px"
+  },
+  "heroOverflow": false,
+  "breadcrumb": {
+   "sel": ".sf-breadcrumb",
+   "left": 20,
+   "right": 420,
+   "width": 400,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "h1": {
+   "sel": "h1",
+   "left": 20,
+   "right": 420,
+   "width": 400,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "sub": {
+   "sel": ".sf-hero-inner p, .sf-hero-slider p",
+   "left": 20,
+   "right": 420,
+   "width": 400,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "leftmostText": {
+   "tag": "A",
+   "cls": "sf-breadcrumb__crumb sf-breadcrumb__crumb--home",
+   "left": 20
+  },
+  "docHScroll": 0,
+  "shot": "/Users/meng/Workbuddy/sinofresh外贸网站建设/screenshots/hero-scan-after/services_440_hero.png"
+ },
+ {
+  "width": 440,
+  "page": "cooperation",
+  "url": "http://sinofresh.local/cooperation/",
+  "heroFound": true,
+  "heroClass": "wp-block-group has-card-white-color has-text-color sf-hero-inner is-layout-const",
+  "heroRect": {
+   "left": 0,
+   "right": 440,
+   "width": 440
+  },
+  "heroPadding": {
+   "left": "20px",
+   "right": "20px"
+  },
+  "heroOverflow": false,
+  "breadcrumb": {
+   "sel": ".sf-breadcrumb",
+   "left": 20,
+   "right": 420,
+   "width": 400,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "h1": {
+   "sel": "h1",
+   "left": 20,
+   "right": 420,
+   "width": 400,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "sub": {
+   "sel": ".sf-hero-inner p, .sf-hero-slider p",
+   "left": 20,
+   "right": 420,
+   "width": 400,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "leftmostText": {
+   "tag": "A",
+   "cls": "sf-breadcrumb__crumb sf-breadcrumb__crumb--home",
+   "left": 20
+  },
+  "docHScroll": 0,
+  "shot": "/Users/meng/Workbuddy/sinofresh外贸网站建设/screenshots/hero-scan-after/cooperation_440_hero.png"
+ },
+ {
+  "width": 440,
+  "page": "contact",
+  "url": "http://sinofresh.local/contact/",
+  "heroFound": true,
+  "heroClass": "wp-block-group has-card-white-color has-text-color sf-hero-inner is-layout-const",
+  "heroRect": {
+   "left": 0,
+   "right": 440,
+   "width": 440
+  },
+  "heroPadding": {
+   "left": "20px",
+   "right": "20px"
+  },
+  "heroOverflow": false,
+  "breadcrumb": {
+   "sel": ".sf-breadcrumb",
+   "left": 20,
+   "right": 420,
+   "width": 400,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "h1": {
+   "sel": "h1",
+   "left": 20,
+   "right": 420,
+   "width": 400,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "sub": {
+   "sel": ".sf-hero-inner p, .sf-hero-slider p",
+   "left": 20,
+   "right": 420,
+   "width": 400,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "leftmostText": {
+   "tag": "A",
+   "cls": "sf-breadcrumb__crumb sf-breadcrumb__crumb--home",
+   "left": 20
+  },
+  "docHScroll": 0,
+  "shot": "/Users/meng/Workbuddy/sinofresh外贸网站建设/screenshots/hero-scan-after/contact_440_hero.png"
+ },
+ {
+  "width": 440,
+  "page": "blog",
+  "url": "http://sinofresh.local/blog/",
+  "heroFound": true,
+  "heroClass": "wp-block-group has-card-white-color has-text-color sf-hero-inner is-layout-const",
+  "heroRect": {
+   "left": 0,
+   "right": 440,
+   "width": 440
+  },
+  "heroPadding": {
+   "left": "20px",
+   "right": "20px"
+  },
+  "heroOverflow": false,
+  "breadcrumb": {
+   "sel": ".sf-breadcrumb",
+   "left": 20,
+   "right": 420,
+   "width": 400,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "h1": {
+   "sel": "h1",
+   "left": 20,
+   "right": 420,
+   "width": 400,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "sub": {
+   "sel": ".sf-hero-inner p, .sf-hero-slider p",
+   "left": 20,
+   "right": 420,
+   "width": 400,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "leftmostText": {
+   "tag": "A",
+   "cls": "sf-breadcrumb__crumb sf-breadcrumb__crumb--home",
+   "left": 20
+  },
+  "docHScroll": 0,
+  "shot": "/Users/meng/Workbuddy/sinofresh外贸网站建设/screenshots/hero-scan-after/blog_440_hero.png"
+ },
+ {
+  "width": 440,
+  "page": "faq",
+  "url": "http://sinofresh.local/faq/",
+  "heroFound": true,
+  "heroClass": "wp-block-group has-card-white-color has-text-color sf-hero-inner is-layout-const",
+  "heroRect": {
+   "left": 0,
+   "right": 440,
+   "width": 440
+  },
+  "heroPadding": {
+   "left": "20px",
+   "right": "20px"
+  },
+  "heroOverflow": false,
+  "breadcrumb": {
+   "sel": ".sf-breadcrumb",
+   "left": 20,
+   "right": 420,
+   "width": 400,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "h1": {
+   "sel": "h1",
+   "left": 20,
+   "right": 420,
+   "width": 400,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "sub": {
+   "sel": ".sf-hero-inner p, .sf-hero-slider p",
+   "left": 20,
+   "right": 420,
+   "width": 400,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "leftmostText": {
+   "tag": "A",
+   "cls": "sf-breadcrumb__crumb sf-breadcrumb__crumb--home",
+   "left": 20
+  },
+  "docHScroll": 0,
+  "shot": "/Users/meng/Workbuddy/sinofresh外贸网站建设/screenshots/hero-scan-after/faq_440_hero.png"
+ },
+ {
+  "width": 440,
+  "page": "soft-chews",
+  "url": "http://sinofresh.local/products/soft-chews/",
+  "heroFound": true,
+  "heroClass": "wp-block-group sf-hero-inner is-layout-constrained wp-block-group-is-layout-cons",
+  "heroRect": {
+   "left": 0,
+   "right": 440,
+   "width": 440
+  },
+  "heroPadding": {
+   "left": "20px",
+   "right": "20px"
+  },
+  "heroOverflow": false,
+  "breadcrumb": {
+   "sel": ".sf-breadcrumb",
+   "left": 20,
+   "right": 420,
+   "width": 400,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "h1": {
+   "sel": "h1",
+   "left": 20,
+   "right": 420,
+   "width": 400,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "sub": {
+   "sel": ".sf-hero-inner p, .sf-hero-slider p",
+   "left": 20,
+   "right": 420,
+   "width": 400,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "leftmostText": {
+   "tag": "A",
+   "cls": "sf-breadcrumb__crumb sf-breadcrumb__crumb--mid",
+   "left": 20
+  },
+  "docHScroll": 0,
+  "shot": "/Users/meng/Workbuddy/sinofresh外贸网站建设/screenshots/hero-scan-after/soft-chews_440_hero.png"
+ },
+ {
+  "width": 440,
+  "page": "tablets",
+  "url": "http://sinofresh.local/products/tablets/",
+  "heroFound": true,
+  "heroClass": "wp-block-group sf-hero-inner is-layout-constrained wp-block-group-is-layout-cons",
+  "heroRect": {
+   "left": 0,
+   "right": 440,
+   "width": 440
+  },
+  "heroPadding": {
+   "left": "20px",
+   "right": "20px"
+  },
+  "heroOverflow": false,
+  "breadcrumb": {
+   "sel": ".sf-breadcrumb",
+   "left": 20,
+   "right": 420,
+   "width": 400,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "h1": {
+   "sel": "h1",
+   "left": 20,
+   "right": 420,
+   "width": 400,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "sub": {
+   "sel": ".sf-hero-inner p, .sf-hero-slider p",
+   "left": 20,
+   "right": 420,
+   "width": 400,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "leftmostText": {
+   "tag": "A",
+   "cls": "sf-breadcrumb__crumb sf-breadcrumb__crumb--mid",
+   "left": 20
+  },
+  "docHScroll": 0,
+  "shot": "/Users/meng/Workbuddy/sinofresh外贸网站建设/screenshots/hero-scan-after/tablets_440_hero.png"
+ },
+ {
+  "width": 440,
+  "page": "powders",
+  "url": "http://sinofresh.local/products/powders/",
+  "heroFound": true,
+  "heroClass": "wp-block-group sf-hero-inner is-layout-constrained wp-block-group-is-layout-cons",
+  "heroRect": {
+   "left": 0,
+   "right": 440,
+   "width": 440
+  },
+  "heroPadding": {
+   "left": "20px",
+   "right": "20px"
+  },
+  "heroOverflow": false,
+  "breadcrumb": {
+   "sel": ".sf-breadcrumb",
+   "left": 20,
+   "right": 420,
+   "width": 400,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "h1": {
+   "sel": "h1",
+   "left": 20,
+   "right": 420,
+   "width": 400,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "sub": {
+   "sel": ".sf-hero-inner p, .sf-hero-slider p",
+   "left": 20,
+   "right": 420,
+   "width": 400,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "leftmostText": {
+   "tag": "A",
+   "cls": "sf-breadcrumb__crumb sf-breadcrumb__crumb--mid",
+   "left": 20
+  },
+  "docHScroll": 0,
+  "shot": "/Users/meng/Workbuddy/sinofresh外贸网站建设/screenshots/hero-scan-after/powders_440_hero.png"
+ },
+ {
+  "width": 440,
+  "page": "pastes",
+  "url": "http://sinofresh.local/products/pastes/",
+  "heroFound": true,
+  "heroClass": "wp-block-group sf-hero-inner is-layout-constrained wp-block-group-is-layout-cons",
+  "heroRect": {
+   "left": 0,
+   "right": 440,
+   "width": 440
+  },
+  "heroPadding": {
+   "left": "20px",
+   "right": "20px"
+  },
+  "heroOverflow": false,
+  "breadcrumb": {
+   "sel": ".sf-breadcrumb",
+   "left": 20,
+   "right": 420,
+   "width": 400,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "h1": {
+   "sel": "h1",
+   "left": 20,
+   "right": 420,
+   "width": 400,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "sub": {
+   "sel": ".sf-hero-inner p, .sf-hero-slider p",
+   "left": 20,
+   "right": 420,
+   "width": 400,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "leftmostText": {
+   "tag": "A",
+   "cls": "sf-breadcrumb__crumb sf-breadcrumb__crumb--mid",
+   "left": 20
+  },
+  "docHScroll": 0,
+  "shot": "/Users/meng/Workbuddy/sinofresh外贸网站建设/screenshots/hero-scan-after/pastes_440_hero.png"
+ },
+ {
+  "width": 440,
+  "page": "liquids",
+  "url": "http://sinofresh.local/products/liquids/",
+  "heroFound": true,
+  "heroClass": "wp-block-group sf-hero-inner is-layout-constrained wp-block-group-is-layout-cons",
+  "heroRect": {
+   "left": 0,
+   "right": 440,
+   "width": 440
+  },
+  "heroPadding": {
+   "left": "20px",
+   "right": "20px"
+  },
+  "heroOverflow": false,
+  "breadcrumb": {
+   "sel": ".sf-breadcrumb",
+   "left": 20,
+   "right": 420,
+   "width": 400,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "h1": {
+   "sel": "h1",
+   "left": 20,
+   "right": 420,
+   "width": 400,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "sub": {
+   "sel": ".sf-hero-inner p, .sf-hero-slider p",
+   "left": 20,
+   "right": 420,
+   "width": 400,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "leftmostText": {
+   "tag": "A",
+   "cls": "sf-breadcrumb__crumb sf-breadcrumb__crumb--mid",
+   "left": 20
+  },
+  "docHScroll": 0,
+  "shot": "/Users/meng/Workbuddy/sinofresh外贸网站建设/screenshots/hero-scan-after/liquids_440_hero.png"
+ },
+ {
+  "width": 440,
+  "page": "drops",
+  "url": "http://sinofresh.local/products/drops/",
+  "heroFound": true,
+  "heroClass": "wp-block-group sf-hero-inner is-layout-constrained wp-block-group-is-layout-cons",
+  "heroRect": {
+   "left": 0,
+   "right": 440,
+   "width": 440
+  },
+  "heroPadding": {
+   "left": "20px",
+   "right": "20px"
+  },
+  "heroOverflow": false,
+  "breadcrumb": {
+   "sel": ".sf-breadcrumb",
+   "left": 20,
+   "right": 420,
+   "width": 400,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "h1": {
+   "sel": "h1",
+   "left": 20,
+   "right": 420,
+   "width": 400,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "sub": {
+   "sel": ".sf-hero-inner p, .sf-hero-slider p",
+   "left": 20,
+   "right": 420,
+   "width": 400,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "leftmostText": {
+   "tag": "A",
+   "cls": "sf-breadcrumb__crumb sf-breadcrumb__crumb--mid",
+   "left": 20
+  },
+  "docHScroll": 0,
+  "shot": "/Users/meng/Workbuddy/sinofresh外贸网站建设/screenshots/hero-scan-after/drops_440_hero.png"
+ },
+ {
+  "width": 440,
+  "page": "dental-chews",
+  "url": "http://sinofresh.local/products/dental-chews/",
+  "heroFound": true,
+  "heroClass": "wp-block-group sf-hero-inner is-layout-constrained wp-block-group-is-layout-cons",
+  "heroRect": {
+   "left": 0,
+   "right": 440,
+   "width": 440
+  },
+  "heroPadding": {
+   "left": "20px",
+   "right": "20px"
+  },
+  "heroOverflow": false,
+  "breadcrumb": {
+   "sel": ".sf-breadcrumb",
+   "left": 20,
+   "right": 420,
+   "width": 400,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "h1": {
+   "sel": "h1",
+   "left": 20,
+   "right": 420,
+   "width": 400,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "sub": {
+   "sel": ".sf-hero-inner p, .sf-hero-slider p",
+   "left": 20,
+   "right": 420,
+   "width": 400,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "leftmostText": {
+   "tag": "A",
+   "cls": "sf-breadcrumb__crumb sf-breadcrumb__crumb--mid",
+   "left": 20
+  },
+  "docHScroll": 0,
+  "shot": "/Users/meng/Workbuddy/sinofresh外贸网站建设/screenshots/hero-scan-after/dental-chews_440_hero.png"
+ },
+ {
+  "width": 440,
+  "page": "fish-oil",
+  "url": "http://sinofresh.local/products/fish-oil/",
+  "heroFound": true,
+  "heroClass": "wp-block-group sf-hero-inner is-layout-constrained wp-block-group-is-layout-cons",
+  "heroRect": {
+   "left": 0,
+   "right": 440,
+   "width": 440
+  },
+  "heroPadding": {
+   "left": "20px",
+   "right": "20px"
+  },
+  "heroOverflow": false,
+  "breadcrumb": {
+   "sel": ".sf-breadcrumb",
+   "left": 20,
+   "right": 420,
+   "width": 400,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "h1": {
+   "sel": "h1",
+   "left": 20,
+   "right": 420,
+   "width": 400,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "sub": {
+   "sel": ".sf-hero-inner p, .sf-hero-slider p",
+   "left": 20,
+   "right": 420,
+   "width": 400,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "leftmostText": {
+   "tag": "A",
+   "cls": "sf-breadcrumb__crumb sf-breadcrumb__crumb--mid",
+   "left": 20
+  },
+  "docHScroll": 0,
+  "shot": "/Users/meng/Workbuddy/sinofresh外贸网站建设/screenshots/hero-scan-after/fish-oil_440_hero.png"
+ },
+ {
+  "width": 375,
+  "page": "home",
+  "url": "http://sinofresh.local/",
+  "heroFound": true,
+  "heroClass": "wp-block-group sf-hero-slider is-layout-flow wp-block-group-is-layout-flow",
+  "heroRect": {
+   "left": 0,
+   "right": 375,
+   "width": 375
+  },
+  "heroPadding": {
+   "left": "0px",
+   "right": "0px"
+  },
+  "heroOverflow": false,
+  "breadcrumb": null,
+  "h1": {
+   "sel": "h1",
+   "left": 36,
+   "right": 339,
+   "width": 303,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "sub": {
+   "sel": ".sf-hero-inner p, .sf-hero-slider p",
+   "left": 36,
+   "right": 284.3,
+   "width": 248.3,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "leftmostText": {
+   "tag": "A",
+   "cls": "wp-block-button__link wp-element-button",
+   "left": 20
+  },
+  "docHScroll": 0,
+  "shot": "/Users/meng/Workbuddy/sinofresh外贸网站建设/screenshots/hero-scan-after/home_375_hero.png"
+ },
+ {
+  "width": 375,
+  "page": "products",
+  "url": "http://sinofresh.local/products/",
+  "heroFound": true,
+  "heroClass": "wp-block-group has-card-white-color has-text-color sf-hero-inner is-layout-const",
+  "heroRect": {
+   "left": 0,
+   "right": 375,
+   "width": 375
+  },
+  "heroPadding": {
+   "left": "20px",
+   "right": "20px"
+  },
+  "heroOverflow": false,
+  "breadcrumb": {
+   "sel": ".sf-breadcrumb",
+   "left": 20,
+   "right": 355,
+   "width": 335,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "h1": {
+   "sel": "h1",
+   "left": 20,
+   "right": 355,
+   "width": 335,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "sub": {
+   "sel": ".sf-hero-inner p, .sf-hero-slider p",
+   "left": 20,
+   "right": 355,
+   "width": 335,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "leftmostText": {
+   "tag": "A",
+   "cls": "sf-breadcrumb__crumb sf-breadcrumb__crumb--home",
+   "left": 20
+  },
+  "docHScroll": 0,
+  "shot": "/Users/meng/Workbuddy/sinofresh外贸网站建设/screenshots/hero-scan-after/products_375_hero.png"
+ },
+ {
+  "width": 375,
+  "page": "about",
+  "url": "http://sinofresh.local/about/",
+  "heroFound": true,
+  "heroClass": "wp-block-group sf-hero-inner is-layout-constrained wp-block-group-is-layout-cons",
+  "heroRect": {
+   "left": 0,
+   "right": 375,
+   "width": 375
+  },
+  "heroPadding": {
+   "left": "20px",
+   "right": "20px"
+  },
+  "heroOverflow": false,
+  "breadcrumb": {
+   "sel": ".sf-breadcrumb",
+   "left": 20,
+   "right": 355,
+   "width": 335,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "h1": {
+   "sel": "h1",
+   "left": 20,
+   "right": 355,
+   "width": 335,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "sub": {
+   "sel": ".sf-hero-inner p, .sf-hero-slider p",
+   "left": 20,
+   "right": 355,
+   "width": 335,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "leftmostText": {
+   "tag": "A",
+   "cls": "sf-breadcrumb__crumb sf-breadcrumb__crumb--home",
+   "left": 20
+  },
+  "docHScroll": 0,
+  "shot": "/Users/meng/Workbuddy/sinofresh外贸网站建设/screenshots/hero-scan-after/about_375_hero.png"
+ },
+ {
+  "width": 375,
+  "page": "quality",
+  "url": "http://sinofresh.local/quality/",
+  "heroFound": true,
+  "heroClass": "wp-block-group has-card-white-color has-text-color sf-hero-inner is-layout-const",
+  "heroRect": {
+   "left": 0,
+   "right": 375,
+   "width": 375
+  },
+  "heroPadding": {
+   "left": "20px",
+   "right": "20px"
+  },
+  "heroOverflow": false,
+  "breadcrumb": {
+   "sel": ".sf-breadcrumb",
+   "left": 20,
+   "right": 355,
+   "width": 335,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "h1": {
+   "sel": "h1",
+   "left": 20,
+   "right": 355,
+   "width": 335,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "sub": {
+   "sel": ".sf-hero-inner p, .sf-hero-slider p",
+   "left": 20,
+   "right": 355,
+   "width": 335,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "leftmostText": {
+   "tag": "A",
+   "cls": "sf-breadcrumb__crumb sf-breadcrumb__crumb--home",
+   "left": 20
+  },
+  "docHScroll": 0,
+  "shot": "/Users/meng/Workbuddy/sinofresh外贸网站建设/screenshots/hero-scan-after/quality_375_hero.png"
+ },
+ {
+  "width": 375,
+  "page": "factory-tour",
+  "url": "http://sinofresh.local/factory-tour/",
+  "heroFound": true,
+  "heroClass": "wp-block-group has-card-white-color has-text-color sf-hero-inner is-layout-const",
+  "heroRect": {
+   "left": 0,
+   "right": 375,
+   "width": 375
+  },
+  "heroPadding": {
+   "left": "20px",
+   "right": "20px"
+  },
+  "heroOverflow": false,
+  "breadcrumb": {
+   "sel": ".sf-breadcrumb",
+   "left": 20,
+   "right": 355,
+   "width": 335,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "h1": {
+   "sel": "h1",
+   "left": 20,
+   "right": 355,
+   "width": 335,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "sub": {
+   "sel": ".sf-hero-inner p, .sf-hero-slider p",
+   "left": 20,
+   "right": 355,
+   "width": 335,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "leftmostText": {
+   "tag": "A",
+   "cls": "sf-breadcrumb__crumb sf-breadcrumb__crumb--home",
+   "left": 20
+  },
+  "docHScroll": 0,
+  "shot": "/Users/meng/Workbuddy/sinofresh外贸网站建设/screenshots/hero-scan-after/factory-tour_375_hero.png"
+ },
+ {
+  "width": 375,
+  "page": "services",
+  "url": "http://sinofresh.local/services/",
+  "heroFound": true,
+  "heroClass": "wp-block-group has-card-white-color has-text-color sf-hero-inner is-layout-const",
+  "heroRect": {
+   "left": 0,
+   "right": 375,
+   "width": 375
+  },
+  "heroPadding": {
+   "left": "20px",
+   "right": "20px"
+  },
+  "heroOverflow": false,
+  "breadcrumb": {
+   "sel": ".sf-breadcrumb",
+   "left": 20,
+   "right": 355,
+   "width": 335,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "h1": {
+   "sel": "h1",
+   "left": 20,
+   "right": 355,
+   "width": 335,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "sub": {
+   "sel": ".sf-hero-inner p, .sf-hero-slider p",
+   "left": 20,
+   "right": 355,
+   "width": 335,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "leftmostText": {
+   "tag": "A",
+   "cls": "sf-breadcrumb__crumb sf-breadcrumb__crumb--home",
+   "left": 20
+  },
+  "docHScroll": 0,
+  "shot": "/Users/meng/Workbuddy/sinofresh外贸网站建设/screenshots/hero-scan-after/services_375_hero.png"
+ },
+ {
+  "width": 375,
+  "page": "cooperation",
+  "url": "http://sinofresh.local/cooperation/",
+  "heroFound": true,
+  "heroClass": "wp-block-group has-card-white-color has-text-color sf-hero-inner is-layout-const",
+  "heroRect": {
+   "left": 0,
+   "right": 375,
+   "width": 375
+  },
+  "heroPadding": {
+   "left": "20px",
+   "right": "20px"
+  },
+  "heroOverflow": false,
+  "breadcrumb": {
+   "sel": ".sf-breadcrumb",
+   "left": 20,
+   "right": 355,
+   "width": 335,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "h1": {
+   "sel": "h1",
+   "left": 20,
+   "right": 355,
+   "width": 335,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "sub": {
+   "sel": ".sf-hero-inner p, .sf-hero-slider p",
+   "left": 20,
+   "right": 355,
+   "width": 335,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "leftmostText": {
+   "tag": "A",
+   "cls": "sf-breadcrumb__crumb sf-breadcrumb__crumb--home",
+   "left": 20
+  },
+  "docHScroll": 0,
+  "shot": "/Users/meng/Workbuddy/sinofresh外贸网站建设/screenshots/hero-scan-after/cooperation_375_hero.png"
+ },
+ {
+  "width": 375,
+  "page": "contact",
+  "url": "http://sinofresh.local/contact/",
+  "heroFound": true,
+  "heroClass": "wp-block-group has-card-white-color has-text-color sf-hero-inner is-layout-const",
+  "heroRect": {
+   "left": 0,
+   "right": 375,
+   "width": 375
+  },
+  "heroPadding": {
+   "left": "20px",
+   "right": "20px"
+  },
+  "heroOverflow": false,
+  "breadcrumb": {
+   "sel": ".sf-breadcrumb",
+   "left": 20,
+   "right": 355,
+   "width": 335,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "h1": {
+   "sel": "h1",
+   "left": 20,
+   "right": 355,
+   "width": 335,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "sub": {
+   "sel": ".sf-hero-inner p, .sf-hero-slider p",
+   "left": 20,
+   "right": 355,
+   "width": 335,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "leftmostText": {
+   "tag": "A",
+   "cls": "sf-breadcrumb__crumb sf-breadcrumb__crumb--home",
+   "left": 20
+  },
+  "docHScroll": 0,
+  "shot": "/Users/meng/Workbuddy/sinofresh外贸网站建设/screenshots/hero-scan-after/contact_375_hero.png"
+ },
+ {
+  "width": 375,
+  "page": "blog",
+  "url": "http://sinofresh.local/blog/",
+  "heroFound": true,
+  "heroClass": "wp-block-group has-card-white-color has-text-color sf-hero-inner is-layout-const",
+  "heroRect": {
+   "left": 0,
+   "right": 375,
+   "width": 375
+  },
+  "heroPadding": {
+   "left": "20px",
+   "right": "20px"
+  },
+  "heroOverflow": false,
+  "breadcrumb": {
+   "sel": ".sf-breadcrumb",
+   "left": 20,
+   "right": 355,
+   "width": 335,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "h1": {
+   "sel": "h1",
+   "left": 20,
+   "right": 355,
+   "width": 335,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "sub": {
+   "sel": ".sf-hero-inner p, .sf-hero-slider p",
+   "left": 20,
+   "right": 355,
+   "width": 335,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "leftmostText": {
+   "tag": "A",
+   "cls": "sf-breadcrumb__crumb sf-breadcrumb__crumb--home",
+   "left": 20
+  },
+  "docHScroll": 0,
+  "shot": "/Users/meng/Workbuddy/sinofresh外贸网站建设/screenshots/hero-scan-after/blog_375_hero.png"
+ },
+ {
+  "width": 375,
+  "page": "faq",
+  "url": "http://sinofresh.local/faq/",
+  "heroFound": true,
+  "heroClass": "wp-block-group has-card-white-color has-text-color sf-hero-inner is-layout-const",
+  "heroRect": {
+   "left": 0,
+   "right": 375,
+   "width": 375
+  },
+  "heroPadding": {
+   "left": "20px",
+   "right": "20px"
+  },
+  "heroOverflow": false,
+  "breadcrumb": {
+   "sel": ".sf-breadcrumb",
+   "left": 20,
+   "right": 355,
+   "width": 335,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "h1": {
+   "sel": "h1",
+   "left": 20,
+   "right": 355,
+   "width": 335,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "sub": {
+   "sel": ".sf-hero-inner p, .sf-hero-slider p",
+   "left": 20,
+   "right": 355,
+   "width": 335,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "leftmostText": {
+   "tag": "A",
+   "cls": "sf-breadcrumb__crumb sf-breadcrumb__crumb--home",
+   "left": 20
+  },
+  "docHScroll": 0,
+  "shot": "/Users/meng/Workbuddy/sinofresh外贸网站建设/screenshots/hero-scan-after/faq_375_hero.png"
+ },
+ {
+  "width": 375,
+  "page": "soft-chews",
+  "url": "http://sinofresh.local/products/soft-chews/",
+  "heroFound": true,
+  "heroClass": "wp-block-group sf-hero-inner is-layout-constrained wp-block-group-is-layout-cons",
+  "heroRect": {
+   "left": 0,
+   "right": 375,
+   "width": 375
+  },
+  "heroPadding": {
+   "left": "20px",
+   "right": "20px"
+  },
+  "heroOverflow": false,
+  "breadcrumb": {
+   "sel": ".sf-breadcrumb",
+   "left": 20,
+   "right": 355,
+   "width": 335,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "h1": {
+   "sel": "h1",
+   "left": 20,
+   "right": 355,
+   "width": 335,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "sub": {
+   "sel": ".sf-hero-inner p, .sf-hero-slider p",
+   "left": 20,
+   "right": 355,
+   "width": 335,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "leftmostText": {
+   "tag": "A",
+   "cls": "sf-breadcrumb__crumb sf-breadcrumb__crumb--mid",
+   "left": 20
+  },
+  "docHScroll": 0,
+  "shot": "/Users/meng/Workbuddy/sinofresh外贸网站建设/screenshots/hero-scan-after/soft-chews_375_hero.png"
+ },
+ {
+  "width": 375,
+  "page": "tablets",
+  "url": "http://sinofresh.local/products/tablets/",
+  "heroFound": true,
+  "heroClass": "wp-block-group sf-hero-inner is-layout-constrained wp-block-group-is-layout-cons",
+  "heroRect": {
+   "left": 0,
+   "right": 375,
+   "width": 375
+  },
+  "heroPadding": {
+   "left": "20px",
+   "right": "20px"
+  },
+  "heroOverflow": false,
+  "breadcrumb": {
+   "sel": ".sf-breadcrumb",
+   "left": 20,
+   "right": 355,
+   "width": 335,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "h1": {
+   "sel": "h1",
+   "left": 20,
+   "right": 355,
+   "width": 335,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "sub": {
+   "sel": ".sf-hero-inner p, .sf-hero-slider p",
+   "left": 20,
+   "right": 355,
+   "width": 335,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "leftmostText": {
+   "tag": "A",
+   "cls": "sf-breadcrumb__crumb sf-breadcrumb__crumb--mid",
+   "left": 20
+  },
+  "docHScroll": 0,
+  "shot": "/Users/meng/Workbuddy/sinofresh外贸网站建设/screenshots/hero-scan-after/tablets_375_hero.png"
+ },
+ {
+  "width": 375,
+  "page": "powders",
+  "url": "http://sinofresh.local/products/powders/",
+  "heroFound": true,
+  "heroClass": "wp-block-group sf-hero-inner is-layout-constrained wp-block-group-is-layout-cons",
+  "heroRect": {
+   "left": 0,
+   "right": 375,
+   "width": 375
+  },
+  "heroPadding": {
+   "left": "20px",
+   "right": "20px"
+  },
+  "heroOverflow": false,
+  "breadcrumb": {
+   "sel": ".sf-breadcrumb",
+   "left": 20,
+   "right": 355,
+   "width": 335,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "h1": {
+   "sel": "h1",
+   "left": 20,
+   "right": 355,
+   "width": 335,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "sub": {
+   "sel": ".sf-hero-inner p, .sf-hero-slider p",
+   "left": 20,
+   "right": 355,
+   "width": 335,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "leftmostText": {
+   "tag": "A",
+   "cls": "sf-breadcrumb__crumb sf-breadcrumb__crumb--mid",
+   "left": 20
+  },
+  "docHScroll": 0,
+  "shot": "/Users/meng/Workbuddy/sinofresh外贸网站建设/screenshots/hero-scan-after/powders_375_hero.png"
+ },
+ {
+  "width": 375,
+  "page": "pastes",
+  "url": "http://sinofresh.local/products/pastes/",
+  "heroFound": true,
+  "heroClass": "wp-block-group sf-hero-inner is-layout-constrained wp-block-group-is-layout-cons",
+  "heroRect": {
+   "left": 0,
+   "right": 375,
+   "width": 375
+  },
+  "heroPadding": {
+   "left": "20px",
+   "right": "20px"
+  },
+  "heroOverflow": false,
+  "breadcrumb": {
+   "sel": ".sf-breadcrumb",
+   "left": 20,
+   "right": 355,
+   "width": 335,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "h1": {
+   "sel": "h1",
+   "left": 20,
+   "right": 355,
+   "width": 335,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "sub": {
+   "sel": ".sf-hero-inner p, .sf-hero-slider p",
+   "left": 20,
+   "right": 355,
+   "width": 335,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "leftmostText": {
+   "tag": "A",
+   "cls": "sf-breadcrumb__crumb sf-breadcrumb__crumb--mid",
+   "left": 20
+  },
+  "docHScroll": 0,
+  "shot": "/Users/meng/Workbuddy/sinofresh外贸网站建设/screenshots/hero-scan-after/pastes_375_hero.png"
+ },
+ {
+  "width": 375,
+  "page": "liquids",
+  "url": "http://sinofresh.local/products/liquids/",
+  "heroFound": true,
+  "heroClass": "wp-block-group sf-hero-inner is-layout-constrained wp-block-group-is-layout-cons",
+  "heroRect": {
+   "left": 0,
+   "right": 375,
+   "width": 375
+  },
+  "heroPadding": {
+   "left": "20px",
+   "right": "20px"
+  },
+  "heroOverflow": false,
+  "breadcrumb": {
+   "sel": ".sf-breadcrumb",
+   "left": 20,
+   "right": 355,
+   "width": 335,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "h1": {
+   "sel": "h1",
+   "left": 20,
+   "right": 355,
+   "width": 335,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "sub": {
+   "sel": ".sf-hero-inner p, .sf-hero-slider p",
+   "left": 20,
+   "right": 355,
+   "width": 335,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "leftmostText": {
+   "tag": "A",
+   "cls": "sf-breadcrumb__crumb sf-breadcrumb__crumb--mid",
+   "left": 20
+  },
+  "docHScroll": 0,
+  "shot": "/Users/meng/Workbuddy/sinofresh外贸网站建设/screenshots/hero-scan-after/liquids_375_hero.png"
+ },
+ {
+  "width": 375,
+  "page": "drops",
+  "url": "http://sinofresh.local/products/drops/",
+  "heroFound": true,
+  "heroClass": "wp-block-group sf-hero-inner is-layout-constrained wp-block-group-is-layout-cons",
+  "heroRect": {
+   "left": 0,
+   "right": 375,
+   "width": 375
+  },
+  "heroPadding": {
+   "left": "20px",
+   "right": "20px"
+  },
+  "heroOverflow": false,
+  "breadcrumb": {
+   "sel": ".sf-breadcrumb",
+   "left": 20,
+   "right": 355,
+   "width": 335,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "h1": {
+   "sel": "h1",
+   "left": 20,
+   "right": 355,
+   "width": 335,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "sub": {
+   "sel": ".sf-hero-inner p, .sf-hero-slider p",
+   "left": 20,
+   "right": 355,
+   "width": 335,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "leftmostText": {
+   "tag": "A",
+   "cls": "sf-breadcrumb__crumb sf-breadcrumb__crumb--mid",
+   "left": 20
+  },
+  "docHScroll": 0,
+  "shot": "/Users/meng/Workbuddy/sinofresh外贸网站建设/screenshots/hero-scan-after/drops_375_hero.png"
+ },
+ {
+  "width": 375,
+  "page": "dental-chews",
+  "url": "http://sinofresh.local/products/dental-chews/",
+  "heroFound": true,
+  "heroClass": "wp-block-group sf-hero-inner is-layout-constrained wp-block-group-is-layout-cons",
+  "heroRect": {
+   "left": 0,
+   "right": 375,
+   "width": 375
+  },
+  "heroPadding": {
+   "left": "20px",
+   "right": "20px"
+  },
+  "heroOverflow": false,
+  "breadcrumb": {
+   "sel": ".sf-breadcrumb",
+   "left": 20,
+   "right": 355,
+   "width": 335,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "h1": {
+   "sel": "h1",
+   "left": 20,
+   "right": 355,
+   "width": 335,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "sub": {
+   "sel": ".sf-hero-inner p, .sf-hero-slider p",
+   "left": 20,
+   "right": 355,
+   "width": 335,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "leftmostText": {
+   "tag": "A",
+   "cls": "sf-breadcrumb__crumb sf-breadcrumb__crumb--mid",
+   "left": 20
+  },
+  "docHScroll": 0,
+  "shot": "/Users/meng/Workbuddy/sinofresh外贸网站建设/screenshots/hero-scan-after/dental-chews_375_hero.png"
+ },
+ {
+  "width": 375,
+  "page": "fish-oil",
+  "url": "http://sinofresh.local/products/fish-oil/",
+  "heroFound": true,
+  "heroClass": "wp-block-group sf-hero-inner is-layout-constrained wp-block-group-is-layout-cons",
+  "heroRect": {
+   "left": 0,
+   "right": 375,
+   "width": 375
+  },
+  "heroPadding": {
+   "left": "20px",
+   "right": "20px"
+  },
+  "heroOverflow": false,
+  "breadcrumb": {
+   "sel": ".sf-breadcrumb",
+   "left": 20,
+   "right": 355,
+   "width": 335,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "h1": {
+   "sel": "h1",
+   "left": 20,
+   "right": 355,
+   "width": 335,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "sub": {
+   "sel": ".sf-hero-inner p, .sf-hero-slider p",
+   "left": 20,
+   "right": 355,
+   "width": 335,
+   "marginLeft": "0px",
+   "pl": "0px"
+  },
+  "leftmostText": {
+   "tag": "A",
+   "cls": "sf-breadcrumb__crumb sf-breadcrumb__crumb--mid",
+   "left": 20
+  },
+  "docHScroll": 0,
+  "shot": "/Users/meng/Workbuddy/sinofresh外贸网站建设/screenshots/hero-scan-after/fish-oil_375_hero.png"
+ }
+]

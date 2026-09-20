@@ -1,0 +1,396 @@
+{
+    "title": "Get a Quote",
+    "description": "Send us your requirements and we will respond within 24 hours.",
+    "isActive": true,
+    "labelPlacement": "top_label",
+    "descriptionPlacement": "under",
+    "button": {
+        "text": "Send Inquiry",
+        "type": "text"
+    },
+    "fields": [
+        {
+            "is_payment": false,
+            "duplicatable": true,
+            "noURLs": false,
+            "repeatable": true,
+            "type": "text",
+            "id": 1,
+            "label": "Company Name",
+            "required": true,
+            "visibility": "visible",
+            "formId": 2,
+            "pageNumber": 1,
+            "fields": "",
+            "cssClass": "gfield--width-half"
+        },
+        {
+            "is_payment": false,
+            "duplicatable": true,
+            "noURLs": false,
+            "repeatable": true,
+            "type": "text",
+            "id": 2,
+            "label": "Contact Person",
+            "required": true,
+            "visibility": "visible",
+            "formId": 2,
+            "pageNumber": 1,
+            "fields": "",
+            "cssClass": "gfield--width-half"
+        },
+        {
+            "is_payment": false,
+            "duplicatable": true,
+            "noURLs": false,
+            "repeatable": true,
+            "type": "email",
+            "id": 3,
+            "label": "Email",
+            "required": true,
+            "visibility": "visible",
+            "formId": 2,
+            "pageNumber": 1,
+            "fields": "",
+            "cssClass": "gfield--width-full"
+        },
+        {
+            "is_payment": false,
+            "duplicatable": true,
+            "noURLs": true,
+            "repeatable": true,
+            "type": "phone",
+            "id": 4,
+            "label": "Phone / WhatsApp",
+            "required": false,
+            "visibility": "visible",
+            "formId": 2,
+            "pageNumber": 1,
+            "fields": "",
+            "cssClass": "gfield--width-full",
+            "phoneFormat": "formatted"
+        },
+        {
+            "is_payment": false,
+            "duplicatable": true,
+            "noURLs": false,
+            "repeatable": true,
+            "type": "select",
+            "id": 5,
+            "label": "Country",
+            "required": true,
+            "choices": [
+                {
+                    "text": "United States",
+                    "value": "United States"
+                },
+                {
+                    "text": "United Kingdom",
+                    "value": "United Kingdom"
+                },
+                {
+                    "text": "Germany",
+                    "value": "Germany"
+                },
+                {
+                    "text": "France",
+                    "value": "France"
+                },
+                {
+                    "text": "Australia",
+                    "value": "Australia"
+                },
+                {
+                    "text": "Canada",
+                    "value": "Canada"
+                },
+                {
+                    "text": "Japan",
+                    "value": "Japan"
+                },
+                {
+                    "text": "Other",
+                    "value": "Other"
+                }
+            ],
+            "visibility": "visible",
+            "formId": 2,
+            "pageNumber": 1,
+            "fields": "",
+            "cssClass": "gfield--width-half"
+        },
+        {
+            "is_payment": false,
+            "duplicatable": true,
+            "noURLs": false,
+            "repeatable": true,
+            "type": "select",
+            "id": 6,
+            "label": "Target Market",
+            "required": true,
+            "choices": [
+                {
+                    "text": "US",
+                    "value": "US"
+                },
+                {
+                    "text": "EU",
+                    "value": "EU"
+                },
+                {
+                    "text": "UK",
+                    "value": "UK"
+                },
+                {
+                    "text": "JP",
+                    "value": "JP"
+                },
+                {
+                    "text": "AU",
+                    "value": "AU"
+                },
+                {
+                    "text": "CA",
+                    "value": "CA"
+                },
+                {
+                    "text": "Other",
+                    "value": "Other"
+                }
+            ],
+            "visibility": "visible",
+            "formId": 2,
+            "pageNumber": 1,
+            "fields": "",
+            "cssClass": "gfield--width-half"
+        },
+        {
+            "is_payment": false,
+            "duplicatable": true,
+            "noURLs": false,
+            "repeatable": true,
+            "type": "select",
+            "id": 7,
+            "label": "Interested Dosage Form",
+            "required": true,
+            "choices": [
+                {
+                    "text": "Soft Chews",
+                    "value": "Soft Chews"
+                },
+                {
+                    "text": "Tablets",
+                    "value": "Tablets"
+                },
+                {
+                    "text": "Powders",
+                    "value": "Powders"
+                },
+                {
+                    "text": "Pastes",
+                    "value": "Pastes"
+                },
+                {
+                    "text": "Drops",
+                    "value": "Drops"
+                },
+                {
+                    "text": "Liquids",
+                    "value": "Liquids"
+                },
+                {
+                    "text": "Fish Oil",
+                    "value": "Fish Oil"
+                },
+                {
+                    "text": "Dental Chews",
+                    "value": "Dental Chews"
+                }
+            ],
+            "visibility": "visible",
+            "formId": 2,
+            "pageNumber": 1,
+            "fields": "",
+            "cssClass": "gfield--width-half"
+        },
+        {
+            "is_payment": false,
+            "duplicatable": true,
+            "noURLs": false,
+            "repeatable": true,
+            "type": "select",
+            "id": 8,
+            "label": "Estimated Quantity",
+            "required": false,
+            "choices": [
+                {
+                    "text": "Under 500",
+                    "value": "Under 500"
+                },
+                {
+                    "text": "500-1,000",
+                    "value": "500-1,000"
+                },
+                {
+                    "text": "1,000-5,000",
+                    "value": "1,000-5,000"
+                },
+                {
+                    "text": "5,000+",
+                    "value": "5,000+"
+                }
+            ],
+            "visibility": "visible",
+            "formId": 2,
+            "pageNumber": 1,
+            "fields": "",
+            "cssClass": "gfield--width-half"
+        },
+        {
+            "is_payment": false,
+            "duplicatable": true,
+            "noURLs": false,
+            "repeatable": true,
+            "type": "select",
+            "id": 9,
+            "label": "Packaging Preference",
+            "required": false,
+            "choices": [
+                {
+                    "text": "Pouch",
+                    "value": "Pouch"
+                },
+                {
+                    "text": "Bottle",
+                    "value": "Bottle"
+                },
+                {
+                    "text": "Jar",
+                    "value": "Jar"
+                },
+                {
+                    "text": "Blister",
+                    "value": "Blister"
+                },
+                {
+                    "text": "Custom",
+                    "value": "Custom"
+                }
+            ],
+            "visibility": "visible",
+            "formId": 2,
+            "pageNumber": 1,
+            "fields": "",
+            "cssClass": "gfield--width-full"
+        },
+        {
+            "is_payment": false,
+            "duplicatable": true,
+            "noURLs": false,
+            "repeatable": true,
+            "type": "textarea",
+            "id": 10,
+            "label": "Notes",
+            "required": false,
+            "visibility": "visible",
+            "formId": 2,
+            "pageNumber": 1,
+            "fields": "",
+            "cssClass": "gfield--width-full"
+        },
+        {
+            "is_payment": false,
+            "duplicatable": true,
+            "noURLs": false,
+            "repeatable": true,
+            "type": "checkbox",
+            "id": 11,
+            "label": "Privacy Consent",
+            "required": true,
+            "choices": [
+                {
+                    "text": "I agree to the Privacy Policy",
+                    "value": "I agree to the Privacy Policy"
+                }
+            ],
+            "inputs": [
+                {
+                    "id": "11.1",
+                    "label": "I agree to the Privacy Policy"
+                }
+            ],
+            "visibility": "visible",
+            "formId": 2,
+            "pageNumber": 1,
+            "fields": "",
+            "cssClass": "gfield--width-full",
+            "selectAllText": "Select All"
+        },
+        {
+            "is_payment": false,
+            "duplicatable": true,
+            "noURLs": false,
+            "repeatable": true,
+            "type": "hidden",
+            "id": "12",
+            "label": "Configuration Summary",
+            "adminLabel": "Configuration Summary (configurator)",
+            "inputName": "config_summary",
+            "defaultValue": "",
+            "isRequired": false,
+            "noDuplicates": false,
+            "allowsPrepopulate": false,
+            "visibility": "visible",
+            "formId": 2,
+            "pageNumber": 1,
+            "fields": "",
+            "cssClass": "sf-config-summary"
+        }
+    ],
+    "id": 2,
+    "markupVersion": 2,
+    "validationPlacement": "above",
+    "subLabelPlacement": "above",
+    "validationSummary": true,
+    "requiredIndicator": "text",
+    "nextFieldId": 13,
+    "is_active": "1",
+    "date_created": "2026-09-15 01:22:05",
+    "is_trash": "0",
+    "notifications": {
+        "admin_notification": {
+            "id": "admin_notification",
+            "name": "Admin Notification",
+            "event": "form_submission",
+            "toType": "email",
+            "to": "sales@zxpet.com",
+            "from": "{Email:3}",
+            "fromName": "SINO FRESH Website",
+            "replyTo": "{Email:3}",
+            "subject": "New Inquiry: {Interested Dosage Form:7} from {Company Name:1} ({Country:5})",
+            "message": "New inquiry received from the website:\n\nCompany: {Company Name:1}\nContact: {Contact Person:2}\nEmail: {Email:3}\nPhone / WhatsApp: {Phone / WhatsApp:4}\nCountry: {Country:5}\nTarget Market: {Target Market:6}\nInterested Dosage Form: {Interested Dosage Form:7}\nEstimated Quantity: {Estimated Quantity:8}\nPackaging Preference: {Packaging Preference:9}\nNotes: {Notes:10}\nPrivacy Consent: {Privacy Consent:11.1}\n",
+            "isActive": true
+        },
+        "auto_reply": {
+            "id": "auto_reply",
+            "name": "Auto Reply to Customer",
+            "event": "form_submission",
+            "toType": "email",
+            "to": "{Email:3}",
+            "from": "sales@zxpet.com",
+            "fromName": "SINO FRESH",
+            "subject": "We've received your inquiry — SINO FRESH",
+            "message": "Dear {Contact Person:2},\n\nThank you for your interest in SINO FRESH pet supplements.\nWe have received your inquiry regarding {Interested Dosage Form:7} and our sales team will respond within 24 hours on business days.\n\nIf you have any additional requirements, feel free to reply to this email.\n\nBest regards,\nSINO FRESH Pet Food Co., Ltd.\nwww.zxpet.com",
+            "isActive": true
+        }
+    },
+    "confirmations": [
+        {
+            "id": 0,
+            "name": "Default Confirmation",
+            "type": "message",
+            "message": "Thank you. We will respond within 24 hours.",
+            "isDefault": true
+        }
+    ]
+}

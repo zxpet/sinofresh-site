@@ -1,0 +1,87 @@
+
+==============================================================================
+== A. get_template_hierarchy（正确调用：第二参保持默认 false）
+==============================================================================
+  single-sf_formula                          -> single-sf_formula → single → singular → index
+  single-sf_formula-liquid-joint-support     -> single-sf_formula-liquid-joint-support → single-sf_formula → single → singular → index
+  archive-sf_formula                         -> archive-sf_formula → archive → index
+
+==============================================================================
+== B. WP 真实候选名（get_single_template / get_post_type_archive_template 的构造逻辑）
+==============================================================================
+  single 候选 = single-sf_formula-liquid-joint-support.php , single-sf_formula.php , single.php
+  archive 候选 = archive-sf_formula.php , archive.php
+
+==============================================================================
+== C. resolve_block_template 权威裁决（wp_template 类型）
+==============================================================================
+  single  → slug=single  source=theme  id=sinofresh-theme//single
+  archive → slug=archive  source=theme  id=sinofresh-theme//archive
+
+==============================================================================
+== D. 若 2B 建了 single-sf_formula.html 会怎样（模拟：直接用 slug 查块模板）
+==============================================================================
+  get_block_template('single-sf_formula-liquid-joint-support  ') = 未命中
+  get_block_template('single-sf_formula                       ') = 未命中
+  get_block_template('single                                  ') = 命中 (source=theme, has_theme_file=true)
+  get_block_template('singular                                ') = 未命中
+  get_block_template('index                                   ') = 命中 (source=theme, has_theme_file=true)
+
+==============================================================================
+== E. 磁盘模板清单（templates/*.html）
+==============================================================================
+  共 26 个
+    404.html                       15132 B
+    archive.html                    5497 B
+    front-page.html               135309 B
+    home.html                        179 B
+    index.html                      1248 B
+    page-about.html                32359 B
+    page-blog.html                   179 B
+    page-contact.html               9832 B
+    page-cooperation.html          21643 B
+    page-dental-chews.html         51975 B
+    page-drops.html                46007 B
+    page-factory-tour.html         25716 B
+    page-faq.html                  14763 B
+    page-feedback.html              5244 B
+    page-fish-oil.html             45942 B
+    page-liquids.html              46524 B
+    page-pastes.html               45701 B
+    page-powders.html              48515 B
+    page-products.html             16453 B
+    page-quality.html              28574 B
+    page-services.html             21835 B
+    page-soft-chews.html           58563 B
+    page-tablets.html              49263 B
+    page.html                       1771 B
+    search.html                     3365 B
+    single.html                    10821 B
+
+  single-sf_formula.html 是否已存在 = 否（2A 不建，2B 建）
+  archive-sf_formula.html 是否已存在 = 否
+
+==============================================================================
+== F. 现有 single.html / archive.html 的可见副作用（2A 注册后立刻生效）
+==============================================================================
+  single.html 占位符 = {{MID_HREF}}, {{MID_CRUMB}}, {{TITLE}}, {{LAST_UPDATED}}, {{SHARE_URL_ENC}}, {{SHARE_TITLE_ENC}}
+  archive.html 占位符 = {{ARCHIVE_TITLE}}
+  archive.html 内是否含 [sf_archive_count] / [sf_blog_chips] = 是 / 是
+  single.html 内是否含文章专属结构（toc/feedback/Article JSON-LD 依赖）:
+    sf-article                 = 有
+    sf-toc                     = 无
+    toc-nav                    = 无
+    sf-share                   = 有
+    sf-breadcrumb              = 有
+    wp:post-featured-image     = 有
+
+==============================================================================
+== G. 结论
+==============================================================================
+  ① CPT 单条回退链（实测）：single-sf_formula-{slug} → single-sf_formula → **single**（single.html 已存在）
+  ② CPT 归档回退链（实测）：archive-sf_formula → **archive**（archive.html 已存在，含 [sf_archive_count]/[sf_blog_chips]）
+  ③ 2A 只注册不建模板 ⇒ /formulas/ 立刻以博客归档版式上线（核心副作用）
+  ④ 模板权威守卫（functions.php:65/102）保证 2B 建的 single-sf_formula.html 自动生效、且不会被 DB 副本遮蔽
+
+==============================================================================
+探针 #7 完成（只读）

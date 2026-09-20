@@ -1,0 +1,110 @@
+
+==============================================================================
+== A. 全部 trp_* option
+==============================================================================
+trp* option 数 = 19
+  trp_add_ons_settings                                443 B
+  trp_advanced_settings                              1460 B
+  trp_db_stored_data                                  172 B
+  trp_in_sp_add_gettext_slugs                           4 B
+  trp_language_switcher_settings                     1932 B
+  trp_license_details                                 262 B
+  trp_license_key                                      32 B
+  trp_license_status                                    5 B
+  trp_old_add_ons_status                              443 B
+  trp_onboarding_started                                3 B
+  trp_plugin_optin                                      3 B
+  trp_plugin_optin_email                               13 B
+  trp_plugin_version                                    5 B
+  trp_post_type_base_slug_translation                   6 B
+  trp_seopack_version                                   5 B
+  trp_settings                                        532 B
+  trp_taxonomy_slug_translation                         6 B
+  trp_updated_database_gettext_original_lookup_hash        3 B
+  trp_updated_database_gettext_tables_optimization        3 B
+
+==============================================================================
+== B. 与 CPT 相关的 TP 设置项（明确存在性）
+==============================================================================
+  trp_settings[trp-post-types                      ] = ** 不存在 **
+  trp_settings[trp-post-type-slugs                 ] = ** 不存在 **
+  trp_settings[post-types                          ] = ** 不存在 **
+  trp_settings[trp_custom_post_types               ] = ** 不存在 **
+  trp_settings[translation-languages               ] = ["en_US","zh_CN"]
+  trp_settings[url-slugs                           ] = {"en_US":"en","zh_CN":"zh"}
+  trp_settings[add-subdirectory-to-default-language] = "no"
+  option 'trp_post_type_base_slug_translation' = []
+  option 'trp_taxonomy_slug_translation'      = []
+  option 'trp_slug_originals'                 存在=false
+
+==============================================================================
+== C. wp_trp_* 数据表
+==============================================================================
+wp_trp_* 表数 = 10
+  wp_trp_dictionary_en_us_zh_cn                     813 行  (COUNT(*))
+  wp_trp_gettext_en_us                             1173 行  (COUNT(*))
+  wp_trp_gettext_original_meta                        0 行  (COUNT(*))
+  wp_trp_gettext_original_strings                  1172 行  (COUNT(*))
+  wp_trp_gettext_zh_cn                              611 行  (COUNT(*))
+  wp_trp_machine_translation_locks                    0 行  (COUNT(*))
+  wp_trp_original_meta                               11 行  (COUNT(*))
+  wp_trp_original_strings                           813 行  (COUNT(*))
+  wp_trp_slug_originals                               6 行  (COUNT(*))
+  wp_trp_slug_translations                            0 行  (COUNT(*))
+
+  --- wp_trp_slug_originals 前 8 行 ---
+    {"id":"1","original":"test-article","type":"post"}
+    {"id":"2","original":"quality","type":"other"}
+    {"id":"3","original":"products","type":"other"}
+    {"id":"4","original":"soft-chews","type":"other"}
+    {"id":"5","original":"faq","type":"other"}
+    {"id":"6","original":"about","type":"other"}
+
+  --- wp_trp_slug_translations 前 8 行 ---
+    (空表)
+
+==============================================================================
+== D. 基线：将改动的文件（sha256 / 体积）
+==============================================================================
+  functions.php        106973 B  65038aa00fb7a231eae7d896972db19e32062bd7e874cc497350be4abe860d4c
+  style.css            237655 B  6a9261ee4b53b3eb5436ff05294fa86bf21c680a3fe9d638fe00da32b323befa
+  theme.json             6523 B  88b7cd8d00c40afed25712fe38b910e01274c59c5977a524cb12a27fc60e1657
+  functions.php    源码==Local : 是
+  style.css        源码==Local : 是
+  theme.json       源码==Local : 是
+
+==============================================================================
+== E. 基线：rewrite_rules 选项
+==============================================================================
+  rewrite_rules 条目数 = 112
+  rewrite_rules sha256 = b814f789dd2eb49da6498e5f4ea30a912a3462ee355e3959013a2876d241031e
+
+==============================================================================
+== F. 基线：日志（PHP Web / nginx / wp-content debug）
+==============================================================================
+  /Users/meng/Local Sites/sinofresh/logs/php/error.log                  69385 B  9ddc8e6ba16742542900d068c564c10b0ca8cd114c0df91b36e2efd0dbf3e8c8
+                                                                       mtime 2026-09-19 09:32:01  | PHP-FPM error_log（Web 请求的真实日志）
+  /Users/meng/Local Sites/sinofresh/logs/php/php-fpm.log                  375 B  9309e0e60e797e0b2d2efd40263160826a8b2b8422a197505b847be188bc861f
+                                                                       mtime 2026-09-19 09:21:07  | PHP-FPM 主日志
+  /Users/meng/Local Sites/sinofresh/logs/nginx/error.log                 1559 B  e083773b105a8f0974c6a9b1628c37a6f6c5c4ee41ca4b48f53f92a2b73b7d7c
+                                                                       mtime 2026-09-19 22:56:50  | nginx 错误日志
+  /Users/meng/Local Sites/sinofresh/app/public/wp-content/debug.log       594 B  f40c4cd3c6ec6aa3c680e47e61af1953150f80e3c61165fd7e56f309845a5018
+                                                                       mtime 2026-09-19 22:56:08  | wp-content/debug.log（CLI 残留，非 Web 日志）
+
+==============================================================================
+== G. 基线：8 剂型页 HTTP 状态（改动前）
+==============================================================================
+  http://sinofresh.local/products/soft-chews/          200  (soft-chews)
+  http://sinofresh.local/products/tablets/             200  (tablets)
+  http://sinofresh.local/products/powders/             200  (powders)
+  http://sinofresh.local/products/pastes/              200  (pastes)
+  http://sinofresh.local/products/drops/               200  (drops)
+  http://sinofresh.local/products/liquids/             200  (liquids)
+  http://sinofresh.local/products/fish-oil/            200  (fish-oil)
+  http://sinofresh.local/products/dental-chews/        200  (dental-chews)
+  http://sinofresh.local/                              200  (front)
+  http://sinofresh.local/blog/                         200  (blog)
+  http://sinofresh.local/legend-blog/                  404  ((占位))
+
+==============================================================================
+探针 #4 完成（只读）

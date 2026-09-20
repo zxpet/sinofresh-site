@@ -1,0 +1,42 @@
+# GF Form 5 certificate request — E2E log
+# run: 2026-09-18 15:58:59  ·  php -c <Local php.ini> tools/_gf5_submit_test.php
+
+=== A · FDA certificate request (document exists) ===
+  OK   A1. submission valid — entry_id=37
+  OK   A2. confirmation is our markup — <div class="sf-cert-result" data-payload="{&quot;download_url&quot;:&quot;http:\/\/sinofre...
+  OK   A3. confirmation carries the JSON payload — {"cert":"fda","to":"sf-cert-test@acmepetnutrition.com","attached":true}
+  OK   A4. payload points at the gated endpoint
+  OK   A5. request not blocked by the mail hop — 60 ms for the whole submission
+  OK   A6. customer email logged — mail_id=95
+  OK   A7. subject matches the spec — Your SINO FRESH Certificate — FDA Registration
+  OK   A8. body contains the same one-time link — link present: yes
+  OK   A9. attachment uses the friendly filename — SINO-FRESH-FDA-Registration.webp
+  OK   A10. sales is copied — Cc: sales@zxpet.com,\nContent-Type: text/html
+  OK   A11. no send error
+  OK   A12. entry meta records the grant — doc=fda mail=sent
+  OK   A13. link downloads the full-resolution file — code=200 bytes=50904 (source 50904)
+  OK   A14. served as an attachment — attachment; filename="SINO-FRESH-FDA-Registration.webp"
+  OK   A15. one-time link is dead on replay — code=403
+
+=== B · HACCP request (no file published yet) ===
+  OK   B1. submission valid
+  OK   B2. no dead Download button
+  OK   B3. payload keeps the document identity — {"download_url":"","email_sent_to":"sf-cert-haccp@acmepetnutrition.com","certificate":"haccp","label":"HACCP Certificate","attached":false}
+  OK   B4. email sent without attachment — Your SINO FRESH Certificate — HACCP Certificate
+
+=== C · default document for the generic buttons ===
+  OK   C1. empty certificate falls back to coa-sample — {"download_url":"http:\/\/sinofresh.local\/wp-json\/sinofresh\/v1\/cert-download?cert=coa-sample&token=643705144841f833e8b162e8a9c31f38bac14c89","email_sent_to":"sf-cert-default@acmepetnutrition.com","certificate":"coa-sample","label":"Sample Certificate of Analysis","attached":true}
+  OK   C2. unknown certificate key falls back too — coa-sample
+
+=== D · front-end markup (what the modal fills) ===
+  OK   D3. hidden certificate field renders as input_10 — <input name='input_10' id='input_5_10' type='hidden' class='gform_hidden'  aria-invalid="false" value='' />
+  OK   D4. it is a hidden input with no default value — <input name='input_10' id='input_5_10' type='hidden' class='gform_hidden' aria-invalid="f
+  OK   D5. form markup is AJAX-ready
+
+=== E · consistency & residues ===
+  OK   E1. source = Local: functions.php
+  OK   E1. source = Local: inc/cert-download.php
+  OK   E2. no "/ -->" residue: functions.php
+  OK   E2. no "/ -->" residue: inc/cert-download.php
+
+ALL PASS  28/28

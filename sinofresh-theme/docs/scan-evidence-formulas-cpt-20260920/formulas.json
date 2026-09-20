@@ -1,0 +1,354 @@
+{
+ "formulas": [
+  {
+   "slug": "soft-chews",
+   "idx": 1,
+   "name": "Joint Support Soft Chews",
+   "use": "Joint care",
+   "cta_data_formula": "Joint Support Soft Chews",
+   "labels": {
+    "Ingredients": "Glucosamine HCl, Chondroitin Sulfate, MSM, Green-lipped Mussel, Chicken Flavor",
+    "Guaranteed Analysis": "Glucosamine ≥500mg/chew, Chondroitin ≥200mg/chew, MSM ≥100mg/chew",
+    "Standard Specs": "2g/piece · 60/90/120 per bottle · 18 months shelf life"
+   },
+   "missing_labels": []
+  },
+  {
+   "slug": "soft-chews",
+   "idx": 2,
+   "name": "Calming Soft Chews",
+   "use": "Calming",
+   "cta_data_formula": "Calming Soft Chews",
+   "labels": {
+    "Ingredients": "L-Tryptophan, Kelp, Ginger Root, Valerian Root, Chamomile, Thiamine",
+    "Guaranteed Analysis": "L-Tryptophan ≥120mg/chew, Chamomile ≥20mg/chew",
+    "Standard Specs": "2g/piece · 60/90/120 per bottle · 18 months shelf life"
+   },
+   "missing_labels": []
+  },
+  {
+   "slug": "soft-chews",
+   "idx": 3,
+   "name": "Digestive Soft Chews",
+   "use": "Digestive care",
+   "cta_data_formula": "Digestive Soft Chews",
+   "labels": {
+    "Ingredients": "Alpha-Amylase, Lipase, Cellulase, Protease, Bacillus coagulans, FOS",
+    "Guaranteed Analysis": "Total microorganisms ≥1 billion CFU/chew",
+    "Standard Specs": "2g/piece · 60/90/120 per bottle · 18 months shelf life"
+   },
+   "missing_labels": []
+  },
+  {
+   "slug": "soft-chews",
+   "idx": 4,
+   "name": "Skin & Coat Soft Chews",
+   "use": "Skin & coat",
+   "cta_data_formula": "Skin & Coat Soft Chews",
+   "labels": {
+    "Ingredients": "Marine Fish Oil, Safflower Oil, Coconut Oil, Biotin, Vitamin C, Vitamin E, Kelp",
+    "Guaranteed Analysis": "Omega-3 ≥50mg/chew, Biotin ≥50mcg/chew",
+    "Standard Specs": "2g/piece · 60/90/120 per bottle · 18 months shelf life"
+   },
+   "missing_labels": []
+  },
+  {
+   "slug": "tablets",
+   "idx": 1,
+   "name": "Joint Support Tablets",
+   "use": "Joint care",
+   "cta_data_formula": "Joint Support Tablets",
+   "labels": {
+    "Ingredients": "Glucosamine HCl, MSM, Chondroitin, Green-lipped Mussel",
+    "Guaranteed Analysis": "Glucosamine ≥500mg/tablet, MSM ≥500mg/tablet, Chondroitin ≥200mg/tablet",
+    "Standard Specs": "1g/tablet · 60/120/180 per bottle · 24 months shelf life"
+   },
+   "missing_labels": []
+  },
+  {
+   "slug": "tablets",
+   "idx": 2,
+   "name": "Multivitamin Tablets",
+   "use": "Daily nutrition",
+   "cta_data_formula": "Multivitamin Tablets",
+   "labels": {
+    "Ingredients": "Vitamin A, D3, E, B-complex, Zinc, Iron, Methionine, EPA, DHA",
+    "Guaranteed Analysis": "Vitamin E ≥50 IU/tablet, Zinc ≥5mg/tablet",
+    "Standard Specs": "1g/tablet · 60/120/180 per bottle · 24 months shelf life"
+   },
+   "missing_labels": []
+  },
+  {
+   "slug": "tablets",
+   "idx": 3,
+   "name": "Calcium & Phosphorus Tablets",
+   "use": "Bone health",
+   "cta_data_formula": "Calcium & Phosphorus Tablets",
+   "labels": {
+    "Ingredients": "Dicalcium Phosphate, Dried Yeast, Whey, Hydrolyzed Soy Protein, Vitamin D3",
+    "Guaranteed Analysis": "Calcium ≥200mg/tablet, Phosphorus ≥100mg/tablet",
+    "Standard Specs": "1g/tablet · 60/120/180 per bottle · 24 months shelf life"
+   },
+   "missing_labels": []
+  },
+  {
+   "slug": "powders",
+   "idx": 1,
+   "name": "Probiotic Powder",
+   "use": "Digestive care",
+   "cta_data_formula": "Probiotic Powder",
+   "labels": {
+    "Ingredients": "Inulin, Spinach Extract, Bacillus subtilis DE111, L. acidophilus, L. plantarum, B. coagulans",
+    "Guaranteed Analysis": "Total microorganisms ≥5 billion CFU/scoop",
+    "Standard Specs": "4oz/8oz/16oz jar · 24 months shelf life"
+   },
+   "missing_labels": []
+  },
+  {
+   "slug": "powders",
+   "idx": 2,
+   "name": "Pumpkin Digestive Powder",
+   "use": "Digestive care",
+   "cta_data_formula": "Pumpkin Digestive Powder",
+   "labels": {
+    "Ingredients": "100% Pumpkin Powder (fiber source)",
+    "Guaranteed Analysis": "Crude Fiber ≥15%",
+    "Standard Specs": "4oz/8oz/16oz jar · 18 months shelf life"
+   },
+   "missing_labels": []
+  },
+  {
+   "slug": "powders",
+   "idx": 3,
+   "name": "Bladder Support Powder",
+   "use": "Urinary care",
+   "cta_data_formula": "Bladder Support Powder",
+   "labels": {
+    "Ingredients": "Cranberry, D-Mannose, Herbal Blend",
+    "Guaranteed Analysis": "Cranberry ≥500mg/scoop",
+    "Standard Specs": "4oz/8oz/16oz jar · 24 months shelf life"
+   },
+   "missing_labels": []
+  },
+  {
+   "slug": "pastes",
+   "idx": 1,
+   "name": "Hairball Remedy Paste",
+   "use": "Hairball control",
+   "cta_data_formula": "Hairball Remedy Paste",
+   "labels": {
+    "Ingredients": "Malt Extract (43%), Oils and Fats (30%), Chicken Meal (4%), Yeast, Minerals",
+    "Guaranteed Analysis": "Crude Fat ≥30%, Crude Fiber ≥5%",
+    "Standard Specs": "50g/60g/100g/120g tube · 24 months shelf life"
+   },
+   "missing_labels": []
+  },
+  {
+   "slug": "pastes",
+   "idx": 2,
+   "name": "Nutrition Paste",
+   "use": "Daily nutrition",
+   "cta_data_formula": "Nutrition Paste",
+   "labels": {
+    "Ingredients": "Oils and Fats, Milk and Dairy, Malt Extract (12%), Yeast (MOS 1%)",
+    "Guaranteed Analysis": "Crude Fat ≥25%, Crude Protein ≥5%",
+    "Standard Specs": "50g/60g/100g/120g tube · 24 months shelf life"
+   },
+   "missing_labels": []
+  },
+  {
+   "slug": "drops",
+   "idx": 1,
+   "name": "Ear Care Drops",
+   "use": "Ear care",
+   "cta_data_formula": "Ear Care Drops",
+   "labels": {
+    "Ingredients": "Organic Aloe Vera, Tea Tree Oil, Calendula",
+    "Guaranteed Analysis": "Aloe Vera ≥10%",
+    "Standard Specs": "30ml/50ml dropper bottle · 24 months shelf life"
+   },
+   "missing_labels": []
+  },
+  {
+   "slug": "drops",
+   "idx": 2,
+   "name": "Urinary Care Drops",
+   "use": "Urinary care",
+   "cta_data_formula": "Urinary Care Drops",
+   "labels": {
+    "Ingredients": "Cranberry Extract, Marshmallow Root, Dandelion",
+    "Guaranteed Analysis": "Cranberry ≥200mg/ml",
+    "Standard Specs": "30ml/50ml dropper bottle · 24 months shelf life"
+   },
+   "missing_labels": []
+  },
+  {
+   "slug": "liquids",
+   "idx": 1,
+   "name": "Liquid Joint Support",
+   "use": "Joint care",
+   "cta_data_formula": "Liquid Joint Support",
+   "labels": {
+    "Ingredients": "Glucosamine Sulfate, MSM, Chondroitin Sulfate, Vitamin C, L-Proline, Grape Seed Extract, CoQ10, Hyaluronic Acid",
+    "Guaranteed Analysis": "Glucosamine ≥1600mg/oz, MSM ≥1500mg/oz, Chondroitin ≥1200mg/oz",
+    "Standard Specs": "8oz/16oz/32oz pump bottle · 24 months shelf life"
+   },
+   "missing_labels": []
+  },
+  {
+   "slug": "liquids",
+   "idx": 2,
+   "name": "Liquid Skin & Coat",
+   "use": "Skin & coat",
+   "cta_data_formula": "Liquid Skin & Coat",
+   "labels": {
+    "Ingredients": "Cod Liver Oil, Pollock Oil, Mixed Tocopherols",
+    "Guaranteed Analysis": "Omega-3 ≥30%, EPA ≥10%, DHA ≥12%",
+    "Standard Specs": "8oz/16oz/32oz pump bottle · 24 months shelf life"
+   },
+   "missing_labels": []
+  },
+  {
+   "slug": "fish-oil",
+   "idx": 1,
+   "name": "Wild Alaskan Salmon Oil",
+   "use": "Skin & coat",
+   "cta_data_formula": "Wild Alaskan Salmon Oil",
+   "labels": {
+    "Ingredients": "Wild-caught Salmon Oil, Mixed Tocopherols",
+    "Guaranteed Analysis": "Omega-3 ≥30%, EPA ≥10%, DHA ≥12%, Omega-6 ≥3%, Omega-9 ≥16%",
+    "Standard Specs": "8oz/16oz/32oz pump bottle · 24 months shelf life"
+   },
+   "missing_labels": []
+  },
+  {
+   "slug": "fish-oil",
+   "idx": 2,
+   "name": "Pure Fish Oil Blend",
+   "use": "Skin & coat",
+   "cta_data_formula": "Pure Fish Oil Blend",
+   "labels": {
+    "Ingredients": "Sardine, Anchovy, Herring, Mackerel Oil",
+    "Guaranteed Analysis": "Omega-3 ≥35%, EPA ≥18%, DHA ≥12%",
+    "Standard Specs": "8oz/16oz/32oz pump bottle · 24 months shelf life"
+   },
+   "missing_labels": []
+  },
+  {
+   "slug": "dental-chews",
+   "idx": 1,
+   "name": "Plaque Control Dental Chews",
+   "use": "Plaque control",
+   "cta_data_formula": "Plaque Control Dental Chews",
+   "labels": {
+    "Ingredients": "Coconut Oil, Parsley, Shiitake Mushroom, Organic Honey",
+    "Guaranteed Analysis": "Coconut Oil ≥5%",
+    "Standard Specs": "15g/piece · 14/28/56 per bag · 18 months shelf life"
+   },
+   "missing_labels": []
+  },
+  {
+   "slug": "dental-chews",
+   "idx": 2,
+   "name": "Oral Care Dental Sticks",
+   "use": "Oral care",
+   "cta_data_formula": "Oral Care Dental Sticks",
+   "labels": {
+    "Ingredients": "Wheat Flour, Wheat Starch, Corn Flour, Glycerin, Natural Flavors, Sodium Tripolyphosphate",
+    "Guaranteed Analysis": "Crude Protein ≥10%, Crude Fat ≥2%",
+    "Standard Specs": "20g/piece · 7/14/28 per bag · 18 months shelf life"
+   },
+   "missing_labels": []
+  },
+  {
+   "slug": "dental-chews",
+   "idx": 3,
+   "name": "Natural Cleaning Dental Sticks",
+   "use": "Oral care",
+   "cta_data_formula": "Natural Cleaning Dental Sticks",
+   "labels": {
+    "Ingredients": "Tapioca (46%), Peas (29%), Vegetable Glycerin (12%), Cheddar Cheese (6%), Hydrolyzed Yeast (4%)",
+    "Guaranteed Analysis": "Crude Protein ≥8%, Crude Fiber ≥2%",
+    "Standard Specs": "18g/piece · 7/14/28 per bag · 18 months shelf life"
+   },
+   "missing_labels": []
+  }
+ ],
+ "pages": {
+  "soft-chews": {
+   "section_bytes": 4714,
+   "items": 4,
+   "section_start": 3908,
+   "itemlist_name": "Standard Formulas — Soft Chews",
+   "itemlist_ok": true,
+   "itemlist_n": 4
+  },
+  "tablets": {
+   "section_bytes": 3720,
+   "items": 3,
+   "section_start": 3915,
+   "itemlist_name": "Standard Formulas — Tablets",
+   "itemlist_ok": true,
+   "itemlist_n": 3
+  },
+  "powders": {
+   "section_bytes": 3520,
+   "items": 3,
+   "section_start": 3883,
+   "itemlist_name": "Standard Formulas — Powders",
+   "itemlist_ok": true,
+   "itemlist_n": 3
+  },
+  "pastes": {
+   "section_bytes": 2619,
+   "items": 2,
+   "section_start": 3892,
+   "itemlist_name": "Standard Formulas — Pastes",
+   "itemlist_ok": true,
+   "itemlist_n": 2
+  },
+  "drops": {
+   "section_bytes": 2512,
+   "items": 2,
+   "section_start": 3886,
+   "itemlist_name": "Standard Formulas — Drops",
+   "itemlist_ok": true,
+   "itemlist_n": 2
+  },
+  "liquids": {
+   "section_bytes": 2688,
+   "items": 2,
+   "section_start": 3906,
+   "itemlist_name": "Standard Formulas — Liquids",
+   "itemlist_ok": true,
+   "itemlist_n": 2
+  },
+  "fish-oil": {
+   "section_bytes": 2619,
+   "items": 2,
+   "section_start": 3883,
+   "itemlist_name": "Standard Formulas — Fish Oil",
+   "itemlist_ok": true,
+   "itemlist_n": 2
+  },
+  "dental-chews": {
+   "section_bytes": 3693,
+   "items": 3,
+   "section_start": 3941,
+   "itemlist_name": "Standard Formulas — Dental Chews",
+   "itemlist_ok": true,
+   "itemlist_n": 3
+  }
+ },
+ "expect": {
+  "soft-chews": 4,
+  "tablets": 3,
+  "powders": 3,
+  "pastes": 2,
+  "drops": 2,
+  "liquids": 2,
+  "fish-oil": 2,
+  "dental-chews": 3
+ },
+ "problems": []
+}

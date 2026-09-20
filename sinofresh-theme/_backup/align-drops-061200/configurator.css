@@ -1,0 +1,622 @@
+/*
+ * SINO FRESH — Dosage Form Configurator
+ * Used by page-soft-chews.html (and future dosage form pages).
+ * Colors come from theme.json presets. Breakpoint: 768px.
+ */
+
+/* === Outer layout: options (65%) + summary (35%) === */
+.configurator {
+	display: flex;
+	align-items: flex-start;
+	gap: 40px;
+}
+
+.configurator__options {
+	flex: 0 1 65%;
+	min-width: 0;
+}
+
+.configurator__summary-col {
+	flex: 1 1 35%;
+	min-width: 0;
+}
+
+/* === Dimension group: label left + option buttons right (wrap) ===
+   The label column is a wrapper (.configurator__label) so it can carry the
+   optional expert tip under the h4 without breaking the two-column rhythm. */
+.configurator__group {
+	display: flex;
+	align-items: flex-start;
+	gap: 20px;
+	padding: 18px 0;
+	border-bottom: 1px solid var(--wp--preset--color--border-light);
+}
+
+.configurator__group:first-child {
+	padding-top: 0;
+}
+
+.configurator__label {
+	flex-shrink: 0;
+	width: 170px;
+}
+
+.configurator__group h4 {
+	margin: 6px 0 0;
+	font-size: 16px;
+	font-weight: 700;
+	color: var(--wp--preset--color--primary);
+}
+
+.configurator__tip {
+	margin: 4px 0 0;
+	font-size: 12px;
+	line-height: 1.5;
+	color: var(--wp--preset--color--text-secondary);
+}
+
+.configurator__items {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+}
+
+/* === Option button: default / hover / selected ===
+   44px min height + 60px min width = comfortable touch targets.
+   Icons lead the label: inline-flex keeps the 16px glyph and the text on one
+   line at every width, gap 6px per the icon spec. */
+.configurator__item {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	min-height: 44px;
+	min-width: 60px;
+	box-sizing: border-box;
+	padding: 8px 16px;
+	background-color: var(--wp--preset--color--card-white);
+	border: 1px solid var(--wp--preset--color--border-medium);
+	border-radius: 6px;
+	font-family: inherit;
+	font-size: 14px;
+	line-height: 1.4;
+	color: var(--wp--preset--color--text-primary);
+	cursor: pointer;
+	transition: border-color 0.15s ease, background-color 0.15s ease, color 0.15s ease;
+}
+
+/* === Icons & color dots ================================================
+   One hidden <svg class="configurator__sprite"> per page carries the
+   <symbol> definitions; buttons reference them with <use>. Stroke styling
+   inherits through the use shadow tree, so icons follow currentColor and
+   darken with the text when .is-selected is applied. */
+.configurator__sprite {
+	display: none;
+}
+
+.configurator__icon {
+	width: 16px;
+	height: 16px;
+	flex: none;
+	fill: none;
+	stroke: currentColor;
+	stroke-width: 1.7;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+}
+
+.configurator__dot {
+	width: 14px;
+	height: 14px;
+	flex: none;
+	border-radius: 50%;
+	box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.18);
+}
+
+.configurator__dot--brown { background-color: #8B4513; }
+.configurator__dot--beige { background-color: #D4C5A0; }
+.configurator__dot--red { background-color: #C0392B; }
+.configurator__dot--green { background-color: #27AE60; }
+.configurator__dot--yellow { background-color: #F1C40F; }
+.configurator__dot--orange { background-color: #E8923A; }
+.configurator__dot--purple { background-color: #8E44AD; }
+.configurator__dot--white { background-color: #FFFFFF; }
+.configurator__dot--light-yellow { background-color: #F5E6A8; }
+.configurator__dot--amber { background-color: #D68A3E; }
+.configurator__dot--light-color { background-color: #EFE6D8; }
+.configurator__dot--suspension { background-color: #F1EEE8; }
+.configurator__dot--multi {
+	background-color: transparent;
+	background-image: conic-gradient(#C0392B, #F1C40F, #27AE60, #C0392B);
+}
+
+.configurator__item:hover {
+	border-color: var(--wp--preset--color--accent);
+}
+
+.configurator__item:focus-visible {
+	outline: 2px solid var(--wp--preset--color--accent);
+	outline-offset: 2px;
+}
+
+.configurator__item.is-selected {
+	border-color: var(--wp--preset--color--cta);
+	background-color: var(--wp--preset--color--cta-selected-bg);
+	color: var(--wp--preset--color--primary);
+	font-weight: 600;
+}
+
+/* === Summary card: sticky on desktop === */.configurator__summary {
+	position: sticky;
+	top: 100px;
+	padding: 24px;
+	background-color: var(--wp--preset--color--card-white);
+	border: 1px solid var(--wp--preset--color--border-light);
+	border-radius: 8px;
+	box-shadow: 0 8px 24px rgba(27, 77, 62, 0.08);
+}
+
+.configurator__summary h3 {
+	margin: 0 0 12px;
+	font-size: 20px;
+	color: var(--wp--preset--color--primary);
+}
+
+/* === Desktop: make the sticky actually stick ===
+   The card's position:sticky (above) only works inside a TALL containing
+   block. The flex container is align-items:flex-start, so by default the
+   summary column collapses to the card's own height and there is no room
+   to stick — measured cardTop went -557px by the time Shelf Life scrolled
+   into view. Stretching the column to the configurator's full height gives
+   sticky its travel; sticky is still bounded by the column, so the card
+   releases at the bottom of the configurator (after Shelf Life) and never
+   covers the FAQ or later sections. */
+@media (min-width: 1024px) {
+	.configurator__summary-col {
+		align-self: stretch;
+	}
+
+	.configurator__summary {
+		top: 100px; /* sticky header 80px + 20px breathing room */
+		max-height: calc(100vh - 120px);
+		overflow-y: auto;
+	}
+}
+
+.configurator__summary-row {
+	display: flex;
+	align-items: baseline;
+	justify-content: space-between;
+	gap: 16px;
+	padding: 9px 0;
+	border-bottom: 1px solid var(--wp--preset--color--border-light);
+}
+
+.configurator__summary-row:last-of-type {
+	border-bottom: none;
+}
+
+.configurator__summary-label {
+	flex-shrink: 0;
+	font-size: 14px;
+	color: var(--wp--preset--color--text-secondary);
+}
+
+.configurator__summary-value {
+	font-size: 14px;
+	font-weight: 700;
+	color: var(--wp--preset--color--primary);
+	text-align: right;
+	overflow-wrap: anywhere;
+}
+
+/* === Submit button inside summary card === */
+.configurator__submit {
+	display: block;
+	width: 100%;
+	margin-top: 18px;
+	padding: 14px 20px;
+	background-color: var(--wp--preset--color--cta);
+	border: none;
+	border-radius: 6px;
+	font-family: inherit;
+	font-size: 15px;
+	font-weight: 600;
+	color: var(--wp--preset--color--card-white);
+	cursor: pointer;
+	transition: background-color 0.15s ease;
+}
+
+.configurator__submit:hover {
+	background-color: var(--wp--preset--color--cta-hover);
+}
+
+/* === Mobile: stack, summary not sticky === */
+@media (max-width: 768px) {
+	.configurator {
+		flex-direction: column;
+		gap: 28px;
+	}
+
+	.configurator__options,
+	.configurator__summary-col {
+		flex: 1 1 auto;
+		width: 100%;
+	}
+
+	.configurator__summary {
+		position: static;
+	}
+
+	.configurator__group {
+		flex-direction: column;
+		gap: 10px;
+	}
+
+	.configurator__label {
+		width: auto;
+	}
+
+	.configurator__group h4 {
+		margin: 0;
+	}
+}
+
+/* === Summary extras: progress / reset / copy / note === */
+.configurator__progress {
+	margin: -6px 0 10px;
+	font-size: 13px;
+	color: var(--wp--preset--color--text-secondary);
+	font-variant-numeric: tabular-nums;
+}
+.configurator__actions {
+	display: flex;
+	gap: 8px;
+	margin-top: 10px;
+}
+.configurator__reset {
+	flex: 1;
+	padding: 11px 16px;
+	background-color: var(--wp--preset--color--card-white);
+	border: 1px solid var(--wp--preset--color--border-medium);
+	border-radius: 6px;
+	font-family: inherit;
+	font-size: 14px;
+	font-weight: 600;
+	color: var(--wp--preset--color--text-primary);
+	cursor: pointer;
+	transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+.configurator__reset:hover {
+	border-color: var(--wp--preset--color--accent);
+	background-color: var(--wp--preset--color--bg-light);
+}
+.configurator__copy {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	padding: 11px 16px;
+	background-color: var(--wp--preset--color--card-white);
+	border: 1px solid var(--wp--preset--color--border-medium);
+	border-radius: 6px;
+	font-family: inherit;
+	font-size: 14px;
+	font-weight: 600;
+	color: var(--wp--preset--color--text-primary);
+	cursor: pointer;
+	transition: border-color 0.15s ease, color 0.15s ease;
+}
+.configurator__copy::before {
+	content: "";
+	width: 14px;
+	height: 14px;
+	border: 1.6px solid currentColor;
+	border-radius: 3px;
+	background:
+		linear-gradient(to right, transparent -2px, var(--wp--preset--color--card-white) 2px) top left / 50% 50% no-repeat,
+		linear-gradient(to right, transparent -2px, var(--wp--preset--color--card-white) 2px) bottom right / 50% 50% no-repeat;
+}
+.configurator__copy:hover {
+	border-color: var(--wp--preset--color--accent);
+}
+.configurator__copy.is-copied {
+	border-color: var(--wp--preset--color--accent);
+	color: var(--wp--preset--color--accent);
+}
+.configurator__note {
+	margin: 12px 0 0;
+	font-size: 12px;
+	line-height: 1.55;
+	color: var(--wp--preset--color--text-secondary);
+}
+
+/* === Mobile/tablet action bar: Submit stays reachable === */
+.configurator__mobilebar {
+	display: none;
+}
+
+/* === Tablet and below: stack the configurator (65/35 split is too tight
+   under 1024px) and keep a Submit bar pinned to the viewport bottom while
+   the visitor scrolls the options. Sticky is constrained to .configurator,
+   so the bar releases before the FAQ and never covers later sections. === */
+@media (max-width: 1023px) {
+	.configurator {
+		flex-direction: column;
+		gap: 28px;
+	}
+
+	.configurator__options,
+	.configurator__summary-col {
+		flex: 1 1 auto;
+		width: 100%;
+	}
+
+	.configurator__summary {
+		position: static;
+	}
+
+	.configurator__mobilebar {
+		display: block;
+		position: sticky;
+		bottom: 0;
+		z-index: 6;
+		padding: 10px 0;
+		background-color: var(--wp--preset--color--card-white);
+		border-top: 1px solid var(--wp--preset--color--border-light);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.configurator__item,
+	.configurator__reset,
+	.configurator__copy,
+	.configurator__submit {
+		transition: none;
+	}
+}
+
+/* === Phone: the summary rides the bottom edge of the screen ================
+   The option list runs 1,100–1,800px tall while the summary card sits after
+   it, so a visitor picks six or eight options without ever seeing what they
+   picked. Sticking the summary COLUMN — whose containing block is the whole,
+   tall .configurator rather than the card's own height — pins the card to the
+   bottom of the viewport for the entire option list and releases it where the
+   card naturally ends.
+
+   The card is compacted so it leaves the options readable, and capped so a
+   short phone can still scroll its rows; the Submit inside it stays pinned to
+   the card's own bottom edge, so it is always one tap away.
+
+   The old .configurator__mobilebar repeated the same Submit button at the same
+   bottom edge; with the card pinned it would sit underneath it, so it is
+   dropped on phones only. Tablet (769–1023px) keeps it.
+
+   Reset / Copy render 41px tall (11px padding around a normal line box); a
+   phone needs 44px touch targets, so they get a box-sizing-aware min-height. */
+@media (max-width: 768px) {
+	.configurator__summary-col {
+		position: sticky;
+		bottom: 0;
+		z-index: 6;
+	}
+
+	.configurator__summary {
+		max-height: 50vh;
+		overflow-y: auto;
+		overscroll-behavior: contain;
+		-webkit-overflow-scrolling: touch;
+		padding: 14px 16px;
+		box-shadow: 0 -6px 18px rgba(27, 77, 62, 0.12);
+	}
+
+	.configurator__summary h3 {
+		margin: 0 0 4px;
+		font-size: 15px;
+	}
+
+	.configurator__progress {
+		margin: 0 0 8px;
+		font-size: 12px;
+	}
+
+	.configurator__summary-row {
+		padding: 3px 0;
+		gap: 10px;
+	}
+
+	.configurator__summary-label,
+	.configurator__summary-value {
+		font-size: 12px;
+	}
+
+	.configurator__submit {
+		margin-top: 10px;
+		padding: 12px 16px;
+		min-height: 44px;
+		box-sizing: border-box;
+		position: sticky;
+		bottom: 0;
+	}
+
+	.configurator__reset,
+	.configurator__copy {
+		box-sizing: border-box;
+		min-height: 44px;
+	}
+
+	.configurator__reset {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.configurator__note {
+		margin-top: 8px;
+		font-size: 11px;
+		line-height: 1.45;
+	}
+
+	.configurator__mobilebar {
+		display: none;
+	}
+}
+
+/* === Mobile summary bar + bottom drawer ====================================
+   Phones (<768px): the full summary card is replaced by a fixed 60px bar
+   (progress + Submit). Tapping the bar opens a bottom drawer holding the
+   complete summary plus Reset / Copy / Submit. The drawer content is cloned
+   from the summary rows by configurator.js, so no summary markup is
+   duplicated. Tablet (768-1023px) keeps the previous behaviour: summary in
+   flow + the sticky .configurator__mobilebar Submit strip. */
+.configurator__bar,
+.configurator__drawer {
+	display: none;
+}
+
+@media (max-width: 767px) {
+	body:has(.configurator__bar) {
+		padding-bottom: 60px; /* keep footer content clear of the fixed bar */
+	}
+
+	.configurator__summary {
+		display: none; /* replaced by bar + drawer */
+	}
+
+	.configurator__bar {
+		display: flex;
+		align-items: center;
+		gap: 12px;
+		position: fixed;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		height: 60px;
+		padding: 0 16px;
+		background-color: var(--wp--preset--color--card-white);
+		border-top: 1px solid var(--wp--preset--color--border-light);
+		box-shadow: 0 -4px 12px rgba(27, 77, 62, 0.08);
+		z-index: 100;
+	}
+
+	.configurator__bar-trigger {
+		flex: 1;
+		display: flex;
+		align-items: center;
+		padding: 8px 0;
+		background: none;
+		border: none;
+		cursor: pointer;
+		text-align: left;
+		font-size: 14px;
+		color: var(--wp--preset--color--primary);
+	}
+
+	.configurator__bar-dot {
+		width: 8px;
+		height: 8px;
+		margin-right: 8px;
+		border-radius: 50%;
+		background-color: var(--wp--preset--color--accent);
+	}
+
+	.configurator__bar .configurator__submit,
+	.configurator__drawer-actions .configurator__submit {
+		margin-top: 0;
+		position: static;
+	}
+
+	.configurator__bar-submit {
+		padding: 10px 20px;
+		min-height: 44px;
+		box-sizing: border-box;
+		border-radius: 6px;
+		font-size: 14px;
+		font-weight: 600;
+	}
+
+	.configurator__drawer {
+		display: flex;
+		flex-direction: column;
+		position: fixed;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		max-height: 70vh;
+		background-color: var(--wp--preset--color--card-white);
+		border-radius: 16px 16px 0 0;
+		box-shadow: 0 -8px 32px rgba(27, 77, 62, 0.15);
+		z-index: 101;
+		transform: translateY(100%);
+		transition: transform 0.3s ease;
+	}
+
+	.configurator__drawer.is-open {
+		transform: translateY(0);
+	}
+
+	.configurator__drawer[hidden] {
+		display: none;
+	}
+
+	.configurator__drawer-header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		padding: 16px 20px;
+		border-bottom: 1px solid var(--wp--preset--color--border-light);
+	}
+
+	.configurator__drawer-header h3 {
+		margin: 0;
+		font-size: 17px;
+		color: var(--wp--preset--color--primary);
+	}
+
+	.configurator__drawer-close {
+		background: none;
+		border: none;
+		font-size: 24px;
+		line-height: 1;
+		padding: 4px 8px;
+		cursor: pointer;
+		color: var(--wp--preset--color--text-secondary);
+	}
+
+	.configurator__drawer-content {
+		flex: 1;
+		overflow-y: auto;
+		overscroll-behavior: contain;
+		-webkit-overflow-scrolling: touch;
+		padding: 8px 20px;
+	}
+
+	.configurator__drawer-content .configurator__summary-row {
+		padding: 6px 0;
+	}
+
+	.configurator__drawer-actions {
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+		padding: 12px 20px 16px;
+		border-top: 1px solid var(--wp--preset--color--border-light);
+	}
+
+	.configurator__drawer-actions .configurator__submit {
+		min-height: 44px;
+		box-sizing: border-box;
+	}
+
+	.configurator__drawer-reset,
+	.configurator__drawer-copy {
+		min-height: 44px;
+		box-sizing: border-box;
+		padding: 10px 16px;
+		background-color: var(--wp--preset--color--card-white);
+		border: 1px solid var(--wp--preset--color--border-light);
+		border-radius: 6px;
+		font-size: 14px;
+		font-weight: 600;
+		color: var(--wp--preset--color--primary);
+		cursor: pointer;
+	}
+}

@@ -1,0 +1,126 @@
+{
+ "liquids-1440": {
+  "heroH": 328,
+  "heroW": 1440,
+  "pt": "48px",
+  "pb": "48px",
+  "h1": "Private Label Liquid Pet Supplements",
+  "h1H": 57,
+  "h1Align": "center",
+  "sub": "8 dosage forms · FDA, cGMP, ISO 9001, FSSC 22000, HACCP, BRC · Flexible MOQ · Export to 30+ countries",
+  "subH": 29,
+  "buttons": [
+   {
+    "text": "Browse Standard Formulas",
+    "href": "#formulas",
+    "bg": "rgb(181, 78, 15)",
+    "style": "wp-block-button__link has-card-white-color has-cta-background-color has-text-color has-background wp-element-button"
+   },
+   {
+    "text": "Build Custom Formula",
+    "href": "#configurator",
+    "bg": "rgba(0, 0, 0, 0)",
+    "style": "wp-block-button__link has-card-white-color has-text-color wp-element-button"
+   }
+  ],
+  "sliderNodes": 0,
+  "heroCols": 0,
+  "sliderScript": 0,
+  "reqQuote": null,
+  "overflowX": 0,
+  "schema": "{\"@context\":\"https://schema.org\",\"@type\":\"FAQPage\",\"mainEntity\":[{\"@type\":\"Question\",\"name\":\"Liquid Joint SupportJoint care\",\"acceptedAnswer\":{\"@type\":\"Answer\",\"text\":\"Ingredients\\n    Glucosamine Sulfate, MSM, Chondroitin Sulfate, Vitamin C, L-Proline, Grape Seed Extract, CoQ10, Hyaluronic Acid\\n    Guaranteed Analysis\\n    Glucosamine ≥1600mg/oz, MSM ≥1500mg/oz, Chondroitin ≥1200mg/oz\\n    Standard Specs\\n    8oz/16oz/32oz pump bottle · 24 months shelf life\\n    Reference this formula →\"}},{\"@type\":\"Question\",\"name\":\"Liquid Skin &amp; CoatSkin &amp; coat\",\"acceptedAnswer\":{\"@type\":\"Answer\",\"text\":\"Ingredients\\n    Cod Liver Oil, Pollock Oil, Mixed Tocopherols\\n    Guaranteed Analysis\\n    Omega-3 ≥30%, EPA ≥10%, DHA ≥12%\\n    Standard Specs\\n    8oz/16oz/32oz pump bottle · 24 months shelf life\\n    Reference this formula →\"}},{\"@type\":\"Question\",\"name\":\"What is the MOQ for liquids?\",\"acceptedAnswer\":{\"@type\":\"Answer\",\"text\":\"Standard formulas start from 500 units. New brands can start with small trial orders.\"}},{\"@type\":\"Question\",\"name\":\"Can you customize bottle size and serving size?\",\"acceptedAnswer\":{\"@type\":\"Answer\",\"text\":\"Yes. We support custom bottle sizes and serving sizes.\"}},{\"@type\":\"Question\",\"name\":\"What is the difference between liquids and drops?\",\"acceptedAnswer\":{\"@type\":\"Answer\",\"text\":\"Liquids are dosed in milliliters; drops are concentrated and dosed in single drops. We produce both.\"}}]}"
+ },
+ "soft-chews-1440": {
+  "heroH": 328,
+  "heroW": 1440,
+  "pt": "48px",
+  "pb": "48px",
+  "h1": "Private Label Soft Chews for Dogs & Cats",
+  "h1H": 57,
+  "h1Align": "center",
+  "sub": "8 dosage forms · FDA, cGMP, ISO 9001, FSSC 22000, HACCP, BRC · Flexible MOQ · Export to 30+ countries",
+  "subH": 29,
+  "buttons": [
+   {
+    "text": "Browse Standard Formulas",
+    "href": "#formulas",
+    "bg": "rgb(181, 78, 15)",
+    "style": "wp-block-button__link has-card-white-color has-cta-background-color has-text-color has-background wp-element-button"
+   },
+   {
+    "text": "Build Custom Formula",
+    "href": "#configurator",
+    "bg": "rgba(0, 0, 0, 0)",
+    "style": "wp-block-button__link has-card-white-color has-text-color wp-element-button"
+   }
+  ],
+  "sliderNodes": 0,
+  "heroCols": 0,
+  "sliderScript": 0,
+  "reqQuote": null,
+  "overflowX": 0,
+  "schema": "{\"@context\":\"https://schema.org\",\"@type\":\"FAQPage\",\"mainEntity\":[{\"@type\":\"Question\",\"name\":\"Joint Support Soft ChewsJoint care\",\"acceptedAnswer\":{\"@type\":\"Answer\",\"text\":\"Ingredients\\n    Glucosamine HCl, Chondroitin Sulfate, MSM, Green-lipped Mussel, Chicken Flavor\\n    Guaranteed Analysis\\n    Glucosamine ≥500mg/chew, Chondroitin ≥200mg/chew, MSM ≥100mg/chew\\n    Standard Specs\\n    2g/piece · 60/90/120 per bottle · 18 months shelf life\\n    Reference this formula →\"}},{\"@type\":\"Question\",\"name\":\"Calming Soft ChewsCalming\",\"acceptedAnswer\":{\"@type\":\"Answer\",\"text\":\"Ingredients\\n    L-Tryptophan, Kelp, Ginger Root, Valerian Root, Chamomile, Thiamine\\n    Guaranteed Analysis\\n    L-Tryptophan ≥120mg/chew, Chamomile ≥20mg/chew\\n    Standard Specs\\n    2g/piece · 60/90/120 per bottle · 18 months shelf life\\n    Reference this formula →\"}},{\"@type\":\"Question\",\"name\":\"Digestive Soft ChewsDigestive care\",\"acceptedAnswer\":{\"@type\":\"Answer\",\"text\":\"Ingredients\\n    Alpha-Amylase, Lipase, Cellulase, Protease, Bacillus coagulans, FOS\\n    Guaranteed Analysis\\n    Total microorganisms ≥1 billion CFU/chew\\n    Standard Specs\\n    2g/piece · 60/90/120 per bottle · 18 months shelf life\\n    Reference this formula →\"}},{\"@type\":\"Question\",\"name\":\"Skin &amp; Coat Soft ChewsSkin &amp; coat\",\"acceptedAnswer\":{\"@type\":\"Answer\",\"text\":\"Ingredients\\n    Marine Fish Oil, Safflower Oil, Coconut Oil, Biotin, Vitamin C, Vitamin E, Kelp\\n    Guaranteed Analysis\\n    Omega-3 ≥50mg/chew, Biotin ≥50mcg/chew\\n    Standard Specs\\n    2g/piece · 60/90/120 per bottle · 18 months shelf life\\n    Reference this formula →\"}},{\"@type\":\"Question\",\"name\":\"What is the MOQ for soft chews?\",\"acceptedAnswer\":{\"@type\":\"Answer\",\"text\":\"Standard formulas start from 500–1,000 units. New brands can start with small trial orders.\"}},{\"@type\":\"Question\",\"name\":\"Can you customize shape, color, flavor, and weight?\",\"acceptedAnswer\":{\"@type\":\"Answer\",\"text\":\"Yes. We support custom shapes, colors, flavors, functional ingredients, and weight per piece.\"}}]}"
+ },
+ "liquids-375": {
+  "heroH": 460,
+  "heroW": 375,
+  "pt": "40px",
+  "pb": "40px",
+  "h1": "Private Label Liquid Pet Supplements",
+  "h1H": 79,
+  "h1Align": "center",
+  "sub": "8 dosage forms · FDA, cGMP, ISO 9001, FSSC 22000, HACCP, BRC · Flexible MOQ · Export to 30+ countries",
+  "subH": 84,
+  "buttons": [
+   {
+    "text": "Browse Standard Formulas",
+    "href": "#formulas",
+    "bg": "rgb(181, 78, 15)",
+    "style": "wp-block-button__link has-card-white-color has-cta-background-color has-text-color has-background wp-element-button"
+   },
+   {
+    "text": "Build Custom Formula",
+    "href": "#configurator",
+    "bg": "rgba(0, 0, 0, 0)",
+    "style": "wp-block-button__link has-card-white-color has-text-color wp-element-button"
+   }
+  ],
+  "sliderNodes": 0,
+  "heroCols": 0,
+  "sliderScript": 0,
+  "reqQuote": null,
+  "overflowX": 0,
+  "schema": "{\"@context\":\"https://schema.org\",\"@type\":\"FAQPage\",\"mainEntity\":[{\"@type\":\"Question\",\"name\":\"Liquid Joint SupportJoint care\",\"acceptedAnswer\":{\"@type\":\"Answer\",\"text\":\"Ingredients\\n    Glucosamine Sulfate, MSM, Chondroitin Sulfate, Vitamin C, L-Proline, Grape Seed Extract, CoQ10, Hyaluronic Acid\\n    Guaranteed Analysis\\n    Glucosamine ≥1600mg/oz, MSM ≥1500mg/oz, Chondroitin ≥1200mg/oz\\n    Standard Specs\\n    8oz/16oz/32oz pump bottle · 24 months shelf life\\n    Reference this formula →\"}},{\"@type\":\"Question\",\"name\":\"Liquid Skin &amp; CoatSkin &amp; coat\",\"acceptedAnswer\":{\"@type\":\"Answer\",\"text\":\"Ingredients\\n    Cod Liver Oil, Pollock Oil, Mixed Tocopherols\\n    Guaranteed Analysis\\n    Omega-3 ≥30%, EPA ≥10%, DHA ≥12%\\n    Standard Specs\\n    8oz/16oz/32oz pump bottle · 24 months shelf life\\n    Reference this formula →\"}},{\"@type\":\"Question\",\"name\":\"What is the MOQ for liquids?\",\"acceptedAnswer\":{\"@type\":\"Answer\",\"text\":\"Standard formulas start from 500 units. New brands can start with small trial orders.\"}},{\"@type\":\"Question\",\"name\":\"Can you customize bottle size and serving size?\",\"acceptedAnswer\":{\"@type\":\"Answer\",\"text\":\"Yes. We support custom bottle sizes and serving sizes.\"}},{\"@type\":\"Question\",\"name\":\"What is the difference between liquids and drops?\",\"acceptedAnswer\":{\"@type\":\"Answer\",\"text\":\"Liquids are dosed in milliliters; drops are concentrated and dosed in single drops. We produce both.\"}}]}"
+ },
+ "soft-chews-375": {
+  "heroH": 499,
+  "heroW": 375,
+  "pt": "40px",
+  "pb": "40px",
+  "h1": "Private Label Soft Chews for Dogs & Cats",
+  "h1H": 119,
+  "h1Align": "center",
+  "sub": "8 dosage forms · FDA, cGMP, ISO 9001, FSSC 22000, HACCP, BRC · Flexible MOQ · Export to 30+ countries",
+  "subH": 84,
+  "buttons": [
+   {
+    "text": "Browse Standard Formulas",
+    "href": "#formulas",
+    "bg": "rgb(181, 78, 15)",
+    "style": "wp-block-button__link has-card-white-color has-cta-background-color has-text-color has-background wp-element-button"
+   },
+   {
+    "text": "Build Custom Formula",
+    "href": "#configurator",
+    "bg": "rgba(0, 0, 0, 0)",
+    "style": "wp-block-button__link has-card-white-color has-text-color wp-element-button"
+   }
+  ],
+  "sliderNodes": 0,
+  "heroCols": 0,
+  "sliderScript": 0,
+  "reqQuote": null,
+  "overflowX": 0,
+  "schema": "{\"@context\":\"https://schema.org\",\"@type\":\"FAQPage\",\"mainEntity\":[{\"@type\":\"Question\",\"name\":\"Joint Support Soft ChewsJoint care\",\"acceptedAnswer\":{\"@type\":\"Answer\",\"text\":\"Ingredients\\n    Glucosamine HCl, Chondroitin Sulfate, MSM, Green-lipped Mussel, Chicken Flavor\\n    Guaranteed Analysis\\n    Glucosamine ≥500mg/chew, Chondroitin ≥200mg/chew, MSM ≥100mg/chew\\n    Standard Specs\\n    2g/piece · 60/90/120 per bottle · 18 months shelf life\\n    Reference this formula →\"}},{\"@type\":\"Question\",\"name\":\"Calming Soft ChewsCalming\",\"acceptedAnswer\":{\"@type\":\"Answer\",\"text\":\"Ingredients\\n    L-Tryptophan, Kelp, Ginger Root, Valerian Root, Chamomile, Thiamine\\n    Guaranteed Analysis\\n    L-Tryptophan ≥120mg/chew, Chamomile ≥20mg/chew\\n    Standard Specs\\n    2g/piece · 60/90/120 per bottle · 18 months shelf life\\n    Reference this formula →\"}},{\"@type\":\"Question\",\"name\":\"Digestive Soft ChewsDigestive care\",\"acceptedAnswer\":{\"@type\":\"Answer\",\"text\":\"Ingredients\\n    Alpha-Amylase, Lipase, Cellulase, Protease, Bacillus coagulans, FOS\\n    Guaranteed Analysis\\n    Total microorganisms ≥1 billion CFU/chew\\n    Standard Specs\\n    2g/piece · 60/90/120 per bottle · 18 months shelf life\\n    Reference this formula →\"}},{\"@type\":\"Question\",\"name\":\"Skin &amp; Coat Soft ChewsSkin &amp; coat\",\"acceptedAnswer\":{\"@type\":\"Answer\",\"text\":\"Ingredients\\n    Marine Fish Oil, Safflower Oil, Coconut Oil, Biotin, Vitamin C, Vitamin E, Kelp\\n    Guaranteed Analysis\\n    Omega-3 ≥50mg/chew, Biotin ≥50mcg/chew\\n    Standard Specs\\n    2g/piece · 60/90/120 per bottle · 18 months shelf life\\n    Reference this formula →\"}},{\"@type\":\"Question\",\"name\":\"What is the MOQ for soft chews?\",\"acceptedAnswer\":{\"@type\":\"Answer\",\"text\":\"Standard formulas start from 500–1,000 units. New brands can start with small trial orders.\"}},{\"@type\":\"Question\",\"name\":\"Can you customize shape, color, flavor, and weight?\",\"acceptedAnswer\":{\"@type\":\"Answer\",\"text\":\"Yes. We support custom shapes, colors, flavors, functional ingredients, and weight per piece.\"}}]}"
+ }
+}

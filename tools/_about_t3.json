@@ -1,0 +1,162 @@
+{
+ "375": {
+  "before": {
+   "cover": {
+    "w": 299,
+    "h": 168.2,
+    "ratio": 1.778,
+    "padding": "0px",
+    "minHeight": "0px",
+    "display": "block"
+   },
+   "poster": {
+    "w": 299,
+    "h": 168.2,
+    "natW": 1920,
+    "natH": 1080,
+    "fit": "cover",
+    "loading": "eager",
+    "fp": "high",
+    "complete": true,
+    "fills": true
+   },
+   "button": {
+    "w": 299,
+    "h": 168.2,
+    "type": "button",
+    "label": "Play the SINO FRESH company video",
+    "id": "REPLACE_ME"
+   },
+   "iframes": 0,
+   "playing": false
+  },
+  "perf": {
+   "lcp": [
+    {
+     "t": 100,
+     "size": 50213,
+     "tag": "IMG."
+    }
+   ],
+   "cls": 0.0215
+  },
+  "ytRequestsBeforeClick": 0,
+  "placeholderClick": {
+   "iframes": 0,
+   "playing": false
+  },
+  "ytAfterPlaceholder": 0,
+  "boxBefore": {
+   "t": 431.1,
+   "w": 299,
+   "h": 168.2
+  },
+  "afterClick": {
+   "coverMoved": {
+    "t": 431.1,
+    "w": 299,
+    "h": 168.2
+   },
+   "iframe": {
+    "src": "https://www.youtube-nocookie.com/embed/dqT-UlYlg1s?autoplay=1&rel=0&playsinline=1",
+    "title": "SINO FRESH company introduction video - pet supplement factory tour",
+    "allow": "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share",
+    "fs": true,
+    "w": 299,
+    "h": 168
+   },
+   "played": true,
+   "posterVisible": "none",
+   "btnVisible": "none",
+   "cls": 0.0215
+  },
+  "keyboard": {
+   "focusedTag": "sf-video__play",
+   "iframes": 1,
+   "playing": true
+  },
+  "warnings": [
+   "[sinofresh] .sf-video__play needs data-video-id (the 11-character YouTube ID); until then the player stays off."
+  ]
+ },
+ "1440": {
+  "before": {
+   "cover": {
+    "w": 588,
+    "h": 330.8,
+    "ratio": 1.778,
+    "padding": "0px",
+    "minHeight": "0px",
+    "display": "block"
+   },
+   "poster": {
+    "w": 588,
+    "h": 330.8,
+    "natW": 1920,
+    "natH": 1080,
+    "fit": "cover",
+    "loading": "eager",
+    "fp": "high",
+    "complete": true,
+    "fills": true
+   },
+   "button": {
+    "w": 588,
+    "h": 330.8,
+    "type": "button",
+    "label": "Play the SINO FRESH company video",
+    "id": "REPLACE_ME"
+   },
+   "iframes": 0,
+   "playing": false
+  },
+  "perf": {
+   "lcp": [
+    {
+     "t": 176,
+     "size": 194453,
+     "tag": "IMG."
+    }
+   ],
+   "cls": 0.0057
+  },
+  "ytRequestsBeforeClick": 0,
+  "placeholderClick": {
+   "iframes": 0,
+   "playing": false
+  },
+  "ytAfterPlaceholder": 0,
+  "boxBefore": {
+   "t": 566.1,
+   "w": 588,
+   "h": 330.8
+  },
+  "afterClick": {
+   "coverMoved": {
+    "t": 566.1,
+    "w": 588,
+    "h": 330.8
+   },
+   "iframe": {
+    "src": "https://www.youtube-nocookie.com/embed/dqT-UlYlg1s?autoplay=1&rel=0&playsinline=1",
+    "title": "SINO FRESH company introduction video - pet supplement factory tour",
+    "allow": "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share",
+    "fs": true,
+    "w": 588,
+    "h": 331
+   },
+   "played": true,
+   "posterVisible": "none",
+   "btnVisible": "none",
+   "cls": 0.0057
+  },
+  "keyboard": {
+   "focusedTag": "sf-video__play",
+   "iframes": 1,
+   "playing": true
+  },
+  "warnings": [
+   "[sinofresh] .sf-video__play needs data-video-id (the 11-character YouTube ID); until then the player stays off."
+  ]
+ }
+}

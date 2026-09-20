@@ -1,0 +1,1735 @@
+<!-- wp:template-part {"slug":"header","tagName":"header"} /-->
+
+<!-- wp:group {"tagName":"section","backgroundColor":"primary","textColor":"card-white","layout":{"type":"constrained"},"style":{"spacing":{"padding":{"top":"56px","bottom":"56px"}}}} -->
+<section class="wp-block-group has-card-white-color has-primary-background-color has-text-color has-background" style="padding-top:56px;padding-bottom:56px">
+	<!-- wp:columns {"verticalAlignment":"center","className":"sf-hero"} -->
+	<div class="wp-block-columns are-vertically-aligned-center sf-hero">
+		<!-- wp:column {"verticalAlignment":"center","width":"58%"} -->
+		<div class="wp-block-column is-vertically-aligned-center" style="flex-basis:58%">
+			<!-- wp:paragraph {"className":"sf-eyebrow"} -->
+			<p class="sf-eyebrow">OEM / ODM &middot; FDA registered &middot; cGMP</p>
+			<!-- /wp:paragraph -->
+			<!-- wp:heading {"level":1,"textColor":"card-white"} -->
+	<h1 class="wp-block-heading has-card-white-color has-text-color">Your Private Label Pet Supplement Partner in China</h1>
+	<!-- /wp:heading -->
+	<!-- wp:paragraph -->
+	<p>OEM/ODM manufacturer for 8 dosage forms. FDA registered, cGMP, ISO 9001, ISO 22000. Exporting to 30+ countries.</p>
+	<!-- /wp:paragraph -->
+	<!-- wp:buttons -->
+	<div class="wp-block-buttons">
+		<!-- wp:button -->
+		<div class="wp-block-button"><a class="wp-block-button__link wp-element-button">Request a Quote</a></div>
+		<!-- /wp:button -->
+	</div>
+	<!-- /wp:buttons -->
+
+<!-- /wp:image -->
+		</div>
+		<!-- /wp:column -->
+		<!-- wp:column {"verticalAlignment":"center","width":"42%"} -->
+		<div class="wp-block-column is-vertically-aligned-center" style="flex-basis:42%">
+			<!-- wp:image {"className":"sf-hero-media","sizeSlug":"full"} -->
+			<figure class="wp-block-image sf-hero-media size-full"><img src="/wp-content/uploads/2026/09/hero-facility.png" alt="SINO FRESH GMP cleanroom production facility"/></figure>
+			<!-- /wp:image -->
+		</div>
+		<!-- /wp:column -->
+	</div>
+	<!-- /wp:columns -->
+</section>
+<!-- /wp:group -->
+
+<!-- wp:group {"tagName":"section","backgroundColor":"bg-light","layout":{"type":"constrained"},"style":{"spacing":{"padding":{"top":"var:preset|spacing|100","bottom":"var:preset|spacing|100"}}}} -->
+<section class="wp-block-group has-bg-light-background-color has-background" style="padding-top:48px;padding-bottom:48px">
+	<!-- wp:paragraph {"className":"sf-eyebrow"} -->
+	<p class="sf-eyebrow">Facility &amp; capacity</p>
+	<!-- /wp:paragraph -->
+	<!-- wp:heading -->
+	<h2 class="wp-block-heading">Factory at a Glance</h2>
+	<!-- /wp:heading -->
+
+	<!-- wp:paragraph {"textColor":"text-secondary"} -->
+	<p class="has-text-secondary-color has-text-color">15,000㎡ of production capacity, 10,000-class cleanroom, and full regulatory support — built for global brand owners.</p>
+	<!-- /wp:paragraph -->
+
+	<!-- wp:columns {"className":"sf-stats","style":{"spacing":{"margin":{"top":"24px"}}}} -->
+	<div class="wp-block-columns sf-stats" style="margin-top:24px">
+		<!-- wp:column -->
+		<div class="wp-block-column">
+			<!-- wp:group {"layout":{"type":"constrained"},"style":{"spacing":{"padding":{"top":"18px","bottom":"18px","left":"20px","right":"20px"}}}} -->
+			<div class="wp-block-group" style="padding-top:18px;padding-right:20px;padding-bottom:18px;padding-left:20px">
+				<!-- wp:paragraph {"className":"sf-num","style":{"typography":{"fontSize":"32px","fontWeight":"700"}},"textColor":"text-primary"} -->
+				<p class="sf-num has-text-primary-color has-text-color" style="font-size:32px;font-weight:700">15,000㎡</p>
+				<!-- /wp:paragraph -->
+				<!-- wp:paragraph {"style":{"typography":{"fontSize":"15px","fontWeight":"600"}},"textColor":"primary"} -->
+				<p class="has-primary-color has-text-color" style="font-size:15px;font-weight:600">Factory</p>
+				<!-- /wp:paragraph -->
+				<!-- wp:paragraph {"style":{"typography":{"fontSize":"13px"}},"textColor":"text-secondary"} -->
+				<p class="has-text-secondary-color has-text-color" style="font-size:13px">Production facility</p>
+				<!-- /wp:paragraph -->
+			</div>
+			<!-- /wp:group -->
+		</div>
+		<!-- /wp:column -->
+		<!-- wp:column -->
+		<div class="wp-block-column">
+			<!-- wp:group {"layout":{"type":"constrained"},"style":{"spacing":{"padding":{"top":"18px","bottom":"18px","left":"20px","right":"20px"}}}} -->
+			<div class="wp-block-group" style="padding-top:18px;padding-right:20px;padding-bottom:18px;padding-left:20px">
+				<!-- wp:paragraph {"className":"sf-num","style":{"typography":{"fontSize":"32px","fontWeight":"700"}},"textColor":"text-primary"} -->
+				<p class="sf-num has-text-primary-color has-text-color" style="font-size:32px;font-weight:700">6,000㎡</p>
+				<!-- /wp:paragraph -->
+				<!-- wp:paragraph {"style":{"typography":{"fontSize":"15px","fontWeight":"600"}},"textColor":"primary"} -->
+				<p class="has-primary-color has-text-color" style="font-size:15px;font-weight:600">Warehouse</p>
+				<!-- /wp:paragraph -->
+				<!-- wp:paragraph {"style":{"typography":{"fontSize":"13px"}},"textColor":"text-secondary"} -->
+				<p class="has-text-secondary-color has-text-color" style="font-size:13px">Storage capacity</p>
+				<!-- /wp:paragraph -->
+			</div>
+			<!-- /wp:group -->
+		</div>
+		<!-- /wp:column -->
+		<!-- wp:column -->
+		<div class="wp-block-column">
+			<!-- wp:group {"layout":{"type":"constrained"},"style":{"spacing":{"padding":{"top":"18px","bottom":"18px","left":"20px","right":"20px"}}}} -->
+			<div class="wp-block-group" style="padding-top:18px;padding-right:20px;padding-bottom:18px;padding-left:20px">
+				<!-- wp:paragraph {"className":"sf-num","style":{"typography":{"fontSize":"32px","fontWeight":"700"}},"textColor":"text-primary"} -->
+				<p class="sf-num has-text-primary-color has-text-color" style="font-size:32px;font-weight:700">1,000㎡</p>
+				<!-- /wp:paragraph -->
+				<!-- wp:paragraph {"style":{"typography":{"fontSize":"15px","fontWeight":"600"}},"textColor":"primary"} -->
+				<p class="has-primary-color has-text-color" style="font-size:15px;font-weight:600">R&D Center</p>
+				<!-- /wp:paragraph -->
+				<!-- wp:paragraph {"style":{"typography":{"fontSize":"13px"}},"textColor":"text-secondary"} -->
+				<p class="has-text-secondary-color has-text-color" style="font-size:13px">Formulation &amp; lab</p>
+				<!-- /wp:paragraph -->
+			</div>
+			<!-- /wp:group -->
+		</div>
+		<!-- /wp:column -->
+	</div>
+	<!-- /wp:columns -->
+
+	<!-- wp:columns {"className":"sf-stats"} -->
+	<div class="wp-block-columns sf-stats">
+		<!-- wp:column -->
+		<div class="wp-block-column">
+			<!-- wp:group {"layout":{"type":"constrained"},"style":{"spacing":{"padding":{"top":"18px","bottom":"18px","left":"20px","right":"20px"}}}} -->
+			<div class="wp-block-group" style="padding-top:18px;padding-right:20px;padding-bottom:18px;padding-left:20px">
+				<!-- wp:paragraph {"className":"sf-num","style":{"typography":{"fontSize":"32px","fontWeight":"700"}},"textColor":"text-primary"} -->
+				<p class="sf-num has-text-primary-color has-text-color" style="font-size:32px;font-weight:700">10,000-Class</p>
+				<!-- /wp:paragraph -->
+				<!-- wp:paragraph {"style":{"typography":{"fontSize":"15px","fontWeight":"600"}},"textColor":"primary"} -->
+				<p class="has-primary-color has-text-color" style="font-size:15px;font-weight:600">Cleanroom</p>
+				<!-- /wp:paragraph -->
+				<!-- wp:paragraph {"style":{"typography":{"fontSize":"13px"}},"textColor":"text-secondary"} -->
+				<p class="has-text-secondary-color has-text-color" style="font-size:13px">GMP-compliant production</p>
+				<!-- /wp:paragraph -->
+			</div>
+			<!-- /wp:group -->
+		</div>
+		<!-- /wp:column -->
+		<!-- wp:column -->
+		<div class="wp-block-column">
+			<!-- wp:group {"layout":{"type":"constrained"},"style":{"spacing":{"padding":{"top":"18px","bottom":"18px","left":"20px","right":"20px"}}}} -->
+			<div class="wp-block-group" style="padding-top:18px;padding-right:20px;padding-bottom:18px;padding-left:20px">
+				<!-- wp:paragraph {"className":"sf-num","style":{"typography":{"fontSize":"32px","fontWeight":"700"}},"textColor":"text-primary"} -->
+				<p class="sf-num has-text-primary-color has-text-color" style="font-size:32px;font-weight:700">100+</p>
+				<!-- /wp:paragraph -->
+				<!-- wp:paragraph {"style":{"typography":{"fontSize":"15px","fontWeight":"600"}},"textColor":"primary"} -->
+				<p class="has-primary-color has-text-color" style="font-size:15px;font-weight:600">Equipment</p>
+				<!-- /wp:paragraph -->
+				<!-- wp:paragraph {"style":{"typography":{"fontSize":"13px"}},"textColor":"text-secondary"} -->
+				<p class="has-text-secondary-color has-text-color" style="font-size:13px">Production &amp; testing</p>
+				<!-- /wp:paragraph -->
+			</div>
+			<!-- /wp:group -->
+		</div>
+		<!-- /wp:column -->
+		<!-- wp:column -->
+		<div class="wp-block-column">
+			<!-- wp:group {"layout":{"type":"constrained"},"style":{"spacing":{"padding":{"top":"18px","bottom":"18px","left":"20px","right":"20px"}}}} -->
+			<div class="wp-block-group" style="padding-top:18px;padding-right:20px;padding-bottom:18px;padding-left:20px">
+				<!-- wp:paragraph {"className":"sf-num","style":{"typography":{"fontSize":"32px","fontWeight":"700"}},"textColor":"text-primary"} -->
+				<p class="sf-num has-text-primary-color has-text-color" style="font-size:32px;font-weight:700">30+</p>
+				<!-- /wp:paragraph -->
+				<!-- wp:paragraph {"style":{"typography":{"fontSize":"15px","fontWeight":"600"}},"textColor":"primary"} -->
+				<p class="has-primary-color has-text-color" style="font-size:15px;font-weight:600">Countries</p>
+				<!-- /wp:paragraph -->
+				<!-- wp:paragraph {"style":{"typography":{"fontSize":"13px"}},"textColor":"text-secondary"} -->
+				<p class="has-text-secondary-color has-text-color" style="font-size:13px">Global export</p>
+				<!-- /wp:paragraph -->
+			</div>
+			<!-- /wp:group -->
+		</div>
+		<!-- /wp:column -->
+	</div>
+	<!-- /wp:columns -->
+</section>
+<!-- /wp:group -->
+
+<!-- wp:group {"tagName":"section","backgroundColor":"card-white","layout":{"type":"constrained"},"style":{"spacing":{"padding":{"top":"var:preset|spacing|60","bottom":"var:preset|spacing|60"}}}} -->
+<section class="wp-block-group has-card-white-background-color has-background" style="padding-top:var(--wp--preset--spacing--60);padding-bottom:var(--wp--preset--spacing--60)">
+	<!-- wp:heading -->
+	<h2 class="wp-block-heading">Our 8 Dosage Forms</h2>
+	<!-- /wp:heading -->
+
+	<!-- wp:paragraph {"textColor":"text-secondary"} -->
+	<p class="has-text-secondary-color has-text-color">Custom formulas, flexible MOQ, and full regulatory support for every dosage form.</p>
+	<!-- /wp:paragraph -->
+
+	<!-- wp:columns {"className":"sf-dosage-grid","style":{"spacing":{"margin":{"top":"var:preset|spacing|60"}}}} -->
+	<div class="wp-block-columns sf-dosage-grid" style="margin-top:var(--wp--preset--spacing--60)">
+		<!-- wp:column -->
+		<div class="wp-block-column">
+			<!-- wp:group {"backgroundColor":"bg-light","layout":{"type":"constrained"},"style":{"spacing":{"padding":{"top":"var:preset|spacing|20","bottom":"var:preset|spacing|20","left":"var:preset|spacing|20","right":"var:preset|spacing|20"}},"border":{"radius":"8px"}}} -->
+			<div class="wp-block-group has-bg-light-background-color has-background" style="border-radius:8px;padding:var(--wp--preset--spacing--20)">
+				<!-- wp:image {"align":"center"} -->
+				<figure class="wp-block-image aligncenter"><img src="/wp-content/uploads/2026/09/soft-chews.png" alt="Private label soft chews manufacturing"/></figure>
+				<!-- /wp:image -->
+				<!-- wp:paragraph {"align":"right","style":{"typography":{"fontSize":"12px","fontWeight":"700"}},"textColor":"cta"} -->
+				<p class="has-text-align-right has-cta-color has-text-color" style="font-size:12px;font-weight:700">BESTSELLER</p>
+				<!-- /wp:paragraph -->
+				<!-- wp:heading {"level":3,"textAlign":"center"} -->
+				<h3 class="wp-block-heading has-text-align-center">Soft Chews</h3>
+				<!-- /wp:heading -->
+				<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"14px"}},"textColor":"text-secondary"} -->
+				<p class="has-text-align-center has-text-secondary-color has-text-color" style="font-size:14px">Joint, skin, calming &amp; digestive support.</p>
+				<!-- /wp:paragraph -->
+				<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"12px"}},"textColor":"text-secondary"} -->
+				<p class="has-text-align-center has-text-secondary-color has-text-color" style="font-size:12px">MOQ from 500 units · Sampling 3–7 days</p>
+				<!-- /wp:paragraph -->
+				<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"14px","fontWeight":"600"}}} -->
+				<p class="has-text-align-center" style="font-size:14px;font-weight:600"><a href="#">Learn More →</a></p>
+				<!-- /wp:paragraph -->
+			</div>
+			<!-- /wp:group -->
+		</div>
+		<!-- /wp:column -->
+		<!-- wp:column -->
+		<div class="wp-block-column">
+			<!-- wp:group {"backgroundColor":"bg-light","layout":{"type":"constrained"},"style":{"spacing":{"padding":{"top":"var:preset|spacing|20","bottom":"var:preset|spacing|20","left":"var:preset|spacing|20","right":"var:preset|spacing|20"}},"border":{"radius":"8px"}}} -->
+			<div class="wp-block-group has-bg-light-background-color has-background" style="border-radius:8px;padding:var(--wp--preset--spacing--20)">
+				<!-- wp:image {"align":"center"} -->
+				<figure class="wp-block-image aligncenter"><img src="/wp-content/uploads/2026/09/tablets.png" alt="Private label supplement tablets manufacturing"/></figure>
+				<!-- /wp:image -->
+				<!-- wp:paragraph {"align":"right","style":{"typography":{"fontSize":"12px","fontWeight":"700"}},"textColor":"cta"} -->
+				<p class="has-text-align-right has-cta-color has-text-color" style="font-size:12px;font-weight:700">HOT</p>
+				<!-- /wp:paragraph -->
+				<!-- wp:heading {"level":3,"textAlign":"center"} -->
+				<h3 class="wp-block-heading has-text-align-center">Tablets</h3>
+				<!-- /wp:heading -->
+				<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"14px"}},"textColor":"text-secondary"} -->
+				<p class="has-text-align-center has-text-secondary-color has-text-color" style="font-size:14px">Joint, multivitamin &amp; specialty formulas.</p>
+				<!-- /wp:paragraph -->
+				<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"12px"}},"textColor":"text-secondary"} -->
+				<p class="has-text-align-center has-text-secondary-color has-text-color" style="font-size:12px">MOQ from 1,000 units · Sampling 3–7 days</p>
+				<!-- /wp:paragraph -->
+				<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"14px","fontWeight":"600"}}} -->
+				<p class="has-text-align-center" style="font-size:14px;font-weight:600"><a href="#">Learn More →</a></p>
+				<!-- /wp:paragraph -->
+			</div>
+			<!-- /wp:group -->
+		</div>
+		<!-- /wp:column -->
+		<!-- wp:column -->
+		<div class="wp-block-column">
+			<!-- wp:group {"backgroundColor":"bg-light","layout":{"type":"constrained"},"style":{"spacing":{"padding":{"top":"var:preset|spacing|20","bottom":"var:preset|spacing|20","left":"var:preset|spacing|20","right":"var:preset|spacing|20"}},"border":{"radius":"8px"}}} -->
+			<div class="wp-block-group has-bg-light-background-color has-background" style="border-radius:8px;padding:var(--wp--preset--spacing--20)">
+				<!-- wp:image {"align":"center"} -->
+				<figure class="wp-block-image aligncenter"><img src="/wp-content/uploads/2026/09/powders.png" alt="Private label supplement powders manufacturing"/></figure>
+				<!-- /wp:image -->
+				<!-- wp:heading {"level":3,"textAlign":"center"} -->
+				<h3 class="wp-block-heading has-text-align-center">Powders</h3>
+				<!-- /wp:heading -->
+				<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"14px"}},"textColor":"text-secondary"} -->
+				<p class="has-text-align-center has-text-secondary-color has-text-color" style="font-size:14px">Probiotics, digestive &amp; daily nutrition.</p>
+				<!-- /wp:paragraph -->
+				<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"12px"}},"textColor":"text-secondary"} -->
+				<p class="has-text-align-center has-text-secondary-color has-text-color" style="font-size:12px">MOQ from 500 units · Sampling 3–7 days</p>
+				<!-- /wp:paragraph -->
+				<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"14px","fontWeight":"600"}}} -->
+				<p class="has-text-align-center" style="font-size:14px;font-weight:600"><a href="#">Learn More →</a></p>
+				<!-- /wp:paragraph -->
+			</div>
+			<!-- /wp:group -->
+		</div>
+		<!-- /wp:column -->
+		<!-- wp:column -->
+		<div class="wp-block-column">
+			<!-- wp:group {"backgroundColor":"bg-light","layout":{"type":"constrained"},"style":{"spacing":{"padding":{"top":"var:preset|spacing|20","bottom":"var:preset|spacing|20","left":"var:preset|spacing|20","right":"var:preset|spacing|20"}},"border":{"radius":"8px"}}} -->
+			<div class="wp-block-group has-bg-light-background-color has-background" style="border-radius:8px;padding:var(--wp--preset--spacing--20)">
+				<!-- wp:image {"align":"center"} -->
+				<figure class="wp-block-image aligncenter"><img src="/wp-content/uploads/2026/09/pastes.png" alt="Private label supplement pastes manufacturing"/></figure>
+				<!-- /wp:image -->
+				<!-- wp:heading {"level":3,"textAlign":"center"} -->
+				<h3 class="wp-block-heading has-text-align-center">Pastes</h3>
+				<!-- /wp:heading -->
+				<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"14px"}},"textColor":"text-secondary"} -->
+				<p class="has-text-align-center has-text-secondary-color has-text-color" style="font-size:14px">Hairball, digestive &amp; nutrient support.</p>
+				<!-- /wp:paragraph -->
+				<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"12px"}},"textColor":"text-secondary"} -->
+				<p class="has-text-align-center has-text-secondary-color has-text-color" style="font-size:12px">MOQ from 500 units · Sampling 3–7 days</p>
+				<!-- /wp:paragraph -->
+				<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"14px","fontWeight":"600"}}} -->
+				<p class="has-text-align-center" style="font-size:14px;font-weight:600"><a href="#">Learn More →</a></p>
+				<!-- /wp:paragraph -->
+			</div>
+			<!-- /wp:group -->
+		</div>
+		<!-- /wp:column -->
+		<!-- wp:column -->
+		<div class="wp-block-column">
+			<!-- wp:group {"backgroundColor":"bg-light","layout":{"type":"constrained"},"style":{"spacing":{"padding":{"top":"var:preset|spacing|20","bottom":"var:preset|spacing|20","left":"var:preset|spacing|20","right":"var:preset|spacing|20"}},"border":{"radius":"8px"}}} -->
+			<div class="wp-block-group has-bg-light-background-color has-background" style="border-radius:8px;padding:var(--wp--preset--spacing--20)">
+				<!-- wp:image {"align":"center"} -->
+				<figure class="wp-block-image aligncenter"><img src="/wp-content/uploads/2026/09/drops.png" alt="Private label supplement drops manufacturing"/></figure>
+				<!-- /wp:image -->
+				<!-- wp:paragraph {"align":"right","style":{"typography":{"fontSize":"12px","fontWeight":"700"}},"textColor":"cta"} -->
+				<p class="has-text-align-right has-cta-color has-text-color" style="font-size:12px;font-weight:700">NEW</p>
+				<!-- /wp:paragraph -->
+				<!-- wp:heading {"level":3,"textAlign":"center"} -->
+				<h3 class="wp-block-heading has-text-align-center">Drops</h3>
+				<!-- /wp:heading -->
+				<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"14px"}},"textColor":"text-secondary"} -->
+				<p class="has-text-align-center has-text-secondary-color has-text-color" style="font-size:14px">Oral care, calming &amp; precise dosing.</p>
+				<!-- /wp:paragraph -->
+				<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"12px"}},"textColor":"text-secondary"} -->
+				<p class="has-text-align-center has-text-secondary-color has-text-color" style="font-size:12px">MOQ from 500 units · Sampling 3–7 days</p>
+				<!-- /wp:paragraph -->
+				<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"14px","fontWeight":"600"}}} -->
+				<p class="has-text-align-center" style="font-size:14px;font-weight:600"><a href="#">Learn More →</a></p>
+				<!-- /wp:paragraph -->
+			</div>
+			<!-- /wp:group -->
+		</div>
+		<!-- /wp:column -->
+		<!-- wp:column -->
+		<div class="wp-block-column">
+			<!-- wp:group {"backgroundColor":"bg-light","layout":{"type":"constrained"},"style":{"spacing":{"padding":{"top":"var:preset|spacing|20","bottom":"var:preset|spacing|20","left":"var:preset|spacing|20","right":"var:preset|spacing|20"}},"border":{"radius":"8px"}}} -->
+			<div class="wp-block-group has-bg-light-background-color has-background" style="border-radius:8px;padding:var(--wp--preset--spacing--20)">
+				<!-- wp:image {"align":"center"} -->
+				<figure class="wp-block-image aligncenter"><img src="/wp-content/uploads/2026/09/liquids.png" alt="Private label liquid supplements manufacturing"/></figure>
+				<!-- /wp:image -->
+				<!-- wp:paragraph {"align":"right","style":{"typography":{"fontSize":"12px","fontWeight":"700"}},"textColor":"cta"} -->
+				<p class="has-text-align-right has-cta-color has-text-color" style="font-size:12px;font-weight:700">NEW</p>
+				<!-- /wp:paragraph -->
+				<!-- wp:heading {"level":3,"textAlign":"center"} -->
+				<h3 class="wp-block-heading has-text-align-center">Liquids</h3>
+				<!-- /wp:heading -->
+				<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"14px"}},"textColor":"text-secondary"} -->
+				<p class="has-text-align-center has-text-secondary-color has-text-color" style="font-size:14px">Easy administration &amp; fast absorption.</p>
+				<!-- /wp:paragraph -->
+				<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"12px"}},"textColor":"text-secondary"} -->
+				<p class="has-text-align-center has-text-secondary-color has-text-color" style="font-size:12px">MOQ from 500 units · Sampling 3–7 days</p>
+				<!-- /wp:paragraph -->
+				<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"14px","fontWeight":"600"}}} -->
+				<p class="has-text-align-center" style="font-size:14px;font-weight:600"><a href="#">Learn More →</a></p>
+				<!-- /wp:paragraph -->
+			</div>
+			<!-- /wp:group -->
+		</div>
+		<!-- /wp:column -->
+		<!-- wp:column -->
+		<div class="wp-block-column">
+			<!-- wp:group {"backgroundColor":"bg-light","layout":{"type":"constrained"},"style":{"spacing":{"padding":{"top":"var:preset|spacing|20","bottom":"var:preset|spacing|20","left":"var:preset|spacing|20","right":"var:preset|spacing|20"}},"border":{"radius":"8px"}}} -->
+			<div class="wp-block-group has-bg-light-background-color has-background" style="border-radius:8px;padding:var(--wp--preset--spacing--20)">
+				<!-- wp:image {"align":"center"} -->
+				<figure class="wp-block-image aligncenter"><img src="/wp-content/uploads/2026/09/fish-oil.png" alt="Private label fish oil soft gel capsules manufacturing"/></figure>
+				<!-- /wp:image -->
+				<!-- wp:paragraph {"align":"right","style":{"typography":{"fontSize":"12px","fontWeight":"700"}},"textColor":"cta"} -->
+				<p class="has-text-align-right has-cta-color has-text-color" style="font-size:12px;font-weight:700">BESTSELLER</p>
+				<!-- /wp:paragraph -->
+				<!-- wp:heading {"level":3,"textAlign":"center"} -->
+				<h3 class="wp-block-heading has-text-align-center">Fish Oil</h3>
+				<!-- /wp:heading -->
+				<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"14px"}},"textColor":"text-secondary"} -->
+				<p class="has-text-align-center has-text-secondary-color has-text-color" style="font-size:14px">Skin, coat, joint &amp; heart support.</p>
+				<!-- /wp:paragraph -->
+				<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"12px"}},"textColor":"text-secondary"} -->
+				<p class="has-text-align-center has-text-secondary-color has-text-color" style="font-size:12px">MOQ from 1,000 units · Sampling 3–7 days</p>
+				<!-- /wp:paragraph -->
+				<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"14px","fontWeight":"600"}}} -->
+				<p class="has-text-align-center" style="font-size:14px;font-weight:600"><a href="#">Learn More →</a></p>
+				<!-- /wp:paragraph -->
+			</div>
+			<!-- /wp:group -->
+		</div>
+		<!-- /wp:column -->
+		<!-- wp:column -->
+		<div class="wp-block-column">
+			<!-- wp:group {"backgroundColor":"bg-light","layout":{"type":"constrained"},"style":{"spacing":{"padding":{"top":"var:preset|spacing|20","bottom":"var:preset|spacing|20","left":"var:preset|spacing|20","right":"var:preset|spacing|20"}},"border":{"radius":"8px"}}} -->
+			<div class="wp-block-group has-bg-light-background-color has-background" style="border-radius:8px;padding:var(--wp--preset--spacing--20)">
+				<!-- wp:image {"align":"center"} -->
+				<figure class="wp-block-image aligncenter"><img src="/wp-content/uploads/2026/09/dental-chews.png" alt="Private label dental chews manufacturing"/></figure>
+				<!-- /wp:image -->
+				<!-- wp:paragraph {"align":"right","style":{"typography":{"fontSize":"12px","fontWeight":"700"}},"textColor":"cta"} -->
+				<p class="has-text-align-right has-cta-color has-text-color" style="font-size:12px;font-weight:700">HOT</p>
+				<!-- /wp:paragraph -->
+				<!-- wp:heading {"level":3,"textAlign":"center"} -->
+				<h3 class="wp-block-heading has-text-align-center">Dental Chews</h3>
+				<!-- /wp:heading -->
+				<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"14px"}},"textColor":"text-secondary"} -->
+				<p class="has-text-align-center has-text-secondary-color has-text-color" style="font-size:14px">Oral hygiene &amp; chewing support.</p>
+				<!-- /wp:paragraph -->
+				<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"12px"}},"textColor":"text-secondary"} -->
+				<p class="has-text-align-center has-text-secondary-color has-text-color" style="font-size:12px">MOQ from 1,000 units · Sampling 3–7 days</p>
+				<!-- /wp:paragraph -->
+				<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"14px","fontWeight":"600"}}} -->
+				<p class="has-text-align-center" style="font-size:14px;font-weight:600"><a href="#">Learn More →</a></p>
+				<!-- /wp:paragraph -->
+			</div>
+			<!-- /wp:group -->
+		</div>
+		<!-- /wp:column -->
+	</div>
+	<!-- /wp:columns -->
+</section>
+<!-- /wp:group -->
+
+<!-- wp:group {"tagName":"section","backgroundColor":"bg-light","layout":{"type":"constrained"},"style":{"spacing":{"padding":{"top":"var:preset|spacing|40","bottom":"var:preset|spacing|40"}}}} -->
+<section class="wp-block-group has-bg-light-background-color has-background" style="padding-top:var(--wp--preset--spacing--40);padding-bottom:var(--wp--preset--spacing--40)">
+<!-- wp:heading {"textAlign":"center"} -->
+<h2 class="wp-block-heading has-text-align-center">Formulated Clean</h2>
+<!-- /wp:heading -->
+<!-- wp:paragraph {"align":"center","textColor":"text-secondary"} -->
+<p class="has-text-align-center has-text-secondary-color has-text-color">No fillers, no artificial additives. Every formula starts from a clean base.</p>
+<!-- /wp:paragraph -->
+<!-- wp:columns {"style":{"spacing":{"margin":{"top":"var:preset|spacing|40"}}}} -->
+<div class="wp-block-columns" style="margin-top:var(--wp--preset--spacing--40)">
+<!-- wp:column -->
+<div class="wp-block-column">
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontWeight":"600"}},"textColor":"primary"} -->
+<p class="has-text-align-center has-primary-color has-text-color" style="font-weight:600">✓ Gluten-Free</p>
+<!-- /wp:paragraph -->
+</div>
+<!-- /wp:column -->
+<!-- wp:column -->
+<div class="wp-block-column">
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontWeight":"600"}},"textColor":"primary"} -->
+<p class="has-text-align-center has-primary-color has-text-color" style="font-weight:600">✓ Corn-Free</p>
+<!-- /wp:paragraph -->
+</div>
+<!-- /wp:column -->
+<!-- wp:column -->
+<div class="wp-block-column">
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontWeight":"600"}},"textColor":"primary"} -->
+<p class="has-text-align-center has-primary-color has-text-color" style="font-weight:600">✓ Soy-Free</p>
+<!-- /wp:paragraph -->
+</div>
+<!-- /wp:column -->
+<!-- wp:column -->
+<div class="wp-block-column">
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontWeight":"600"}},"textColor":"primary"} -->
+<p class="has-text-align-center has-primary-color has-text-color" style="font-weight:600">✓ No Artificial Flavors</p>
+<!-- /wp:paragraph -->
+</div>
+<!-- /wp:column -->
+<!-- wp:column -->
+<div class="wp-block-column">
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontWeight":"600"}},"textColor":"primary"} -->
+<p class="has-text-align-center has-primary-color has-text-color" style="font-weight:600">✓ Non-GMO</p>
+<!-- /wp:paragraph -->
+</div>
+<!-- /wp:column -->
+</div>
+<!-- /wp:columns -->
+</section>
+<!-- /wp:group -->
+
+<!-- wp:group {"tagName":"section","backgroundColor":"bg-light","layout":{"type":"constrained"},"style":{"spacing":{"padding":{"top":"var:preset|spacing|80","bottom":"var:preset|spacing|80"}}}} -->
+<section class="wp-block-group has-bg-light-background-color has-background" style="padding-top:var(--wp--preset--spacing--80);padding-bottom:var(--wp--preset--spacing--80)">
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Certifications &amp; Registrations</h2>
+<!-- /wp:heading -->
+<!-- wp:paragraph {"textColor":"text-secondary"} -->
+<p class="has-text-secondary-color has-text-color">Registered and audited production — full documentation available on request.</p>
+<!-- /wp:paragraph -->
+<!-- wp:columns {"style":{"spacing":{"margin":{"top":"var:preset|spacing|60"}}}} -->
+<div class="wp-block-columns" style="margin-top:var(--wp--preset--spacing--60)">
+<!-- wp:column -->
+<div class="wp-block-column">
+<!-- wp:group {"backgroundColor":"card-white","layout":{"type":"constrained"},"style":{"spacing":{"padding":{"top":"var:preset|spacing|20","bottom":"var:preset|spacing|20","left":"var:preset|spacing|20","right":"var:preset|spacing|20"}},"border":{"radius":"8px"}}} -->
+<div class="wp-block-group has-card-white-background-color has-background" style="border-radius:8px;padding:var(--wp--preset--spacing--20)">
+<!-- wp:group {"backgroundColor":"bg-light","layout":{"type":"constrained"},"style":{"spacing":{"padding":{"top":"var:preset|spacing|60","bottom":"var:preset|spacing|60"}},"border":{"radius":"8px"}}} -->
+<div class="wp-block-group has-bg-light-background-color has-background" style="border-radius:8px;padding-top:var(--wp--preset--spacing--60);padding-bottom:var(--wp--preset--spacing--60)">
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"12px"}},"textColor":"text-secondary"} -->
+<p class="has-text-align-center has-text-secondary-color has-text-color" style="font-size:12px">[Certificate Image]</p>
+<!-- /wp:paragraph -->
+</div>
+<!-- /wp:group -->
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontWeight":"600"}},"textColor":"primary"} -->
+<p class="has-text-align-center has-primary-color has-text-color" style="font-weight:600">FDA Registered</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"12px"}},"textColor":"text-secondary"} -->
+<p class="has-text-align-center has-text-secondary-color has-text-color" style="font-size:12px">U.S. Food Facility Registration</p>
+<!-- /wp:paragraph -->
+</div>
+<!-- /wp:group -->
+</div>
+<!-- /wp:column -->
+<!-- wp:column -->
+<div class="wp-block-column">
+<!-- wp:group {"backgroundColor":"card-white","layout":{"type":"constrained"},"style":{"spacing":{"padding":{"top":"var:preset|spacing|20","bottom":"var:preset|spacing|20","left":"var:preset|spacing|20","right":"var:preset|spacing|20"}},"border":{"radius":"8px"}}} -->
+<div class="wp-block-group has-card-white-background-color has-background" style="border-radius:8px;padding:var(--wp--preset--spacing--20)">
+<!-- wp:group {"backgroundColor":"bg-light","layout":{"type":"constrained"},"style":{"spacing":{"padding":{"top":"var:preset|spacing|60","bottom":"var:preset|spacing|60"}},"border":{"radius":"8px"}}} -->
+<div class="wp-block-group has-bg-light-background-color has-background" style="border-radius:8px;padding-top:var(--wp--preset--spacing--60);padding-bottom:var(--wp--preset--spacing--60)">
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"12px"}},"textColor":"text-secondary"} -->
+<p class="has-text-align-center has-text-secondary-color has-text-color" style="font-size:12px">[Certificate Image]</p>
+<!-- /wp:paragraph -->
+</div>
+<!-- /wp:group -->
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontWeight":"600"}},"textColor":"primary"} -->
+<p class="has-text-align-center has-primary-color has-text-color" style="font-weight:600">cGMP Compliant</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"12px"}},"textColor":"text-secondary"} -->
+<p class="has-text-align-center has-text-secondary-color has-text-color" style="font-size:12px">Pharmaceutical-grade production</p>
+<!-- /wp:paragraph -->
+</div>
+<!-- /wp:group -->
+</div>
+<!-- /wp:column -->
+<!-- wp:column -->
+<div class="wp-block-column">
+<!-- wp:group {"backgroundColor":"card-white","layout":{"type":"constrained"},"style":{"spacing":{"padding":{"top":"var:preset|spacing|20","bottom":"var:preset|spacing|20","left":"var:preset|spacing|20","right":"var:preset|spacing|20"}},"border":{"radius":"8px"}}} -->
+<div class="wp-block-group has-card-white-background-color has-background" style="border-radius:8px;padding:var(--wp--preset--spacing--20)">
+<!-- wp:group {"backgroundColor":"bg-light","layout":{"type":"constrained"},"style":{"spacing":{"padding":{"top":"var:preset|spacing|60","bottom":"var:preset|spacing|60"}},"border":{"radius":"8px"}}} -->
+<div class="wp-block-group has-bg-light-background-color has-background" style="border-radius:8px;padding-top:var(--wp--preset--spacing--60);padding-bottom:var(--wp--preset--spacing--60)">
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"12px"}},"textColor":"text-secondary"} -->
+<p class="has-text-align-center has-text-secondary-color has-text-color" style="font-size:12px">[Certificate Image]</p>
+<!-- /wp:paragraph -->
+</div>
+<!-- /wp:group -->
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontWeight":"600"}},"textColor":"primary"} -->
+<p class="has-text-align-center has-primary-color has-text-color" style="font-weight:600">ISO 9001</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"12px"}},"textColor":"text-secondary"} -->
+<p class="has-text-align-center has-text-secondary-color has-text-color" style="font-size:12px">Quality management system</p>
+<!-- /wp:paragraph -->
+</div>
+<!-- /wp:group -->
+</div>
+<!-- /wp:column -->
+<!-- wp:column -->
+<div class="wp-block-column">
+<!-- wp:group {"backgroundColor":"card-white","layout":{"type":"constrained"},"style":{"spacing":{"padding":{"top":"var:preset|spacing|20","bottom":"var:preset|spacing|20","left":"var:preset|spacing|20","right":"var:preset|spacing|20"}},"border":{"radius":"8px"}}} -->
+<div class="wp-block-group has-card-white-background-color has-background" style="border-radius:8px;padding:var(--wp--preset--spacing--20)">
+<!-- wp:group {"backgroundColor":"bg-light","layout":{"type":"constrained"},"style":{"spacing":{"padding":{"top":"var:preset|spacing|60","bottom":"var:preset|spacing|60"}},"border":{"radius":"8px"}}} -->
+<div class="wp-block-group has-bg-light-background-color has-background" style="border-radius:8px;padding-top:var(--wp--preset--spacing--60);padding-bottom:var(--wp--preset--spacing--60)">
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"12px"}},"textColor":"text-secondary"} -->
+<p class="has-text-align-center has-text-secondary-color has-text-color" style="font-size:12px">[Certificate Image]</p>
+<!-- /wp:paragraph -->
+</div>
+<!-- /wp:group -->
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontWeight":"600"}},"textColor":"primary"} -->
+<p class="has-text-align-center has-primary-color has-text-color" style="font-weight:600">ISO 22000</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"12px"}},"textColor":"text-secondary"} -->
+<p class="has-text-align-center has-text-secondary-color has-text-color" style="font-size:12px">Food safety management</p>
+<!-- /wp:paragraph -->
+</div>
+<!-- /wp:group -->
+</div>
+<!-- /wp:column -->
+</div>
+<!-- /wp:columns -->
+</section>
+<!-- /wp:group -->
+
+<!-- wp:group {"tagName":"section","backgroundColor":"bg-light","layout":{"type":"constrained"},"style":{"spacing":{"padding":{"top":"var:preset|spacing|80","bottom":"var:preset|spacing|80"}}}} -->
+<section class="wp-block-group has-bg-light-background-color has-background" style="padding-top:var(--wp--preset--spacing--80);padding-bottom:var(--wp--preset--spacing--80)">
+<!-- wp:heading {"textAlign":"center"} -->
+<h2 class="wp-block-heading has-text-align-center">Quality Control at Every Step</h2>
+<!-- /wp:heading -->
+<!-- wp:paragraph {"align":"center","textColor":"text-secondary"} -->
+<p class="has-text-align-center has-text-secondary-color has-text-color">From raw material intake to final release, every stage is checked, recorded, and signed off.</p>
+<!-- /wp:paragraph -->
+<!-- wp:columns {"style":{"spacing":{"margin":{"top":"var:preset|spacing|60"}}}} -->
+<div class="wp-block-columns" style="margin-top:var(--wp--preset--spacing--60)">
+<!-- wp:column -->
+<div class="wp-block-column">
+<!-- wp:group {"backgroundColor":"card-white","layout":{"type":"constrained"},"style":{"spacing":{"padding":{"top":"var:preset|spacing|20","bottom":"var:preset|spacing|20","left":"var:preset|spacing|20","right":"var:preset|spacing|20"}},"border":{"radius":"8px"}}} -->
+<div class="wp-block-group has-card-white-background-color has-background" style="border-radius:8px;padding:var(--wp--preset--spacing--20)">
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"40px","fontWeight":"700"}},"textColor":"accent"} -->
+<p class="has-text-align-center has-accent-color has-text-color" style="font-size:40px;font-weight:700">01</p>
+<!-- /wp:paragraph -->
+<!-- wp:heading {"level":3,"textAlign":"center"} -->
+<h3 class="wp-block-heading has-text-align-center">Raw Material Inspection</h3>
+<!-- /wp:heading -->
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"14px"}},"textColor":"text-secondary"} -->
+<p class="has-text-align-center has-text-secondary-color has-text-color" style="font-size:14px">Raw materials tested against specifications before entering production.</p>
+<!-- /wp:paragraph -->
+<!-- wp:group {"backgroundColor":"bg-light","layout":{"type":"constrained"},"style":{"spacing":{"padding":{"top":"var:preset|spacing|60","bottom":"var:preset|spacing|60"}},"border":{"radius":"8px"}}} -->
+<div class="wp-block-group has-bg-light-background-color has-background" style="border-radius:8px;padding-top:var(--wp--preset--spacing--60);padding-bottom:var(--wp--preset--spacing--60)">
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"12px"}},"textColor":"text-secondary"} -->
+<p class="has-text-align-center has-text-secondary-color has-text-color" style="font-size:12px">待上传实拍图</p>
+<!-- /wp:paragraph -->
+</div>
+<!-- /wp:group -->
+</div>
+<!-- /wp:group -->
+</div>
+<!-- /wp:column -->
+<!-- wp:column -->
+<div class="wp-block-column">
+<!-- wp:group {"backgroundColor":"card-white","layout":{"type":"constrained"},"style":{"spacing":{"padding":{"top":"var:preset|spacing|20","bottom":"var:preset|spacing|20","left":"var:preset|spacing|20","right":"var:preset|spacing|20"}},"border":{"radius":"8px"}}} -->
+<div class="wp-block-group has-card-white-background-color has-background" style="border-radius:8px;padding:var(--wp--preset--spacing--20)">
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"40px","fontWeight":"700"}},"textColor":"accent"} -->
+<p class="has-text-align-center has-accent-color has-text-color" style="font-size:40px;font-weight:700">02</p>
+<!-- /wp:paragraph -->
+<!-- wp:heading {"level":3,"textAlign":"center"} -->
+<h3 class="wp-block-heading has-text-align-center">Batching &amp; Weighing</h3>
+<!-- /wp:heading -->
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"14px"}},"textColor":"text-secondary"} -->
+<p class="has-text-align-center has-text-secondary-color has-text-color" style="font-size:14px">Precise weighing with batch records for full traceability.</p>
+<!-- /wp:paragraph -->
+<!-- wp:group {"backgroundColor":"bg-light","layout":{"type":"constrained"},"style":{"spacing":{"padding":{"top":"var:preset|spacing|60","bottom":"var:preset|spacing|60"}},"border":{"radius":"8px"}}} -->
+<div class="wp-block-group has-bg-light-background-color has-background" style="border-radius:8px;padding-top:var(--wp--preset--spacing--60);padding-bottom:var(--wp--preset--spacing--60)">
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"12px"}},"textColor":"text-secondary"} -->
+<p class="has-text-align-center has-text-secondary-color has-text-color" style="font-size:12px">待上传实拍图</p>
+<!-- /wp:paragraph -->
+</div>
+<!-- /wp:group -->
+</div>
+<!-- /wp:group -->
+</div>
+<!-- /wp:column -->
+<!-- wp:column -->
+<div class="wp-block-column">
+<!-- wp:group {"backgroundColor":"card-white","layout":{"type":"constrained"},"style":{"spacing":{"padding":{"top":"var:preset|spacing|20","bottom":"var:preset|spacing|20","left":"var:preset|spacing|20","right":"var:preset|spacing|20"}},"border":{"radius":"8px"}}} -->
+<div class="wp-block-group has-card-white-background-color has-background" style="border-radius:8px;padding:var(--wp--preset--spacing--20)">
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"40px","fontWeight":"700"}},"textColor":"accent"} -->
+<p class="has-text-align-center has-accent-color has-text-color" style="font-size:40px;font-weight:700">03</p>
+<!-- /wp:paragraph -->
+<!-- wp:heading {"level":3,"textAlign":"center"} -->
+<h3 class="wp-block-heading has-text-align-center">In-Process QC</h3>
+<!-- /wp:heading -->
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"14px"}},"textColor":"text-secondary"} -->
+<p class="has-text-align-center has-text-secondary-color has-text-color" style="font-size:14px">Random sampling during production at defined checkpoints.</p>
+<!-- /wp:paragraph -->
+<!-- wp:group {"backgroundColor":"bg-light","layout":{"type":"constrained"},"style":{"spacing":{"padding":{"top":"var:preset|spacing|60","bottom":"var:preset|spacing|60"}},"border":{"radius":"8px"}}} -->
+<div class="wp-block-group has-bg-light-background-color has-background" style="border-radius:8px;padding-top:var(--wp--preset--spacing--60);padding-bottom:var(--wp--preset--spacing--60)">
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"12px"}},"textColor":"text-secondary"} -->
+<p class="has-text-align-center has-text-secondary-color has-text-color" style="font-size:12px">待上传实拍图</p>
+<!-- /wp:paragraph -->
+</div>
+<!-- /wp:group -->
+</div>
+<!-- /wp:group -->
+</div>
+<!-- /wp:column -->
+</div>
+<!-- /wp:columns -->
+<!-- wp:columns {"style":{"spacing":{"margin":{"top":"var:preset|spacing|40"}}}} -->
+<div class="wp-block-columns" style="margin-top:var(--wp--preset--spacing--40)">
+<!-- wp:column -->
+<div class="wp-block-column">
+<!-- wp:group {"backgroundColor":"card-white","layout":{"type":"constrained"},"style":{"spacing":{"padding":{"top":"var:preset|spacing|20","bottom":"var:preset|spacing|20","left":"var:preset|spacing|20","right":"var:preset|spacing|20"}},"border":{"radius":"8px"}}} -->
+<div class="wp-block-group has-card-white-background-color has-background" style="border-radius:8px;padding:var(--wp--preset--spacing--20)">
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"40px","fontWeight":"700"}},"textColor":"accent"} -->
+<p class="has-text-align-center has-accent-color has-text-color" style="font-size:40px;font-weight:700">04</p>
+<!-- /wp:paragraph -->
+<!-- wp:heading {"level":3,"textAlign":"center"} -->
+<h3 class="wp-block-heading has-text-align-center">Finished Product Testing</h3>
+<!-- /wp:heading -->
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"14px"}},"textColor":"text-secondary"} -->
+<p class="has-text-align-center has-text-secondary-color has-text-color" style="font-size:14px">HPLC / GC / AAS testing on every finished batch.</p>
+<!-- /wp:paragraph -->
+<!-- wp:group {"backgroundColor":"bg-light","layout":{"type":"constrained"},"style":{"spacing":{"padding":{"top":"var:preset|spacing|60","bottom":"var:preset|spacing|60"}},"border":{"radius":"8px"}}} -->
+<div class="wp-block-group has-bg-light-background-color has-background" style="border-radius:8px;padding-top:var(--wp--preset--spacing--60);padding-bottom:var(--wp--preset--spacing--60)">
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"12px"}},"textColor":"text-secondary"} -->
+<p class="has-text-align-center has-text-secondary-color has-text-color" style="font-size:12px">待上传实拍图</p>
+<!-- /wp:paragraph -->
+</div>
+<!-- /wp:group -->
+</div>
+<!-- /wp:group -->
+</div>
+<!-- /wp:column -->
+<!-- wp:column -->
+<div class="wp-block-column">
+<!-- wp:group {"backgroundColor":"card-white","layout":{"type":"constrained"},"style":{"spacing":{"padding":{"top":"var:preset|spacing|20","bottom":"var:preset|spacing|20","left":"var:preset|spacing|20","right":"var:preset|spacing|20"}},"border":{"radius":"8px"}}} -->
+<div class="wp-block-group has-card-white-background-color has-background" style="border-radius:8px;padding:var(--wp--preset--spacing--20)">
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"40px","fontWeight":"700"}},"textColor":"accent"} -->
+<p class="has-text-align-center has-accent-color has-text-color" style="font-size:40px;font-weight:700">05</p>
+<!-- /wp:paragraph -->
+<!-- wp:heading {"level":3,"textAlign":"center"} -->
+<h3 class="wp-block-heading has-text-align-center">COA Issuance</h3>
+<!-- /wp:heading -->
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"14px"}},"textColor":"text-secondary"} -->
+<p class="has-text-align-center has-text-secondary-color has-text-color" style="font-size:14px">Certificate of Analysis issued for every order.</p>
+<!-- /wp:paragraph -->
+<!-- wp:group {"backgroundColor":"bg-light","layout":{"type":"constrained"},"style":{"spacing":{"padding":{"top":"var:preset|spacing|60","bottom":"var:preset|spacing|60"}},"border":{"radius":"8px"}}} -->
+<div class="wp-block-group has-bg-light-background-color has-background" style="border-radius:8px;padding-top:var(--wp--preset--spacing--60);padding-bottom:var(--wp--preset--spacing--60)">
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"12px"}},"textColor":"text-secondary"} -->
+<p class="has-text-align-center has-text-secondary-color has-text-color" style="font-size:12px">待上传实拍图</p>
+<!-- /wp:paragraph -->
+</div>
+<!-- /wp:group -->
+</div>
+<!-- /wp:group -->
+</div>
+<!-- /wp:column -->
+<!-- wp:column -->
+<div class="wp-block-column">
+<!-- wp:group {"backgroundColor":"card-white","layout":{"type":"constrained"},"style":{"spacing":{"padding":{"top":"var:preset|spacing|20","bottom":"var:preset|spacing|20","left":"var:preset|spacing|20","right":"var:preset|spacing|20"}},"border":{"radius":"8px"}}} -->
+<div class="wp-block-group has-card-white-background-color has-background" style="border-radius:8px;padding:var(--wp--preset--spacing--20)">
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"40px","fontWeight":"700"}},"textColor":"accent"} -->
+<p class="has-text-align-center has-accent-color has-text-color" style="font-size:40px;font-weight:700">06</p>
+<!-- /wp:paragraph -->
+<!-- wp:heading {"level":3,"textAlign":"center"} -->
+<h3 class="wp-block-heading has-text-align-center">Retention Sampling</h3>
+<!-- /wp:heading -->
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"14px"}},"textColor":"text-secondary"} -->
+<p class="has-text-align-center has-text-secondary-color has-text-color" style="font-size:14px">Samples archived for the full shelf life period.</p>
+<!-- /wp:paragraph -->
+<!-- wp:group {"backgroundColor":"bg-light","layout":{"type":"constrained"},"style":{"spacing":{"padding":{"top":"var:preset|spacing|60","bottom":"var:preset|spacing|60"}},"border":{"radius":"8px"}}} -->
+<div class="wp-block-group has-bg-light-background-color has-background" style="border-radius:8px;padding-top:var(--wp--preset--spacing--60);padding-bottom:var(--wp--preset--spacing--60)">
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"12px"}},"textColor":"text-secondary"} -->
+<p class="has-text-align-center has-text-secondary-color has-text-color" style="font-size:12px">待上传实拍图</p>
+<!-- /wp:paragraph -->
+</div>
+<!-- /wp:group -->
+</div>
+<!-- /wp:group -->
+</div>
+<!-- /wp:column -->
+</div>
+<!-- /wp:columns -->
+</section>
+<!-- /wp:group -->
+
+<!-- wp:group {"tagName":"section","backgroundColor":"card-white","layout":{"type":"constrained"},"style":{"spacing":{"padding":{"top":"var:preset|spacing|80","bottom":"var:preset|spacing|80"}}}} -->
+<section class="wp-block-group has-card-white-background-color has-background" style="padding-top:var(--wp--preset--spacing--80);padding-bottom:var(--wp--preset--spacing--80)">
+<!-- wp:heading {"textAlign":"center"} -->
+<h2 class="wp-block-heading has-text-align-center">OEM &amp; ODM Services</h2>
+<!-- /wp:heading -->
+<!-- wp:paragraph {"align":"center","textColor":"text-secondary"} -->
+<p class="has-text-align-center has-text-secondary-color has-text-color">You bring the formula or the idea. We handle the rest.</p>
+<!-- /wp:paragraph -->
+<!-- wp:columns {"verticalAlignment":"stretch","style":{"spacing":{"margin":{"top":"var:preset|spacing|60"}}}} -->
+<div class="wp-block-columns are-vertically-aligned-stretch" style="margin-top:var(--wp--preset--spacing--60)">
+<!-- wp:column {"verticalAlignment":"stretch"} -->
+<div class="wp-block-column is-vertically-aligned-stretch">
+<!-- wp:group {"backgroundColor":"bg-light","layout":{"type":"constrained"},"style":{"spacing":{"padding":{"top":"var:preset|spacing|40","bottom":"var:preset|spacing|40","left":"var:preset|spacing|20","right":"var:preset|spacing|20"}},"border":{"radius":"8px"}}} -->
+<div class="wp-block-group has-bg-light-background-color has-background" style="border-radius:8px;padding-top:var(--wp--preset--spacing--40);padding-right:var(--wp--preset--spacing--20);padding-bottom:var(--wp--preset--spacing--40);padding-left:var(--wp--preset--spacing--20)">
+<!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading">OEM — You Bring the Formula</h3>
+<!-- /wp:heading -->
+<!-- wp:paragraph {"textColor":"text-secondary"} -->
+<p class="has-text-secondary-color has-text-color">You provide the formula, specifications, and packaging requirements. We manufacture, test, and deliver.</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph {"style":{"typography":{"fontSize":"14px"}},"textColor":"primary"} -->
+<p class="has-primary-color has-text-color" style="font-size:14px">✓ Manufacturing</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph {"style":{"typography":{"fontSize":"14px"}},"textColor":"primary"} -->
+<p class="has-primary-color has-text-color" style="font-size:14px">✓ Testing</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph {"style":{"typography":{"fontSize":"14px"}},"textColor":"primary"} -->
+<p class="has-primary-color has-text-color" style="font-size:14px">✓ COA per batch</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph {"style":{"typography":{"fontSize":"14px"}},"textColor":"primary"} -->
+<p class="has-primary-color has-text-color" style="font-size:14px">✓ Packaging</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph {"style":{"typography":{"fontSize":"14px"}},"textColor":"primary"} -->
+<p class="has-primary-color has-text-color" style="font-size:14px">✓ Delivery</p>
+<!-- /wp:paragraph -->
+</div>
+<!-- /wp:group -->
+</div>
+<!-- /wp:column -->
+<!-- wp:column {"verticalAlignment":"stretch"} -->
+<div class="wp-block-column is-vertically-aligned-stretch">
+<!-- wp:group {"backgroundColor":"bg-light","layout":{"type":"constrained"},"style":{"spacing":{"padding":{"top":"var:preset|spacing|40","bottom":"var:preset|spacing|40","left":"var:preset|spacing|20","right":"var:preset|spacing|20"}},"border":{"radius":"8px"}}} -->
+<div class="wp-block-group has-bg-light-background-color has-background" style="border-radius:8px;padding-top:var(--wp--preset--spacing--40);padding-right:var(--wp--preset--spacing--20);padding-bottom:var(--wp--preset--spacing--40);padding-left:var(--wp--preset--spacing--20)">
+<!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading">ODM — We Develop From Your Idea</h3>
+<!-- /wp:heading -->
+<!-- wp:paragraph {"textColor":"text-secondary"} -->
+<p class="has-text-secondary-color has-text-color">You provide a concept, reference sample, or functional requirement. We develop the formula, sample it, test palatability, and produce the finished product.</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph {"style":{"typography":{"fontSize":"14px"}},"textColor":"primary"} -->
+<p class="has-primary-color has-text-color" style="font-size:14px">✓ Formula development</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph {"style":{"typography":{"fontSize":"14px"}},"textColor":"primary"} -->
+<p class="has-primary-color has-text-color" style="font-size:14px">✓ Palatability testing</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph {"style":{"typography":{"fontSize":"14px"}},"textColor":"primary"} -->
+<p class="has-primary-color has-text-color" style="font-size:14px">✓ Sampling</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph {"style":{"typography":{"fontSize":"14px"}},"textColor":"primary"} -->
+<p class="has-primary-color has-text-color" style="font-size:14px">✓ Stability testing</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph {"style":{"typography":{"fontSize":"14px"}},"textColor":"primary"} -->
+<p class="has-primary-color has-text-color" style="font-size:14px">✓ Label support</p>
+<!-- /wp:paragraph -->
+</div>
+<!-- /wp:group -->
+</div>
+<!-- /wp:column -->
+</div>
+<!-- /wp:columns -->
+</section>
+<!-- /wp:group -->
+
+<!-- wp:group {"tagName":"section","backgroundColor":"bg-light","layout":{"type":"constrained"},"style":{"spacing":{"padding":{"top":"var:preset|spacing|80","bottom":"var:preset|spacing|80"}}}} -->
+<section class="wp-block-group has-bg-light-background-color has-background" style="padding-top:var(--wp--preset--spacing--80);padding-bottom:var(--wp--preset--spacing--80)">
+<!-- wp:heading {"textAlign":"center"} -->
+<h2 class="wp-block-heading has-text-align-center">Cooperation Models</h2>
+<!-- /wp:heading -->
+<!-- wp:paragraph {"align":"center","textColor":"text-secondary"} -->
+<p class="has-text-align-center has-text-secondary-color has-text-color">Whether you are a brand owner, e-commerce seller, distributor, or trading company, we have a model that fits your business.</p>
+<!-- /wp:paragraph -->
+<!-- wp:columns {"style":{"spacing":{"margin":{"top":"var:preset|spacing|60"}}}} -->
+<div class="wp-block-columns" style="margin-top:var(--wp--preset--spacing--60)">
+<!-- wp:column -->
+<div class="wp-block-column">
+<!-- wp:group {"backgroundColor":"card-white","layout":{"type":"constrained"},"style":{"spacing":{"padding":{"top":"var:preset|spacing|40","bottom":"var:preset|spacing|40","left":"var:preset|spacing|20","right":"var:preset|spacing|20"}},"border":{"radius":"8px"}}} -->
+<div class="wp-block-group has-card-white-background-color has-background" style="border-radius:8px;padding-top:var(--wp--preset--spacing--40);padding-right:var(--wp--preset--spacing--20);padding-bottom:var(--wp--preset--spacing--40);padding-left:var(--wp--preset--spacing--20)">
+<!-- wp:heading {"level":3,"textAlign":"center"} -->
+<h3 class="wp-block-heading has-text-align-center">Brand Owners</h3>
+<!-- /wp:heading -->
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"14px"}},"textColor":"text-secondary"} -->
+<p class="has-text-align-center has-text-secondary-color has-text-color" style="font-size:14px">Launch or expand your own supplement brand with full private label support.</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"12px"}},"textColor":"text-secondary"} -->
+<p class="has-text-align-center has-text-secondary-color has-text-color" style="font-size:12px">MOQ 500</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"12px"}},"textColor":"text-secondary"} -->
+<p class="has-text-align-center has-text-secondary-color has-text-color" style="font-size:12px">Sampling 3–7 days</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"12px"}},"textColor":"text-secondary"} -->
+<p class="has-text-align-center has-text-secondary-color has-text-color" style="font-size:12px">Lead time 15–30 days</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"12px"}},"textColor":"text-secondary"} -->
+<p class="has-text-align-center has-text-secondary-color has-text-color" style="font-size:12px">Support: full private label</p>
+<!-- /wp:paragraph -->
+</div>
+<!-- /wp:group -->
+</div>
+<!-- /wp:column -->
+<!-- wp:column -->
+<div class="wp-block-column">
+<!-- wp:group {"backgroundColor":"card-white","layout":{"type":"constrained"},"style":{"spacing":{"padding":{"top":"var:preset|spacing|40","bottom":"var:preset|spacing|40","left":"var:preset|spacing|20","right":"var:preset|spacing|20"}},"border":{"radius":"8px"}}} -->
+<div class="wp-block-group has-card-white-background-color has-background" style="border-radius:8px;padding-top:var(--wp--preset--spacing--40);padding-right:var(--wp--preset--spacing--20);padding-bottom:var(--wp--preset--spacing--40);padding-left:var(--wp--preset--spacing--20)">
+<!-- wp:heading {"level":3,"textAlign":"center"} -->
+<h3 class="wp-block-heading has-text-align-center">Cross-Border E-Commerce Sellers</h3>
+<!-- /wp:heading -->
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"14px"}},"textColor":"text-secondary"} -->
+<p class="has-text-align-center has-text-secondary-color has-text-color" style="font-size:14px">Amazon, Chewy and TikTok Shop ready products with compliant labeling.</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"12px"}},"textColor":"text-secondary"} -->
+<p class="has-text-align-center has-text-secondary-color has-text-color" style="font-size:12px">MOQ 500</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"12px"}},"textColor":"text-secondary"} -->
+<p class="has-text-align-center has-text-secondary-color has-text-color" style="font-size:12px">Sampling 3–7 days</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"12px"}},"textColor":"text-secondary"} -->
+<p class="has-text-align-center has-text-secondary-color has-text-color" style="font-size:12px">Lead time 15–30 days</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"12px"}},"textColor":"text-secondary"} -->
+<p class="has-text-align-center has-text-secondary-color has-text-color" style="font-size:12px">Support: US &amp; EU compliant labeling</p>
+<!-- /wp:paragraph -->
+</div>
+<!-- /wp:group -->
+</div>
+<!-- /wp:column -->
+<!-- wp:column -->
+<div class="wp-block-column">
+<!-- wp:group {"backgroundColor":"card-white","layout":{"type":"constrained"},"style":{"spacing":{"padding":{"top":"var:preset|spacing|40","bottom":"var:preset|spacing|40","left":"var:preset|spacing|20","right":"var:preset|spacing|20"}},"border":{"radius":"8px"}}} -->
+<div class="wp-block-group has-card-white-background-color has-background" style="border-radius:8px;padding-top:var(--wp--preset--spacing--40);padding-right:var(--wp--preset--spacing--20);padding-bottom:var(--wp--preset--spacing--40);padding-left:var(--wp--preset--spacing--20)">
+<!-- wp:heading {"level":3,"textAlign":"center"} -->
+<h3 class="wp-block-heading has-text-align-center">Pet Store Chains &amp; Distributors</h3>
+<!-- /wp:heading -->
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"14px"}},"textColor":"text-secondary"} -->
+<p class="has-text-align-center has-text-secondary-color has-text-color" style="font-size:14px">Stable bulk supply with consistent quality for retail networks.</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"12px"}},"textColor":"text-secondary"} -->
+<p class="has-text-align-center has-text-secondary-color has-text-color" style="font-size:12px">MOQ 1,000</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"12px"}},"textColor":"text-secondary"} -->
+<p class="has-text-align-center has-text-secondary-color has-text-color" style="font-size:12px">Sampling 3–7 days</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"12px"}},"textColor":"text-secondary"} -->
+<p class="has-text-align-center has-text-secondary-color has-text-color" style="font-size:12px">Lead time 15–30 days</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"12px"}},"textColor":"text-secondary"} -->
+<p class="has-text-align-center has-text-secondary-color has-text-color" style="font-size:12px">Support: dedicated account manager</p>
+<!-- /wp:paragraph -->
+</div>
+<!-- /wp:group -->
+</div>
+<!-- /wp:column -->
+</div>
+<!-- /wp:columns -->
+<!-- wp:columns {"style":{"spacing":{"margin":{"top":"var:preset|spacing|40"}}}} -->
+<div class="wp-block-columns" style="margin-top:var(--wp--preset--spacing--40)">
+<!-- wp:column -->
+<div class="wp-block-column">
+<!-- wp:group {"backgroundColor":"card-white","layout":{"type":"constrained"},"style":{"spacing":{"padding":{"top":"var:preset|spacing|40","bottom":"var:preset|spacing|40","left":"var:preset|spacing|20","right":"var:preset|spacing|20"}},"border":{"radius":"8px"}}} -->
+<div class="wp-block-group has-card-white-background-color has-background" style="border-radius:8px;padding-top:var(--wp--preset--spacing--40);padding-right:var(--wp--preset--spacing--20);padding-bottom:var(--wp--preset--spacing--40);padding-left:var(--wp--preset--spacing--20)">
+<!-- wp:heading {"level":3,"textAlign":"center"} -->
+<h3 class="wp-block-heading has-text-align-center">Veterinary Clinics</h3>
+<!-- /wp:heading -->
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"14px"}},"textColor":"text-secondary"} -->
+<p class="has-text-align-center has-text-secondary-color has-text-color" style="font-size:14px">Functional formulas with precise dosing for professional recommendations.</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"12px"}},"textColor":"text-secondary"} -->
+<p class="has-text-align-center has-text-secondary-color has-text-color" style="font-size:12px">MOQ 500</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"12px"}},"textColor":"text-secondary"} -->
+<p class="has-text-align-center has-text-secondary-color has-text-color" style="font-size:12px">Sampling 3–7 days</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"12px"}},"textColor":"text-secondary"} -->
+<p class="has-text-align-center has-text-secondary-color has-text-color" style="font-size:12px">Lead time 15–30 days</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"12px"}},"textColor":"text-secondary"} -->
+<p class="has-text-align-center has-text-secondary-color has-text-color" style="font-size:12px">Support: clinical formulation advice</p>
+<!-- /wp:paragraph -->
+</div>
+<!-- /wp:group -->
+</div>
+<!-- /wp:column -->
+<!-- wp:column -->
+<div class="wp-block-column">
+<!-- wp:group {"backgroundColor":"card-white","layout":{"type":"constrained"},"style":{"spacing":{"padding":{"top":"var:preset|spacing|40","bottom":"var:preset|spacing|40","left":"var:preset|spacing|20","right":"var:preset|spacing|20"}},"border":{"radius":"8px"}}} -->
+<div class="wp-block-group has-card-white-background-color has-background" style="border-radius:8px;padding-top:var(--wp--preset--spacing--40);padding-right:var(--wp--preset--spacing--20);padding-bottom:var(--wp--preset--spacing--40);padding-left:var(--wp--preset--spacing--20)">
+<!-- wp:heading {"level":3,"textAlign":"center"} -->
+<h3 class="wp-block-heading has-text-align-center">Trading Companies</h3>
+<!-- /wp:heading -->
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"14px"}},"textColor":"text-secondary"} -->
+<p class="has-text-align-center has-text-secondary-color has-text-color" style="font-size:14px">Reliable manufacturing partner with export documentation for 30+ countries.</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"12px"}},"textColor":"text-secondary"} -->
+<p class="has-text-align-center has-text-secondary-color has-text-color" style="font-size:12px">MOQ 1,000</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"12px"}},"textColor":"text-secondary"} -->
+<p class="has-text-align-center has-text-secondary-color has-text-color" style="font-size:12px">Sampling 3–7 days</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"12px"}},"textColor":"text-secondary"} -->
+<p class="has-text-align-center has-text-secondary-color has-text-color" style="font-size:12px">Lead time 15–30 days</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"12px"}},"textColor":"text-secondary"} -->
+<p class="has-text-align-center has-text-secondary-color has-text-color" style="font-size:12px">Support: full export documentation</p>
+<!-- /wp:paragraph -->
+</div>
+<!-- /wp:group -->
+</div>
+<!-- /wp:column -->
+<!-- wp:column -->
+<div class="wp-block-column">
+<!-- wp:group {"backgroundColor":"card-white","layout":{"type":"constrained"},"style":{"spacing":{"padding":{"top":"var:preset|spacing|40","bottom":"var:preset|spacing|40","left":"var:preset|spacing|20","right":"var:preset|spacing|20"}},"border":{"radius":"8px"}}} -->
+<div class="wp-block-group has-card-white-background-color has-background" style="border-radius:8px;padding-top:var(--wp--preset--spacing--40);padding-right:var(--wp--preset--spacing--20);padding-bottom:var(--wp--preset--spacing--40);padding-left:var(--wp--preset--spacing--20)">
+<!-- wp:heading {"level":3,"textAlign":"center"} -->
+<h3 class="wp-block-heading has-text-align-center">Domestic E-Commerce Sellers</h3>
+<!-- /wp:heading -->
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"14px"}},"textColor":"text-secondary"} -->
+<p class="has-text-align-center has-text-secondary-color has-text-color" style="font-size:14px">Fast-turnaround production for Tmall, JD and Douyin flagship stores.</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"12px"}},"textColor":"text-secondary"} -->
+<p class="has-text-align-center has-text-secondary-color has-text-color" style="font-size:12px">MOQ 500</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"12px"}},"textColor":"text-secondary"} -->
+<p class="has-text-align-center has-text-secondary-color has-text-color" style="font-size:12px">Sampling 3–7 days</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"12px"}},"textColor":"text-secondary"} -->
+<p class="has-text-align-center has-text-secondary-color has-text-color" style="font-size:12px">Lead time 15–30 days</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"12px"}},"textColor":"text-secondary"} -->
+<p class="has-text-align-center has-text-secondary-color has-text-color" style="font-size:12px">Support: fast replenishment</p>
+<!-- /wp:paragraph -->
+</div>
+<!-- /wp:group -->
+</div>
+<!-- /wp:column -->
+</div>
+<!-- /wp:columns -->
+<!-- wp:buttons {"layout":{"type":"flex","justifyContent":"center"},"style":{"spacing":{"margin":{"top":"var:preset|spacing|40"}}}} -->
+<div class="wp-block-buttons" style="margin-top:var(--wp--preset--spacing--40)">
+<!-- wp:button {"style":{"color":{"background":"transparent","text":"var:preset|color|primary"},"border":{"width":"2px","color":"var:preset|color|primary","radius":"6px"},"typography":{"fontStyle":"normal","fontWeight":"600"}}} -->
+<div class="wp-block-button"><a class="wp-block-button__link wp-element-button has-text-color has-background has-border-color has-custom-font-weight" style="border-radius:6px;border-width:2px;background-color:transparent;color:var(--wp--preset--color--primary);border-color:var(--wp--preset--color--primary);font-weight:600" href="/cooperation/">View All Cooperation Models</a></div>
+<!-- /wp:button -->
+</div>
+<!-- /wp:buttons -->
+</section>
+<!-- /wp:group -->
+
+<!-- wp:group {"tagName":"section","backgroundColor":"bg-light","layout":{"type":"constrained"},"style":{"spacing":{"padding":{"top":"var:preset|spacing|80","bottom":"var:preset|spacing|80"}}}} -->
+<section class="wp-block-group has-bg-light-background-color has-background" style="padding-top:var(--wp--preset--spacing--80);padding-bottom:var(--wp--preset--spacing--80)">
+<!-- wp:heading {"textAlign":"center"} -->
+<h2 class="wp-block-heading has-text-align-center">From Inquiry to After-Sales</h2>
+<!-- /wp:heading -->
+<!-- wp:paragraph {"align":"center","textColor":"text-secondary"} -->
+<p class="has-text-align-center has-text-secondary-color has-text-color">A clear, documented process from your first message to repeat orders.</p>
+<!-- /wp:paragraph -->
+<!-- wp:columns {"style":{"spacing":{"margin":{"top":"var:preset|spacing|60"}}}} -->
+<div class="wp-block-columns" style="margin-top:var(--wp--preset--spacing--60)">
+<!-- wp:column -->
+<div class="wp-block-column">
+<!-- wp:group {"style":{"border":{"top":{"color":"var:preset|color|accent","width":"2px"}},"spacing":{"padding":{"top":"var:preset|spacing|20"}}},"layout":{"type":"constrained"}} -->
+<div class="wp-block-group has-top-border-color has-top-border" style="border-top-color:var(--wp--preset--color--accent);border-top-width:2px;padding-top:var(--wp--preset--spacing--20)">
+<!-- wp:paragraph {"style":{"typography":{"fontSize":"40px","fontWeight":"700"}},"textColor":"accent"} -->
+<p class="has-accent-color has-text-color" style="font-size:40px;font-weight:700">01</p>
+<!-- /wp:paragraph -->
+<!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading">Inquiry</h3>
+<!-- /wp:heading -->
+<!-- wp:paragraph {"style":{"typography":{"fontSize":"14px"}},"textColor":"text-secondary"} -->
+<p class="has-text-secondary-color has-text-color" style="font-size:14px">Send us your product idea, target market, and reference.</p>
+<!-- /wp:paragraph -->
+</div>
+<!-- /wp:group -->
+</div>
+<!-- /wp:column -->
+<!-- wp:column -->
+<div class="wp-block-column">
+<!-- wp:group {"style":{"border":{"top":{"color":"var:preset|color|accent","width":"2px"}},"spacing":{"padding":{"top":"var:preset|spacing|20"}}},"layout":{"type":"constrained"}} -->
+<div class="wp-block-group has-top-border-color has-top-border" style="border-top-color:var(--wp--preset--color--accent);border-top-width:2px;padding-top:var(--wp--preset--spacing--20)">
+<!-- wp:paragraph {"style":{"typography":{"fontSize":"40px","fontWeight":"700"}},"textColor":"accent"} -->
+<p class="has-accent-color has-text-color" style="font-size:40px;font-weight:700">02</p>
+<!-- /wp:paragraph -->
+<!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading">Requirement Confirmation</h3>
+<!-- /wp:heading -->
+<!-- wp:paragraph {"style":{"typography":{"fontSize":"14px"}},"textColor":"text-secondary"} -->
+<p class="has-text-secondary-color has-text-color" style="font-size:14px">We confirm dosage form, formula direction, and specifications.</p>
+<!-- /wp:paragraph -->
+</div>
+<!-- /wp:group -->
+</div>
+<!-- /wp:column -->
+<!-- wp:column -->
+<div class="wp-block-column">
+<!-- wp:group {"style":{"border":{"top":{"color":"var:preset|color|accent","width":"2px"}},"spacing":{"padding":{"top":"var:preset|spacing|20"}}},"layout":{"type":"constrained"}} -->
+<div class="wp-block-group has-top-border-color has-top-border" style="border-top-color:var(--wp--preset--color--accent);border-top-width:2px;padding-top:var(--wp--preset--spacing--20)">
+<!-- wp:paragraph {"style":{"typography":{"fontSize":"40px","fontWeight":"700"}},"textColor":"accent"} -->
+<p class="has-accent-color has-text-color" style="font-size:40px;font-weight:700">03</p>
+<!-- /wp:paragraph -->
+<!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading">Quotation &amp; Sampling</h3>
+<!-- /wp:heading -->
+<!-- wp:paragraph {"style":{"typography":{"fontSize":"14px"}},"textColor":"text-secondary"} -->
+<p class="has-text-secondary-color has-text-color" style="font-size:14px">Detailed quotation plus samples delivered in 3–7 days.</p>
+<!-- /wp:paragraph -->
+</div>
+<!-- /wp:group -->
+</div>
+<!-- /wp:column -->
+<!-- wp:column -->
+<div class="wp-block-column">
+<!-- wp:group {"style":{"border":{"top":{"color":"var:preset|color|accent","width":"2px"}},"spacing":{"padding":{"top":"var:preset|spacing|20"}}},"layout":{"type":"constrained"}} -->
+<div class="wp-block-group has-top-border-color has-top-border" style="border-top-color:var(--wp--preset--color--accent);border-top-width:2px;padding-top:var(--wp--preset--spacing--20)">
+<!-- wp:paragraph {"style":{"typography":{"fontSize":"40px","fontWeight":"700"}},"textColor":"accent"} -->
+<p class="has-accent-color has-text-color" style="font-size:40px;font-weight:700">04</p>
+<!-- /wp:paragraph -->
+<!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading">Contract &amp; Payment</h3>
+<!-- /wp:heading -->
+<!-- wp:paragraph {"style":{"typography":{"fontSize":"14px"}},"textColor":"text-secondary"} -->
+<p class="has-text-secondary-color has-text-color" style="font-size:14px">Clear terms, production schedule, and payment milestones.</p>
+<!-- /wp:paragraph -->
+</div>
+<!-- /wp:group -->
+</div>
+<!-- /wp:column -->
+</div>
+<!-- /wp:columns -->
+<!-- wp:columns {"style":{"spacing":{"margin":{"top":"var:preset|spacing|40"}}}} -->
+<div class="wp-block-columns" style="margin-top:var(--wp--preset--spacing--40)">
+<!-- wp:column -->
+<div class="wp-block-column">
+<!-- wp:group {"style":{"border":{"top":{"color":"var:preset|color|accent","width":"2px"}},"spacing":{"padding":{"top":"var:preset|spacing|20"}}},"layout":{"type":"constrained"}} -->
+<div class="wp-block-group has-top-border-color has-top-border" style="border-top-color:var(--wp--preset--color--accent);border-top-width:2px;padding-top:var(--wp--preset--spacing--20)">
+<!-- wp:paragraph {"style":{"typography":{"fontSize":"40px","fontWeight":"700"}},"textColor":"accent"} -->
+<p class="has-accent-color has-text-color" style="font-size:40px;font-weight:700">05</p>
+<!-- /wp:paragraph -->
+<!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading">Production &amp; QC</h3>
+<!-- /wp:heading -->
+<!-- wp:paragraph {"style":{"typography":{"fontSize":"14px"}},"textColor":"text-secondary"} -->
+<p class="has-text-secondary-color has-text-color" style="font-size:14px">Batch production with in-process and finished-goods QC.</p>
+<!-- /wp:paragraph -->
+</div>
+<!-- /wp:group -->
+</div>
+<!-- /wp:column -->
+<!-- wp:column -->
+<div class="wp-block-column">
+<!-- wp:group {"style":{"border":{"top":{"color":"var:preset|color|accent","width":"2px"}},"spacing":{"padding":{"top":"var:preset|spacing|20"}}},"layout":{"type":"constrained"}} -->
+<div class="wp-block-group has-top-border-color has-top-border" style="border-top-color:var(--wp--preset--color--accent);border-top-width:2px;padding-top:var(--wp--preset--spacing--20)">
+<!-- wp:paragraph {"style":{"typography":{"fontSize":"40px","fontWeight":"700"}},"textColor":"accent"} -->
+<p class="has-accent-color has-text-color" style="font-size:40px;font-weight:700">06</p>
+<!-- /wp:paragraph -->
+<!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading">Shipping &amp; Delivery</h3>
+<!-- /wp:heading -->
+<!-- wp:paragraph {"style":{"typography":{"fontSize":"14px"}},"textColor":"text-secondary"} -->
+<p class="has-text-secondary-color has-text-color" style="font-size:14px">Export packing, full documentation, and door-to-door options.</p>
+<!-- /wp:paragraph -->
+</div>
+<!-- /wp:group -->
+</div>
+<!-- /wp:column -->
+<!-- wp:column -->
+<div class="wp-block-column">
+<!-- wp:group {"style":{"border":{"top":{"color":"var:preset|color|accent","width":"2px"}},"spacing":{"padding":{"top":"var:preset|spacing|20"}}},"layout":{"type":"constrained"}} -->
+<div class="wp-block-group has-top-border-color has-top-border" style="border-top-color:var(--wp--preset--color--accent);border-top-width:2px;padding-top:var(--wp--preset--spacing--20)">
+<!-- wp:paragraph {"style":{"typography":{"fontSize":"40px","fontWeight":"700"}},"textColor":"accent"} -->
+<p class="has-accent-color has-text-color" style="font-size:40px;font-weight:700">07</p>
+<!-- /wp:paragraph -->
+<!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading">After-Sales &amp; Reorder</h3>
+<!-- /wp:heading -->
+<!-- wp:paragraph {"style":{"typography":{"fontSize":"14px"}},"textColor":"text-secondary"} -->
+<p class="has-text-secondary-color has-text-color" style="font-size:14px">Market feedback, restocking, and continuous support.</p>
+<!-- /wp:paragraph -->
+</div>
+<!-- /wp:group -->
+</div>
+<!-- /wp:column -->
+</div>
+<!-- /wp:columns -->
+</section>
+<!-- /wp:group -->
+
+<!-- wp:group {"tagName":"section","backgroundColor":"card-white","layout":{"type":"constrained"},"style":{"spacing":{"padding":{"top":"var:preset|spacing|80","bottom":"var:preset|spacing|80"}}}} -->
+<section class="wp-block-group has-card-white-background-color has-background" style="padding-top:var(--wp--preset--spacing--80);padding-bottom:var(--wp--preset--spacing--80)">
+<!-- wp:heading {"textAlign":"center"} -->
+<h2 class="wp-block-heading has-text-align-center">Client Stories</h2>
+<!-- /wp:heading -->
+<!-- wp:paragraph {"align":"center","textColor":"text-secondary"} -->
+<p class="has-text-align-center has-text-secondary-color has-text-color">How brand owners, e-commerce sellers, and distributors work with SINO FRESH to build their pet supplement lines.</p>
+<!-- /wp:paragraph -->
+<!-- wp:columns {"style":{"spacing":{"margin":{"top":"var:preset|spacing|60"}}}} -->
+<div class="wp-block-columns" style="margin-top:var(--wp--preset--spacing--60)">
+<!-- wp:column -->
+<div class="wp-block-column">
+<!-- wp:group {"backgroundColor":"card-white","style":{"border":{"radius":"8px","color":"var:preset|color|border-light","width":"1px"},"spacing":{"padding":{"top":"var:preset|spacing|40","bottom":"var:preset|spacing|40","left":"var:preset|spacing|20","right":"var:preset|spacing|20"}}},"layout":{"type":"flex","orientation":"vertical","justifyContent":"center"}} -->
+<div class="wp-block-group is-vertical is-content-justification-center has-border-color has-border-light-border-color has-card-white-background-color has-background" style="border-radius:8px;border-width:1px;padding-top:var(--wp--preset--spacing--40);padding-right:var(--wp--preset--spacing--20);padding-bottom:var(--wp--preset--spacing--40);padding-left:var(--wp--preset--spacing--20)">
+<!-- wp:group {"backgroundColor":"bg-light","style":{"dimensions":{"width":"96px","height":"96px"},"border":{"radius":"999px"}},"layout":{"type":"flex","justifyContent":"center","verticalAlignment":"center"}} -->
+<div class="wp-block-group has-bg-light-background-color has-background" style="border-radius:999px;width:96px;height:96px">
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"11px"}},"textColor":"text-secondary"} -->
+<p class="has-text-align-center has-text-secondary-color has-text-color" style="font-size:11px">待上传头像</p>
+<!-- /wp:paragraph -->
+</div>
+<!-- /wp:group -->
+<!-- wp:heading {"level":3,"textAlign":"center"} -->
+<h3 class="wp-block-heading has-text-align-center">Mark T.</h3>
+<!-- /wp:heading -->
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"14px"}},"textColor":"text-secondary"} -->
+<p class="has-text-align-center has-text-secondary-color has-text-color" style="font-size:14px">Brand Owner · USA</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"16px","fontStyle":"italic","fontWeight":"400"}},"textColor":"text-primary"} -->
+<p class="has-text-align-center has-text-primary-color has-text-color" style="font-size:16px;font-style:italic;font-weight:400">“They handled formulation and regulatory support from day one.”</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"12px"}},"textColor":"text-secondary"} -->
+<p class="has-text-align-center has-text-secondary-color has-text-color" style="font-size:12px">Soft Chews · Brand Owner</p>
+<!-- /wp:paragraph -->
+</div>
+<!-- /wp:group -->
+</div>
+<!-- /wp:column -->
+<!-- wp:column -->
+<div class="wp-block-column">
+<!-- wp:group {"backgroundColor":"card-white","style":{"border":{"radius":"8px","color":"var:preset|color|border-light","width":"1px"},"spacing":{"padding":{"top":"var:preset|spacing|40","bottom":"var:preset|spacing|40","left":"var:preset|spacing|20","right":"var:preset|spacing|20"}}},"layout":{"type":"flex","orientation":"vertical","justifyContent":"center"}} -->
+<div class="wp-block-group is-vertical is-content-justification-center has-border-color has-border-light-border-color has-card-white-background-color has-background" style="border-radius:8px;border-width:1px;padding-top:var(--wp--preset--spacing--40);padding-right:var(--wp--preset--spacing--20);padding-bottom:var(--wp--preset--spacing--40);padding-left:var(--wp--preset--spacing--20)">
+<!-- wp:group {"backgroundColor":"bg-light","style":{"dimensions":{"width":"96px","height":"96px"},"border":{"radius":"999px"}},"layout":{"type":"flex","justifyContent":"center","verticalAlignment":"center"}} -->
+<div class="wp-block-group has-bg-light-background-color has-background" style="border-radius:999px;width:96px;height:96px">
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"11px"}},"textColor":"text-secondary"} -->
+<p class="has-text-align-center has-text-secondary-color has-text-color" style="font-size:11px">待上传头像</p>
+<!-- /wp:paragraph -->
+</div>
+<!-- /wp:group -->
+<!-- wp:heading {"level":3,"textAlign":"center"} -->
+<h3 class="wp-block-heading has-text-align-center">Sophie L.</h3>
+<!-- /wp:heading -->
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"14px"}},"textColor":"text-secondary"} -->
+<p class="has-text-align-center has-text-secondary-color has-text-color" style="font-size:14px">E-Commerce Seller · Germany</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"16px","fontStyle":"italic","fontWeight":"400"}},"textColor":"text-primary"} -->
+<p class="has-text-align-center has-text-primary-color has-text-color" style="font-size:16px;font-style:italic;font-weight:400">“Fast sampling and clear communication. Exactly what we needed for our Amazon launch.”</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"12px"}},"textColor":"text-secondary"} -->
+<p class="has-text-align-center has-text-secondary-color has-text-color" style="font-size:12px">Powders · E-Commerce Seller</p>
+<!-- /wp:paragraph -->
+</div>
+<!-- /wp:group -->
+</div>
+<!-- /wp:column -->
+<!-- wp:column -->
+<div class="wp-block-column">
+<!-- wp:group {"backgroundColor":"card-white","style":{"border":{"radius":"8px","color":"var:preset|color|border-light","width":"1px"},"spacing":{"padding":{"top":"var:preset|spacing|40","bottom":"var:preset|spacing|40","left":"var:preset|spacing|20","right":"var:preset|spacing|20"}}},"layout":{"type":"flex","orientation":"vertical","justifyContent":"center"}} -->
+<div class="wp-block-group is-vertical is-content-justification-center has-border-color has-border-light-border-color has-card-white-background-color has-background" style="border-radius:8px;border-width:1px;padding-top:var(--wp--preset--spacing--40);padding-right:var(--wp--preset--spacing--20);padding-bottom:var(--wp--preset--spacing--40);padding-left:var(--wp--preset--spacing--20)">
+<!-- wp:group {"backgroundColor":"bg-light","style":{"dimensions":{"width":"96px","height":"96px"},"border":{"radius":"999px"}},"layout":{"type":"flex","justifyContent":"center","verticalAlignment":"center"}} -->
+<div class="wp-block-group has-bg-light-background-color has-background" style="border-radius:999px;width:96px;height:96px">
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"11px"}},"textColor":"text-secondary"} -->
+<p class="has-text-align-center has-text-secondary-color has-text-color" style="font-size:11px">待上传头像</p>
+<!-- /wp:paragraph -->
+</div>
+<!-- /wp:group -->
+<!-- wp:heading {"level":3,"textAlign":"center"} -->
+<h3 class="wp-block-heading has-text-align-center">James K.</h3>
+<!-- /wp:heading -->
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"14px"}},"textColor":"text-secondary"} -->
+<p class="has-text-align-center has-text-secondary-color has-text-color" style="font-size:14px">Distributor · UK</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"16px","fontStyle":"italic","fontWeight":"400"}},"textColor":"text-primary"} -->
+<p class="has-text-align-center has-text-primary-color has-text-color" style="font-size:16px;font-style:italic;font-weight:400">“Consistent quality and reliable lead times.”</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"12px"}},"textColor":"text-secondary"} -->
+<p class="has-text-align-center has-text-secondary-color has-text-color" style="font-size:12px">Tablets · Distributor</p>
+<!-- /wp:paragraph -->
+</div>
+<!-- /wp:group -->
+</div>
+<!-- /wp:column -->
+</div>
+<!-- /wp:columns -->
+<!-- wp:columns {"style":{"spacing":{"margin":{"top":"var:preset|spacing|40"}}}} -->
+<div class="wp-block-columns" style="margin-top:var(--wp--preset--spacing--40)">
+<!-- wp:column -->
+<div class="wp-block-column">
+<!-- wp:group {"backgroundColor":"card-white","style":{"border":{"radius":"8px","color":"var:preset|color|border-light","width":"1px"},"spacing":{"padding":{"top":"var:preset|spacing|40","bottom":"var:preset|spacing|40","left":"var:preset|spacing|20","right":"var:preset|spacing|20"}}},"layout":{"type":"flex","orientation":"vertical","justifyContent":"center"}} -->
+<div class="wp-block-group is-vertical is-content-justification-center has-border-color has-border-light-border-color has-card-white-background-color has-background" style="border-radius:8px;border-width:1px;padding-top:var(--wp--preset--spacing--40);padding-right:var(--wp--preset--spacing--20);padding-bottom:var(--wp--preset--spacing--40);padding-left:var(--wp--preset--spacing--20)">
+<!-- wp:group {"backgroundColor":"bg-light","style":{"dimensions":{"width":"96px","height":"96px"},"border":{"radius":"999px"}},"layout":{"type":"flex","justifyContent":"center","verticalAlignment":"center"}} -->
+<div class="wp-block-group has-bg-light-background-color has-background" style="border-radius:999px;width:96px;height:96px">
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"11px"}},"textColor":"text-secondary"} -->
+<p class="has-text-align-center has-text-secondary-color has-text-color" style="font-size:11px">待上传头像</p>
+<!-- /wp:paragraph -->
+</div>
+<!-- /wp:group -->
+<!-- wp:heading {"level":3,"textAlign":"center"} -->
+<h3 class="wp-block-heading has-text-align-center">Dr. Elena M.</h3>
+<!-- /wp:heading -->
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"14px"}},"textColor":"text-secondary"} -->
+<p class="has-text-align-center has-text-secondary-color has-text-color" style="font-size:14px">Veterinarian · Spain</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"16px","fontStyle":"italic","fontWeight":"400"}},"textColor":"text-primary"} -->
+<p class="has-text-align-center has-text-primary-color has-text-color" style="font-size:16px;font-style:italic;font-weight:400">“Precise dosing and professional documentation.”</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"12px"}},"textColor":"text-secondary"} -->
+<p class="has-text-align-center has-text-secondary-color has-text-color" style="font-size:12px">Drops · Veterinary Clinic</p>
+<!-- /wp:paragraph -->
+</div>
+<!-- /wp:group -->
+</div>
+<!-- /wp:column -->
+<!-- wp:column -->
+<div class="wp-block-column">
+<!-- wp:group {"backgroundColor":"card-white","style":{"border":{"radius":"8px","color":"var:preset|color|border-light","width":"1px"},"spacing":{"padding":{"top":"var:preset|spacing|40","bottom":"var:preset|spacing|40","left":"var:preset|spacing|20","right":"var:preset|spacing|20"}}},"layout":{"type":"flex","orientation":"vertical","justifyContent":"center"}} -->
+<div class="wp-block-group is-vertical is-content-justification-center has-border-color has-border-light-border-color has-card-white-background-color has-background" style="border-radius:8px;border-width:1px;padding-top:var(--wp--preset--spacing--40);padding-right:var(--wp--preset--spacing--20);padding-bottom:var(--wp--preset--spacing--40);padding-left:var(--wp--preset--spacing--20)">
+<!-- wp:group {"backgroundColor":"bg-light","style":{"dimensions":{"width":"96px","height":"96px"},"border":{"radius":"999px"}},"layout":{"type":"flex","justifyContent":"center","verticalAlignment":"center"}} -->
+<div class="wp-block-group has-bg-light-background-color has-background" style="border-radius:999px;width:96px;height:96px">
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"11px"}},"textColor":"text-secondary"} -->
+<p class="has-text-align-center has-text-secondary-color has-text-color" style="font-size:11px">待上传头像</p>
+<!-- /wp:paragraph -->
+</div>
+<!-- /wp:group -->
+<!-- wp:heading {"level":3,"textAlign":"center"} -->
+<h3 class="wp-block-heading has-text-align-center">David R.</h3>
+<!-- /wp:heading -->
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"14px"}},"textColor":"text-secondary"} -->
+<p class="has-text-align-center has-text-secondary-color has-text-color" style="font-size:14px">Trading Company · Australia</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"16px","fontStyle":"italic","fontWeight":"400"}},"textColor":"text-primary"} -->
+<p class="has-text-align-center has-text-primary-color has-text-color" style="font-size:16px;font-style:italic;font-weight:400">“Flexible MOQ and competitive pricing.”</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"12px"}},"textColor":"text-secondary"} -->
+<p class="has-text-align-center has-text-secondary-color has-text-color" style="font-size:12px">Fish Oil · Trading Company</p>
+<!-- /wp:paragraph -->
+</div>
+<!-- /wp:group -->
+</div>
+<!-- /wp:column -->
+<!-- wp:column -->
+<div class="wp-block-column">
+<!-- wp:group {"backgroundColor":"card-white","style":{"border":{"radius":"8px","color":"var:preset|color|border-light","width":"1px"},"spacing":{"padding":{"top":"var:preset|spacing|40","bottom":"var:preset|spacing|40","left":"var:preset|spacing|20","right":"var:preset|spacing|20"}}},"layout":{"type":"flex","orientation":"vertical","justifyContent":"center"}} -->
+<div class="wp-block-group is-vertical is-content-justification-center has-border-color has-border-light-border-color has-card-white-background-color has-background" style="border-radius:8px;border-width:1px;padding-top:var(--wp--preset--spacing--40);padding-right:var(--wp--preset--spacing--20);padding-bottom:var(--wp--preset--spacing--40);padding-left:var(--wp--preset--spacing--20)">
+<!-- wp:group {"backgroundColor":"bg-light","style":{"dimensions":{"width":"96px","height":"96px"},"border":{"radius":"999px"}},"layout":{"type":"flex","justifyContent":"center","verticalAlignment":"center"}} -->
+<div class="wp-block-group has-bg-light-background-color has-background" style="border-radius:999px;width:96px;height:96px">
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"11px"}},"textColor":"text-secondary"} -->
+<p class="has-text-align-center has-text-secondary-color has-text-color" style="font-size:11px">待上传头像</p>
+<!-- /wp:paragraph -->
+</div>
+<!-- /wp:group -->
+<!-- wp:heading {"level":3,"textAlign":"center"} -->
+<h3 class="wp-block-heading has-text-align-center">Yuki S.</h3>
+<!-- /wp:heading -->
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"14px"}},"textColor":"text-secondary"} -->
+<p class="has-text-align-center has-text-secondary-color has-text-color" style="font-size:14px">Brand Owner · Japan</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"16px","fontStyle":"italic","fontWeight":"400"}},"textColor":"text-primary"} -->
+<p class="has-text-align-center has-text-primary-color has-text-color" style="font-size:16px;font-style:italic;font-weight:400">“The palatability testing made a real difference.”</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"12px"}},"textColor":"text-secondary"} -->
+<p class="has-text-align-center has-text-secondary-color has-text-color" style="font-size:12px">Pastes · Brand Owner</p>
+<!-- /wp:paragraph -->
+</div>
+<!-- /wp:group -->
+</div>
+<!-- /wp:column -->
+</div>
+<!-- /wp:columns -->
+</section>
+<!-- /wp:group -->
+
+<!-- wp:group {"tagName":"section","backgroundColor":"card-white","layout":{"type":"constrained"},"style":{"spacing":{"padding":{"top":"var:preset|spacing|80","bottom":"var:preset|spacing|80"}}}} -->
+<section class="wp-block-group has-card-white-background-color has-background" style="padding-top:var(--wp--preset--spacing--80);padding-bottom:var(--wp--preset--spacing--80)">
+<!-- wp:heading {"textAlign":"center"} -->
+<h2 class="wp-block-heading has-text-align-center">Exporting to 4 Continents, 33 Countries</h2>
+<!-- /wp:heading -->
+<!-- wp:paragraph {"align":"center","textColor":"text-secondary"} -->
+<p class="has-text-align-center has-text-secondary-color has-text-color">From North America to Europe, Oceania, and Asia — SINO FRESH products reach brand owners worldwide.</p>
+<!-- /wp:paragraph -->
+<!-- wp:group {"backgroundColor":"bg-light","style":{"border":{"radius":"8px"},"dimensions":{"minHeight":"400px"},"spacing":{"margin":{"top":"var:preset|spacing|60"}}},"layout":{"type":"flex","justifyContent":"center","verticalAlignment":"center"}} -->
+<div class="wp-block-group has-bg-light-background-color has-background" style="border-radius:8px;min-height:400px;margin-top:var(--wp--preset--spacing--60)">
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"14px"}},"textColor":"text-secondary"} -->
+<p class="has-text-align-center has-text-secondary-color has-text-color" style="font-size:14px">待上传世界地图</p>
+<!-- /wp:paragraph -->
+</div>
+<!-- /wp:group -->
+<!-- wp:columns {"style":{"spacing":{"margin":{"top":"var:preset|spacing|40"}}}} -->
+<div class="wp-block-columns" style="margin-top:var(--wp--preset--spacing--40)">
+<!-- wp:column -->
+<div class="wp-block-column">
+<!-- wp:group {"backgroundColor":"card-white","style":{"border":{"radius":"8px","color":"var:preset|color|border-light","width":"1px"},"spacing":{"padding":{"top":"var:preset|spacing|40","bottom":"var:preset|spacing|40","left":"var:preset|spacing|20","right":"var:preset|spacing|20"}}},"layout":{"type":"constrained"}} -->
+<div class="wp-block-group has-border-color has-border-light-border-color has-card-white-background-color has-background" style="border-radius:8px;border-width:1px;padding-top:var(--wp--preset--spacing--40);padding-right:var(--wp--preset--spacing--20);padding-bottom:var(--wp--preset--spacing--40);padding-left:var(--wp--preset--spacing--20)">
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"40px","fontWeight":"700"}},"textColor":"accent"} -->
+<p class="has-text-align-center has-accent-color has-text-color" style="font-size:40px;font-weight:700">4</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontWeight":"600"}},"textColor":"primary"} -->
+<p class="has-text-align-center has-primary-color has-text-color" style="font-weight:600">Continents</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"14px"}},"textColor":"text-secondary"} -->
+<p class="has-text-align-center has-text-secondary-color has-text-color" style="font-size:14px">North America, Europe, Oceania &amp; Asia</p>
+<!-- /wp:paragraph -->
+</div>
+<!-- /wp:group -->
+</div>
+<!-- /wp:column -->
+<!-- wp:column -->
+<div class="wp-block-column">
+<!-- wp:group {"backgroundColor":"card-white","style":{"border":{"radius":"8px","color":"var:preset|color|border-light","width":"1px"},"spacing":{"padding":{"top":"var:preset|spacing|40","bottom":"var:preset|spacing|40","left":"var:preset|spacing|20","right":"var:preset|spacing|20"}}},"layout":{"type":"constrained"}} -->
+<div class="wp-block-group has-border-color has-border-light-border-color has-card-white-background-color has-background" style="border-radius:8px;border-width:1px;padding-top:var(--wp--preset--spacing--40);padding-right:var(--wp--preset--spacing--20);padding-bottom:var(--wp--preset--spacing--40);padding-left:var(--wp--preset--spacing--20)">
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"40px","fontWeight":"700"}},"textColor":"accent"} -->
+<p class="has-text-align-center has-accent-color has-text-color" style="font-size:40px;font-weight:700">33</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontWeight":"600"}},"textColor":"primary"} -->
+<p class="has-text-align-center has-primary-color has-text-color" style="font-weight:600">Countries</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"14px"}},"textColor":"text-secondary"} -->
+<p class="has-text-align-center has-text-secondary-color has-text-color" style="font-size:14px">and growing every quarter</p>
+<!-- /wp:paragraph -->
+</div>
+<!-- /wp:group -->
+</div>
+<!-- /wp:column -->
+<!-- wp:column -->
+<div class="wp-block-column">
+<!-- wp:group {"backgroundColor":"card-white","style":{"border":{"radius":"8px","color":"var:preset|color|border-light","width":"1px"},"spacing":{"padding":{"top":"var:preset|spacing|40","bottom":"var:preset|spacing|40","left":"var:preset|spacing|20","right":"var:preset|spacing|20"}}},"layout":{"type":"constrained"}} -->
+<div class="wp-block-group has-border-color has-border-light-border-color has-card-white-background-color has-background" style="border-radius:8px;border-width:1px;padding-top:var(--wp--preset--spacing--40);padding-right:var(--wp--preset--spacing--20);padding-bottom:var(--wp--preset--spacing--40);padding-left:var(--wp--preset--spacing--20)">
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"40px","fontWeight":"700"}},"textColor":"accent"} -->
+<p class="has-text-align-center has-accent-color has-text-color" style="font-size:40px;font-weight:700">30+</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontWeight":"600"}},"textColor":"primary"} -->
+<p class="has-text-align-center has-primary-color has-text-color" style="font-weight:600">Global Brands</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"14px"}},"textColor":"text-secondary"} -->
+<p class="has-text-align-center has-text-secondary-color has-text-color" style="font-size:14px">private label partners served</p>
+<!-- /wp:paragraph -->
+</div>
+<!-- /wp:group -->
+</div>
+<!-- /wp:column -->
+<!-- wp:column -->
+<div class="wp-block-column">
+<!-- wp:group {"backgroundColor":"card-white","style":{"border":{"radius":"8px","color":"var:preset|color|border-light","width":"1px"},"spacing":{"padding":{"top":"var:preset|spacing|40","bottom":"var:preset|spacing|40","left":"var:preset|spacing|20","right":"var:preset|spacing|20"}}},"layout":{"type":"constrained"}} -->
+<div class="wp-block-group has-border-color has-border-light-border-color has-card-white-background-color has-background" style="border-radius:8px;border-width:1px;padding-top:var(--wp--preset--spacing--40);padding-right:var(--wp--preset--spacing--20);padding-bottom:var(--wp--preset--spacing--40);padding-left:var(--wp--preset--spacing--20)">
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"40px","fontWeight":"700"}},"textColor":"accent"} -->
+<p class="has-text-align-center has-accent-color has-text-color" style="font-size:40px;font-weight:700">100%</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontWeight":"600"}},"textColor":"primary"} -->
+<p class="has-text-align-center has-primary-color has-text-color" style="font-weight:600">OEM/ODM</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"14px"}},"textColor":"text-secondary"} -->
+<p class="has-text-align-center has-text-secondary-color has-text-color" style="font-size:14px">dedicated contract manufacturing</p>
+<!-- /wp:paragraph -->
+</div>
+<!-- /wp:group -->
+</div>
+<!-- /wp:column -->
+</div>
+<!-- /wp:columns -->
+</section>
+<!-- /wp:group -->
+
+<!-- wp:group {"tagName":"section","backgroundColor":"bg-light","layout":{"type":"constrained"},"style":{"spacing":{"padding":{"top":"var:preset|spacing|80","bottom":"var:preset|spacing|80"}}}} -->
+<section class="wp-block-group has-bg-light-background-color has-background" style="padding-top:var(--wp--preset--spacing--80);padding-bottom:var(--wp--preset--spacing--80)">
+<!-- wp:columns {"verticalAlignment":"stretch","style":{"spacing":{"margin":{"top":"0"}}}} -->
+<div class="wp-block-columns are-vertically-aligned-stretch" style="margin-top:0">
+<!-- wp:column {"verticalAlignment":"stretch"} -->
+<div class="wp-block-column is-vertically-aligned-stretch">
+<!-- wp:group {"backgroundColor":"primary","style":{"border":{"radius":"8px"},"dimensions":{"minHeight":"400px"}},"layout":{"type":"flex","justifyContent":"center","verticalAlignment":"center","orientation":"vertical"}} -->
+<div class="wp-block-group has-primary-background-color has-background" style="border-radius:8px;min-height:400px">
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"48px"}},"textColor":"card-white"} -->
+<p class="has-text-align-center has-card-white-color has-text-color" style="font-size:48px">&#9654;</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"14px"}},"textColor":"card-white"} -->
+<p class="has-text-align-center has-card-white-color has-text-color" style="font-size:14px">待上传公司简介视频</p>
+<!-- /wp:paragraph -->
+</div>
+<!-- /wp:group -->
+</div>
+<!-- /wp:column -->
+<!-- wp:column {"verticalAlignment":"stretch"} -->
+<div class="wp-block-column is-vertically-aligned-stretch">
+<!-- wp:group {"layout":{"type":"constrained"},"style":{"spacing":{"padding":{"left":"var:preset|spacing|40","right":"0"}}}} -->
+<div class="wp-block-group" style="padding-left:var(--wp--preset--spacing--40)">
+<!-- wp:heading -->
+<h2 class="wp-block-heading">About SINO FRESH</h2>
+<!-- /wp:heading -->
+<!-- wp:paragraph {"textColor":"text-secondary"} -->
+<p class="has-text-secondary-color has-text-color">A private label pet supplement manufacturer built on R&amp;D, quality, and reliable delivery.</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph {"style":{"typography":{"fontSize":"16px","fontWeight":"600"}},"textColor":"primary"} -->
+<p class="has-primary-color has-text-color" style="font-size:16px;font-weight:600"><span style="color:var(--wp--preset--color--accent)">✓</span> 100% OEM/ODM — no brand conflict</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph {"style":{"typography":{"fontSize":"16px","fontWeight":"600"}},"textColor":"primary"} -->
+<p class="has-primary-color has-text-color" style="font-size:16px;font-weight:600"><span style="color:var(--wp--preset--color--accent)">✓</span> FDA registered, cGMP, ISO 9001, ISO 22000</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph {"style":{"typography":{"fontSize":"16px","fontWeight":"600"}},"textColor":"primary"} -->
+<p class="has-primary-color has-text-color" style="font-size:16px;font-weight:600"><span style="color:var(--wp--preset--color--accent)">✓</span> 15,000㎡ factory with 10,000-class cleanroom</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph {"style":{"typography":{"fontSize":"16px","fontWeight":"600"}},"textColor":"primary"} -->
+<p class="has-primary-color has-text-color" style="font-size:16px;font-weight:600"><span style="color:var(--wp--preset--color--accent)">✓</span> Exporting to 30+ countries</p>
+<!-- /wp:paragraph -->
+<!-- wp:buttons {"style":{"spacing":{"margin":{"top":"var:preset|spacing|40"}}}} -->
+<div class="wp-block-buttons" style="margin-top:var(--wp--preset--spacing--40)">
+<!-- wp:button -->
+<div class="wp-block-button"><a class="wp-block-button__link wp-element-button">Learn More About Us</a></div>
+<!-- /wp:button -->
+</div>
+<!-- /wp:buttons -->
+</div>
+<!-- /wp:group -->
+</div>
+<!-- /wp:column -->
+</div>
+<!-- /wp:columns -->
+</section>
+<!-- /wp:group -->
+
+<!-- wp:group {"tagName":"section","backgroundColor":"card-white","layout":{"type":"constrained"},"style":{"spacing":{"padding":{"top":"var:preset|spacing|80","bottom":"var:preset|spacing|80"}}}} -->
+<section class="wp-block-group has-card-white-background-color has-background" style="padding-top:var(--wp--preset--spacing--80);padding-bottom:var(--wp--preset--spacing--80)">
+<!-- wp:heading {"textAlign":"center"} -->
+<h2 class="wp-block-heading has-text-align-center">Latest Articles</h2>
+<!-- /wp:heading -->
+<!-- wp:paragraph {"align":"center","textColor":"text-secondary"} -->
+<p class="has-text-align-center has-text-secondary-color has-text-color">Insights on pet supplement manufacturing, private label, formulation, and compliance.</p>
+<!-- /wp:paragraph -->
+<!-- wp:columns {"style":{"spacing":{"margin":{"top":"var:preset|spacing|60"}}}} -->
+<div class="wp-block-columns" style="margin-top:var(--wp--preset--spacing--60)">
+<!-- wp:column -->
+<div class="wp-block-column">
+<!-- wp:group {"backgroundColor":"card-white","style":{"border":{"radius":"8px","color":"var:preset|color|border-light","width":"1px"}},"layout":{"type":"constrained"}} -->
+<div class="wp-block-group has-border-color has-border-light-border-color has-card-white-background-color has-background" style="border-radius:8px;border-width:1px">
+<!-- wp:group {"backgroundColor":"bg-light","style":{"border":{"radius":{"topLeft":"8px","topRight":"8px","bottomLeft":"0px","bottomRight":"0px"}},"dimensions":{"aspectRatio":"4/3"}},"layout":{"type":"flex","justifyContent":"center","verticalAlignment":"center"}} -->
+<div class="wp-block-group has-bg-light-background-color has-background" style="border-top-left-radius:8px;border-top-right-radius:8px;aspect-ratio:4/3">
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"12px"}},"textColor":"text-secondary"} -->
+<p class="has-text-align-center has-text-secondary-color has-text-color" style="font-size:12px">待上传文章配图</p>
+<!-- /wp:paragraph -->
+</div>
+<!-- /wp:group -->
+<!-- wp:group {"style":{"spacing":{"padding":{"top":"var:preset|spacing|20","bottom":"var:preset|spacing|20","left":"var:preset|spacing|20","right":"var:preset|spacing|20"}}},"layout":{"type":"constrained"}} -->
+<div class="wp-block-group" style="padding-top:var(--wp--preset--spacing--20);padding-right:var(--wp--preset--spacing--20);padding-bottom:var(--wp--preset--spacing--20);padding-left:var(--wp--preset--spacing--20)">
+<!-- wp:paragraph {"style":{"typography":{"fontSize":"12px","fontWeight":"700"}},"textColor":"accent"} -->
+<p class="has-accent-color has-text-color" style="font-size:12px;font-weight:700">Manufacturing</p>
+<!-- /wp:paragraph -->
+<!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading">How to Choose a Pet Supplement Manufacturer: 7 Questions to Ask</h3>
+<!-- /wp:heading -->
+<!-- wp:paragraph {"style":{"typography":{"fontSize":"14px"}},"textColor":"text-secondary"} -->
+<p class="has-text-secondary-color has-text-color" style="font-size:14px">Key questions about certifications, MOQ, lead times, and QC to ask before you sign with a supplier.</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph {"style":{"typography":{"fontSize":"14px","fontWeight":"600"}}} -->
+<p style="font-size:14px;font-weight:600"><a href="#">Read More →</a></p>
+<!-- /wp:paragraph -->
+</div>
+<!-- /wp:group -->
+</div>
+<!-- /wp:group -->
+</div>
+<!-- /wp:column -->
+<!-- wp:column -->
+<div class="wp-block-column">
+<!-- wp:group {"backgroundColor":"card-white","style":{"border":{"radius":"8px","color":"var:preset|color|border-light","width":"1px"}},"layout":{"type":"constrained"}} -->
+<div class="wp-block-group has-border-color has-border-light-border-color has-card-white-background-color has-background" style="border-radius:8px;border-width:1px">
+<!-- wp:group {"backgroundColor":"bg-light","style":{"border":{"radius":{"topLeft":"8px","topRight":"8px","bottomLeft":"0px","bottomRight":"0px"}},"dimensions":{"aspectRatio":"4/3"}},"layout":{"type":"flex","justifyContent":"center","verticalAlignment":"center"}} -->
+<div class="wp-block-group has-bg-light-background-color has-background" style="border-top-left-radius:8px;border-top-right-radius:8px;aspect-ratio:4/3">
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"12px"}},"textColor":"text-secondary"} -->
+<p class="has-text-align-center has-text-secondary-color has-text-color" style="font-size:12px">待上传文章配图</p>
+<!-- /wp:paragraph -->
+</div>
+<!-- /wp:group -->
+<!-- wp:group {"style":{"spacing":{"padding":{"top":"var:preset|spacing|20","bottom":"var:preset|spacing|20","left":"var:preset|spacing|20","right":"var:preset|spacing|20"}}},"layout":{"type":"constrained"}} -->
+<div class="wp-block-group" style="padding-top:var(--wp--preset--spacing--20);padding-right:var(--wp--preset--spacing--20);padding-bottom:var(--wp--preset--spacing--20);padding-left:var(--wp--preset--spacing--20)">
+<!-- wp:paragraph {"style":{"typography":{"fontSize":"12px","fontWeight":"700"}},"textColor":"accent"} -->
+<p class="has-accent-color has-text-color" style="font-size:12px;font-weight:700">Private Label</p>
+<!-- /wp:paragraph -->
+<!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading">Private Label Soft Chews: MOQ, Lead Time, and Compliance</h3>
+<!-- /wp:heading -->
+<!-- wp:paragraph {"style":{"typography":{"fontSize":"14px"}},"textColor":"text-secondary"} -->
+<p class="has-text-secondary-color has-text-color" style="font-size:14px">What to expect on minimum order quantities, production timelines, and compliance files for soft chew projects.</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph {"style":{"typography":{"fontSize":"14px","fontWeight":"600"}}} -->
+<p style="font-size:14px;font-weight:600"><a href="#">Read More →</a></p>
+<!-- /wp:paragraph -->
+</div>
+<!-- /wp:group -->
+</div>
+<!-- /wp:group -->
+</div>
+<!-- /wp:column -->
+<!-- wp:column -->
+<div class="wp-block-column">
+<!-- wp:group {"backgroundColor":"card-white","style":{"border":{"radius":"8px","color":"var:preset|color|border-light","width":"1px"}},"layout":{"type":"constrained"}} -->
+<div class="wp-block-group has-border-color has-border-light-border-color has-card-white-background-color has-background" style="border-radius:8px;border-width:1px">
+<!-- wp:group {"backgroundColor":"bg-light","style":{"border":{"radius":{"topLeft":"8px","topRight":"8px","bottomLeft":"0px","bottomRight":"0px"}},"dimensions":{"aspectRatio":"4/3"}},"layout":{"type":"flex","justifyContent":"center","verticalAlignment":"center"}} -->
+<div class="wp-block-group has-bg-light-background-color has-background" style="border-top-left-radius:8px;border-top-right-radius:8px;aspect-ratio:4/3">
+<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"12px"}},"textColor":"text-secondary"} -->
+<p class="has-text-align-center has-text-secondary-color has-text-color" style="font-size:12px">待上传文章配图</p>
+<!-- /wp:paragraph -->
+</div>
+<!-- /wp:group -->
+<!-- wp:group {"style":{"spacing":{"padding":{"top":"var:preset|spacing|20","bottom":"var:preset|spacing|20","left":"var:preset|spacing|20","right":"var:preset|spacing|20"}}},"layout":{"type":"constrained"}} -->
+<div class="wp-block-group" style="padding-top:var(--wp--preset--spacing--20);padding-right:var(--wp--preset--spacing--20);padding-bottom:var(--wp--preset--spacing--20);padding-left:var(--wp--preset--spacing--20)">
+<!-- wp:paragraph {"style":{"typography":{"fontSize":"12px","fontWeight":"700"}},"textColor":"accent"} -->
+<p class="has-accent-color has-text-color" style="font-size:12px;font-weight:700">Compliance</p>
+<!-- /wp:paragraph -->
+<!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading">Pet Supplement Compliance in the US and EU: What Brand Owners Need to Know</h3>
+<!-- /wp:heading -->
+<!-- wp:paragraph {"style":{"typography":{"fontSize":"14px"}},"textColor":"text-secondary"} -->
+<p class="has-text-secondary-color has-text-color" style="font-size:14px">Label claims, ingredient rules, and registration steps for selling in the US and EU markets.</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph {"style":{"typography":{"fontSize":"14px","fontWeight":"600"}}} -->
+<p style="font-size:14px;font-weight:600"><a href="#">Read More →</a></p>
+<!-- /wp:paragraph -->
+</div>
+<!-- /wp:group -->
+</div>
+<!-- /wp:group -->
+</div>
+<!-- /wp:column -->
+</div>
+<!-- /wp:columns -->
+<!-- wp:buttons {"layout":{"type":"flex","justifyContent":"center"},"style":{"spacing":{"margin":{"top":"var:preset|spacing|60"}}}} -->
+<div class="wp-block-buttons" style="margin-top:var(--wp--preset--spacing--60)">
+<!-- wp:button {"style":{"color":{"background":"transparent","text":"var:preset|color|primary"},"border":{"width":"2px","color":"var:preset|color|primary","radius":"6px"},"typography":{"fontStyle":"normal","fontWeight":"600"}}} -->
+<div class="wp-block-button"><a class="wp-block-button__link wp-element-button has-text-color has-background has-border-color has-custom-font-weight" style="border-radius:6px;border-width:2px;background-color:transparent;color:var(--wp--preset--color--primary);border-color:var(--wp--preset--color--primary);font-weight:600">View All Articles</a></div>
+<!-- /wp:button -->
+</div>
+<!-- /wp:buttons -->
+</section>
+<!-- /wp:group -->
+
+<!-- wp:group {"tagName":"section","backgroundColor":"bg-light","layout":{"type":"constrained"},"style":{"spacing":{"padding":{"top":"var:preset|spacing|80","bottom":"var:preset|spacing|80"}}}} -->
+<section class="wp-block-group has-bg-light-background-color has-background" style="padding-top:var(--wp--preset--spacing--80);padding-bottom:var(--wp--preset--spacing--80)">
+<!-- wp:heading {"textAlign":"center"} -->
+<h2 class="wp-block-heading has-text-align-center">Frequently Asked Questions</h2>
+<!-- /wp:heading -->
+<!-- wp:paragraph {"align":"center","textColor":"text-secondary"} -->
+<p class="has-text-align-center has-text-secondary-color has-text-color">Answers to the questions we hear most from brand owners and procurement teams.</p>
+<!-- /wp:paragraph -->
+<!-- wp:group {"style":{"spacing":{"margin":{"top":"var:preset|spacing|60"}}},"layout":{"type":"constrained","contentSize":"800px"}} -->
+<div class="wp-block-group" style="margin-top:var(--wp--preset--spacing--60)">
+<!-- wp:group {"layout":{"type":"flex","justifyContent":"space-between","verticalAlignment":"top"},"style":{"spacing":{"margin":{"top":"var:preset|spacing|30"}}}} -->
+<div class="wp-block-group" style="margin-top:var(--wp--preset--spacing--30)">
+<!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading">What is your MOQ?</h3>
+<!-- /wp:heading -->
+<!-- wp:paragraph {"style":{"typography":{"fontSize":"24px","fontWeight":"700"}},"textColor":"accent"} -->
+<p class="has-accent-color has-text-color" style="font-size:24px;font-weight:700">+</p>
+<!-- /wp:paragraph -->
+</div>
+<!-- /wp:group -->
+<!-- wp:paragraph {"style":{"typography":{"fontSize":"14px"},"spacing":{"margin":{"bottom":"var:preset|spacing|30"}}},"textColor":"text-secondary"} -->
+<p class="has-text-secondary-color has-text-color" style="margin-bottom:var(--wp--preset--spacing--30);font-size:14px">From 500 units depending on dosage form. New brands can start with small trial orders.</p>
+<!-- /wp:paragraph -->
+<!-- wp:separator {"backgroundColor":"border-light","className":"is-style-wide"} -->
+<hr class="wp-block-separator has-border-light-background-color has-background is-style-wide"/>
+<!-- /wp:separator -->
+<!-- wp:group {"layout":{"type":"flex","justifyContent":"space-between","verticalAlignment":"top"},"style":{"spacing":{"margin":{"top":"var:preset|spacing|30"}}}} -->
+<div class="wp-block-group" style="margin-top:var(--wp--preset--spacing--30)">
+<!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading">How long does sampling take?</h3>
+<!-- /wp:heading -->
+<!-- wp:paragraph {"style":{"typography":{"fontSize":"24px","fontWeight":"700"}},"textColor":"accent"} -->
+<p class="has-accent-color has-text-color" style="font-size:24px;font-weight:700">+</p>
+<!-- /wp:paragraph -->
+</div>
+<!-- /wp:group -->
+<!-- wp:paragraph {"style":{"typography":{"fontSize":"14px"},"spacing":{"margin":{"bottom":"var:preset|spacing|30"}}},"textColor":"text-secondary"} -->
+<p class="has-text-secondary-color has-text-color" style="margin-bottom:var(--wp--preset--spacing--30);font-size:14px">3–7 working days for standard formulas. Complex formulas may take longer.</p>
+<!-- /wp:paragraph -->
+<!-- wp:separator {"backgroundColor":"border-light","className":"is-style-wide"} -->
+<hr class="wp-block-separator has-border-light-background-color has-background is-style-wide"/>
+<!-- /wp:separator -->
+<!-- wp:group {"layout":{"type":"flex","justifyContent":"space-between","verticalAlignment":"top"},"style":{"spacing":{"margin":{"top":"var:preset|spacing|30"}}}} -->
+<div class="wp-block-group" style="margin-top:var(--wp--preset--spacing--30)">
+<!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading">What certifications do you hold?</h3>
+<!-- /wp:heading -->
+<!-- wp:paragraph {"style":{"typography":{"fontSize":"24px","fontWeight":"700"}},"textColor":"accent"} -->
+<p class="has-accent-color has-text-color" style="font-size:24px;font-weight:700">+</p>
+<!-- /wp:paragraph -->
+</div>
+<!-- /wp:group -->
+<!-- wp:paragraph {"style":{"typography":{"fontSize":"14px"},"spacing":{"margin":{"bottom":"var:preset|spacing|30"}}},"textColor":"text-secondary"} -->
+<p class="has-text-secondary-color has-text-color" style="margin-bottom:var(--wp--preset--spacing--30);font-size:14px">FDA registration, cGMP, ISO 9001, ISO 22000.</p>
+<!-- /wp:paragraph -->
+<!-- wp:separator {"backgroundColor":"border-light","className":"is-style-wide"} -->
+<hr class="wp-block-separator has-border-light-background-color has-background is-style-wide"/>
+<!-- /wp:separator -->
+<!-- wp:group {"layout":{"type":"flex","justifyContent":"space-between","verticalAlignment":"top"},"style":{"spacing":{"margin":{"top":"var:preset|spacing|30"}}}} -->
+<div class="wp-block-group" style="margin-top:var(--wp--preset--spacing--30)">
+<!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading">Do you provide COA for every batch?</h3>
+<!-- /wp:heading -->
+<!-- wp:paragraph {"style":{"typography":{"fontSize":"24px","fontWeight":"700"}},"textColor":"accent"} -->
+<p class="has-accent-color has-text-color" style="font-size:24px;font-weight:700">+</p>
+<!-- /wp:paragraph -->
+</div>
+<!-- /wp:group -->
+<!-- wp:paragraph {"style":{"typography":{"fontSize":"14px"},"spacing":{"margin":{"bottom":"var:preset|spacing|30"}}},"textColor":"text-secondary"} -->
+<p class="has-text-secondary-color has-text-color" style="margin-bottom:var(--wp--preset--spacing--30);font-size:14px">Yes. Every batch is tested in our QC laboratory and ships with a COA.</p>
+<!-- /wp:paragraph -->
+<!-- wp:separator {"backgroundColor":"border-light","className":"is-style-wide"} -->
+<hr class="wp-block-separator has-border-light-background-color has-background is-style-wide"/>
+<!-- /wp:separator -->
+<!-- wp:group {"layout":{"type":"flex","justifyContent":"space-between","verticalAlignment":"top"},"style":{"spacing":{"margin":{"top":"var:preset|spacing|30"}}}} -->
+<div class="wp-block-group" style="margin-top:var(--wp--preset--spacing--30)">
+<!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading">What payment terms do you offer?</h3>
+<!-- /wp:heading -->
+<!-- wp:paragraph {"style":{"typography":{"fontSize":"24px","fontWeight":"700"}},"textColor":"accent"} -->
+<p class="has-accent-color has-text-color" style="font-size:24px;font-weight:700">+</p>
+<!-- /wp:paragraph -->
+</div>
+<!-- /wp:group -->
+<!-- wp:paragraph {"style":{"typography":{"fontSize":"14px"},"spacing":{"margin":{"bottom":"var:preset|spacing|30"}}},"textColor":"text-secondary"} -->
+<p class="has-text-secondary-color has-text-color" style="margin-bottom:var(--wp--preset--spacing--30);font-size:14px">30% deposit, 70% before shipment. T/T and other terms negotiable.</p>
+<!-- /wp:paragraph -->
+<!-- wp:separator {"backgroundColor":"border-light","className":"is-style-wide"} -->
+<hr class="wp-block-separator has-border-light-background-color has-background is-style-wide"/>
+<!-- /wp:separator -->
+<!-- wp:group {"layout":{"type":"flex","justifyContent":"space-between","verticalAlignment":"top"},"style":{"spacing":{"margin":{"top":"var:preset|spacing|30"}}}} -->
+<div class="wp-block-group" style="margin-top:var(--wp--preset--spacing--30)">
+<!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading">Can I visit your factory?</h3>
+<!-- /wp:heading -->
+<!-- wp:paragraph {"style":{"typography":{"fontSize":"24px","fontWeight":"700"}},"textColor":"accent"} -->
+<p class="has-accent-color has-text-color" style="font-size:24px;font-weight:700">+</p>
+<!-- /wp:paragraph -->
+</div>
+<!-- /wp:group -->
+<!-- wp:paragraph {"style":{"typography":{"fontSize":"14px"},"spacing":{"margin":{"bottom":"var:preset|spacing|30"}}},"textColor":"text-secondary"} -->
+<p class="has-text-secondary-color has-text-color" style="margin-bottom:var(--wp--preset--spacing--30);font-size:14px">Yes. We support both on-site and video factory tours.</p>
+<!-- /wp:paragraph -->
+<!-- wp:separator {"backgroundColor":"border-light","className":"is-style-wide"} -->
+<hr class="wp-block-separator has-border-light-background-color has-background is-style-wide"/>
+<!-- /wp:separator -->
+<!-- wp:group {"layout":{"type":"flex","justifyContent":"space-between","verticalAlignment":"top"},"style":{"spacing":{"margin":{"top":"var:preset|spacing|30"}}}} -->
+<div class="wp-block-group" style="margin-top:var(--wp--preset--spacing--30)">
+<!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading">Do you support private label?</h3>
+<!-- /wp:heading -->
+<!-- wp:paragraph {"style":{"typography":{"fontSize":"24px","fontWeight":"700"}},"textColor":"accent"} -->
+<p class="has-accent-color has-text-color" style="font-size:24px;font-weight:700">+</p>
+<!-- /wp:paragraph -->
+</div>
+<!-- /wp:group -->
+<!-- wp:paragraph {"style":{"typography":{"fontSize":"14px"},"spacing":{"margin":{"bottom":"var:preset|spacing|30"}}},"textColor":"text-secondary"} -->
+<p class="has-text-secondary-color has-text-color" style="margin-bottom:var(--wp--preset--spacing--30);font-size:14px">Yes. We are 100% OEM/ODM and do not sell our own retail brand.</p>
+<!-- /wp:paragraph -->
+<!-- wp:separator {"backgroundColor":"border-light","className":"is-style-wide"} -->
+<hr class="wp-block-separator has-border-light-background-color has-background is-style-wide"/>
+<!-- /wp:separator -->
+<!-- wp:group {"layout":{"type":"flex","justifyContent":"space-between","verticalAlignment":"top"},"style":{"spacing":{"margin":{"top":"var:preset|spacing|30"}}}} -->
+<div class="wp-block-group" style="margin-top:var(--wp--preset--spacing--30)">
+<!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading">Can you handle regulatory documentation for my market?</h3>
+<!-- /wp:heading -->
+<!-- wp:paragraph {"style":{"typography":{"fontSize":"24px","fontWeight":"700"}},"textColor":"accent"} -->
+<p class="has-accent-color has-text-color" style="font-size:24px;font-weight:700">+</p>
+<!-- /wp:paragraph -->
+</div>
+<!-- /wp:group -->
+<!-- wp:paragraph {"style":{"typography":{"fontSize":"14px"},"spacing":{"margin":{"bottom":"var:preset|spacing|30"}}},"textColor":"text-secondary"} -->
+<p class="has-text-secondary-color has-text-color" style="margin-bottom:var(--wp--preset--spacing--30);font-size:14px">Yes. We support FDA, EU, and other target market requirements.</p>
+<!-- /wp:paragraph -->
+</div>
+<!-- /wp:group -->
+</section>
+<!-- /wp:group -->
+
+<!-- wp:group {"tagName":"section","backgroundColor":"primary","layout":{"type":"constrained"},"style":{"spacing":{"padding":{"top":"var:preset|spacing|80","bottom":"var:preset|spacing|80"}}}} -->
+<section class="wp-block-group has-primary-background-color has-background" style="padding-top:var(--wp--preset--spacing--80);padding-bottom:var(--wp--preset--spacing--80)">
+<!-- wp:columns -->
+<div class="wp-block-columns">
+<!-- wp:column {"verticalAlignment":"center"} -->
+<div class="wp-block-column is-vertically-aligned-center">
+<!-- wp:heading {"textColor":"card-white"} -->
+<h2 class="wp-block-heading has-card-white-color has-text-color">Ready to Launch Your Product?</h2>
+<!-- /wp:heading -->
+<!-- wp:paragraph {"style":{"typography":{"fontSize":"16px"}},"textColor":"card-white"} -->
+<p class="has-card-white-color has-text-color" style="font-size:16px">Send us your requirements and we will respond within 24 hours.</p>
+<!-- /wp:paragraph -->
+<!-- wp:group {"style":{"spacing":{"margin":{"top":"var:preset|spacing|40"}}},"layout":{"type":"constrained"}} -->
+<div class="wp-block-group" style="margin-top:var(--wp--preset--spacing--40)">
+<!-- wp:group {"layout":{"type":"flex","justifyContent":"left","verticalAlignment":"top"}} -->
+<div class="wp-block-group">
+<!-- wp:paragraph {"style":{"typography":{"fontWeight":"700"}},"textColor":"accent"} -->
+<p class="has-accent-color has-text-color" style="font-weight:700">✓</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph {"textColor":"card-white"} -->
+<p class="has-card-white-color has-text-color">24-hour response on business days</p>
+<!-- /wp:paragraph -->
+</div>
+<!-- /wp:group -->
+<!-- wp:group {"layout":{"type":"flex","justifyContent":"left","verticalAlignment":"top"}} -->
+<div class="wp-block-group">
+<!-- wp:paragraph {"style":{"typography":{"fontWeight":"700"}},"textColor":"accent"} -->
+<p class="has-accent-color has-text-color" style="font-weight:700">✓</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph {"textColor":"card-white"} -->
+<p class="has-card-white-color has-text-color">Formula and branding stay confidential</p>
+<!-- /wp:paragraph -->
+</div>
+<!-- /wp:group -->
+<!-- wp:group {"layout":{"type":"flex","justifyContent":"left","verticalAlignment":"top"}} -->
+<div class="wp-block-group">
+<!-- wp:paragraph {"style":{"typography":{"fontWeight":"700"}},"textColor":"accent"} -->
+<p class="has-accent-color has-text-color" style="font-weight:700">✓</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph {"textColor":"card-white"} -->
+<p class="has-card-white-color has-text-color">Small trial orders welcome</p>
+<!-- /wp:paragraph -->
+</div>
+<!-- /wp:group -->
+</div>
+<!-- /wp:group -->
+</div>
+<!-- /wp:column -->
+<!-- wp:column {"verticalAlignment":"center"} -->
+<div class="wp-block-column is-vertically-aligned-center">
+<!-- wp:group {"backgroundColor":"card-white","style":{"border":{"radius":"8px"},"spacing":{"padding":{"top":"var:preset|spacing|40","bottom":"var:preset|spacing|40","left":"var:preset|spacing|40","right":"var:preset|spacing|40"}}}} -->
+<div class="wp-block-group has-card-white-background-color has-background" style="border-radius:8px;padding-top:var(--wp--preset--spacing--40);padding-right:var(--wp--preset--spacing--40);padding-bottom:var(--wp--preset--spacing--40);padding-left:var(--wp--preset--spacing--40)">
+<!-- wp:gravityforms/form {"formId":"2","title":false,"description":false,"ajax":true} /-->
+</div>
+<!-- /wp:group -->
+</div>
+<!-- /wp:column -->
+</div>
+<!-- /wp:columns -->
+</section>
+<!-- /wp:group -->
+<!-- wp:template-part {"slug":"footer","tagName":"footer"} /-->

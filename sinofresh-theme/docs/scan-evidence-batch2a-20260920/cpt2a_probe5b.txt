@@ -1,0 +1,59 @@
+
+Warning: foreach() argument must be of type array|object, null given in /Users/meng/Local Sites/sinofresh/app/public/wp-admin/includes/menu.php on line 52
+
+Warning: foreach() argument must be of type array|object, null given in /Users/meng/Local Sites/sinofresh/app/public/wp-admin/includes/menu.php on line 87
+
+Warning: foreach() argument must be of type array|object, null given in /Users/meng/Local Sites/sinofresh/app/public/wp-admin/includes/menu.php on line 107
+
+==============================================================================
+== A. 现有后台顶层菜单（按 WP 内部 position 排序）
+==============================================================================
+顶层菜单项数 = 17（含分隔符）
+
+  pos        slug                           title                         
+  0          wpml_plugin_log                WP Mail Logging               
+  10         upload.php                     Media                         
+  15         link-manager.php               Links                         
+  2          index.php                      Dashboard                     
+  20         edit.php?post_type=page        Pages                         
+  25         edit-comments.php              Comments 00 Comments in mode  
+  26         wps_overview_page              Statistics                    
+  26.16252   social-links                   Social Links                  
+  5          edit.php                       Posts                         
+  60         themes.php                     Appearance                    
+  65         plugins.php                    Plugins 0                     
+  70         users.php                      Users                         
+  75         tools.php                      Tools                         
+  80         options-general.php            Settings                      
+
+==============================================================================
+== B. position 21 占用判定
+==============================================================================
+  position 21 现有项 = ** 空 → 可用 **
+
+  邻近位置逐格占用：
+    17  : (空)
+    18  : (空)
+    19  : (空)
+    20  : Pages[edit.php?post_type=page]
+    21  : (空)
+    22  : (空)
+    23  : (空)
+    24  : (空)
+    25  : Comments 00 Comments[edit-comments.php]
+    26  : Statistics[wps_overview_page] | Social Links[social-links]
+    27  : (空)
+
+==============================================================================
+== C. 现有 CPT 菜单（plugin 注册）
+==============================================================================
+  pos 20       edit.php?post_type=page        Pages
+
+==============================================================================
+== D. 结论
+==============================================================================
+  menu_position=21 → 可用（落在 Pages=20 之后）
+  顶层 slug 列表 = wpml_plugin_log, upload.php, link-manager.php, index.php, edit.php?post_type=page, edit-comments.php, wps_overview_page, social-links, edit.php, themes.php, plugins.php, users.php, tools.php, options-general.php
+
+==============================================================================
+探针 #5b 完成（只读）

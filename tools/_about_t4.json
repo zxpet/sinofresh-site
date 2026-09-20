@@ -1,0 +1,114 @@
+{
+ "375": {
+  "sectionH": 652.2,
+  "colsDisplay": "grid",
+  "colDisplay": "flex",
+  "cardFlex": "1 1 auto",
+  "cardAlignSelf": "auto",
+  "colH": [
+   156.2,
+   156.2,
+   174.4,
+   174.4,
+   105.8
+  ],
+  "cardH": [
+   156.2,
+   156.2,
+   174.4,
+   174.4,
+   105.8
+  ],
+  "cardBottom": [
+   3405.9,
+   3405.9,
+   3594.2,
+   3594.2,
+   3714
+  ],
+  "cardWidth": [
+   142.5,
+   142.5,
+   142.5,
+   142.5,
+   299
+  ],
+  "sameHeight": false,
+  "maxSpread": 68.6,
+  "sameBottom": false,
+  "sameWidth": false,
+  "rows": [
+   "3250:0,1",
+   "3420:2,3",
+   "3608:4"
+  ],
+  "sections": [
+   "HEADER wp-block-templa=91.0",
+   "SECTION wp-block-group=268.1",
+   "Who We Are=986.1",
+   "Our Journey=1692.7",
+   "Our Core Values=652.2",
+   "Our Team=974.1",
+   "Inside Our Factory=679.9",
+   "Ready to Start?=219.9",
+   "FOOTER wp-block-templa=450.9"
+  ],
+  "docH": 6183,
+  "hScroll": 0
+ },
+ "1440": {
+  "sectionH": 372.7,
+  "colsDisplay": "flex",
+  "colDisplay": "flex",
+  "cardFlex": "1 1 auto",
+  "cardAlignSelf": "auto",
+  "colH": [
+   173.6,
+   173.6,
+   173.6,
+   173.6,
+   173.6
+  ],
+  "cardH": [
+   173.6,
+   173.6,
+   173.6,
+   173.6,
+   173.6
+  ],
+  "cardBottom": [
+   2509.8,
+   2509.8,
+   2509.8,
+   2509.8,
+   2509.8
+  ],
+  "cardWidth": [
+   220.8,
+   220.8,
+   220.8,
+   220.8,
+   220.8
+  ],
+  "sameHeight": true,
+  "maxSpread": 0,
+  "sameBottom": true,
+  "sameWidth": true,
+  "rows": [
+   "2336:0,1,2,3,4"
+  ],
+  "sections": [
+   "HEADER wp-block-templa=120.2",
+   "SECTION wp-block-group=284.6",
+   "Who We Are=605.4",
+   "Our Journey=1103.0",
+   "Our Core Values=372.7",
+   "Our Team=441.5",
+   "Inside Our Factory=766.1",
+   "Ready to Start?=231.1",
+   "FOOTER wp-block-templa=409.1"
+  ],
+  "docH": 4502,
+  "hScroll": 0
+ }
+}

@@ -1,0 +1,178 @@
+# -*- coding: utf-8 -*-
+"""Align a dosage page to soft-chews structure.
+Usage: python3 align_dosage.py <slug>   (config in PAGES below)"""
+import sys, re
+
+PAGES = {
+  "liquids": {
+    "h1": "Private Label Liquid Pet Supplements",
+    "sub": "Custom liquid supplements for multivitamin, joint, immune, and skin &amp; coat support. OEM/ODM with flexible MOQ, fast sampling, and full regulatory support.",
+    "label": "Liquids",
+    "img": "liquids.webp",
+    "alt": "SINO FRESH Liquids private label pet supplement product",
+    "form": "Liquids",
+    "formula": ["Multivitamin liquids", "Joint support liquids", "Immune support formulas", "Skin &amp; coat liquids", "Flavored or unflavored options"],
+    "packaging": ["Plastic bottle", "Glass bottle", "Bottle with measuring cup", "Custom packaging with label compliance support"],
+  },
+  "fish-oil": {
+    "h1": "Private Label Fish Oil for Dogs &amp; Cats",
+    "sub": "Omega-3 fish oil in softgels, liquid, and pump formats. OEM/ODM with flexible MOQ, fast sampling, and full regulatory support.",
+    "label": "Fish Oil",
+    "img": "fish-oil.webp",
+    "alt": "SINO FRESH Fish Oil private label pet supplement product",
+    "form": "Fish Oil",
+    "moq": "1,000 units",
+    "formula": ["Salmon oil", "Sardine &amp; anchovy oil", "Cod liver oil", "Blended fish oil", "Custom Omega-3 concentrations, non-GMO, gluten-free"],
+    "packaging": ["Plastic bottle", "Glass bottle", "Pump bottle", "Custom packaging with label compliance support"],
+  },
+  "dental-chews": {
+    "h1": "Private Label Dental Chews &amp; Sticks for Dogs",
+    "sub": "Custom dental chews and sticks for plaque control, tartar reduction, and fresh breath. OEM/ODM with flexible MOQ, fast sampling, and full regulatory support.",
+    "label": "Dental Chews",
+    "img": "dental-chews.webp",
+    "alt": "SINO FRESH Dental Chews private label pet supplement product",
+    "form": "Dental Chews",
+    "moq": "1,000 units",
+    "formula": ["Plaque control formulas", "Tartar reduction formulas", "Fresh breath formulas", "Chewing support for small and large dogs", "Custom formulas with mint, chicken, beef, cheese flavors"],
+    "packaging": ["Foil pouch", "Stand-up pouch", "Box", "Custom packaging with label compliance support"],
+  },
+}
+
+def li_block(items):
+    out = ['<!-- wp:list {"className":"sf-triple__list","style":{"typography":{"fontSize":"15px","lineHeight":"1.7"},"spacing":{"margin":{"top":"16px"}}}} -->',
+           '<ul class="sf-triple__list" style="margin-top:16px;font-size:15px;line-height:1.7">']
+    for it in items:
+        out += ['<!-- wp:list-item -->', '<li>%s</li>' % it, '<!-- /wp:list-item -->']
+    out += ['</ul>', '<!-- /wp:list -->']
+    return '\n'.join(out)
+
+def main(slug):
+    cfg = PAGES[slug]
+    assert cfg["formula"] and cfg["packaging"] and cfg["h1"] and cfg["sub"], "fill config first"
+    path = 'templates/page-%s.html' % slug
+    src = open(path, encoding='utf-8').read()
+
+    START = src.index('<!-- Block 2: Hero -->')
+    END = src.index('<!-- Block 4: Configurator -->')
+
+    spec_rows = [
+        ("MOQ", cfg.get("moq", "500 units")),
+        ("Sampling", "3&ndash;7 working days"),
+        ("Bulk Lead Time", "7&ndash;15 working days after packaging ready"),
+        ("Dosage Form", cfg["form"]),
+        ("Certifications", "FDA, cGMP, ISO 9001, ISO 22000"),
+        ("Packaging", "Pouch, Bottle, Jar, Blister, Custom"),
+        ("Payment", "30% deposit, 70% before shipment"),
+        ("Trade Terms", "FOB / CIF / EXW / DDP"),
+    ]
+    rows = '\n'.join('\t<div class="sf-spec-row"><span class="sf-spec-term">%s</span><span class="sf-spec-value">%s</span></div>' % t for t in spec_rows)
+
+    NEW_TOP = '''<!-- Block 2: Hero -->
+<!-- wp:group {"tagName":"section","className":"sf-hero-inner","layout":{"type":"constrained"},"style":{"spacing":{"padding":{"top":"var:preset|spacing|80","bottom":"var:preset|spacing|80"}}}} -->
+<section class="wp-block-group sf-hero-inner" style="padding-top:var(--wp--preset--spacing--80);padding-bottom:var(--wp--preset--spacing--80)">
+<!-- wp:html -->
+<nav class="sf-breadcrumb sf-breadcrumb--d3" aria-label="Breadcrumb"><a class="sf-breadcrumb__crumb sf-breadcrumb__crumb--home" href="/">Home</a><span class="sf-breadcrumb__sep sf-breadcrumb__sep--home" aria-hidden="true">/</span><a class="sf-breadcrumb__crumb sf-breadcrumb__crumb--mid" href="/products/">Products</a><span class="sf-breadcrumb__sep" aria-hidden="true">/</span><span class="sf-breadcrumb__crumb sf-breadcrumb__current" aria-current="page">%(label)s</span></nav>
+<!-- /wp:html -->
+<!-- wp:columns -->
+<div class="wp-block-columns">
+<!-- wp:column {"verticalAlignment":"center"} -->
+<div class="wp-block-column is-vertically-aligned-center">
+<!-- wp:heading {"level":1,"textColor":"card-white","style":{"typography":{"fontSize":"clamp(36px, 4vw, 52px)"}}} -->
+<h1 class="wp-block-heading has-card-white-color has-text-color" style="font-size:clamp(36px, 4vw, 52px)">%(h1)s</h1>
+<!-- /wp:heading -->
+<!-- wp:paragraph {"textColor":"card-white","style":{"typography":{"fontSize":"18px"}}} -->
+<p class="has-card-white-color has-text-color" style="font-size:18px">%(sub)s</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph {"textColor":"card-white","style":{"typography":{"fontSize":"13px","fontWeight":"600","letterSpacing":"2px"},"spacing":{"margin":{"top":"20px"}}}} -->
+<p class="has-card-white-color has-text-color" style="margin-top:20px;font-size:13px;font-weight:600;letter-spacing:2px">FDA &middot; cGMP &middot; ISO 9001 &middot; ISO 22000</p>
+<!-- /wp:paragraph -->
+<!-- wp:buttons {"style":{"spacing":{"margin":{"top":"var:preset|spacing|40"}}}} -->
+<div class="wp-block-buttons" style="margin-top:var(--wp--preset--spacing--40)">
+<!-- wp:button {"backgroundColor":"cta","textColor":"card-white"} -->
+<div class="wp-block-button"><a class="wp-block-button__link has-card-white-color has-cta-background-color has-text-color has-background wp-element-button" href="#inquiry-form">Request a Quote</a></div>
+<!-- /wp:button -->
+<!-- wp:button {"textColor":"card-white","className":"is-style-outline"} -->
+<div class="wp-block-button is-style-outline"><a class="wp-block-button__link has-card-white-color has-text-color wp-element-button" href="#">Download Catalog</a></div>
+<!-- /wp:button -->
+</div>
+<!-- /wp:buttons -->
+</div>
+<!-- /wp:column -->
+<!-- wp:column {"verticalAlignment":"center"} -->
+<div class="wp-block-column is-vertically-aligned-center">
+<!-- wp:group {"className":"sf-product-hero-image","backgroundColor":"card-white","layout":{"type":"flex","justifyContent":"center","verticalAlignment":"center","orientation":"vertical"},"style":{"border":{"radius":"12px"}}} -->
+<div class="wp-block-group sf-product-hero-image has-card-white-background-color has-background" style="border-radius:12px">
+<!-- wp:image {"align":"center"} -->
+<figure class="wp-block-image aligncenter"><img src="/wp-content/uploads/2026/09/%(img)s" alt="%(alt)s" width="800" height="600" loading="lazy"/></figure>
+<!-- /wp:image -->
+</div>
+<!-- /wp:group -->
+</div>
+<!-- /wp:column -->
+</div>
+<!-- /wp:columns -->
+</section>
+<!-- /wp:group -->
+
+<!-- Block 3: Specifications &middot; Formula Options &middot; Packaging Options (merged three-column) -->
+<!-- wp:group {"tagName":"section","backgroundColor":"bg-light","layout":{"type":"constrained"},"style":{"spacing":{"padding":{"top":"48px","bottom":"48px"}}}} -->
+<section class="wp-block-group has-bg-light-background-color has-background" style="padding-top:48px;padding-bottom:48px">
+<!-- wp:columns {"className":"sf-triple"} -->
+<div class="wp-block-columns sf-triple">
+<!-- wp:column -->
+<div class="wp-block-column">
+<!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading">Specifications</h3>
+<!-- /wp:heading -->
+<!-- wp:html -->
+<div class="sf-spec-list">
+%(rows)s
+</div>
+<!-- /wp:html -->
+</div>
+<!-- /wp:column -->
+<!-- wp:column -->
+<div class="wp-block-column">
+<!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading">Formula Options</h3>
+<!-- /wp:heading -->
+%(formula)s
+</div>
+<!-- /wp:column -->
+<!-- wp:column -->
+<div class="wp-block-column">
+<!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading">Packaging Options</h3>
+<!-- /wp:heading -->
+%(packaging)s
+</div>
+<!-- /wp:column -->
+</div>
+<!-- /wp:columns -->
+</section>
+<!-- /wp:group -->
+
+''' % {"label": cfg["label"], "h1": cfg["h1"], "sub": cfg["sub"], "img": cfg["img"], "alt": cfg["alt"], "rows": rows,
+       "formula": li_block(cfg["formula"]), "packaging": li_block(cfg["packaging"])}
+
+    src = src[:START] + NEW_TOP + src[END:]
+
+    # delete merged-away blocks 6+7
+    S6 = src.index('<!-- Block 6: Formula Options -->')
+    S8 = src.index('<!-- Block 8: Compliance & Quality -->')
+    src = src[:S6] + src[S8:]
+
+    # mobilebar before configurator__bar
+    BAR = '''  <div class="configurator__bar">
+    <button type="button" class="configurator__bar-trigger"'''
+    MOB = '''  <div class="configurator__mobilebar">
+    <button type="button" class="configurator__submit configurator__submit--bar">Submit This Configuration</button>
+  </div>
+'''
+    assert src.count(BAR) == 1, "bar marker not unique"
+    src = src.replace(BAR, MOB + BAR, 1)
+
+    open(path, 'w', encoding='utf-8').write(src)
+    print(slug, 'rewritten, lines:', len(src.split('\n')))
+
+main(sys.argv[1])

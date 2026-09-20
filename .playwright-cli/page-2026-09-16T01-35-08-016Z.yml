@@ -1,0 +1,752 @@
+- generic [ref=e2]:
+  - banner [ref=e3]:
+    - generic [ref=e4]:
+      - generic [ref=e5]:
+        - paragraph [ref=e6]:
+          - link "info@zxpet.com" [ref=e10]:
+            - /url: mailto:info@zxpet.com
+        - paragraph [ref=e11]:
+          - link "+86 539 866 9539" [ref=e14]:
+            - /url: tel:+865398669539
+        - paragraph [ref=e15]:
+          - link "WhatsApp +86 133 8539 7805" [ref=e19]:
+            - /url: https://wa.me/8613385397805
+      - generic [ref=e20]:
+        - paragraph [ref=e21]: Linyi, Shandong, China
+        - paragraph [ref=e25]: Mon–Fri · 9:00–18:00 GMT+8
+      - generic [ref=e29]:
+        - paragraph [ref=e30]:
+          - generic [ref=e31]: FDA
+          - generic [ref=e32]: cGMP
+          - generic [ref=e33]: ISO 9001
+          - generic [ref=e34]: ISO 22000
+        - paragraph [ref=e35]:
+          - link "EN" [ref=e36]:
+            - /url: /
+          - text: /
+          - link "DE" [ref=e37]:
+            - /url: /de/
+          - text: /
+          - link "FR" [ref=e38]:
+            - /url: /fr/
+        - paragraph [ref=e39]:
+          - link "YouTube" [ref=e40]:
+            - /url: "#"
+          - link "Instagram" [ref=e44]:
+            - /url: "#"
+          - link "Facebook" [ref=e49]:
+            - /url: "#"
+    - banner [ref=e52]:
+      - paragraph [ref=e53]:
+        - link "sinofresh" [ref=e54]:
+          - /url: http://sinofresh.local
+      - navigation "Main Menu" [ref=e55]:
+        - list [ref=e60]:
+          - listitem [ref=e61]:
+            - link "Products" [ref=e62]:
+              - /url: /products/
+            - button "Products submenu" [ref=e63] [cursor=pointer]
+          - listitem [ref=e66]:
+            - link "OEM/ODM" [ref=e67]:
+              - /url: /services/
+          - listitem [ref=e68]:
+            - link "Quality" [ref=e69]:
+              - /url: /quality/
+          - listitem [ref=e70]:
+            - link "About" [ref=e71]:
+              - /url: /about/
+          - listitem [ref=e72]:
+            - link "Factory Tour" [ref=e73]:
+              - /url: /factory-tour/
+          - listitem [ref=e74]:
+            - link "Blog" [ref=e75]:
+              - /url: /blog/
+          - listitem [ref=e76]:
+            - link "Contact" [ref=e77]:
+              - /url: /contact/
+      - link "Get a Quote" [ref=e80] [cursor=pointer]:
+        - /url: "#quote"
+  - generic [ref=e81]:
+    - generic [ref=e82]:
+      - generic [ref=e83]:
+        - img "SINO FRESH pet supplement manufacturing facility, Linyi, Shandong" [ref=e85]
+        - generic [ref=e87]:
+          - paragraph [ref=e88]: OEM / ODM · FDA registered · cGMP
+          - heading "Your Private Label Pet Supplement Partner in China" [level=1] [ref=e89]
+          - paragraph [ref=e90]: OEM/ODM manufacturer for 8 dosage forms. FDA registered, cGMP, ISO 9001, ISO 22000. Exporting to 30+ countries.
+      - generic [ref=e91]:
+        - img "SINO FRESH in-house research and development laboratory" [ref=e93]
+        - generic [ref=e95]:
+          - paragraph [ref=e96]: In-House R&D for Custom Formulas
+          - paragraph [ref=e97]: From concept to finished product — our R&D team develops formulas, tests palatability, and validates stability.
+      - generic [ref=e98]:
+        - img "Soft chew production line inside the SINO FRESH cleanroom" [ref=e100]
+        - generic [ref=e102]:
+          - paragraph [ref=e103]: 8 Dosage Forms, One Factory
+          - paragraph [ref=e104]: Soft chews, tablets, powders, pastes, drops, liquids, fish oil, and dental chews — all produced in an ISO 8 cleanroom.
+      - generic [ref=e105]:
+        - img "SINO FRESH warehouse and packaging area with export pallets" [ref=e107]
+        - generic [ref=e109]:
+          - paragraph [ref=e110]: Reliable Delivery to 30+ Countries
+          - paragraph [ref=e111]: Full export documentation, batch-level COA, and flexible logistics for global brand owners.
+    - generic [ref=e113]:
+      - link "Request a Quote" [ref=e115] [cursor=pointer]:
+        - /url: /contact/
+      - link "Book a Factory Tour" [ref=e117] [cursor=pointer]:
+        - /url: /factory-tour/
+    - button "Previous slide" [ref=e118] [cursor=pointer]
+    - button "Next slide" [ref=e121] [cursor=pointer]
+    - tablist "Choose slide" [ref=e124]:
+      - button "Go to slide 1" [ref=e125] [cursor=pointer]
+      - button "Go to slide 2" [ref=e126] [cursor=pointer]
+      - button "Go to slide 3" [ref=e127] [cursor=pointer]
+      - button "Go to slide 4" [ref=e128] [cursor=pointer]
+  - generic [ref=e129]:
+    - paragraph [ref=e130]: Facility & capacity
+    - heading "Factory at a Glance" [level=2] [ref=e131]
+    - paragraph [ref=e132]: 15,000 m² of production capacity, an ISO 8 cleanroom (ISO 14644), and full regulatory support — built for global brand owners.
+    - generic [ref=e133]:
+      - generic [ref=e135]:
+        - paragraph [ref=e136]: 0 m²
+        - paragraph [ref=e137]: Factory
+        - paragraph [ref=e138]: Production facility
+      - generic [ref=e140]:
+        - paragraph [ref=e141]: 0 m²
+        - paragraph [ref=e142]: Warehouse
+        - paragraph [ref=e143]: Storage capacity
+      - generic [ref=e145]:
+        - paragraph [ref=e146]: 0 m²
+        - paragraph [ref=e147]: R&D Center
+        - paragraph [ref=e148]: Formulation & lab
+      - generic [ref=e150]:
+        - paragraph [ref=e151]: ISO 0
+        - paragraph [ref=e152]: Cleanroom
+        - paragraph [ref=e153]: ISO 14644 certified
+      - generic [ref=e155]:
+        - paragraph [ref=e156]: 0+
+        - paragraph [ref=e157]: Equipment
+        - paragraph [ref=e158]: Production & testing
+      - generic [ref=e160]:
+        - paragraph [ref=e161]: 0+
+        - paragraph [ref=e162]: Countries
+        - paragraph [ref=e163]: Global export
+    - paragraph [ref=e164]: MOQ from 500 units · Sampling 3–7 days · Lead time 15–30 days · Full OEM/ODM support
+  - generic [ref=e165]:
+    - paragraph [ref=e166]: Product range
+    - heading "Our 8 Dosage Forms" [level=2] [ref=e167]
+    - paragraph [ref=e168]: Custom formulas, flexible MOQ, and full regulatory support for every dosage form.
+    - generic [ref=e169]:
+      - generic [ref=e171]:
+        - figure:
+          - img "Private label soft chews manufacturing"
+        - paragraph [ref=e172]: BESTSELLER
+        - heading "Soft Chews" [level=3] [ref=e173]
+        - paragraph [ref=e174]: Joint, skin, calming & digestive support.
+        - paragraph [ref=e175]: MOQ from 500 units · Sampling 3–7 days
+        - paragraph [ref=e176]:
+          - link "Learn More →" [ref=e177]:
+            - /url: "#"
+      - generic [ref=e179]:
+        - figure:
+          - img "Private label supplement tablets manufacturing"
+        - paragraph [ref=e180]: HOT
+        - heading "Tablets" [level=3] [ref=e181]
+        - paragraph [ref=e182]: Joint, multivitamin & specialty formulas.
+        - paragraph [ref=e183]: MOQ from 1,000 units · Sampling 3–7 days
+        - paragraph [ref=e184]:
+          - link "Learn More →" [ref=e185]:
+            - /url: "#"
+      - generic [ref=e187]:
+        - figure:
+          - img "Private label supplement powders manufacturing"
+        - heading "Powders" [level=3] [ref=e188]
+        - paragraph [ref=e189]: Probiotics, digestive & daily nutrition.
+        - paragraph [ref=e190]: MOQ from 500 units · Sampling 3–7 days
+        - paragraph [ref=e191]:
+          - link "Learn More →" [ref=e192]:
+            - /url: "#"
+      - generic [ref=e194]:
+        - figure:
+          - img "Private label supplement pastes manufacturing"
+        - heading "Pastes" [level=3] [ref=e195]
+        - paragraph [ref=e196]: Hairball, digestive & nutrient support.
+        - paragraph [ref=e197]: MOQ from 500 units · Sampling 3–7 days
+        - paragraph [ref=e198]:
+          - link "Learn More →" [ref=e199]:
+            - /url: "#"
+      - generic [ref=e201]:
+        - figure:
+          - img "Private label supplement drops manufacturing"
+        - paragraph [ref=e202]: NEW
+        - heading "Drops" [level=3] [ref=e203]
+        - paragraph [ref=e204]: Oral care, calming & precise dosing.
+        - paragraph [ref=e205]: MOQ from 500 units · Sampling 3–7 days
+        - paragraph [ref=e206]:
+          - link "Learn More →" [ref=e207]:
+            - /url: "#"
+      - generic [ref=e209]:
+        - figure:
+          - img "Private label liquid supplements manufacturing"
+        - paragraph [ref=e210]: NEW
+        - heading "Liquids" [level=3] [ref=e211]
+        - paragraph [ref=e212]: Easy administration & fast absorption.
+        - paragraph [ref=e213]: MOQ from 500 units · Sampling 3–7 days
+        - paragraph [ref=e214]:
+          - link "Learn More →" [ref=e215]:
+            - /url: "#"
+      - generic [ref=e217]:
+        - figure:
+          - img "Private label fish oil soft gel capsules manufacturing"
+        - paragraph [ref=e218]: BESTSELLER
+        - heading "Fish Oil" [level=3] [ref=e219]
+        - paragraph [ref=e220]: Skin, coat, joint & heart support.
+        - paragraph [ref=e221]: MOQ from 1,000 units · Sampling 3–7 days
+        - paragraph [ref=e222]:
+          - link "Learn More →" [ref=e223]:
+            - /url: "#"
+      - generic [ref=e225]:
+        - figure:
+          - img "Private label dental chews manufacturing"
+        - paragraph [ref=e226]: HOT
+        - heading "Dental Chews" [level=3] [ref=e227]
+        - paragraph [ref=e228]: Oral hygiene & chewing support.
+        - paragraph [ref=e229]: MOQ from 1,000 units · Sampling 3–7 days
+        - paragraph [ref=e230]:
+          - link "Learn More →" [ref=e231]:
+            - /url: "#"
+  - generic [ref=e232]:
+    - paragraph [ref=e233]: Formula standards
+    - heading "Formulated Clean" [level=2] [ref=e234]
+    - paragraph [ref=e235]: No fillers, no artificial additives. Every formula starts from a clean base.
+    - generic [ref=e236]:
+      - paragraph [ref=e238]: Gluten-Free
+      - paragraph [ref=e242]: Corn-Free
+      - paragraph [ref=e246]: Soy-Free
+      - paragraph [ref=e252]: No Artificial Flavors
+      - paragraph [ref=e257]: Non-GMO
+  - generic [ref=e260]:
+    - paragraph [ref=e261]: Compliance
+    - heading "Certifications & Registrations" [level=2] [ref=e262]
+    - paragraph [ref=e263]: Registered and audited production — full documentation available on request.
+    - generic [ref=e264]:
+      - generic [ref=e266]:
+        - generic [ref=e267]:
+          - figure:
+            - img "FDA registration certificate - SINO FRESH pet supplement manufacturer"
+        - paragraph [ref=e268]: FDA Registered
+        - paragraph [ref=e269]: U.S. Food Facility Registration
+      - generic [ref=e271]:
+        - generic [ref=e272]:
+          - figure:
+            - img "cGMP compliance certificate - SINO FRESH"
+        - paragraph [ref=e273]: cGMP Compliant
+        - paragraph [ref=e274]: Pharmaceutical-grade production
+      - generic [ref=e276]:
+        - generic [ref=e277]:
+          - figure:
+            - img "ISO 9001 certificate - SINO FRESH"
+        - paragraph [ref=e278]: ISO 9001
+        - paragraph [ref=e279]: Quality management system
+      - generic [ref=e281]:
+        - generic [ref=e282]:
+          - figure:
+            - img "ISO 22000 certificate - SINO FRESH"
+        - paragraph [ref=e283]: ISO 22000
+        - paragraph [ref=e284]: Food safety management
+  - generic [ref=e285]:
+    - paragraph [ref=e286]: Quality system
+    - heading "Quality Control at Every Step" [level=2] [ref=e287]
+    - paragraph [ref=e288]: From raw material intake to final release, every stage is checked, recorded, and signed off.
+    - generic [ref=e289]:
+      - generic [ref=e291]:
+        - paragraph [ref=e292]: "01"
+        - heading "Raw Material Inspection" [level=3] [ref=e293]
+        - paragraph [ref=e294]: Raw materials tested against specifications before entering production.
+        - generic [ref=e295]:
+          - figure:
+            - img "SINO FRESH raw material inspection - pet supplement quality control"
+      - generic [ref=e297]:
+        - paragraph [ref=e298]: "02"
+        - heading "Batching & Weighing" [level=3] [ref=e299]
+        - paragraph [ref=e300]: Precise weighing with batch records for full traceability.
+        - generic [ref=e301]:
+          - figure:
+            - img "SINO FRESH batching and weighing - GMP supplement production"
+      - generic [ref=e303]:
+        - paragraph [ref=e304]: "03"
+        - heading "In-Process QC" [level=3] [ref=e305]
+        - paragraph [ref=e306]: Random sampling during production at defined checkpoints.
+        - generic [ref=e307]:
+          - figure:
+            - img "SINO FRESH in-process quality check on the production line"
+    - generic [ref=e308]:
+      - generic [ref=e310]:
+        - paragraph [ref=e311]: "04"
+        - heading "Finished Product Testing" [level=3] [ref=e312]
+        - paragraph [ref=e313]: HPLC / GC / AAS testing on every finished batch.
+        - generic [ref=e314]:
+          - figure:
+            - img "SINO FRESH finished product testing in the QC laboratory"
+      - generic [ref=e316]:
+        - paragraph [ref=e317]: "05"
+        - heading "COA Issuance" [level=3] [ref=e318]
+        - paragraph [ref=e319]: Certificate of Analysis issued for every order.
+        - generic [ref=e320]:
+          - figure:
+            - img "SINO FRESH certificate of analysis issuance"
+      - generic [ref=e322]:
+        - paragraph [ref=e323]: "06"
+        - heading "Retention Sampling" [level=3] [ref=e324]
+        - paragraph [ref=e325]: Samples archived for the full shelf life period.
+        - generic [ref=e326]:
+          - figure:
+            - img "SINO FRESH retention sample storage room"
+  - generic [ref=e327]:
+    - paragraph [ref=e328]: Engagement types
+    - heading "OEM & ODM Services" [level=2] [ref=e329]
+    - paragraph [ref=e330]: You bring the formula or the idea. We handle the rest.
+    - generic [ref=e331]:
+      - generic [ref=e333]:
+        - heading "OEM — You Bring the Formula" [level=3] [ref=e334]
+        - paragraph [ref=e335]: You provide the formula, specifications, and packaging requirements. We manufacture, test, and deliver.
+        - paragraph [ref=e336]: ✓ Manufacturing
+        - paragraph [ref=e337]: ✓ Testing
+        - paragraph [ref=e338]: ✓ COA per batch
+        - paragraph [ref=e339]: ✓ Packaging
+        - paragraph [ref=e340]: ✓ Delivery
+      - generic [ref=e342]:
+        - heading "ODM — We Develop From Your Idea" [level=3] [ref=e343]
+        - paragraph [ref=e344]: You provide a concept, reference sample, or functional requirement. We develop the formula, sample it, test palatability, and produce the finished product.
+        - paragraph [ref=e345]: ✓ Formula development
+        - paragraph [ref=e346]: ✓ Palatability testing
+        - paragraph [ref=e347]: ✓ Sampling
+        - paragraph [ref=e348]: ✓ Stability testing
+        - paragraph [ref=e349]: ✓ Label support
+  - generic [ref=e350]:
+    - paragraph [ref=e351]: Partnership
+    - heading "Cooperation Models" [level=2] [ref=e352]
+    - paragraph [ref=e353]: Whether you are a brand owner, e-commerce seller, distributor, or trading company, we have a model that fits your business.
+    - generic [ref=e354]:
+      - generic [ref=e356]:
+        - heading "Brand Owners" [level=3] [ref=e357]
+        - paragraph [ref=e358]: Launch or expand your own supplement brand with full private label support.
+        - paragraph [ref=e359]: MOQ 500
+        - paragraph [ref=e360]: Sampling 3–7 days
+        - paragraph [ref=e361]: Lead time 15–30 days
+        - paragraph [ref=e362]: "Support: full private label"
+      - generic [ref=e364]:
+        - heading "Cross-Border E-Commerce Sellers" [level=3] [ref=e365]
+        - paragraph [ref=e366]: Amazon, Chewy and TikTok Shop ready products with compliant labeling.
+        - paragraph [ref=e367]: MOQ 500
+        - paragraph [ref=e368]: Sampling 3–7 days
+        - paragraph [ref=e369]: Lead time 15–30 days
+        - paragraph [ref=e370]: "Support: US & EU compliant labeling"
+      - generic [ref=e372]:
+        - heading "Pet Store Chains & Distributors" [level=3] [ref=e373]
+        - paragraph [ref=e374]: Stable bulk supply with consistent quality for retail networks.
+        - paragraph [ref=e375]: MOQ 1,000
+        - paragraph [ref=e376]: Sampling 3–7 days
+        - paragraph [ref=e377]: Lead time 15–30 days
+        - paragraph [ref=e378]: "Support: dedicated account manager"
+    - generic [ref=e379]:
+      - generic [ref=e381]:
+        - heading "Veterinary Clinics" [level=3] [ref=e382]
+        - paragraph [ref=e383]: Functional formulas with precise dosing for professional recommendations.
+        - paragraph [ref=e384]: MOQ 500
+        - paragraph [ref=e385]: Sampling 3–7 days
+        - paragraph [ref=e386]: Lead time 15–30 days
+        - paragraph [ref=e387]: "Support: clinical formulation advice"
+      - generic [ref=e389]:
+        - heading "Trading Companies" [level=3] [ref=e390]
+        - paragraph [ref=e391]: Reliable manufacturing partner with export documentation for 30+ countries.
+        - paragraph [ref=e392]: MOQ 1,000
+        - paragraph [ref=e393]: Sampling 3–7 days
+        - paragraph [ref=e394]: Lead time 15–30 days
+        - paragraph [ref=e395]: "Support: full export documentation"
+      - generic [ref=e397]:
+        - heading "Domestic E-Commerce Sellers" [level=3] [ref=e398]
+        - paragraph [ref=e399]: Fast-turnaround production for Tmall, JD and Douyin flagship stores.
+        - paragraph [ref=e400]: MOQ 500
+        - paragraph [ref=e401]: Sampling 3–7 days
+        - paragraph [ref=e402]: Lead time 15–30 days
+        - paragraph [ref=e403]: "Support: fast replenishment"
+    - link "View All Cooperation Models" [ref=e406] [cursor=pointer]:
+      - /url: /cooperation/
+  - generic [ref=e407]:
+    - paragraph [ref=e408]: Process
+    - heading "From Inquiry to After-Sales" [level=2] [ref=e409]
+    - paragraph [ref=e410]: A clear, documented process from your first message to repeat orders.
+    - generic [ref=e411]:
+      - generic [ref=e413]:
+        - paragraph [ref=e414]: "01"
+        - heading "Inquiry" [level=3] [ref=e415]
+        - paragraph [ref=e416]: Send us your product idea, target market, and reference.
+      - generic [ref=e418]:
+        - paragraph [ref=e419]: "02"
+        - heading "Requirement Confirmation" [level=3] [ref=e420]
+        - paragraph [ref=e421]: We confirm dosage form, formula direction, and specifications.
+      - generic [ref=e423]:
+        - paragraph [ref=e424]: "03"
+        - heading "Quotation & Sampling" [level=3] [ref=e425]
+        - paragraph [ref=e426]: Detailed quotation plus samples delivered in 3–7 days.
+      - generic [ref=e428]:
+        - paragraph [ref=e429]: "04"
+        - heading "Contract & Payment" [level=3] [ref=e430]
+        - paragraph [ref=e431]: Clear terms, production schedule, and payment milestones.
+    - generic [ref=e432]:
+      - generic [ref=e434]:
+        - paragraph [ref=e435]: "05"
+        - heading "Production & QC" [level=3] [ref=e436]
+        - paragraph [ref=e437]: Batch production with in-process and finished-goods QC.
+      - generic [ref=e439]:
+        - paragraph [ref=e440]: "06"
+        - heading "Shipping & Delivery" [level=3] [ref=e441]
+        - paragraph [ref=e442]: Export packing, full documentation, and door-to-door options.
+      - generic [ref=e444]:
+        - paragraph [ref=e445]: "07"
+        - heading "After-Sales & Reorder" [level=3] [ref=e446]
+        - paragraph [ref=e447]: Market feedback, restocking, and continuous support.
+  - generic [ref=e448]:
+    - paragraph [ref=e449]: Feedback
+    - heading "Client Stories" [level=2] [ref=e450]
+    - paragraph [ref=e451]: How brand owners, e-commerce sellers, and distributors work with SINO FRESH to build their pet supplement lines.
+    - region "Client stories" [ref=e452]:
+      - generic [ref=e453]:
+        - generic [ref=e454]:
+          - 'link "Client story: Mark T." [ref=e455]':
+            - /url: "#"
+            - heading "Mark T." [level=3] [ref=e457]
+            - paragraph [ref=e458]: Brand Owner · USA
+            - paragraph [ref=e459]: “They handled formulation and regulatory support from day one.”
+            - paragraph [ref=e460]: Soft Chews · Brand Owner
+          - 'link "Client story: Sophie L." [ref=e461]':
+            - /url: "#"
+            - heading "Sophie L." [level=3] [ref=e463]
+            - paragraph [ref=e464]: E-Commerce Seller · Germany
+            - paragraph [ref=e465]: “Fast sampling and clear communication. Exactly what we needed for our Amazon launch.”
+            - paragraph [ref=e466]: Powders · E-Commerce Seller
+          - 'link "Client story: James K." [ref=e467]':
+            - /url: "#"
+            - heading "James K." [level=3] [ref=e469]
+            - paragraph [ref=e470]: Distributor · UK
+            - paragraph [ref=e471]: “Consistent quality and reliable lead times.”
+            - paragraph [ref=e472]: Tablets · Distributor
+          - 'link "Client story: Dr. Elena M." [ref=e473]':
+            - /url: "#"
+            - heading "Dr. Elena M." [level=3] [ref=e475]
+            - paragraph [ref=e476]: Veterinarian · Spain
+            - paragraph [ref=e477]: “Precise dosing and professional documentation.”
+            - paragraph [ref=e478]: Drops · Veterinary Clinic
+          - 'link "Client story: David R." [ref=e479]':
+            - /url: "#"
+            - heading "David R." [level=3] [ref=e481]
+            - paragraph [ref=e482]: Trading Company · Australia
+            - paragraph [ref=e483]: “Flexible MOQ and competitive pricing.”
+            - paragraph [ref=e484]: Fish Oil · Trading Company
+          - 'link "Client story: Yuki S." [ref=e485]':
+            - /url: "#"
+            - heading "Yuki S." [level=3] [ref=e487]
+            - paragraph [ref=e488]: Brand Owner · Japan
+            - paragraph [ref=e489]: “The palatability testing made a real difference.”
+            - paragraph [ref=e490]: Pastes · Brand Owner
+        - generic [aria-hidden] [ref=e491]:
+          - link [ref=e492]:
+            - /url: "#"
+            - heading [level=3] [ref=e494]: Mark T.
+            - paragraph [ref=e495]: Brand Owner · USA
+            - paragraph [ref=e496]: “They handled formulation and regulatory support from day one.”
+            - paragraph [ref=e497]: Soft Chews · Brand Owner
+          - link [ref=e498]:
+            - /url: "#"
+            - heading [level=3] [ref=e500]: Sophie L.
+            - paragraph [ref=e501]: E-Commerce Seller · Germany
+            - paragraph [ref=e502]: “Fast sampling and clear communication. Exactly what we needed for our Amazon launch.”
+            - paragraph [ref=e503]: Powders · E-Commerce Seller
+          - link [ref=e504]:
+            - /url: "#"
+            - heading [level=3] [ref=e506]: James K.
+            - paragraph [ref=e507]: Distributor · UK
+            - paragraph [ref=e508]: “Consistent quality and reliable lead times.”
+            - paragraph [ref=e509]: Tablets · Distributor
+          - link [ref=e510]:
+            - /url: "#"
+            - heading [level=3] [ref=e512]: Dr. Elena M.
+            - paragraph [ref=e513]: Veterinarian · Spain
+            - paragraph [ref=e514]: “Precise dosing and professional documentation.”
+            - paragraph [ref=e515]: Drops · Veterinary Clinic
+          - link [ref=e516]:
+            - /url: "#"
+            - heading [level=3] [ref=e518]: David R.
+            - paragraph [ref=e519]: Trading Company · Australia
+            - paragraph [ref=e520]: “Flexible MOQ and competitive pricing.”
+            - paragraph [ref=e521]: Fish Oil · Trading Company
+          - link [ref=e522]:
+            - /url: "#"
+            - heading [level=3] [ref=e524]: Yuki S.
+            - paragraph [ref=e525]: Brand Owner · Japan
+            - paragraph [ref=e526]: “The palatability testing made a real difference.”
+            - paragraph [ref=e527]: Pastes · Brand Owner
+  - generic [ref=e528]:
+    - paragraph [ref=e529]: Export footprint
+    - heading "Exporting to 4 Continents, 33 Countries" [level=2] [ref=e530]
+    - paragraph [ref=e531]: From North America to Europe, Oceania, and Asia — SINO FRESH products reach brand owners worldwide.
+    - generic [ref=e532]:
+      - figure:
+        - img "SINO FRESH global reach - exporting to 30+ countries across four continents"
+    - generic [ref=e533]:
+      - generic [ref=e535]:
+        - paragraph [ref=e536]: "4"
+        - paragraph [ref=e537]: Continents
+        - paragraph [ref=e538]: North America, Europe, Oceania & Asia
+      - generic [ref=e540]:
+        - paragraph [ref=e541]: "33"
+        - paragraph [ref=e542]: Countries
+        - paragraph [ref=e543]: and growing every quarter
+      - generic [ref=e545]:
+        - paragraph [ref=e546]: 30+
+        - paragraph [ref=e547]: Global Brands
+        - paragraph [ref=e548]: private label partners served
+      - generic [ref=e550]:
+        - paragraph [ref=e551]: 100%
+        - paragraph [ref=e552]: OEM/ODM
+        - paragraph [ref=e553]: dedicated contract manufacturing
+  - generic [ref=e555]:
+    - generic [ref=e557]:
+      - figure:
+        - img "SINO FRESH company introduction video - pet supplement factory tour"
+    - generic [ref=e559]:
+      - paragraph [ref=e560]: Company
+      - heading "About SINO FRESH" [level=2] [ref=e561]
+      - paragraph [ref=e562]: A private label pet supplement manufacturer built on R&D, quality, and reliable delivery.
+      - paragraph [ref=e563]: ✓ 100% OEM/ODM — no brand conflict
+      - paragraph [ref=e564]: ✓ FDA registered, cGMP, ISO 9001, ISO 22000
+      - paragraph [ref=e565]: ✓ 15,000 m² factory with ISO 8 cleanroom
+      - paragraph [ref=e566]: ✓ Exporting to 30+ countries
+      - generic [ref=e567]: Learn More About Us
+  - generic [ref=e570]:
+    - paragraph [ref=e571]: Insights
+    - heading "Latest Articles" [level=2] [ref=e572]
+    - paragraph [ref=e573]: Insights on pet supplement manufacturing, private label, formulation, and compliance.
+    - generic [ref=e574]:
+      - generic [ref=e576]:
+        - generic [ref=e577]:
+          - figure:
+            - img "How to choose a pet supplement manufacturer - factory audit walk-through"
+        - generic [ref=e578]:
+          - paragraph [ref=e579]: Manufacturing
+          - 'heading "How to Choose a Pet Supplement Manufacturer: 7 Questions to Ask" [level=3] [ref=e580]'
+          - paragraph [ref=e581]: Key questions about certifications, MOQ, lead times, and QC to ask before you sign with a supplier.
+          - paragraph [ref=e582]:
+            - link "Read More →" [ref=e583]:
+              - /url: "#"
+      - generic [ref=e585]:
+        - generic [ref=e586]:
+          - figure:
+            - img "Private label soft chews - MOQ, lead time and compliance"
+        - generic [ref=e587]:
+          - paragraph [ref=e588]: Private Label
+          - 'heading "Private Label Soft Chews: MOQ, Lead Time, and Compliance" [level=3] [ref=e589]'
+          - paragraph [ref=e590]: What to expect on minimum order quantities, production timelines, and compliance files for soft chew projects.
+          - paragraph [ref=e591]:
+            - link "Read More →" [ref=e592]:
+              - /url: "#"
+      - generic [ref=e594]:
+        - generic [ref=e595]:
+          - figure:
+            - img "Pet supplement compliance in the US and EU - documents and seals"
+        - generic [ref=e596]:
+          - paragraph [ref=e597]: Compliance
+          - 'heading "Pet Supplement Compliance in the US and EU: What Brand Owners Need to Know" [level=3] [ref=e598]'
+          - paragraph [ref=e599]: Label claims, ingredient rules, and registration steps for selling in the US and EU markets.
+          - paragraph [ref=e600]:
+            - link "Read More →" [ref=e601]:
+              - /url: "#"
+    - generic [ref=e602]: View All Articles
+  - generic [ref=e605]:
+    - paragraph [ref=e606]: FAQ
+    - heading "Frequently Asked Questions" [level=2] [ref=e607]
+    - paragraph [ref=e608]: Answers to the questions we hear most from brand owners and procurement teams.
+    - generic [ref=e609]:
+      - group [ref=e610]:
+        - heading "What is your MOQ?" [level=3] [ref=e612] [cursor=pointer]
+        - paragraph [ref=e614]: From 500 units depending on dosage form. New brands can start with small trial orders.
+      - group [ref=e615]:
+        - heading "How long does sampling take?" [level=3] [ref=e617] [cursor=pointer]
+      - group [ref=e619]:
+        - heading "What certifications do you hold?" [level=3] [ref=e621] [cursor=pointer]
+      - group [ref=e623]:
+        - heading "Do you provide COA for every batch?" [level=3] [ref=e625] [cursor=pointer]
+      - group [ref=e627]:
+        - heading "What payment terms do you offer?" [level=3] [ref=e629] [cursor=pointer]
+      - group [ref=e631]:
+        - heading "Can I visit your factory?" [level=3] [ref=e633] [cursor=pointer]
+      - group [ref=e635]:
+        - heading "Do you support private label?" [level=3] [ref=e637] [cursor=pointer]
+      - group [ref=e639]:
+        - heading "Can you handle regulatory documentation for my market?" [level=3] [ref=e641] [cursor=pointer]
+  - generic [ref=e644]:
+    - generic [ref=e645]:
+      - paragraph [ref=e646]: Next step
+      - heading "Ready to Launch Your Product?" [level=2] [ref=e647]
+      - paragraph [ref=e648]: Send us your requirements and we will respond within 24 hours.
+      - generic [ref=e649]:
+        - generic [ref=e650]:
+          - paragraph [ref=e651]: ✓
+          - paragraph [ref=e652]: 24-hour response on business days
+        - generic [ref=e653]:
+          - paragraph [ref=e654]: ✓
+          - paragraph [ref=e655]: Formula and branding stay confidential
+        - generic [ref=e656]:
+          - paragraph [ref=e657]: ✓
+          - paragraph [ref=e658]: Small trial orders welcome
+    - generic [ref=e662]:
+      - generic [ref=e664]:
+        - generic [ref=e665]:
+          - generic [ref=e666]: Company Name
+          - textbox "Company Name" [ref=e668]
+        - generic [ref=e669]:
+          - generic [ref=e670]: Contact Person
+          - textbox "Contact Person" [ref=e672]
+        - generic [ref=e673]:
+          - generic [ref=e674]: Email
+          - textbox "Email" [ref=e676]
+        - group "Phone / WhatsApp" [ref=e677]:
+          - application [ref=e680]:
+            - generic [ref=e681]:
+              - generic [ref=e682]:
+                - generic [ref=e683]: Country
+                - button "Select country" [ref=e684] [cursor=pointer]
+              - generic [ref=e686]:
+                - generic [ref=e687]: Phone Number
+                - textbox "Phone Number" [ref=e688]
+        - generic [ref=e690]:
+          - generic [ref=e691]: Country
+          - combobox "Country" [ref=e693]:
+            - option "United States" [selected]
+            - option "United Kingdom"
+            - option "Germany"
+            - option "France"
+            - option "Australia"
+            - option "Canada"
+            - option "Japan"
+            - option "Other"
+        - generic [ref=e694]:
+          - generic [ref=e695]: Target Market
+          - combobox "Target Market" [ref=e697]:
+            - option "US" [selected]
+            - option "EU"
+            - option "UK"
+            - option "JP"
+            - option "AU"
+            - option "CA"
+            - option "Other"
+        - generic [ref=e698]:
+          - generic [ref=e699]: Interested Dosage Form
+          - combobox "Interested Dosage Form" [ref=e701]:
+            - option "Soft Chews" [selected]
+            - option "Tablets"
+            - option "Powders"
+            - option "Pastes"
+            - option "Drops"
+            - option "Liquids"
+            - option "Fish Oil"
+            - option "Dental Chews"
+        - generic [ref=e702]:
+          - generic [ref=e703]: Estimated Quantity
+          - combobox "Estimated Quantity" [ref=e705]:
+            - option "Under 500" [selected]
+            - option "500-1,000"
+            - option "1,000-5,000"
+            - option "5,000+"
+        - generic [ref=e706]:
+          - generic [ref=e707]: Packaging Preference
+          - combobox "Packaging Preference" [ref=e709]:
+            - option "Pouch" [selected]
+            - option "Bottle"
+            - option "Jar"
+            - option "Blister"
+            - option "Custom"
+        - generic [ref=e710]:
+          - generic [ref=e711]: Notes
+          - textbox "Notes" [ref=e713]
+        - group "Privacy Consent" [ref=e714]:
+          - generic [ref=e718]:
+            - checkbox "I agree to the Privacy Policy" [ref=e719]: 
+            - generic [ref=e720]: I agree to the Privacy Policy
+      - button "Send Inquiry" [ref=e722] [cursor=pointer]
+  - contentinfo [ref=e723]:
+    - contentinfo [ref=e724]:
+      - generic [ref=e725]:
+        - generic [ref=e726]:
+          - paragraph [ref=e727]: SINO FRESH
+          - paragraph [ref=e728]: Shandong SINO FRESH Pet Food Co., Ltd. — Private label pet supplement manufacturer with 8 dosage forms, FDA, cGMP, ISO 9001, ISO 22000.
+          - paragraph [ref=e729]:
+            - link "X" [ref=e730]:
+              - /url: "#"
+            - link "YouTube" [ref=e733]:
+              - /url: "#"
+            - link "WeChat" [ref=e737]:
+              - /url: "#"
+            - link "Instagram" [ref=e741]:
+              - /url: "#"
+            - link "TikTok" [ref=e746]:
+              - /url: "#"
+            - link "WhatsApp" [ref=e750]:
+              - /url: https://wa.me/8613385397805
+            - link "Facebook" [ref=e754]:
+              - /url: "#"
+        - group [ref=e758]:
+          - generic "Products"
+          - paragraph [ref=e759]:
+            - link "Soft Chews" [ref=e760]:
+              - /url: /soft-chews/
+            - link "Tablets" [ref=e761]:
+              - /url: /tablets/
+            - link "Powders" [ref=e762]:
+              - /url: /powders/
+            - link "Pastes" [ref=e763]:
+              - /url: /pastes/
+            - link "Drops" [ref=e764]:
+              - /url: /drops/
+            - link "Liquids" [ref=e765]:
+              - /url: /liquids/
+            - link "Fish Oil" [ref=e766]:
+              - /url: /fish-oil/
+            - link "Dental Chews" [ref=e767]:
+              - /url: /dental-chews/
+        - group [ref=e769]:
+          - generic "Company"
+          - paragraph [ref=e770]:
+            - link "About Us" [ref=e771]:
+              - /url: /about/
+            - link "Quality & Compliance" [ref=e772]:
+              - /url: /quality/
+            - link "Book a Factory Tour" [ref=e773]:
+              - /url: /factory-tour/
+            - link "Blog" [ref=e774]:
+              - /url: /blog/
+            - link "Team" [ref=e775]:
+              - /url: /about/#team
+        - group [ref=e777]:
+          - generic "Contact Us"
+          - paragraph [ref=e778]:
+            - link "info@zxpet.com" [ref=e779]:
+              - /url: mailto:info@zxpet.com
+            - link "+86 539 866 9539" [ref=e780]:
+              - /url: tel:+865398669539
+            - link "WhatsApp" [ref=e781]:
+              - /url: https://wa.me/8613385397805
+            - generic [ref=e782]: No. 22 Zhongshan Road B3, Yihe New District, Linyi, Shandong, China
+          - link "Get a Quote" [ref=e785] [cursor=pointer]:
+            - /url: "#quote"
+      - generic [ref=e786]:
+        - paragraph [ref=e787]: © 2026 Shandong SINO FRESH Pet Food Co., Ltd. All rights reserved.
+        - paragraph [ref=e788]:
+          - link "Privacy Policy" [ref=e789]:
+            - /url: /privacy-policy/
+          - text: "|"
+          - link "Cookie Policy" [ref=e790]:
+            - /url: /cookie-policy/
+          - text: "|"
+          - link "Terms" [ref=e791]:
+            - /url: /terms/

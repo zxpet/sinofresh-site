@@ -1,0 +1,1246 @@
+{
+ "375": {
+  "video": {
+   "box": {
+    "l": 38,
+    "t": 431.1,
+    "w": 299,
+    "h": 400
+   },
+   "img": {
+    "l": 76,
+    "t": 568.3,
+    "w": 223,
+    "h": 125.4
+   },
+   "imgNatural": {
+    "w": 1920,
+    "h": 1080
+   },
+   "imgObjectFit": "fill",
+   "playBtn": {
+    "w": "76px",
+    "h": "76px",
+    "bg": "rgba(27, 77, 62, 0.8)",
+    "triBorder": "24px"
+   },
+   "hasAnchor": false,
+   "hasIframe": false,
+   "clickable": null,
+   "section": {
+    "l": 0,
+    "t": 383.1,
+    "w": 375,
+    "h": 1194.6
+   }
+  },
+  "journey": {
+   "section": {
+    "l": 0,
+    "t": 1601.7,
+    "w": 375,
+    "h": 929.7
+   },
+   "h2": {
+    "l": 38,
+    "t": 1649.7,
+    "w": 299,
+    "h": 43.9
+   },
+   "rowCount": 4,
+   "rows": [
+    {
+     "year": "2025",
+     "title": "Company Founded",
+     "years": [
+      "2025",
+      "SINO FRESH is established in Linyi, Shandong, with a single focus: pet supplement OEM/ODM manufacturing."
+     ],
+     "box": {
+      "l": 38,
+      "t": 1741.6,
+      "w": 299,
+      "h": 167.5
+     },
+     "h3Top": 1796.6,
+     "borderLeft": "0px none rgb(28, 43, 36)",
+     "flexDir": "row",
+     "gap": "24px"
+    },
+    {
+     "year": "2025",
+     "title": "Factory Commissioned",
+     "years": [
+      "2025",
+      "Our 15,000 m² plant comes online with 100,000-class clean workshops and five dosage-form production lines."
+     ],
+     "box": {
+      "l": 38,
+      "t": 1933,
+      "w": 299,
+      "h": 167.5
+     },
+     "h3Top": 1988,
+     "borderLeft": "0px none rgb(28, 43, 36)",
+     "flexDir": "row",
+     "gap": "24px"
+    },
+    {
+     "year": "2026",
+     "title": "Certifications Completed",
+     "years": [
+      "2026",
+      "FDA registration, cGMP, ISO 9001, and FSSC 22000 certifications are obtained, opening US and EU markets."
+     ],
+     "box": {
+      "l": 38,
+      "t": 2124.5,
+      "w": 299,
+      "h": 167.5
+     },
+     "h3Top": 2179.5,
+     "borderLeft": "0px none rgb(28, 43, 36)",
+     "flexDir": "row",
+     "gap": "24px"
+    },
+    {
+     "year": "2026",
+     "title": "Exporting Worldwide",
+     "years": [
+      "2026",
+      "Private label products now ship to brand owners and distributors across four continents."
+     ],
+     "box": {
+      "l": 38,
+      "t": 2316,
+      "w": 299,
+      "h": 167.5
+     },
+     "h3Top": 2371,
+     "borderLeft": "0px none rgb(28, 43, 36)",
+     "flexDir": "row",
+     "gap": "24px"
+    }
+   ],
+   "markers": 0,
+   "anyTransition": 0,
+   "countUp": 0
+  },
+  "coreValues": {
+   "section": {
+    "l": 0,
+    "t": 2555.4,
+    "w": 375,
+    "h": 652.2
+   },
+   "colCount": 5,
+   "colsPerRow": null,
+   "cards": [
+    {
+     "colBox": {
+      "l": 38,
+      "t": 2695.3,
+      "w": 142.5,
+      "h": 156.2
+     },
+     "cardBox": {
+      "l": 38,
+      "t": 2695.3,
+      "w": 142.5,
+      "h": 156.2
+     },
+     "h3Top": 2710.3,
+     "h3Lines": 1,
+     "pTop": 2752.5,
+     "pl": "14px",
+     "align": "normal/normal"
+    },
+    {
+     "colBox": {
+      "l": 194.5,
+      "t": 2695.3,
+      "w": 142.5,
+      "h": 156.2
+     },
+     "cardBox": {
+      "l": 194.5,
+      "t": 2695.3,
+      "w": 142.5,
+      "h": 156.2
+     },
+     "h3Top": 2710.3,
+     "h3Lines": 1,
+     "pTop": 2752.5,
+     "pl": "14px",
+     "align": "normal/normal"
+    },
+    {
+     "colBox": {
+      "l": 38,
+      "t": 2865.5,
+      "w": 142.5,
+      "h": 174.4
+     },
+     "cardBox": {
+      "l": 38,
+      "t": 2865.5,
+      "w": 142.5,
+      "h": 174.4
+     },
+     "h3Top": 2880.5,
+     "h3Lines": 1,
+     "pTop": 2922.7,
+     "pl": "14px",
+     "align": "normal/normal"
+    },
+    {
+     "colBox": {
+      "l": 194.5,
+      "t": 2865.5,
+      "w": 142.5,
+      "h": 174.4
+     },
+     "cardBox": {
+      "l": 194.5,
+      "t": 2865.5,
+      "w": 142.5,
+      "h": 174.4
+     },
+     "h3Top": 2880.5,
+     "h3Lines": 1,
+     "pTop": 2940.8,
+     "pl": "14px",
+     "align": "normal/normal"
+    },
+    {
+     "colBox": {
+      "l": 38,
+      "t": 3053.8,
+      "w": 299,
+      "h": 105.8
+     },
+     "cardBox": {
+      "l": 38,
+      "t": 3053.8,
+      "w": 299,
+      "h": 105.8
+     },
+     "h3Top": 3068.8,
+     "h3Lines": 1,
+     "pTop": 3111,
+     "pl": "14px",
+     "align": "normal/normal"
+    }
+   ],
+   "columnsWrapFlexWrap": "wrap",
+   "rowsByTop": {
+    "2695": [
+     0,
+     1
+    ],
+    "2865": [
+     2,
+     3
+    ],
+    "3054": [
+     4
+    ]
+   }
+  },
+  "team": {
+   "circleCount": 5,
+   "memberCount": 5,
+   "circles": [
+    {
+     "box": {
+      "l": 38,
+      "t": 3371.5,
+      "w": 120,
+      "h": 120
+     },
+     "styleWH": "120pxx120px",
+     "radius": "999px",
+     "overflow": "visible",
+     "display": "flex",
+     "alignItems": "center",
+     "justifyContent": "center",
+     "img": {
+      "l": 52,
+      "t": 3385.5,
+      "w": 92,
+      "h": 92
+     },
+     "figBox": {
+      "l": 52,
+      "t": 3385.5,
+      "w": 92,
+      "h": 92
+     },
+     "figDisplay": "table",
+     "imgObjectFit": "fill",
+     "imgW": "92px"
+    },
+    {
+     "box": {
+      "l": 194.5,
+      "t": 3371.5,
+      "w": 120,
+      "h": 140.1
+     },
+     "styleWH": "120pxx140.141px",
+     "radius": "999px",
+     "overflow": "visible",
+     "display": "flex",
+     "alignItems": "center",
+     "justifyContent": "center",
+     "img": {
+      "l": 208.5,
+      "t": 3395.6,
+      "w": 92,
+      "h": 92
+     },
+     "figBox": {
+      "l": 208.5,
+      "t": 3395.6,
+      "w": 92,
+      "h": 92
+     },
+     "figDisplay": "table",
+     "imgObjectFit": "fill",
+     "imgW": "92px"
+    },
+    {
+     "box": {
+      "l": 38,
+      "t": 3696.4,
+      "w": 120,
+      "h": 120
+     },
+     "styleWH": "120pxx120px",
+     "radius": "999px",
+     "overflow": "visible",
+     "display": "flex",
+     "alignItems": "center",
+     "justifyContent": "center",
+     "img": {
+      "l": 52,
+      "t": 3710.4,
+      "w": 92,
+      "h": 92
+     },
+     "figBox": {
+      "l": 52,
+      "t": 3710.4,
+      "w": 92,
+      "h": 92
+     },
+     "figDisplay": "table",
+     "imgObjectFit": "fill",
+     "imgW": "92px"
+    },
+    {
+     "box": {
+      "l": 194.5,
+      "t": 3696.4,
+      "w": 120,
+      "h": 120
+     },
+     "styleWH": "120pxx120px",
+     "radius": "999px",
+     "overflow": "visible",
+     "display": "flex",
+     "alignItems": "center",
+     "justifyContent": "center",
+     "img": {
+      "l": 208.5,
+      "t": 3710.4,
+      "w": 92,
+      "h": 92
+     },
+     "figBox": {
+      "l": 208.5,
+      "t": 3710.4,
+      "w": 92,
+      "h": 92
+     },
+     "figDisplay": "table",
+     "imgObjectFit": "fill",
+     "imgW": "92px"
+    },
+    {
+     "box": {
+      "l": 38,
+      "t": 4001.1,
+      "w": 120,
+      "h": 120
+     },
+     "styleWH": "120pxx120px",
+     "radius": "999px",
+     "overflow": "visible",
+     "display": "flex",
+     "alignItems": "center",
+     "justifyContent": "center",
+     "img": {
+      "l": 52,
+      "t": 4015.1,
+      "w": 92,
+      "h": 92
+     },
+     "figBox": {
+      "l": 52,
+      "t": 4015.1,
+      "w": 92,
+      "h": 92
+     },
+     "figDisplay": "table",
+     "imgObjectFit": "fill",
+     "imgW": "92px"
+    }
+   ]
+  },
+  "factory": {
+   "section": {
+    "l": 0,
+    "t": 4343.8,
+    "w": 375,
+    "h": 679.9
+   },
+   "cardCount": 6,
+   "rows": [
+    {
+     "l": 0,
+     "t": 0,
+     "w": 0,
+     "h": 0
+    },
+    {
+     "l": 0,
+     "t": 0,
+     "w": 0,
+     "h": 0
+    }
+   ],
+   "cards": [
+    {
+     "box": {
+      "l": 38,
+      "t": 4453.6,
+      "w": 142.5,
+      "h": 162
+     },
+     "minH": "0px",
+     "padding": "20px",
+     "figBox": {
+      "l": 59,
+      "t": 4474.6,
+      "w": 100.5,
+      "h": 120
+     },
+     "figDisplay": "table",
+     "figMargin": "0px",
+     "img": {
+      "l": 59,
+      "t": 4474.6,
+      "w": 100.5,
+      "h": 120
+     },
+     "objectFit": "cover",
+     "natural": "800x600",
+     "hasAnchor": false,
+     "hasIframe": false
+    },
+    {
+     "box": {
+      "l": 194.5,
+      "t": 4453.6,
+      "w": 142.5,
+      "h": 162
+     },
+     "minH": "0px",
+     "padding": "20px",
+     "figBox": {
+      "l": 215.5,
+      "t": 4474.6,
+      "w": 100.5,
+      "h": 120
+     },
+     "figDisplay": "table",
+     "figMargin": "0px",
+     "img": {
+      "l": 215.5,
+      "t": 4474.6,
+      "w": 100.5,
+      "h": 120
+     },
+     "objectFit": "cover",
+     "natural": "800x600",
+     "hasAnchor": false,
+     "hasIframe": false
+    },
+    {
+     "box": {
+      "l": 38,
+      "t": 4633.6,
+      "w": 142.5,
+      "h": 162
+     },
+     "minH": "0px",
+     "padding": "20px",
+     "figBox": {
+      "l": 59,
+      "t": 4654.6,
+      "w": 100.5,
+      "h": 120
+     },
+     "figDisplay": "table",
+     "figMargin": "0px",
+     "img": {
+      "l": 59,
+      "t": 4654.6,
+      "w": 100.5,
+      "h": 120
+     },
+     "objectFit": "cover",
+     "natural": "800x600",
+     "hasAnchor": false,
+     "hasIframe": false
+    },
+    {
+     "box": {
+      "l": 194.5,
+      "t": 4633.6,
+      "w": 142.5,
+      "h": 162
+     },
+     "minH": "0px",
+     "padding": "20px",
+     "figBox": {
+      "l": 215.5,
+      "t": 4654.6,
+      "w": 100.5,
+      "h": 120
+     },
+     "figDisplay": "table",
+     "figMargin": "0px",
+     "img": {
+      "l": 215.5,
+      "t": 4654.6,
+      "w": 100.5,
+      "h": 120
+     },
+     "objectFit": "cover",
+     "natural": "800x600",
+     "hasAnchor": false,
+     "hasIframe": false
+    },
+    {
+     "box": {
+      "l": 38,
+      "t": 4813.6,
+      "w": 142.5,
+      "h": 162
+     },
+     "minH": "0px",
+     "padding": "20px",
+     "figBox": {
+      "l": 59,
+      "t": 4834.6,
+      "w": 100.5,
+      "h": 120
+     },
+     "figDisplay": "table",
+     "figMargin": "0px",
+     "img": {
+      "l": 59,
+      "t": 4834.6,
+      "w": 100.5,
+      "h": 120
+     },
+     "objectFit": "cover",
+     "natural": "800x600",
+     "hasAnchor": false,
+     "hasIframe": false
+    },
+    {
+     "box": {
+      "l": 194.5,
+      "t": 4813.6,
+      "w": 142.5,
+      "h": 162
+     },
+     "minH": "0px",
+     "padding": "20px",
+     "figBox": {
+      "l": 215.5,
+      "t": 4834.6,
+      "w": 100.5,
+      "h": 120
+     },
+     "figDisplay": "table",
+     "figMargin": "0px",
+     "img": {
+      "l": 215.5,
+      "t": 4834.6,
+      "w": 100.5,
+      "h": 120
+     },
+     "objectFit": "cover",
+     "natural": "800x600",
+     "hasAnchor": false,
+     "hasIframe": false
+    }
+   ]
+  },
+  "pagination": {
+   "anyNav": 0,
+   "anyQuery": 0,
+   "buttonsOnPage": 10
+  },
+  "hero": {
+   "box": {
+    "l": 0,
+    "t": 91,
+    "w": 375,
+    "h": 268.1
+   },
+   "h1": {
+    "l": 20,
+    "t": 171.8,
+    "w": 335,
+    "h": 39.6
+   },
+   "pt": "40px"
+  },
+  "textHits": {
+   "has15years": false,
+   "m2Count": 6,
+   "fourContinents": true,
+   "yearTokens": [
+    "2025",
+    "2026"
+   ]
+  },
+  "docH": 5742,
+  "hScroll": 0
+ },
+ "1440": {
+  "video": {
+   "box": {
+    "l": 120,
+    "t": 531.5,
+    "w": 588,
+    "h": 400
+   },
+   "img": {
+    "l": 158,
+    "t": 587.5,
+    "w": 512,
+    "h": 288
+   },
+   "imgNatural": {
+    "w": 1920,
+    "h": 1080
+   },
+   "imgObjectFit": "fill",
+   "playBtn": {
+    "w": "76px",
+    "h": "76px",
+    "bg": "rgba(27, 77, 62, 0.8)",
+    "triBorder": "24px"
+   },
+   "hasAnchor": false,
+   "hasIframe": false,
+   "clickable": null,
+   "section": {
+    "l": 0,
+    "t": 428.8,
+    "w": 1440,
+    "h": 605.4
+   }
+  },
+  "journey": {
+   "section": {
+    "l": 0,
+    "t": 1058.2,
+    "w": 1440,
+    "h": 616.7
+   },
+   "h2": {
+    "l": 120,
+    "t": 1106.2,
+    "w": 1200,
+    "h": 55.1
+   },
+   "rowCount": 4,
+   "rows": [
+    {
+     "year": "2025",
+     "title": "Company Founded",
+     "years": [
+      "2025",
+      "SINO FRESH is established in Linyi, Shandong, with a single focus: pet supplement OEM/ODM manufacturing."
+     ],
+     "box": {
+      "l": 320,
+      "t": 1209.3,
+      "w": 800,
+      "h": 72.4
+     },
+     "h3Top": 1209.3,
+     "borderLeft": "0px none rgb(28, 43, 36)",
+     "flexDir": "row",
+     "gap": "24px"
+    },
+    {
+     "year": "2025",
+     "title": "Factory Commissioned",
+     "years": [
+      "2025",
+      "Our 15,000 m² plant comes online with 100,000-class clean workshops and five dosage-form production lines."
+     ],
+     "box": {
+      "l": 320,
+      "t": 1305.7,
+      "w": 800,
+      "h": 128.4
+     },
+     "h3Top": 1361.7,
+     "borderLeft": "0px none rgb(28, 43, 36)",
+     "flexDir": "row",
+     "gap": "24px"
+    },
+    {
+     "year": "2026",
+     "title": "Certifications Completed",
+     "years": [
+      "2026",
+      "FDA registration, cGMP, ISO 9001, and FSSC 22000 certifications are obtained, opening US and EU markets."
+     ],
+     "box": {
+      "l": 320,
+      "t": 1458,
+      "w": 800,
+      "h": 72.4
+     },
+     "h3Top": 1458,
+     "borderLeft": "0px none rgb(28, 43, 36)",
+     "flexDir": "row",
+     "gap": "24px"
+    },
+    {
+     "year": "2026",
+     "title": "Exporting Worldwide",
+     "years": [
+      "2026",
+      "Private label products now ship to brand owners and distributors across four continents."
+     ],
+     "box": {
+      "l": 320,
+      "t": 1554.4,
+      "w": 800,
+      "h": 72.4
+     },
+     "h3Top": 1554.4,
+     "borderLeft": "0px none rgb(28, 43, 36)",
+     "flexDir": "row",
+     "gap": "24px"
+    }
+   ],
+   "markers": 0,
+   "anyTransition": 0,
+   "countUp": 0
+  },
+  "coreValues": {
+   "section": {
+    "l": 0,
+    "t": 1698.8,
+    "w": 1440,
+    "h": 372.7
+   },
+   "colCount": 5,
+   "colsPerRow": null,
+   "cards": [
+    {
+     "colBox": {
+      "l": 120,
+      "t": 1849.9,
+      "w": 220.8,
+      "h": 173.6
+     },
+     "cardBox": {
+      "l": 120,
+      "t": 1849.9,
+      "w": 220.8,
+      "h": 151.2
+     },
+     "h3Top": 1866.9,
+     "h3Lines": 1,
+     "pTop": 1916.9,
+     "pl": "16px",
+     "align": "normal/normal"
+    },
+    {
+     "colBox": {
+      "l": 364.8,
+      "t": 1849.9,
+      "w": 220.8,
+      "h": 173.6
+     },
+     "cardBox": {
+      "l": 364.8,
+      "t": 1849.9,
+      "w": 220.8,
+      "h": 173.6
+     },
+     "h3Top": 1866.9,
+     "h3Lines": 1,
+     "pTop": 1916.9,
+     "pl": "16px",
+     "align": "normal/normal"
+    },
+    {
+     "colBox": {
+      "l": 609.6,
+      "t": 1849.9,
+      "w": 220.8,
+      "h": 173.6
+     },
+     "cardBox": {
+      "l": 609.6,
+      "t": 1849.9,
+      "w": 220.8,
+      "h": 173.6
+     },
+     "h3Top": 1866.9,
+     "h3Lines": 1,
+     "pTop": 1916.9,
+     "pl": "16px",
+     "align": "normal/normal"
+    },
+    {
+     "colBox": {
+      "l": 854.4,
+      "t": 1849.9,
+      "w": 220.8,
+      "h": 173.6
+     },
+     "cardBox": {
+      "l": 854.4,
+      "t": 1849.9,
+      "w": 220.8,
+      "h": 151.2
+     },
+     "h3Top": 1866.9,
+     "h3Lines": 1,
+     "pTop": 1916.9,
+     "pl": "16px",
+     "align": "normal/normal"
+    },
+    {
+     "colBox": {
+      "l": 1099.2,
+      "t": 1849.9,
+      "w": 220.8,
+      "h": 173.6
+     },
+     "cardBox": {
+      "l": 1099.2,
+      "t": 1849.9,
+      "w": 220.8,
+      "h": 173.6
+     },
+     "h3Top": 1866.9,
+     "h3Lines": 1,
+     "pTop": 1916.9,
+     "pl": "16px",
+     "align": "normal/normal"
+    }
+   ],
+   "columnsWrapFlexWrap": "nowrap",
+   "rowsByTop": {
+    "1850": [
+     0,
+     1,
+     2,
+     3,
+     4
+    ]
+   }
+  },
+  "team": {
+   "circleCount": 5,
+   "memberCount": 5,
+   "circles": [
+    {
+     "box": {
+      "l": 120,
+      "t": 2246.6,
+      "w": 120,
+      "h": 120
+     },
+     "styleWH": "120pxx120px",
+     "radius": "999px",
+     "overflow": "visible",
+     "display": "flex",
+     "alignItems": "center",
+     "justifyContent": "center",
+     "img": {
+      "l": 158,
+      "t": 2284.6,
+      "w": 44,
+      "h": 44
+     },
+     "figBox": {
+      "l": 158,
+      "t": 2284.6,
+      "w": 44,
+      "h": 44
+     },
+     "figDisplay": "table",
+     "imgObjectFit": "fill",
+     "imgW": "44px"
+    },
+    {
+     "box": {
+      "l": 364.8,
+      "t": 2246.6,
+      "w": 120,
+      "h": 120
+     },
+     "styleWH": "120pxx120px",
+     "radius": "999px",
+     "overflow": "visible",
+     "display": "flex",
+     "alignItems": "center",
+     "justifyContent": "center",
+     "img": {
+      "l": 402.8,
+      "t": 2284.6,
+      "w": 44,
+      "h": 44
+     },
+     "figBox": {
+      "l": 402.8,
+      "t": 2284.6,
+      "w": 44,
+      "h": 44
+     },
+     "figDisplay": "table",
+     "imgObjectFit": "fill",
+     "imgW": "44px"
+    },
+    {
+     "box": {
+      "l": 609.6,
+      "t": 2246.6,
+      "w": 120,
+      "h": 120
+     },
+     "styleWH": "120pxx120px",
+     "radius": "999px",
+     "overflow": "visible",
+     "display": "flex",
+     "alignItems": "center",
+     "justifyContent": "center",
+     "img": {
+      "l": 647.6,
+      "t": 2284.6,
+      "w": 44,
+      "h": 44
+     },
+     "figBox": {
+      "l": 647.6,
+      "t": 2284.6,
+      "w": 44,
+      "h": 44
+     },
+     "figDisplay": "table",
+     "imgObjectFit": "fill",
+     "imgW": "44px"
+    },
+    {
+     "box": {
+      "l": 854.4,
+      "t": 2246.6,
+      "w": 120,
+      "h": 120
+     },
+     "styleWH": "120pxx120px",
+     "radius": "999px",
+     "overflow": "visible",
+     "display": "flex",
+     "alignItems": "center",
+     "justifyContent": "center",
+     "img": {
+      "l": 892.4,
+      "t": 2284.6,
+      "w": 44,
+      "h": 44
+     },
+     "figBox": {
+      "l": 892.4,
+      "t": 2284.6,
+      "w": 44,
+      "h": 44
+     },
+     "figDisplay": "table",
+     "imgObjectFit": "fill",
+     "imgW": "44px"
+    },
+    {
+     "box": {
+      "l": 1099.2,
+      "t": 2246.6,
+      "w": 120,
+      "h": 120
+     },
+     "styleWH": "120pxx120px",
+     "radius": "999px",
+     "overflow": "visible",
+     "display": "flex",
+     "alignItems": "center",
+     "justifyContent": "center",
+     "img": {
+      "l": 1137.2,
+      "t": 2284.6,
+      "w": 44,
+      "h": 44
+     },
+     "figBox": {
+      "l": 1137.2,
+      "t": 2284.6,
+      "w": 44,
+      "h": 44
+     },
+     "figDisplay": "table",
+     "imgObjectFit": "fill",
+     "imgW": "44px"
+    }
+   ]
+  },
+  "factory": {
+   "section": {
+    "l": 0,
+    "t": 2599,
+    "w": 1440,
+    "h": 766.1
+   },
+   "cardCount": 6,
+   "rows": [
+    {
+     "l": 120,
+     "t": 2750.1,
+     "w": 1200,
+     "h": 271.5
+    },
+    {
+     "l": 120,
+     "t": 3045.6,
+     "w": 1200,
+     "h": 271.5
+    }
+   ],
+   "cards": [
+    {
+     "box": {
+      "l": 120,
+      "t": 2750.1,
+      "w": 384,
+      "h": 271.5
+     },
+     "minH": "260px",
+     "padding": "20px 38px",
+     "figBox": {
+      "l": 159,
+      "t": 2771.1,
+      "w": 306,
+      "h": 229.5
+     },
+     "figDisplay": "table",
+     "figMargin": "0px",
+     "img": {
+      "l": 159,
+      "t": 2771.1,
+      "w": 306,
+      "h": 229.5
+     },
+     "objectFit": "fill",
+     "natural": "800x600",
+     "hasAnchor": false,
+     "hasIframe": false
+    },
+    {
+     "box": {
+      "l": 528,
+      "t": 2750.1,
+      "w": 384,
+      "h": 271.5
+     },
+     "minH": "260px",
+     "padding": "20px 38px",
+     "figBox": {
+      "l": 567,
+      "t": 2771.1,
+      "w": 306,
+      "h": 229.5
+     },
+     "figDisplay": "table",
+     "figMargin": "0px",
+     "img": {
+      "l": 567,
+      "t": 2771.1,
+      "w": 306,
+      "h": 229.5
+     },
+     "objectFit": "fill",
+     "natural": "800x600",
+     "hasAnchor": false,
+     "hasIframe": false
+    },
+    {
+     "box": {
+      "l": 936,
+      "t": 2750.1,
+      "w": 384,
+      "h": 271.5
+     },
+     "minH": "260px",
+     "padding": "20px 38px",
+     "figBox": {
+      "l": 975,
+      "t": 2771.1,
+      "w": 306,
+      "h": 229.5
+     },
+     "figDisplay": "table",
+     "figMargin": "0px",
+     "img": {
+      "l": 975,
+      "t": 2771.1,
+      "w": 306,
+      "h": 229.5
+     },
+     "objectFit": "fill",
+     "natural": "800x600",
+     "hasAnchor": false,
+     "hasIframe": false
+    },
+    {
+     "box": {
+      "l": 120,
+      "t": 3045.6,
+      "w": 384,
+      "h": 271.5
+     },
+     "minH": "260px",
+     "padding": "20px 38px",
+     "figBox": {
+      "l": 159,
+      "t": 3066.6,
+      "w": 306,
+      "h": 229.5
+     },
+     "figDisplay": "table",
+     "figMargin": "0px",
+     "img": {
+      "l": 159,
+      "t": 3066.6,
+      "w": 306,
+      "h": 229.5
+     },
+     "objectFit": "fill",
+     "natural": "800x600",
+     "hasAnchor": false,
+     "hasIframe": false
+    },
+    {
+     "box": {
+      "l": 528,
+      "t": 3045.6,
+      "w": 384,
+      "h": 271.5
+     },
+     "minH": "260px",
+     "padding": "20px 38px",
+     "figBox": {
+      "l": 567,
+      "t": 3066.6,
+      "w": 306,
+      "h": 229.5
+     },
+     "figDisplay": "table",
+     "figMargin": "0px",
+     "img": {
+      "l": 567,
+      "t": 3066.6,
+      "w": 306,
+      "h": 229.5
+     },
+     "objectFit": "fill",
+     "natural": "800x600",
+     "hasAnchor": false,
+     "hasIframe": false
+    },
+    {
+     "box": {
+      "l": 936,
+      "t": 3045.6,
+      "w": 384,
+      "h": 271.5
+     },
+     "minH": "260px",
+     "padding": "20px 38px",
+     "figBox": {
+      "l": 975,
+      "t": 3066.6,
+      "w": 306,
+      "h": 229.5
+     },
+     "figDisplay": "table",
+     "figMargin": "0px",
+     "img": {
+      "l": 975,
+      "t": 3066.6,
+      "w": 306,
+      "h": 229.5
+     },
+     "objectFit": "fill",
+     "natural": "800x600",
+     "hasAnchor": false,
+     "hasIframe": false
+    }
+   ]
+  },
+  "pagination": {
+   "anyNav": 0,
+   "anyQuery": 0,
+   "buttonsOnPage": 10
+  },
+  "hero": {
+   "box": {
+    "l": 0,
+    "t": 120.2,
+    "w": 1440,
+    "h": 284.6
+   },
+   "h1": {
+    "l": 120,
+    "t": 226.4,
+    "w": 1200,
+    "h": 61.6
+   },
+   "pt": "64px"
+  },
+  "textHits": {
+   "has15years": false,
+   "m2Count": 6,
+   "fourContinents": true,
+   "yearTokens": [
+    "2025",
+    "2026"
+   ]
+  },
+  "docH": 4053,
+  "hScroll": 0
+ }
+}

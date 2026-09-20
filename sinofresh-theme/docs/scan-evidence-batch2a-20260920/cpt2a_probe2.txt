@@ -1,0 +1,152 @@
+
+==============================================================================
+== A. 注册前基线
+==============================================================================
+注册前生成规则数 = 112
+option rewrite_rules 条目数 = 112（生成前，落库态）
+use_verbose_page_rules = true
+extra_permastructs(前) = category, post_tag, post_format, language_switcher
+extra_rules_top(前) 条数 = 41
+
+==============================================================================
+== B. 内存注册 sf_formula（参数与拟交付一致）
+==============================================================================
+register_post_type 返回 = WP_Post_Type
+post_type_exists(sf_formula) = true
+taxonomy_exists(sf_formula_form) = true / sf_formula_use = true
+rewrite 参数 = array (
+  'slug' => 'formulas',
+  'with_front' => false,
+  'pages' => true,
+  'feeds' => true,
+  'ep_mask' => 1,
+)
+has_archive  = true
+query_var    = 'sf_formula'
+
+==============================================================================
+== C. 生成规则（rewrite_rules() 只生成不写库）
+==============================================================================
+注册后生成规则数 = 135（增量 +23）
+option rewrite_rules 条目数 = 112（应与注册前相同=未落盘）
+extra_permastructs(后) = category, post_tag, post_format, language_switcher, sf_formula
+
+--- 新增/变化的规则（与基线 diff）---
+  formulas/?$                                                -> index.php?post_type=sf_formula
+  formulas/feed/(feed|rdf|rss|rss2|atom)/?$                  -> index.php?post_type=sf_formula&feed=$matches[1]
+  formulas/(feed|rdf|rss|rss2|atom)/?$                       -> index.php?post_type=sf_formula&feed=$matches[1]
+  formulas/page/([0-9]{1,})/?$                               -> index.php?post_type=sf_formula&paged=$matches[1]
+  formulas/[^/]+/attachment/([^/]+)/?$                       -> index.php?attachment=$1
+  formulas/[^/]+/attachment/([^/]+)/trackback/?$             -> index.php?attachment=$1&tb=1
+  formulas/[^/]+/attachment/([^/]+)/feed/(feed|rdf|rss|rss2|atom)/?$ -> index.php?attachment=$1&feed=$2
+  formulas/[^/]+/attachment/([^/]+)/(feed|rdf|rss|rss2|atom)/?$ -> index.php?attachment=$1&feed=$2
+  formulas/[^/]+/attachment/([^/]+)/comment-page-([0-9]{1,})/?$ -> index.php?attachment=$1&cpage=$2
+  formulas/[^/]+/attachment/([^/]+)/embed/?$                 -> index.php?attachment=$1&embed=true
+  formulas/([^/]+)/embed/?$                                  -> index.php?sf_formula=$1&embed=true
+  formulas/([^/]+)/trackback/?$                              -> index.php?sf_formula=$1&tb=1
+  formulas/([^/]+)/feed/(feed|rdf|rss|rss2|atom)/?$          -> index.php?sf_formula=$1&feed=$2
+  formulas/([^/]+)/(feed|rdf|rss|rss2|atom)/?$               -> index.php?sf_formula=$1&feed=$2
+  formulas/([^/]+)/page/?([0-9]{1,})/?$                      -> index.php?sf_formula=$1&paged=$2
+  formulas/([^/]+)/comment-page-([0-9]{1,})/?$               -> index.php?sf_formula=$1&cpage=$2
+  formulas/([^/]+)(?:/([0-9]+))?/?$                          -> index.php?sf_formula=$1&page=$2
+  formulas/[^/]+/([^/]+)/?$                                  -> index.php?attachment=$1
+  formulas/[^/]+/([^/]+)/trackback/?$                        -> index.php?attachment=$1&tb=1
+  formulas/[^/]+/([^/]+)/feed/(feed|rdf|rss|rss2|atom)/?$    -> index.php?attachment=$1&feed=$2
+  formulas/[^/]+/([^/]+)/(feed|rdf|rss|rss2|atom)/?$         -> index.php?attachment=$1&feed=$2
+  formulas/[^/]+/([^/]+)/comment-page-([0-9]{1,})/?$         -> index.php?attachment=$1&cpage=$2
+  formulas/[^/]+/([^/]+)/embed/?$                            -> index.php?attachment=$1&embed=true
+  （合计 23 条新增/变化）
+
+--- formulas 相关规则及其在总表中的**序号位置** ---
+  #42   formulas/?$                                              -> index.php?post_type=sf_formula
+  #43   formulas/feed/(feed|rdf|rss|rss2|atom)/?$                -> index.php?post_type=sf_formula&feed=$matches[1]
+  #44   formulas/(feed|rdf|rss|rss2|atom)/?$                     -> index.php?post_type=sf_formula&feed=$matches[1]
+  #45   formulas/page/([0-9]{1,})/?$                             -> index.php?post_type=sf_formula&paged=$matches[1]
+  #46   formulas/[^/]+/attachment/([^/]+)/?$                     -> index.php?attachment=$1
+  #47   formulas/[^/]+/attachment/([^/]+)/trackback/?$           -> index.php?attachment=$1&tb=1
+  #48   formulas/[^/]+/attachment/([^/]+)/feed/(feed|rdf|rss|rss2|atom)/?$ -> index.php?attachment=$1&feed=$2
+  #49   formulas/[^/]+/attachment/([^/]+)/(feed|rdf|rss|rss2|atom)/?$ -> index.php?attachment=$1&feed=$2
+  #50   formulas/[^/]+/attachment/([^/]+)/comment-page-([0-9]{1,})/?$ -> index.php?attachment=$1&cpage=$2
+  #51   formulas/[^/]+/attachment/([^/]+)/embed/?$               -> index.php?attachment=$1&embed=true
+  #52   formulas/([^/]+)/embed/?$                                -> index.php?sf_formula=$1&embed=true
+  #53   formulas/([^/]+)/trackback/?$                            -> index.php?sf_formula=$1&tb=1
+  #54   formulas/([^/]+)/feed/(feed|rdf|rss|rss2|atom)/?$        -> index.php?sf_formula=$1&feed=$2
+  #55   formulas/([^/]+)/(feed|rdf|rss|rss2|atom)/?$             -> index.php?sf_formula=$1&feed=$2
+  #56   formulas/([^/]+)/page/?([0-9]{1,})/?$                    -> index.php?sf_formula=$1&paged=$2
+  #57   formulas/([^/]+)/comment-page-([0-9]{1,})/?$             -> index.php?sf_formula=$1&cpage=$2
+  #58   formulas/([^/]+)(?:/([0-9]+))?/?$                        -> index.php?sf_formula=$1&page=$2
+  #59   formulas/[^/]+/([^/]+)/?$                                -> index.php?attachment=$1
+  #60   formulas/[^/]+/([^/]+)/trackback/?$                      -> index.php?attachment=$1&tb=1
+  #61   formulas/[^/]+/([^/]+)/feed/(feed|rdf|rss|rss2|atom)/?$  -> index.php?attachment=$1&feed=$2
+  #62   formulas/[^/]+/([^/]+)/(feed|rdf|rss|rss2|atom)/?$       -> index.php?attachment=$1&feed=$2
+  #63   formulas/[^/]+/([^/]+)/comment-page-([0-9]{1,})/?$       -> index.php?attachment=$1&cpage=$2
+  #64   formulas/[^/]+/([^/]+)/embed/?$                          -> index.php?attachment=$1&embed=true
+
+==============================================================================
+== D. 路径解析预演（按规则顺序逐条 preg_match，取首个命中）
+==============================================================================
+  formulas/liquid-joint-support/             -> #58   index.php?sf_formula=$1&page=$2
+                                                (配方详情（应为 CPT single）)
+  formulas/                                  -> #42   index.php?post_type=sf_formula
+                                                (CPT 归档)
+  formulas                                   -> #42   index.php?post_type=sf_formula
+                                                (CPT 归档（无斜杠）)
+  formulas/page/2/                           -> #45   index.php?post_type=sf_formula&paged=2
+                                                (CPT 归档分页)
+  formulas/feed/                             -> #44   index.php?post_type=sf_formula&feed=feed
+                                                (CPT 归档 feed)
+  products/soft-chews/                       -> #116  index.php?pagename=$1&page=$2
+                                                (剂型页（应仍为 pagename）)
+  products/                                  -> #116  index.php?pagename=$1&page=$2
+                                                (Products 页)
+  blog/                                      -> #116  index.php?pagename=$1&page=$2
+                                                (博客页)
+  about/                                     -> #116  index.php?pagename=$1&page=$2
+                                                (普通页)
+  zh/formulas/liquid-joint-support/          -> #116  index.php?pagename=$1&page=$2
+                                                (zh 站配方详情（TranslatePress 前缀）)
+  2019/01/01/                                -> #93   index.php?year=$1&monthnum=$2&day=$3
+                                                (日期归档)
+  category/manufacturing/                    -> #14   index.php?category_name=$1
+                                                (分类归档)
+
+==============================================================================
+== E. slug 冲突检查
+==============================================================================
+page  'formulas' => free
+post  'formulas' => free
+term  'formulas' => free
+
+  8 剂型页完整路径（get_page_by_path 需带父级）：
+    products/soft-chews/    => ID 20  http://sinofresh.local/products/soft-chews/
+    products/tablets/       => ID 21  http://sinofresh.local/products/tablets/
+    products/powders/       => ID 22  http://sinofresh.local/products/powders/
+    products/pastes/        => ID 23  http://sinofresh.local/products/pastes/
+    products/drops/         => ID 24  http://sinofresh.local/products/drops/
+    products/liquids/       => ID 25  http://sinofresh.local/products/liquids/
+    products/fish-oil/      => ID 26  http://sinofresh.local/products/fish-oil/
+    products/dental-chews/  => ID 27  http://sinofresh.local/products/dental-chews/
+
+  拟用 taxonomy term slug 与剂型页 slug 是否同名（供 FORM_CRUMB 映射）：
+    term 'soft-chews' -> 页面 URL http://sinofresh.local/products/soft-chews/
+    term 'tablets' -> 页面 URL http://sinofresh.local/products/tablets/
+    term 'powders' -> 页面 URL http://sinofresh.local/products/powders/
+    term 'pastes' -> 页面 URL http://sinofresh.local/products/pastes/
+    term 'drops' -> 页面 URL http://sinofresh.local/products/drops/
+    term 'liquids' -> 页面 URL http://sinofresh.local/products/liquids/
+    term 'fish-oil' -> 页面 URL http://sinofresh.local/products/fish-oil/
+    term 'dental-chews' -> 页面 URL http://sinofresh.local/products/dental-chews/
+
+==============================================================================
+== F. 拟新增的 PHP 符号是否已被占用
+==============================================================================
+  sinofresh_formula_grid             function_exists=false  shortcode_exists=false
+  sinofresh_register_formula_cpt     function_exists=false  shortcode_exists=false
+  sinofresh_formula_form_label       function_exists=false  shortcode_exists=false
+  sf_formula_grid                    function_exists=false  shortcode_exists=false
+  sf_formula                         function_exists=false  shortcode_exists=false
+  sinofresh_formula_card_html        function_exists=false  shortcode_exists=false
+  'sinofresh_template_placeholders' function_exists = true
+
+==============================================================================
+注册预演完成（只读，未写 DB）

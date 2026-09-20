@@ -1,0 +1,112 @@
+
+==============================================================================
+== A. trp_settings
+==============================================================================
+  default-language               = 'en_US'
+  translation-languages          = ["en_US","zh_CN"]
+  url-slugs                      = {"en_US":"en","zh_CN":"zh"}
+  publish-languages              = ["en_US","zh_CN"]
+  native_or_english_name         = 'native_name'
+  force-language-to-custom-links = 'yes'
+  add-subdirectory-to-default-language = 'no'
+  trp-ls-floater                 = 'no'
+  floater-position               = 'bottom-right'
+  floater-color                  = 'dark'
+  trp-ls-show-poweredby          = 'no'
+
+==============================================================================
+== B. trp_advanced_settings
+==============================================================================
+  show_dynamic_content_before_translation = 'no'
+  disable_dynamic_translation        = 'no'
+  disable_bundled_translations       = 'no'
+  strip_gettext_post_content         = 'no'
+  strip_gettext_post_meta            = 'no'
+  load_legacy_language_switcher      = 'no'
+  exclude_gettext_strings            = {"string":[],"domain":[]}
+  exclude_words_from_auto_translate  = {"words":[]}
+  skip_dynamic_selectors             = {"selector":[]}
+  exclude_translate_selectors        = {"selector":[]}
+  exclude_selectors_from_automatic_translation = {"selector":[]}
+  disable_post_container_tags_for_post_title = 'no'
+  disable_post_container_tags_for_post_content = 'no'
+  disable_translation_for_gettext_strings = 'no'
+  hreflang_remove_locale             = 'show_both'
+  html_lang_remove_locale            = 'default'
+  serve_similar_translation          = 'no'
+  force_slash_at_end_of_links        = 'no'
+  enable_numerals_translation        = 'no'
+  disable_languages_sitemap          = 'no'
+  manual_translation_only            = 'no'
+  enable_hreflang_xdefault           = 'disabled'
+  enable_hreflang_xdefault-checkbox  = 'no'
+  language_date_format-checkbox      = 'no'
+  plugin_optin_setting               = 'yes'
+  custom_language                    = {"cuslangcode":[],"cuslangname":[],"cuslangnative":[],"cuslangiso":[],"cuslangflag":[],"cuslangisrtl":[]}
+
+==============================================================================
+== C. 语言列表 / 机制判定
+==============================================================================
+  trp_languages            = false
+  trp_original_languages   = false
+  WPLANG                   = ''
+  trp_plugin_version       = '3.3.6'
+  trp_db_version           = false
+  trp 是否存在类 TRP_Url_Converter = true
+  home_url('/') = http://sinofresh.local/
+  get_option('home') = http://sinofresh.local
+  强制语言到自定义链接(force-language-to-custom-links) 用值 = 'yes'
+  add-subdirectory 用值 = NULL ；相对 url 用值 = array (
+  'en_US' => 'en',
+  'zh_CN' => 'zh',
+)
+
+==============================================================================
+== D. 语言切换实际 URL（判定 /zh/ 是否为真路径）
+==============================================================================
+  trp_custom_language_switcher 可用
+  language_switcher 记录数 = 4
+    ID 147 slug=english title=English status=publish
+    ID 148 slug=chinese title=Chinese status=publish
+    ID 149 slug=%e5%bd%93%e5%89%8d%e8%af%ad%e8%a8%80 title=当前语言 status=publish
+    ID 150 slug=%e5%af%b9%e7%ab%8b%e8%af%ad%e8%a8%80 title=对立语言 status=publish
+
+==============================================================================
+== E. 后台菜单位置占位（静态：扫活跃插件声明的 position）
+==============================================================================
+活跃插件 6 个：
+  - gravityforms/gravityforms.php
+  - translatepress-business/index.php
+  - translatepress-multilingual/index.php
+  - wp-consent-api/wp-consent-api.php
+  - wp-mail-logging/wp-mail-logging.php
+  - wp-statistics/wp-statistics.php
+    [raw]  __( 'Forms', 'gravityforms' ), __( 'Forms', 'gravityforms' ) . $update_icon, $has_full_access ? 'gform_full_access' : $min_cap, $parent_menu['name'],
+  （参考）WP 核心占用：2 仪表盘 / 4 分隔 / 5 文章 / 10 媒体 / 20 页面 / 25 评论 / 60 外观 / 65 插件 / 70 用户 / 75 工具 / 80 设置 / 99 分隔
+
+==============================================================================
+== F. 错误日志位置
+==============================================================================
+  /Users/meng/Local Sites/sinofresh/app/public/wp-content/debug.log => 存在 594 B, mtime 2026-09-19 22:56:08
+  /Users/meng/Local Sites/sinofresh/app/public/debug.log         => 不存在
+  /Users/meng/Local Sites/sinofresh/app/logs/php/error.log       => 不存在
+  /Users/meng/Local Sites/sinofresh/app/logs/nginx/error.log     => 不存在
+  (空) => n/a
+
+  php.ini 相关：
+    error_log          = ''
+    log_errors         = '0'
+    display_errors     = '1'
+    error_reporting    = '4983'
+
+  /Users/meng/Local Sites/sinofresh/app/logs 目录内容 = 不存在
+
+==============================================================================
+== G. 现有 sf-formulas 区块 / 模板行号（复核扫描报告）
+==============================================================================
+  page-soft-chews.html 第 58 行含 id="formulas"
+  page-tablets.html   第 58 行含 id="formulas"
+  page-liquids.html   第 58 行含 id="formulas"
+
+==============================================================================
+探针 #3 完成（只读）
