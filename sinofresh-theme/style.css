@@ -2,7 +2,7 @@
 Theme Name: SINO FRESH
 Author: Shandong SINO FRESH Pet Food Co., Ltd.
 Text Domain: sinofresh
-Version: 2.10.50
+Version: 2.10.51
 Requires at least: 6.0
 Requires PHP: 7.4
 License: GNU General Public License v2 or later
@@ -8156,3 +8156,102 @@ body.sf-certmodal-lock {
 	}
 }
 
+/* B2D Step5 — core facts + direct answer, between the hero and #formulas on
+   the eight dosage pages. The facts a buyer (or a crawler) needs first — MOQ,
+   sampling, lead time, certifications, packaging — were four sections down in
+   .sf-spectable; this band puts them one screen up. It duplicates three of
+   them on purpose and the two bands will drift; that reconciliation is its own
+   batch.
+
+   A new class group (.sf-facts__*) rather than a reuse of .sf-spectable: the
+   two bands carry overlapping facts, and separate names stop an edit to one
+   from silently restyling the other. The visual tokens are copied from
+   .sf-spectable so the page keeps one voice — hairline rows, no vertical
+   rules, 11px letterspaced caption in the secondary text colour, ink values.
+   Labels stay muted instead of taking the green header band, because five
+   stacked full-width green rows would out-weigh the hero above them. ------ */
+/* No padding declaration here: the 40px top/bottom lives in the block's own
+   spacing attribute and reaches the page as an inline style, which a plain
+   class rule would lose to. CSS only overrides it below 768px, and that one
+   does need !important for the same reason. ------------------------------- */
+.sf-facts__table {
+	width: 100%;
+	margin: 0;
+	border-collapse: collapse;
+	table-layout: fixed;
+	font-size: 14px;
+	line-height: 1.5;
+	font-variant-numeric: tabular-nums;
+	text-align: left;
+}
+.sf-facts__caption {
+	caption-side: top;
+	padding: 0 0 10px;
+	text-align: left;
+	font-size: 11px;
+	font-weight: 700;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: var(--wp--preset--color--text-secondary);
+}
+/* 220px holds "Production lead time" on one line at 12px/700 uppercase; the
+   value column then takes whatever is left, which is where the long Packaging
+   and Certifications strings need the room. */
+.sf-facts__table tbody th {
+	width: 220px;
+	padding: 9px 24px 9px 0;
+	border-bottom: 1px solid var(--wp--preset--color--border-light);
+	font-size: 12px;
+	font-weight: 700;
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+	color: var(--wp--preset--color--text-secondary);
+	vertical-align: top;
+}
+.sf-facts__table tbody td {
+	padding: 9px 0;
+	border-bottom: 1px solid var(--wp--preset--color--border-light);
+	color: var(--wp--preset--color--text-primary);
+	vertical-align: top;
+}
+/* Two selectors: the block is a direct child of a core constrained-layout
+   container, and core ships
+   `:root :where(.is-layout-constrained) > * { margin-block-start: 24px }`
+   at specificity (0,1,0) — the same as a bare class. Pairing the section class
+   with the paragraph class wins that without !important. */
+.sf-facts .sf-facts__answer {
+	max-width: 860px;
+	margin: 24px 0 0;
+	padding-top: 20px;
+	border-top: 1px solid var(--wp--preset--color--border-light);
+	font-size: 15px;
+	line-height: 1.65;
+	color: var(--wp--preset--color--text-primary);
+}
+/* <=767px: the label column cannot hold "Production lead time" next to a
+   value, so each field stacks as a labelled row. Same trade .sf-spectable
+   makes — display:block drops the table semantics for assistive tech, and
+   nothing here needs the hidden header row that pattern uses, because these
+   labels are real <th scope="row"> cells and stack above their own value. */
+@media (max-width: 767px) {
+	.sf-facts {
+		padding-top: 24px !important;
+		padding-bottom: 28px !important;
+	}
+	.sf-facts__table,
+	.sf-facts__table tbody,
+	.sf-facts__table tr,
+	.sf-facts__table th,
+	.sf-facts__table td {
+		display: block;
+		width: 100%;
+	}
+	.sf-facts__table tbody th {
+		padding: 14px 0 2px;
+		border-bottom: 0;
+	}
+	.sf-facts__table tbody td {
+		padding: 0 0 10px;
+		border-bottom: 1px solid var(--wp--preset--color--border-light);
+	}
+}
