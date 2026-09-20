@@ -628,22 +628,55 @@
 
 		function readFormula() {
 			/* { name, sections:[{label,value}] } for the referenced standard
-			   formula, pulled from the Standard Formulas band markup. */
+			   formula. 2B Stage2: prefer the machine-readable JSON mirror
+			   (.sf-formulas-data, emitted by the sf_formula_grid shortcode),
+			   fall back to scraping the legacy .sf-formula__item markup,
+			   and return empty sections when neither is present. */
 			try {
 				var name = FORMULA_KEY ? sessionStorage.getItem(FORMULA_KEY) : '';
 				if (!name) {
 					return null;
 				}
+				var wanted = name.replace(/\s+/g, ' ').trim();
+
+				/* Path 1 — .sf-formulas-data JSON (2A shape: {name, slug,
+				   url, form, use, sections[3]{label,value}}). */
+				var jsonNodes = document.querySelectorAll('script.sf-formulas-data');
+				for (var i = 0; i < jsonNodes.length; i++) {
+					var data;
+					try {
+						data = JSON.parse(jsonNodes[i].textContent || '');
+					} catch (pe) {
+						data = null;
+					}
+					if (!data || !data.length) {
+						continue;
+					}
+					for (var k = 0; k < data.length; k++) {
+						if (data[k] && typeof data[k].name === 'string'
+							&& data[k].name.replace(/\s+/g, ' ').trim() === wanted) {
+							return {
+								name: name,
+								sections: (data[k].sections || []).map(function (s) {
+									return { label: String(s.label || ''), value: String(s.value || '') };
+								})
+							};
+						}
+					}
+				}
+
+				/* Path 2 — legacy DOM scrape (kept until 2B Stage 3 removes
+				   the details markup from the dosage templates). */
 				var items = document.querySelectorAll('.sf-formula__item');
-				for (var i = 0; i < items.length; i++) {
-					var nameEl = items[i].querySelector('.sf-formula__name');
-					if (nameEl && nameEl.textContent.replace(/\s+/g, ' ').trim() === name) {
+				for (var j = 0; j < items.length; j++) {
+					var nameEl = items[j].querySelector('.sf-formula__name');
+					if (nameEl && nameEl.textContent.replace(/\s+/g, ' ').trim() === wanted) {
 						var sections = [];
-						var labels = items[i].querySelectorAll('.sf-formula__label');
-						for (var j = 0; j < labels.length; j++) {
-							var val = labels[j].nextElementSibling;
+						var labels = items[j].querySelectorAll('.sf-formula__label');
+						for (var m = 0; m < labels.length; m++) {
+							var val = labels[m].nextElementSibling;
 							if (val) {
-								sections.push({ label: labels[j].textContent.trim(), value: val.textContent.trim() });
+								sections.push({ label: labels[m].textContent.trim(), value: val.textContent.trim() });
 							}
 						}
 						return { name: name, sections: sections };

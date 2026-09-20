@@ -181,7 +181,7 @@ add_action('wp_enqueue_scripts', function() {
 	$is_dosage_page = is_page($dosage_pages) || is_page_template(array_map(fn($s) => "page-$s", $dosage_pages));
 	if ($is_dosage_page) {
 		wp_enqueue_style('sinofresh-configurator', get_template_directory_uri() . '/assets/css/configurator.css', array(), '2.9');
-		wp_enqueue_script('sinofresh-configurator', get_template_directory_uri() . '/assets/js/configurator.js', array(), '2.2', true);
+		wp_enqueue_script('sinofresh-configurator', get_template_directory_uri() . '/assets/js/configurator.js', array(), '2.3', true);
 		// Standard Formulas accordion CTAs: copy formula name + scroll to configurator.
 		wp_enqueue_script('sinofresh-formulas', get_template_directory_uri() . '/assets/js/formulas.js', array(), '1.0.0', true);
 	}
