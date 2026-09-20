@@ -37,6 +37,10 @@ import sys
 # The Step0 mask set. Order matters: the specific patterns run before the
 # catch-all base64 run.
 MASKS = [
+    # Cloudflare caches HTML by URL (cache-control: max-age=86400), so a snapshot
+    # that must see the origin has to defeat the cache with a unique query string.
+    # The value differs on every run by design -> mask it, not the parameter.
+    (re.compile(r'sfcap=[A-Za-z0-9._-]+'), 'sfcap=MASK', 'cache_buster'),
     (re.compile(r'email-protection#[0-9a-f]+'), 'email-protection#MASK', 'cf_email_link'),
     (re.compile(r'data-cfemail="[0-9a-f]+"'), 'data-cfemail="MASK"', 'cf_email_attr'),
     (re.compile(r"'[A-Za-z0-9+/=]{16,}'"), "'MASK'", 'quoted_blob'),

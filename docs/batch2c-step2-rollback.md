@@ -94,3 +94,39 @@ md5 -q sinofresh-theme/functions.php
 4. **用完立刻**删 mu-plugin 与副本，并按 §5.1／5.3 复验。
 
 回滚时若页面出现异常，先确认这两样东西不在（它们不属于 Git，容易漏删）。
+
+---
+
+## 附：第三步 TP 重收录的回滚（2026-09-20 执行，属本批回滚剧本）
+
+本步**没有改主题任何文件**，只让 TranslatePress 在 `/zh/` 渲染时注册新串，因此回滚只涉及数据库。
+
+### 备份位置
+
+```
+/root/tp-backup-20260920-115727.sql     425104 B
+```
+
+内容：10 张 `wp_trp_*` 表（`dictionary_en_us_zh_cn`、`original_strings`、`original_meta`、`gettext_en_us`、`gettext_original_strings`、`gettext_zh_cn`、`gettext_original_meta`、`machine_translation_locks`、`slug_originals`、`slug_translations`），
+由 `mariadb-dump --single-transaction --add-drop-table` 生成，**带 `DROP TABLE IF EXISTS`，可整份导回**。
+已实测：导入临时库 `sfs3_bak` 后表行数与现网基线一致（1290/1290/1178/623），确认可用。
+
+### 完整回滚
+
+```bash
+export MYSQL_PWD="$(sed -n 's/^DBPASS=//p' /root/sinofresh-db-creds.txt)"
+mariadb -u root sinofresh < /root/tp-backup-20260920-115727.sql
+```
+
+### 轻量回滚（推荐：本操作纯追加、id 单调，删除不影响既有行）
+
+```sql
+DELETE FROM wp_trp_dictionary_en_us_zh_cn WHERE id >= 1291;   -- 本轮新增 43 行
+DELETE FROM wp_trp_original_strings        WHERE id >= 1291;
+```
+
+### 回滚后验收
+
+- 表计数回到 **1290 / 1290**，gettext 侧 **1178 / 623（147×status0 + 476×status4）**
+- `wp_trp_dictionary_en_us_zh_cn` 中 `Browse All Formulas →` 行数 = **0**
+- 页面侧**不需要复验**：重收录已由掩码回归证明「19/19 SAME」，页面输出与串是否注册无关（译文为空 ⇒ 回落英文原文）
