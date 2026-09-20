@@ -183,13 +183,19 @@ add_action('wp_enqueue_scripts', function() {
 		wp_enqueue_style('sinofresh-configurator', get_template_directory_uri() . '/assets/css/configurator.css', array(), '2.9');
 		wp_enqueue_script('sinofresh-configurator', get_template_directory_uri() . '/assets/js/configurator.js', array(), '2.3', true);
 	}
-	// Standard Formulas CTAs (K1): the card grid on the eight dosage pages and
-	// the hero button on a formula detail page. Enqueued independently of the
-	// configurator because single-sf_formula.html has no #configurator — 1.1.0
-	// reads data-form off the button and simply does not scroll when the
-	// target is absent.
-	if ($is_dosage_page || is_singular('sf_formula')) {
+	// Standard Formulas CTAs (K1): the card grid on the eight dosage pages,
+	// the hero button on a formula detail page, and — since 2C Step2 — the
+	// same 21-card grid on the sf_formula archive. Enqueued independently of
+	// the configurator because neither single-sf_formula.html nor
+	// archive-sf_formula.html has an #configurator — 1.1.0 reads data-form
+	// off the button and simply does not scroll when the target is absent.
+	if ($is_dosage_page || is_singular('sf_formula') || is_post_type_archive('sf_formula')) {
 		wp_enqueue_script('sinofresh-formulas', get_template_directory_uri() . '/assets/js/formulas.js', array(), '1.1.0', true);
+	}
+	// Archive-only: the dosage-form filter bar on /formulas/. Nothing else on
+	// the site renders [sf_formula_filters], so nothing else pays for it.
+	if (is_post_type_archive('sf_formula')) {
+		wp_enqueue_script('sinofresh-formula-filter', get_template_directory_uri() . '/assets/js/formula-filter.js', array(), '1.0.0', true);
 	}
 });
 
@@ -236,17 +242,36 @@ function sinofresh_explore_chips() {
 add_shortcode('sf_explore_chips', 'sinofresh_explore_chips');
 
 /**
- * Archive post count (templates/archive.html hero).
+ * Archive post count (templates/archive.html and archive-sf_formula.html hero).
  *
  * Block templates run do_shortcode() before do_blocks(), so a raw shortcode
  * inside a wp:html block resolves in templates without extra wiring.
+ *
+ * noun picks the counted thing from a closed set: 'article' (default) or
+ * 'formula'. The two _n() calls stay literal inside the switch on purpose —
+ * a composed msgid ("%d " . $noun) could never be translated, and each arm
+ * needs its own translators comment. 2C Step2 added the attribute; until
+ * then this was an anonymous closure with no parameters at all, so
+ * noun="formula" was silently discarded and the archive said "21 articles".
+ * The default keeps /blog/ and every term archive on the original output.
  */
-add_shortcode('sf_archive_count', function () {
+function sinofresh_archive_count($atts = array()) {
 	global $wp_query;
+	$atts  = shortcode_atts(array('noun' => 'article'), $atts, 'sf_archive_count');
 	$found = isset($wp_query->found_posts) ? (int) $wp_query->found_posts : 0;
-	/* translators: %d: number of articles. */
-	return esc_html(sprintf(_n('%d article', '%d articles', $found, 'sinofresh'), $found));
-});
+	switch (sanitize_key($atts['noun'])) {
+		case 'formula':
+			/* translators: %d: number of formulas. */
+			$label = sprintf(_n('%d formula', '%d formulas', $found, 'sinofresh'), $found);
+			break;
+		default:
+			/* translators: %d: number of articles. */
+			$label = sprintf(_n('%d article', '%d articles', $found, 'sinofresh'), $found);
+			break;
+	}
+	return esc_html($label);
+}
+add_shortcode('sf_archive_count', 'sinofresh_archive_count');
 
 /**
  * [sf_blog_chips] — blog filter chips, shared by /blog/ and the archive
@@ -469,11 +494,21 @@ add_action('after_switch_theme', 'sinofresh_formula_flush_rewrite_rules');
  * queried object is not a post. It needs no language-prefix handling:
  * /zh/products/soft-chews/ still ends in "soft-chews", the same convention
  * configurator.js already uses.
+ *
+ * The one view where that fallback is wrong is the sf_formula archive itself
+ * (2C Step2). /formulas/ queries a WP_Post_Type, so the fallback read the
+ * last segment — "formulas", or the page number on /formulas/page/2/ — and
+ * the grid filtered on a term that does not exist: zero cards, no error, no
+ * way to tell it apart from "no formulas yet". An archive is not a dosage
+ * form, so the guard below returns '' and the grid lists all 21.
  */
 function sinofresh_formula_current_form($form) {
 	$form = sanitize_title($form);
 	if ($form !== '') {
 		return $form;
+	}
+	if (is_post_type_archive('sf_formula')) {
+		return '';
 	}
 	$queried = get_queried_object();
 	if ($queried instanceof WP_Post) {
@@ -868,6 +903,118 @@ function sinofresh_formula_grid($atts = array()) {
 		. '</div>';
 }
 add_shortcode('sf_formula_grid', 'sinofresh_formula_grid');
+
+/**
+ * [sf_formula_filters] — dosage-form filter bar for archive-sf_formula.html.
+ *
+ * 2C Step2 renders all 21 formulas on one page and narrows them in the
+ * browser (formula-filter.js toggles .is-sf-off on the cards), so the bar is
+ * nine <button>s rather than links: a button is the honest control for
+ * "narrow what is already on screen". Buttons carry aria-pressed and the
+ * container a role="status" line, so the state is announced, not just
+ * painted.
+ *
+ * Order and labels come from the Products children (parent 19, menu_order) —
+ * the same source [sf_explore_chips] uses — so the chip row reads in the
+ * dosage-page sequence the visitor already knows, and "All" leads. A form
+ * with no published formula is skipped instead of rendered as a dead end.
+ *
+ * Without JavaScript the whole bar is hidden: the CSS hook is the sf-js
+ * class the head marker adds to <html> before the body paints. A no-JS
+ * visitor gets the plain 21-card list, never a row of buttons that do
+ * nothing. (The white band around it collapses to its own padding in that
+ * case — deliberately not compensated with :has(), which would need
+ * !important to beat the section's inline padding.)
+ *
+ * The shown-count is a <span> of its own so the script rewrites only the
+ * number and the phrase around it stays one translatable string.
+ */
+function sinofresh_formula_filters() {
+	$total = (int) wp_count_posts('sf_formula')->publish;
+	if ($total < 1) {
+		return '';
+	}
+	$pages = get_pages(array(
+		'parent'      => 19,          // Products — same source as sf_explore_chips
+		'post_status' => 'publish',
+		'sort_column' => 'menu_order',
+		'sort_order'  => 'ASC',
+	));
+
+	$buttons = '<button type="button" class="sf-fchip is-active" data-sf-form="all" aria-pressed="true">'
+		. esc_html('All') . '</button>';
+	foreach ($pages as $page) {
+		$slug = (string) $page->post_name;
+		$term = get_term_by('slug', $slug, 'sf_formula_form');
+		if (!$term instanceof WP_Term || (int) $term->count < 1) {
+			continue;
+		}
+		$buttons .= sprintf(
+			'<button type="button" class="sf-fchip" data-sf-form="%s" aria-pressed="false">%s</button>',
+			esc_attr($slug),
+			esc_html(sinofresh_formula_label($slug, $term->name))
+		);
+	}
+
+	return '<div class="sf-fchips-wrap">'
+		. '<div class="sf-fchips" role="group" aria-label="Filter formulas by dosage form">' . $buttons . '</div>'
+		. '<p class="sf-fchips-status" role="status">'
+		. sprintf(
+			esc_html('Showing %1$s of %2$d formulas'),
+			'<span class="sf-fchips-count">' . $total . '</span>',
+			$total
+		)
+		. '</p>'
+		. '</div>';
+}
+add_shortcode('sf_formula_filters', 'sinofresh_formula_filters');
+
+/**
+ * /formulas/page/2/, /formulas/page/3/ → 301 to /formulas/.
+ *
+ * 2C Step2 replaced the paginated blog recipe with a single page holding all
+ * 21 cards, so page 2 and 3 would render the same list a second and third
+ * time — duplicate content with no way back. page/4 already 404s (the
+ * archive never had a fourth page) and handle_404() resets the query flags,
+ * so this hook never sees it and the 404 stands.
+ *
+ * The target is a site-relative path derived from the request, for two
+ * independent reasons. get_post_type_archive_link() returns the English
+ * /formulas/ on /zh/formulas/page/2/ and would drop the visitor out of the
+ * language they were browsing; and home_url() is filtered by TranslatePress
+ * to prepend the active language, so home_url('/zh/formulas/') comes back as
+ * /zh/zh/formulas/. The path already carries the prefix the visitor asked
+ * for, so it goes out untouched.
+ */
+add_action('template_redirect', function () {
+	if (!is_post_type_archive('sf_formula') || !is_paged()) {
+		return;
+	}
+	$uri    = isset($_SERVER['REQUEST_URI']) ? (string) wp_unslash($_SERVER['REQUEST_URI']) : '';
+	$path   = (string) wp_parse_url($uri, PHP_URL_PATH);
+	$target = preg_replace('#/page/[0-9]+/?$#', '/', $path);
+	if (!is_string($target) || $target === $path) {
+		return;
+	}
+	$query = (string) wp_parse_url($uri, PHP_URL_QUERY);
+	wp_safe_redirect($target . ($query !== '' ? '?' . $query : ''), 301);
+	exit;
+});
+
+/**
+ * No-JS guard for the filter bar (see [sf_formula_filters]).
+ *
+ * A class on <html> set by an inline head script is available before the
+ * body paints, so a JS-less visitor never sees the bar flash in and stay
+ * dead. Emitted only on the archive that renders the bar, which keeps every
+ * other template byte-identical.
+ */
+add_action('wp_head', function () {
+	if (!is_post_type_archive('sf_formula')) {
+		return;
+	}
+	echo "<script>document.documentElement.classList.add('sf-js');</script>\n";
+}, 1);
 
 /**
  * [sf_formula_detail] — the three-field specification of the current formula.
@@ -2096,7 +2243,10 @@ function sinofresh_template_placeholders($html) {
 		$archive_title = get_search_query();
 	} elseif (is_archive()) {
 		$archive_title = wp_strip_all_tags(get_the_archive_title());
-		$archive_title = trim(preg_replace('/^(?:Category|Tag|Author|Year|Month|Day|Week|Post Format|Classification|Classification|分类|标签|作者|年|月|日)\s*[^:：]*:\s*/iu', '', $archive_title));
+		/* "Archives" is the prefix WP puts on a post type archive title
+		   ("Archives: Formulas") — 2C Step2 turns it into the /formulas/
+		   crumb and H1. 归档 is the same prefix in a zh_CN string set. */
+		$archive_title = trim(preg_replace('/^(?:Category|Tag|Author|Year|Month|Day|Week|Post Format|Classification|Classification|Archives|分类|标签|作者|年|月|日|归档)\s*[^:：]*:\s*/iu', '', $archive_title));
 	}
 	if ($archive_title === '') {
 		$archive_title = 'Archive';
@@ -2192,6 +2342,13 @@ add_action('wp_head', function() {
 		$candidates = array('single-sf_formula', 'single');
 	} elseif (is_search()) {
 		$candidates = array('search');
+	} elseif (is_post_type_archive('sf_formula')) {
+		/* 2C Step2: the archive has its own recipe now. Naming it first pins
+		   the JSON-LD source to the file that actually renders. Both
+		   templates carry the same two-level crumb, so the emitted
+		   BreadcrumbList is byte-identical — this only keeps the schema
+		   generator in step with the render path if one file is edited. */
+		$candidates = array('archive-sf_formula', 'archive');
 	} elseif (is_archive()) {
 		/* Categories, tags, dates and authors all fall back to archive.html. */
 		$candidates = array('archive');
