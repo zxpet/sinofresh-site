@@ -2,7 +2,7 @@
 Theme Name: SINO FRESH
 Author: Shandong SINO FRESH Pet Food Co., Ltd.
 Text Domain: sinofresh
-Version: 2.10.44
+Version: 2.10.45
 Requires at least: 6.0
 Requires PHP: 7.4
 License: GNU General Public License v2 or later
@@ -7906,3 +7906,58 @@ body.sf-certmodal-lock {
 	box-sizing: border-box;
 	height: 100%;
 }
+/* B2D Step1 — Active Ingredients & Guaranteed Analysis band on the eight
+   dosage pages. One recipe per block, hairline-separated: the band sits on
+   the white section, so card chrome would not read. The guaranteed-analysis
+   table is the compact .sf-spec-list grid defined above (section "Compact
+   8-row spec list"), reused here with <dt>/<dd> — the correct semantics for a
+   term/value pair, and structurally out of reach of the dosage-page Product
+   JSON-LD parser, which matches <span class="sf-spec-term">…</span>
+   <span class="sf-spec-value">…</span> on the template file. ------------- */
+.sf-actives__title { margin: 0; }
+.sf-actives__intro {
+	max-width: 720px;
+	margin-top: 10px;
+	font-size: 15px;
+	color: var(--wp--preset--color--text-secondary);
+}
+.sf-actives__list { margin-top: 30px; }
+.sf-actives__item + .sf-actives__item {
+	margin-top: 28px;
+	padding-top: 28px;
+	border-top: 1px solid var(--wp--preset--color--border-light);
+}
+.sf-actives__name { margin: 0; font-size: 17px; }
+.sf-actives__label {
+	margin: 16px 0 0;
+	font-size: 11px;
+	font-weight: 600;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: var(--wp--preset--color--text-secondary);
+}
+/* Ingredient pills. Deliberately NOT .sf-fchip: that class carries
+   cursor:pointer and a hover/.is-active state because it is a filter button —
+   the wrong affordance on a static term. Outline pill mirrors the
+   .sf-topbar-badges certificate pill, the site's existing pill vocabulary. */
+.sf-actives__ing {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	margin: 10px 0 0;
+	padding: 0;
+	list-style: none;
+}
+.sf-actives__pill {
+	padding: 3px 10px;
+	border: 1px solid var(--wp--preset--color--border-light);
+	border-radius: 999px;
+	font-size: 13px;
+	line-height: 1.5;
+	color: var(--wp--preset--color--text-primary);
+}
+/* <dl> ships margin-block 1em and <dd> margin-inline-start 40px — the reused
+   .sf-spec-list grid needs both neutralised inside this band. */
+.sf-actives .sf-spec-list { margin: 10px 0 0; }
+.sf-actives .sf-spec-term,
+.sf-actives .sf-spec-value { margin: 0; }

@@ -23,7 +23,7 @@ add_action('after_setup_theme', function() {
 });
 
 add_action('wp_enqueue_scripts', function() {
-	wp_enqueue_style('sinofresh-style', get_stylesheet_uri(), array(), '2.10.44');
+	wp_enqueue_style('sinofresh-style', get_stylesheet_uri(), array(), '2.10.45');
 	// Sticky nav: every template renders parts/header.html, so this is site-wide.
 	wp_enqueue_script('sinofresh-sticky-header', get_template_directory_uri() . '/assets/js/sticky-header.js', array(), '1.0.0', true);
 	wp_enqueue_script('sinofresh-ui-components', get_template_directory_uri() . '/assets/js/ui-components.js', array(), '1.0.0', true);
@@ -916,6 +916,196 @@ function sinofresh_formula_grid($atts = array()) {
 		. '</div>';
 }
 add_shortcode('sf_formula_grid', 'sinofresh_formula_grid');
+
+/**
+ * Split an "a, b, c" meta value on its top-level commas.
+ *
+ * The comma is the separator every sf_formula_ingredients value uses, and it
+ * can also legitimately appear INSIDE a parenthesised share — "Tapioca (46%),
+ * Peas (29%)" separates at depth 0 only. Today all 21 records split identically
+ * either way (tools/b2d1_parser_dryrun.php §1), so this is defensive rather
+ * than load-bearing: it costs a depth counter and removes a silent wrong split
+ * if content ever writes "X (a, b), Y".
+ *
+ * Byte-wise on purpose: "(" ")" "," are ASCII and every UTF-8 continuation
+ * byte is >= 0x80, so multi-byte terms pass through untouched.
+ *
+ * Returns a trimmed list with empty segments dropped; '' and whitespace give an
+ * empty array, never one empty element.
+ */
+function sinofresh_formula_split_top_level($value) {
+	$value = (string) $value;
+	if (trim($value) === '') {
+		return array();
+	}
+	$out   = array();
+	$depth = 0;
+	$cur   = '';
+	$len   = strlen($value);
+	for ($i = 0; $i < $len; $i++) {
+		$ch = $value[$i];
+		if ($ch === '(') {
+			$depth++;
+		} elseif ($ch === ')') {
+			if ($depth > 0) {
+				$depth--;
+			}
+		}
+		if ($ch === ',' && $depth === 0) {
+			$out[] = trim($cur);
+			$cur   = '';
+			continue;
+		}
+		$cur .= $ch;
+	}
+	$out[] = trim($cur);
+	return array_values(array_filter($out, function ($s) { return $s !== ''; }));
+}
+
+/**
+ * Turn "Glucosamine ≥500mg/chew, Chondroitin ≥200mg/chew" into term/value pairs
+ * for the guaranteed-analysis table.
+ *
+ * Each segment splits at its FIRST U+2265 (≥), so the level half keeps any
+ * further text verbatim ("Omega-3 ≥30%" → term "Omega-3", value "≥30%"). A
+ * segment with no ≥ is kept as a term with an empty value — the caller decides
+ * — while a value with no subject is dropped here, because that is not a row.
+ */
+function sinofresh_formula_analysis_pairs($value) {
+	$pairs = array();
+	foreach (sinofresh_formula_split_top_level($value) as $part) {
+		$pos = strpos($part, "\xE2\x89\xA5"); // U+2265 GREATER-THAN OR EQUAL TO
+		if ($pos === false) {
+			$pairs[] = array('term' => $part, 'value' => '');
+			continue;
+		}
+		$term  = rtrim(substr($part, 0, $pos));
+		$level = ltrim(substr($part, $pos));
+		if ($term === '' || $level === '') {
+			continue;
+		}
+		$pairs[] = array('term' => $term, 'value' => $level);
+	}
+	return $pairs;
+}
+
+/**
+ * [sf_formula_actives form="soft-chews"] — the "Active Ingredients &
+ * Guaranteed Analysis" band on the eight dosage pages.
+ *
+ * Reads the same post meta [sf_formula_detail] reads (sf_formula_ingredients,
+ * sf_formula_analysis), so the formula record stays the single source of truth
+ * and stays editable in wp-admin: the eight block templates sit behind the
+ * authority guard, post meta does not.
+ *
+ * Server-side by necessity. The K2 JSON mirror is a [sf_formula_grid]
+ * by-product, so reading it would mean keeping the grid on the page, painting
+ * nothing without JavaScript, and coupling this band to the grid. Querying the
+ * records directly is crawlable, degrades to plain HTML, and cannot be broken
+ * by editing the cards.
+ *
+ * Emits no JSON and no ItemList of its own: the page already carries the grid's
+ * ItemList and the dosage Product schema, and a second copy would only
+ * duplicate them. Returns '' when the dosage form has no published formula, so
+ * the band collapses instead of leaving an empty padded section — the same
+ * convention [sf_formula_body] follows.
+ *
+ * The query mirrors [sf_formula_grid]'s exactly (same post type, status,
+ * orderby, tax_query) so a recipe holds the same position in the table as its
+ * card holds in the grid above it.
+ *
+ * Labels are plain English literals, not gettext: that is how the eight
+ * templates' own copy is written (and how [sf_formula_grid] writes "View
+ * formula →"), so these strings land on the same TranslatePress path as the
+ * rest of the page. No TP strings are registered in this batch.
+ */
+function sinofresh_formula_actives($atts = array()) {
+	$atts = shortcode_atts(array('form' => ''), $atts, 'sf_formula_actives');
+	$form = sinofresh_formula_current_form($atts['form']);
+
+	$args = array(
+		'post_type'           => 'sf_formula',
+		'post_status'         => 'publish',
+		'posts_per_page'      => -1,
+		'orderby'             => array('menu_order' => 'ASC', 'title' => 'ASC'),
+		'ignore_sticky_posts' => true,
+		'no_found_rows'       => true,
+	);
+	if ($form !== '') {
+		$args['tax_query'] = array(
+			array('taxonomy' => 'sf_formula_form', 'field' => 'slug', 'terms' => $form),
+		);
+	}
+	$formulas = get_posts($args);
+	if (!$formulas) {
+		return '';
+	}
+
+	$items = '';
+	foreach ($formulas as $formula) {
+		/* One authoritative name string, decoded once and re-escaped per
+		   context — the rule [sf_formula_grid] follows ("Skin & Coat Soft
+		   Chews" is stored entity-encoded). */
+		$name = html_entity_decode(get_the_title($formula), ENT_QUOTES, 'UTF-8');
+		if ($name === '') {
+			continue;
+		}
+		$ingredients = trim((string) get_post_meta($formula->ID, 'sf_formula_ingredients', true));
+		$analysis    = trim((string) get_post_meta($formula->ID, 'sf_formula_analysis', true));
+		if ($ingredients === '' && $analysis === '') {
+			continue;
+		}
+
+		$body = '<h3 class="sf-actives__name">' . esc_html($name) . '</h3>';
+
+		$pills = '';
+		foreach (sinofresh_formula_split_top_level($ingredients) as $term) {
+			$pills .= '<li class="sf-actives__pill">' . esc_html($term) . '</li>';
+		}
+		if ($pills !== '') {
+			$body .= '<p class="sf-actives__label">' . esc_html('Ingredients') . '</p>'
+				. '<ul class="sf-actives__ing">' . $pills . '</ul>';
+		}
+
+		/* A segment with no level, or with no subject, is not a row: the dry
+		   run (tools/b2d1_parser_dryrun.php §2/§3) finds zero such segments
+		   in the 21 live records, and rendering one would emit an empty <dd>. */
+		$rows = '';
+		foreach (sinofresh_formula_analysis_pairs($analysis) as $pair) {
+			if ($pair['term'] === '' || $pair['value'] === '') {
+				continue;
+			}
+			$rows .= '<div class="sf-spec-row">'
+				. '<dt class="sf-spec-term">' . esc_html($pair['term']) . '</dt>'
+				. '<dd class="sf-spec-value">' . esc_html($pair['value']) . '</dd>'
+				. '</div>';
+		}
+		if ($rows !== '') {
+			$body .= '<p class="sf-actives__label">' . esc_html('Guaranteed Analysis') . '</p>'
+				. '<dl class="sf-spec-list">' . $rows . '</dl>';
+		}
+
+		$items .= '<article class="sf-actives__item">' . $body . '</article>';
+	}
+	if ($items === '') {
+		return '';
+	}
+
+	$label = sinofresh_formula_label($form);
+	if ($label === '') {
+		$label = 'dosage';
+	}
+
+	return '<div class="sf-actives__inner">'
+		. '<h2 class="sf-actives__title">' . esc_html('Active Ingredients & Guaranteed Analysis') . '</h2>'
+		. '<p class="sf-actives__intro">' . esc_html(sprintf(
+			'Every formula in our standard %s range, with the ingredient list and the guaranteed analysis we hold to in production. Use one as a starting point, or ask us to adjust the actives and the levels for your own label.',
+			$label
+		)) . '</p>'
+		. '<div class="sf-actives__list">' . $items . '</div>'
+		. '</div>';
+}
+add_shortcode('sf_formula_actives', 'sinofresh_formula_actives');
 
 /**
  * [sf_formula_filters] — dosage-form filter bar for archive-sf_formula.html.
