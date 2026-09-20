@@ -1,0 +1,37 @@
+==============================================================================
+Batch 2D step 4c — rendered evidence  (/formulas/ear-care-drops/, header: X-SF-Preflight: 1)
+==============================================================================
+
+[1] 1440 — the single card's left edge and width
+  PASS stylesheet really is the pre-flight copy             expected=href contains -preflight actual=https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/style.css?ver=2.10.50
+  PASS the stylesheet served is 2.10.50                     expected=ver=2.10.50              actual=https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/style.css?ver=2.10.50
+      {"found": true, "rs": "complete", "w": 1440, "sheet": "https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/style.css?ver=2.10.50", "cls": "sf-fdetail__grid sf-fdetail__grid--solo", "gridLeft": 120, "gridW": 1200, "specH2Left": 120, "deltaVsSpecH2": 0, "cardCount": 1, "cardLeft": 120, "cardW": 560, "tracks": "560px", "maxWidth": "1200px", "h2Count": 5, "h2SharedLeft": 5, "h2s": ["A Closer Look at Ear Care @x=120", "Specification@x=120", "Formula & nutrition@x=120", "More Drops Formulas@x=120", "Ready to Launch Your Produ@x=120"], "hScroll": false}
+  PASS render is complete at 1440                           expected=complete / 1440          actual=complete / 1440
+  PASS exactly one card (the --solo state)                  expected=1                        actual=1
+  PASS grid carries the --solo modifier                     expected=--solo                   actual=sf-fdetail__grid sf-fdetail__grid--solo
+  PASS single track is minmax(0, 560px)                     expected=560px                    actual=560px
+  PASS card width is 560                                    expected=560                      actual=560
+  PASS card left == grid left (card does not float inside its track) expected=cardLeft == gridLeft     actual=120 / 120
+  PASS grid left == Specification h2 left                   expected=0px                      actual=0px
+  PASS grid left is x=120 (the 1200px measure's left edge)  expected=120                      actual=120
+  PASS grid left is shared with at least half the page's h2s expected=>= half of 5 h2          actual=5
+  PASS no horizontal scroll at 1440                         expected=False                    actual=False
+      h2 lefts: A Closer Look at Ear Care @x=120 | Specification@x=120 | Formula & nutrition@x=120 | More Drops Formulas@x=120 | Ready to Launch Your Produ@x=120
+
+[2] 1440 — negative control (hand the grid back its auto-fit tracks)
+      "injected"
+      {"found": true, "rs": "complete", "w": 1440, "sheet": "https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/style.css?ver=2.10.50", "cls": "sf-fdetail__grid sf-fdetail__grid--solo", "gridLeft": 120, "gridW": 1200, "specH2Left": 120, "deltaVsSpecH2": 0, "cardCount": 1, "cardLeft": 120, "cardW": 1200, "tracks": "1200px 0px 0px 0px", "maxWidth": "1200px", "h2Count": 5, "h2SharedLeft": 5, "h2s": ["A Closer Look at Ear Care @x=120", "Specification@x=120", "Formula & nutrition@x=120", "More Drops Formulas@x=120", "Ready to Launch Your Produ@x=120"], "hScroll": false}
+  PASS card fills the measure once the solo track is removed expected=> +400px                 actual=640 px (560 -> 1200)
+  PASS neutralised track is not the solo one                expected=a different grid-template-columns actual=560px vs 1200px 0px 0px 0px
+
+[3] 375 — the same page on a phone
+      {"found": true, "rs": "complete", "w": 375, "sheet": "https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/style.css?ver=2.10.50", "cls": "sf-fdetail__grid sf-fdetail__grid--solo", "gridLeft": 20, "gridW": 335, "specH2Left": 20, "deltaVsSpecH2": 0, "cardCount": 1, "cardLeft": 20, "cardW": 335, "tracks": "335px", "maxWidth": "1200px", "h2Count": 5, "h2SharedLeft": 3, "h2s": ["A Closer Look at Ear Care @x=38", "Specification@x=20", "Formula & nutrition@x=20", "More Drops Formulas@x=20", "Ready to Launch Your Produ@x=38"], "hScroll": false}
+  PASS render is complete at 375                            expected=complete / 375           actual=complete / 375
+  PASS no horizontal scroll at 375                          expected=False                    actual=False
+  PASS card fits the phone measure                          expected=<= 375                   actual=335px
+  PASS track is capped at the available width, not at 560   expected=< 560                    actual=335px
+  PASS grid left still on the Specification h2 edge at 375  expected=0px                      actual=0px
+
+==============================================================================
+PASS — 19/19 checks pass
+==============================================================================

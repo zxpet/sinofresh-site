@@ -1,0 +1,35 @@
+==========================================================================
+Batch 2D step 4c — gates for `grid-template-columns: minmax(0, 560px)`
+                on .sf-fdetail__grid--solo, 2.10.49 -> 2.10.50
+==========================================================================
+
+[0] inputs
+    base dir _backup/b2d-step4b-baselines/new : 75 pages
+    new  dir _backup/b2d-step4c-baselines/new : 75 pages
+
+[1] resource inventory (which cache tokens moved?)
+    style.css          2.10.49 -> 2.10.50   on 75 page(s)
+    asset SET changed on 0 page(s) (must be 0)
+
+[2] masked comparison of the 75 pages (?ver= folded)
+    identical 75/75
+
+[3] style.css reconstruction (undo the declared edits)
+    base bytes 257903 / new bytes 258083 / undone bytes 257903
+    every declaration applied : YES
+    undone == base : YES   (796acac4dcb516c7 vs 796acac4dcb516c7)
+
+[4] functions.php reconstruction (undo the declared edits)
+    base bytes 168850 / new bytes 168850 / undone bytes 168850
+    every declaration applied : YES
+    undone == base : YES   (d9b9a0e35d3ff2f4 vs d9b9a0e35d3ff2f4)
+
+[5] JSON-LD deep-equal (decoded structures, not masked text)
+    identical 75/75 page(s)
+
+==========================================================================
+PASS — style.css is base + the three declared edits, byte for byte;
+       functions.php is base + the enqueue bump;
+       75/75 pages identical once the version token is folded;
+       75/75 pages byte-identical in decoded JSON-LD.
+==========================================================================

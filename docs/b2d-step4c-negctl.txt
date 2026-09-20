@@ -1,0 +1,46 @@
+==========================================================================
+Batch 2D step 4c — gates for `grid-template-columns: minmax(0, 560px)`
+                on .sf-fdetail__grid--solo, 2.10.49 -> 2.10.50
+==========================================================================
+
+[0] inputs
+    base dir _backup/b2d-step4b-baselines/new : 75 pages
+    new  dir _backup/b2d-step4b-baselines/new : 75 pages
+
+[1] resource inventory (which cache tokens moved?)
+    asset SET changed on 0 page(s) (must be 0)
+
+[2] masked comparison of the 75 pages (?ver= folded)
+    identical 75/75
+
+[3] style.css reconstruction (undo the declared edits)
+    !! declared new text occurs 0 time(s) — cannot undo unambiguously
+       literal: 'Version: 2.10.50'
+    !! declared new text occurs 0 time(s) — cannot undo unambiguously
+       literal: '\n   The cap is expressed as the track width, not as a max-width on the box.\n   A max-width plus auto margins —'
+    !! declared new text occurs 0 time(s) — cannot undo unambiguously
+       literal: '.sf-fdetail__grid--solo {\n\tgrid-template-columns: minmax(0, 560px);\n}'
+    base bytes 257903 / new bytes 257903 / undone bytes 257903
+    every declaration applied : NO
+    undone == base : NO   (not comparable — nothing was undone)
+
+[4] functions.php reconstruction (undo the declared edits)
+    !! declared new text occurs 0 time(s) — cannot undo unambiguously
+       literal: "array(), '2.10.50');"
+    base bytes 168850 / new bytes 168850 / undone bytes 168850
+    every declaration applied : NO
+    undone == base : NO   (not comparable — nothing was undone)
+
+[5] JSON-LD deep-equal (decoded structures, not masked text)
+    identical 75/75 page(s)
+
+==========================================================================
+FAIL — 7 problem(s):
+  * NOTHING moved — the two directories have identical version tokens, so this gate proved nothing (is --new pointing at base?)
+  * style.css: declared new text occurs 0 time(s), expected 1
+  * style.css: declared new text occurs 0 time(s), expected 1
+  * style.css: declared new text occurs 0 time(s), expected 1
+  * style.css: reconstruction does not reproduce the base byte-for-byte
+  * functions.php: declared new text occurs 0 time(s), expected 1
+  * functions.php: reconstruction does not reproduce the base byte-for-byte
+==========================================================================

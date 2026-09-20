@@ -1,0 +1,26 @@
+tracked files            : 1226
+hashed locally           : 1226  (unreadable: 0)
+hashed on the dev box    : 1226
+non-ASCII paths          : 13
+   sinofresh-theme/docs/官网开发文档-全文.md                    matched
+   sinofresh-theme/docs/视觉重设计方案-v2.md                   matched
+   sinofresh-theme/screenshots/batch1-step2-hero/s2-liquids-1440-Hero特写.png matched
+   sinofresh-theme/screenshots/batch1-step2-hero/s2-liquids-1440-首屏-标注.png matched
+   sinofresh-theme/screenshots/batch1-step2-hero/s2-liquids-1440-首屏.png matched
+   sinofresh-theme/screenshots/batch1-step2-hero/s2-liquids-375-首屏-标注.png matched
+   sinofresh-theme/screenshots/batch1-step2-hero/s2-liquids-375-首屏.png matched
+   sinofresh-theme/screenshots/batch1-step2-hero/s2-soft-chews-1440-Hero特写.png matched
+   sinofresh-theme/screenshots/batch1-step2-hero/s2-soft-chews-1440-首屏-标注.png matched
+   sinofresh-theme/screenshots/batch1-step2-hero/s2-soft-chews-1440-首屏.png matched
+   sinofresh-theme/screenshots/batch1-step2-hero/s2-soft-chews-375-首屏-标注.png matched
+   sinofresh-theme/screenshots/batch1-step2-hero/s2-soft-chews-375-首屏.png matched
+   网站网址图标素材512-512.ai                                   matched
+mismatches               : 2
+   * tools/b2d_s4b_confine.py
+       local 832062de45f769e17a5f82fa28049912
+       live  8331e159d36791f697821dc97d2d2c7e
+   * tools/b2d_s4c_confine.py
+       local 29e4381d68fe808bec118bc7c75d0777
+       live  3748dc2585e0de0f951ed03103a539a5
+
+FAIL  1226 files, 2 mismatches
