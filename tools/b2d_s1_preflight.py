@@ -21,6 +21,15 @@ exists:
     python3 tools/b2d_s1_preflight.py install <commit>
     python3 tools/b2d_s1_preflight.py remove
     python3 tools/b2d_s1_preflight.py status
+
+NOTE — pass the FULL 40-character sha. Measured 2026-09-21 on the dev box:
+`git rev-parse HEAD` and `git cat-file -t HEAD` work, but the same repo refuses
+an abbreviated sha ("fatal: Not a valid object name dcfc4d3") even though the
+object is present and packed. An install with the 7-char form therefore fails
+with a git error that looks like the commit is missing, and the tar step then
+reports "This does not look like a tar archive" — a misleading pair of
+messages for what is only a short-sha lookup failure. `git log --oneline`
+still prints the short form, so it is easy to paste it back in by mistake.
 """
 
 import os
@@ -53,6 +62,11 @@ def ssh(script, check=True):
 
 def install(commit):
     assert commit and len(commit) >= 7, "need a commit-ish"
+    if len(commit) < 40:
+        # Not pedantry: abbreviated lookups fail on this box (see the module
+        # docstring), and the failure surfaces as a tar error three steps later.
+        raise SystemExit("pass the full 40-char sha; abbreviated lookups fail on "
+                         "the dev box (got %r)" % commit)
     if not os.path.exists(MU_SRC):
         raise SystemExit("missing %s" % MU_SRC)
     # 1. upload the gate (scp, so the file's bytes are the repo's bytes)

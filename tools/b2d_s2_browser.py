@@ -148,21 +148,45 @@ def dismiss_cookie_banner():
     thumbnail strip sits. A real click aimed at a thumbnail therefore lands on
     the banner. Accepting it is a genuine click, so the banner's own dismissal
     path is exercised rather than a CSS override of it.
+
+    The decision is made on the banner's own LAYOUT BOX, not on whether the
+    element exists. Acceptance is remembered for the rest of the browser
+    session, and every later navigation then re-renders the banner with
+    `display:none`: same node, a 0x0 accept button at (0,0), nothing on screen
+    and nothing covered. Asking `querySelector(...)` therefore answers "yes,
+    still there", the click that follows cannot succeed, and the caller printed
+    "later click checks may fail for this reason alone" on every navigation
+    after the first — a warning about a state in which nothing can be blocked.
+
+    Measured, not assumed (docs/b2d-step3-shots/_banner-steps.txt): fresh
+    session at 1280x900 — banner 1280x76, accept button 104x44 at (858,862),
+    elementFromPoint returns the button, click dismisses it; later navigation —
+    banner display:none, button 0x0, elementFromPoint returns the topbar.
     """
     state = ev("""JSON.stringify((function(){
-      return {present: !!document.querySelector('.sf-cookie-banner'),
+      var b=document.querySelector('.sf-cookie-banner');
+      if(!b) return {present:false, shown:false};
+      var cs=getComputedStyle(b), r=b.getBoundingClientRect();
+      return {present:true,
+              shown:(cs.display!=='none' && cs.visibility!=='hidden' &&
+                     r.width>0 && r.height>0),
               button: !!document.querySelector('.sf-cookie-banner__btn--accept')};
     })())""")
     if not state or not state.get("present"):
+        return
+    if not state.get("shown"):
+        print("      -- consent banner already resolved for this session"
+              " (display:none, no box); nothing can cover the gallery")
         return
     if not state.get("button"):
         check("cookie banner has an accept button", True, False)
         return
     if not real_click(".sf-cookie-banner__btn--accept"):
-        # Do not fail the run on the banner itself; report it and carry on so
-        # every other check still reports a real result.
-        print("      !! cookie banner not dismissed — later click checks may"
-              " fail for this reason alone")
+        # It is on screen and still could not be clicked: a real risk, stated
+        # as one. Do not fail the run on the banner itself — carry on so every
+        # other check still reports a real result.
+        print("      !! cookie banner is on screen but could not be clicked"
+              " — later click checks may fail for this reason alone")
         return
     time.sleep(0.6)
     gone = ev("""JSON.stringify((function(){
