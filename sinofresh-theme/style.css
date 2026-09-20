@@ -5723,9 +5723,15 @@ body.page-id-28 .wp-block-columns:has(> .wp-block-column > .wp-block-group.has-c
    The tag is .sf-fcard__use so the card and the page it opens label the same
    term with the same type treatment; on this tone it has to go light, like
    .sf-eyebrow under .has-primary-background-color — brand-green on #1B4D3E is
-   3.8:1 and #2E6B54 is no better, both failing AA at 11px even at weight 700. */
+   3.8:1 and #2E6B54 is no better, both failing AA at 11px even at weight 700.
+   It must be a BLOCK here, not the card's inline: the constrained layout
+   centres block children (max-width + auto margins) but an inline-level child
+   flows in an anonymous block that spans the full band, and the tag rendered
+   flush at x=0 while the breadcrumb above it sat at the content edge. No
+   fit-content shrink either — the layout's auto side margins would then
+   centre the shrink-wrapped box instead of leaving it at the content edge. */
 .sf-formula-hero .sf-fcard__use {
-	display: inline-block;
+	display: block;
 	color: var(--wp--preset--color--card-white);
 	opacity: 0.72;
 }
