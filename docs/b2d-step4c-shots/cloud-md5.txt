@@ -17,9 +17,6 @@ non-ASCII paths          : 13
    sinofresh-theme/screenshots/batch1-step2-hero/s2-soft-chews-375-首屏-标注.png matched
    sinofresh-theme/screenshots/batch1-step2-hero/s2-soft-chews-375-首屏.png matched
    网站网址图标素材512-512.ai                                   matched
-mismatches               : 1
-   * docs/batch2d-step4c.md
-       local 837920c42ace4c93e5388b339ddca23b
-       live  eccbba537bbbd43a570af8d234a5ff13
+mismatches               : 0
 
-FAIL  1238 files, 1 mismatches
+PASS  1238 files, 0 mismatches
