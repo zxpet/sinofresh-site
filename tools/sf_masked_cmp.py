@@ -33,10 +33,16 @@ import os
 import re
 import subprocess
 import sys
+import time
 
 # The Step0 mask set. Order matters: the specific patterns run before the
 # catch-all base64 run.
 MASKS = [
+    # Preflight renders load the same theme under a copy directory, so every
+    # asset URL gains a "-preflight" suffix. Masking it lets a preflight page be
+    # compared byte-for-byte against the live one. Never fires on live captures,
+    # so existing baselines keep their hashes.
+    (re.compile(r'sinofresh-theme-preflight'), 'sinofresh-theme', 'preflight_theme_dir'),
     # Cloudflare caches HTML by URL (cache-control: max-age=86400), so a snapshot
     # that must see the origin has to defeat the cache with a unique query string.
     # The value differs on every run by design -> mask it, not the parameter.
@@ -86,6 +92,11 @@ def main():
     ap.add_argument('--fetch', metavar='DIR', help='fetch the given paths into DIR')
     ap.add_argument('--base', default='https://dev.zxpet.com', help='base URL for --fetch')
     ap.add_argument('--header', default=None, help='extra request header (e.g. preflight gate)')
+    ap.add_argument('--bust', action='store_true',
+                    help='append a unique ?sfcap= to each --fetch URL so Cloudflare '
+                         '(max-age=86400, keyed by URL) cannot answer with a snapshot '
+                         'taken under different conditions — required whenever the '
+                         'request carries a header that changes the response')
     ap.add_argument('--json', default=None, help='write the result JSON here')
     ap.add_argument('dirs', nargs='*', help='dirA dirB for a directory comparison')
     args = ap.parse_args()
@@ -112,6 +123,9 @@ def main():
         os.makedirs(args.fetch, exist_ok=True)
         for p in args.dirs:
             url = args.base.rstrip('/') + '/' + p.lstrip('/')
+            if args.bust:
+                sep = '&' if '?' in url else '?'
+                url += sep + 'sfcap=s' + str(int(time.time() * 1000))
             body = curl(url, args.header)
             out = os.path.join(args.fetch, slug_of(p) + '.html')
             open(out, 'w', encoding='utf-8').write(body)
