@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>批次 2D 第 1 批 · 验收报告 — 活性成分 + 保证值表</title>
+<style>
+	:root{
+		--green:#2E6B54; --green-dark:#1B4D3E; --accent:#C05621;
+		--ink:#1C2B24; --muted:#5F6B65; --line:#DCE2DF; --bg:#F3F6F4; --card:#fff;
+	}
+	*{box-sizing:border-box}
+	body{margin:0;background:var(--bg);color:var(--ink);
+		font:15px/1.65 -apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;}
+	.wrap{max-width:1080px;margin:0 auto;padding:40px 28px 80px}
+	header{background:var(--green);color:#fff;border-radius:14px;padding:28px 30px}
+	header h1{margin:0 0 6px;font-size:24px;letter-spacing:.2px}
+	header p{margin:0;opacity:.9;font-size:14px}
+	.verdict{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+	.pill{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.32);
+		border-radius:999px;padding:3px 12px;font-size:12.5px}
+	h2{font-size:17px;margin:38px 0 12px;padding-bottom:8px;border-bottom:2px solid var(--green)}
+	h2 span{color:var(--muted);font-weight:400;font-size:13px;margin-left:8px}
+	.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px}
+	.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+	.card b{display:block;font-size:22px;color:var(--green);letter-spacing:-.3px}
+	.card small{color:var(--muted);font-size:12.5px}
+	table{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--line);
+		border-radius:10px;overflow:hidden;font-size:13.5px}
+	th,td{padding:8px 12px;text-align:left;border-bottom:1px solid var(--line)}
+	th{background:#EDF2EF;font-weight:600;font-size:12.5px;letter-spacing:.02em}
+	tr:last-child td{border-bottom:none}
+	td.num{font-variant-numeric:tabular-nums;text-align:right}
+	.ok{color:#1B7A4B;font-weight:600}
+	.same{color:var(--muted)}
+	.note{background:#FFF8EE;border:1px solid #F0DCC2;border-left:4px solid var(--accent);
+		border-radius:8px;padding:12px 16px;margin:14px 0;font-size:13.5px}
+	.note b{color:#8A4B12}
+	figure{margin:14px 0;background:var(--card);border:1px solid var(--line);border-radius:10px;
+		overflow:hidden}
+	figure img{display:block;width:100%;height:auto}
+	figcaption{padding:8px 14px;font-size:12.5px;color:var(--muted);border-top:1px solid var(--line)}
+	.row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+	@media(max-width:760px){.row{grid-template-columns:1fr}}
+	code{background:#EDF2EF;border-radius:4px;padding:1px 5px;font-size:12.5px;
+		font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+	pre{background:var(--green-dark);color:#DCEBE4;border-radius:8px;padding:14px 16px;overflow:auto;
+		font-size:12.5px;line-height:1.55}
+	ul{padding-left:20px}
+	li{margin:5px 0}
+	.foot{margin-top:44px;color:var(--muted);font-size:12.5px;text-align:center}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+	<h1>批次 2D · 第 1 批 —— 活性成分 + 保证值表</h1>
+	<p>八个剂型页在「典型规格表」与「How We Work」之间新增服务端渲染的 Active Ingredients &amp; Guaranteed Analysis</p>
+	<div class="verdict">
+		<span class="pill">commit 58e24eb</span>
+		<span class="pill">10 文件 / +319 −2</span>
+		<span class="pill">限定证明 47/47</span>
+		<span class="pill">浏览器 30/30</span>
+		<span class="pill">数据层 46/46</span>
+		<span class="pill">工作区↔云端 342/342</span>
+	</div>
+</header>
+
+<h2>核心结论 <span>最有力的一条证据</span></h2>
+<p>把新块从候选页里删掉之后，<b>9 个带新块的页面全部与基线逐字节相同</b>；而 38 个不带新块的页面本来就逐字节相同。<br>
+这意味着：<b>除新块以外的每一个字节都没动</b> —— 配方卡数量与顺序、JSON-LD 全部载荷、入队资源清单、markup、空白，一字未改。</p>
+<div class="grid">
+	<div class="card"><b>9/9</b><small>带新块的页面：删块后与基线逐字节相同</small></div>
+	<div class="card"><b>38/38</b><small>不带新块的页面：本来就逐字节相同</small></div>
+	<div class="card"><b>38/47</b><small>掩码回归 SAME（9 个 DIFF ＝ 预期的那 9 页）</small></div>
+	<div class="card"><b>1 项</b><small>入队清单变化：仅 style.css 2.10.44→2.10.45</small></div>
+	<div class="card"><b>False</b><small>剂型页 Product schema 的 additionalProperty 仍缺失</small></div>
+	<div class="card"><b>6 → 7</b><small>点轨项数，新项落在第 3 位</small></div>
+</div>
+
+<h2>改动内容 <span>逐字节可核对</span></h2>
+<table>
+	<tr><th>文件</th><th>变化</th><th class="num">现字节</th><th>说明</th></tr>
+	<tr><td><code>functions.php</code></td><td>+191 / −1</td><td class="num">156 120</td><td>2 个纯函数 + <code>[sf_formula_actives]</code>；版本号 bump</td></tr>
+	<tr><td><code>style.css</code></td><td>+56 / −1</td><td class="num">250 582</td><td>55 行新样式（41 行声明 + 14 行注释）；版本号 bump</td></tr>
+	<tr><td colspan="4" style="background:#FAFCFB"><b>8 个剂型页模板，各 +9 行</b>（8 行块 + 1 空行），插入段归一 <code>form="…"</code> 后 <b>md5 全等</b>（<code>e54e6366049a001e</code>）</td></tr>
+	<tr><td>page-soft-chews.html</td><td>+9</td><td class="num">55 186</td><td rowspan="8" style="vertical-align:middle">容器注释与 <code>&lt;section&gt;</code> 是块② <code>#formulas</code> 的原样序列化，只把 <code>formulas→actives</code>、<code>sf-formulas→sf-actives</code>；写入前脚本会做替换后等值断言</td></tr>
+	<tr><td>page-tablets.html</td><td>+9</td><td class="num">46 874</td></tr>
+	<tr><td>page-powders.html</td><td>+9</td><td class="num">46 326</td></tr>
+	<tr><td>page-pastes.html</td><td>+9</td><td class="num">44 411</td></tr>
+	<tr><td>page-drops.html</td><td>+9</td><td class="num">44 822</td></tr>
+	<tr><td>page-liquids.html</td><td>+9</td><td class="num">45 167</td></tr>
+	<tr><td>page-fish-oil.html</td><td>+9</td><td class="num">46 656</td></tr>
+	<tr><td>page-dental-chews.html</td><td>+9</td><td class="num">49 623</td></tr>
+</table>
+
+<h2>实际渲染 <span>线上 dev 站，带认证访问</span></h2>
+<figure>
+	<img src="b2d-step1-shots/01-band-full-1440.png" alt="1440 宽的完整新块">
+	<figcaption>1440 × 1450 · /products/soft-chews/ · 整段新块一屏容纳：H2 + 导语 + 4 条配方（成分药丸 + 保证值表）。右侧点轨 7 个点，第 3 个为当前高亮项。</figcaption>
+</figure>
+<div class="row">
+	<figure style="margin:0">
+		<img src="b2d-step1-shots/03-band-top-375.png" alt="375 宽新块上半">
+		<figcaption>375 × 812 · 新块上半：标题换行、药丸 3 行换行正常、无横向溢出</figcaption>
+	</figure>
+	<figure style="margin:0">
+		<img src="b2d-step1-shots/04-band-mid-375.png" alt="375 宽新块中段">
+		<figcaption>375 × 812 · 新块中段：条目之间的 hairline 分隔与保证值表</figcaption>
+	</figure>
+</div>
+<figure>
+	<img src="b2d-step1-shots/06-zh-band-375.png" alt="zh 版新块">
+	<figcaption>/zh/products/soft-chews/ · 同一模板的 zh 版本，同一段新块（英文原文，本批不补 TranslatePress 串）</figcaption>
+</figure>
+
+<h2>12 项回归 <span>逐项判据与实测</span></h2>
+<table>
+	<tr><th style="width:26px">#</th><th>项</th><th>判据</th><th>实测</th></tr>
+	<tr><td>1</td><td>PHP 语法</td><td><code>php -l functions.php</code></td><td class="ok">No syntax errors</td></tr>
+	<tr><td>2</td><td>块配平 × 8</td><td><code>b2c_s2_block_lint.py</code>；<code>/ --&gt;</code> 残留</td><td class="ok">8/8 PASS；自闭合各 3 个；<code>"/ --&gt;"</code> 全仓 0</td></tr>
+	<tr><td>3</td><td>新块 8 页同构</td><td>归一 <code>form="…"</code> 后 md5</td><td class="ok">8/8 相等（e54e6366049a001e）</td></tr>
+	<tr><td>4</td><td>掩码字节回归</td><td>预检 A/B → 归一 → <code>sf_masked_cmp</code>，先跑 A/A</td><td class="ok">38/47 SAME；9 个 DIFF ＝ 8 剂型 + zh 版</td></tr>
+	<tr><td>5</td><td><b>限定证明</b></td><td>删掉新块后与基线逐字节比</td><td class="ok">47/47（带块 9/9，不带块 38/38）</td></tr>
+	<tr><td>6</td><td>入队资源清单</td><td><code>b2c_s2_ver_inventory.py</code></td><td class="ok">仅 style.css 2.10.44→2.10.45；资源集合无增减</td></tr>
+	<tr><td>7</td><td>JSON-LD 数据层</td><td>47 页解析后双向 deep-equal</td><td class="ok">全等；<code>additionalProperty</code> 仍缺失</td></tr>
+	<tr><td>8</td><td>K2 镜像</td><td><code>.sf-formulas-data</code> 逐值比</td><td class="ok">A==B；条数 4/3/3/2/2/2/2/3＝21</td></tr>
+	<tr><td>9</td><td>渲染计数</td><td>items/pills/rows 对干跑预测</td><td class="ok">8/8 逐页相符；无空 <code>&lt;li&gt;</code>/<code>&lt;dd&gt;</code></td></tr>
+	<tr><td>10</td><td>配置器</td><td>4 个 K1 按钮 → sessionStorage → 摘要卡</td><td class="ok">4 个在；"Joint Support Soft Chews" 入库；Shape→"Bone" 回填</td></tr>
+	<tr><td>11</td><td>点轨</td><td>项数 / 位置 / 逐项点击落位</td><td class="ok">7 项，新项第 3 位，7/7 落位</td></tr>
+	<tr><td>12</td><td>响应式 + i18n</td><td>375 无横向滚动、药丸换行、zh 200</td><td class="ok">scrollW 375＝clientW 375；zh 渲染同块；未碰图片</td></tr>
+</table>
+
+<h2>渲染计数 <span>与干跑预测逐页相符</span></h2>
+<table>
+	<tr><th>页面</th><th class="num">配方条目</th><th class="num">成分药丸</th><th class="num">保证值行</th></tr>
+	<tr><td>/products/soft-chews/ <span class="same">（含 zh 版）</span></td><td class="num">4</td><td class="num">24</td><td class="num">8</td></tr>
+	<tr><td>/products/tablets/</td><td class="num">3</td><td class="num">18</td><td class="num">7</td></tr>
+	<tr><td>/products/powders/</td><td class="num">3</td><td class="num">10</td><td class="num">3</td></tr>
+	<tr><td>/products/pastes/</td><td class="num">2</td><td class="num">9</td><td class="num">4</td></tr>
+	<tr><td>/products/drops/</td><td class="num">2</td><td class="num">6</td><td class="num">2</td></tr>
+	<tr><td>/products/liquids/</td><td class="num">2</td><td class="num">11</td><td class="num">6</td></tr>
+	<tr><td>/products/fish-oil/</td><td class="num">2</td><td class="num">6</td><td class="num">8</td></tr>
+	<tr><td>/products/dental-chews/</td><td class="num">3</td><td class="num">15</td><td class="num">5</td></tr>
+	<tr><td><b>合计</b></td><td class="num"><b>21</b></td><td class="num"><b>99</b></td><td class="num"><b>43</b></td></tr>
+</table>
+
+<h2>JSON-LD 双重保险 <span>为什么这不会污染 schema</span></h2>
+<p>剂型页的 Product JSON-LD 解析器<b>读的是磁盘模板文件</b>（<code>templates/page-*.html</code>），
+它要的模式是 <code>&lt;span class="sf-spec-term"&gt;…&lt;/span&gt;&lt;span class="sf-spec-value"&gt;…&lt;/span&gt;</code>（两 span 之间零空白）。</p>
+<pre>Product 块数                       1          未新增第二个 Product
+含 additionalProperty              false      ← 仍然缺失（本批无 schema 污染）
+页面里有 class="sf-spec-term"      true       来自新块的 &lt;dt class="sf-spec-term"&gt;
+页面里有 &lt;span class="sf-spec-term"&gt;  false      解析器要求的精确模式仍不存在
+模板文件里有 sf-spec-term          false      解析器读的那个文件里根本没有这个字符串</pre>
+<p>① 解析器读磁盘模板，模板里只有一行短代码；② 即便改读渲染结果，它要的是 <code>&lt;span&gt;</code>，
+而新块产出的是 <code>&lt;dt&gt;</code>。两道锁各自独立成立。</p>
+
+<h2>一处主动偏离 <span>已如实记录</span></h2>
+<div class="note">
+	<b>导语文案</b>：方案示例写的是 <code>Every Soft Chews recipe in our standard range, …</code>，
+	实施时改为 <code>Every formula in our standard {Label} range, …</code>。<br>
+	原因：Label 取剂型页标题，八个值是 Soft Chews / Tablets / <b>Powders</b> / <b>Pastes</b> / <b>Drops</b> /
+	Liquids / Fish Oil / Dental Chews —— 全是复数。原句式在"Soft Chews"上读得通，
+	但在 Powders / Pastes / Drops 三个页面的语法是错的。把 Label 放在名词后当定语，八个页面全部成立。<br>
+	<b>只动了一句文案</b>，结构、选择器、回归判据一字未改。
+</div>
+
+<h2>计划外发现 <span>与本次改动无关，但已处理</span></h2>
+<ul>
+	<li><b>回归门在带 GF 电话字段的页面上永远无法变绿。</b>
+		<code>/services/</code> 的 A/A 自检（<b>改前状态</b>）就失败：Gravity Forms 的电话国家下拉
+		id <code>gform_phone_dropdown_&lt;微时间种子哈希&gt;</code> 每次请求都不同，实测连续三次拿到三个不同值。
+		⇒ 已给掩码集补 <code>gform_phone_dropdown_[0-9a-f]+</code> 一条；补后 A/A 在
+		/services/、/products/soft-chews/、/formulas/ 三处全部 PASS。</li>
+	<li><b>掩码比对工具新增 <code>--user</code>。</b> dev 站 Basic Auth 后，不带凭据的 curl 会拿到 401 页面，
+		两侧哈希同一个错误页 ⇒ <b>静默全绿</b>。已显式要求凭据并写进文档。</li>
+	<li><b>预检脚本曾覆盖上一趟日志。</b> 原 <code>install</code> 里的 <code>rm -f log</code> 会把基线趟
+		"门确实触发过"的证据删掉，已改为轮转保留。</li>
+</ul>
+
+<h2>回滚 <span>纯新增，一行命令</span></h2>
+<ul>
+	<li><code>git revert 58e24eb</code> —— 10 个文件同一个 commit，纯新增，不改 post meta / 模板路由 / K1·K2·K7</li>
+	<li>备份：<code>sinofresh-theme/_backup/b2d-step1-20260920-225306/</code>（10 文件 + 带 sha256 的 MANIFEST）</li>
+	<li>回滚后硬指标：8 页回到基线渲染字节；<code>#actives</code> 段与该 H2 消失；点轨回到 6 项；<code>style.css?ver=2.10.44</code></li>
+</ul>
+
+<h2>遗留 <span>如实记录</span></h2>
+<ol>
+	<li><b><code>.sf-spec-term</code> 在同一页上现在有两个出处</b>：块④规格表原本不含该类，新块的
+		<code>&lt;dt class="sf-spec-term"&gt;</code> 是首次出现。当前 <code>assets/js/</code> 与 <code>includes/</code>
+		中<b>无任何脚本消费 <code>.sf-spec-*</code></b>（已 grep 复核为空），CSS 侧已用 <code>.sf-actives</code> 限定作用域。
+		日后若有人写页面级 <code>.sf-spec-term</code> 选择器，会同时命中两处。这是本批唯一的结构性代价。</li>
+	<li>本批<b>未补 TranslatePress 串</b>，zh 版显示英文原文（与方案一致）。</li>
+	<li>水印图、首页 <code>&lt;title&gt;</code>、≤1239px 内页 hero 文字贴边 —— 均不在本批范围。</li>
+</ol>
+
+<p class="foot">批次 2D 第 1 批 · 全档见 <code>docs/batch2d-step1.md</code> · 方案见 <code>docs/batch2d-step1-plan.md</code> · 取证图 <code>docs/b2d-step1-shots/</code></p>
+</div>
+</body>
+</html>
