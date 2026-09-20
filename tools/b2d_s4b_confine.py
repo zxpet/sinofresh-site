@@ -105,7 +105,12 @@ def main():
 
     lines, fails = [], []
 
-    def say(s=''):
+    def say(*parts):
+        # Variadic: the mismatch dump below passes a label and a repr() as two
+        # arguments. Declared as say(s='') this raised TypeError on the very
+        # path that exists to explain a failure — i.e. the bug could only ever
+        # hide a problem, never invent one.
+        s = ' '.join(str(p) for p in parts)
         print(s)
         lines.append(s)
 

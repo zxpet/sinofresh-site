@@ -114,7 +114,11 @@ DECLARED = {
     '2.10.48': {
         'css': [
             ('Version: 2.10.48', 'Version: %s'),
-            (TAIL_ANCHOR, TAIL_ANCHOR + NEW_PARA),
+            # NEW_PARA starts with "\n", which in the 2.10.49 set is the blank
+            # line's newline; from 2.10.48 that blank line does not exist yet,
+            # so the literal needs one more. Getting this wrong is not subtle —
+            # the run reported "declared new text occurs 0 time(s)".
+            (TAIL_ANCHOR, TAIL_ANCHOR + "\n" + NEW_PARA),
             (RULE_48, NEW_RULE),
         ],
         'php': [("array(), '2.10.48');", "array(), '%s');")],
@@ -170,7 +174,14 @@ def main():
 
     lines, fails = [], []
 
-    def say(s=''):
+    def say(*parts):
+        # Variadic because the mismatch dump passes a label and a repr() as two
+        # arguments. The 4b version of this file declared say(s='') and then
+        # called it with two — harmless only because that run never reached the
+        # dump, i.e. the bug was hidden by the code path that means "gate
+        # passed". Found by the 2.10.48 run of this file, where it crashed
+        # instead of printing the mismatch.
+        s = ' '.join(str(p) for p in parts)
         print(s)
         lines.append(s)
 
