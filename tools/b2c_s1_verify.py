@@ -117,7 +117,7 @@ def main():
         c.ok('/ -->' not in doc, f'{slug} no self-closing residue')
 
         # --- assets ---------------------------------------------------------
-        c.ok('style.css?ver=2.10.42' in doc, f'{slug} style 2.10.42')
+        c.ok('style.css?ver=2.10.43' in doc, f'{slug} style 2.10.43')
         c.ok('formulas.js?ver=1.1.0' in doc, f'{slug} formulas.js 1.1.0')
         c.ok('configurator.js' not in doc, f'{slug} no configurator.js')
         c.ok('id="configurator"' not in doc, f'{slug} no #configurator')

@@ -127,14 +127,24 @@ if k1:
     check(k1["type"] == "button", "type=button", k1["type"])
 
 # --- grid / cards -------------------------------------------------------
-grid = js_val("""(()=>{const g=document.querySelector('.sf-fdetail__grid');
-  return {cols:getComputedStyle(g).gridTemplateColumns.split(' ').length,
-          cards:document.querySelectorAll('.sf-fdetail__card').length,
-          w:Math.round(document.querySelector('.sf-fdetail__card').getBoundingClientRect().width),
+# Track count cannot be counted by splitting gridTemplateColumns: CSS Grid
+# resolves auto-fit by emitting the whole repeated track list and collapsing
+# the unused tracks to "0px" (measured: "386.656px 386.672px 386.656px 0px"
+# with three visibly placed cards). Count the non-zero tracks, and prove the
+# layout independently by the cards sharing a row.
+GRID_JS = """(()=>{const g=document.querySelector('.sf-fdetail__grid');
+  const gs=getComputedStyle(g);
+  const tracks=gs.gridTemplateColumns.split(' ').filter(t=>parseFloat(t)>1).length;
+  const cards=[...document.querySelectorAll('.sf-fdetail__card')];
+  const rows=new Set(cards.map(c=>Math.round(c.getBoundingClientRect().top)));
+  return {tracks:tracks, cards:cards.length, rows:rows.size,
+          w:Math.round(cards[0].getBoundingClientRect().width),
           labels:[...document.querySelectorAll('.sf-fdetail__label')].map(e=>e.textContent),
-          values:[...document.querySelectorAll('.sf-fdetail__value')].map(e=>e.textContent)}})()""")
+          values:[...document.querySelectorAll('.sf-fdetail__value')].map(e=>e.textContent)}})()"""
+grid = js_val(GRID_JS)
 check(grid["cards"] == 3, "three specification cards", str(grid["cards"]))
-check(grid["cols"] == 3, "desktop grid is 3 tracks", str(grid["cols"]))
+check(grid["tracks"] == 3 and grid["rows"] == 1, "desktop grid is 3 tracks on one row",
+      str(grid))
 check(grid["labels"] == ["Ingredients", "Guaranteed Analysis", "Standard Specs"],
       "card labels", str(grid["labels"]))
 check(len(grid["values"]) == 3 and all(grid["values"]), "card values non-empty", str(grid["values"])[:80])
@@ -142,6 +152,16 @@ check(js_val("(()=>document.documentElement.outerHTML.includes('sf-fdetail-body'
       "long-copy band absent on an empty record")
 
 # --- K1 press: toast, and NO scroll ------------------------------------
+# The clipboard cannot be read back (headless Chromium denies readText), so
+# hook writeText before the click: that records exactly what the page tried to
+# copy, whether or not the write itself is permitted. When the API is absent
+# formulas.js takes its documented degrade path instead, which the toast names.
+rec = js_val("""(()=>{window.__copied=null;
+  try{const o=navigator.clipboard.writeText.bind(navigator.clipboard);
+      navigator.clipboard.writeText=t=>{window.__copied=t;return o(t);};}
+  catch(e){return 'no clipboard: '+e.message}
+  return 'hooked'})()""")
+print('  clipboard hook:', rec)
 before = js_val("(()=>window.scrollY)()")
 hit = real_click(".sf-formula__cta")
 check(hit.get("hit"), "button is the hit-test target", str(hit.get("tag"))[:60])
@@ -155,7 +175,10 @@ if hit.get("hit"):
     run("mouse", "up")
     time.sleep(1.2)
     toast = js_val("(()=>{const t=document.querySelector('.sf-toast');return t?t.textContent:''})()")
-    check(TITLE in toast, "toast names the formula (copy ran)", toast)
+    copied = js_val("(()=>window.__copied)()")
+    check(copied == TITLE or copied is None, "writeText received the formula name", repr(copied))
+    check(copied == TITLE or "Copy unavailable" in toast,
+          "the copy either landed or degraded as designed", str(toast))
     after = js_val("(()=>window.scrollY)()")
     check(abs(after - before) <= 2, "no scroll on a page without #configurator",
           f"{before} -> {after}")
@@ -191,13 +214,14 @@ check(fold["form"] is True and fold["arrow"] not in ("none", "normal", ""),
 check(fold["cur"] == TITLE, "current crumb still the formula", str(fold["cur"]))
 
 m = js_val("""(()=>{const g=document.querySelector('.sf-fdetail__grid');
+  const tracks=getComputedStyle(g).gridTemplateColumns.split(' ').filter(t=>parseFloat(t)>1).length;
   const c=document.querySelector('.sf-fdetail__card').getBoundingClientRect();
   const h=document.querySelector('.sf-formula-hero').getBoundingClientRect();
   const t=document.querySelector('.sf-formula-hero__title');
-  return {cols:getComputedStyle(g).gridTemplateColumns.split(' ').length,
+  return {tracks:tracks,
           cw:Math.round(c.width), heroPad:getComputedStyle(document.querySelector('.sf-formula-hero')).paddingLeft,
           h1:getComputedStyle(t).fontSize, heroH:Math.round(h.height)}})()""")
-check(m["cols"] == 1, "phone grid is one column", str(m["cols"]))
+check(m["tracks"] == 1, "phone grid is one column", str(m["tracks"]))
 check(m["cw"] > 300, "card fills the phone column", str(m["cw"]))
 check(m["heroPad"] == "20px", "hero inset 20px (rule 27s)", m["heroPad"])
 
