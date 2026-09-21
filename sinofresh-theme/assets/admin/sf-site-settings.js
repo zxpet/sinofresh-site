@@ -15,8 +15,20 @@
 		return input ? (parseInt(input.name.match(/sf_certifications\[(\d+)\]/)[1], 10) || 0) : 0;
 	}
 
+	/* The certifications table is rendered without an id attribute, so locate
+	 * it relative to the "+ Add row" button: <table> immediately precedes the
+	 * button's <p>. Never assume #sf-certs-rows — that id does not exist. */
+	function certsTbody() {
+		var add = document.getElementById('sf-certs-add');
+		if (!add) { return null; }
+		var table = add.closest('p').previousElementSibling;
+		return table ? table.querySelector('tbody') : null;
+	}
+
 	function renumberCertRows() {
-		document.querySelectorAll('#sf-certs-rows tr').forEach(function (tr, i) {
+		var tbody = certsTbody();
+		if (!tbody) { return; }
+		tbody.querySelectorAll('tr').forEach(function (tr, i) {
 			tr.querySelectorAll('input').forEach(function (el) {
 				el.name = el.name.replace(/sf_certifications\[\d+\]/, 'sf_certifications[' + i + ']');
 			});
@@ -28,8 +40,8 @@
 	document.addEventListener('click', function (e) {
 		var add = e.target.closest('#sf-certs-add');
 		if (add) {
-			var tbody = document.querySelector('#sf-certs-rows tbody');
-			var last = tbody.querySelector('tr:last-child');
+			var tbody = certsTbody();
+			var last = tbody && tbody.querySelector('tr:last-child');
 			if (!last) { return; }
 			var tr = last.cloneNode(true);
 			tr.querySelectorAll('input[type="text"]').forEach(function (el) { el.value = ''; });
@@ -40,9 +52,9 @@
 		}
 		var del = e.target.closest('.sf-certs-del');
 		if (del) {
-			var tbody2 = document.querySelector('#sf-certs-rows tbody');
+			var tbody2 = certsTbody();
 			var row = del.closest('tr');
-			if (row && tbody2.querySelectorAll('tr').length > 1) {
+			if (tbody2 && row && tbody2.querySelectorAll('tr').length > 1) {
 				row.remove();
 				renumberCertRows();
 			}

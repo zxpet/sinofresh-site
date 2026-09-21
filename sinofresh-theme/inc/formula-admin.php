@@ -481,10 +481,10 @@ add_action('admin_enqueue_scripts', function ($hook) {
 	wp_enqueue_style('sf-mb', $dir . '/assets/admin/sf-mb.css', array(), '1.0.0');
 	wp_enqueue_script('sf-mb-tables', $dir . '/assets/admin/sf-mb-tables.js', array(), '1.0.0', true);
 	if ($is_formula) {
-		wp_enqueue_media();
 		wp_enqueue_script('sf-mb-precheck', $dir . '/assets/admin/sf-mb-precheck.js', array(), '1.0.0', true);
 	}
 	if ($is_settings) {
+		wp_enqueue_media(); /* the Container Library picks images via wp.media */
 		wp_enqueue_script('sf-site-settings', $dir . '/assets/admin/sf-site-settings.js', array(), '1.0.0', true);
 	}
 });
@@ -621,6 +621,12 @@ function sf_render_global_faq_page() {
 	$rows = get_option('sf_global_faq', array());
 	if (!is_array($rows)) {
 		$rows = array();
+	}
+	/* Empty option still renders ONE blank row: the table JS clones the last
+	 * <tr> and no-ops on an empty tbody, so an empty table could never
+	 * receive its first row. Saving drops fully-empty rows. */
+	if (!$rows) {
+		$rows = array(array('q' => '', 'a' => ''));
 	}
 	?>
 	<div class="wrap">
