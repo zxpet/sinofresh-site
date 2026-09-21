@@ -125,8 +125,13 @@ precheck 横幅正则加 `|Save`，enqueue ver 1.0.0→1.0.1）。**上线 SHA �
 ## 身份链与仓库 md5
 
 - 身份链（`tools/b2d_s3_identity.py`，workspace ↔ site-repo live 主题）：
-  **__IDENTITY__**
-- 仓库 md5（`tools/sf_repo_md5.py --exclude 本文档`，JSON `_backup/b2d-h-baselines/repo-md5-h2a.json`）：
-  **__REPO_MD5__**
-- 闭包时服务器 HEAD：**__CLOSURE_HEAD__**（本地 `/tmp` 无残留、`/root` 无残留；
-  预检副本三件已删；`screenshots/` 与 `_backup/` 按 `.gitignore` 不进仓库）
+  **697 tracked 文件，0 mismatch**（预检副本已在第 5 步拆除，故第三段不再比 —— 上线后"被服务的字节"
+  就是 live 主题本身，与工作树逐 md5 相同）。
+- 仓库 md5（`tools/sf_repo_md5.py --exclude 本文档`，JSON `_backup/b2d-h2a-baselines/repo-md5-h2a.json`）：
+  **1405 files, 0 mismatches**（H1 为 1360 → 1405，**+45 恰为本次闭包提交新增的文件数**；
+  非 ASCII 路径 13 条逐条 matched）。
+- 闭包链：`ebbede5`（工具 + 证据 + 文档）→ **本回填提交**（数字版；SHA 见 `git log`）。
+  数字生成时点服务器 HEAD = `ebbede5`。规避了"报告不能是它所报告集合的成员"：本文档两侧排除。
+- 收尾时无残留：服务器 `/root`、`/tmp` 下本批临时件已删；预检副本三件已删；
+  `screenshots/` 与 `_backup/` 按 `.gitignore` 不进仓库（证据已归集到 `docs/batchH2a-shots/` 与 `docs/batchH2a-gates/`）。
+
