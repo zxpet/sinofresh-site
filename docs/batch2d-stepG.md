@@ -58,7 +58,9 @@
 
 ## 五、Step 7 上线与八步闭环（2026-09-21 07:2x–07:4x UTC）
 
-拍板后执行。八步逐条落证，证据全在 `docs/b2d-g-closure/`（9 件：`closure-75.json`、`teardown-75.json`、`e2e.json/.txt`、`logaudit.txt`、`identity-chain.txt`、`cloud-md5.txt`、`g-preflight.log`、`teardown.txt`、`shots/` 4 张）。
+拍板后执行。八步逐条落证，证据全在 `docs/b2d-g-closure/`（8 个文件 + `shots/` 4 张截图）：`closure-75.json`、`teardown-75.json`、`e2e.json`、`e2e.txt`、`logaudit.txt`、`identity-chain.txt`、`g-preflight.log`、`teardown.txt`。
+
+> `shots/` 与 §三 的 `docs/batchG-shots/` 是同名两次抓取：前者对着**线上**（不带预检头），后者对着**预检副本**（带 `X-SF-Preflight` 头）。四张里三张（768 / zh-1440 / fish-oil-1440）逐字节相同；唯一不同的 `joint-support-soft-chews-1440.png`，页面版式一样，**差在缩略图懒加载的瞬时状态**——预检那跑只等到了第 1 张缩略图，live 那跑 4 张全到位（两图都带 cookie 横幅）。两份都留着：它们各自是那一次取证的原始产物，替换成一份就等于把「对着哪份字节测的」这件事抹掉。
 
 | 步 | 结果 |
 |---|---|
@@ -69,7 +71,7 @@
 | 5 拆预检 | 主题目录 / mu-plugin / 日志三者全消，`find *preflight*` **零残留**（仅余常驻 `zz-sf-dev-lockdown.php`）；拆前先把预检副本自己的访问日志（158 行、07:04:24→07:18:47）留档为 `g-preflight.log`。复验：**拆除前 live vs 拆除后 live 75/75 identical** ⇒ 拆除本身零字节影响；带 `X-SF-Preflight` 头访问现在也回落到线上主题 |
 | 6 日志归因 | **窗口内 0 条**；40 行按内容归因；1 条 `--allow` 记账（2D-E 负对照的故意 fatal）。窗口内 **1113 条请求全部认证为 `sfdev`，非我方 0 条**（`curl/8.7.1` 230 + 浏览器 882 + 站点自身 wp-cron 环回 1） |
 | 7 身份链 | workspace ↔ `site-repo/sinofresh-theme`：**691 文件 0 不一致**；第三条腿：仓库目录 ↔ Apache 实际服务的 symlink 目录：**691 文件 0 差异** |
-| 8 仓库 md5 | **1339 文件 0 差异**（两侧同排除 `docs/batch2d-stepG.md` 与 `docs/b2d-g-closure/cloud-md5.txt`；复跑命令写在 `cloud-md5.txt` 头部，与本次逐字相同） |
+| 8 仓库 md5 | **1339 文件 0 差异**（1340 跟踪 − 1 排除；两侧同排除 `docs/batch2d-stepG.md`。原始输出见本节末尾） |
 
 ### 过程里的两处自我纠正（都是用法错，不是数据错）
 
@@ -82,4 +84,34 @@
 
 ### 顺序上的一个取舍
 
-md5 是**最后一步**，在本档与 `cloud-md5.txt` 落盘之前跑（前者停在 `8522f77`，后者随后单独提交）。两个文件是这次判定本身的产物，与 F1 同款处理：报告不能是它所报告集合的成员 ⇒ 两侧同时排除它们；`cloud-md5.txt` 头部写着逐字复跑命令，跑完应得同样的 1339/0。
+md5 是**最后一步**，在本档写下这些数字之前跑（`d63ea50`）。报告不能是它所报告集合的成员 ⇒ 两侧同时排除本档；复跑命令 `python3 tools/sf_repo_md5.py --exclude docs/batch2d-stepG.md`，应得同样的 1340/1/1339/0。曾想再拆出一个 `cloud-md5.txt` 单独落盘原始输出，被工具自己拦下——**未跟踪的排除路径会被拒绝**（否则排除是空动作），这个守门是对的，于是原始输出直接放进报告。
+
+<details>
+<summary>仓库 md5 原始输出（<code>python3 tools/sf_repo_md5.py --exclude docs/batch2d-stepG.md</code>，commit <code>d63ea50</code>）</summary>
+
+```
+tracked files            : 1340
+excluded (both sides)    : 1  (docs/batch2d-stepG.md)
+compared                 : 1339
+hashed locally           : 1339  (unreadable: 0)
+hashed on the dev box    : 1339
+non-ASCII paths          : 13
+   sinofresh-theme/docs/官网开发文档-全文.md                    matched
+   sinofresh-theme/docs/视觉重设计方案-v2.md                   matched
+   sinofresh-theme/screenshots/batch1-step2-hero/s2-liquids-1440-Hero特写.png matched
+   sinofresh-theme/screenshots/batch1-step2-hero/s2-liquids-1440-首屏-标注.png matched
+   sinofresh-theme/screenshots/batch1-step2-hero/s2-liquids-1440-首屏.png matched
+   sinofresh-theme/screenshots/batch1-step2-hero/s2-liquids-375-首屏-标注.png matched
+   sinofresh-theme/screenshots/batch1-step2-hero/s2-liquids-375-首屏.png matched
+   sinofresh-theme/screenshots/batch1-step2-hero/s2-soft-chews-1440-Hero特写.png matched
+   sinofresh-theme/screenshots/batch1-step2-hero/s2-soft-chews-1440-首屏-标注.png matched
+   sinofresh-theme/screenshots/batch1-step2-hero/s2-soft-chews-1440-首屏.png matched
+   sinofresh-theme/screenshots/batch1-step2-hero/s2-soft-chews-375-首屏-标注.png matched
+   sinofresh-theme/screenshots/batch1-step2-hero/s2-soft-chews-375-首屏.png matched
+   网站网址图标素材512-512.ai                                   matched
+mismatches               : 0
+
+PASS  1339 files, 0 mismatches
+```
+
+</details>
