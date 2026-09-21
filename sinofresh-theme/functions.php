@@ -23,7 +23,7 @@ add_action('after_setup_theme', function() {
 });
 
 add_action('wp_enqueue_scripts', function() {
-	wp_enqueue_style('sinofresh-style', get_stylesheet_uri(), array(), '2.10.52');
+	wp_enqueue_style('sinofresh-style', get_stylesheet_uri(), array(), '2.10.53');
 	// Sticky nav: every template renders parts/header.html, so this is site-wide.
 	wp_enqueue_script('sinofresh-sticky-header', get_template_directory_uri() . '/assets/js/sticky-header.js', array(), '1.0.0', true);
 	wp_enqueue_script('sinofresh-ui-components', get_template_directory_uri() . '/assets/js/ui-components.js', array(), '1.0.0', true);
@@ -634,18 +634,22 @@ function sinofresh_formula_card_image($form) {
 }
 
 /**
- * One cell of a dosage page's "Typical specifications" table, by row label.
+ * One value of a dosage page's .sf-facts-mini core-facts row, by data-label.
  *
  * The formula detail hero needs the MOQ and the lead time of the dosage form
- * the formula belongs to. Both already exist as rows of the sf-spectable
- * table on /products/<form>/, so the hero reads them from that template file
+ * the formula belongs to. Both exist as value spans of the .sf-facts-mini row
+ * on /products/<form>/ (batch F1 re-established what the sf-spectable table
+ * fed before 2D-E deleted it), so the hero reads them from that template file
  * instead of restating them — same single-source-of-truth rule the FAQPage,
- * BreadcrumbList and Product schema generators follow. Editing the table on
+ * BreadcrumbList and Product schema generators follow. Editing the row on
  * the dosage page updates every formula hero of that form.
  *
- * $label is the data-label attribute ("MOQ", "Lead time"), not the header
- * text, because data-label is the stable machine-readable twin of the
- * column head (it also drives the stacked mobile table).
+ * $label is the data-label attribute ("MOQ", "Lead time"), not the visible
+ * label text, because data-label is the stable machine-readable twin of the
+ * visible label (it also survives a wording change to the row's labels).
+ *
+ * The lookup is scoped to the .sf-facts-mini block, not the whole page: a
+ * second data-label anywhere else on the page must never shadow the value.
  *
  * Returns a decoded string; callers escape per context. Memoised per
  * form+label, and returns '' for anything it cannot resolve so the caller
@@ -669,7 +673,13 @@ function sinofresh_formula_spec_cell($form, $label) {
 		return '';
 	}
 	$html = (string) file_get_contents($file);
-	if (preg_match('/<td[^>]*data-label="' . preg_quote($label, '/') . '"[^>]*>(.*?)<\/td>/s', $html, $m)) {
+	/* Scope to the .sf-facts-mini row (batch F1's replacement for the
+	   sf-spectable table): the band's wp:html wrapper is consumed by the
+	   renderer, so the template carries the section verbatim. Non-greedy on
+	   both spans — the row holds no nested section and the page must never
+	   gain one inside it. */
+	if (preg_match('/<section class="sf-facts-mini">(.*?)<\/section>/s', $html, $band)
+		&& preg_match('/data-label="' . preg_quote($label, '/') . '"[^>]*>(.*?)<\/span>/s', $band[1], $m)) {
 		$cache[$key] = html_entity_decode(trim(wp_strip_all_tags($m[1])), ENT_QUOTES, 'UTF-8');
 	}
 	return $cache[$key];
@@ -2716,9 +2726,9 @@ add_action('wp_head', function() {
  *   {{FORMULA_META}}     formula detail pages only — the hero's one-line meta
  *                        summary, composed here rather than in the template so
  *                        a missing piece can never leave a dangling "· ":
- *                        "<form> · MOQ <row> · Lead time <row>", where the two
- *                        rows come from the form's /products/<form>/
- *                        specification table (sinofresh_formula_spec_cell).
+ *                        "<form> · MOQ <value> · Lead time <value>", where
+ *                        the two values come from the form's /products/<form>/
+ *                        .sf-facts-mini row (sinofresh_formula_spec_cell).
  *                        Falls back to the form label alone, or to ''.
  *   {{LAST_UPDATED}}     "· Last updated: M j, Y" from the sf_last_reviewed
  *                        custom field, or '' when unset (only posts with a

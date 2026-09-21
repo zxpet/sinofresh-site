@@ -2,7 +2,7 @@
 Theme Name: SINO FRESH
 Author: Shandong SINO FRESH Pet Food Co., Ltd.
 Text Domain: sinofresh
-Version: 2.10.52
+Version: 2.10.53
 Requires at least: 6.0
 Requires PHP: 7.4
 License: GNU General Public License v2 or later
@@ -8253,5 +8253,74 @@ body.sf-certmodal-lock {
 	.sf-facts__table tbody td {
 		padding: 0 0 10px;
 		border-bottom: 1px solid var(--wp--preset--color--border-light);
+	}
+}
+
+/* F1 — minimal core-facts row, between the hero and #formulas on the eight
+   dosage pages. Three fields on one line: MOQ, lead time, certifications.
+   Batch 2D-E deleted the bands that used to carry these facts; this row is
+   the one-line replacement, and it is also machine-readable: every value
+   span carries data-label, and sinofresh_formula_spec_cell() scopes its
+   lookup to the .sf-facts-mini block to feed the formula-detail hero meta —
+   the page stays the single source of truth.
+
+   No heading on purpose: toc-nav.js builds one dot per h2, and the dot rail
+   settled at 6 in 2D-E; this row must not move it.
+
+   Voice copied from .sf-spectable / .sf-facts: hairline top and bottom
+   rules, no vertical rules, 11px letterspaced muted labels, ink values.
+   A new class group rather than a reuse of .sf-facts: separate names stop an
+   edit to one band from silently restyling the other. No padding-top/bottom
+   declaration here either — the vertical rhythm is the block markup's blank
+   lines plus core's constrained-layout child margin, exactly the seam
+   2D-E's gates measured; a class rule here would fight that arithmetic.
+   Selectors stay inside the .sf-facts-mini namespace. ------------------ */
+.sf-facts-mini {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	justify-content: space-between;
+	gap: 10px 40px;
+	border-top: 1px solid var(--wp--preset--color--border-light);
+	border-bottom: 1px solid var(--wp--preset--color--border-light);
+}
+.sf-facts-mini__item {
+	display: flex;
+	align-items: baseline;
+	gap: 10px;
+	min-width: 0;
+}
+.sf-facts-mini__label {
+	font-size: 11px;
+	font-weight: 700;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: var(--wp--preset--color--text-secondary);
+	white-space: nowrap;
+}
+.sf-facts-mini__value {
+	font-size: 14px;
+	line-height: 1.5;
+	font-variant-numeric: tabular-nums;
+	color: var(--wp--preset--color--text-primary);
+}
+/* <=767px: three fields on one line cannot hold "FDA, cGMP, ISO 9001, FSSC
+   22000, HACCP, BRC", so the row stacks — label above its own value, same
+   trade .sf-facts makes. No !important needed: nothing here overrides a
+   core declaration, the flex direction is this namespace's own. */
+@media (max-width: 767px) {
+	.sf-facts-mini {
+		flex-direction: column;
+		gap: 0;
+	}
+	.sf-facts-mini__item {
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 2px;
+		padding: 10px 0;
+		border-bottom: 1px solid var(--wp--preset--color--border-light);
+	}
+	.sf-facts-mini__item:last-child {
+		border-bottom: 0;
 	}
 }
