@@ -1,0 +1,92 @@
+==============================================================================
+Batch F1 — gates for inserting the .sf-facts-mini core-facts row
+                 on the eight dosage pages, 2.10.52 -> 2.10.53
+==============================================================================
+
+[0] inputs, and proof that the candidate is the candidate
+    base dir _backup/b2d-f1-baselines/base : 75 pages
+    new  dir _backup/b2d-f1-baselines/base : 75 pages
+    candidate pages carrying the pre-flight theme directory: 0/75
+    expected to differ: 58 page(s) — 8 dosage + 8 /zh/ dosage + 21 formula + 21 /zh/ formula
+
+[1] resource inventory (which cache tokens moved?)
+    asset SET changed on 0 page(s) (must be 0)
+
+[2] masked comparison of the 75 pages (?ver= folded, nonces and the pre-flight directory masked)
+    differ    0 page(s)
+    identical 75 page(s)
+    !! formulas__bladder-support-powder.html should have differed and did not
+    !! formulas__calcium-phosphorus-tablets.html should have differed and did not
+    !! formulas__calming-soft-chews.html should have differed and did not
+    !! formulas__digestive-soft-chews.html should have differed and did not
+    !! formulas__ear-care-drops.html should have differed and did not
+    !! formulas__hairball-remedy-paste.html should have differed and did not
+    !! formulas__joint-support-soft-chews.html should have differed and did not
+    !! formulas__joint-support-tablets.html should have differed and did not
+    !! formulas__liquid-joint-support.html should have differed and did not
+    !! formulas__liquid-skin-coat.html should have differed and did not
+    !! formulas__multivitamin-tablets.html should have differed and did not
+    !! formulas__natural-cleaning-dental-sticks.html should have differed and did not
+    !! formulas__nutrition-paste.html should have differed and did not
+    !! formulas__oral-care-dental-sticks.html should have differed and did not
+    !! formulas__plaque-control-dental-chews.html should have differed and did not
+    !! formulas__probiotic-powder.html should have differed and did not
+    !! formulas__pumpkin-digestive-powder.html should have differed and did not
+    !! formulas__pure-fish-oil-blend.html should have differed and did not
+    !! formulas__skin-coat-soft-chews.html should have differed and did not
+    !! formulas__urinary-care-drops.html should have differed and did not
+    !! formulas__wild-alaskan-salmon-oil.html should have differed and did not
+    !! products__dental-chews.html should have differed and did not
+    !! products__drops.html should have differed and did not
+    !! products__fish-oil.html should have differed and did not
+    !! products__liquids.html should have differed and did not
+    !! products__pastes.html should have differed and did not
+    !! products__powders.html should have differed and did not
+    !! products__soft-chews.html should have differed and did not
+    !! products__tablets.html should have differed and did not
+    !! zh__formulas__bladder-support-powder.html should have differed and did not
+    !! zh__formulas__calcium-phosphorus-tablets.html should have differed and did not
+    !! zh__formulas__calming-soft-chews.html should have differed and did not
+    !! zh__formulas__digestive-soft-chews.html should have differed and did not
+    !! zh__formulas__ear-care-drops.html should have differed and did not
+    !! zh__formulas__hairball-remedy-paste.html should have differed and did not
+    !! zh__formulas__joint-support-soft-chews.html should have differed and did not
+    !! zh__formulas__joint-support-tablets.html should have differed and did not
+    !! zh__formulas__liquid-joint-support.html should have differed and did not
+    !! zh__formulas__liquid-skin-coat.html should have differed and did not
+    !! zh__formulas__multivitamin-tablets.html should have differed and did not
+    !! zh__formulas__natural-cleaning-dental-sticks.html should have differed and did not
+    !! zh__formulas__nutrition-paste.html should have differed and did not
+    !! zh__formulas__oral-care-dental-sticks.html should have differed and did not
+    !! zh__formulas__plaque-control-dental-chews.html should have differed and did not
+    !! zh__formulas__probiotic-powder.html should have differed and did not
+    !! zh__formulas__pumpkin-digestive-powder.html should have differed and did not
+    !! zh__formulas__pure-fish-oil-blend.html should have differed and did not
+    !! zh__formulas__skin-coat-soft-chews.html should have differed and did not
+    !! zh__formulas__urinary-care-drops.html should have differed and did not
+    !! zh__formulas__wild-alaskan-salmon-oil.html should have differed and did not
+    !! zh__products__dental-chews.html should have differed and did not
+    !! zh__products__drops.html should have differed and did not
+    !! zh__products__fish-oil.html should have differed and did not
+    !! zh__products__liquids.html should have differed and did not
+    !! zh__products__pastes.html should have differed and did not
+    !! zh__products__powders.html should have differed and did not
+    !! zh__products__soft-chews.html should have differed and did not
+    !! zh__products__tablets.html should have differed and did not
+
+[3] page-level confined proof: undo this batch, compare the two sides
+    INSERTION batch — direction is the reverse of step E: the block lives on the
+    CANDIDATE side, so candidate minus the block must equal the base. The detail
+    pages' restored meta values are cross-read from the candidate dosage page's
+    own block — the same single source spec_cell reads.
+Traceback (most recent call last):
+  File "/Users/meng/Workbuddy/sinofresh外贸网站建设/tools/b2d_f1_confine.py", line 629, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "/Users/meng/Workbuddy/sinofresh外贸网站建设/tools/b2d_f1_confine.py", line 436, in main
+    ok = page_reduce_detail(name, b, n, dosage_vals[form],
+                            fails, say)
+  File "/Users/meng/Workbuddy/sinofresh外贸网站建设/tools/b2d_f1_confine.py", line 276, in page_reduce_detail
+    moq, lead = dosage_vals['MOQ'], dosage_vals['Lead time']
+                ~~~~~~~~~~~^^^^^^^
+KeyError: 'MOQ'

@@ -1,0 +1,65 @@
+==============================================================================
+Batch F1 — gates for inserting the .sf-facts-mini core-facts row
+                 on the eight dosage pages, 2.10.52 -> 2.10.53
+==============================================================================
+
+[0] inputs, and proof that the candidate is the candidate
+    base dir _backup/b2d-f1-baselines/base : 75 pages
+    new  dir _backup/b2d-f1-baselines/new : 75 pages
+    candidate pages carrying the pre-flight theme directory: 75/75
+    expected to differ: 58 page(s) — 8 dosage + 8 /zh/ dosage + 21 formula + 21 /zh/ formula
+
+[1] resource inventory (which cache tokens moved?)
+    style.css          2.10.52 -> 2.10.53   on 75 page(s)
+    asset SET changed on 0 page(s) (must be 0)
+
+[2] masked comparison of the 75 pages (?ver= folded, nonces and the pre-flight directory masked)
+    differ    58 page(s)
+    identical 17 page(s)
+
+[3] page-level confined proof: undo this batch, compare the two sides
+    INSERTION batch — direction is the reverse of step E: the block lives on the
+    CANDIDATE side, so candidate minus the block must equal the base. The detail
+    pages' restored meta values are cross-read from the candidate dosage page's
+    own block — the same single source spec_cell reads.
+    products__dental-chews.html: seam runs lead 4 / trail 4 newline(s)
+    products__drops.html: seam runs lead 4 / trail 4 newline(s)
+    products__fish-oil.html: seam runs lead 4 / trail 4 newline(s)
+    products__liquids.html: seam runs lead 4 / trail 4 newline(s)
+    products__pastes.html: seam runs lead 4 / trail 4 newline(s)
+    products__powders.html: seam runs lead 4 / trail 4 newline(s)
+    products__soft-chews.html: seam runs lead 4 / trail 4 newline(s)
+    products__tablets.html: seam runs lead 4 / trail 4 newline(s)
+    zh__products__dental-chews.html: seam runs lead 4 / trail 4 newline(s)
+    zh__products__drops.html: seam runs lead 4 / trail 4 newline(s)
+    zh__products__fish-oil.html: seam runs lead 4 / trail 4 newline(s)
+    zh__products__liquids.html: seam runs lead 4 / trail 4 newline(s)
+    zh__products__pastes.html: seam runs lead 4 / trail 4 newline(s)
+    zh__products__powders.html: seam runs lead 4 / trail 4 newline(s)
+    zh__products__soft-chews.html: seam runs lead 4 / trail 4 newline(s)
+    zh__products__tablets.html: seam runs lead 4 / trail 4 newline(s)
+    58/58 page(s) reduce to the base byte-for-byte
+
+[4] style.css / functions.php / the eight templates — reconstruction
+    each file: undo the declared edits, then compare to the source the batch started from.
+    functions.php            base  168850 / new  169510 / undone  168850  applied:YES  undone==base:YES
+      + .sf-facts-mini block base  261832 / new  264366 / undone  261832  applied:YES  undone==base:YES  (+2534 B CSS)
+    templates/page-soft-chews.html base   53699 / new   54366 / undone   53699  applied:YES  undone==base:YES  (+667 B)
+    templates/page-tablets.html base   45394 / new   46055 / undone   45394  applied:YES  undone==base:YES  (+661 B)
+    templates/page-powders.html base   44858 / new   45517 / undone   44858  applied:YES  undone==base:YES  (+659 B)
+    templates/page-pastes.html base   42942 / new   43601 / undone   42942  applied:YES  undone==base:YES  (+659 B)
+    templates/page-drops.html base   43351 / new   44010 / undone   43351  applied:YES  undone==base:YES  (+659 B)
+    templates/page-liquids.html base   43695 / new   44354 / undone   43695  applied:YES  undone==base:YES  (+659 B)
+    templates/page-fish-oil.html base   43181 / new   43842 / undone   43181  applied:YES  undone==base:YES  (+661 B)
+    templates/page-dental-chews.html base   48127 / new   48788 / undone   48127  applied:YES  undone==base:YES  (+661 B)
+
+[5] JSON-LD deep-equal (decoded structures, not masked text)
+    identical 75/75 page(s)
+
+==============================================================================
+PASS — only style.css's version token moved, on all 75 pages, with no asset added or lost;
+       58 pages differ and they are exactly the expected set;
+       all 58 changed pages reduce to the base byte-for-byte once the inserted row is deleted and the restored meta line degraded;
+       the ten source files rebuild to their pre-batch bytes;
+       75/75 pages byte-identical in decoded JSON-LD.
+==============================================================================
