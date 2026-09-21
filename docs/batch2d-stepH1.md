@@ -51,7 +51,6 @@
 
 ## 身份链与仓库 md5
 - 身份链：`b2d_s3_identity.py` **697 tracked 文件，0 mismatch**（workspace ↔ site-repo，server HEAD `3d382c7`）
-- 仓库 md5：见下方回填行（`sf_repo_md5.py --exclude 本文档`，报告数字生成后本文档才回填；
-  回填后文档两侧字节一致，复跑仍须排除本文档）
-
-<!-- md5-result -->
+- 仓库 md5：**1360 files, 0 mismatches**（`sf_repo_md5.py --exclude 本文档`，JSON
+  `_backup/b2d-h-baselines/repo-md5-h1.json`；数字回填于闭包时刻，复跑须继续排除本文档）
+- 闭包时服务器 HEAD：`ee074ff`（= 本文档回填提交）
