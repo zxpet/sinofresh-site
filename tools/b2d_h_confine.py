@@ -45,6 +45,10 @@ spec = importlib.util.spec_from_file_location('b2d_h_apply', os.path.join(HERE, 
 APPLY = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(APPLY)
 
+spec2 = importlib.util.spec_from_file_location('sf_masked_cmp', os.path.join(HERE, 'sf_masked_cmp.py'))
+MASKED = importlib.util.module_from_spec(spec2)
+spec2.loader.exec_module(MASKED)
+
 STYLE_VER_RE = re.compile(r'/themes/[a-z0-9-]+/style\.css\?ver=([0-9a-z.\-]+)')
 
 SABOTAGE = [
@@ -174,7 +178,13 @@ def run_gate(args, page_new, work, fails, notes):
     else:
         notes.append('[1] no admin asset is referenced by any front page')
 
-    # [2] pages — byte-for-byte, no masks: H1 has zero expected diff
+    # [2] pages — byte-for-byte after the shared mask set: H1 has zero expected
+    # diff. Two captures of the same page are never byte-identical (the
+    # preflight theme dir, CF email protection and GF per-request artefacts all
+    # rotate), so the comparison runs through sf_masked_cmp's ONE mask set,
+    # applied identically to both sides. Sabotage bytes (an extra newline, a
+    # renamed cert, a bumped version, an admin asset tag) are plain text the
+    # mask set never touches, so a masked gate still refuses every sabotage.
     paths = load_manifest(args.base_dir)
     if len(paths) != 75:
         fails.append('[2] manifest carries %d paths (want 75)' % len(paths))
@@ -182,12 +192,17 @@ def run_gate(args, page_new, work, fails, notes):
     for rel in paths:
         a = os.path.join(args.base_dir, rel)
         b = os.path.join(page_new, rel)
-        if not os.path.exists(b) or open(a, 'rb').read() != open(b, 'rb').read():
+        if not os.path.exists(b):
+            diff.append(rel)
+            continue
+        ma, _ = MASKED.masked(read(a))
+        mb, _ = MASKED.masked(read(b))
+        if ma != mb:
             diff.append(rel)
     if diff:
-        fails.append('[2] %d page(s) differ from the base capture: %s' % (len(diff), diff[:4]))
+        fails.append('[2] %d page(s) differ from the base capture (masked): %s' % (len(diff), diff[:4]))
     else:
-        notes.append('[2] %d/75 pages byte-for-byte identical (zero-diff batch)' % len(paths))
+        notes.append('[2] %d/75 pages identical under the shared mask set (zero-diff batch)' % len(paths))
 
     # [3] source rebuild
     base_php = read(args.base_php)
@@ -221,18 +236,31 @@ def run_gate(args, page_new, work, fails, notes):
             if line.strip():
                 h, rel = line.split('  ', 1)
                 table[rel] = h
-    files_root = os.path.join(work, 'theme-files')
-    if not os.path.isdir(files_root):
-        files_root = args.new_theme_dir
-    for rel in APPLY.NEW_FILES:
-        p = os.path.join(files_root, rel)
-        if not os.path.exists(p):
-            fails.append('[4] new file missing from the candidate: %s' % rel)
-            continue
-        got = sha(p)
-        if rel in table and got != table[rel]:
-            fails.append('[4] %s drifted from the recorded sha256' % rel)
-    notes.append('[4] %d new files hash-checked against the recorded table' % len(APPLY.NEW_FILES))
+    if not table:
+        # A gate run without the recorded sha256 table has no reference to
+        # compare against — refuse instead of silently skipping the check.
+        fails.append('[4] no sha256 table given for the %d new files' % len(APPLY.NEW_FILES))
+        notes.append('[4] skipped: no sha256 table')
+    else:
+        files_root = os.path.join(work, 'theme-files')
+        if not os.path.isdir(files_root):
+            # Never silently fall back to the untouched --new-theme-dir: that
+            # directory is exactly the copy a sabotage would want to hide behind.
+            if args.sabotage:
+                fails.append('[4] the sabotaged theme-files copy is missing (silent-fallback path)')
+                files_root = None
+            else:
+                files_root = args.new_theme_dir
+        if files_root:
+            for rel in APPLY.NEW_FILES:
+                p = os.path.join(files_root, rel)
+                if not os.path.exists(p):
+                    fails.append('[4] new file missing from the candidate: %s' % rel)
+                    continue
+                got = sha(p)
+                if rel in table and got != table[rel]:
+                    fails.append('[4] %s drifted from the recorded sha256' % rel)
+        notes.append('[4] %d new files hash-checked against the recorded table' % len(APPLY.NEW_FILES))
 
     # [5] wiring
     if new_php.count('sf_certifications_line()') != 1:

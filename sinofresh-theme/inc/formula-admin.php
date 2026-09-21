@@ -216,6 +216,13 @@ function sf_formula_render_field($spec, $post_id) {
 		case 'table':
 			$rows  = sf_json_rows($raw);
 			$cols  = array_keys($spec['cols']);
+			/* Empty meta still renders ONE blank row: the table JS clones the
+			 * last <tr> and is a no-op on a zero-row tbody, so an empty table
+			 * could never receive its first row. Saving drops fully-empty rows
+			 * (sf_formula_save_meta), so the blank row is never stored. */
+			if (!$rows) {
+				$rows = array(array());
+			}
 			echo '<table class="sf-reptable widefat" data-sf-name="' . esc_attr($spec['key']) . '"><thead><tr>';
 			foreach ($spec['cols'] as $c) {
 				echo '<th>' . esc_html($c) . '</th>';
