@@ -53,4 +53,4 @@
 - 身份链：`b2d_s3_identity.py` **697 tracked 文件，0 mismatch**（workspace ↔ site-repo，server HEAD `3d382c7`）
 - 仓库 md5：**1360 files, 0 mismatches**（`sf_repo_md5.py --exclude 本文档`，JSON
   `_backup/b2d-h-baselines/repo-md5-h1.json`；数字回填于闭包时刻，复跑须继续排除本文档）
-- 闭包时服务器 HEAD：`ee074ff`（= 本文档回填提交）
+- 闭包时服务器 HEAD：`0022453`（= 本文档 md5 回填提交；`ee074ff` 为数字生成时点）
