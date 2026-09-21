@@ -1,0 +1,156 @@
+==============================================================================
+Batch 2D step 5 — gates for the core-facts band + Direct Answer,
+                 and the How We Work wording change, 2.10.50 -> 2.10.51
+==============================================================================
+
+[0] inputs
+    base dir _backup/b2d-step5-baselines/base : 75 pages
+    new  dir _backup/b2d-step5-baselines/base : 75 pages
+    expected to differ: 16 page(s) (8 dosage pages + their /zh/ twins)
+
+[1] resource inventory (which cache tokens moved?)
+    asset SET changed on 0 page(s) (must be 0)
+
+[2] masked comparison of the 75 pages (?ver= folded)
+    differ    0 page(s)
+    identical 75 page(s)
+    !! products__dental-chews.html should have differed and did not — the band is missing there
+    !! products__drops.html should have differed and did not — the band is missing there
+    !! products__fish-oil.html should have differed and did not — the band is missing there
+    !! products__liquids.html should have differed and did not — the band is missing there
+    !! products__pastes.html should have differed and did not — the band is missing there
+    !! products__powders.html should have differed and did not — the band is missing there
+    !! products__soft-chews.html should have differed and did not — the band is missing there
+    !! products__tablets.html should have differed and did not — the band is missing there
+    !! zh__products__dental-chews.html should have differed and did not — the band is missing there
+    !! zh__products__drops.html should have differed and did not — the band is missing there
+    !! zh__products__fish-oil.html should have differed and did not — the band is missing there
+    !! zh__products__liquids.html should have differed and did not — the band is missing there
+    !! zh__products__pastes.html should have differed and did not — the band is missing there
+    !! zh__products__powders.html should have differed and did not — the band is missing there
+    !! zh__products__soft-chews.html should have differed and did not — the band is missing there
+    !! zh__products__tablets.html should have differed and did not — the band is missing there
+
+    confinement: delete the band's span, restore the sentence, compare to base
+    !! products__dental-chews.html: no band span found
+    !! products__drops.html: no band span found
+    !! products__fish-oil.html: no band span found
+    !! products__liquids.html: no band span found
+    !! products__pastes.html: no band span found
+    !! products__powders.html: no band span found
+    !! products__soft-chews.html: no band span found
+    !! products__tablets.html: no band span found
+    !! zh__products__dental-chews.html: no band span found
+    !! zh__products__drops.html: no band span found
+    !! zh__products__fish-oil.html: no band span found
+    !! zh__products__liquids.html: no band span found
+    !! zh__products__pastes.html: no band span found
+    !! zh__products__powders.html: no band span found
+    !! zh__products__soft-chews.html: no band span found
+    !! zh__products__tablets.html: no band span found
+    0/16 page(s) reduce to the base byte-for-byte
+
+[3] style.css / functions.php / the eight templates — reconstruction
+    each file: undo the declared edits, then compare to the file commit
+    cc21dfc replaced. Every declared literal must occur exactly once.
+    A declaration is (restore_this, currently_present); restore_this of
+    None means the edit was a pure insertion, so the literal is deleted.
+
+    style.css                    !! declared literal occurs 0 time(s): 'Version: 2.10.51'
+    style.css                    !! declared literal occurs 0 time(s): '/* B2D Step5 — core facts + direct answer, between the hero '
+    style.css                    base 258083 / new 258083 / undone 258083  applied:NO   undone==base:NO
+    functions.php                !! declared literal occurs 0 time(s): "array(), '2.10.51');"
+    functions.php                base 168850 / new 168850 / undone 168850  applied:NO   undone==base:NO
+    templates/page-soft-chews.html !! declared literal occurs 0 time(s): 'delivered in 3–7 working days.'
+    templates/page-soft-chews.html !! declared literal occurs 0 time(s): '<!-- B2D-S5: core facts -->\n<!-- wp:group {"tagName":"sectio'
+    templates/page-soft-chews.html base  55186 / new  55186 / undone  55186  applied:NO   undone==base:NO
+    templates/page-tablets.html  !! declared literal occurs 0 time(s): 'delivered in 3–7 working days.'
+    templates/page-tablets.html  !! declared literal occurs 0 time(s): '<!-- B2D-S5: core facts -->\n<!-- wp:group {"tagName":"sectio'
+    templates/page-tablets.html  base  46874 / new  46874 / undone  46874  applied:NO   undone==base:NO
+    templates/page-powders.html  !! declared literal occurs 0 time(s): 'delivered in 3–7 working days.'
+    templates/page-powders.html  !! declared literal occurs 0 time(s): '<!-- B2D-S5: core facts -->\n<!-- wp:group {"tagName":"sectio'
+    templates/page-powders.html  base  46326 / new  46326 / undone  46326  applied:NO   undone==base:NO
+    templates/page-pastes.html   !! declared literal occurs 0 time(s): 'delivered in 3–7 working days.'
+    templates/page-pastes.html   !! declared literal occurs 0 time(s): '<!-- B2D-S5: core facts -->\n<!-- wp:group {"tagName":"sectio'
+    templates/page-pastes.html   base  44411 / new  44411 / undone  44411  applied:NO   undone==base:NO
+    templates/page-drops.html    !! declared literal occurs 0 time(s): 'delivered in 3–7 working days.'
+    templates/page-drops.html    !! declared literal occurs 0 time(s): '<!-- B2D-S5: core facts -->\n<!-- wp:group {"tagName":"sectio'
+    templates/page-drops.html    base  44822 / new  44822 / undone  44822  applied:NO   undone==base:NO
+    templates/page-liquids.html  !! declared literal occurs 0 time(s): 'delivered in 3–7 working days.'
+    templates/page-liquids.html  !! declared literal occurs 0 time(s): '<!-- B2D-S5: core facts -->\n<!-- wp:group {"tagName":"sectio'
+    templates/page-liquids.html  base  45167 / new  45167 / undone  45167  applied:NO   undone==base:NO
+    templates/page-fish-oil.html !! declared literal occurs 0 time(s): 'delivered in 3–7 working days.'
+    templates/page-fish-oil.html !! declared literal occurs 0 time(s): '<!-- B2D-S5: core facts -->\n<!-- wp:group {"tagName":"sectio'
+    templates/page-fish-oil.html base  44656 / new  44656 / undone  44656  applied:NO   undone==base:NO
+    templates/page-dental-chews.html !! declared literal occurs 0 time(s): 'delivered in 3–7 working days.'
+    templates/page-dental-chews.html !! declared literal occurs 0 time(s): '<!-- B2D-S5: core facts -->\n<!-- wp:group {"tagName":"sectio'
+    templates/page-dental-chews.html base  49623 / new  49623 / undone  49623  applied:NO   undone==base:NO
+
+[6] JSON-LD deep-equal (decoded structures, not masked text)
+    identical 75/75 page(s)
+
+==============================================================================
+FAIL — 62 problem(s):
+  * NOTHING moved — the two directories have identical version tokens, so this gate proved nothing (is --new pointing at base?)
+  * products__dental-chews.html should have differed and did not
+  * products__drops.html should have differed and did not
+  * products__fish-oil.html should have differed and did not
+  * products__liquids.html should have differed and did not
+  * products__pastes.html should have differed and did not
+  * products__powders.html should have differed and did not
+  * products__soft-chews.html should have differed and did not
+  * products__tablets.html should have differed and did not
+  * zh__products__dental-chews.html should have differed and did not
+  * zh__products__drops.html should have differed and did not
+  * zh__products__fish-oil.html should have differed and did not
+  * zh__products__liquids.html should have differed and did not
+  * zh__products__pastes.html should have differed and did not
+  * zh__products__powders.html should have differed and did not
+  * zh__products__soft-chews.html should have differed and did not
+  * zh__products__tablets.html should have differed and did not
+  * products__dental-chews.html: the band span is not present (markers '<!-- B2D-S5: core facts -->' .. '<!-- /B2D-S5 -->')
+  * products__drops.html: the band span is not present (markers '<!-- B2D-S5: core facts -->' .. '<!-- /B2D-S5 -->')
+  * products__fish-oil.html: the band span is not present (markers '<!-- B2D-S5: core facts -->' .. '<!-- /B2D-S5 -->')
+  * products__liquids.html: the band span is not present (markers '<!-- B2D-S5: core facts -->' .. '<!-- /B2D-S5 -->')
+  * products__pastes.html: the band span is not present (markers '<!-- B2D-S5: core facts -->' .. '<!-- /B2D-S5 -->')
+  * products__powders.html: the band span is not present (markers '<!-- B2D-S5: core facts -->' .. '<!-- /B2D-S5 -->')
+  * products__soft-chews.html: the band span is not present (markers '<!-- B2D-S5: core facts -->' .. '<!-- /B2D-S5 -->')
+  * products__tablets.html: the band span is not present (markers '<!-- B2D-S5: core facts -->' .. '<!-- /B2D-S5 -->')
+  * zh__products__dental-chews.html: the band span is not present (markers '<!-- B2D-S5: core facts -->' .. '<!-- /B2D-S5 -->')
+  * zh__products__drops.html: the band span is not present (markers '<!-- B2D-S5: core facts -->' .. '<!-- /B2D-S5 -->')
+  * zh__products__fish-oil.html: the band span is not present (markers '<!-- B2D-S5: core facts -->' .. '<!-- /B2D-S5 -->')
+  * zh__products__liquids.html: the band span is not present (markers '<!-- B2D-S5: core facts -->' .. '<!-- /B2D-S5 -->')
+  * zh__products__pastes.html: the band span is not present (markers '<!-- B2D-S5: core facts -->' .. '<!-- /B2D-S5 -->')
+  * zh__products__powders.html: the band span is not present (markers '<!-- B2D-S5: core facts -->' .. '<!-- /B2D-S5 -->')
+  * zh__products__soft-chews.html: the band span is not present (markers '<!-- B2D-S5: core facts -->' .. '<!-- /B2D-S5 -->')
+  * zh__products__tablets.html: the band span is not present (markers '<!-- B2D-S5: core facts -->' .. '<!-- /B2D-S5 -->')
+  * style.css: declared new text occurs 0 time(s), expected 1
+  * style.css: declared new text occurs 0 time(s), expected 1
+  * style.css: reconstruction does not reproduce the base byte-for-byte
+  * functions.php: declared new text occurs 0 time(s), expected 1
+  * functions.php: reconstruction does not reproduce the base byte-for-byte
+  * templates/page-soft-chews.html: declared new text occurs 0 time(s), expected 1
+  * templates/page-soft-chews.html: declared new text occurs 0 time(s), expected 1
+  * templates/page-soft-chews.html: reconstruction does not reproduce the base byte-for-byte
+  * templates/page-tablets.html: declared new text occurs 0 time(s), expected 1
+  * templates/page-tablets.html: declared new text occurs 0 time(s), expected 1
+  * templates/page-tablets.html: reconstruction does not reproduce the base byte-for-byte
+  * templates/page-powders.html: declared new text occurs 0 time(s), expected 1
+  * templates/page-powders.html: declared new text occurs 0 time(s), expected 1
+  * templates/page-powders.html: reconstruction does not reproduce the base byte-for-byte
+  * templates/page-pastes.html: declared new text occurs 0 time(s), expected 1
+  * templates/page-pastes.html: declared new text occurs 0 time(s), expected 1
+  * templates/page-pastes.html: reconstruction does not reproduce the base byte-for-byte
+  * templates/page-drops.html: declared new text occurs 0 time(s), expected 1
+  * templates/page-drops.html: declared new text occurs 0 time(s), expected 1
+  * templates/page-drops.html: reconstruction does not reproduce the base byte-for-byte
+  * templates/page-liquids.html: declared new text occurs 0 time(s), expected 1
+  * templates/page-liquids.html: declared new text occurs 0 time(s), expected 1
+  * templates/page-liquids.html: reconstruction does not reproduce the base byte-for-byte
+  * templates/page-fish-oil.html: declared new text occurs 0 time(s), expected 1
+  * templates/page-fish-oil.html: declared new text occurs 0 time(s), expected 1
+  * templates/page-fish-oil.html: reconstruction does not reproduce the base byte-for-byte
+  * templates/page-dental-chews.html: declared new text occurs 0 time(s), expected 1
+  * templates/page-dental-chews.html: declared new text occurs 0 time(s), expected 1
+  * templates/page-dental-chews.html: reconstruction does not reproduce the base byte-for-byte
+==============================================================================

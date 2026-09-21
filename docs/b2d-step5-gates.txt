@@ -1,0 +1,49 @@
+==============================================================================
+Batch 2D step 5 — gates for the core-facts band + Direct Answer,
+                 and the How We Work wording change, 2.10.50 -> 2.10.51
+==============================================================================
+
+[0] inputs
+    base dir _backup/b2d-step5-baselines/base : 75 pages
+    new  dir _backup/b2d-step5-baselines/new : 75 pages
+    expected to differ: 16 page(s) (8 dosage pages + their /zh/ twins)
+
+[1] resource inventory (which cache tokens moved?)
+    style.css          2.10.50 -> 2.10.51   on 75 page(s)
+    asset SET changed on 0 page(s) (must be 0)
+
+[2] masked comparison of the 75 pages (?ver= folded)
+    differ    16 page(s)
+    identical 59 page(s)
+
+    confinement: delete the band's span, restore the sentence, compare to base
+    16/16 page(s) reduce to the base byte-for-byte
+
+[3] style.css / functions.php / the eight templates — reconstruction
+    each file: undo the declared edits, then compare to the file commit
+    cc21dfc replaced. Every declared literal must occur exactly once.
+    A declaration is (restore_this, currently_present); restore_this of
+    None means the edit was a pure insertion, so the literal is deleted.
+
+    style.css                    base 258083 / new 261832 / undone 258083  applied:YES  undone==base:YES
+    functions.php                base 168850 / new 168850 / undone 168850  applied:YES  undone==base:YES
+    templates/page-soft-chews.html base  55186 / new  56882 / undone  55186  applied:YES  undone==base:YES
+    templates/page-tablets.html  base  46874 / new  48447 / undone  46874  applied:YES  undone==base:YES
+    templates/page-powders.html  base  46326 / new  47851 / undone  46326  applied:YES  undone==base:YES
+    templates/page-pastes.html   base  44411 / new  45956 / undone  44411  applied:YES  undone==base:YES
+    templates/page-drops.html    base  44822 / new  46362 / undone  44822  applied:YES  undone==base:YES
+    templates/page-liquids.html  base  45167 / new  46735 / undone  45167  applied:YES  undone==base:YES
+    templates/page-fish-oil.html base  44656 / new  46209 / undone  44656  applied:YES  undone==base:YES
+    templates/page-dental-chews.html base  49623 / new  51183 / undone  49623  applied:YES  undone==base:YES
+
+[6] JSON-LD deep-equal (decoded structures, not masked text)
+    identical 75/75 page(s)
+
+==============================================================================
+PASS — style.css is base + the appended block and the version bump;
+       functions.php is base + the enqueue bump;
+       all eight templates are base + the band + the sentence change;
+       16/16 changed pages reduce to base once the band is removed;
+       59/59 other pages byte-identical after ?ver= is folded;
+       75/75 pages byte-identical in decoded JSON-LD.
+==============================================================================

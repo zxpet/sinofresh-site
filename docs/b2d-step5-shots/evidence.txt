@@ -1,0 +1,54 @@
+====================================================================================
+Batch 2D step 5 — rendered evidence  (/products/soft-chews/, header: X-SF-Preflight: 1)
+====================================================================================
+base capture h2 order: 7 heading(s)
+
+[1] 1440 — where the band lands
+  PASS stylesheet really is the pre-flight copy               expected=href contains -preflight   actual=https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/style.css?ver=2.10.51
+  PASS the stylesheet served is 2.10.51                       expected=ver=2.10.51                actual=https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/style.css?ver=2.10.51
+      hero   {"top": 120, "bottom": 448, "left": 0, "right": 1440, "width": 1440, "height": 328}
+      band   {"top": 472, "bottom": 948, "left": 0, "right": 1440, "width": 1440, "height": 475}
+      wall   {"top": 972, "bottom": 1708, "left": 0, "right": 1440, "width": 1440, "height": 736}
+  PASS render is complete at 1440                             expected=complete / 1440            actual=complete / 1440
+  PASS the band exists                                        expected=True                       actual=True
+  PASS five fact rows                                         expected=5                          actual=5
+  PASS the band carries no heading                            expected=0                          actual=0
+  PASS band sits below the hero                               expected=band.top >= hero.bottom    actual=472 vs 448
+  PASS band sits above #formulas                              expected=band.bottom <= #formulas.top actual=948 vs 972
+  PASS all five fact rows are in the first 900px              expected=5                          actual=5
+  PASS the Direct Answer starts inside the first screen       expected=< 900                      actual=763
+      band bottom 948, answer 763..908 (viewport 900)
+  PASS table left edge == caption left edge                   expected=tableLeft == capLeft       actual=120 / 120
+  PASS band's left edge is the page measure's left edge (120) expected=120                        actual=120
+  PASS no horizontal scroll at 1440                           expected=False                      actual=False
+  PASS Direct Answer is 50-80 words as rendered               expected=50-80                      actual=75
+  PASS the caption names the table (no H2 needed)             expected=contains 'Core facts'      actual=Core facts — Soft Chews
+      labels: MOQ | Sample lead time | Production lead time | Certifications | Packaging
+      values: from 500–1,000 units || 3–7 working days || 7–15 working days after packaging is ready || FDA, cGMP, ISO 9001, FSSC 22000, HACCP, BRC || Aluminum Stand-up Pouch, Aluminum Foil Pouch
+      row tops above 900: [539, 578, 618, 658, 698]
+      answer 75 words: Private Label Soft Chews for Dogs & Cats are manufactured to FDA, cGMP, ISO 9001, FSSC 22000, HACCP and BRC standards, w...
+  PASS toc rail still has seven dots                          expected=7                          actual=7
+  PASS toc rail labels match its dots                         expected=same count                 actual=7 / 7
+  PASS h2 order is unchanged from the base capture (old bytes vs new page) expected=7 heading(s), same order   actual=7 heading(s)
+
+[2] 1440 — negative control (push the band 1400px down)
+      "injected"
+  PASS the first-screen count collapses when the band moves   expected=0 rows above 900           actual=0
+  PASS the fact rows really moved down                        expected=> +1200px                  actual=1360 px
+
+[3] 375 — the same page on a phone
+      band   {"top": 614, "bottom": 1494, "left": 0, "right": 375, "width": 375, "height": 880}
+      wall   {"top": 1518, "bottom": 3630, "left": 0, "right": 375, "width": 375, "height": 2113}
+  PASS render is complete at 375                              expected=complete / 375             actual=complete / 375
+  PASS no horizontal scroll at 375                            expected=False                      actual=False
+  PASS the band fits the phone measure                        expected=<= 375                     actual=375
+  PASS the table stacks: th becomes a block                   expected=block                      actual=block
+  PASS the table stacks: td becomes a block                   expected=block                      actual=block
+  PASS every stacked row still carries its field name         expected=5 non-empty labels         actual=5 rows, [True, True, True, True, True]
+  PASS Direct Answer is 50-80 words at 375 too                expected=50-80                      actual=75
+  PASS toc rail still has seven dots at 375                   expected=7                          actual=7
+  PASS h2 order unchanged at 375                              expected=7 heading(s), same order   actual=7
+
+====================================================================================
+PASS — 29/29 checks pass
+====================================================================================

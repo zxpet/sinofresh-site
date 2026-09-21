@@ -1,0 +1,384 @@
+{
+  "1440": {
+    "found": true,
+    "rs": "complete",
+    "w": 1440,
+    "h": 900,
+    "sheet": "https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/style.css?ver=2.10.51",
+    "hero": {
+      "top": 120,
+      "bottom": 448,
+      "left": 0,
+      "right": 1440,
+      "width": 1440,
+      "height": 328
+    },
+    "band": {
+      "top": 472,
+      "bottom": 948,
+      "left": 0,
+      "right": 1440,
+      "width": 1440,
+      "height": 475
+    },
+    "wall": {
+      "top": 972,
+      "bottom": 1708,
+      "left": 0,
+      "right": 1440,
+      "width": 1440,
+      "height": 736
+    },
+    "tableLeft": 120,
+    "capText": "Core facts — Soft Chews",
+    "capLeft": 120,
+    "rows": 5,
+    "labels": [
+      "MOQ",
+      "Sample lead time",
+      "Production lead time",
+      "Certifications",
+      "Packaging"
+    ],
+    "values": [
+      "from 500–1,000 units",
+      "3–7 working days",
+      "7–15 working days after packaging is ready",
+      "FDA, cGMP, ISO 9001, FSSC 22000, HACCP, BRC",
+      "Aluminum Stand-up Pouch, Aluminum Foil Pouch with Zipper, Plastic Bottle, Jar, Blister Pack, Box + Foil, + custom formats"
+    ],
+    "rowTops": [
+      539,
+      578,
+      618,
+      658,
+      698
+    ],
+    "answerText": "Private Label Soft Chews for Dogs & Cats are manufactured to FDA, cGMP, ISO 9001, FSSC 22000, HACCP and BRC standards, with a flexible MOQ from 500–1,000 units and samples ready in 3–7 working days. Formulated for joint, skin, calming and digestive support, they ship in aluminum stand-up pouches, aluminum foil pouches with zipper, plastic bottles, jars, blister packs, boxes with foil or custom formats. Bulk production takes 7–15 working days after packaging is ready.",
+    "answerLeft": 290,
+    "answerTop": 763,
+    "answerBottom": 908,
+    "h2InsideBand": 0,
+    "dots": 7,
+    "tocLabels": 7,
+    "h2": [
+      "Standard Formulas",
+      "Build Your Soft Chews Formula",
+      "Active Ingredients & Guaranteed Analysis",
+      "How We Work",
+      "Frequently Asked Questions",
+      "Related Dosage Forms",
+      "Request a Soft Chews Quote"
+    ],
+    "tocHrefs": [
+      "#sf-sec-0",
+      "#sf-sec-1",
+      "#sf-sec-2",
+      "#sf-sec-3",
+      "#sf-sec-4",
+      "#sf-sec-5",
+      "#sf-sec-6"
+    ],
+    "thDisplay": "table-cell",
+    "tdDisplay": "table-cell",
+    "hScroll": false,
+    "scrollW": 1440
+  },
+  "1440_pushed_down": {
+    "found": true,
+    "rs": "complete",
+    "w": 1440,
+    "h": 900,
+    "sheet": "https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/style.css?ver=2.10.51",
+    "hero": {
+      "top": 120,
+      "bottom": 448,
+      "left": 0,
+      "right": 1440,
+      "width": 1440,
+      "height": 328
+    },
+    "band": {
+      "top": 472,
+      "bottom": 2308,
+      "left": 0,
+      "right": 1440,
+      "width": 1440,
+      "height": 1835
+    },
+    "wall": {
+      "top": 2332,
+      "bottom": 3068,
+      "left": 0,
+      "right": 1440,
+      "width": 1440,
+      "height": 736
+    },
+    "tableLeft": 120,
+    "capText": "Core facts — Soft Chews",
+    "capLeft": 120,
+    "rows": 5,
+    "labels": [
+      "MOQ",
+      "Sample lead time",
+      "Production lead time",
+      "Certifications",
+      "Packaging"
+    ],
+    "values": [
+      "from 500–1,000 units",
+      "3–7 working days",
+      "7–15 working days after packaging is ready",
+      "FDA, cGMP, ISO 9001, FSSC 22000, HACCP, BRC",
+      "Aluminum Stand-up Pouch, Aluminum Foil Pouch with Zipper, Plastic Bottle, Jar, Blister Pack, Box + Foil, + custom formats"
+    ],
+    "rowTops": [
+      1899,
+      1938,
+      1978,
+      2018,
+      2058
+    ],
+    "answerText": "Private Label Soft Chews for Dogs & Cats are manufactured to FDA, cGMP, ISO 9001, FSSC 22000, HACCP and BRC standards, with a flexible MOQ from 500–1,000 units and samples ready in 3–7 working days. Formulated for joint, skin, calming and digestive support, they ship in aluminum stand-up pouches, aluminum foil pouches with zipper, plastic bottles, jars, blister packs, boxes with foil or custom formats. Bulk production takes 7–15 working days after packaging is ready.",
+    "answerLeft": 290,
+    "answerTop": 2123,
+    "answerBottom": 2268,
+    "h2InsideBand": 0,
+    "dots": 7,
+    "tocLabels": 7,
+    "h2": [
+      "Standard Formulas",
+      "Build Your Soft Chews Formula",
+      "Active Ingredients & Guaranteed Analysis",
+      "How We Work",
+      "Frequently Asked Questions",
+      "Related Dosage Forms",
+      "Request a Soft Chews Quote"
+    ],
+    "tocHrefs": [
+      "#sf-sec-0",
+      "#sf-sec-1",
+      "#sf-sec-2",
+      "#sf-sec-3",
+      "#sf-sec-4",
+      "#sf-sec-5",
+      "#sf-sec-6"
+    ],
+    "thDisplay": "table-cell",
+    "tdDisplay": "table-cell",
+    "hScroll": false,
+    "scrollW": 1440
+  },
+  "375": {
+    "found": true,
+    "rs": "complete",
+    "w": 375,
+    "h": 900,
+    "sheet": "https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/style.css?ver=2.10.51",
+    "hero": {
+      "top": 91,
+      "bottom": 590,
+      "left": 0,
+      "right": 375,
+      "width": 375,
+      "height": 499
+    },
+    "band": {
+      "top": 614,
+      "bottom": 1494,
+      "left": 0,
+      "right": 375,
+      "width": 375,
+      "height": 880
+    },
+    "wall": {
+      "top": 1518,
+      "bottom": 3630,
+      "left": 0,
+      "right": 375,
+      "width": 375,
+      "height": 2113
+    },
+    "tableLeft": 38,
+    "capText": "Core facts — Soft Chews",
+    "capLeft": 38,
+    "rows": 5,
+    "labels": [
+      "MOQ",
+      "Sample lead time",
+      "Production lead time",
+      "Certifications",
+      "Packaging"
+    ],
+    "values": [
+      "from 500–1,000 units",
+      "3–7 working days",
+      "7–15 working days after packaging is ready",
+      "FDA, cGMP, ISO 9001, FSSC 22000, HACCP, BRC",
+      "Aluminum Stand-up Pouch, Aluminum Foil Pouch with Zipper, Plastic Bottle, Jar, Blister Pack, Box + Foil, + custom formats"
+    ],
+    "rowTops": [
+      731,
+      797,
+      863,
+      929,
+      1016
+    ],
+    "answerText": "Private Label Soft Chews for Dogs & Cats are manufactured to FDA, cGMP, ISO 9001, FSSC 22000, HACCP and BRC standards, with a flexible MOQ from 500–1,000 units and samples ready in 3–7 working days. Formulated for joint, skin, calming and digestive support, they ship in aluminum stand-up pouches, aluminum foil pouches with zipper, plastic bottles, jars, blister packs, boxes with foil or custom formats. Bulk production takes 7–15 working days after packaging is ready.",
+    "answerLeft": 38,
+    "answerTop": 1148,
+    "answerBottom": 1466,
+    "h2InsideBand": 0,
+    "dots": 7,
+    "tocLabels": 7,
+    "h2": [
+      "Standard Formulas",
+      "Build Your Soft Chews Formula",
+      "Active Ingredients & Guaranteed Analysis",
+      "How We Work",
+      "Frequently Asked Questions",
+      "Related Dosage Forms",
+      "Request a Soft Chews Quote"
+    ],
+    "tocHrefs": [
+      "#sf-sec-0",
+      "#sf-sec-1",
+      "#sf-sec-2",
+      "#sf-sec-3",
+      "#sf-sec-4",
+      "#sf-sec-5",
+      "#sf-sec-6"
+    ],
+    "thDisplay": "block",
+    "tdDisplay": "block",
+    "hScroll": false,
+    "scrollW": 375
+  },
+  "base_h2": [
+    "Standard Formulas",
+    "Build Your Soft Chews Formula",
+    "Active Ingredients & Guaranteed Analysis",
+    "How We Work",
+    "Frequently Asked Questions",
+    "Related Dosage Forms",
+    "Request a Soft Chews Quote"
+  ],
+  "checks": [
+    {
+      "name": "stylesheet really is the pre-flight copy",
+      "ok": true
+    },
+    {
+      "name": "the stylesheet served is 2.10.51",
+      "ok": true
+    },
+    {
+      "name": "render is complete at 1440",
+      "ok": true
+    },
+    {
+      "name": "the band exists",
+      "ok": true
+    },
+    {
+      "name": "five fact rows",
+      "ok": true
+    },
+    {
+      "name": "the band carries no heading",
+      "ok": true
+    },
+    {
+      "name": "band sits below the hero",
+      "ok": true
+    },
+    {
+      "name": "band sits above #formulas",
+      "ok": true
+    },
+    {
+      "name": "all five fact rows are in the first 900px",
+      "ok": true
+    },
+    {
+      "name": "the Direct Answer starts inside the first screen",
+      "ok": true
+    },
+    {
+      "name": "table left edge == caption left edge",
+      "ok": true
+    },
+    {
+      "name": "band's left edge is the page measure's left edge (120)",
+      "ok": true
+    },
+    {
+      "name": "no horizontal scroll at 1440",
+      "ok": true
+    },
+    {
+      "name": "Direct Answer is 50-80 words as rendered",
+      "ok": true
+    },
+    {
+      "name": "the caption names the table (no H2 needed)",
+      "ok": true
+    },
+    {
+      "name": "toc rail still has seven dots",
+      "ok": true
+    },
+    {
+      "name": "toc rail labels match its dots",
+      "ok": true
+    },
+    {
+      "name": "h2 order is unchanged from the base capture (old bytes vs new page)",
+      "ok": true
+    },
+    {
+      "name": "the first-screen count collapses when the band moves",
+      "ok": true
+    },
+    {
+      "name": "the fact rows really moved down",
+      "ok": true
+    },
+    {
+      "name": "render is complete at 375",
+      "ok": true
+    },
+    {
+      "name": "no horizontal scroll at 375",
+      "ok": true
+    },
+    {
+      "name": "the band fits the phone measure",
+      "ok": true
+    },
+    {
+      "name": "the table stacks: th becomes a block",
+      "ok": true
+    },
+    {
+      "name": "the table stacks: td becomes a block",
+      "ok": true
+    },
+    {
+      "name": "every stacked row still carries its field name",
+      "ok": true
+    },
+    {
+      "name": "Direct Answer is 50-80 words at 375 too",
+      "ok": true
+    },
+    {
+      "name": "toc rail still has seven dots at 375",
+      "ok": true
+    },
+    {
+      "name": "h2 order unchanged at 375",
+      "ok": true
+    }
+  ]
+}

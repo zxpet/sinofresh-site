@@ -144,7 +144,7 @@ def main():
         old, new = pair
         return (old, new % args.to_ver) if '%s' in new else (old, new)
 
-    css_declared = [lit(VER_CSS), ('', CSS_ADDITION)]
+    css_declared = [lit(VER_CSS), (None, CSS_ADDITION)]
     php_declared = [lit(VER_PHP)]
 
     say('=' * 78)
@@ -225,16 +225,24 @@ def main():
             continue
         span = m.group(0)
         body = span[len(m.group(1)):len(span) - len(m.group(2))]
-        # the span must actually contain the band, not just the markers
+        # The span must actually contain the band, not just the two markers.
+        # The paragraph is matched without its closing quote: core appends its
+        # own class to a paragraph carrying a className, so the attribute reads
+        # class="sf-facts__answer wp-block-paragraph" — the first version of
+        # this check looked for the quoted form and failed a page that was
+        # perfectly correct.
         ok_span = (len(body) > 900
                    and 'class="sf-facts__table"' in body
-                   and 'class="sf-facts__answer"' in body
-                   and body.count('<th scope="row">') == 5)
+                   and 'sf-facts__answer' in body
+                   and body.count('<th scope="row">') == 5
+                   and '<h2' not in body)
         if not ok_span:
             fails.append('%s: the span between the markers does not look like the band '
-                         '(%d bytes, %d row headers)' % (name, len(body), body.count('<th scope="row">')))
-            say('    !! %s: span is %d bytes, %d row headers'
-                % (name, len(body), body.count('<th scope="row">')))
+                         '(%d bytes, %d row headers, %d h2)'
+                         % (name, len(body), body.count('<th scope="row">'),
+                            body.count('<h2')))
+            say('    !! %s: span is %d bytes, %d row headers, %d h2'
+                % (name, len(body), body.count('<th scope="row">'), body.count('<h2')))
         # base's own separator between the hero and #formulas: the insertion
         # split that newline run in two, so restoring means re-joining it
         sm = SEP_RE.search(b)
@@ -269,7 +277,7 @@ def main():
     tpl_pairs = [('templates/page-%s.html' % s,
                   os.path.join(args.base_tpl_dir, 'page-%s.html' % s),
                   os.path.join(args.new_tpl_dir, 'page-%s.html' % s),
-                  [(SENT_NEW, SENT_OLD), (inserted_block(s), '')])
+                  [(SENT_OLD, SENT_NEW), (None, inserted_block(s))])
                  for s in DOSAGES]
     jobs = ([('style.css', args.base_css, args.new_css, css_declared),
              ('functions.php', args.base_php, args.new_php, php_declared)]
@@ -277,6 +285,8 @@ def main():
     say('\n[3] style.css / functions.php / the eight templates — reconstruction')
     say('    each file: undo the declared edits, then compare to the file commit')
     say('    cc21dfc replaced. Every declared literal must occur exactly once.')
+    say('    A declaration is (restore_this, currently_present); restore_this of')
+    say('    None means the edit was a pure insertion, so the literal is deleted.')
     say('')
     for label, bpath, npath, declared in jobs:
         braw = open(bpath, encoding='utf-8').read()
@@ -284,6 +294,17 @@ def main():
         undone = nraw
         all_applied = True
         for old, newlit in declared:
+            # An empty "currently present" literal is meaningless: count('') is
+            # len+1, and replace('', X, 1) prepends X rather than removing
+            # anything. The first version of this file used '' to mean "delete
+            # this", reported 56837 occurrences for a 56882-byte template and
+            # then silently did nothing.
+            if newlit == '':
+                fails.append('%s: a declared literal is empty, which cannot be '
+                             'undone unambiguously' % label)
+                say('    %-28s !! declared literal is empty' % label)
+                all_applied = False
+                continue
             n_occ = undone.count(newlit)
             if n_occ != 1:
                 fails.append('%s: declared new text occurs %d time(s), expected 1'
@@ -292,7 +313,7 @@ def main():
                     % (label, n_occ, newlit[:60]))
                 all_applied = False
                 continue
-            undone = undone.replace(newlit, old, 1)
+            undone = undone.replace(newlit, '' if old is None else old, 1)
         same_file = all_applied and undone == braw
         say('    %-28s base %6d / new %6d / undone %6d  applied:%-3s  undone==base:%s'
             % (label, len(braw.encode()), len(nraw.encode()), len(undone.encode()),
