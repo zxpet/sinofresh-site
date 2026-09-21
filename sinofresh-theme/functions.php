@@ -9,6 +9,11 @@ require get_template_directory() . '/inc/config-pdf.php';
    SF_CERTS_DIR in inc/cert-download.php for the production path. */
 require get_template_directory() . '/inc/cert-download.php';
 
+/* Batch H1 — the formula publishing form (admin) and its option pools.
+   Admin-only for now: nothing here renders a front-end byte. */
+require get_template_directory() . '/inc/formula-pools.php';
+require get_template_directory() . '/inc/formula-admin.php';
+
 add_action('after_setup_theme', function() {
 	add_theme_support('wp-block-styles');
 	add_theme_support('editor-styles');
@@ -904,7 +909,7 @@ function sinofresh_formula_faq_data($post_id = 0) {
 	if (!is_wp_error($form_terms) && $form_terms) {
 		$form_slug = (string) $form_terms[0]->slug;
 	}
-	$certs = $form_slug !== '' ? sinofresh_formula_spec_cell($form_slug, 'Certifications') : '';
+	$certs = sf_formula_certifications_value($form_slug);
 	$pack  = $form_slug !== '' ? sinofresh_formula_spec_cell($form_slug, 'Packaging formats') : '';
 
 	$pairs = array();
@@ -1850,7 +1855,7 @@ function sinofresh_formula_factsheet() {
 	}
 	$specs = trim((string) get_post_meta($post_id, 'sf_formula_specs', true));
 	$parts = sinofresh_formula_specs_parts($specs);
-	$certifications = $form_slug !== '' ? sinofresh_formula_spec_cell($form_slug, 'Certifications') : '';
+	$certifications = sf_formula_certifications_value($form_slug);
 	$packaging      = $form_slug !== '' ? sinofresh_formula_spec_cell($form_slug, 'Packaging formats') : '';
 	$rows = array(
 		'Unit size'      => $parts['unit'],
@@ -3513,10 +3518,17 @@ add_action('admin_init', function () {
 		'type'              => 'array',
 		'sanitize_callback' => function ($v) {
 			$out = array();
-			for ($i = 0; $i < 8; $i++) {
-				$row = (isset($v[$i]) && is_array($v[$i])) ? $v[$i] : array();
-				$out[$i] = array(
-					'name'   => isset($row['name']) ? sanitize_text_field($row['name']) : '',
+			/* Batch H1: dynamic rows instead of eight fixed slots. Empty
+			   rows collapse out; order is preserved for the badges, the
+			   line token, the detail row and the schema. */
+			foreach ((array) $v as $row) {
+				$row = is_array($row) ? $row : array();
+				$name = isset($row['name']) ? sanitize_text_field($row['name']) : '';
+				if ($name === '') {
+					continue;
+				}
+				$out[] = array(
+					'name'   => $name,
 					'url'    => isset($row['url']) ? esc_url_raw($row['url']) : '',
 					'active' => !empty($row['active']),
 				);
@@ -3576,17 +3588,19 @@ function sf_render_site_settings_page() {
 			<table class="form-table" role="presentation">
 				<thead><tr><th>#</th><th>Name</th><th>URL (optional)</th><th>Active</th></tr></thead>
 				<tbody>
-				<?php for ($i = 0; $i < 8; $i++) :
-					$c = isset($certs[$i]) && is_array($certs[$i]) ? $certs[$i] : array('name' => '', 'url' => '', 'active' => false); ?>
+				<?php foreach ($certs as $i => $c) :
+					$c = is_array($c) ? $c : array('name' => '', 'url' => '', 'active' => false); ?>
 				<tr>
 					<td><?php echo (int) ($i + 1); ?></td>
-					<td><input name="sf_certifications[<?php echo $i; ?>][name]" type="text" class="regular-text" value="<?php echo esc_attr($c['name']); ?>"></td>
-					<td><input name="sf_certifications[<?php echo $i; ?>][url]" type="text" class="regular-text" value="<?php echo esc_attr($c['url']); ?>"></td>
-					<td><input name="sf_certifications[<?php echo $i; ?>][active]" type="checkbox" value="1" <?php checked(!empty($c['active'])); ?>></td>
+					<td><input name="sf_certifications[<?php echo (int) $i; ?>][name]" type="text" class="regular-text" value="<?php echo esc_attr($c['name']); ?>"></td>
+					<td><input name="sf_certifications[<?php echo (int) $i; ?>][url]" type="text" class="regular-text" value="<?php echo esc_attr($c['url']); ?>"></td>
+					<td><input name="sf_certifications[<?php echo (int) $i; ?>][active]" type="checkbox" value="1" <?php checked(!empty($c['active'])); ?>></td>
+					<td><button type="button" class="button-link sf-certs-del">Remove</button></td>
 				</tr>
-				<?php endfor; ?>
+				<?php endforeach; ?>
 				</tbody>
 			</table>
+			<p><button type="button" class="button" id="sf-certs-add">+ Add row</button></p>
 			<h2 class="title">Copyright</h2>
 			<p>Footer legal line, rendered as “© {year} {company} {suffix}”. The year is generated automatically and rolls over on January 1.</p>
 			<table class="form-table" role="presentation">
@@ -3649,6 +3663,7 @@ add_filter('render_block', function ($block_content, $parsed_block) {
 		'{{sf-copyright-year}}'   => esc_html(date('Y')),
 		'{{sf-copyright-company}}' => esc_html(get_option('sf_copyright_company', $d['sf_copyright_company'])),
 		'{{sf-copyright-suffix}}' => esc_html(get_option('sf_copyright_suffix', $d['sf_copyright_suffix'])),
+		'{{sf-certifications-line}}' => esc_html(sf_certifications_line()),
 	);
 	$block_content = str_replace(array_keys($map), array_values($map), $block_content);
 	if (strpos($block_content, '{{sf-certifications}}') !== false) {
@@ -3987,14 +4002,11 @@ add_action('wp_head', function () {
 	// Certifications held (updated 2026-09-17: FSSC 22000 supersedes the old
 	// food-safety listing; HACCP and BRC added). Same six credentials are
 	// rendered as HTML text in the front-page grid and the quality-page rows.
-	$schema['hasCredential'] = array(
-		array('@type' => 'EducationalOccupationalCredential', 'name' => 'FDA Registered',       'credentialCategory' => 'U.S. Food and Drug Administration'),
-		array('@type' => 'EducationalOccupationalCredential', 'name' => 'cGMP Compliant',       'credentialCategory' => 'Current Good Manufacturing Practice'),
-		array('@type' => 'EducationalOccupationalCredential', 'name' => 'ISO 9001 Certified',   'credentialCategory' => 'Quality Management System'),
-		array('@type' => 'EducationalOccupationalCredential', 'name' => 'FSSC 22000 Certified', 'credentialCategory' => 'GFSI Recognized Food Safety System'),
-		array('@type' => 'EducationalOccupationalCredential', 'name' => 'HACCP Certified',      'credentialCategory' => 'Hazard Analysis Critical Control Point'),
-		array('@type' => 'EducationalOccupationalCredential', 'name' => 'BRC Certified',        'credentialCategory' => 'British Retail Consortium'),
-	);
+	/* Batch H1: the same six credentials, now read from the Site Settings
+	   certification rows (sf_cert_schema_credentials() keeps the exact
+	   names and order this array shipped with, so the default option set
+	   renders byte-identically). */
+	$schema['hasCredential'] = sf_cert_schema_credentials();
 	if ($logo) {
 		$schema['logo'] = $logo;
 	}

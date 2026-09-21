@@ -1,0 +1,29 @@
+/* SINO FRESH — batch H1 admin styles (formula publishing form + settings
+ * subpages). Admin-only; the front end never loads this file. */
+
+.sf-mb__field { margin: 0 0 16px; padding: 0 0 12px; border-bottom: 1px solid #f0f0f1; }
+.sf-mb__field:last-child { border-bottom: 0; }
+.sf-mb__field[hidden] { display: none; }
+.sf-mb__label { display: block; font-weight: 600; margin-bottom: 6px; }
+.sf-mb__req { color: #d63638; font-weight: 700; margin-left: 2px; }
+.sf-mb__hint { margin: 4px 0 6px; color: #646970; font-size: 12px; }
+.sf-mb__opt { display: inline-block; margin: 0 14px 4px 0; }
+.sf-mb__opt input { margin-right: 4px; }
+
+.sf-mb__gallery-preview img { display: inline-block; margin: 0 6px 6px 0; border: 1px solid #dcdcde; border-radius: 4px; }
+.sf-mb__gallery-clear { color: #b32d2e; margin-left: 8px; }
+
+.sf-reptable th { font-weight: 600; }
+.sf-reptable td { vertical-align: top; padding: 8px 8px 8px 0; }
+.sf-reptable--faq td:first-child { width: 38%; }
+.sf-reptable__del { color: #b32d2e; }
+.sf-reptable--faq td:last-child,
+.sf-reptable td:last-child { width: 70px; text-align: right; }
+
+.sf-containers td { vertical-align: top; padding: 10px 10px 10px 0; }
+.sf-containers__preview img { display: block; margin-bottom: 6px; border: 1px solid #dcdcde; border-radius: 4px; }
+.sf-containers__preview:empty::before { content: "no image"; display: inline-block; width: 80px; height: 80px;
+	line-height: 80px; text-align: center; color: #a7aaad; background: #f6f7f7; border: 1px dashed #c3c4c7; border-radius: 4px; }
+
+.sf-mb-banner { margin: 8px 0 16px; padding: 10px 14px; border-left: 4px solid #dba617; background: #fff8e5; }
+.sf-mb-banner ul { margin: 4px 0 0 18px; list-style: disc; }
