@@ -188,7 +188,7 @@ band left edge 120 = 页面度量左缘
 
 - `tools/b2d_s3_identity.py`：工作区 ↔ 实服务主题 **691 文件 0 不一致**
   （`docs/b2d-step5-shots/identity.txt`）。本批未在主题目录新增文件，故与 4c 同为 691。
-- `tools/sf_repo_md5.py`：**跟踪 1261 个文件 / 排除 2 / 比较 1259 / 0 差异**，
+- `tools/sf_repo_md5.py`：**跟踪 1262 个文件 / 排除 2 / 比较 1260 / 0 差异**，
   其中 **13 个非 ASCII 路径逐条 matched**（`docs/b2d-step5-shots/cloud-md5.txt`）。
   ⛔ `--exclude` 传入未跟踪的路径会**直接拒绝运行**（否则排除是个空操作、静默什么都没缩小）。
   因此本批的记录与本报告都在被比较集合**之外**：报告不能是它所报告集合的成员，
