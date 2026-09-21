@@ -1,0 +1,25 @@
+# Batch H2a closure — per-line attribution ledger for b2d_s5_logaudit.py --allow
+# One entry per distinct log timestamp: 'YYYY-MM-DDTHH:MM:SS=reason'.
+# Section A: lines INSIDE the H2a window (2026-09-21T21:15:00Z -> 22:35:00Z).
+# The tool condemns every in-window line by design (classify() returns at the
+# window test before any content rule), so each one is accounted here with the
+# evidence that identifies it.
+2026-09-21T21:38:52=ours: agent-browser's first GET / before its Authorization header attached (access row: user sfdev, status 401, UA HeadlessChrome/153)
+2026-09-21T21:38:53=ours: the same pre-header probe under the iPhone-UA emulation (access row: user sfdev, 401)
+2026-09-21T21:41:01=ours: our own cookie-banner probe GET /formulas/calming-soft-chews/?sfcap=cookieprobe — 401 before the header attached
+2026-09-21T21:41:27=ours: the same probe as ?sfcap=cookieprobe2 (Apache wrote one request as two 401 rows)
+2026-09-21T22:05:51=ours: our ssh-side curl probe that fed base64(credentials) where curl wants user:pass — the access row's user field is literally that base64 blob, status 401, curl/7.76.1
+2026-09-21T22:11:01=ours: the same base64-as-username probe (curl/7.76.1, 401)
+2026-09-21T22:11:10=ours: the same base64-as-username probe (curl/7.76.1, 401)
+2026-09-21T22:12:34=third party: DuckAssistBot denied by the lockdown (access row: user -, status 403) — inside our window, never ours
+# Section B: lines OUTSIDE the H2a window that the tool still wants footed.
+# All of them belong to batch H1 (2026-09-21, before H2a opened) and are already
+# accounted for in docs/batch2d-stepH1.md's closure audit.
+2026-09-21T03:38:30=batch H1, not H2a: our authenticated /wp-settings.php probe — see docs/batch2d-stepH1.md
+2026-09-21T09:10:58=batch H1, not H2a: the preflight-copy redeclare burst (same-second 500s with user sfdev, curl/8.7.1) — see docs/batch2d-stepH1.md
+2026-09-21T09:10:59=batch H1, not H2a: the preflight-copy redeclare burst (user sfdev, curl/8.7.1, 500) — see docs/batch2d-stepH1.md
+2026-09-21T09:11:00=batch H1, not H2a: the preflight-copy redeclare burst (user sfdev, curl/8.7.1, 500) — see docs/batch2d-stepH1.md
+2026-09-21T09:11:01=batch H1, not H2a: the preflight-copy redeclare burst (user sfdev, curl/8.7.1, 500) — see docs/batch2d-stepH1.md
+2026-09-21T09:11:02=batch H1, not H2a: the preflight-copy redeclare burst (user sfdev, curl/8.7.1, 500) — see docs/batch2d-stepH1.md
+2026-09-21T09:11:03=batch H1, not H2a: the preflight-copy redeclare burst (user sfdev, curl/8.7.1, 500) — see docs/batch2d-stepH1.md
+2026-09-21T14:45:23=batch H1, not H2a: MaxRequestWorkers while H1 pulled its 75 pages concurrently — see docs/batch2d-stepH1.md

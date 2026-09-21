@@ -1,0 +1,18 @@
+{
+  "t0": {
+    "rows": 391,
+    "max_id": 3301
+  },
+  "t1": {
+    "rows": 391,
+    "max_id": 3301
+  },
+  "transients": [
+    183,
+    183
+  ],
+  "nontransient_sha": [
+    "e2495acafd9bfaffa10cd94460213bb9eb60fcf6",
+    "e2495acafd9bfaffa10cd94460213bb9eb60fcf6"
+  ]
+}

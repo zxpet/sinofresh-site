@@ -1,0 +1,369 @@
+==============================================================================
+BATCH 2D STEP 5 — ERROR-LOG AUDIT BY ATTRIBUTION
+==============================================================================
+window, given explicitly (the closure outlived the capture):
+  window : 2026-09-21 21:15:00 -> 2026-09-21 22:35:00
+
+  access log: 50122 line(s), 0 unparsable, 1808 distinct client(s), span 2026-09-20 05:39:35 -> 2026-09-21 22:19:26
+
+------------------------------------------------------------------------------
+WHAT ACTUALLY HIT THE BOX INSIDE THAT WINDOW  (dev.zxpet.com-ssl-access.log + dev.zxpet.com-access.log)
+------------------------------------------------------------------------------
+  access-log lines in window          : 4257
+  ... authenticated as ours (sfdev)   : 3576
+  ... not ours                        : 681
+        status ua (truncated)                                 user       n
+        401    GET /index.php?s=index/\\think\\app/invokefu   -          5
+        401    GET / HTTP/1.1                                 -          4
+        401    GET /api/config HTTP/1.1                       -          4
+        401    GET /actuator/loggers HTTP/1.1                 -          4
+        401    GET /_ignition/health-check HTTP/1.1           -          4
+        401    GET /_debugbar/open HTTP/1.1                   -          4
+        401    GET /actuator/mappings HTTP/1.1                -          4
+        401    GET /api/console/api_server?sense_version=%4   -          4
+        401    GET /__vite_rsc_findSourceMapURL?filename=fi   -          4
+        401    POST /read-document HTTP/1.1                   -          4
+        401    POST /api/templates/preview HTTP/1.1           -          4
+        401    GET /actuator/configprops HTTP/1.1             -          3
+        ... 375 further group(s)
+        status mix: 401=673, 403=1, 404=7
+        not-ours lines that were NOT denied (i.e. reached PHP): 8
+          2026-09-21 21:47:49  172.71.126.252  Mozilla/5.0 (compatible; Qwenbot/1.0; +https://qwen.alibaba.com/) -> 404
+          2026-09-21 21:47:50  172.71.126.252  Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Safari/605.1.15 (Applebot/0.1) -> 404
+          2026-09-21 21:47:50  172.71.126.253  Mozilla/5.0 (compatible; xAI-Grok/1.0; +https://x.ai/) -> 404
+          2026-09-21 22:12:34  172.69.7.143  DuckAssistBot/1.1 (https://duckduckgo.com/duckassistbot) -> 403
+          2026-09-21 22:12:37  172.69.6.6  Mozilla/5.0 (compatible; MistralAI-User/1.0; +https://mistral.ai/) -> 404
+          2026-09-21 22:12:37  172.69.6.7  Mozilla/5.0 (compatible; ChatGLM-Spider/1.0; +https://zhipuai.cn/) -> 404
+  our first / last                    : 2026-09-21 21:15:30 / 2026-09-21 22:19:26
+         2424  Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.
+          867  Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.
+          237  curl/8.7.1
+           35  curl/7.76.1
+           11  Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebK
+            2  WordPress/7.1.1; https://dev.zxpet.com
+
+  -> the batch made 3576 authenticated requests while writing nothing (see below)
+
+  the discriminator — usernames in the access log:
+        sfdev       27952  <- ours
+        -           22161  
+        c2ZkZXY6VmtFd3MxOEtsNVYxcXAzVHBaNnM=      3  
+        admin           2  
+
+==============================================================================
+/var/log/httpd/dev.zxpet.com-ssl-error.log
+  11773 byte(s), mtime 2026-09-21 22:12:34.385074851 +0000  (for the record; not an invariant)
+  60 record(s) over 60 non-empty line(s)
+  [OK  ] 2026-09-20 05:39:35  apache lifecycle notice AH01909 — no client, emitted at a restart
+         [Sun Sep 20 05:39:35.928691 2026] [ssl:warn] [pid 316450:tid 316450] AH01909: dev.zxpet.com:443:0 server certificate does NOT include an ID which matches the se
+  [OK  ] 2026-09-20 05:46:10  apache lifecycle notice AH01909 — no client, emitted at a restart
+         [Sun Sep 20 05:46:10.598353 2026] [ssl:warn] [pid 316450:tid 316450] AH01909: dev.zxpet.com:443:0 server certificate does NOT include an ID which matches the se
+  [OK  ] 2026-09-20 09:36:30  probe of /.htpasswd.bak by - — 1 matching access-log row(s), status 403, never ours
+         [Sun Sep 20 09:36:30.779528 2026] [authz_core:error] [pid 330135:tid 330183] [client 35.205.254.119:45060] AH01630: client denied by server configuration: /var/
+  [OK  ] 2026-09-20 14:18:42  apache lifecycle notice AH01909 — no client, emitted at a restart
+         [Sun Sep 20 14:18:42.087237 2026] [ssl:warn] [pid 316450:tid 316450] AH01909: dev.zxpet.com:443:0 server certificate does NOT include an ID which matches the se
+  [OK  ] 2026-09-20 14:20:26  probe of /.htpasswd by - — 1 matching access-log row(s), status 403, never ours
+         [Sun Sep 20 14:20:26.552871 2026] [authz_core:error] [pid 362847:tid 362891] [client 127.0.0.1:34732] AH01630: client denied by server configuration: /var/www/d
+  [OK  ] 2026-09-20 14:20:41  a third party guessed the username 'admin' — that username occurs 2 time(s) in the whole access log and never as ours
+         [Sun Sep 20 14:20:41.062078 2026] [auth_basic:error] [pid 362847:tid 362909] [client 104.23.170.72:11928] AH01618: user admin not found: /wp-admin/index.php, re
+  [OK  ] 2026-09-20 14:21:32  a third party guessed the username 'admin' — that username occurs 2 time(s) in the whole access log and never as ours
+         [Sun Sep 20 14:21:32.717738 2026] [auth_basic:error] [pid 362847:tid 362914] [client 104.23.170.73:13580] AH01618: user admin not found: /products/soft-chews/, 
+  [OK  ] 2026-09-20 19:31:11  probe of /.htpasswd by - — 1 matching access-log row(s), status 403, never ours
+         [Sun Sep 20 19:31:11.738036 2026] [authz_core:error] [pid 362848:tid 362921] [client 172.71.151.153:10266] AH01630: client denied by server configuration: /var/
+  [OK  ] 2026-09-20 23:23:19  exploit scanner sent a malformed path (/cgi-bin/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/b)
+         [Sun Sep 20 23:23:19.052190 2026] [core:error] [pid 380983:tid 381013] [client 168.144.80.239:54310] AH10244: invalid URI path (/cgi-bin/.%2e/.%2e/.%2e/.%2e/.%2
+  [OK  ] 2026-09-20 23:23:21  exploit scanner sent a malformed path (/cgi-bin/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%6)
+         [Sun Sep 20 23:23:21.511093 2026] [core:error] [pid 381554:tid 381578] [client 168.144.80.239:54320] AH10244: invalid URI path (/cgi-bin/%%32%65%%32%65/%%32%65%
+  [OK  ] 2026-09-21 00:12:45  probe of /.htpasswd by - — 1 matching access-log row(s), status 403, never ours
+         [Mon Sep 21 00:12:45.608120 2026] [authz_core:error] [pid 381554:tid 381581] [client 162.159.113.95:12544] AH01630: client denied by server configuration: /var/
+  [OK  ] 2026-09-21 00:25:16  exploit scanner sent a malformed path (/cgi-bin/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/b)
+         [Mon Sep 21 00:25:16.691740 2026] [core:error] [pid 380983:tid 381016] [client 118.145.104.105:51972] AH10244: invalid URI path (/cgi-bin/.%2e/.%2e/.%2e/.%2e/.%
+  [OK  ] 2026-09-21 03:00:22  probe of /.htpasswd by - — 1 matching access-log row(s), status 403, never ours
+         [Mon Sep 21 03:00:22.857068 2026] [authz_core:error] [pid 380983:tid 381003] [client 108.162.246.186:13434] AH01630: client denied by server configuration: /var
+  [OK  ] 2026-09-21 03:48:24  probe of /.htpasswd by - — 1 matching access-log row(s), status 403, never ours
+         [Mon Sep 21 03:48:24.403466 2026] [authz_core:error] [pid 380983:tid 381007] [client 104.22.160.42:10750] AH01630: client denied by server configuration: /var/w
+  [OK  ] 2026-09-21 05:10:54  exploit scanner sent a malformed path (/cgi-bin/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/b)
+         [Mon Sep 21 05:10:54.290291 2026] [core:error] [pid 485179:tid 485209] [client 103.63.101.24:36430] AH10244: invalid URI path (/cgi-bin/.%2e/.%2e/.%2e/.%2e/.%2e
+  [OK  ] 2026-09-21 05:10:55  exploit scanner sent a malformed path (/cgi-bin/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%6)
+         [Mon Sep 21 05:10:55.207534 2026] [core:error] [pid 487872:tid 487892] [client 103.63.101.24:36432] AH10244: invalid URI path (/cgi-bin/%%32%65%%32%65/%%32%65%%
+  [OK  ] 2026-09-21 11:41:11  probe of /.htpasswd by - — 1 matching access-log row(s), status 403, never ours
+         [Mon Sep 21 11:41:11.938507 2026] [authz_core:error] [pid 487872:tid 487901] [client 172.69.6.105:10005] AH01630: client denied by server configuration: /var/ww
+  [OK  ] 2026-09-21 11:41:50  probe of /.htpasswd by - — 1 matching access-log row(s), status 403, never ours
+         [Mon Sep 21 11:41:50.118090 2026] [authz_core:error] [pid 485179:tid 485206] [client 104.22.64.148:12462] AH01630: client denied by server configuration: /var/w
+  [OK  ] 2026-09-21 11:45:39  probe of /.htpasswd by - — 1 matching access-log row(s), status 403, never ours
+         [Mon Sep 21 11:45:39.895128 2026] [authz_core:error] [pid 485179:tid 485199] [client 104.22.62.189:13664] AH01630: client denied by server configuration: /var/w
+  [OK  ] 2026-09-21 11:55:07  probe of /.htpasswd by - — 1 matching access-log row(s), status 403, never ours
+         [Mon Sep 21 11:55:07.986972 2026] [authz_core:error] [pid 487872:tid 487892] [client 172.69.59.243:10085] AH01630: client denied by server configuration: /var/w
+  [OK  ] 2026-09-21 11:59:57  probe of /.htpasswd by - — 1 matching access-log row(s), status 403, never ours
+         [Mon Sep 21 11:59:57.173229 2026] [authz_core:error] [pid 487872:tid 487906] [client 172.69.7.62:11932] AH01630: client denied by server configuration: /var/www
+  [OK  ] 2026-09-21 12:03:46  probe of /.htpasswd by - — 1 matching access-log row(s), status 403, never ours
+         [Mon Sep 21 12:03:46.847746 2026] [authz_core:error] [pid 485179:tid 485206] [client 104.22.62.82:10416] AH01630: client denied by server configuration: /var/ww
+  [OK  ] 2026-09-21 12:04:49  probe of /.htpasswd by - — 1 matching access-log row(s), status 403, never ours
+         [Mon Sep 21 12:04:49.182011 2026] [authz_core:error] [pid 487872:tid 487899] [client 172.69.17.100:11509] AH01630: client denied by server configuration: /var/w
+  [OK  ] 2026-09-21 12:11:44  probe of /.htpasswd by - — 1 matching access-log row(s), status 403, never ours
+         [Mon Sep 21 12:11:44.257353 2026] [authz_core:error] [pid 487872:tid 487895] [client 104.22.62.197:10587] AH01630: client denied by server configuration: /var/w
+  [OK  ] 2026-09-21 12:29:53  probe of /.htpasswd by - — 1 matching access-log row(s), status 403, never ours
+         [Mon Sep 21 12:29:53.583068 2026] [authz_core:error] [pid 485179:tid 485203] [client 172.70.100.205:11864] AH01630: client denied by server configuration: /var/
+  [OK  ] 2026-09-21 12:38:24  probe of /.htpasswd by - — 1 matching access-log row(s), status 403, never ours
+         [Mon Sep 21 12:38:24.050317 2026] [authz_core:error] [pid 516038:tid 516079] [client 172.71.254.59:11977] AH01630: client denied by server configuration: /var/w
+  [OK  ] 2026-09-21 13:05:07  probe of /.htpasswd by - — 1 matching access-log row(s), status 403, never ours
+         [Mon Sep 21 13:05:07.962423 2026] [authz_core:error] [pid 516090:tid 516111] [client 172.69.7.191:10405] AH01630: client denied by server configuration: /var/ww
+  [OK  ] 2026-09-21 13:05:30  probe of /.htpasswd by - — 1 matching access-log row(s), status 403, never ours
+         [Mon Sep 21 13:05:30.145108 2026] [authz_core:error] [pid 516038:tid 516076] [client 172.71.120.104:9232] AH01630: client denied by server configuration: /var/w
+  [OK  ] 2026-09-21 13:11:32  probe of /.htaccess by - — 2 matching access-log row(s), status 403, never ours
+         [Mon Sep 21 13:11:32.718614 2026] [authz_core:error] [pid 516090:tid 516120] [client 94.154.46.244:48272] AH01630: client denied by server configuration: /var/w
+  [OK  ] 2026-09-21 13:11:33  probe of /.htpasswd by - — 2 matching access-log row(s), status 403, never ours
+         [Mon Sep 21 13:11:33.227201 2026] [authz_core:error] [pid 516090:tid 516117] [client 94.154.46.244:48514] AH01630: client denied by server configuration: /var/w
+  [OK  ] 2026-09-21 13:11:33  probe of /.htaccess by - — 2 matching access-log row(s), status 403, never ours
+         [Mon Sep 21 13:11:33.228289 2026] [authz_core:error] [pid 516090:tid 516113] [client 94.154.46.244:48484] AH01630: client denied by server configuration: /var/w
+  [OK  ] 2026-09-21 13:11:33  probe of /.htpasswd by - — 2 matching access-log row(s), status 403, never ours
+         [Mon Sep 21 13:11:33.958288 2026] [authz_core:error] [pid 516038:tid 516075] [client 94.154.46.244:48644] AH01630: client denied by server configuration: /var/w
+  [OK  ] 2026-09-21 13:39:34  exploit scanner sent a malformed path (/cgi-bin/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/b)
+         [Mon Sep 21 13:39:34.407395 2026] [core:error] [pid 516038:tid 516073] [client 102.203.197.6:55592] AH10244: invalid URI path (/cgi-bin/.%2e/.%2e/.%2e/.%2e/.%2e
+  [OK  ] 2026-09-21 13:39:35  exploit scanner sent a malformed path (/cgi-bin/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%6)
+         [Mon Sep 21 13:39:35.825994 2026] [core:error] [pid 516090:tid 516120] [client 102.203.197.6:55598] AH10244: invalid URI path (/cgi-bin/%%32%65%%32%65/%%32%65%%
+  [OK  ] 2026-09-21 14:16:07  probe of /.htpasswd by - — 1 matching access-log row(s), status 403, never ours
+         [Mon Sep 21 14:16:07.532219 2026] [authz_core:error] [pid 516038:tid 516079] [client 172.71.22.151:12596] AH01630: client denied by server configuration: /var/w
+  [OK  ] 2026-09-21 14:55:06  exploit scanner sent a malformed path (/cgi-bin/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/b)
+         [Mon Sep 21 14:55:06.103936 2026] [core:error] [pid 518493:tid 518522] [client 31.132.90.3:49808] AH10244: invalid URI path (/cgi-bin/.%2e/.%2e/.%2e/.%2e/.%2e/.
+  [OK  ] 2026-09-21 15:15:27  probe of /.htpasswd by - — 1 matching access-log row(s), status 403, never ours
+         [Mon Sep 21 15:15:27.481438 2026] [authz_core:error] [pid 524342:tid 524373] [client 172.69.130.88:13378] AH01630: client denied by server configuration: /var/w
+  [OK  ] 2026-09-21 15:23:47  probe of /.htpasswd by - — 1 matching access-log row(s), status 403, never ours
+         [Mon Sep 21 15:23:47.939966 2026] [authz_core:error] [pid 524378:tid 524412] [client 108.162.241.219:13821] AH01630: client denied by server configuration: /var
+  [OK  ] 2026-09-21 16:21:07  probe of /.htpasswd by - — 1 matching access-log row(s), status 403, never ours
+         [Mon Sep 21 16:21:07.458641 2026] [authz_core:error] [pid 526860:tid 526879] [client 172.70.80.143:13991] AH01630: client denied by server configuration: /var/w
+  [OK  ] 2026-09-21 16:56:39  probe of /.htpasswd by - — 1 matching access-log row(s), status 403, never ours
+         [Mon Sep 21 16:56:39.790919 2026] [authz_core:error] [pid 526860:tid 526894] [client 172.70.80.162:13071] AH01630: client denied by server configuration: /var/w
+  [OK  ] 2026-09-21 17:38:26  probe of /.htpasswd by - — 1 matching access-log row(s), status 403, never ours
+         [Mon Sep 21 17:38:26.249956 2026] [authz_core:error] [pid 526517:tid 526547] [client 172.71.120.82:13401] AH01630: client denied by server configuration: /var/w
+  [OK  ] 2026-09-21 18:09:49  probe of /.htpasswd by - — 1 matching access-log row(s), status 403, never ours
+         [Mon Sep 21 18:09:49.412691 2026] [authz_core:error] [pid 526860:tid 526885] [client 172.70.50.133:10733] AH01630: client denied by server configuration: /var/w
+  [OK  ] 2026-09-21 18:19:03  probe of /.htpasswd by - — 1 matching access-log row(s), status 403, never ours
+         [Mon Sep 21 18:19:03.814757 2026] [authz_core:error] [pid 526807:tid 526850] [client 172.70.50.139:11682] AH01630: client denied by server configuration: /var/w
+  [OK  ] 2026-09-21 18:23:05  probe of /.htpasswd by - — 1 matching access-log row(s), status 403, never ours
+         [Mon Sep 21 18:23:05.298745 2026] [authz_core:error] [pid 526860:tid 526890] [client 108.162.241.200:10013] AH01630: client denied by server configuration: /var
+  [OK  ] 2026-09-21 18:50:05  probe of /.htpasswd by - — 1 matching access-log row(s), status 403, never ours
+         [Mon Sep 21 18:50:05.607336 2026] [authz_core:error] [pid 526517:tid 526543] [client 172.71.120.36:11490] AH01630: client denied by server configuration: /var/w
+  [OK  ] 2026-09-21 18:59:12  probe of /.htpasswd by - — 1 matching access-log row(s), status 403, never ours
+         [Mon Sep 21 18:59:12.038887 2026] [authz_core:error] [pid 526860:tid 526879] [client 172.71.120.117:12580] AH01630: client denied by server configuration: /var/
+  [OK  ] 2026-09-21 19:03:15  probe of /.htpasswd by - — 1 matching access-log row(s), status 403, never ours
+         [Mon Sep 21 19:03:15.935362 2026] [authz_core:error] [pid 526517:tid 526538] [client 172.69.130.7:11625] AH01630: client denied by server configuration: /var/ww
+  [OK  ] 2026-09-21 19:16:04  probe of /.htpasswd by - — 1 matching access-log row(s), status 403, never ours
+         [Mon Sep 21 19:16:04.911354 2026] [authz_core:error] [pid 526860:tid 526885] [client 172.69.130.124:14232] AH01630: client denied by server configuration: /var/
+  [OK  ] 2026-09-21 20:01:07  probe of /.htpasswd by - — 1 matching access-log row(s), status 403, never ours
+         [Mon Sep 21 20:01:07.432266 2026] [authz_core:error] [pid 526807:tid 526846] [client 172.71.120.27:13463] AH01630: client denied by server configuration: /var/w
+  [OK  ] 2026-09-21 20:23:55  probe of /.htpasswd by - — 1 matching access-log row(s), status 403, never ours
+         [Mon Sep 21 20:23:55.992676 2026] [authz_core:error] [pid 526807:tid 526845] [client 172.70.50.165:12048] AH01630: client denied by server configuration: /var/w
+  [OK  ] 2026-09-21 20:41:20  probe of /.htpasswd by - — 1 matching access-log row(s), status 403, never ours
+         [Mon Sep 21 20:41:20.870845 2026] [authz_core:error] [pid 526860:tid 526893] [client 172.69.130.80:12599] AH01630: client denied by server configuration: /var/w
+  [ALLOW] 2026-09-21 21:38:52  [documented exception] ours: agent-browser's first GET / before its Authorization header attached (access row: user sfdev, status 401, UA HeadlessChrome/153)
+         [Mon Sep 21 21:38:52.460128 2026] [auth_basic:error] [pid 526807:tid 526852] [client 104.22.18.45:13776] AH01617: user sfdev: authentication failure for "/": Pa
+  [ALLOW] 2026-09-21 21:38:53  [documented exception] ours: the same pre-header probe under the iPhone-UA emulation (access row: user sfdev, 401)
+         [Mon Sep 21 21:38:53.174638 2026] [auth_basic:error] [pid 526807:tid 526842] [client 104.22.18.46:10033] AH01617: user sfdev: authentication failure for "/": Pa
+  [ALLOW] 2026-09-21 21:41:01  [documented exception] ours: our own cookie-banner probe GET /formulas/calming-soft-chews/?sfcap=cookieprobe — 401 before the header attached
+         [Mon Sep 21 21:41:01.978406 2026] [auth_basic:error] [pid 526807:tid 526855] [client 172.70.214.190:9240] AH01617: user sfdev: authentication failure for "/form
+  [ALLOW] 2026-09-21 21:41:27  [documented exception] ours: the same probe as ?sfcap=cookieprobe2 (Apache wrote one request as two 401 rows)
+         [Mon Sep 21 21:41:27.221196 2026] [auth_basic:error] [pid 526860:tid 526887] [client 162.158.167.66:12020] AH01617: user sfdev: authentication failure for "/for
+  [ALLOW] 2026-09-21 21:41:27  [documented exception] ours: the same probe as ?sfcap=cookieprobe2 (Apache wrote one request as two 401 rows)
+         [Mon Sep 21 21:41:27.600061 2026] [auth_basic:error] [pid 526860:tid 526883] [client 162.158.167.66:12013] AH01617: user sfdev: authentication failure for "/for
+  [ALLOW] 2026-09-21 22:05:51  [documented exception] ours: our ssh-side curl probe that fed base64(credentials) where curl wants user:pass — the access row's user field is literally that base64 blob, status 401, curl/7.76.1
+         [Mon Sep 21 22:05:51.024326 2026] [auth_basic:error] [pid 546399:tid 546433] [client 172.71.154.178:9257] AH01618: user c2ZkZXY6VmtFd3MxOEtsNVYxcXAzVHBaNnM= not
+  [ALLOW] 2026-09-21 22:11:01  [documented exception] ours: the same base64-as-username probe (curl/7.76.1, 401)
+         [Mon Sep 21 22:11:01.440654 2026] [auth_basic:error] [pid 546399:tid 546432] [client 172.69.22.73:13934] AH01618: user c2ZkZXY6VmtFd3MxOEtsNVYxcXAzVHBaNnM= not 
+  [ALLOW] 2026-09-21 22:11:10  [documented exception] ours: the same base64-as-username probe (curl/7.76.1, 401)
+         [Mon Sep 21 22:11:10.752096 2026] [auth_basic:error] [pid 546399:tid 546431] [client 172.71.154.179:10849] AH01618: user c2ZkZXY6VmtFd3MxOEtsNVYxcXAzVHBaNnM= no
+  [ALLOW] 2026-09-21 22:12:34  [documented exception] third party: DuckAssistBot denied by the lockdown (access row: user -, status 403) — inside our window, never ours
+         [Mon Sep 21 22:12:34.386510 2026] [authz_core:error] [pid 546462:tid 546496] [client 172.69.7.143:14304] AH01630: client denied by server configuration: /var/ww
+
+==============================================================================
+/var/log/httpd/dev.zxpet.com-error.log
+  2646 byte(s), mtime 2026-09-21 17:33:22.069968281 +0000  (for the record; not an invariant)
+  13 record(s) over 13 non-empty line(s)
+  [OK  ] 2026-09-21 00:56:57  exploit scanner sent a malformed path (/cgi-bin/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/b)
+         [Mon Sep 21 00:56:57.243561 2026] [core:error] [pid 380983:tid 381017] [client 107.150.97.10:59534] AH10244: invalid URI path (/cgi-bin/.%2e/.%2e/.%2e/.%2e/.%2e
+  [OK  ] 2026-09-21 00:56:57  exploit scanner sent a malformed path (/cgi-bin/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%6)
+         [Mon Sep 21 00:56:57.263217 2026] [core:error] [pid 381554:tid 381587] [client 107.150.97.10:59540] AH10244: invalid URI path (/cgi-bin/%%32%65%%32%65/%%32%65%%
+  [OK  ] 2026-09-21 02:01:44  exploit scanner sent a malformed path (/cgi-bin/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/b)
+         [Mon Sep 21 02:01:44.193881 2026] [core:error] [pid 381554:tid 381579] [client 186.242.162.94:50158] AH10244: invalid URI path (/cgi-bin/.%2e/.%2e/.%2e/.%2e/.%2
+  [OK  ] 2026-09-21 02:01:47  exploit scanner sent a malformed path (/cgi-bin/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%6)
+         [Mon Sep 21 02:01:47.518956 2026] [core:error] [pid 381554:tid 381578] [client 186.242.162.94:50172] AH10244: invalid URI path (/cgi-bin/%%32%65%%32%65/%%32%65%
+  [OK  ] 2026-09-21 02:29:29  a probe for the cgi-bin script /var/www/cgi-bin/luci by - — 2 matching access-log row(s), status 404, never ours
+         [Mon Sep 21 02:29:29.680262 2026] [cgid:error] [pid 381554:tid 381578] [client 221.159.119.6:37718] AH01264: stderr from /var/www/cgi-bin/luci: script not found
+  [OK  ] 2026-09-21 02:29:29  a probe for the cgi-bin script /var/www/cgi-bin/luci by - — 2 matching access-log row(s), status 404, never ours
+         [Mon Sep 21 02:29:29.876548 2026] [cgid:error] [pid 380983:tid 381003] [client 221.159.119.6:37793] AH01264: stderr from /var/www/cgi-bin/luci: script not found
+  [OK  ] 2026-09-21 13:11:37  probe of /.htaccess by - — 2 matching access-log row(s), status 403, never ours
+         [Mon Sep 21 13:11:37.244049 2026] [authz_core:error] [pid 516090:tid 516124] [client 94.154.46.244:39592] AH01630: client denied by server configuration: /var/w
+  [OK  ] 2026-09-21 13:11:37  probe of /.htpasswd by - — 2 matching access-log row(s), status 403, never ours
+         [Mon Sep 21 13:11:37.249030 2026] [authz_core:error] [pid 516038:tid 516079] [client 94.154.46.244:39658] AH01630: client denied by server configuration: /var/w
+  [OK  ] 2026-09-21 13:11:37  probe of /.htaccess by - — 2 matching access-log row(s), status 403, never ours
+         [Mon Sep 21 13:11:37.709971 2026] [authz_core:error] [pid 518493:tid 518527] [client 94.154.46.244:39258] AH01630: client denied by server configuration: /var/w
+  [OK  ] 2026-09-21 13:11:37  probe of /.htpasswd by - — 2 matching access-log row(s), status 403, never ours
+         [Mon Sep 21 13:11:37.816913 2026] [authz_core:error] [pid 516090:tid 516115] [client 94.154.46.244:39598] AH01630: client denied by server configuration: /var/w
+  [OK  ] 2026-09-21 13:14:45  exploit scanner sent a malformed path (/cgi-bin/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/b)
+         [Mon Sep 21 13:14:45.346844 2026] [core:error] [pid 516038:tid 516073] [client 103.63.101.24:53252] AH10244: invalid URI path (/cgi-bin/.%2e/.%2e/.%2e/.%2e/.%2e
+  [OK  ] 2026-09-21 13:14:46  exploit scanner sent a malformed path (/cgi-bin/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%6)
+         [Mon Sep 21 13:14:46.064566 2026] [core:error] [pid 516090:tid 516117] [client 103.63.101.24:53254] AH10244: invalid URI path (/cgi-bin/%%32%65%%32%65/%%32%65%%
+  [OK  ] 2026-09-21 17:33:22  a probe for the cgi-bin script /var/www/cgi-bin/luci by - — 1 matching access-log row(s), status 404, never ours
+         [Mon Sep 21 17:33:22.071212 2026] [cgid:error] [pid 526807:tid 526856] [client 185.213.174.141:22374] AH01264: stderr from /var/www/cgi-bin/luci: script not fou
+
+==============================================================================
+/var/log/httpd/error_log
+  2246 byte(s), mtime 2026-09-21 14:45:23.347450459 +0000  (for the record; not an invariant)
+  16 record(s) over 16 non-empty line(s)
+  [OK  ] 2026-09-20 00:00:01  apache lifecycle notice AH02282 — no client, emitted at a restart
+         [Sun Sep 20 00:00:01.927580 2026] [lbmethod_heartbeat:notice] [pid 316450:tid 316450] AH02282: No slotmem from mod_heartmonitor
+  [OK  ] 2026-09-20 00:00:01  apache lifecycle notice AH00489 — no client, emitted at a restart
+         [Sun Sep 20 00:00:01.940508 2026] [mpm_event:notice] [pid 316450:tid 316450] AH00489: Apache/2.4.62 (AlmaLinux) OpenSSL/3.5.5 configured -- resuming normal oper
+  [OK  ] 2026-09-20 00:00:01  apache lifecycle notice AH00094 — no client, emitted at a restart
+         [Sun Sep 20 00:00:01.940566 2026] [core:notice] [pid 316450:tid 316450] AH00094: Command line: '/usr/sbin/httpd -D FOREGROUND'
+  [OK  ] 2026-09-20 05:39:35  apache lifecycle notice AH00493 — no client, emitted at a restart
+         [Sun Sep 20 05:39:35.515104 2026] [mpm_event:notice] [pid 316450:tid 316450] AH00493: SIGUSR1 received.  Doing graceful restart
+  [OK  ] 2026-09-20 05:39:35  apache lifecycle notice AH02282 — no client, emitted at a restart
+         [Sun Sep 20 05:39:35.929520 2026] [lbmethod_heartbeat:notice] [pid 316450:tid 316450] AH02282: No slotmem from mod_heartmonitor
+  [OK  ] 2026-09-20 05:39:35  apache lifecycle notice AH00489 — no client, emitted at a restart
+         [Sun Sep 20 05:39:35.933500 2026] [mpm_event:notice] [pid 316450:tid 316450] AH00489: Apache/2.4.62 (AlmaLinux) OpenSSL/3.5.5 configured -- resuming normal oper
+  [OK  ] 2026-09-20 05:39:35  apache lifecycle notice AH00094 — no client, emitted at a restart
+         [Sun Sep 20 05:39:35.933548 2026] [core:notice] [pid 316450:tid 316450] AH00094: Command line: '/usr/sbin/httpd -D FOREGROUND'
+  [OK  ] 2026-09-20 05:46:10  apache lifecycle notice AH00493 — no client, emitted at a restart
+         [Sun Sep 20 05:46:10.516447 2026] [mpm_event:notice] [pid 316450:tid 316450] AH00493: SIGUSR1 received.  Doing graceful restart
+  [OK  ] 2026-09-20 05:46:10  apache lifecycle notice AH02282 — no client, emitted at a restart
+         [Sun Sep 20 05:46:10.598822 2026] [lbmethod_heartbeat:notice] [pid 316450:tid 316450] AH02282: No slotmem from mod_heartmonitor
+  [OK  ] 2026-09-20 05:46:10  apache lifecycle notice AH00489 — no client, emitted at a restart
+         [Sun Sep 20 05:46:10.601342 2026] [mpm_event:notice] [pid 316450:tid 316450] AH00489: Apache/2.4.62 (AlmaLinux) OpenSSL/3.5.5 configured -- resuming normal oper
+  [OK  ] 2026-09-20 05:46:10  apache lifecycle notice AH00094 — no client, emitted at a restart
+         [Sun Sep 20 05:46:10.601372 2026] [core:notice] [pid 316450:tid 316450] AH00094: Command line: '/usr/sbin/httpd -D FOREGROUND'
+  [OK  ] 2026-09-20 14:18:41  apache lifecycle notice AH00493 — no client, emitted at a restart
+         [Sun Sep 20 14:18:41.638007 2026] [mpm_event:notice] [pid 316450:tid 316450] AH00493: SIGUSR1 received.  Doing graceful restart
+  [OK  ] 2026-09-20 14:18:42  apache lifecycle notice AH02282 — no client, emitted at a restart
+         [Sun Sep 20 14:18:42.088088 2026] [lbmethod_heartbeat:notice] [pid 316450:tid 316450] AH02282: No slotmem from mod_heartmonitor
+  [OK  ] 2026-09-20 14:18:42  apache lifecycle notice AH00489 — no client, emitted at a restart
+         [Sun Sep 20 14:18:42.093721 2026] [mpm_event:notice] [pid 316450:tid 316450] AH00489: Apache/2.4.62 (AlmaLinux) OpenSSL/3.5.5 configured -- resuming normal oper
+  [OK  ] 2026-09-20 14:18:42  apache lifecycle notice AH00094 — no client, emitted at a restart
+         [Sun Sep 20 14:18:42.093766 2026] [core:notice] [pid 316450:tid 316450] AH00094: Command line: '/usr/sbin/httpd -D FOREGROUND'
+  [ALLOW] 2026-09-21 14:45:23  [documented exception] batch H1, not H2a: MaxRequestWorkers while H1 pulled its 75 pages concurrently — see docs/batch2d-stepH1.md
+         [Mon Sep 21 14:45:23.347905 2026] [mpm_event:error] [pid 316450:tid 316450] AH00484: server reached MaxRequestWorkers setting, consider raising the MaxRequestWo
+
+==============================================================================
+/var/log/php-fpm/www-error.log
+  13804 byte(s), mtime 2026-09-21 09:11:03.822734808 +0000  (for the record; not an invariant)
+  45 record(s) over 51 non-empty line(s)
+  [OK  ] 2026-09-20 05:49:31  the file it could not read, /wp-content/themes/sinofresh-theme/parts/footer.html, exists now (16752 byte(s)) — a transient from before the batch
+         [20-Sep-2026 05:49:31 UTC] PHP Warning:  file_get_contents(/var/www/dev.zxpet.com/public/wp-content/themes/sinofresh-theme/parts/footer.html): Failed to open st
+  [OK  ] 2026-09-20 09:36:32  a direct request for /wp-settings.php by - at the same second, status 500 — the message is that request's consequence, not ours  (+3 continuation line(s))
+         [20-Sep-2026 09:36:32 UTC] PHP Fatal error:  Uncaught Error: Undefined constant "ABSPATH" in /var/www/dev.zxpet.com/public/wp-settings.php:34
+  [ALLOW] 2026-09-21 03:38:30  [documented exception] batch H1, not H2a: our authenticated /wp-settings.php probe — see docs/batch2d-stepH1.md  (+3 continuation line(s))
+         [21-Sep-2026 03:38:30 UTC] PHP Fatal error:  Uncaught Error: Undefined constant "ABSPATH" in /var/www/dev.zxpet.com/public/wp-settings.php:34
+  [ALLOW] 2026-09-21 09:10:58  [documented exception] batch H1, not H2a: the preflight-copy redeclare burst (same-second 500s with user sfdev, curl/8.7.1) — see docs/batch2d-stepH1.md
+         [21-Sep-2026 09:10:58 UTC] PHP Fatal error:  Cannot redeclare sinofresh_formula_faq_data() (previously declared in /var/www/dev.zxpet.com/public/wp-content/them
+  [ALLOW] 2026-09-21 09:10:58  [documented exception] batch H1, not H2a: the preflight-copy redeclare burst (same-second 500s with user sfdev, curl/8.7.1) — see docs/batch2d-stepH1.md
+         [21-Sep-2026 09:10:58 UTC] PHP Fatal error:  Cannot redeclare sinofresh_formula_faq_data() (previously declared in /var/www/dev.zxpet.com/public/wp-content/them
+  [ALLOW] 2026-09-21 09:10:58  [documented exception] batch H1, not H2a: the preflight-copy redeclare burst (same-second 500s with user sfdev, curl/8.7.1) — see docs/batch2d-stepH1.md
+         [21-Sep-2026 09:10:58 UTC] PHP Fatal error:  Cannot redeclare sinofresh_formula_faq_data() (previously declared in /var/www/dev.zxpet.com/public/wp-content/them
+  [ALLOW] 2026-09-21 09:10:59  [documented exception] batch H1, not H2a: the preflight-copy redeclare burst (user sfdev, curl/8.7.1, 500) — see docs/batch2d-stepH1.md
+         [21-Sep-2026 09:10:59 UTC] PHP Fatal error:  Cannot redeclare sinofresh_formula_faq_data() (previously declared in /var/www/dev.zxpet.com/public/wp-content/them
+  [ALLOW] 2026-09-21 09:10:59  [documented exception] batch H1, not H2a: the preflight-copy redeclare burst (user sfdev, curl/8.7.1, 500) — see docs/batch2d-stepH1.md
+         [21-Sep-2026 09:10:59 UTC] PHP Fatal error:  Cannot redeclare sinofresh_formula_faq_data() (previously declared in /var/www/dev.zxpet.com/public/wp-content/them
+  [ALLOW] 2026-09-21 09:10:59  [documented exception] batch H1, not H2a: the preflight-copy redeclare burst (user sfdev, curl/8.7.1, 500) — see docs/batch2d-stepH1.md
+         [21-Sep-2026 09:10:59 UTC] PHP Fatal error:  Cannot redeclare sinofresh_formula_faq_data() (previously declared in /var/www/dev.zxpet.com/public/wp-content/them
+  [ALLOW] 2026-09-21 09:10:59  [documented exception] batch H1, not H2a: the preflight-copy redeclare burst (user sfdev, curl/8.7.1, 500) — see docs/batch2d-stepH1.md
+         [21-Sep-2026 09:10:59 UTC] PHP Fatal error:  Cannot redeclare sinofresh_formula_faq_data() (previously declared in /var/www/dev.zxpet.com/public/wp-content/them
+  [ALLOW] 2026-09-21 09:10:59  [documented exception] batch H1, not H2a: the preflight-copy redeclare burst (user sfdev, curl/8.7.1, 500) — see docs/batch2d-stepH1.md
+         [21-Sep-2026 09:10:59 UTC] PHP Fatal error:  Cannot redeclare sinofresh_formula_faq_data() (previously declared in /var/www/dev.zxpet.com/public/wp-content/them
+  [ALLOW] 2026-09-21 09:10:59  [documented exception] batch H1, not H2a: the preflight-copy redeclare burst (user sfdev, curl/8.7.1, 500) — see docs/batch2d-stepH1.md
+         [21-Sep-2026 09:10:59 UTC] PHP Fatal error:  Cannot redeclare sinofresh_formula_faq_data() (previously declared in /var/www/dev.zxpet.com/public/wp-content/them
+  [ALLOW] 2026-09-21 09:10:59  [documented exception] batch H1, not H2a: the preflight-copy redeclare burst (user sfdev, curl/8.7.1, 500) — see docs/batch2d-stepH1.md
+         [21-Sep-2026 09:10:59 UTC] PHP Fatal error:  Cannot redeclare sinofresh_formula_faq_data() (previously declared in /var/www/dev.zxpet.com/public/wp-content/them
+  [ALLOW] 2026-09-21 09:10:59  [documented exception] batch H1, not H2a: the preflight-copy redeclare burst (user sfdev, curl/8.7.1, 500) — see docs/batch2d-stepH1.md
+         [21-Sep-2026 09:10:59 UTC] PHP Fatal error:  Cannot redeclare sinofresh_formula_faq_data() (previously declared in /var/www/dev.zxpet.com/public/wp-content/them
+  [ALLOW] 2026-09-21 09:10:59  [documented exception] batch H1, not H2a: the preflight-copy redeclare burst (user sfdev, curl/8.7.1, 500) — see docs/batch2d-stepH1.md
+         [21-Sep-2026 09:10:59 UTC] PHP Fatal error:  Cannot redeclare sinofresh_formula_faq_data() (previously declared in /var/www/dev.zxpet.com/public/wp-content/them
+  [ALLOW] 2026-09-21 09:11:00  [documented exception] batch H1, not H2a: the preflight-copy redeclare burst (user sfdev, curl/8.7.1, 500) — see docs/batch2d-stepH1.md
+         [21-Sep-2026 09:11:00 UTC] PHP Fatal error:  Cannot redeclare sinofresh_formula_faq_data() (previously declared in /var/www/dev.zxpet.com/public/wp-content/them
+  [ALLOW] 2026-09-21 09:11:00  [documented exception] batch H1, not H2a: the preflight-copy redeclare burst (user sfdev, curl/8.7.1, 500) — see docs/batch2d-stepH1.md
+         [21-Sep-2026 09:11:00 UTC] PHP Fatal error:  Cannot redeclare sinofresh_formula_faq_data() (previously declared in /var/www/dev.zxpet.com/public/wp-content/them
+  [ALLOW] 2026-09-21 09:11:00  [documented exception] batch H1, not H2a: the preflight-copy redeclare burst (user sfdev, curl/8.7.1, 500) — see docs/batch2d-stepH1.md
+         [21-Sep-2026 09:11:00 UTC] PHP Fatal error:  Cannot redeclare sinofresh_formula_faq_data() (previously declared in /var/www/dev.zxpet.com/public/wp-content/them
+  [ALLOW] 2026-09-21 09:11:00  [documented exception] batch H1, not H2a: the preflight-copy redeclare burst (user sfdev, curl/8.7.1, 500) — see docs/batch2d-stepH1.md
+         [21-Sep-2026 09:11:00 UTC] PHP Fatal error:  Cannot redeclare sinofresh_formula_faq_data() (previously declared in /var/www/dev.zxpet.com/public/wp-content/them
+  [ALLOW] 2026-09-21 09:11:00  [documented exception] batch H1, not H2a: the preflight-copy redeclare burst (user sfdev, curl/8.7.1, 500) — see docs/batch2d-stepH1.md
+         [21-Sep-2026 09:11:00 UTC] PHP Fatal error:  Cannot redeclare sinofresh_formula_faq_data() (previously declared in /var/www/dev.zxpet.com/public/wp-content/them
+  [ALLOW] 2026-09-21 09:11:00  [documented exception] batch H1, not H2a: the preflight-copy redeclare burst (user sfdev, curl/8.7.1, 500) — see docs/batch2d-stepH1.md
+         [21-Sep-2026 09:11:00 UTC] PHP Fatal error:  Cannot redeclare sinofresh_formula_faq_data() (previously declared in /var/www/dev.zxpet.com/public/wp-content/them
+  [ALLOW] 2026-09-21 09:11:00  [documented exception] batch H1, not H2a: the preflight-copy redeclare burst (user sfdev, curl/8.7.1, 500) — see docs/batch2d-stepH1.md
+         [21-Sep-2026 09:11:00 UTC] PHP Fatal error:  Cannot redeclare sinofresh_formula_faq_data() (previously declared in /var/www/dev.zxpet.com/public/wp-content/them
+  [ALLOW] 2026-09-21 09:11:00  [documented exception] batch H1, not H2a: the preflight-copy redeclare burst (user sfdev, curl/8.7.1, 500) — see docs/batch2d-stepH1.md
+         [21-Sep-2026 09:11:00 UTC] PHP Fatal error:  Cannot redeclare sinofresh_formula_faq_data() (previously declared in /var/www/dev.zxpet.com/public/wp-content/them
+  [ALLOW] 2026-09-21 09:11:00  [documented exception] batch H1, not H2a: the preflight-copy redeclare burst (user sfdev, curl/8.7.1, 500) — see docs/batch2d-stepH1.md
+         [21-Sep-2026 09:11:00 UTC] PHP Fatal error:  Cannot redeclare sinofresh_formula_faq_data() (previously declared in /var/www/dev.zxpet.com/public/wp-content/them
+  [ALLOW] 2026-09-21 09:11:01  [documented exception] batch H1, not H2a: the preflight-copy redeclare burst (user sfdev, curl/8.7.1, 500) — see docs/batch2d-stepH1.md
+         [21-Sep-2026 09:11:01 UTC] PHP Fatal error:  Cannot redeclare sinofresh_formula_faq_data() (previously declared in /var/www/dev.zxpet.com/public/wp-content/them
+  [ALLOW] 2026-09-21 09:11:01  [documented exception] batch H1, not H2a: the preflight-copy redeclare burst (user sfdev, curl/8.7.1, 500) — see docs/batch2d-stepH1.md
+         [21-Sep-2026 09:11:01 UTC] PHP Fatal error:  Cannot redeclare sinofresh_formula_faq_data() (previously declared in /var/www/dev.zxpet.com/public/wp-content/them
+  [ALLOW] 2026-09-21 09:11:01  [documented exception] batch H1, not H2a: the preflight-copy redeclare burst (user sfdev, curl/8.7.1, 500) — see docs/batch2d-stepH1.md
+         [21-Sep-2026 09:11:01 UTC] PHP Fatal error:  Cannot redeclare sinofresh_formula_faq_data() (previously declared in /var/www/dev.zxpet.com/public/wp-content/them
+  [ALLOW] 2026-09-21 09:11:01  [documented exception] batch H1, not H2a: the preflight-copy redeclare burst (user sfdev, curl/8.7.1, 500) — see docs/batch2d-stepH1.md
+         [21-Sep-2026 09:11:01 UTC] PHP Fatal error:  Cannot redeclare sinofresh_formula_faq_data() (previously declared in /var/www/dev.zxpet.com/public/wp-content/them
+  [ALLOW] 2026-09-21 09:11:01  [documented exception] batch H1, not H2a: the preflight-copy redeclare burst (user sfdev, curl/8.7.1, 500) — see docs/batch2d-stepH1.md
+         [21-Sep-2026 09:11:01 UTC] PHP Fatal error:  Cannot redeclare sinofresh_formula_faq_data() (previously declared in /var/www/dev.zxpet.com/public/wp-content/them
+  [ALLOW] 2026-09-21 09:11:01  [documented exception] batch H1, not H2a: the preflight-copy redeclare burst (user sfdev, curl/8.7.1, 500) — see docs/batch2d-stepH1.md
+         [21-Sep-2026 09:11:01 UTC] PHP Fatal error:  Cannot redeclare sinofresh_formula_faq_data() (previously declared in /var/www/dev.zxpet.com/public/wp-content/them
+  [ALLOW] 2026-09-21 09:11:01  [documented exception] batch H1, not H2a: the preflight-copy redeclare burst (user sfdev, curl/8.7.1, 500) — see docs/batch2d-stepH1.md
+         [21-Sep-2026 09:11:01 UTC] PHP Fatal error:  Cannot redeclare sinofresh_formula_faq_data() (previously declared in /var/www/dev.zxpet.com/public/wp-content/them
+  [ALLOW] 2026-09-21 09:11:01  [documented exception] batch H1, not H2a: the preflight-copy redeclare burst (user sfdev, curl/8.7.1, 500) — see docs/batch2d-stepH1.md
+         [21-Sep-2026 09:11:01 UTC] PHP Fatal error:  Cannot redeclare sinofresh_formula_faq_data() (previously declared in /var/www/dev.zxpet.com/public/wp-content/them
+  [ALLOW] 2026-09-21 09:11:02  [documented exception] batch H1, not H2a: the preflight-copy redeclare burst (user sfdev, curl/8.7.1, 500) — see docs/batch2d-stepH1.md
+         [21-Sep-2026 09:11:02 UTC] PHP Fatal error:  Cannot redeclare sinofresh_formula_faq_data() (previously declared in /var/www/dev.zxpet.com/public/wp-content/them
+  [ALLOW] 2026-09-21 09:11:02  [documented exception] batch H1, not H2a: the preflight-copy redeclare burst (user sfdev, curl/8.7.1, 500) — see docs/batch2d-stepH1.md
+         [21-Sep-2026 09:11:02 UTC] PHP Fatal error:  Cannot redeclare sinofresh_formula_faq_data() (previously declared in /var/www/dev.zxpet.com/public/wp-content/them
+  [ALLOW] 2026-09-21 09:11:02  [documented exception] batch H1, not H2a: the preflight-copy redeclare burst (user sfdev, curl/8.7.1, 500) — see docs/batch2d-stepH1.md
+         [21-Sep-2026 09:11:02 UTC] PHP Fatal error:  Cannot redeclare sinofresh_formula_faq_data() (previously declared in /var/www/dev.zxpet.com/public/wp-content/them
+  [ALLOW] 2026-09-21 09:11:02  [documented exception] batch H1, not H2a: the preflight-copy redeclare burst (user sfdev, curl/8.7.1, 500) — see docs/batch2d-stepH1.md
+         [21-Sep-2026 09:11:02 UTC] PHP Fatal error:  Cannot redeclare sinofresh_formula_faq_data() (previously declared in /var/www/dev.zxpet.com/public/wp-content/them
+  [ALLOW] 2026-09-21 09:11:02  [documented exception] batch H1, not H2a: the preflight-copy redeclare burst (user sfdev, curl/8.7.1, 500) — see docs/batch2d-stepH1.md
+         [21-Sep-2026 09:11:02 UTC] PHP Fatal error:  Cannot redeclare sinofresh_formula_faq_data() (previously declared in /var/www/dev.zxpet.com/public/wp-content/them
+  [ALLOW] 2026-09-21 09:11:02  [documented exception] batch H1, not H2a: the preflight-copy redeclare burst (user sfdev, curl/8.7.1, 500) — see docs/batch2d-stepH1.md
+         [21-Sep-2026 09:11:02 UTC] PHP Fatal error:  Cannot redeclare sinofresh_formula_faq_data() (previously declared in /var/www/dev.zxpet.com/public/wp-content/them
+  [ALLOW] 2026-09-21 09:11:03  [documented exception] batch H1, not H2a: the preflight-copy redeclare burst (user sfdev, curl/8.7.1, 500) — see docs/batch2d-stepH1.md
+         [21-Sep-2026 09:11:03 UTC] PHP Fatal error:  Cannot redeclare sinofresh_formula_faq_data() (previously declared in /var/www/dev.zxpet.com/public/wp-content/them
+  [ALLOW] 2026-09-21 09:11:03  [documented exception] batch H1, not H2a: the preflight-copy redeclare burst (user sfdev, curl/8.7.1, 500) — see docs/batch2d-stepH1.md
+         [21-Sep-2026 09:11:03 UTC] PHP Fatal error:  Cannot redeclare sinofresh_formula_faq_data() (previously declared in /var/www/dev.zxpet.com/public/wp-content/them
+  [ALLOW] 2026-09-21 09:11:03  [documented exception] batch H1, not H2a: the preflight-copy redeclare burst (user sfdev, curl/8.7.1, 500) — see docs/batch2d-stepH1.md
+         [21-Sep-2026 09:11:03 UTC] PHP Fatal error:  Cannot redeclare sinofresh_formula_faq_data() (previously declared in /var/www/dev.zxpet.com/public/wp-content/them
+  [ALLOW] 2026-09-21 09:11:03  [documented exception] batch H1, not H2a: the preflight-copy redeclare burst (user sfdev, curl/8.7.1, 500) — see docs/batch2d-stepH1.md
+         [21-Sep-2026 09:11:03 UTC] PHP Fatal error:  Cannot redeclare sinofresh_formula_faq_data() (previously declared in /var/www/dev.zxpet.com/public/wp-content/them
+  [ALLOW] 2026-09-21 09:11:03  [documented exception] batch H1, not H2a: the preflight-copy redeclare burst (user sfdev, curl/8.7.1, 500) — see docs/batch2d-stepH1.md
+         [21-Sep-2026 09:11:03 UTC] PHP Fatal error:  Cannot redeclare sinofresh_formula_faq_data() (previously declared in /var/www/dev.zxpet.com/public/wp-content/them
+  [ALLOW] 2026-09-21 09:11:03  [documented exception] batch H1, not H2a: the preflight-copy redeclare burst (user sfdev, curl/8.7.1, 500) — see docs/batch2d-stepH1.md
+         [21-Sep-2026 09:11:03 UTC] PHP Fatal error:  Cannot redeclare sinofresh_formula_faq_data() (previously declared in /var/www/dev.zxpet.com/public/wp-content/them
+  [ALLOW] 2026-09-21 09:11:03  [documented exception] batch H1, not H2a: the preflight-copy redeclare burst (user sfdev, curl/8.7.1, 500) — see docs/batch2d-stepH1.md
+         [21-Sep-2026 09:11:03 UTC] PHP Fatal error:  Cannot redeclare sinofresh_formula_faq_data() (previously declared in /var/www/dev.zxpet.com/public/wp-content/them
+
+==============================================================================
+wp-content/debug.log
+  does not exist  [OK  ]
+
+==============================================================================
+VERDICT
+==============================================================================
+  lines inside the window, anywhere           : 0 required
+  lines cleared by attribution                : 134
+  lines allowed as documented exceptions      : 53
+      2026-09-21 03:38:30  batch H1, not H2a: our authenticated /wp-settings.php probe — see docs/batch2d-stepH1.md
+      2026-09-21 09:10:58  batch H1, not H2a: the preflight-copy redeclare burst (same-second 500s with user sfdev, curl/8.7.1) — see docs/batch2d-stepH1.md
+      2026-09-21 09:10:59  batch H1, not H2a: the preflight-copy redeclare burst (user sfdev, curl/8.7.1, 500) — see docs/batch2d-stepH1.md
+      2026-09-21 09:11:00  batch H1, not H2a: the preflight-copy redeclare burst (user sfdev, curl/8.7.1, 500) — see docs/batch2d-stepH1.md
+      2026-09-21 09:11:01  batch H1, not H2a: the preflight-copy redeclare burst (user sfdev, curl/8.7.1, 500) — see docs/batch2d-stepH1.md
+      2026-09-21 09:11:02  batch H1, not H2a: the preflight-copy redeclare burst (user sfdev, curl/8.7.1, 500) — see docs/batch2d-stepH1.md
+      2026-09-21 09:11:03  batch H1, not H2a: the preflight-copy redeclare burst (user sfdev, curl/8.7.1, 500) — see docs/batch2d-stepH1.md
+      2026-09-21 14:45:23  batch H1, not H2a: MaxRequestWorkers while H1 pulled its 75 pages concurrently — see docs/batch2d-stepH1.md
+      2026-09-21 21:38:52  ours: agent-browser's first GET / before its Authorization header attached (access row: user sfdev, status 401, UA HeadlessChrome/153)
+      2026-09-21 21:38:53  ours: the same pre-header probe under the iPhone-UA emulation (access row: user sfdev, 401)
+      2026-09-21 21:41:01  ours: our own cookie-banner probe GET /formulas/calming-soft-chews/?sfcap=cookieprobe — 401 before the header attached
+      2026-09-21 21:41:27  ours: the same probe as ?sfcap=cookieprobe2 (Apache wrote one request as two 401 rows)
+      2026-09-21 22:05:51  ours: our ssh-side curl probe that fed base64(credentials) where curl wants user:pass — the access row's user field is literally that base64 blob, status 401, curl/7.76.1
+      2026-09-21 22:11:01  ours: the same base64-as-username probe (curl/7.76.1, 401)
+      2026-09-21 22:11:10  ours: the same base64-as-username probe (curl/7.76.1, 401)
+      2026-09-21 22:12:34  third party: DuckAssistBot denied by the lockdown (access row: user -, status 403) — inside our window, never ours
+  lines that could NOT be cleared             : 0
+
+AUDIT PASSED — every line attributable, none ours, none in window

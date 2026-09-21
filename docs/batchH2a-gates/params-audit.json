@@ -1,0 +1,442 @@
+[
+  {
+    "id": 158,
+    "form": "soft-chews",
+    "url": "https://dev.zxpet.com/formulas/joint-support-soft-chews/",
+    "rows": 6,
+    "labels": [
+      "Piece Weight",
+      "Pack Size",
+      "Shelf life",
+      "Packaging",
+      "Certifications",
+      "Lead time"
+    ],
+    "values": {
+      "Piece Weight": "2g/piece",
+      "Pack Size": "60/90/120 per bottle",
+      "Shelf life": "18 months shelf life",
+      "Packaging": "Aluminum Stand-up Pouch, Aluminum Foil Pouch with Zipper, Plastic Bottle, Jar, Blister Pack, Box + Foil, or custom forma",
+      "Certifications": "FDA cGMP ISO 9001 FSSC 22000 HACCP BRC",
+      "Lead time": "Typically 7–15 working days after packaging is ready"
+    }
+  },
+  {
+    "id": 159,
+    "form": "soft-chews",
+    "url": "https://dev.zxpet.com/formulas/calming-soft-chews/",
+    "rows": 6,
+    "labels": [
+      "Piece Weight",
+      "Pack Size",
+      "Shelf life",
+      "Packaging",
+      "Certifications",
+      "Lead time"
+    ],
+    "values": {
+      "Piece Weight": "2g/piece",
+      "Pack Size": "60/90/120 per bottle",
+      "Shelf life": "18 months shelf life",
+      "Packaging": "Aluminum Stand-up Pouch, Aluminum Foil Pouch with Zipper, Plastic Bottle, Jar, Blister Pack, Box + Foil, or custom forma",
+      "Certifications": "FDA cGMP ISO 9001 FSSC 22000 HACCP BRC",
+      "Lead time": "Typically 7–15 working days after packaging is ready"
+    }
+  },
+  {
+    "id": 160,
+    "form": "soft-chews",
+    "url": "https://dev.zxpet.com/formulas/digestive-soft-chews/",
+    "rows": 6,
+    "labels": [
+      "Piece Weight",
+      "Pack Size",
+      "Shelf life",
+      "Packaging",
+      "Certifications",
+      "Lead time"
+    ],
+    "values": {
+      "Piece Weight": "2g/piece",
+      "Pack Size": "60/90/120 per bottle",
+      "Shelf life": "18 months shelf life",
+      "Packaging": "Aluminum Stand-up Pouch, Aluminum Foil Pouch with Zipper, Plastic Bottle, Jar, Blister Pack, Box + Foil, or custom forma",
+      "Certifications": "FDA cGMP ISO 9001 FSSC 22000 HACCP BRC",
+      "Lead time": "Typically 7–15 working days after packaging is ready"
+    }
+  },
+  {
+    "id": 161,
+    "form": "soft-chews",
+    "url": "https://dev.zxpet.com/formulas/skin-coat-soft-chews/",
+    "rows": 6,
+    "labels": [
+      "Piece Weight",
+      "Pack Size",
+      "Shelf life",
+      "Packaging",
+      "Certifications",
+      "Lead time"
+    ],
+    "values": {
+      "Piece Weight": "2g/piece",
+      "Pack Size": "60/90/120 per bottle",
+      "Shelf life": "18 months shelf life",
+      "Packaging": "Aluminum Stand-up Pouch, Aluminum Foil Pouch with Zipper, Plastic Bottle, Jar, Blister Pack, Box + Foil, or custom forma",
+      "Certifications": "FDA cGMP ISO 9001 FSSC 22000 HACCP BRC",
+      "Lead time": "Typically 7–15 working days after packaging is ready"
+    }
+  },
+  {
+    "id": 162,
+    "form": "tablets",
+    "url": "https://dev.zxpet.com/formulas/joint-support-tablets/",
+    "rows": 6,
+    "labels": [
+      "Piece Weight",
+      "Pack Size",
+      "Shelf life",
+      "Packaging",
+      "Certifications",
+      "Lead time"
+    ],
+    "values": {
+      "Piece Weight": "1g/tablet",
+      "Pack Size": "60/120/180 per bottle",
+      "Shelf life": "24 months shelf life",
+      "Packaging": "Plastic Bottle, Jar, Blister Pack, Foil Pouch, or custom formats",
+      "Certifications": "FDA cGMP ISO 9001 FSSC 22000 HACCP BRC",
+      "Lead time": "Typically 7–15 working days after packaging is ready"
+    }
+  },
+  {
+    "id": 163,
+    "form": "tablets",
+    "url": "https://dev.zxpet.com/formulas/multivitamin-tablets/",
+    "rows": 6,
+    "labels": [
+      "Piece Weight",
+      "Pack Size",
+      "Shelf life",
+      "Packaging",
+      "Certifications",
+      "Lead time"
+    ],
+    "values": {
+      "Piece Weight": "1g/tablet",
+      "Pack Size": "60/120/180 per bottle",
+      "Shelf life": "24 months shelf life",
+      "Packaging": "Plastic Bottle, Jar, Blister Pack, Foil Pouch, or custom formats",
+      "Certifications": "FDA cGMP ISO 9001 FSSC 22000 HACCP BRC",
+      "Lead time": "Typically 7–15 working days after packaging is ready"
+    }
+  },
+  {
+    "id": 164,
+    "form": "tablets",
+    "url": "https://dev.zxpet.com/formulas/calcium-phosphorus-tablets/",
+    "rows": 6,
+    "labels": [
+      "Piece Weight",
+      "Pack Size",
+      "Shelf life",
+      "Packaging",
+      "Certifications",
+      "Lead time"
+    ],
+    "values": {
+      "Piece Weight": "1g/tablet",
+      "Pack Size": "60/120/180 per bottle",
+      "Shelf life": "24 months shelf life",
+      "Packaging": "Plastic Bottle, Jar, Blister Pack, Foil Pouch, or custom formats",
+      "Certifications": "FDA cGMP ISO 9001 FSSC 22000 HACCP BRC",
+      "Lead time": "Typically 7–15 working days after packaging is ready"
+    }
+  },
+  {
+    "id": 165,
+    "form": "powders",
+    "url": "https://dev.zxpet.com/formulas/probiotic-powder/",
+    "rows": 5,
+    "labels": [
+      "Piece Weight",
+      "Shelf life",
+      "Packaging",
+      "Certifications",
+      "Lead time"
+    ],
+    "values": {
+      "Piece Weight": "4oz/8oz/16oz jar",
+      "Shelf life": "24 months shelf life",
+      "Packaging": "Jar, Foil Pouch, Stand-up Pouch, or custom formats",
+      "Certifications": "FDA cGMP ISO 9001 FSSC 22000 HACCP BRC",
+      "Lead time": "Typically 7–15 working days after packaging is ready"
+    }
+  },
+  {
+    "id": 166,
+    "form": "powders",
+    "url": "https://dev.zxpet.com/formulas/pumpkin-digestive-powder/",
+    "rows": 5,
+    "labels": [
+      "Piece Weight",
+      "Shelf life",
+      "Packaging",
+      "Certifications",
+      "Lead time"
+    ],
+    "values": {
+      "Piece Weight": "4oz/8oz/16oz jar",
+      "Shelf life": "18 months shelf life",
+      "Packaging": "Jar, Foil Pouch, Stand-up Pouch, or custom formats",
+      "Certifications": "FDA cGMP ISO 9001 FSSC 22000 HACCP BRC",
+      "Lead time": "Typically 7–15 working days after packaging is ready"
+    }
+  },
+  {
+    "id": 167,
+    "form": "powders",
+    "url": "https://dev.zxpet.com/formulas/bladder-support-powder/",
+    "rows": 5,
+    "labels": [
+      "Piece Weight",
+      "Shelf life",
+      "Packaging",
+      "Certifications",
+      "Lead time"
+    ],
+    "values": {
+      "Piece Weight": "4oz/8oz/16oz jar",
+      "Shelf life": "24 months shelf life",
+      "Packaging": "Jar, Foil Pouch, Stand-up Pouch, or custom formats",
+      "Certifications": "FDA cGMP ISO 9001 FSSC 22000 HACCP BRC",
+      "Lead time": "Typically 7–15 working days after packaging is ready"
+    }
+  },
+  {
+    "id": 168,
+    "form": "pastes",
+    "url": "https://dev.zxpet.com/formulas/hairball-remedy-paste/",
+    "rows": 5,
+    "labels": [
+      "Piece Weight",
+      "Shelf life",
+      "Packaging",
+      "Certifications",
+      "Lead time"
+    ],
+    "values": {
+      "Piece Weight": "50g/60g/100g/120g tube",
+      "Shelf life": "24 months shelf life",
+      "Packaging": "Plastic Tube, Metal Tube, Aluminum Tube, or custom formats",
+      "Certifications": "FDA cGMP ISO 9001 FSSC 22000 HACCP BRC",
+      "Lead time": "Typically 7–15 working days after packaging is ready"
+    }
+  },
+  {
+    "id": 169,
+    "form": "pastes",
+    "url": "https://dev.zxpet.com/formulas/nutrition-paste/",
+    "rows": 5,
+    "labels": [
+      "Piece Weight",
+      "Shelf life",
+      "Packaging",
+      "Certifications",
+      "Lead time"
+    ],
+    "values": {
+      "Piece Weight": "50g/60g/100g/120g tube",
+      "Shelf life": "24 months shelf life",
+      "Packaging": "Plastic Tube, Metal Tube, Aluminum Tube, or custom formats",
+      "Certifications": "FDA cGMP ISO 9001 FSSC 22000 HACCP BRC",
+      "Lead time": "Typically 7–15 working days after packaging is ready"
+    }
+  },
+  {
+    "id": 170,
+    "form": "drops",
+    "url": "https://dev.zxpet.com/formulas/ear-care-drops/",
+    "rows": 5,
+    "labels": [
+      "Piece Weight",
+      "Shelf life",
+      "Packaging",
+      "Certifications",
+      "Lead time"
+    ],
+    "values": {
+      "Piece Weight": "30ml/50ml dropper bottle",
+      "Shelf life": "24 months shelf life",
+      "Packaging": "Dropper Bottle, Glass Bottle, Plastic Bottle, or custom formats",
+      "Certifications": "FDA cGMP ISO 9001 FSSC 22000 HACCP BRC",
+      "Lead time": "Typically 7–15 working days after packaging is ready"
+    }
+  },
+  {
+    "id": 171,
+    "form": "drops",
+    "url": "https://dev.zxpet.com/formulas/urinary-care-drops/",
+    "rows": 5,
+    "labels": [
+      "Piece Weight",
+      "Shelf life",
+      "Packaging",
+      "Certifications",
+      "Lead time"
+    ],
+    "values": {
+      "Piece Weight": "30ml/50ml dropper bottle",
+      "Shelf life": "24 months shelf life",
+      "Packaging": "Dropper Bottle, Glass Bottle, Plastic Bottle, or custom formats",
+      "Certifications": "FDA cGMP ISO 9001 FSSC 22000 HACCP BRC",
+      "Lead time": "Typically 7–15 working days after packaging is ready"
+    }
+  },
+  {
+    "id": 172,
+    "form": "liquids",
+    "url": "https://dev.zxpet.com/formulas/liquid-joint-support/",
+    "rows": 5,
+    "labels": [
+      "Piece Weight",
+      "Shelf life",
+      "Packaging",
+      "Certifications",
+      "Lead time"
+    ],
+    "values": {
+      "Piece Weight": "8oz/16oz/32oz pump bottle",
+      "Shelf life": "24 months shelf life",
+      "Packaging": "Plastic Bottle, Glass Bottle, Bottle with Cup, or custom formats",
+      "Certifications": "FDA cGMP ISO 9001 FSSC 22000 HACCP BRC",
+      "Lead time": "Typically 7–15 working days after packaging is ready"
+    }
+  },
+  {
+    "id": 173,
+    "form": "liquids",
+    "url": "https://dev.zxpet.com/formulas/liquid-skin-coat/",
+    "rows": 5,
+    "labels": [
+      "Piece Weight",
+      "Shelf life",
+      "Packaging",
+      "Certifications",
+      "Lead time"
+    ],
+    "values": {
+      "Piece Weight": "8oz/16oz/32oz pump bottle",
+      "Shelf life": "24 months shelf life",
+      "Packaging": "Plastic Bottle, Glass Bottle, Bottle with Cup, or custom formats",
+      "Certifications": "FDA cGMP ISO 9001 FSSC 22000 HACCP BRC",
+      "Lead time": "Typically 7–15 working days after packaging is ready"
+    }
+  },
+  {
+    "id": 174,
+    "form": "fish-oil",
+    "url": "https://dev.zxpet.com/formulas/wild-alaskan-salmon-oil/",
+    "rows": 5,
+    "labels": [
+      "Piece Weight",
+      "Shelf life",
+      "Packaging",
+      "Certifications",
+      "Lead time"
+    ],
+    "values": {
+      "Piece Weight": "8oz/16oz/32oz pump bottle",
+      "Shelf life": "24 months shelf life",
+      "Packaging": "Plastic Bottle, Glass Bottle, Pump Bottle, or custom formats",
+      "Certifications": "FDA cGMP ISO 9001 FSSC 22000 HACCP BRC",
+      "Lead time": "Typically 7–15 working days after packaging is ready"
+    }
+  },
+  {
+    "id": 175,
+    "form": "fish-oil",
+    "url": "https://dev.zxpet.com/formulas/pure-fish-oil-blend/",
+    "rows": 5,
+    "labels": [
+      "Piece Weight",
+      "Shelf life",
+      "Packaging",
+      "Certifications",
+      "Lead time"
+    ],
+    "values": {
+      "Piece Weight": "8oz/16oz/32oz pump bottle",
+      "Shelf life": "24 months shelf life",
+      "Packaging": "Plastic Bottle, Glass Bottle, Pump Bottle, or custom formats",
+      "Certifications": "FDA cGMP ISO 9001 FSSC 22000 HACCP BRC",
+      "Lead time": "Typically 7–15 working days after packaging is ready"
+    }
+  },
+  {
+    "id": 176,
+    "form": "dental-chews",
+    "url": "https://dev.zxpet.com/formulas/plaque-control-dental-chews/",
+    "rows": 6,
+    "labels": [
+      "Piece Weight",
+      "Pack Size",
+      "Shelf life",
+      "Packaging",
+      "Certifications",
+      "Lead time"
+    ],
+    "values": {
+      "Piece Weight": "15g/piece",
+      "Pack Size": "14/28/56 per bag",
+      "Shelf life": "18 months shelf life",
+      "Packaging": "Foil Pouch, Stand-up Pouch, Box, or custom formats",
+      "Certifications": "FDA cGMP ISO 9001 FSSC 22000 HACCP BRC",
+      "Lead time": "Typically 7–15 working days after packaging is ready"
+    }
+  },
+  {
+    "id": 177,
+    "form": "dental-chews",
+    "url": "https://dev.zxpet.com/formulas/oral-care-dental-sticks/",
+    "rows": 6,
+    "labels": [
+      "Piece Weight",
+      "Pack Size",
+      "Shelf life",
+      "Packaging",
+      "Certifications",
+      "Lead time"
+    ],
+    "values": {
+      "Piece Weight": "20g/piece",
+      "Pack Size": "7/14/28 per bag",
+      "Shelf life": "18 months shelf life",
+      "Packaging": "Foil Pouch, Stand-up Pouch, Box, or custom formats",
+      "Certifications": "FDA cGMP ISO 9001 FSSC 22000 HACCP BRC",
+      "Lead time": "Typically 7–15 working days after packaging is ready"
+    }
+  },
+  {
+    "id": 178,
+    "form": "dental-chews",
+    "url": "https://dev.zxpet.com/formulas/natural-cleaning-dental-sticks/",
+    "rows": 6,
+    "labels": [
+      "Piece Weight",
+      "Pack Size",
+      "Shelf life",
+      "Packaging",
+      "Certifications",
+      "Lead time"
+    ],
+    "values": {
+      "Piece Weight": "18g/piece",
+      "Pack Size": "7/14/28 per bag",
+      "Shelf life": "18 months shelf life",
+      "Packaging": "Foil Pouch, Stand-up Pouch, Box, or custom formats",
+      "Certifications": "FDA cGMP ISO 9001 FSSC 22000 HACCP BRC",
+      "Lead time": "Typically 7–15 working days after packaging is ready"
+    }
+  }
+]

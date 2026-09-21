@@ -1,0 +1,22 @@
+========================================================================
+Batch H2a gate — CANDIDATE
+========================================================================
+  ok   [1] base side: style token 2.10.54 on all 75 pages
+  ok   [1] candidate side: style token 2.10.55 on all 75 pages
+  ok   [1] formula-gallery 2.0.0 on all 42 detail pages, absent elsewhere
+  ok   [1] no admin asset is referenced by any front page
+  ok   [1] 33 stable pages: the only moved token is style.css 2.10.54 -> 2.10.55
+  ok   [1] candidate style.css served == working tree (sha d867e8827a22…)
+  ok   [2] exactly the 42 detail pages differ (21 en + 21 zh); 33 others identical
+  ok   [2] unfolded: all 75 differ, so the fold hides exactly the declared token
+  ok   [3] all 42 detail pages carry the 9 band markers and the band root
+  ok   [3] the old band namespace is gone from all 42 rendered pages
+  ok   [3] head/hero/Specification/FAQ/More/CTA/footer byte-identical on all 42 pages
+  ok   [3] the band itself differs on all 42 pages (the change is where it was declared)
+  ok   [4] all 6 candidate theme files match the server-side sha256 table
+  ok   [4] tokenizer: all 5 new functions at top level (depth 0)
+  ok   [5] FAQPage JSON-LD byte-identical on all 42 detail pages (one block each)
+  ok   [6] all 10 wiring assertions hold
+  ok   [6] the params shortcode rendered one populated list on all 42 pages
+------------------------------------------------------------------------
+VERDICT: PASS — all six gates hold

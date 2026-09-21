@@ -1,0 +1,35 @@
+band-reverted    FAIL [3] band markers missing on candidate pages: ['formulas__calming-soft-chews.html:sf-fdetail2__params']
+band-reverted    FAIL [6] the params list is not rendered exactly once on: ['formulas__calming-soft-chews.html']
+band-reverted  VERDICT: FAIL as required (2 finding(s))
+stray-byte-elsewhere    FAIL [2] diff set is wrong: 43 differ, expected 42; extra=['blog.html'] missing=[]
+stray-byte-elsewhere  VERDICT: FAIL as required (1 finding(s))
+detail-not-changed    FAIL [1] candidate style token is ['2.10.54', '2.10.55'], expected only 2.10.55 ({'2.10.54': ['formulas__calming-soft-chews.html']})
+detail-not-changed    FAIL [1] formula-gallery version wrong: ['formulas__calming-soft-chews.html want 2.0.0 got 1.0.0']
+detail-not-changed    FAIL [2] diff set is wrong: 41 differ, expected 42; extra=[] missing=['formulas__calming-soft-chews.html']
+detail-not-changed    FAIL [2] unfolded comparison differs on 74 pages (want 75: the token moved everywhere)
+detail-not-changed    FAIL [3] band markers missing on candidate pages: ['formulas__calming-soft-chews.html:sf-fdetail2', 'formulas__calming-soft-chews.html:sf-fdetail2__inner', 'formulas__calming-soft-chews.html:sf-fdetail2__media', 'formulas__calming-soft-chews.html:sf-fdetail2__side', 'formulas__calming-soft-chews.html:sf-fdetail2__intro']
+detail-not-changed    FAIL [3] batch G namespace still present (or absent from base): ['formulas__calming-soft-chews.html']
+detail-not-changed    FAIL [3] the band did not change on: ['formulas__calming-soft-chews.html']
+detail-not-changed    FAIL [6] the params list is not rendered exactly once on: ['formulas__calming-soft-chews.html']
+detail-not-changed  VERDICT: FAIL as required (8 finding(s))
+jsonld-drift    FAIL [3] region changed outside the band: ['zh__formulas__calming-soft-chews.html:doc-head']
+jsonld-drift    FAIL [5] FAQPage JSON-LD drifted on: ['zh__formulas__calming-soft-chews.html']
+jsonld-drift  VERDICT: FAIL as required (2 finding(s))
+intro-class-lost    FAIL [3] band markers missing on candidate pages: ['formulas__calming-soft-chews.html:sf-fdetail2__intro']
+intro-class-lost  VERDICT: FAIL as required (1 finding(s))
+style-ver-stale    FAIL [1] candidate style token is ['2.10.54', '2.10.55'], expected only 2.10.55 ({'2.10.54': ['formulas__calming-soft-chews.html']})
+style-ver-stale  VERDICT: FAIL as required (1 finding(s))
+admin-leak    FAIL [1] admin assets leak into front pages: ['blog.html']
+admin-leak    FAIL [1] undeclared version movement on 1 page(s): [('blog.html', [('style.css', '2.10.54', '2.10.55'), ('sf-mb.css', None, '1.0.0')])]
+admin-leak    FAIL [2] diff set is wrong: 43 differ, expected 42; extra=['blog.html'] missing=[]
+admin-leak  VERDICT: FAIL as required (3 finding(s))
+other-asset-ver-moved    FAIL [1] candidate style token is ['2.10.55', '9.9.9'], expected only 2.10.55 ({'9.9.9': ['blog.html']})
+other-asset-ver-moved    FAIL [1] undeclared version movement on 1 page(s): [('blog.html', [('style.css', '2.10.54', '9.9.9')])]
+other-asset-ver-moved  VERDICT: FAIL as required (2 finding(s))
+gallery-ver-stale    FAIL [1] formula-gallery version wrong: ['formulas__calming-soft-chews.html want 2.0.0 got 1.0.0']
+gallery-ver-stale  VERDICT: FAIL as required (1 finding(s))
+cta-lost    FAIL [3] band markers missing on candidate pages: ['formulas__calming-soft-chews.html:sf-fdetail2__cta']
+cta-lost  VERDICT: FAIL as required (1 finding(s))
+php-intro-reverted    FAIL [4] functions.php is not the file recorded off the server
+php-intro-reverted    FAIL [6] intro class emitted from PHP exactly once
+php-intro-reverted  VERDICT: FAIL as required (2 finding(s))

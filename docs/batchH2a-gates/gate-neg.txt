@@ -1,0 +1,23 @@
+========================================================================
+Batch H2a gate — NEGATIVE CONTROL
+========================================================================
+  ok   [1] base side: style token 2.10.54 on all 75 pages
+  ok   [1] no admin asset is referenced by any front page
+  ok   [3] head/hero/Specification/FAQ/More/CTA/footer byte-identical on all 42 pages
+  ok   [4] all 6 candidate theme files match the server-side sha256 table
+  ok   [4] tokenizer: all 5 new functions at top level (depth 0)
+  ok   [5] FAQPage JSON-LD byte-identical on all 42 detail pages (one block each)
+  FAIL [1] candidate style token is ['2.10.54'], expected only 2.10.55 ({'2.10.54': ['formulas__joint-support-tablets.html', 'products__soft-chews.html', 'formulas__multivitamin-tablets.html']})
+  FAIL [1] formula-gallery version wrong: ['formulas__joint-support-tablets.html want 2.0.0 got 1.0.0', 'formulas__multivitamin-tablets.html want 2.0.0 got 1.0.0', 'zh__formulas__calcium-phosphorus-tablets.html want 2.0.0 got 1.0.0']
+  FAIL [1] undeclared version movement on 33 page(s): [('products__soft-chews.html', []), ('root.html', [])]
+  FAIL [2] diff set is wrong: 0 differ, expected 42; extra=[] missing=['formulas__bladder-support-powder.html', 'formulas__calcium-phosphorus-tablets.html', 'formulas__calming-soft-chews.html', 'formulas__digestive-soft-chews.html']
+  FAIL [2] unfolded comparison differs on 0 pages (want 75: the token moved everywhere)
+  FAIL [3] band markers missing on candidate pages: ['formulas__bladder-support-powder.html:sf-fdetail2', 'formulas__bladder-support-powder.html:sf-fdetail2__inner', 'formulas__bladder-support-powder.html:sf-fdetail2__media', 'formulas__bladder-support-powder.html:sf-fdetail2__side', 'formulas__bladder-support-powder.html:sf-fdetail2__intro']
+  FAIL [3] batch G namespace still present (or absent from base): ['formulas__bladder-support-powder.html', 'formulas__calcium-phosphorus-tablets.html', 'formulas__calming-soft-chews.html', 'formulas__digestive-soft-chews.html', 'formulas__ear-care-drops.html']
+  FAIL [3] the band did not change on: ['formulas__bladder-support-powder.html', 'formulas__calcium-phosphorus-tablets.html', 'formulas__calming-soft-chews.html', 'formulas__digestive-soft-chews.html', 'formulas__ear-care-drops.html']
+  FAIL [6] intro class emitted from PHP exactly once
+  FAIL [6] intro class defined in CSS exactly once
+  FAIL [6] params list defined in CSS exactly once
+  FAIL [6] the params list is not rendered exactly once on: ['formulas__bladder-support-powder.html', 'formulas__calcium-phosphorus-tablets.html', 'formulas__calming-soft-chews.html', 'formulas__digestive-soft-chews.html', 'formulas__ear-care-drops.html']
+------------------------------------------------------------------------
+VERDICT: FAIL as required (12 finding(s))
