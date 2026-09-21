@@ -71,6 +71,22 @@
 <!-- wp:html -->
 [sf_formula_detail_composition]
 <!-- /wp:html -->
+<!-- Batch C: the formula FAQ. The accordion is emitted by the FAQ shortcode
+     in the core/html block below, so the nine answers can carry this record's
+     own values and the FAQPage schema can read the same function instead of
+     scanning this file for a details pair. sf-fdetail is on the section only
+     for its <=768px inset; the .sf-faq class comes from the div the shortcode
+     returns, which is what style.css 13 and 31a both key on. -->
+<!-- wp:group {"tagName":"section","className":"sf-fdetail sf-fdetail-faq","backgroundColor":"card-white","layout":{"type":"constrained"},"style":{"spacing":{"padding":{"top":"var:preset|spacing|80","bottom":"var:preset|spacing|80"}}}} -->
+<section class="wp-block-group sf-fdetail sf-fdetail-faq has-card-white-background-color has-background" style="padding-top:var(--wp--preset--spacing--80);padding-bottom:var(--wp--preset--spacing--80)">
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Frequently Asked Questions</h2>
+<!-- /wp:heading -->
+<!-- wp:html -->
+[sf_formula_faq]
+<!-- /wp:html -->
+</section>
+<!-- /wp:group -->
 
 <!-- Block 4: related formulas -->
 <!-- wp:group {"tagName":"section","className":"sf-fdetail-more","backgroundColor":"bg-light","layout":{"type":"constrained"},"style":{"spacing":{"padding":{"top":"var:preset|spacing|80","bottom":"var:preset|spacing|80"}}}} -->

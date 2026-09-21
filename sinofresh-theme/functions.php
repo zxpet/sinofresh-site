@@ -803,6 +803,239 @@ function sinofresh_formula_intro($post_id = 0) {
 			$text .= ' Lead time: ' . $lead . '.';
 		}
 	}
+/**
+ * The nine question/answer pairs of a formula's FAQ band (batch C).
+ *
+ * The dosage pages answer "what about this dosage form"; this band answers
+ * "what about THIS formula", so it is a different set of nine. Where the two
+ * overlap they share the wording, not merely the meaning: the sampling fee and
+ * turnaround, the certification list and the confidentiality promise are the
+ * sentences /faq/ already publishes, so the site cannot end up contradicting
+ * itself about its own commercial terms.
+ *
+ * Three answers carry a value, and each value is read from the single source
+ * the rest of the page already reads:
+ *
+ *   Certifications      the dosage page's .sf-facts-mini row, through
+ *                       sinofresh_formula_spec_cell() — the {{FORMULA_META}}
+ *                       source, not a second copy
+ *   Packaging formats   the same row (batch G's fourth item)
+ *   the record's title  get_the_title()
+ *
+ * A value that cannot be resolved drops its clause instead of printing an
+ * empty label, the rule {{FORMULA_META}} and sinofresh_formula_intro() follow.
+ * That is why the packaging answer is written as an optional LEADING sentence:
+ * it has to read as finished with and without the value.
+ *
+ * sf_formula_faq (post meta) overrides the whole set when it parses to two or
+ * more usable pairs. The format is plain text because the slot is edited by
+ * hand in wp-admin, one question line with its answer under it, repeated:
+ *
+ *   Q: question
+ *   A: answer, continued on following lines until the next Q:
+ *
+ * A malformed override falls back to the generated set rather than shipping a
+ * half-empty accordion, and says so in the PHP error log. Like
+ * sf_formula_intro this key is deliberately left unregistered: the record type
+ * supports custom-fields, which is the same editing route the intro uses.
+ *
+ * Returns RAW (decoded) text, never HTML. sinofresh_formula_faq() escapes it
+ * for the page and the FAQPage generator takes it verbatim, which is what
+ * keeps the structured data free of HTML entities — and both readers share
+ * this one function, so the accordion and the schema cannot drift apart.
+ */
+function sinofresh_formula_faq_data($post_id = 0) {
+	$post_id = (int) $post_id;
+	if ($post_id <= 0) {
+		$post_id = (int) get_queried_object_id();
+	}
+	if ($post_id <= 0 || get_post_type($post_id) !== 'sf_formula') {
+		return array();
+	}
+
+	/* Whole-set override. Answers may run over several lines; a line that is
+	   neither Q: nor A: continues the answer it is under, and a Q: with no
+	   answer at all is dropped rather than shipped as an empty <details>. */
+	$raw = (string) get_post_meta($post_id, 'sf_formula_faq', true);
+	if (trim($raw) !== '') {
+		$pairs    = array();
+		$question = '';
+		$answer   = array();
+		foreach (preg_split('/\R/u', $raw) as $line) {
+			$line = trim((string) $line);
+			if ($line === '') {
+				continue;
+			}
+			if (preg_match('/^Q\s*:\s*(.+)$/iu', $line, $m)) {
+				if ($question !== '' && $answer) {
+					$pairs[] = array('q' => $question, 'a' => implode(' ', $answer));
+				}
+				$question = trim($m[1]);
+				$answer   = array();
+				continue;
+			}
+			if (preg_match('/^A\s*:\s*(.+)$/iu', $line, $m)) {
+				$answer[] = trim($m[1]);
+				continue;
+			}
+			if ($question !== '' && $answer) {
+				$answer[] = $line;
+			}
+		}
+		if ($question !== '' && $answer) {
+			$pairs[] = array('q' => $question, 'a' => implode(' ', $answer));
+		}
+		if (count($pairs) >= 2) {
+			return $pairs;
+		}
+		error_log(sprintf(
+			'[sinofresh] sf_formula_faq: post %d override parsed to %d pair(s), '
+			. 'below the two a FAQPage needs; using the generated set.',
+			$post_id, count($pairs)
+		));
+	}
+
+	$name = trim(wp_strip_all_tags((string) get_the_title($post_id)));
+	$form_slug  = '';
+	$form_terms = wp_get_post_terms($post_id, 'sf_formula_form');
+	if (!is_wp_error($form_terms) && $form_terms) {
+		$form_slug = (string) $form_terms[0]->slug;
+	}
+	$certs = $form_slug !== '' ? sinofresh_formula_spec_cell($form_slug, 'Certifications') : '';
+	$pack  = $form_slug !== '' ? sinofresh_formula_spec_cell($form_slug, 'Packaging formats') : '';
+
+	$pairs = array();
+
+	$pairs[] = array(
+		'q' => 'Can the active ingredients be changed?',
+		'a' => 'Yes. This is a starting point rather than a fixed recipe: we can adjust the '
+		     . 'levels, swap one active for another, or add new ones, and the specification '
+		     . 'and the label are rewritten to match.',
+	);
+
+	$pairs[] = array(
+		'q' => 'Can the flavour be changed?',
+		'a' => 'Yes. The flavour profile is chosen with you for your target market, including '
+		     . 'a profile you already sell.',
+	);
+
+	$pairs[] = array(
+		'q' => 'Is a gluten-free or grain-free version available?',
+		'a' => 'Yes. Wheat, gluten and grain carriers can be left out of the recipe, and the '
+		     . 'change is recorded in the specification and in the Certificate of Analysis.',
+	);
+
+	$pairs[] = array(
+		'q' => 'Is this formula for dogs or for cats?',
+		'a' => 'Our formulas can be customised for dogs, cats, or both. Tell us your target '
+		     . 'species when you enquire and we will adjust the formula, the dosage, and the '
+		     . 'label accordingly.',
+	);
+
+	$pairs[] = array(
+		'q' => 'Can I sample this formula before ordering?',
+		'a' => 'Yes. The sample is made to the same specification as the bulk order: sampling '
+		     . 'takes 3–7 working days for a standard formula, and the $200 sampling fee '
+		     . 'is deducted from your bulk order.',
+	);
+
+	$answer = '';
+	if ($certs !== '') {
+		$answer .= 'Certifications: ' . $certs . '. ';
+	}
+	$answer .= 'Every batch is tested in our QC laboratory and ships with a Certificate of '
+	         . 'Analysis, and we support FDA, EU and other target-market documentation.';
+	$pairs[] = array(
+		'q' => 'What certifications and documentation do you provide?',
+		'a' => $answer,
+	);
+
+	$answer = '';
+	if ($pack !== '') {
+		$answer .= 'Standard formats for this dosage form: ' . $pack . '. ';
+	}
+	$answer .= 'The label, the carton and the barcode are all produced with your own brand '
+	         . 'on them.';
+	$pairs[] = array(
+		'q' => 'Can the packaging and the label be customised?',
+		'a' => $answer,
+	);
+
+	$pairs[] = array(
+		'q' => 'How should the finished product be stored?',
+		'a' => 'Store in a cool, dry place, away from direct sunlight. Once opened, keep the '
+		     . 'container tightly closed and use within the recommended period.',
+	);
+
+	$pairs[] = array(
+		'q' => 'Will you keep my formula and my brand confidential?',
+		'a' => 'Yes — every formula is produced exclusively under your own brand. We never '
+		     . 'sell your formula, your artwork, or your customer list to any third party, '
+		     . 'and we sign an NDA before sharing any custom formulation details.',
+	);
+
+	return $pairs;
+}
+
+/**
+ * [sf_formula_faq] — the accordion itself, inside the template's core/html
+ * block (batch C).
+ *
+ * The <details> sequence is built here rather than written as core/details
+ * blocks in the template for the same reason every other dynamic band on this
+ * page is: a block template runs do_shortcode() before do_blocks(), so a
+ * {{placeholder}} in a block cannot be resolved, while a shortcode reads the
+ * record at render time. It also means the nine answers exist once, in
+ * sinofresh_formula_faq_data(), and both the page and the FAQPage schema read
+ * that one copy instead of two implementations that can disagree.
+ *
+ * The markup is the dosage pages' own vocabulary — .sf-faq, .sf-faq__item,
+ * .sf-faq__icon, wp-block-heading on the question, has-text-secondary-color on
+ * the answer — so style.css needs no new rule and the two accordions cannot
+ * look different. The first item ships open, as it does there, and the whole
+ * sequence is one line: the band is a shortcode, so the renderer's newline
+ * arithmetic has nothing to do here.
+ *
+ * Returns '' outside a formula, and '' if every pair is unusable, so nothing
+ * empty is emitted. On a real record the generated set is never empty, so the
+ * template's core heading always has an accordion under it.
+ */
+function sinofresh_formula_faq($post_id = 0) {
+	$pairs = sinofresh_formula_faq_data($post_id);
+	if (!$pairs) {
+		return '';
+	}
+	$html  = '';
+	$first = true;
+	foreach ($pairs as $pair) {
+		$question = trim((string) $pair['q']);
+		$answer   = trim((string) $pair['a']);
+		if ($question === '' || $answer === '') {
+			continue;
+		}
+		$html .= sprintf(
+			'<details class="wp-block-details sf-faq__item"%s>'
+			. '<summary><h3 class="wp-block-heading">%s</h3>'
+			. '<span class="sf-faq__icon" aria-hidden="true"></span></summary>'
+			. '<p class="has-text-secondary-color has-text-color">%s</p></details>',
+			$first ? ' open' : '',
+			esc_html($question),
+			esc_html($answer)
+		);
+		$first = false;
+	}
+	if ($html === '') {
+		return '';
+	}
+	return '<div class="sf-faq">' . $html . '</div>';
+}
+/* WP hands a shortcode callback its attribute array as the first argument, so
+   the id is never read from it: the band only ever renders on the record being
+   viewed. */
+add_shortcode('sf_formula_faq', function() {
+	return sinofresh_formula_faq();
+});
+
 	return $text;
 }
 
@@ -2800,6 +3033,42 @@ add_action('wp_head', function() {
 	}
 	// If an SEO plugin that emits FAQPage schema is ever installed, stand down.
 	if (class_exists('RankMath') || defined('WPSEO_VERSION') || defined('RANK_MATH_VERSION')) {
+		return;
+	}
+
+	/* Batch C: the formula detail page's accordion is generated by the
+	   [sf_formula_faq] shortcode inside a core/html block, so the template
+	   file holds no <details> pair to find — and its {{TITLE}} and
+	   {{FORM_CRUMB}} tokens would be read as literal text. The pairs therefore
+	   come from the same function the visible block renders from, which is the
+	   only arrangement in which the page and the schema cannot disagree. */
+	if (is_singular('sf_formula')) {
+		$entities = array();
+		foreach (sinofresh_formula_faq_data((int) get_queried_object_id()) as $pair) {
+			$question = trim((string) $pair['q']);
+			$answer   = trim((string) $pair['a']);
+			if ($question === '' || $answer === '') {
+				continue;
+			}
+			$entities[] = array(
+				'@type'          => 'Question',
+				'name'           => $question,
+				'acceptedAnswer' => array(
+					'@type' => 'Answer',
+					'text'  => $answer,
+				),
+			);
+		}
+		if (count($entities) >= 2) {
+			$schema = array(
+				'@context'   => 'https://schema.org',
+				'@type'      => 'FAQPage',
+				'mainEntity' => $entities,
+			);
+			echo "\n" . '<script type="application/ld+json">'
+				. wp_json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE)
+				. "</script>\n";
+		}
 		return;
 	}
 
