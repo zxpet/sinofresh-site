@@ -455,7 +455,8 @@ def main():
         for r in theirs:
             by_status[r[4]] = by_status.get(r[4], 0) + 1
         print("        status mix: %s"
-              % ", ".join("%s=%d" % kv for kv in sorted(by_status.items())))
+              % ", ".join("%s=%d" % kv for kv in sorted(by_status.items(),
+                                                       key=lambda kv: (kv[0] is None, kv[0] or "", kv[1]))))
         notdenied = [r for r in theirs if r[2] and r[4] != "401"]
         print("        not-ours lines that were NOT denied (i.e. reached PHP): %d"
               % len(notdenied))
