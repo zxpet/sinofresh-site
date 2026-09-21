@@ -1,0 +1,22 @@
+tracked files            : 1289
+excluded (both sides)    : 1  (docs/b2d-stepE-shots/cloud-md5.txt)
+compared                 : 1288
+hashed locally           : 1288  (unreadable: 0)
+hashed on the dev box    : 1288
+non-ASCII paths          : 13
+   sinofresh-theme/docs/官网开发文档-全文.md                    matched
+   sinofresh-theme/docs/视觉重设计方案-v2.md                   matched
+   sinofresh-theme/screenshots/batch1-step2-hero/s2-liquids-1440-Hero特写.png matched
+   sinofresh-theme/screenshots/batch1-step2-hero/s2-liquids-1440-首屏-标注.png matched
+   sinofresh-theme/screenshots/batch1-step2-hero/s2-liquids-1440-首屏.png matched
+   sinofresh-theme/screenshots/batch1-step2-hero/s2-liquids-375-首屏-标注.png matched
+   sinofresh-theme/screenshots/batch1-step2-hero/s2-liquids-375-首屏.png matched
+   sinofresh-theme/screenshots/batch1-step2-hero/s2-soft-chews-1440-Hero特写.png matched
+   sinofresh-theme/screenshots/batch1-step2-hero/s2-soft-chews-1440-首屏-标注.png matched
+   sinofresh-theme/screenshots/batch1-step2-hero/s2-soft-chews-1440-首屏.png matched
+   sinofresh-theme/screenshots/batch1-step2-hero/s2-soft-chews-375-首屏-标注.png matched
+   sinofresh-theme/screenshots/batch1-step2-hero/s2-soft-chews-375-首屏.png matched
+   网站网址图标素材512-512.ai                                   matched
+mismatches               : 0
+
+PASS  1288 files, 0 mismatches
