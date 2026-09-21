@@ -81,12 +81,17 @@
 	}
 
 	/* The block editor's publish button and the classic submit button share
-	   no reliable class, so listen on the form and match by text. */
+	   no reliable class, so listen on the form and match by text. "Save" is
+	   in the set because WordPress 7.1 labels the block editor's button that
+	   way on an already-published post, which is the case for every formula:
+	   without it the banner never fired on the screen the editors actually
+	   use. The server-side banner is the authority either way — this one is
+	   only the earlier of the two warnings. */
 	document.addEventListener('click', function (e) {
 		var btn = e.target.closest('button, input[type="submit"]');
 		if (!btn) { return; }
 		var text = (btn.textContent || btn.value || '').trim();
-		if (/^(Publish|Update)$/.test(text)) {
+		if (/^(Publish|Update|Save)$/.test(text)) {
 			onPublish();
 		}
 	});

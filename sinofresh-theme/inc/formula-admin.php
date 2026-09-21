@@ -504,7 +504,7 @@ add_action('admin_enqueue_scripts', function ($hook) {
 	wp_enqueue_style('sf-mb', $dir . '/assets/admin/sf-mb.css', array(), '1.0.0');
 	wp_enqueue_script('sf-mb-tables', $dir . '/assets/admin/sf-mb-tables.js', array(), '1.0.0', true);
 	if ($is_formula) {
-		wp_enqueue_script('sf-mb-precheck', $dir . '/assets/admin/sf-mb-precheck.js', array(), '1.0.0', true);
+		wp_enqueue_script('sf-mb-precheck', $dir . '/assets/admin/sf-mb-precheck.js', array(), '1.0.1', true);
 	}
 	if ($is_settings) {
 		wp_enqueue_media(); /* the Container Library picks images via wp.media */
