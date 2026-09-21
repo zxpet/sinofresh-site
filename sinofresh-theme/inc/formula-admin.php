@@ -307,27 +307,27 @@ add_action('save_post_sf_formula', function ($post_id) {
 		$key = $spec['key'];
 		switch ($spec['type']) {
 			case 'text':
-				update_post_meta($post_id, $key, sanitize_text_field(wp_unslash($_POST[$key] ?? '')));
+				sf_mb_store($post_id, $key, sanitize_text_field(wp_unslash($_POST[$key] ?? '')));
 				break;
 			case 'url':
-				update_post_meta($post_id, $key, esc_url_raw(wp_unslash($_POST[$key] ?? '')));
+				sf_mb_store($post_id, $key, esc_url_raw(wp_unslash($_POST[$key] ?? '')));
 				break;
 			case 'textarea':
-				update_post_meta($post_id, $key, sanitize_textarea_field(wp_unslash($_POST[$key] ?? '')));
+				sf_mb_store($post_id, $key, sanitize_textarea_field(wp_unslash($_POST[$key] ?? '')));
 				break;
 			case 'multi':
 				$in   = array_map('sanitize_text_field', (array) wp_unslash($_POST[$key] ?? array()));
 				$opts = sf_formula_mb_options($spec, $post_id);
-				update_post_meta($post_id, $key, wp_json_encode(array_values(array_intersect($opts, $in))));
+				sf_mb_store($post_id, $key, wp_json_encode(array_values(array_intersect($opts, $in))));
 				break;
 			case 'radio':
 				$in   = sanitize_text_field(wp_unslash($_POST[$key] ?? ''));
 				$opts = sf_formula_mb_options($spec, $post_id);
-				update_post_meta($post_id, $key, in_array($in, $opts, true) ? $in : '');
+				sf_mb_store($post_id, $key, in_array($in, $opts, true) ? $in : '');
 				break;
 			case 'gallery':
 				$ids = array_filter(array_map('absint', explode(',', (string) wp_unslash($_POST[$key] ?? ''))));
-				update_post_meta($post_id, $key, implode(',', $ids));
+				sf_mb_store($post_id, $key, implode(',', $ids));
 				break;
 			case 'table':
 				$cols  = array_keys($spec['cols']);
@@ -354,7 +354,7 @@ add_action('save_post_sf_formula', function ($post_id) {
 				 * corrupt the stored JSON — measured 2026-09-21 (an em dash came
 				 * back as a literal "u2014"). Store slash-slashed data with
 				 * unicode/slashes unescaped, as the core API expects. */
-				update_post_meta($post_id, $key, wp_slash(wp_json_encode(array_values($rows), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)));
+				sf_mb_store($post_id, $key, wp_slash(wp_json_encode(array_values($rows), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)));
 				break;
 			case 'faqtable':
 				$qs   = array_map('sanitize_text_field', (array) wp_unslash($_POST[$key]['q'] ?? array()));
@@ -368,7 +368,7 @@ add_action('save_post_sf_formula', function ($post_id) {
 						$rows[] = array('q' => $q, 'a' => $a);
 					}
 				}
-				update_post_meta($post_id, $key, wp_slash(wp_json_encode(array_values($rows), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)));
+				sf_mb_store($post_id, $key, wp_slash(wp_json_encode(array_values($rows), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)));
 				break;
 		}
 	}
@@ -377,6 +377,21 @@ add_action('save_post_sf_formula', function ($post_id) {
 /** FAQ answers are plain text plus <a href> — nothing else survives. */
 function sf_mb_kses_answer($v) {
 	return wp_kses((string) $v, array('a' => array('href' => array(), 'title' => array(), 'target' => array())));
+}
+
+/* "Empty means absent": a blank single value and an empty JSON shape delete
+ * the key instead of writing '', '[]'. The migration leaves 16 keys
+ * intentionally EMPTY for the sales team to fill; a first admin save must
+ * not pollute them (measured 2026-09-21: one save wrote '[]' into 7 keys,
+ * breaking the key-census invariant). Renderer behavior is unchanged —
+ * get_post_meta() returns '' for a missing key either way. */
+function sf_mb_store($post_id, $key, $value) {
+	$v = (string) $value;
+	if ($v === '' || $v === '[]') {
+		delete_post_meta($post_id, $key);
+		return;
+	}
+	update_post_meta($post_id, $key, $v);
 }
 
 /** Decode a stored JSON array; junk in, empty array out. */
