@@ -23,7 +23,7 @@ add_action('after_setup_theme', function() {
 });
 
 add_action('wp_enqueue_scripts', function() {
-	wp_enqueue_style('sinofresh-style', get_stylesheet_uri(), array(), '2.10.53');
+	wp_enqueue_style('sinofresh-style', get_stylesheet_uri(), array(), '2.10.54');
 	// Sticky nav: every template renders parts/header.html, so this is site-wide.
 	wp_enqueue_script('sinofresh-sticky-header', get_template_directory_uri() . '/assets/js/sticky-header.js', array(), '1.0.0', true);
 	wp_enqueue_script('sinofresh-ui-components', get_template_directory_uri() . '/assets/js/ui-components.js', array(), '1.0.0', true);
@@ -683,6 +683,127 @@ function sinofresh_formula_spec_cell($form, $label) {
 		$cache[$key] = html_entity_decode(trim(wp_strip_all_tags($m[1])), ENT_QUOTES, 'UTF-8');
 	}
 	return $cache[$key];
+}
+
+/**
+ * The three facts buried in a formula's one-line sf_formula_specs value.
+ *
+ * The meta is free text with " · " separators, and it is NOT uniform: ten
+ * records carry three segments (unit / pack / shelf life), eleven carry two
+ * (unit / combined pack-and-shelf-life), so a positional reader takes the
+ * shelf life as the pack options on those eleven. Fields are therefore taken
+ * by KEY REGEX, never by index:
+ *
+ *   shelf  the segment matching /\d+ months? shelf life/
+ *   pack   of what is left, the segment matching /\sper\s/
+ *   unit   the first segment that is left
+ *
+ * The pack pattern needs the surrounding whitespace. A bare /per (bottle|...)/ 
+ * also matches the "per bottle" inside "dropper bottle", measured on this data
+ * as two false positives out of twelve hits; /\sper\s/ gives the true ten.
+ *
+ * Returns '' for anything it cannot find, so callers drop the row rather than
+ * print an empty "Pack options". (Decision I: the eleven records without a
+ * pack segment show four rows, the ten with one show five. Substituting the
+ * packaging formats there would put container names under a quantity label.)
+ */
+function sinofresh_formula_specs_parts($specs) {
+	$parts = array('unit' => '', 'pack' => '', 'shelf' => '');
+	$specs = trim((string) $specs);
+	if ($specs === '') {
+		return $parts;
+	}
+	$segments = array();
+	foreach (explode('·', $specs) as $segment) {
+		$segment = trim($segment);
+		if ($segment !== '') {
+			$segments[] = $segment;
+		}
+	}
+	$rest = array();
+	foreach ($segments as $segment) {
+		if ($parts['shelf'] === '' && preg_match('/\d+\s*months?\s+shelf\s+life/i', $segment)) {
+			$parts['shelf'] = $segment;
+			continue;
+		}
+		$rest[] = $segment;
+	}
+	$unit = array();
+	foreach ($rest as $segment) {
+		if ($parts['pack'] === '' && preg_match('/\sper\s/i', $segment)) {
+			$parts['pack'] = $segment;
+			continue;
+		}
+		$unit[] = $segment;
+	}
+	if ($unit) {
+		$parts['unit'] = $unit[0];
+	}
+	return $parts;
+}
+
+/**
+ * The intro paragraph of a formula's media column.
+ *
+ * Same wording root as the Product schema's description on this page
+ * (wp_head, sf_formula Product): the first sentence is the same sentence, so
+ * the visible copy and the structured data cannot drift apart. It is not the
+ * same function on purpose — the schema generator's output is covered by the
+ * JSON-LD gate, which must stay at zero change, and a shared function would
+ * put this batch inside that path.
+ *
+ * sf_formula_intro (post meta) overrides the whole paragraph when set. That
+ * is the slot the 21 real product blurbs go into later; until then every
+ * record renders the template, which is why the template must read as a
+ * finished sentence rather than a stub.
+ *
+ * {moq} and {lead_time} are the dosage page's own values (spec_cell is the
+ * single source): a missing one drops its clause instead of printing an
+ * empty label, the same rule {{FORMULA_META}} follows. Both values are
+ * transcribed verbatim, so the sentence is built as "Label: value." rather
+ * than "a minimum order of {moq}" — the values already read as clauses
+ * ("from 500-1,000 units"), and glueing prepositions on would produce
+ * "a minimum order of from 500-1,000 units".
+ */
+function sinofresh_formula_intro($post_id = 0) {
+	$post_id = (int) $post_id;
+	if ($post_id <= 0) {
+		$post_id = (int) get_queried_object_id();
+	}
+	if ($post_id <= 0 || get_post_type($post_id) !== 'sf_formula') {
+		return '';
+	}
+	$override = trim((string) get_post_meta($post_id, 'sf_formula_intro', true));
+	if ($override !== '') {
+		return $override;
+	}
+	$name = html_entity_decode((string) get_the_title($post_id), ENT_QUOTES, 'UTF-8');
+	if ($name === '') {
+		return '';
+	}
+	$form_slug  = '';
+	$form_label = '';
+	$form_terms = wp_get_post_terms($post_id, 'sf_formula_form');
+	if (!is_wp_error($form_terms) && $form_terms) {
+		$form_slug  = (string) $form_terms[0]->slug;
+		$form_label = sinofresh_formula_label($form_terms[0]->slug, $form_terms[0]->name);
+	}
+	$text = $form_label !== ''
+		? sprintf('%s is a standard %s formula from the SINO FRESH OEM/ODM range for private-label pet supplements.', $name, $form_label)
+		: sprintf('%s is a standard formula from the SINO FRESH OEM/ODM range for private-label pet supplements.', $name);
+	$text .= ' Produced in a GMP-certified facility in Linyi, China and shipped with full documentation, '
+		. 'it is ready for your own brand.';
+	if ($form_slug !== '') {
+		$moq = sinofresh_formula_spec_cell($form_slug, 'MOQ');
+		if ($moq !== '') {
+			$text .= ' Minimum order quantity: ' . $moq . '.';
+		}
+		$lead = sinofresh_formula_spec_cell($form_slug, 'Lead time');
+		if ($lead !== '') {
+			$text .= ' Lead time: ' . $lead . '.';
+		}
+	}
+	return $text;
 }
 
 /**
@@ -1464,6 +1585,65 @@ function sinofresh_formula_detail() {
 	return '<div class="' . $grid_class . '">' . $cards . '</div>';
 }
 add_shortcode('sf_formula_detail', 'sinofresh_formula_detail');
+
+/**
+ * [sf_formula_factsheet] - the media column's five-row specification list.
+ *
+ * <dt>/<dd>, not the .sf-spec-term / .sf-spec-value <span> pair: that pair
+ * has two different readers in this theme (a visual one on <dt>/<dd>, and the
+ * K6 parser looking for adjacent spans), and emitting the pair here would put
+ * a second, richer source in front of the parser. A definition list is read
+ * by neither.
+ *
+ * Order and sources are fixed by the brief: Unit size / Pack options / Shelf
+ * life come out of the record's own sf_formula_specs, Certifications and
+ * Packaging out of the dosage page's .sf-facts-mini row (the same single
+ * source the hero meta reads). Rows with no value are omitted, so the eleven
+ * records without a pack segment render four rows and the ten with one render
+ * five; the band never prints a label with nothing after it.
+ */
+function sinofresh_formula_factsheet() {
+	if (!is_singular('sf_formula')) {
+		return '';
+	}
+	$post_id = (int) get_queried_object_id();
+	if ($post_id <= 0) {
+		return '';
+	}
+	$form_slug = '';
+	$form_terms = wp_get_post_terms($post_id, 'sf_formula_form');
+	if (!is_wp_error($form_terms) && $form_terms) {
+		$form_slug = (string) $form_terms[0]->slug;
+	}
+	$specs = trim((string) get_post_meta($post_id, 'sf_formula_specs', true));
+	$parts = sinofresh_formula_specs_parts($specs);
+	$certifications = $form_slug !== '' ? sinofresh_formula_spec_cell($form_slug, 'Certifications') : '';
+	$packaging      = $form_slug !== '' ? sinofresh_formula_spec_cell($form_slug, 'Packaging formats') : '';
+	$rows = array(
+		'Unit size'      => $parts['unit'],
+		'Pack options'   => $parts['pack'],
+		'Shelf life'     => $parts['shelf'],
+		'Certifications' => $certifications,
+		'Packaging'      => $packaging,
+	);
+	$html = '';
+	foreach ($rows as $label => $value) {
+		$value = trim((string) $value);
+		if ($value === '') {
+			continue;
+		}
+		$html .= sprintf(
+			'<dt class="sf-fdetail-media__term">%s</dt><dd class="sf-fdetail-media__value">%s</dd>',
+			esc_html($label),
+			esc_html($value)
+		);
+	}
+	if ($html === '') {
+		return '';
+	}
+	return '<dl class="sf-fdetail-media__facts">' . $html . '</dl>';
+}
+add_shortcode('sf_formula_factsheet', 'sinofresh_formula_factsheet');
 
 /**
  * [sf_formula_body] — the formula's own long-form copy (post_content).
@@ -2730,6 +2910,11 @@ add_action('wp_head', function() {
  *                        the two values come from the form's /products/<form>/
  *                        .sf-facts-mini row (sinofresh_formula_spec_cell).
  *                        Falls back to the form label alone, or to ''.
+ *   {{FORMULA_INTRO}}    formula detail pages only - the media column's intro
+ *                        paragraph, already wrapped in its own <p> (escaped
+ *                        HTML, not escaped text), resolved by
+ *                        sinofresh_formula_intro(); '' when it cannot be
+ *                        composed, which writes nothing at all
  *   {{LAST_UPDATED}}     "· Last updated: M j, Y" from the sf_last_reviewed
  *                        custom field, or '' when unset (only posts with a
  *                        real content review show the second date)
@@ -2793,6 +2978,7 @@ function sinofresh_template_placeholders($html) {
 	$form_slug  = '';
 	$formula_use = '';
 	$formula_meta = '';
+	$formula_intro = '';
 	if (is_singular('sf_formula')) {
 		$formula_id = (int) get_queried_object_id();
 		$form_terms = wp_get_post_terms($formula_id, 'sf_formula_form');
@@ -2823,6 +3009,14 @@ function sinofresh_template_placeholders($html) {
 			}
 		}
 		$formula_meta = implode(' · ', $meta_bits);
+		/* Batch G: the media column's intro. Wrapped in its <p> here,
+		   which is why the map entry below is escaped HTML and not
+		   escaped text like {{FORMULA_META}}. Empty stays empty: no
+		   empty <p> is written. */
+		$intro = sinofresh_formula_intro($formula_id);
+		if ($intro !== '') {
+			$formula_intro = '<p class="sf-fdetail-media__intro">' . esc_html($intro) . '</p>';
+		}
 	}
 	$map = array(
 		'{{TITLE}}'           => esc_html($title),
@@ -2835,6 +3029,7 @@ function sinofresh_template_placeholders($html) {
 		/* Verbatim, not esc_html: see the docblock and the 2B Stage1 pit. */
 		'{{FORMULA_USE}}'     => $formula_use,
 		'{{FORMULA_META}}'    => esc_html($formula_meta),
+		'{{FORMULA_INTRO}}'   => $formula_intro,
 		'{{LAST_UPDATED}}'    => esc_html($last),
 		'{{SHARE_URL}}'       => esc_url($permalink),
 		'{{SHARE_URL_ENC}}'   => rawurlencode($permalink),

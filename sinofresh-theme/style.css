@@ -2,7 +2,7 @@
 Theme Name: SINO FRESH
 Author: Shandong SINO FRESH Pet Food Co., Ltd.
 Text Domain: sinofresh
-Version: 2.10.53
+Version: 2.10.54
 Requires at least: 6.0
 Requires PHP: 7.4
 License: GNU General Public License v2 or later
@@ -8322,5 +8322,104 @@ body.sf-certmodal-lock {
 	}
 	.sf-facts-mini__item:last-child {
 		border-bottom: 0;
+	}
+}
+
+/* G — formula detail: media + facts, two columns.
+
+   The gallery stops being a full-width band and becomes the left column of a
+   3fr/2fr grid, with the intro, the five-row factsheet and the sample CTA in
+   the right column. Layout only: the four slides, the #gallery anchor and
+   its h2 are untouched, and the dot rail still counts the same five h2 (four
+   dots) it counted before.
+
+   minmax(0, ...) on both tracks is load-bearing, not tidiness: the packaging
+   value is a 124-character list, and a bare 3fr track refuses to shrink below
+   its content, so the two columns would push the page into horizontal scroll
+   at every width where the value does not wrap on its own.
+
+   Every rule stays inside the .sf-fdetail-media namespace. No !important
+   anywhere except the one core override below, which needs it for the reason
+   written there. ------------------------------------------------------------ */
+.sf-fdetail-media__inner {
+	display: grid;
+	grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+	gap: 48px;
+	align-items: start;
+}
+/* core gives every .is-layout-flow child after the first a 24px block-gap
+   margin (":root :where(.is-layout-flow) > *"). In a grid row that lands on
+   the aside and drops the right column 24px below the left one. The gap is
+   the grid's job here, so the margins go. */
+.sf-fdetail-media__inner > * {
+	margin-block-start: 0;
+}
+/* .sf-gallery__stage was written for a full-width band: 680px wide and
+   auto-centred. Inside the 3fr column that is a narrow box floating in the
+   middle of its own column. Widened to the column and pinned left; its
+   aspect-ratio (1/1) keeps the height arithmetic exactly as it was. */
+.sf-fdetail-media__left .sf-gallery__stage {
+	max-width: none;
+	margin-inline: 0;
+}
+.sf-fdetail-media__side {
+	min-width: 0;
+}
+.sf-fdetail-media__intro {
+	margin: 0 0 24px;
+	font-size: 15px;
+	line-height: 1.6;
+	color: var(--wp--preset--color--text-primary);
+}
+/* Two columns of a grid, not a table: the terms size to their own text so
+   the five values start on one x, whatever the longest term is. Voice copied
+   from .sf-facts-mini — 11px letterspaced muted label, ink value. */
+.sf-fdetail-media__facts {
+	display: grid;
+	grid-template-columns: auto minmax(0, 1fr);
+	gap: 10px 16px;
+	margin: 0 0 28px;
+}
+.sf-fdetail-media__term {
+	margin: 0;
+	font-size: 11px;
+	font-weight: 700;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: var(--wp--preset--color--text-secondary);
+	white-space: nowrap;
+}
+.sf-fdetail-media__value {
+	margin: 0;
+	font-size: 14px;
+	line-height: 1.5;
+	color: var(--wp--preset--color--text-primary);
+}
+/* Same orange as the page's closing "Request a Quote": two call-to-action
+   buttons on one page that looked different would read as two different
+   kinds of action. */
+.sf-fdetail-media__cta {
+	display: inline-block;
+	padding: 12px 24px;
+	border-radius: 6px;
+	background: var(--wp--preset--color--cta);
+	color: var(--wp--preset--color--card-white);
+	font-size: 15px;
+	font-weight: 600;
+	text-decoration: none;
+	transition: background-color 0.2s ease;
+}
+.sf-fdetail-media__cta:hover,
+.sf-fdetail-media__cta:focus-visible {
+	background: var(--wp--preset--color--cta-hover);
+	color: var(--wp--preset--color--card-white);
+}
+/* <=768px (the site's main breakpoint): one column, gallery first, facts
+   under it. 32px because the desktop 48px is a column gap, not a section
+   gap, and the band's own padding still supplies the outer rhythm. */
+@media (max-width: 768px) {
+	.sf-fdetail-media__inner {
+		grid-template-columns: minmax(0, 1fr);
+		gap: 32px;
 	}
 }
