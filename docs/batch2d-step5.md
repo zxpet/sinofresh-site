@@ -288,5 +288,8 @@ band left edge 120 = 页面度量左缘
   根因是「从 macOS 拷贝时没排除」未修；已在 `docs/batch2d-step5.md` §5 记账）
 - `composer.phar/json/lock` 已移出 web 根到 `/var/www/dev.zxpet.com/_offroot/`
   （记账非待办）；若将来要在 wp-content 下跑 composer，从这里拷回去即可
-- 未评估：`wp-content/vendor/` 里 649 个文件同样在 web 根下（运行时**必须**在，不能移）；
-  是否需要给 `wp-content/vendor` 加一条 Apache `<Directory>` 拒绝直访，属独立安全批次
+- `wp-content/vendor/` **已扫描，无发现、无需动作**：649 文件＝546 PHP ＋ 21 sourcemap ＋ 14 json ＋
+  字体 38 ＋ 13 md；**零敏感物**（无 `.pem`/`.key`/`*credential*`/`.env`/`.sql`/`.db`/`.log`，
+  PHP 里也无凭据字面量），直访库文件 401 ⇒ **没有暴露面要关**。
+  给它加 Apache 拒绝直访只是装饰性硬化（且要在同机生产站存在的前提下保证只作用于 dev vhost），
+  收益近零、成本是改共享机配置 ⇒ **不做**。将来若 Composer 装进带密钥的库再复查。
