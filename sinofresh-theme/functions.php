@@ -803,6 +803,9 @@ function sinofresh_formula_intro($post_id = 0) {
 			$text .= ' Lead time: ' . $lead . '.';
 		}
 	}
+	return $text;
+}
+
 /**
  * The nine question/answer pairs of a formula's FAQ band (batch C).
  *
@@ -1035,9 +1038,6 @@ function sinofresh_formula_faq($post_id = 0) {
 add_shortcode('sf_formula_faq', function() {
 	return sinofresh_formula_faq();
 });
-
-	return $text;
-}
 
 /**
  * wp_json_encode() for the body of an inline <script>.

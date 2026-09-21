@@ -35,6 +35,7 @@ usage:
 """
 import argparse
 import os
+import re
 import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -43,13 +44,24 @@ TPL = os.path.join(THEME, 'templates')
 
 
 # --- part: php ------------------------------------------------------------
-# intro()'s tail plus the docblock that follows it: the insertion point sits
-# between them, and `return $text;` occurs exactly once in the file.
-PHP_FUNCS_ANCHOR = """	return $text;
+# The anchor is the seam BETWEEN two top-level functions: intro()'s tail, then
+# the docblock that opens the next one. The batch belongs BETWEEN the two
+# halves. Splicing it in front of the whole anchor instead puts the block
+# *inside* sinofresh_formula_intro() — the declarations then only execute when
+# that function runs, and the second call in a request fatals with
+# "Cannot redeclare sinofresh_formula_faq_data()". That is invisible to the
+# splice's own undo proof (the splice is still clean) and to the synthesiser
+# (which models bytes, not PHP scope); only a real render shows it, which is
+# how it was caught. `return $text;` occurs exactly once in the file.
+PHP_FUNCS_OPEN = """	return $text;
 }
 
-/**
+"""
+
+PHP_FUNCS_CLOSE = """/**
  * wp_json_encode() for the body of an inline <script>."""
+
+PHP_FUNCS_ANCHOR = PHP_FUNCS_OPEN + PHP_FUNCS_CLOSE
 
 PHP_FAQ_BLOCK = '''/**
  * The nine question/answer pairs of a formula's FAQ band (batch C).
@@ -425,16 +437,34 @@ def main():
             problems.append('php: sinofresh_formula_faq_data already present')
         cur = raw
         for old, new, label in (
-                (PHP_FUNCS_ANCHOR, PHP_FAQ_BLOCK + PHP_FUNCS_ANCHOR, 'php/faq-functions'),
+                (PHP_FUNCS_ANCHOR, PHP_FUNCS_OPEN + PHP_FAQ_BLOCK + PHP_FUNCS_CLOSE,
+                 'php/faq-functions'),
                 (PHP_FAQPAGE_ANCHOR, PHP_FAQPAGE_BLOCK, 'php/faqpage-branch')):
             cur = splice(cur, old, new, label, problems)
             if cur is None:
                 break
+        # Structural guard. The block has to be at include time, i.e. between
+        # two top-level functions, not nested in one. Both halves of that are
+        # checked here: what precedes the block is a column-0 closing brace,
+        # and nothing inside the block is indented like a nested declaration.
+        if cur is not None:
+            i = cur.find(PHP_FAQ_BLOCK)
+            if i < 0 or not cur[:i].endswith("\n}\n\n"):
+                problems.append('php: the FAQ block does not start right after a '
+                                'top-level closing brace — it would be declared '
+                                'only when that function runs')
+            for line in PHP_FAQ_BLOCK.split('\n'):
+                if re.match(r'^[ \t]+function\b', line):
+                    problems.append('php: the FAQ block declares a function at an '
+                                    'indent level; it would not be declared at '
+                                    'include time')
+                    break
         if cur is not None:
             undone = cur
             for old, new, label in (
                     (PHP_FAQPAGE_ANCHOR, PHP_FAQPAGE_BLOCK, 'php/faqpage-branch'),
-                    (PHP_FUNCS_ANCHOR, PHP_FAQ_BLOCK + PHP_FUNCS_ANCHOR,
+                    (PHP_FUNCS_ANCHOR,
+                     PHP_FUNCS_OPEN + PHP_FAQ_BLOCK + PHP_FUNCS_CLOSE,
                      'php/faq-functions')):
                 if new not in undone:
                     problems.append('php: the assembled file lacks the %s insert'
