@@ -1,0 +1,431 @@
+==============================================================================
+Batch 2D step E — gates for deleting sf-facts / sf-spectable / B2D-S1
+                 from the eight dosage pages, 2.10.51 -> 2.10.52
+==============================================================================
+
+[0] inputs, and proof that the candidate is the candidate
+    base dir _backup/b2d-stepE-baselines/base : 75 pages
+    new  dir _backup/b2d-stepE-baselines/base : 75 pages
+    candidate pages carrying the pre-flight theme directory: 0/75
+    expected to differ: 58 page(s) — 8 dosage + 8 /zh/ dosage + 21 formula + 21 /zh/ formula
+
+[1] resource inventory (which cache tokens moved?)
+    asset SET changed on 0 page(s) (must be 0)
+
+[2] masked comparison of the 75 pages (?ver= folded, nonces and the pre-flight directory masked)
+    differ    0 page(s)
+    identical 75 page(s)
+    !! formulas__bladder-support-powder.html should have differed and did not
+    !! formulas__calcium-phosphorus-tablets.html should have differed and did not
+    !! formulas__calming-soft-chews.html should have differed and did not
+    !! formulas__digestive-soft-chews.html should have differed and did not
+    !! formulas__ear-care-drops.html should have differed and did not
+    !! formulas__hairball-remedy-paste.html should have differed and did not
+    !! formulas__joint-support-soft-chews.html should have differed and did not
+    !! formulas__joint-support-tablets.html should have differed and did not
+    !! formulas__liquid-joint-support.html should have differed and did not
+    !! formulas__liquid-skin-coat.html should have differed and did not
+    !! formulas__multivitamin-tablets.html should have differed and did not
+    !! formulas__natural-cleaning-dental-sticks.html should have differed and did not
+    !! formulas__nutrition-paste.html should have differed and did not
+    !! formulas__oral-care-dental-sticks.html should have differed and did not
+    !! formulas__plaque-control-dental-chews.html should have differed and did not
+    !! formulas__probiotic-powder.html should have differed and did not
+    !! formulas__pumpkin-digestive-powder.html should have differed and did not
+    !! formulas__pure-fish-oil-blend.html should have differed and did not
+    !! formulas__skin-coat-soft-chews.html should have differed and did not
+    !! formulas__urinary-care-drops.html should have differed and did not
+    !! formulas__wild-alaskan-salmon-oil.html should have differed and did not
+    !! products__dental-chews.html should have differed and did not
+    !! products__drops.html should have differed and did not
+    !! products__fish-oil.html should have differed and did not
+    !! products__liquids.html should have differed and did not
+    !! products__pastes.html should have differed and did not
+    !! products__powders.html should have differed and did not
+    !! products__soft-chews.html should have differed and did not
+    !! products__tablets.html should have differed and did not
+    !! zh__formulas__bladder-support-powder.html should have differed and did not
+    !! zh__formulas__calcium-phosphorus-tablets.html should have differed and did not
+    !! zh__formulas__calming-soft-chews.html should have differed and did not
+    !! zh__formulas__digestive-soft-chews.html should have differed and did not
+    !! zh__formulas__ear-care-drops.html should have differed and did not
+    !! zh__formulas__hairball-remedy-paste.html should have differed and did not
+    !! zh__formulas__joint-support-soft-chews.html should have differed and did not
+    !! zh__formulas__joint-support-tablets.html should have differed and did not
+    !! zh__formulas__liquid-joint-support.html should have differed and did not
+    !! zh__formulas__liquid-skin-coat.html should have differed and did not
+    !! zh__formulas__multivitamin-tablets.html should have differed and did not
+    !! zh__formulas__natural-cleaning-dental-sticks.html should have differed and did not
+    !! zh__formulas__nutrition-paste.html should have differed and did not
+    !! zh__formulas__oral-care-dental-sticks.html should have differed and did not
+    !! zh__formulas__plaque-control-dental-chews.html should have differed and did not
+    !! zh__formulas__probiotic-powder.html should have differed and did not
+    !! zh__formulas__pumpkin-digestive-powder.html should have differed and did not
+    !! zh__formulas__pure-fish-oil-blend.html should have differed and did not
+    !! zh__formulas__skin-coat-soft-chews.html should have differed and did not
+    !! zh__formulas__urinary-care-drops.html should have differed and did not
+    !! zh__formulas__wild-alaskan-salmon-oil.html should have differed and did not
+    !! zh__products__dental-chews.html should have differed and did not
+    !! zh__products__drops.html should have differed and did not
+    !! zh__products__fish-oil.html should have differed and did not
+    !! zh__products__liquids.html should have differed and did not
+    !! zh__products__pastes.html should have differed and did not
+    !! zh__products__powders.html should have differed and did not
+    !! zh__products__soft-chews.html should have differed and did not
+    !! zh__products__tablets.html should have differed and did not
+
+[3] page-level confined proof: undo this batch, compare the two sides
+    dosage pages: the spans live on the base side, so base minus the spans must equal the candidate
+    formula pages: the batch's effect is the shortened hero meta, so putting the full line back must equal the base
+    !! formulas__bladder-support-powder.html: candidate meta '<p class="sf-formula-hero__meta">Powders · MOQ from 500 units · Lead time 7–15 working days after packaging is ready</p>', expected '<p class="sf-formula-hero__meta">Powders</p>'
+    DIFF formulas__bladder-support-powder.html does not reduce to the base page
+    !! formulas__calcium-phosphorus-tablets.html: candidate meta '<p class="sf-formula-hero__meta">Tablets · MOQ from 1,000 units · Lead time 7–15 working days after packaging is ready</p>', expected '<p class="sf-formula-hero__meta">Tablets</p>'
+    DIFF formulas__calcium-phosphorus-tablets.html does not reduce to the base page
+    !! formulas__calming-soft-chews.html: candidate meta '<p class="sf-formula-hero__meta">Soft Chews · MOQ from 500–1,000 units · Lead time 7–15 working days after packaging is ready</p>', expected '<p class="sf-formula-hero__meta">Soft Chews</p>'
+    DIFF formulas__calming-soft-chews.html does not reduce to the base page
+    !! formulas__digestive-soft-chews.html: candidate meta '<p class="sf-formula-hero__meta">Soft Chews · MOQ from 500–1,000 units · Lead time 7–15 working days after packaging is ready</p>', expected '<p class="sf-formula-hero__meta">Soft Chews</p>'
+    DIFF formulas__digestive-soft-chews.html does not reduce to the base page
+    !! formulas__ear-care-drops.html: candidate meta '<p class="sf-formula-hero__meta">Drops · MOQ from 500 units · Lead time 7–15 working days after packaging is ready</p>', expected '<p class="sf-formula-hero__meta">Drops</p>'
+    DIFF formulas__ear-care-drops.html does not reduce to the base page
+    !! formulas__hairball-remedy-paste.html: candidate meta '<p class="sf-formula-hero__meta">Pastes · MOQ from 500 units · Lead time 7–15 working days after packaging is ready</p>', expected '<p class="sf-formula-hero__meta">Pastes</p>'
+    DIFF formulas__hairball-remedy-paste.html does not reduce to the base page
+    !! formulas__joint-support-soft-chews.html: candidate meta '<p class="sf-formula-hero__meta">Soft Chews · MOQ from 500–1,000 units · Lead time 7–15 working days after packaging is ready</p>', expected '<p class="sf-formula-hero__meta">Soft Chews</p>'
+    DIFF formulas__joint-support-soft-chews.html does not reduce to the base page
+    !! formulas__joint-support-tablets.html: candidate meta '<p class="sf-formula-hero__meta">Tablets · MOQ from 1,000 units · Lead time 7–15 working days after packaging is ready</p>', expected '<p class="sf-formula-hero__meta">Tablets</p>'
+    DIFF formulas__joint-support-tablets.html does not reduce to the base page
+    !! formulas__liquid-joint-support.html: candidate meta '<p class="sf-formula-hero__meta">Liquids · MOQ from 500 units · Lead time 7–15 working days after packaging is ready</p>', expected '<p class="sf-formula-hero__meta">Liquids</p>'
+    DIFF formulas__liquid-joint-support.html does not reduce to the base page
+    !! formulas__liquid-skin-coat.html: candidate meta '<p class="sf-formula-hero__meta">Liquids · MOQ from 500 units · Lead time 7–15 working days after packaging is ready</p>', expected '<p class="sf-formula-hero__meta">Liquids</p>'
+    DIFF formulas__liquid-skin-coat.html does not reduce to the base page
+    !! formulas__multivitamin-tablets.html: candidate meta '<p class="sf-formula-hero__meta">Tablets · MOQ from 1,000 units · Lead time 7–15 working days after packaging is ready</p>', expected '<p class="sf-formula-hero__meta">Tablets</p>'
+    DIFF formulas__multivitamin-tablets.html does not reduce to the base page
+    !! formulas__natural-cleaning-dental-sticks.html: candidate meta '<p class="sf-formula-hero__meta">Dental Chews · MOQ from 1,000 units · Lead time 7–15 working days after packaging is ready</p>', expected '<p class="sf-formula-hero__meta">Dental Chews</p>'
+    DIFF formulas__natural-cleaning-dental-sticks.html does not reduce to the base page
+    !! formulas__nutrition-paste.html: candidate meta '<p class="sf-formula-hero__meta">Pastes · MOQ from 500 units · Lead time 7–15 working days after packaging is ready</p>', expected '<p class="sf-formula-hero__meta">Pastes</p>'
+    DIFF formulas__nutrition-paste.html does not reduce to the base page
+    !! formulas__oral-care-dental-sticks.html: candidate meta '<p class="sf-formula-hero__meta">Dental Chews · MOQ from 1,000 units · Lead time 7–15 working days after packaging is ready</p>', expected '<p class="sf-formula-hero__meta">Dental Chews</p>'
+    DIFF formulas__oral-care-dental-sticks.html does not reduce to the base page
+    !! formulas__plaque-control-dental-chews.html: candidate meta '<p class="sf-formula-hero__meta">Dental Chews · MOQ from 1,000 units · Lead time 7–15 working days after packaging is ready</p>', expected '<p class="sf-formula-hero__meta">Dental Chews</p>'
+    DIFF formulas__plaque-control-dental-chews.html does not reduce to the base page
+    !! formulas__probiotic-powder.html: candidate meta '<p class="sf-formula-hero__meta">Powders · MOQ from 500 units · Lead time 7–15 working days after packaging is ready</p>', expected '<p class="sf-formula-hero__meta">Powders</p>'
+    DIFF formulas__probiotic-powder.html does not reduce to the base page
+    !! formulas__pumpkin-digestive-powder.html: candidate meta '<p class="sf-formula-hero__meta">Powders · MOQ from 500 units · Lead time 7–15 working days after packaging is ready</p>', expected '<p class="sf-formula-hero__meta">Powders</p>'
+    DIFF formulas__pumpkin-digestive-powder.html does not reduce to the base page
+    !! formulas__pure-fish-oil-blend.html: candidate meta '<p class="sf-formula-hero__meta">Fish Oil · MOQ from 1,000 units · Lead time 7–15 working days after packaging is ready</p>', expected '<p class="sf-formula-hero__meta">Fish Oil</p>'
+    DIFF formulas__pure-fish-oil-blend.html does not reduce to the base page
+    !! formulas__skin-coat-soft-chews.html: candidate meta '<p class="sf-formula-hero__meta">Soft Chews · MOQ from 500–1,000 units · Lead time 7–15 working days after packaging is ready</p>', expected '<p class="sf-formula-hero__meta">Soft Chews</p>'
+    DIFF formulas__skin-coat-soft-chews.html does not reduce to the base page
+    !! formulas__urinary-care-drops.html: candidate meta '<p class="sf-formula-hero__meta">Drops · MOQ from 500 units · Lead time 7–15 working days after packaging is ready</p>', expected '<p class="sf-formula-hero__meta">Drops</p>'
+    DIFF formulas__urinary-care-drops.html does not reduce to the base page
+    !! formulas__wild-alaskan-salmon-oil.html: candidate meta '<p class="sf-formula-hero__meta">Fish Oil · MOQ from 1,000 units · Lead time 7–15 working days after packaging is ready</p>', expected '<p class="sf-formula-hero__meta">Fish Oil</p>'
+    DIFF formulas__wild-alaskan-salmon-oil.html does not reduce to the base page
+    !! products__dental-chews.html: candidate still carries ['<!-- B2D-S5: core facts -->', '<!-- /B2D-S5 -->', '<section class="wp-block-group sf-spectable ', '<!-- B2D-S1: actives -->', 'sf-spectable', 'sf-facts']
+    DIFF products__dental-chews.html does not reduce to the base page
+    !! products__drops.html: candidate still carries ['<!-- B2D-S5: core facts -->', '<!-- /B2D-S5 -->', '<section class="wp-block-group sf-spectable ', '<!-- B2D-S1: actives -->', 'sf-spectable', 'sf-facts']
+    DIFF products__drops.html does not reduce to the base page
+    !! products__fish-oil.html: candidate still carries ['<!-- B2D-S5: core facts -->', '<!-- /B2D-S5 -->', '<section class="wp-block-group sf-spectable ', '<!-- B2D-S1: actives -->', 'sf-spectable', 'sf-facts']
+    DIFF products__fish-oil.html does not reduce to the base page
+    !! products__liquids.html: candidate still carries ['<!-- B2D-S5: core facts -->', '<!-- /B2D-S5 -->', '<section class="wp-block-group sf-spectable ', '<!-- B2D-S1: actives -->', 'sf-spectable', 'sf-facts']
+    DIFF products__liquids.html does not reduce to the base page
+    !! products__pastes.html: candidate still carries ['<!-- B2D-S5: core facts -->', '<!-- /B2D-S5 -->', '<section class="wp-block-group sf-spectable ', '<!-- B2D-S1: actives -->', 'sf-spectable', 'sf-facts']
+    DIFF products__pastes.html does not reduce to the base page
+    !! products__powders.html: candidate still carries ['<!-- B2D-S5: core facts -->', '<!-- /B2D-S5 -->', '<section class="wp-block-group sf-spectable ', '<!-- B2D-S1: actives -->', 'sf-spectable', 'sf-facts']
+    DIFF products__powders.html does not reduce to the base page
+    !! products__soft-chews.html: candidate still carries ['<!-- B2D-S5: core facts -->', '<!-- /B2D-S5 -->', '<section class="wp-block-group sf-spectable ', '<!-- B2D-S1: actives -->', 'sf-spectable', 'sf-facts']
+    DIFF products__soft-chews.html does not reduce to the base page
+    !! products__tablets.html: candidate still carries ['<!-- B2D-S5: core facts -->', '<!-- /B2D-S5 -->', '<section class="wp-block-group sf-spectable ', '<!-- B2D-S1: actives -->', 'sf-spectable', 'sf-facts']
+    DIFF products__tablets.html does not reduce to the base page
+    !! zh__formulas__bladder-support-powder.html: candidate meta '<p class="sf-formula-hero__meta">Powders · MOQ from 500 units · Lead time 7–15 working days after packaging is ready</p>', expected '<p class="sf-formula-hero__meta">Powders</p>'
+    DIFF zh__formulas__bladder-support-powder.html does not reduce to the base page
+    !! zh__formulas__calcium-phosphorus-tablets.html: candidate meta '<p class="sf-formula-hero__meta">Tablets · MOQ from 1,000 units · Lead time 7–15 working days after packaging is ready</p>', expected '<p class="sf-formula-hero__meta">Tablets</p>'
+    DIFF zh__formulas__calcium-phosphorus-tablets.html does not reduce to the base page
+    !! zh__formulas__calming-soft-chews.html: candidate meta '<p class="sf-formula-hero__meta">Soft Chews · MOQ from 500–1,000 units · Lead time 7–15 working days after packaging is ready</p>', expected '<p class="sf-formula-hero__meta">Soft Chews</p>'
+    DIFF zh__formulas__calming-soft-chews.html does not reduce to the base page
+    !! zh__formulas__digestive-soft-chews.html: candidate meta '<p class="sf-formula-hero__meta">Soft Chews · MOQ from 500–1,000 units · Lead time 7–15 working days after packaging is ready</p>', expected '<p class="sf-formula-hero__meta">Soft Chews</p>'
+    DIFF zh__formulas__digestive-soft-chews.html does not reduce to the base page
+    !! zh__formulas__ear-care-drops.html: candidate meta '<p class="sf-formula-hero__meta">Drops · MOQ from 500 units · Lead time 7–15 working days after packaging is ready</p>', expected '<p class="sf-formula-hero__meta">Drops</p>'
+    DIFF zh__formulas__ear-care-drops.html does not reduce to the base page
+    !! zh__formulas__hairball-remedy-paste.html: candidate meta '<p class="sf-formula-hero__meta">Pastes · MOQ from 500 units · Lead time 7–15 working days after packaging is ready</p>', expected '<p class="sf-formula-hero__meta">Pastes</p>'
+    DIFF zh__formulas__hairball-remedy-paste.html does not reduce to the base page
+    !! zh__formulas__joint-support-soft-chews.html: candidate meta '<p class="sf-formula-hero__meta">Soft Chews · MOQ from 500–1,000 units · Lead time 7–15 working days after packaging is ready</p>', expected '<p class="sf-formula-hero__meta">Soft Chews</p>'
+    DIFF zh__formulas__joint-support-soft-chews.html does not reduce to the base page
+    !! zh__formulas__joint-support-tablets.html: candidate meta '<p class="sf-formula-hero__meta">Tablets · MOQ from 1,000 units · Lead time 7–15 working days after packaging is ready</p>', expected '<p class="sf-formula-hero__meta">Tablets</p>'
+    DIFF zh__formulas__joint-support-tablets.html does not reduce to the base page
+    !! zh__formulas__liquid-joint-support.html: candidate meta '<p class="sf-formula-hero__meta">Liquids · MOQ from 500 units · Lead time 7–15 working days after packaging is ready</p>', expected '<p class="sf-formula-hero__meta">Liquids</p>'
+    DIFF zh__formulas__liquid-joint-support.html does not reduce to the base page
+    !! zh__formulas__liquid-skin-coat.html: candidate meta '<p class="sf-formula-hero__meta">Liquids · MOQ from 500 units · Lead time 7–15 working days after packaging is ready</p>', expected '<p class="sf-formula-hero__meta">Liquids</p>'
+    DIFF zh__formulas__liquid-skin-coat.html does not reduce to the base page
+    !! zh__formulas__multivitamin-tablets.html: candidate meta '<p class="sf-formula-hero__meta">Tablets · MOQ from 1,000 units · Lead time 7–15 working days after packaging is ready</p>', expected '<p class="sf-formula-hero__meta">Tablets</p>'
+    DIFF zh__formulas__multivitamin-tablets.html does not reduce to the base page
+    !! zh__formulas__natural-cleaning-dental-sticks.html: candidate meta '<p class="sf-formula-hero__meta">Dental Chews · MOQ from 1,000 units · Lead time 7–15 working days after packaging is ready</p>', expected '<p class="sf-formula-hero__meta">Dental Chews</p>'
+    DIFF zh__formulas__natural-cleaning-dental-sticks.html does not reduce to the base page
+    !! zh__formulas__nutrition-paste.html: candidate meta '<p class="sf-formula-hero__meta">Pastes · MOQ from 500 units · Lead time 7–15 working days after packaging is ready</p>', expected '<p class="sf-formula-hero__meta">Pastes</p>'
+    DIFF zh__formulas__nutrition-paste.html does not reduce to the base page
+    !! zh__formulas__oral-care-dental-sticks.html: candidate meta '<p class="sf-formula-hero__meta">Dental Chews · MOQ from 1,000 units · Lead time 7–15 working days after packaging is ready</p>', expected '<p class="sf-formula-hero__meta">Dental Chews</p>'
+    DIFF zh__formulas__oral-care-dental-sticks.html does not reduce to the base page
+    !! zh__formulas__plaque-control-dental-chews.html: candidate meta '<p class="sf-formula-hero__meta">Dental Chews · MOQ from 1,000 units · Lead time 7–15 working days after packaging is ready</p>', expected '<p class="sf-formula-hero__meta">Dental Chews</p>'
+    DIFF zh__formulas__plaque-control-dental-chews.html does not reduce to the base page
+    !! zh__formulas__probiotic-powder.html: candidate meta '<p class="sf-formula-hero__meta">Powders · MOQ from 500 units · Lead time 7–15 working days after packaging is ready</p>', expected '<p class="sf-formula-hero__meta">Powders</p>'
+    DIFF zh__formulas__probiotic-powder.html does not reduce to the base page
+    !! zh__formulas__pumpkin-digestive-powder.html: candidate meta '<p class="sf-formula-hero__meta">Powders · MOQ from 500 units · Lead time 7–15 working days after packaging is ready</p>', expected '<p class="sf-formula-hero__meta">Powders</p>'
+    DIFF zh__formulas__pumpkin-digestive-powder.html does not reduce to the base page
+    !! zh__formulas__pure-fish-oil-blend.html: candidate meta '<p class="sf-formula-hero__meta">Fish Oil · MOQ from 1,000 units · Lead time 7–15 working days after packaging is ready</p>', expected '<p class="sf-formula-hero__meta">Fish Oil</p>'
+    DIFF zh__formulas__pure-fish-oil-blend.html does not reduce to the base page
+    !! zh__formulas__skin-coat-soft-chews.html: candidate meta '<p class="sf-formula-hero__meta">Soft Chews · MOQ from 500–1,000 units · Lead time 7–15 working days after packaging is ready</p>', expected '<p class="sf-formula-hero__meta">Soft Chews</p>'
+    DIFF zh__formulas__skin-coat-soft-chews.html does not reduce to the base page
+    !! zh__formulas__urinary-care-drops.html: candidate meta '<p class="sf-formula-hero__meta">Drops · MOQ from 500 units · Lead time 7–15 working days after packaging is ready</p>', expected '<p class="sf-formula-hero__meta">Drops</p>'
+    DIFF zh__formulas__urinary-care-drops.html does not reduce to the base page
+    !! zh__formulas__wild-alaskan-salmon-oil.html: candidate meta '<p class="sf-formula-hero__meta">Fish Oil · MOQ from 1,000 units · Lead time 7–15 working days after packaging is ready</p>', expected '<p class="sf-formula-hero__meta">Fish Oil</p>'
+    DIFF zh__formulas__wild-alaskan-salmon-oil.html does not reduce to the base page
+    !! zh__products__dental-chews.html: candidate still carries ['<!-- B2D-S5: core facts -->', '<!-- /B2D-S5 -->', '<section class="wp-block-group sf-spectable ', '<!-- B2D-S1: actives -->', 'sf-spectable', 'sf-facts']
+    DIFF zh__products__dental-chews.html does not reduce to the base page
+    !! zh__products__drops.html: candidate still carries ['<!-- B2D-S5: core facts -->', '<!-- /B2D-S5 -->', '<section class="wp-block-group sf-spectable ', '<!-- B2D-S1: actives -->', 'sf-spectable', 'sf-facts']
+    DIFF zh__products__drops.html does not reduce to the base page
+    !! zh__products__fish-oil.html: candidate still carries ['<!-- B2D-S5: core facts -->', '<!-- /B2D-S5 -->', '<section class="wp-block-group sf-spectable ', '<!-- B2D-S1: actives -->', 'sf-spectable', 'sf-facts']
+    DIFF zh__products__fish-oil.html does not reduce to the base page
+    !! zh__products__liquids.html: candidate still carries ['<!-- B2D-S5: core facts -->', '<!-- /B2D-S5 -->', '<section class="wp-block-group sf-spectable ', '<!-- B2D-S1: actives -->', 'sf-spectable', 'sf-facts']
+    DIFF zh__products__liquids.html does not reduce to the base page
+    !! zh__products__pastes.html: candidate still carries ['<!-- B2D-S5: core facts -->', '<!-- /B2D-S5 -->', '<section class="wp-block-group sf-spectable ', '<!-- B2D-S1: actives -->', 'sf-spectable', 'sf-facts']
+    DIFF zh__products__pastes.html does not reduce to the base page
+    !! zh__products__powders.html: candidate still carries ['<!-- B2D-S5: core facts -->', '<!-- /B2D-S5 -->', '<section class="wp-block-group sf-spectable ', '<!-- B2D-S1: actives -->', 'sf-spectable', 'sf-facts']
+    DIFF zh__products__powders.html does not reduce to the base page
+    !! zh__products__soft-chews.html: candidate still carries ['<!-- B2D-S5: core facts -->', '<!-- /B2D-S5 -->', '<section class="wp-block-group sf-spectable ', '<!-- B2D-S1: actives -->', 'sf-spectable', 'sf-facts']
+    DIFF zh__products__soft-chews.html does not reduce to the base page
+    !! zh__products__tablets.html: candidate still carries ['<!-- B2D-S5: core facts -->', '<!-- /B2D-S5 -->', '<section class="wp-block-group sf-spectable ', '<!-- B2D-S1: actives -->', 'sf-spectable', 'sf-facts']
+    DIFF zh__products__tablets.html does not reduce to the base page
+    0/58 page(s) reduce to the base byte-for-byte
+
+[4] style.css / functions.php / the eight templates — reconstruction
+    each file: undo the declared edits, then compare to the source the batch started from.
+    A declaration is (restore_this, currently_present); restore_this of None means a pure insertion, so the literal is deleted.
+
+    style.css                !! declared literal occurs 0 time(s): 'Version: 2.10.52'
+    style.css                base 261832 / new 261832 / undone 261832  applied:NO   undone==base:NO
+    functions.php            !! declared literal occurs 0 time(s): "array(), '2.10.52');"
+    functions.php            base 168850 / new 168850 / undone 168850  applied:NO   undone==base:NO
+    templates/page-soft-chews.html base  56882 / new  56882 / undone  53699  applied:YES  undone==base:NO  (-0 B in two spans)
+        first mismatch @2704
+          undone: 'v>\n<!-- /wp:buttons -->\n</section>\n<!-- /wp:group -->\n\n<!-- wp:group {"tagName":"section","anchor":"'
+          new   : 'v>\n<!-- /wp:buttons -->\n</section>\n<!-- /wp:group -->\n\n<!-- B2D-S5: core facts -->\n<!-- wp:group {"t'
+    templates/page-tablets.html base  48447 / new  48447 / undone  45394  applied:YES  undone==base:NO  (-0 B in two spans)
+        first mismatch @2713
+          undone: 'v>\n<!-- /wp:buttons -->\n</section>\n<!-- /wp:group -->\n\n<!-- wp:group {"tagName":"section","anchor":"'
+          new   : 'v>\n<!-- /wp:buttons -->\n</section>\n<!-- /wp:group -->\n\n<!-- B2D-S5: core facts -->\n<!-- wp:group {"t'
+    templates/page-powders.html base  47851 / new  47851 / undone  44858  applied:YES  undone==base:NO  (-0 B in two spans)
+        first mismatch @2697
+          undone: 'v>\n<!-- /wp:buttons -->\n</section>\n<!-- /wp:group -->\n\n<!-- wp:group {"tagName":"section","anchor":"'
+          new   : 'v>\n<!-- /wp:buttons -->\n</section>\n<!-- /wp:group -->\n\n<!-- B2D-S5: core facts -->\n<!-- wp:group {"t'
+    templates/page-pastes.html base  45956 / new  45956 / undone  42942  applied:YES  undone==base:NO  (-0 B in two spans)
+        first mismatch @2702
+          undone: 'v>\n<!-- /wp:buttons -->\n</section>\n<!-- /wp:group -->\n\n<!-- wp:group {"tagName":"section","anchor":"'
+          new   : 'v>\n<!-- /wp:buttons -->\n</section>\n<!-- /wp:group -->\n\n<!-- B2D-S5: core facts -->\n<!-- wp:group {"t'
+    templates/page-drops.html base  46362 / new  46362 / undone  43351  applied:YES  undone==base:NO  (-0 B in two spans)
+        first mismatch @2693
+          undone: 'v>\n<!-- /wp:buttons -->\n</section>\n<!-- /wp:group -->\n\n<!-- wp:group {"tagName":"section","anchor":"'
+          new   : 'v>\n<!-- /wp:buttons -->\n</section>\n<!-- /wp:group -->\n\n<!-- B2D-S5: core facts -->\n<!-- wp:group {"t'
+    templates/page-liquids.html base  46735 / new  46735 / undone  43695  applied:YES  undone==base:NO  (-0 B in two spans)
+        first mismatch @2714
+          undone: 'v>\n<!-- /wp:buttons -->\n</section>\n<!-- /wp:group -->\n\n<!-- wp:group {"tagName":"section","anchor":"'
+          new   : 'v>\n<!-- /wp:buttons -->\n</section>\n<!-- /wp:group -->\n\n<!-- B2D-S5: core facts -->\n<!-- wp:group {"t'
+    templates/page-fish-oil.html base  46209 / new  46209 / undone  43181  applied:YES  undone==base:NO  (-0 B in two spans)
+        first mismatch @2689
+          undone: 'v>\n<!-- /wp:buttons -->\n</section>\n<!-- /wp:group -->\n\n<!-- wp:group {"tagName":"section","anchor":"'
+          new   : 'v>\n<!-- /wp:buttons -->\n</section>\n<!-- /wp:group -->\n\n<!-- B2D-S5: core facts -->\n<!-- wp:group {"t'
+    templates/page-dental-chews.html base  51183 / new  51183 / undone  48127  applied:YES  undone==base:NO  (-0 B in two spans)
+        first mismatch @2730
+          undone: 'v>\n<!-- /wp:buttons -->\n</section>\n<!-- /wp:group -->\n\n<!-- wp:group {"tagName":"section","anchor":"'
+          new   : 'v>\n<!-- /wp:buttons -->\n</section>\n<!-- /wp:group -->\n\n<!-- B2D-S5: core facts -->\n<!-- wp:group {"t'
+
+[5] JSON-LD deep-equal (decoded structures, not masked text)
+    identical 75/75 page(s)
+
+==============================================================================
+FAIL — 187 problem(s):
+  * NOTHING moved — the two directories have identical version tokens, so this gate proved nothing (is --new pointing at base?)
+  * formulas__bladder-support-powder.html should have differed and did not
+  * formulas__calcium-phosphorus-tablets.html should have differed and did not
+  * formulas__calming-soft-chews.html should have differed and did not
+  * formulas__digestive-soft-chews.html should have differed and did not
+  * formulas__ear-care-drops.html should have differed and did not
+  * formulas__hairball-remedy-paste.html should have differed and did not
+  * formulas__joint-support-soft-chews.html should have differed and did not
+  * formulas__joint-support-tablets.html should have differed and did not
+  * formulas__liquid-joint-support.html should have differed and did not
+  * formulas__liquid-skin-coat.html should have differed and did not
+  * formulas__multivitamin-tablets.html should have differed and did not
+  * formulas__natural-cleaning-dental-sticks.html should have differed and did not
+  * formulas__nutrition-paste.html should have differed and did not
+  * formulas__oral-care-dental-sticks.html should have differed and did not
+  * formulas__plaque-control-dental-chews.html should have differed and did not
+  * formulas__probiotic-powder.html should have differed and did not
+  * formulas__pumpkin-digestive-powder.html should have differed and did not
+  * formulas__pure-fish-oil-blend.html should have differed and did not
+  * formulas__skin-coat-soft-chews.html should have differed and did not
+  * formulas__urinary-care-drops.html should have differed and did not
+  * formulas__wild-alaskan-salmon-oil.html should have differed and did not
+  * products__dental-chews.html should have differed and did not
+  * products__drops.html should have differed and did not
+  * products__fish-oil.html should have differed and did not
+  * products__liquids.html should have differed and did not
+  * products__pastes.html should have differed and did not
+  * products__powders.html should have differed and did not
+  * products__soft-chews.html should have differed and did not
+  * products__tablets.html should have differed and did not
+  * zh__formulas__bladder-support-powder.html should have differed and did not
+  * zh__formulas__calcium-phosphorus-tablets.html should have differed and did not
+  * zh__formulas__calming-soft-chews.html should have differed and did not
+  * zh__formulas__digestive-soft-chews.html should have differed and did not
+  * zh__formulas__ear-care-drops.html should have differed and did not
+  * zh__formulas__hairball-remedy-paste.html should have differed and did not
+  * zh__formulas__joint-support-soft-chews.html should have differed and did not
+  * zh__formulas__joint-support-tablets.html should have differed and did not
+  * zh__formulas__liquid-joint-support.html should have differed and did not
+  * zh__formulas__liquid-skin-coat.html should have differed and did not
+  * zh__formulas__multivitamin-tablets.html should have differed and did not
+  * zh__formulas__natural-cleaning-dental-sticks.html should have differed and did not
+  * zh__formulas__nutrition-paste.html should have differed and did not
+  * zh__formulas__oral-care-dental-sticks.html should have differed and did not
+  * zh__formulas__plaque-control-dental-chews.html should have differed and did not
+  * zh__formulas__probiotic-powder.html should have differed and did not
+  * zh__formulas__pumpkin-digestive-powder.html should have differed and did not
+  * zh__formulas__pure-fish-oil-blend.html should have differed and did not
+  * zh__formulas__skin-coat-soft-chews.html should have differed and did not
+  * zh__formulas__urinary-care-drops.html should have differed and did not
+  * zh__formulas__wild-alaskan-salmon-oil.html should have differed and did not
+  * zh__products__dental-chews.html should have differed and did not
+  * zh__products__drops.html should have differed and did not
+  * zh__products__fish-oil.html should have differed and did not
+  * zh__products__liquids.html should have differed and did not
+  * zh__products__pastes.html should have differed and did not
+  * zh__products__powders.html should have differed and did not
+  * zh__products__soft-chews.html should have differed and did not
+  * zh__products__tablets.html should have differed and did not
+  * formulas__bladder-support-powder.html: candidate hero meta is '<p class="sf-formula-hero__meta">Powders · MOQ from 500 units · Lead time 7–15 working days after packaging is ready</p>', expected exactly '<p class="sf-formula-hero__meta">Powders</p>'
+  * formulas__bladder-support-powder.html: undoing the batch does not reproduce the base
+  * formulas__calcium-phosphorus-tablets.html: candidate hero meta is '<p class="sf-formula-hero__meta">Tablets · MOQ from 1,000 units · Lead time 7–15 working days after packaging is ready</p>', expected exactly '<p class="sf-formula-hero__meta">Tablets</p>'
+  * formulas__calcium-phosphorus-tablets.html: undoing the batch does not reproduce the base
+  * formulas__calming-soft-chews.html: candidate hero meta is '<p class="sf-formula-hero__meta">Soft Chews · MOQ from 500–1,000 units · Lead time 7–15 working days after packaging is ready</p>', expected exactly '<p class="sf-formula-hero__meta">Soft Chews</p>'
+  * formulas__calming-soft-chews.html: undoing the batch does not reproduce the base
+  * formulas__digestive-soft-chews.html: candidate hero meta is '<p class="sf-formula-hero__meta">Soft Chews · MOQ from 500–1,000 units · Lead time 7–15 working days after packaging is ready</p>', expected exactly '<p class="sf-formula-hero__meta">Soft Chews</p>'
+  * formulas__digestive-soft-chews.html: undoing the batch does not reproduce the base
+  * formulas__ear-care-drops.html: candidate hero meta is '<p class="sf-formula-hero__meta">Drops · MOQ from 500 units · Lead time 7–15 working days after packaging is ready</p>', expected exactly '<p class="sf-formula-hero__meta">Drops</p>'
+  * formulas__ear-care-drops.html: undoing the batch does not reproduce the base
+  * formulas__hairball-remedy-paste.html: candidate hero meta is '<p class="sf-formula-hero__meta">Pastes · MOQ from 500 units · Lead time 7–15 working days after packaging is ready</p>', expected exactly '<p class="sf-formula-hero__meta">Pastes</p>'
+  * formulas__hairball-remedy-paste.html: undoing the batch does not reproduce the base
+  * formulas__joint-support-soft-chews.html: candidate hero meta is '<p class="sf-formula-hero__meta">Soft Chews · MOQ from 500–1,000 units · Lead time 7–15 working days after packaging is ready</p>', expected exactly '<p class="sf-formula-hero__meta">Soft Chews</p>'
+  * formulas__joint-support-soft-chews.html: undoing the batch does not reproduce the base
+  * formulas__joint-support-tablets.html: candidate hero meta is '<p class="sf-formula-hero__meta">Tablets · MOQ from 1,000 units · Lead time 7–15 working days after packaging is ready</p>', expected exactly '<p class="sf-formula-hero__meta">Tablets</p>'
+  * formulas__joint-support-tablets.html: undoing the batch does not reproduce the base
+  * formulas__liquid-joint-support.html: candidate hero meta is '<p class="sf-formula-hero__meta">Liquids · MOQ from 500 units · Lead time 7–15 working days after packaging is ready</p>', expected exactly '<p class="sf-formula-hero__meta">Liquids</p>'
+  * formulas__liquid-joint-support.html: undoing the batch does not reproduce the base
+  * formulas__liquid-skin-coat.html: candidate hero meta is '<p class="sf-formula-hero__meta">Liquids · MOQ from 500 units · Lead time 7–15 working days after packaging is ready</p>', expected exactly '<p class="sf-formula-hero__meta">Liquids</p>'
+  * formulas__liquid-skin-coat.html: undoing the batch does not reproduce the base
+  * formulas__multivitamin-tablets.html: candidate hero meta is '<p class="sf-formula-hero__meta">Tablets · MOQ from 1,000 units · Lead time 7–15 working days after packaging is ready</p>', expected exactly '<p class="sf-formula-hero__meta">Tablets</p>'
+  * formulas__multivitamin-tablets.html: undoing the batch does not reproduce the base
+  * formulas__natural-cleaning-dental-sticks.html: candidate hero meta is '<p class="sf-formula-hero__meta">Dental Chews · MOQ from 1,000 units · Lead time 7–15 working days after packaging is ready</p>', expected exactly '<p class="sf-formula-hero__meta">Dental Chews</p>'
+  * formulas__natural-cleaning-dental-sticks.html: undoing the batch does not reproduce the base
+  * formulas__nutrition-paste.html: candidate hero meta is '<p class="sf-formula-hero__meta">Pastes · MOQ from 500 units · Lead time 7–15 working days after packaging is ready</p>', expected exactly '<p class="sf-formula-hero__meta">Pastes</p>'
+  * formulas__nutrition-paste.html: undoing the batch does not reproduce the base
+  * formulas__oral-care-dental-sticks.html: candidate hero meta is '<p class="sf-formula-hero__meta">Dental Chews · MOQ from 1,000 units · Lead time 7–15 working days after packaging is ready</p>', expected exactly '<p class="sf-formula-hero__meta">Dental Chews</p>'
+  * formulas__oral-care-dental-sticks.html: undoing the batch does not reproduce the base
+  * formulas__plaque-control-dental-chews.html: candidate hero meta is '<p class="sf-formula-hero__meta">Dental Chews · MOQ from 1,000 units · Lead time 7–15 working days after packaging is ready</p>', expected exactly '<p class="sf-formula-hero__meta">Dental Chews</p>'
+  * formulas__plaque-control-dental-chews.html: undoing the batch does not reproduce the base
+  * formulas__probiotic-powder.html: candidate hero meta is '<p class="sf-formula-hero__meta">Powders · MOQ from 500 units · Lead time 7–15 working days after packaging is ready</p>', expected exactly '<p class="sf-formula-hero__meta">Powders</p>'
+  * formulas__probiotic-powder.html: undoing the batch does not reproduce the base
+  * formulas__pumpkin-digestive-powder.html: candidate hero meta is '<p class="sf-formula-hero__meta">Powders · MOQ from 500 units · Lead time 7–15 working days after packaging is ready</p>', expected exactly '<p class="sf-formula-hero__meta">Powders</p>'
+  * formulas__pumpkin-digestive-powder.html: undoing the batch does not reproduce the base
+  * formulas__pure-fish-oil-blend.html: candidate hero meta is '<p class="sf-formula-hero__meta">Fish Oil · MOQ from 1,000 units · Lead time 7–15 working days after packaging is ready</p>', expected exactly '<p class="sf-formula-hero__meta">Fish Oil</p>'
+  * formulas__pure-fish-oil-blend.html: undoing the batch does not reproduce the base
+  * formulas__skin-coat-soft-chews.html: candidate hero meta is '<p class="sf-formula-hero__meta">Soft Chews · MOQ from 500–1,000 units · Lead time 7–15 working days after packaging is ready</p>', expected exactly '<p class="sf-formula-hero__meta">Soft Chews</p>'
+  * formulas__skin-coat-soft-chews.html: undoing the batch does not reproduce the base
+  * formulas__urinary-care-drops.html: candidate hero meta is '<p class="sf-formula-hero__meta">Drops · MOQ from 500 units · Lead time 7–15 working days after packaging is ready</p>', expected exactly '<p class="sf-formula-hero__meta">Drops</p>'
+  * formulas__urinary-care-drops.html: undoing the batch does not reproduce the base
+  * formulas__wild-alaskan-salmon-oil.html: candidate hero meta is '<p class="sf-formula-hero__meta">Fish Oil · MOQ from 1,000 units · Lead time 7–15 working days after packaging is ready</p>', expected exactly '<p class="sf-formula-hero__meta">Fish Oil</p>'
+  * formulas__wild-alaskan-salmon-oil.html: undoing the batch does not reproduce the base
+  * products__dental-chews.html: the candidate still carries ['<!-- B2D-S5: core facts -->', '<!-- /B2D-S5 -->', '<section class="wp-block-group sf-spectable ', '<!-- B2D-S1: actives -->', 'sf-spectable', 'sf-facts']
+  * products__dental-chews.html: undoing the batch does not reproduce the base
+  * products__drops.html: the candidate still carries ['<!-- B2D-S5: core facts -->', '<!-- /B2D-S5 -->', '<section class="wp-block-group sf-spectable ', '<!-- B2D-S1: actives -->', 'sf-spectable', 'sf-facts']
+  * products__drops.html: undoing the batch does not reproduce the base
+  * products__fish-oil.html: the candidate still carries ['<!-- B2D-S5: core facts -->', '<!-- /B2D-S5 -->', '<section class="wp-block-group sf-spectable ', '<!-- B2D-S1: actives -->', 'sf-spectable', 'sf-facts']
+  * products__fish-oil.html: undoing the batch does not reproduce the base
+  * products__liquids.html: the candidate still carries ['<!-- B2D-S5: core facts -->', '<!-- /B2D-S5 -->', '<section class="wp-block-group sf-spectable ', '<!-- B2D-S1: actives -->', 'sf-spectable', 'sf-facts']
+  * products__liquids.html: undoing the batch does not reproduce the base
+  * products__pastes.html: the candidate still carries ['<!-- B2D-S5: core facts -->', '<!-- /B2D-S5 -->', '<section class="wp-block-group sf-spectable ', '<!-- B2D-S1: actives -->', 'sf-spectable', 'sf-facts']
+  * products__pastes.html: undoing the batch does not reproduce the base
+  * products__powders.html: the candidate still carries ['<!-- B2D-S5: core facts -->', '<!-- /B2D-S5 -->', '<section class="wp-block-group sf-spectable ', '<!-- B2D-S1: actives -->', 'sf-spectable', 'sf-facts']
+  * products__powders.html: undoing the batch does not reproduce the base
+  * products__soft-chews.html: the candidate still carries ['<!-- B2D-S5: core facts -->', '<!-- /B2D-S5 -->', '<section class="wp-block-group sf-spectable ', '<!-- B2D-S1: actives -->', 'sf-spectable', 'sf-facts']
+  * products__soft-chews.html: undoing the batch does not reproduce the base
+  * products__tablets.html: the candidate still carries ['<!-- B2D-S5: core facts -->', '<!-- /B2D-S5 -->', '<section class="wp-block-group sf-spectable ', '<!-- B2D-S1: actives -->', 'sf-spectable', 'sf-facts']
+  * products__tablets.html: undoing the batch does not reproduce the base
+  * zh__formulas__bladder-support-powder.html: candidate hero meta is '<p class="sf-formula-hero__meta">Powders · MOQ from 500 units · Lead time 7–15 working days after packaging is ready</p>', expected exactly '<p class="sf-formula-hero__meta">Powders</p>'
+  * zh__formulas__bladder-support-powder.html: undoing the batch does not reproduce the base
+  * zh__formulas__calcium-phosphorus-tablets.html: candidate hero meta is '<p class="sf-formula-hero__meta">Tablets · MOQ from 1,000 units · Lead time 7–15 working days after packaging is ready</p>', expected exactly '<p class="sf-formula-hero__meta">Tablets</p>'
+  * zh__formulas__calcium-phosphorus-tablets.html: undoing the batch does not reproduce the base
+  * zh__formulas__calming-soft-chews.html: candidate hero meta is '<p class="sf-formula-hero__meta">Soft Chews · MOQ from 500–1,000 units · Lead time 7–15 working days after packaging is ready</p>', expected exactly '<p class="sf-formula-hero__meta">Soft Chews</p>'
+  * zh__formulas__calming-soft-chews.html: undoing the batch does not reproduce the base
+  * zh__formulas__digestive-soft-chews.html: candidate hero meta is '<p class="sf-formula-hero__meta">Soft Chews · MOQ from 500–1,000 units · Lead time 7–15 working days after packaging is ready</p>', expected exactly '<p class="sf-formula-hero__meta">Soft Chews</p>'
+  * zh__formulas__digestive-soft-chews.html: undoing the batch does not reproduce the base
+  * zh__formulas__ear-care-drops.html: candidate hero meta is '<p class="sf-formula-hero__meta">Drops · MOQ from 500 units · Lead time 7–15 working days after packaging is ready</p>', expected exactly '<p class="sf-formula-hero__meta">Drops</p>'
+  * zh__formulas__ear-care-drops.html: undoing the batch does not reproduce the base
+  * zh__formulas__hairball-remedy-paste.html: candidate hero meta is '<p class="sf-formula-hero__meta">Pastes · MOQ from 500 units · Lead time 7–15 working days after packaging is ready</p>', expected exactly '<p class="sf-formula-hero__meta">Pastes</p>'
+  * zh__formulas__hairball-remedy-paste.html: undoing the batch does not reproduce the base
+  * zh__formulas__joint-support-soft-chews.html: candidate hero meta is '<p class="sf-formula-hero__meta">Soft Chews · MOQ from 500–1,000 units · Lead time 7–15 working days after packaging is ready</p>', expected exactly '<p class="sf-formula-hero__meta">Soft Chews</p>'
+  * zh__formulas__joint-support-soft-chews.html: undoing the batch does not reproduce the base
+  * zh__formulas__joint-support-tablets.html: candidate hero meta is '<p class="sf-formula-hero__meta">Tablets · MOQ from 1,000 units · Lead time 7–15 working days after packaging is ready</p>', expected exactly '<p class="sf-formula-hero__meta">Tablets</p>'
+  * zh__formulas__joint-support-tablets.html: undoing the batch does not reproduce the base
+  * zh__formulas__liquid-joint-support.html: candidate hero meta is '<p class="sf-formula-hero__meta">Liquids · MOQ from 500 units · Lead time 7–15 working days after packaging is ready</p>', expected exactly '<p class="sf-formula-hero__meta">Liquids</p>'
+  * zh__formulas__liquid-joint-support.html: undoing the batch does not reproduce the base
+  * zh__formulas__liquid-skin-coat.html: candidate hero meta is '<p class="sf-formula-hero__meta">Liquids · MOQ from 500 units · Lead time 7–15 working days after packaging is ready</p>', expected exactly '<p class="sf-formula-hero__meta">Liquids</p>'
+  * zh__formulas__liquid-skin-coat.html: undoing the batch does not reproduce the base
+  * zh__formulas__multivitamin-tablets.html: candidate hero meta is '<p class="sf-formula-hero__meta">Tablets · MOQ from 1,000 units · Lead time 7–15 working days after packaging is ready</p>', expected exactly '<p class="sf-formula-hero__meta">Tablets</p>'
+  * zh__formulas__multivitamin-tablets.html: undoing the batch does not reproduce the base
+  * zh__formulas__natural-cleaning-dental-sticks.html: candidate hero meta is '<p class="sf-formula-hero__meta">Dental Chews · MOQ from 1,000 units · Lead time 7–15 working days after packaging is ready</p>', expected exactly '<p class="sf-formula-hero__meta">Dental Chews</p>'
+  * zh__formulas__natural-cleaning-dental-sticks.html: undoing the batch does not reproduce the base
+  * zh__formulas__nutrition-paste.html: candidate hero meta is '<p class="sf-formula-hero__meta">Pastes · MOQ from 500 units · Lead time 7–15 working days after packaging is ready</p>', expected exactly '<p class="sf-formula-hero__meta">Pastes</p>'
+  * zh__formulas__nutrition-paste.html: undoing the batch does not reproduce the base
+  * zh__formulas__oral-care-dental-sticks.html: candidate hero meta is '<p class="sf-formula-hero__meta">Dental Chews · MOQ from 1,000 units · Lead time 7–15 working days after packaging is ready</p>', expected exactly '<p class="sf-formula-hero__meta">Dental Chews</p>'
+  * zh__formulas__oral-care-dental-sticks.html: undoing the batch does not reproduce the base
+  * zh__formulas__plaque-control-dental-chews.html: candidate hero meta is '<p class="sf-formula-hero__meta">Dental Chews · MOQ from 1,000 units · Lead time 7–15 working days after packaging is ready</p>', expected exactly '<p class="sf-formula-hero__meta">Dental Chews</p>'
+  * zh__formulas__plaque-control-dental-chews.html: undoing the batch does not reproduce the base
+  * zh__formulas__probiotic-powder.html: candidate hero meta is '<p class="sf-formula-hero__meta">Powders · MOQ from 500 units · Lead time 7–15 working days after packaging is ready</p>', expected exactly '<p class="sf-formula-hero__meta">Powders</p>'
+  * zh__formulas__probiotic-powder.html: undoing the batch does not reproduce the base
+  * zh__formulas__pumpkin-digestive-powder.html: candidate hero meta is '<p class="sf-formula-hero__meta">Powders · MOQ from 500 units · Lead time 7–15 working days after packaging is ready</p>', expected exactly '<p class="sf-formula-hero__meta">Powders</p>'
+  * zh__formulas__pumpkin-digestive-powder.html: undoing the batch does not reproduce the base
+  * zh__formulas__pure-fish-oil-blend.html: candidate hero meta is '<p class="sf-formula-hero__meta">Fish Oil · MOQ from 1,000 units · Lead time 7–15 working days after packaging is ready</p>', expected exactly '<p class="sf-formula-hero__meta">Fish Oil</p>'
+  * zh__formulas__pure-fish-oil-blend.html: undoing the batch does not reproduce the base
+  * zh__formulas__skin-coat-soft-chews.html: candidate hero meta is '<p class="sf-formula-hero__meta">Soft Chews · MOQ from 500–1,000 units · Lead time 7–15 working days after packaging is ready</p>', expected exactly '<p class="sf-formula-hero__meta">Soft Chews</p>'
+  * zh__formulas__skin-coat-soft-chews.html: undoing the batch does not reproduce the base
+  * zh__formulas__urinary-care-drops.html: candidate hero meta is '<p class="sf-formula-hero__meta">Drops · MOQ from 500 units · Lead time 7–15 working days after packaging is ready</p>', expected exactly '<p class="sf-formula-hero__meta">Drops</p>'
+  * zh__formulas__urinary-care-drops.html: undoing the batch does not reproduce the base
+  * zh__formulas__wild-alaskan-salmon-oil.html: candidate hero meta is '<p class="sf-formula-hero__meta">Fish Oil · MOQ from 1,000 units · Lead time 7–15 working days after packaging is ready</p>', expected exactly '<p class="sf-formula-hero__meta">Fish Oil</p>'
+  * zh__formulas__wild-alaskan-salmon-oil.html: undoing the batch does not reproduce the base
+  * zh__products__dental-chews.html: the candidate still carries ['<!-- B2D-S5: core facts -->', '<!-- /B2D-S5 -->', '<section class="wp-block-group sf-spectable ', '<!-- B2D-S1: actives -->', 'sf-spectable', 'sf-facts']
+  * zh__products__dental-chews.html: undoing the batch does not reproduce the base
+  * zh__products__drops.html: the candidate still carries ['<!-- B2D-S5: core facts -->', '<!-- /B2D-S5 -->', '<section class="wp-block-group sf-spectable ', '<!-- B2D-S1: actives -->', 'sf-spectable', 'sf-facts']
+  * zh__products__drops.html: undoing the batch does not reproduce the base
+  * zh__products__fish-oil.html: the candidate still carries ['<!-- B2D-S5: core facts -->', '<!-- /B2D-S5 -->', '<section class="wp-block-group sf-spectable ', '<!-- B2D-S1: actives -->', 'sf-spectable', 'sf-facts']
+  * zh__products__fish-oil.html: undoing the batch does not reproduce the base
+  * zh__products__liquids.html: the candidate still carries ['<!-- B2D-S5: core facts -->', '<!-- /B2D-S5 -->', '<section class="wp-block-group sf-spectable ', '<!-- B2D-S1: actives -->', 'sf-spectable', 'sf-facts']
+  * zh__products__liquids.html: undoing the batch does not reproduce the base
+  * zh__products__pastes.html: the candidate still carries ['<!-- B2D-S5: core facts -->', '<!-- /B2D-S5 -->', '<section class="wp-block-group sf-spectable ', '<!-- B2D-S1: actives -->', 'sf-spectable', 'sf-facts']
+  * zh__products__pastes.html: undoing the batch does not reproduce the base
+  * zh__products__powders.html: the candidate still carries ['<!-- B2D-S5: core facts -->', '<!-- /B2D-S5 -->', '<section class="wp-block-group sf-spectable ', '<!-- B2D-S1: actives -->', 'sf-spectable', 'sf-facts']
+  * zh__products__powders.html: undoing the batch does not reproduce the base
+  * zh__products__soft-chews.html: the candidate still carries ['<!-- B2D-S5: core facts -->', '<!-- /B2D-S5 -->', '<section class="wp-block-group sf-spectable ', '<!-- B2D-S1: actives -->', 'sf-spectable', 'sf-facts']
+  * zh__products__soft-chews.html: undoing the batch does not reproduce the base
+  * zh__products__tablets.html: the candidate still carries ['<!-- B2D-S5: core facts -->', '<!-- /B2D-S5 -->', '<section class="wp-block-group sf-spectable ', '<!-- B2D-S1: actives -->', 'sf-spectable', 'sf-facts']
+  * zh__products__tablets.html: undoing the batch does not reproduce the base
+  * style.css: declared new text occurs 0 time(s), expected 1
+  * style.css: reconstruction does not reproduce the base byte-for-byte
+  * functions.php: declared new text occurs 0 time(s), expected 1
+  * functions.php: reconstruction does not reproduce the base byte-for-byte
+  * templates/page-soft-chews.html: reconstruction does not reproduce the base byte-for-byte
+  * templates/page-tablets.html: reconstruction does not reproduce the base byte-for-byte
+  * templates/page-powders.html: reconstruction does not reproduce the base byte-for-byte
+  * templates/page-pastes.html: reconstruction does not reproduce the base byte-for-byte
+  * templates/page-drops.html: reconstruction does not reproduce the base byte-for-byte
+  * templates/page-liquids.html: reconstruction does not reproduce the base byte-for-byte
+  * templates/page-fish-oil.html: reconstruction does not reproduce the base byte-for-byte
+  * templates/page-dental-chews.html: reconstruction does not reproduce the base byte-for-byte
+==============================================================================

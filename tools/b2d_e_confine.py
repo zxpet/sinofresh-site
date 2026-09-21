@@ -131,22 +131,29 @@ def expected_diff_pages(names):
 
 
 def page_reduce(name, base_norm, cand_norm, fails, say):
-    """Undo this batch on one page; return True when it reproduces the base."""
-    if '__products__' in name:
-        cand, basepage = cand_norm, base_norm
-        n_s5 = len(S5_PAGE_RE.findall(cand))
-        n_sp = len(SPEC_PAGE_RE.findall(cand))
+    """Undo this batch on one page; return True when it reproduces the other.
+
+    The direction is set by which side the batch's content lives on. This is a
+    deletion batch, so for a dosage page the three spans are in the BASE and
+    the reduction runs there: base minus the spans must equal the candidate.
+    For a formula page the batch's effect is the shortened hero meta, which is
+    in the CANDIDATE, so the full line goes back on and the result must equal
+    the base. Getting this backwards (it was, in the first version) cannot be
+    detected by counting: the run still produced 58 findings.
+    """
+    if re.match(r'^(zh__)?products__', name):
+        basepage, cand = base_norm, cand_norm
+        n_s5 = len(S5_PAGE_RE.findall(basepage))
+        n_sp = len(SPEC_PAGE_RE.findall(basepage))
         if n_s5 != 1 or n_sp != 1:
             fails.append('%s: expected exactly one band span and one '
-                         'spectable+actives span, found %d and %d'
+                         'spectable+actives span in the base, found %d and %d'
                          % (name, n_s5, n_sp))
-            say('    !! %s: spans found %d (band) / %d (spectable+actives)'
+            say('    !! %s: spans in the base %d (band) / %d (spectable+actives)'
                 % (name, n_s5, n_sp))
             return False
-        # sanity: what is being deleted has to look like the sections and
-        # must not contain anything that survives.
-        band = S5_PAGE_RE.search(cand).group(0)
-        spec = SPEC_PAGE_RE.search(cand).group(0)
+        band = S5_PAGE_RE.search(basepage).group(0)
+        spec = SPEC_PAGE_RE.search(basepage).group(0)
         ok_band = ('class="sf-facts__table"' in band
                    and 'sf-facts__answer' in band
                    and band.count('<th scope="row">') == 5
@@ -163,35 +170,51 @@ def page_reduce(name, base_norm, cand_norm, fails, say):
             say('    !! %s: band ok %s / spec ok %s / survivors %r'
                 % (name, ok_band, ok_spec, survivors))
             return False
+        # the other half of the proof: nothing of the batch may be left on the
+        # candidate side, and the sections that survive have to be there.
+        left = [tok for tok in (S5_OPEN, S5_CLOSE, SPEC_PAGE_OPEN, S1_MARK,
+                                'sf-spectable', 'sf-facts')
+                if tok in cand]
+        if left:
+            fails.append('%s: the candidate still carries %r'
+                         % (name, left))
+            say('    !! %s: candidate still carries %r' % (name, left))
+            return False
+        for keep in ('<section id="formulas"', 'configurator',
+                     'Frequently Asked Questions', 'How We Work',
+                     'Related Dosage Forms'):
+            if keep not in cand:
+                fails.append('%s: the candidate lost %r' % (name, keep))
+                say('    !! %s: candidate lost %r' % (name, keep))
+                return False
         # the joins, from the new template's own structure: hero -> #formulas
         # keeps four newlines; configurator -> the Block 9 comment keeps three.
-        reduced = S5_PAGE_RE.sub('\n\n\n\n', cand, count=1)
+        reduced = S5_PAGE_RE.sub('\n\n\n\n', basepage, count=1)
         reduced = SPEC_PAGE_RE.sub('</section>\n\n\n', reduced, count=1)
-    else:
-        # formula page: hero meta degrades to the form label alone.
-        cand, basepage = cand_norm, base_norm
-        asked = DETAIL_META_RE.findall(basepage)
-        if len(asked) != 1 or ' \u00b7 ' not in asked[0]:
-            fails.append('%s: base hero meta is not a single "label · ..." line'
-                         % name)
-            say('    !! %s: base meta %r' % (name, asked))
-            return False
-        label = META_RE.search(asked[0]).group(1).split(' \u00b7 ')[0]
-        want = '<p class="sf-formula-hero__meta">%s</p>' % label
-        got = DETAIL_META_RE.findall(cand)
-        if len(got) != 1:
-            fails.append('%s: candidate has %d hero meta lines' % (name, len(got)))
-            say('    !! %s: candidate has %d meta line(s)' % (name, len(got)))
-            return False
-        reduced = cand.replace(got[0], want, 1)
-        if reduced != basepage and len(got) == 1:
-            # a mismatch here is most likely the label being translated on the
-            # /zh/ copy, which is worth reporting precisely rather than as a
-            # bare "does not reproduce".
-            say('    note %s: candidate meta %r vs asserted %r'
-                % (name, got[0][len('<p class="sf-formula-hero__meta">'):-4],
-                   label))
-    return reduced == basepage
+        return reduced == cand
+
+    # formula page: the hero meta line degrades to the form label alone
+    # (functions.php: meta_bits, implode(' · ')), so put the full line back.
+    basepage, cand = base_norm, cand_norm
+    asked = DETAIL_META_RE.findall(basepage)
+    if len(asked) != 1 or ' \u00b7 ' not in asked[0]:
+        fails.append('%s: base hero meta is not a single "label · ..." line'
+                     % name)
+        say('    !! %s: base meta %r' % (name, asked))
+        return False
+    label = META_RE.search(asked[0]).group(1).split(' \u00b7 ')[0]
+    want = '<p class="sf-formula-hero__meta">%s</p>' % label
+    got = DETAIL_META_RE.findall(cand)
+    if len(got) != 1:
+        fails.append('%s: candidate has %d hero meta lines' % (name, len(got)))
+        say('    !! %s: candidate has %d meta line(s)' % (name, len(got)))
+        return False
+    if got[0] != want:
+        fails.append('%s: candidate hero meta is %r, expected exactly %r'
+                     % (name, got[0], want))
+        say('    !! %s: candidate meta %r, expected %r' % (name, got[0], want))
+        return False
+    return cand.replace(got[0], asked[0], 1) == basepage
 
 
 def main():
@@ -305,10 +328,12 @@ def main():
         fails.append('%s should have differed and did not' % name)
 
     # ---- gate 3: page-level confined proof -------------------------------
-    say('\n[3] page-level confined proof: undo this batch on the candidate, '
-        'compare to base')
-    say('    dosage pages: delete the three spans; formula pages: put the '
-        'full hero meta line back')
+    say('\n[3] page-level confined proof: undo this batch, compare the two '
+        'sides')
+    say('    dosage pages: the spans live on the base side, so base minus the '
+        'spans must equal the candidate')
+    say('    formula pages: the batch\'s effect is the shortened hero meta, so '
+        'putting the full line back must equal the base')
     confined = 0
     for name in sorted(expect):
         if name not in new or name not in base:

@@ -1,0 +1,49 @@
+==============================================================================
+Batch 2D step E — gates for deleting sf-facts / sf-spectable / B2D-S1
+                 from the eight dosage pages, 2.10.51 -> 2.10.52
+==============================================================================
+
+[0] inputs, and proof that the candidate is the candidate
+    base dir _backup/b2d-stepE-baselines/base : 75 pages
+    new  dir _backup/b2d-stepE-baselines/new : 75 pages
+    candidate pages carrying the pre-flight theme directory: 75/75
+    expected to differ: 58 page(s) — 8 dosage + 8 /zh/ dosage + 21 formula + 21 /zh/ formula
+
+[1] resource inventory (which cache tokens moved?)
+    style.css          2.10.51 -> 2.10.52   on 75 page(s)
+    asset SET changed on 0 page(s) (must be 0)
+
+[2] masked comparison of the 75 pages (?ver= folded, nonces and the pre-flight directory masked)
+    differ    58 page(s)
+    identical 17 page(s)
+
+[3] page-level confined proof: undo this batch, compare the two sides
+    dosage pages: the spans live on the base side, so base minus the spans must equal the candidate
+    formula pages: the batch's effect is the shortened hero meta, so putting the full line back must equal the base
+    58/58 page(s) reduce to the base byte-for-byte
+
+[4] style.css / functions.php / the eight templates — reconstruction
+    each file: undo the declared edits, then compare to the source the batch started from.
+    A declaration is (restore_this, currently_present); restore_this of None means a pure insertion, so the literal is deleted.
+
+    style.css                base 261832 / new 261832 / undone 261832  applied:YES  undone==base:YES
+    functions.php            base 168850 / new 168850 / undone 168850  applied:YES  undone==base:YES
+    templates/page-soft-chews.html base  56882 / new  53699 / undone  53699  applied:YES  undone==base:YES  (-3183 B in two spans)
+    templates/page-tablets.html base  48447 / new  45394 / undone  45394  applied:YES  undone==base:YES  (-3053 B in two spans)
+    templates/page-powders.html base  47851 / new  44858 / undone  44858  applied:YES  undone==base:YES  (-2993 B in two spans)
+    templates/page-pastes.html base  45956 / new  42942 / undone  42942  applied:YES  undone==base:YES  (-3014 B in two spans)
+    templates/page-drops.html base  46362 / new  43351 / undone  43351  applied:YES  undone==base:YES  (-3011 B in two spans)
+    templates/page-liquids.html base  46735 / new  43695 / undone  43695  applied:YES  undone==base:YES  (-3040 B in two spans)
+    templates/page-fish-oil.html base  46209 / new  43181 / undone  43181  applied:YES  undone==base:YES  (-3028 B in two spans)
+    templates/page-dental-chews.html base  51183 / new  48127 / undone  48127  applied:YES  undone==base:YES  (-3056 B in two spans)
+
+[5] JSON-LD deep-equal (decoded structures, not masked text)
+    identical 75/75 page(s)
+
+==============================================================================
+PASS — only style.css's version token moved, on all 75 pages, with no asset added or lost;
+       58 pages differ and they are exactly the expected set;
+       all 58 changed pages reduce to the base byte-for-byte once the batch is undone;
+       the ten source files rebuild to their pre-batch bytes;
+       75/75 pages byte-identical in decoded JSON-LD.
+==============================================================================
