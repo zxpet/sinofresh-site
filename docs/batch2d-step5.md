@@ -214,9 +214,16 @@ band left edge 120 = 页面度量左缘
 | `wp-content/debug.log` (+`._debug.log`) | 2 个文件 | 扫描 `grep -rIl "/Users/meng"` ⇒ 全 `wp-content` **仅此一处**命中 | **删除**（泄露已闭合，删除后该扫描 0 命中） |
 | AppleDouble `._*` | **5645** 个 / 936 KB（`plugins` 4295、`vendor` 715、`themes` 441、`languages` 105、`uploads` 76） | 逐个读前 4 字节，验证 **AppleDouble 魔数 `00 05 16 07`**；**非魔数计数 0** | **删除 5644**（第 5645 个是 `._debug.log`）；删除动作**自带魔数守卫**，未验证的不删 |
 | `.DS_Store` | 2 个 | 文件名精确匹配 | 删除 |
+| `wp-content/composer.phar` (+`.json`/`.lock`) | 3 个 / 3.6 MB | `grep -rIl "composer\.phar"` 在全部 `wp-content` PHP 里 **0 引用**；运行时真依赖是 `wp-content/vendor/autoload.php`（**200**，649 文件完整） | **移出 web 根** → `/var/www/dev.zxpet.com/_offroot/`（保留文件、可逆） |
 
-复查：残留 `._*` **0** / `.DS_Store` **0** / 仍引用本机路径的文件 **0**；站点仍 **401**（封锁正常），
-清理后 8 个剂型页全 **200 + band + `style.css?ver=2.10.51`**。
+`composer.phar` 这一条的性质与前三类不同：它**不是垃圾**，而是「一个 3.6 MB 的 CLI 工具躺在 web 根下」。
+现在被封锁挡着（无凭据 401），但**封锁是要解除的** ⇒ 解除后就是可直接下载的路径。
+选择**移出而不是删除**：可逆、零数据损失，且运行时不依赖它。
+带凭据复核：`/wp-content/composer.phar|.json|.lock` 全部 **404**（证明确实不在 web 根了），
+`/wp-content/vendor/autoload.php` **200**（运行时依赖完好）。
+
+复查：残留 `._*` **0** / `.DS_Store` **0** / 仍引用本机路径的文件 **0** / `composer.*` 带凭据 **404**；
+站点仍 **401**（封锁正常），清理后 8 个剂型页全 **200 + band + `style.css?ver=2.10.51`**。
 
 顺带确认：**仓库本身干净** —— `git ls-files` 里 `._*` / `.DS_Store` **0 个**，
 `site-repo` 磁盘上也是 **0 个** ⇒ 这批垃圾只存在于**非仓库区**的 `wp-content/`。
@@ -279,6 +286,7 @@ band left edge 120 = 页面度量左缘
 - 配置器 Packaging 选项集与 `.sf-facts` Packaging 行同源，未来任一侧改动需要同步
 - **部署同步脚本要加 `--exclude='._*' --exclude='.DS_Store'`**（本批已清掉存量 5647 个，
   根因是「从 macOS 拷贝时没排除」未修；已在 `docs/batch2d-step5.md` §5 记账）
-- 未评估：dev docroot 里还有 `wp-content/composer.phar`（3.6 MB）与 `composer.json/lock`
-  —— 一个 3.6 MB 的库文件直接躺在 web 根下，属性上是「可达路径」而非「垃圾」，
-  是否该移出属于**部署形态决策**（可能被某个插件引用），本批只记账不动手
+- `composer.phar/json/lock` 已移出 web 根到 `/var/www/dev.zxpet.com/_offroot/`
+  （记账非待办）；若将来要在 wp-content 下跑 composer，从这里拷回去即可
+- 未评估：`wp-content/vendor/` 里 649 个文件同样在 web 根下（运行时**必须**在，不能移）；
+  是否需要给 `wp-content/vendor` 加一条 Apache `<Directory>` 拒绝直访，属独立安全批次
