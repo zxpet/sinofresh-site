@@ -349,7 +349,12 @@ add_action('save_post_sf_formula', function ($post_id) {
 						$rows[] = $row; // fully-empty rows are dropped, not stored
 					}
 				}
-				update_post_meta($post_id, $key, wp_json_encode(array_values($rows)));
+				/* update_post_meta() runs wp_unslash() on the value, which would
+				 * strip the backslash out of JSON escapes (\" quotes, \uXXXX) and
+				 * corrupt the stored JSON — measured 2026-09-21 (an em dash came
+				 * back as a literal "u2014"). Store slash-slashed data with
+				 * unicode/slashes unescaped, as the core API expects. */
+				update_post_meta($post_id, $key, wp_slash(wp_json_encode(array_values($rows), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)));
 				break;
 			case 'faqtable':
 				$qs   = array_map('sanitize_text_field', (array) wp_unslash($_POST[$key]['q'] ?? array()));
@@ -363,7 +368,7 @@ add_action('save_post_sf_formula', function ($post_id) {
 						$rows[] = array('q' => $q, 'a' => $a);
 					}
 				}
-				update_post_meta($post_id, $key, wp_json_encode(array_values($rows)));
+				update_post_meta($post_id, $key, wp_slash(wp_json_encode(array_values($rows), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)));
 				break;
 		}
 	}
