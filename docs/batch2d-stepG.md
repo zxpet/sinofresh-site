@@ -1,6 +1,6 @@
 # Batch G — 详情页「主图 + 参数」两栏 + 剂型页 Packaging 第 4 行
 
-**状态：已上线并闭环（2026-09-21）**。提交链：`c4f4437`（源改动 + 门工具 + 方案档）→ `d8c54a5`（门报告 + 渲染取证 + 本档）→ 闭环提交（`docs/b2d-g-closure/` 8 件证据 + 本档 Step 7 段）。线上工作树由 `4504aa9`（F1）快进到 `d8c54a5`（**主题内容＝`c4f4437`**，`d8c54a5` 只加 docs/tools），预检副本已拆净。
+**状态：已上线并闭环（2026-09-21）**。提交链：`c4f4437`（源改动 + 门工具 + 方案档）→ `d8c54a5`（门报告 + 渲染取证 + 本档）→ `8522f77`（`docs/b2d-g-closure/` 证据 + 本档头部）。线上工作树由 `4504aa9`（F1）快进到 `d8c54a5`（**主题内容＝`c4f4437`**，`d8c54a5` 只加 docs/tools），预检副本已拆净。
 
 ## 一、这批做了什么
 
@@ -40,7 +40,9 @@
 
 合成器本身也修了 2 处：formulas 分支「先插注释再定位」的索引偏移（曾产出 `<<section` 坏字节）；键名带 `.html` 后缀（F1 同款 bug 复发）。
 
-## 三、渲染取证（`tools/b2d_g_evidence.py`，**340 项 / 0 失败**）
+## 三、渲染取证（`tools/b2d_g_evidence.py`，预检 **340 项 / 0 失败**，live 复跑 **342 项 / 0 失败**）
+
+> 两次项数差 2，是因为 live 复跑把点轨断言从「两侧读数相等」升级成「直接断言 detail 0 / dosage 6」（多 2 项）。预检那一跑读的是候选副本，live 那一跑读的是线上（不带 `X-SF-Preflight` 头，并断言拿到的样式表**不是** preflight 目录）。
 
 数字全部实测（`docs/batchG-evidence.json` 落盘，截图 `docs/batchG-shots/`），断言「拿到的是哪份样式表」也是一项检查（本批全走预检副本 `style.css?ver=2.10.54`）。
 
@@ -54,6 +56,30 @@
 
 方案里「详情页点轨 4 点」是**错误前提**。实测（预检与线上 2.10.53 各测一遍）：详情页 `toc-nav.js` **根本未入队**，`.sf-toc__dot` 为 **0**，全页无任何 `*toc*` 元素；线上同样为 0。所以本批的不变量不是「保持 4 点」，而是「**详情页点轨数与线上一致（0＝0）、剂型页 6 点不变**」——已用 live vs 候选两侧对照证实（detail `0/0`，dosage `6/6`，均 RAIL UNCHANGED）。断言一个不存在的东西，只会把对的改成错的；这条已写进取证工具的注释。
 
-## 五、下一步（Step 7，等确认）
+## 五、Step 7 上线与八步闭环（2026-09-21 07:2x–07:4x UTC）
 
-预检副本仍在云端、线上字节未动。确认后按八步闭环走：`pull --ff-only` → 掩码 75/75 identical → E2E → 拆预检 → 日志归因（沿用 2D-E 那条 fatal 的 `--allow` 记账）→ 身份链 691 文件 → 仓库 md5（`--exclude` 本档）→ 收尾提交。回滚路径＝预检脚手架的 `remove`＋工作树仍在 F1。
+拍板后执行。八步逐条落证，证据全在 `docs/b2d-g-closure/`（9 件：`closure-75.json`、`teardown-75.json`、`e2e.json/.txt`、`logaudit.txt`、`identity-chain.txt`、`cloud-md5.txt`、`g-preflight.log`、`teardown.txt`、`shots/` 4 张）。
+
+| 步 | 结果 |
+|---|---|
+| 1 上线 | `git pull --ff-only`：`4504aa9`（F1）→ `d8c54a5`。`git diff --name-only c4f4437 d8c54a5` 里**主题文件 0 个** ⇒ 上线的主题字节就是门上跑过的 `c4f4437`；线上 `functions.php`/`style.css` sha256 与本地**逐位相同**（`87a0499b…`／`2578488e…`） |
+| 2 服务侧 | 详情页与剂型页都引用 `themes/sinofresh-theme/style.css?ver=2.10.54`（**不是** preflight 目录）；两栏 8 个类各 1 次、`id="gallery"` 1、`h2.sf-gallery__title` 1、4 帧 slide 在；`<dl>` **5 行**（Unit size / Pack options / Shelf life / Certifications / Packaging）；CTA → `/contact/`「Request Sample」；剂型页事实带 **4 项**、第 4 项 `data-label="Packaging formats"` 以 `, or custom formats` 结尾；**A/A 掩码自检 PASS**（111918/111918 B） |
+| 3 掩码回归 | 抓 live 75 页，先**逐页断言样式表目录为 `sinofresh-theme` 且版本为 2.10.54**（否则 CF 快照能冒充上线）→ 候选 vs live **75/75 identical** |
+| 4 浏览器 E2E（live） | **342 项 / 0 失败**：1440 两栏 **691.19 / 460.80 px**（≈3:2）、gap **48**、左右顶边同为 **509**、`.sf-gallery__stage` `max-width:none` 宽 691＝栏宽、CTA `rgb(181,78,15)`；**点轨直接断言 detail 0 / dosage 6**；375（299px 单栏、gap 32）与 768（692px 单栏，leftBottom 1303 → sideTop 1335）堆叠成立；**0 JS 错** |
+| 5 拆预检 | 主题目录 / mu-plugin / 日志三者全消，`find *preflight*` **零残留**（仅余常驻 `zz-sf-dev-lockdown.php`）；拆前先把预检副本自己的访问日志（158 行、07:04:24→07:18:47）留档为 `g-preflight.log`。复验：**拆除前 live vs 拆除后 live 75/75 identical** ⇒ 拆除本身零字节影响；带 `X-SF-Preflight` 头访问现在也回落到线上主题 |
+| 6 日志归因 | **窗口内 0 条**；40 行按内容归因；1 条 `--allow` 记账（2D-E 负对照的故意 fatal）。窗口内 **1113 条请求全部认证为 `sfdev`，非我方 0 条**（`curl/8.7.1` 230 + 浏览器 882 + 站点自身 wp-cron 环回 1） |
+| 7 身份链 | workspace ↔ `site-repo/sinofresh-theme`：**691 文件 0 不一致**；第三条腿：仓库目录 ↔ Apache 实际服务的 symlink 目录：**691 文件 0 差异** |
+| 8 仓库 md5 | **1339 文件 0 差异**（两侧同排除 `docs/batch2d-stepG.md` 与 `docs/b2d-g-closure/cloud-md5.txt`；复跑命令写在 `cloud-md5.txt` 头部，与本次逐字相同） |
+
+### 过程里的两处自我纠正（都是用法错，不是数据错）
+
+1. **日志审计第一次跑 FAIL**：我把 `--access-log` 覆盖成只剩 SSL 那一份，端口 80 的 `/cgi-bin/luci` 探测因此找不到对照行——工具 docblock 原文就写着这条要靠端口 80 的访问日志。去掉覆盖后 PASS（2 条 FAIL → 0 条）。
+2. **窗口内那条 `WordPress/7.1.1` 请求**：`POST /wp-cron.php?doing_wp_cron=…`，访问日志记的用户是 `sfdev`、状态 200。它是**批前就有的既有行为**（前后 24 小时内每小时左右一条，最早一条在 20 Sep 23:25，早于本批任何改动），机制未坐实，但判别符说它是我们这一侧，一并计入归因。
+
+### 回滚
+
+预检脚手架已 `remove` 且已证零残留。主题回退＝在 `site-repo` 内 `git checkout 4504aa9 -- sinofresh-theme`（或把工作树 reset 回 `4504aa9`）；dev 站无页面缓存层，`functions.php` 的 enqueue 版本号一改，样式 URL 立刻换键，不需要手工清缓存。
+
+### 顺序上的一个取舍
+
+md5 是**最后一步**，在本档与 `cloud-md5.txt` 落盘之前跑（前者停在 `8522f77`，后者随后单独提交）。两个文件是这次判定本身的产物，与 F1 同款处理：报告不能是它所报告集合的成员 ⇒ 两侧同时排除它们；`cloud-md5.txt` 头部写着逐字复跑命令，跑完应得同样的 1339/0。
