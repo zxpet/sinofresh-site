@@ -1,0 +1,22 @@
+Batch G rendered proof: 342 checks, 0 failures
+  [PASS] joint-support-soft-chews            1440  CASE PASS              {"geometry": {"vw": 1440, "tracks": ["691.188px", "460.797px"], "gap": "48px", "left": 691, "side": 461, "leftTop": 509, "sideTop"
+  [PASS] joint-support-soft-chews             375  CASE PASS              {"geometry": {"vw": 375, "tracks": ["299px"], "gap": "32px", "left": 299, "side": 299, "leftTop": 554, "sideTop": 1082}, "stage": 
+  [PASS] pure-fish-oil-blend                 1440  CASE PASS              {"geometry": {"vw": 1440, "tracks": ["691.188px", "460.797px"], "gap": "48px", "left": 691, "side": 461, "leftTop": 509, "sideTop"
+  [PASS] pure-fish-oil-blend                  375  CASE PASS              {"geometry": {"vw": 375, "tracks": ["299px"], "gap": "32px", "left": 299, "side": 299, "leftTop": 499, "sideTop": 1028}, "stage": 
+  [PASS] joint-support-soft-chews (zh)       1440  CASE PASS              {"geometry": {"vw": 1440, "tracks": ["691.188px", "460.797px"], "gap": "48px", "left": 691, "side": 461, "leftTop": 509, "sideTop"
+  [PASS] joint-support-soft-chews (zh)        375  CASE PASS              {"geometry": {"vw": 375, "tracks": ["299px"], "gap": "32px", "left": 299, "side": 299, "leftTop": 554, "sideTop": 1082}, "stage": 
+  [PASS] joint-support-soft-chews @768        768  CASE PASS              {"geometry": {"tracks": ["692px"], "leftBottom": 1303, "sideTop": 1335, "leftWidth": 692, "sideWidth": 692}}
+  [PASS] soft-chews                          1440  CASE PASS              {"wrap": {"vw": 1440, "items": 4, "rows": 2, "tops": [473, 473, 473, 505], "bandHeight": 55}, "rail": {"h2": 6, "dots": 6}}
+  [PASS] tablets                             1440  CASE PASS              {"wrap": {"vw": 1440, "items": 4, "rows": 2, "tops": [473, 473, 473, 505], "bandHeight": 55}, "rail": {"h2": 6, "dots": 6}}
+  [PASS] powders                             1440  CASE PASS              {"wrap": {"vw": 1440, "items": 4, "rows": 2, "tops": [473, 473, 473, 505], "bandHeight": 55}, "rail": {"h2": 6, "dots": 6}}
+  [PASS] pastes                              1440  CASE PASS              {"wrap": {"vw": 1440, "items": 4, "rows": 2, "tops": [473, 473, 473, 505], "bandHeight": 55}, "rail": {"h2": 6, "dots": 6}}
+  [PASS] drops                               1440  CASE PASS              {"wrap": {"vw": 1440, "items": 4, "rows": 2, "tops": [473, 473, 473, 505], "bandHeight": 55}, "rail": {"h2": 6, "dots": 6}}
+  [PASS] liquids                             1440  CASE PASS              {"wrap": {"vw": 1440, "items": 4, "rows": 2, "tops": [473, 473, 473, 505], "bandHeight": 55}, "rail": {"h2": 6, "dots": 6}}
+  [PASS] fish-oil                            1440  CASE PASS              {"wrap": {"vw": 1440, "items": 4, "rows": 2, "tops": [473, 473, 473, 505], "bandHeight": 55}, "rail": {"h2": 6, "dots": 6}}
+  [PASS] dental-chews                        1440  CASE PASS              {"wrap": {"vw": 1440, "items": 4, "rows": 2, "tops": [473, 473, 473, 505], "bandHeight": 55}, "rail": {"h2": 6, "dots": 6}}
+  [PASS] soft-chews @375                      375  CASE PASS              {"wrap": {"vw": 375, "items": 4, "rows": 4, "tops": [615, 677, 738, 800], "bandHeight": 289}, "rail": {"h2": 6, "dots": 6}}
+  [PASS] rail detail: live vs live-again     1440  RAIL UNCHANGED         {"live": {"sheet": "https://dev.zxpet.com/wp-content/themes/sinofresh-theme/style.css?ver=2.10.54", "dots": 0, "h2": 5, "tocScript
+  [PASS] rail detail: dot count              1440  DOTS == 0              {"sheet": "https://dev.zxpet.com/wp-content/themes/sinofresh-theme/style.css?ver=2.10.54", "dots": 0, "h2": 5, "tocScript": false}
+  [PASS] rail dosage: live vs live-again     1440  RAIL UNCHANGED         {"live": {"sheet": "https://dev.zxpet.com/wp-content/themes/sinofresh-theme/style.css?ver=2.10.54", "dots": 6, "h2": 6, "tocScript
+  [PASS] rail dosage: dot count              1440  DOTS == 6              {"sheet": "https://dev.zxpet.com/wp-content/themes/sinofresh-theme/style.css?ver=2.10.54", "dots": 6, "h2": 6, "tocScript": true}
+measurements -> docs/batchG-evidence-live.json

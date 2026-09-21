@@ -414,21 +414,33 @@ def main():
     # reading the rail off the live 2.10.53 page and off the candidate and
     # finding them the same — which is also how the premise "the detail page
     # has a 4-dot rail" got corrected: it has none, and it had none before.
-    for label, path in (('detail', '/formulas/joint-support-soft-chews/'),
-                        ('dosage', '/products/soft-chews/')):
+    for label, path, want in (('detail', '/formulas/joint-support-soft-chews/', 0),
+                              ('dosage', '/products/soft-chews/', 6)):
         got = {}
-        for tag, pre in (('live', False), ('cand', args.preflight)):
+        # Under --preflight the second visit is the copy under test; on the
+        # live run it is the same page again, i.e. an A/A reading that would
+        # fail loudly if a page were flaky.
+        second = 'cand' if args.preflight else 'live-again'
+        for tag, pre in (('live', False), (second, args.preflight)):
             visit(args.site, path, tok, 1440, preflight=pre)
             got[tag] = ev(build_rail_js())
-        same = got['live'].get('dots') == got['cand'].get('dots')
+        same = got['live'].get('dots') == got[second].get('dots')
         total += 1
         if not same:
             fails += 1
-        raw.append({'case': 'rail %s, live vs test' % label, 'viewport': 1440,
-                    'path': path, 'data': got})
-        report.append(('rail %s, live vs test' % label, 1440,
+        raw.append({'case': 'rail %s, live vs %s' % (label, second),
+                    'viewport': 1440, 'path': path, 'data': got})
+        report.append(('rail %s: live vs %s' % (label, second), 1440,
                        'RAIL UNCHANGED' if same else 'RAIL MOVED', same,
                        json.dumps(got, ensure_ascii=False)[:185]))
+        n = got['live'].get('dots')
+        ok = (n == want)
+        total += 1
+        if not ok:
+            fails += 1
+        report.append(('rail %s: dot count' % label, 1440,
+                       'DOTS == %d' % want if ok else 'DOTS != %d' % want, ok,
+                       json.dumps(got['live'], ensure_ascii=False)[:185]))
 
     print('Batch G rendered proof: %d checks, %d failures' % (total, fails))
     for row in report:

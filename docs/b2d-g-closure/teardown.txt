@@ -1,0 +1,10 @@
+=== preflight teardown — state after removal ===
+date(UTC): 2026-09-21T07:41:51
+
+--- themes dir (sinofresh*) ---
+lrwxrwxrwx 1 apache apache   48 Sep 20 05:50 sinofresh-theme -> /var/www/dev.zxpet.com/site-repo/sinofresh-theme
+--- mu-plugins ---
+total 4
+-rw-r--r-- 1 apache apache 2510 Sep 20 14:19 zz-sf-dev-lockdown.php
+--- find *preflight* under wp-content ---
+(none above = clean)
