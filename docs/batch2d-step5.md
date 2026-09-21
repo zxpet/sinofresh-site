@@ -195,11 +195,39 @@ band left edge 120 = 页面度量左缘
   记录里又写着报告的结论 —— 两个文件都不存在稳定值。排除后**逐字节可复现**：
   同一条命令再跑一次，输出与入库报告 `cmp` 相同。
 
+### 顺带清掉的两处东西（日志取证带出来的，不在原计划内）
+
+审计错误日志时读到 `wp-content/debug.log` 的**内容**，发现它根本不是服务器产生的错误：
+
+```
+[19-Sep-2026 22:55:59 UTC] PHP Fatal error: … Call to undefined function wp_delete_option()
+  in /Users/meng/Workbuddy/sinofresh外贸网站建设/tools/t23_diag.php:44
+```
+
+它引用的是一条 **macOS 本机路径**，而本机现在**已无**这个 `debug.log`
+⇒ 它是**初次上云时从工作区误传进来的陈旧产物**（`_migration/` 那一步），不是 dev 站的行为记录。
+
+顺着这一点扫了一遍 docroot，量化后处理了两类东西（**都只落在 dev docroot，不碰生产站 `/var/www/html`**）：
+
+| 项 | 数量/体积 | 判据 | 处置 |
+|---|---|---|---|
+| `wp-content/debug.log` (+`._debug.log`) | 2 个文件 | 扫描 `grep -rIl "/Users/meng"` ⇒ 全 `wp-content` **仅此一处**命中 | **删除**（泄露已闭合，删除后该扫描 0 命中） |
+| AppleDouble `._*` | **5645** 个 / 936 KB（`plugins` 4295、`vendor` 715、`themes` 441、`languages` 105、`uploads` 76） | 逐个读前 4 字节，验证 **AppleDouble 魔数 `00 05 16 07`**；**非魔数计数 0** | **删除 5644**（第 5645 个是 `._debug.log`）；删除动作**自带魔数守卫**，未验证的不删 |
+| `.DS_Store` | 2 个 | 文件名精确匹配 | 删除 |
+
+复查：残留 `._*` **0** / `.DS_Store` **0** / 仍引用本机路径的文件 **0**；站点仍 **401**（封锁正常），
+清理后 8 个剂型页全 **200 + band + `style.css?ver=2.10.51`**。
+
+顺带确认：**仓库本身干净** —— `git ls-files` 里 `._*` / `.DS_Store` **0 个**，
+`site-repo` 磁盘上也是 **0 个** ⇒ 这批垃圾只存在于**非仓库区**的 `wp-content/`。
+⛔ 根因是「从 macOS 拷贝时没排除 `._*` 与 `.DS_Store`」；仓库侧不会复发（已在 `.gitignore` 之外，
+但**零跟踪**），部署侧下次同步应带 `--exclude='._*' --exclude='.DS_Store'`。
+
 ---
 
-## 6. 本批在工具里抓到的三个真 bug + 一条口径修正
+## 6. 本批在工具里抓到的四个真 bug + 一条口径修正
 
-门第一次全量跑就 FAIL 40 条，**没有一条是站点的错**：
+门第一次全量跑就 FAIL 40 条、日志审计第一次全量跑 FAIL 3 条，**没有一条是站点的错**：
 
 1. **声明对方向写反**。写成了 `(新, 旧)`，而契约是 `(restore_this, currently_present)` ⇒
    工具报告「明明在文件里的字面量出现 0 次」。改成 `(旧, 新)`。
@@ -208,6 +236,11 @@ band left edge 120 = 页面度量左缘
 3. **span 校验匹配带闭合引号的类名**。渲染后是 `class="sf-facts__answer wp-block-paragraph"`
    （core 会给自己追加类），`'class="sf-facts__answer"'` 匹配不到，把一个完全正确的页面判死。
    改成不带引号匹配，并加断言 span 内 `<h2>` 数为 0。
+4. **日志归因按客户端 IP 判**（`tools/b2d_s5_logaudit.py` 第一版）。**Cloudflare 边缘 IP 是共享的**，
+   同一 IP 会在一分钟内同时转发我们和陌生人的请求 ⇒ 打出 3 条假 FAIL（`127.0.0.1` 与两个 CF IP）。
+   改成**按内容 / 认证用户名**判定后全绿。同一趟还补了两个解析缺陷：PHP-FPM 用**第三种时间戳格式**
+   （`[20-Sep-2026 05:49:31 UTC]`），且 fatal 是**多行记录**（堆栈续行无时间戳）⇒ 必须先按
+   「无时间戳的续行归属上一条记录」分组，否则要么丢行、要么把堆栈判成「不可归因」。
 
 渲染取证首跑另有 4 条 FAIL，其中 2 条是**真实几何发现**（不是 bug）：1440×900 下 band 底 948 > 900，
 5 行字段全在首屏、摘要起始也在首屏，只有散文最后两行溢出 ⇒ 断言从「band 底 ≤ 900」改成
@@ -244,3 +277,8 @@ band left edge 120 = 页面度量左缘
 - **MOQ 在站点里已出现第 3 次**（FAQ / `.sf-spectable` / 本批 `.sf-facts`）⇒
   独立小批次：新块与 `.sf-spectable` 的重复/漂移对账
 - 配置器 Packaging 选项集与 `.sf-facts` Packaging 行同源，未来任一侧改动需要同步
+- **部署同步脚本要加 `--exclude='._*' --exclude='.DS_Store'`**（本批已清掉存量 5647 个，
+  根因是「从 macOS 拷贝时没排除」未修；已在 `docs/batch2d-step5.md` §5 记账）
+- 未评估：dev docroot 里还有 `wp-content/composer.phar`（3.6 MB）与 `composer.json/lock`
+  —— 一个 3.6 MB 的库文件直接躺在 web 根下，属性上是「可达路径」而非「垃圾」，
+  是否该移出属于**部署形态决策**（可能被某个插件引用），本批只记账不动手
