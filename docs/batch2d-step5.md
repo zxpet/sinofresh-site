@@ -230,6 +230,30 @@ band left edge 120 = 页面度量左缘
 ⛔ 根因是「从 macOS 拷贝时没排除 `._*` 与 `.DS_Store`」；仓库侧不会复发（已在 `.gitignore` 之外，
 但**零跟踪**），部署侧下次同步应带 `--exclude='._*' --exclude='.DS_Store'`。
 
+### 5b. 根因修复（同日追加，只改脚本、未重跑部署）
+
+取证把两条来路都钉死了（不再停留在「从 macOS 拷贝」的推测）：
+
+1. **迁移 tar 本身**：`_migration/wp-content-full.tar.gz`（Mac 上裸 tar 打包，无排除）
+   实测 5709 个成员里携带 `wp-content/debug.log` ×1 ＋ `.DS_Store` ×2 ——
+   `debug.log`（本机陈旧产物、曾被扫描器 200 抓到）就是**这个包**送上服务器的。
+2. **macOS 目录直传**（`scp -r` 类）：AppleDouble `._*` 在 tar 里为 **0** ⇒
+   dev 站的 5645 个来自另一条递归拷贝路径；旁证：服务器 `/root` 至今残留 63 个同类文件。
+
+处置（三层，全部本地验证）：
+
+| 层 | 改动 | 验证 |
+|---|---|---|
+| 打包 | 新增 `tools/sf_pack_migration.sh`：`COPYFILE_DISABLE=1` ＋ 双层 `--exclude`（`._*`/`*/._*`、`.DS_Store`/`*/.DS_Store`、`wp-content/debug.log`），打包后自证 | 夹具正例 PASS；**真站点重打 PASS**（49M，5706 条目 = 旧包 5709 − 3 个垃圾，交叉吻合）；`--verify` 对旧包 FAIL（负对照，exit 1） |
+| 部署 | `_migration/deploy.sh` 解包前**包内容守门**（含垃圾即拒跑、指路重打包）＋ 解包后**防御清扫**（兜底删 `._*`/`.DS_Store`/`debug.log`） | `bash -n` 过；守门 grep 对旧包命中 3 条 |
+| 仓库 | `.gitignore` 补 `._*`；`/_migration/` 改为只忽略 tar/sql 大包，`deploy.sh`/`README`/nginx conf 进仓库 | `git check-ignore -v` 逐条核过 |
+
+结论口径更新：`_migration/wp-content-full.tar.gz` 是 **2026-09-20 时点**的陈旧包（内容早已落后）且携带 3 个垃圾成员 ⇒ **不得再用**；将来上线生产的部署包必须用 `tools/sf_pack_migration.sh` 重打（自证通过才可部署，deploy.sh 守门会强制这一点）。
+
+本批顺带抓到的第 5 个工具坑：**macOS bash 3.2 会把 `$VAR（` 后的多字节字节吃进变量名**
+（`echo "$TAR_N（期望 $EXPECT）"` 在 `set -u` 下报 `TAR_N（期望: unbound variable`）⇒
+脚本里变量一律 `${VAR}` 花括号。已记入跨项目记忆。
+
 ---
 
 ## 6. 本批在工具里抓到的四个真 bug + 一条口径修正
@@ -284,8 +308,8 @@ band left edge 120 = 页面度量左缘
 - **MOQ 在站点里已出现第 3 次**（FAQ / `.sf-spectable` / 本批 `.sf-facts`）⇒
   独立小批次：新块与 `.sf-spectable` 的重复/漂移对账
 - 配置器 Packaging 选项集与 `.sf-facts` Packaging 行同源，未来任一侧改动需要同步
-- **部署同步脚本要加 `--exclude='._*' --exclude='.DS_Store'`**（本批已清掉存量 5647 个，
-  根因是「从 macOS 拷贝时没排除」未修；已在 `docs/batch2d-step5.md` §5 记账）
+- ~~部署同步脚本要加 `--exclude='._*' --exclude='.DS_Store'`~~ **已修**（同日 §5b：
+  打包脚本＋deploy.sh 守门＋gitignore 三层；只改脚本、未重跑部署）
 - `composer.phar/json/lock` 已移出 web 根到 `/var/www/dev.zxpet.com/_offroot/`
   （记账非待办）；若将来要在 wp-content 下跑 composer，从这里拷回去即可
 - `wp-content/vendor/` **已扫描，无发现、无需动作**：649 文件＝546 PHP ＋ 21 sourcemap ＋ 14 json ＋
