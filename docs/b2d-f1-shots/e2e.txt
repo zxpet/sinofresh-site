@@ -1,0 +1,21 @@
+F1 rendered proof: 200 checks, 0 failures
+  [PASS] soft-chews                      1440  CASE PASS  {"MOQ": "from 500–1,000 units", "Lead time": "Typically 7–15 working days after packaging is ready", "Cer
+  [PASS] soft-chews                       375  CASE PASS  {"MOQ": "from 500–1,000 units", "Lead time": "Typically 7–15 working days after packaging is ready", "Cer
+  [PASS] tablets                         1440  CASE PASS  {"MOQ": "from 1,000 units", "Lead time": "Typically 7–15 working days after packaging is ready", "Certifi
+  [PASS] tablets                          375  CASE PASS  {"MOQ": "from 1,000 units", "Lead time": "Typically 7–15 working days after packaging is ready", "Certifi
+  [PASS] fish-oil                        1440  CASE PASS  {"MOQ": "from 1,000 units", "Lead time": "Typically 7–15 working days after packaging is ready", "Certifi
+  [PASS] fish-oil                         375  CASE PASS  {"MOQ": "from 1,000 units", "Lead time": "Typically 7–15 working days after packaging is ready", "Certifi
+  [PASS] dental-chews                    1440  CASE PASS  {"MOQ": "from 1,000 units", "Lead time": "Typically 7–15 working days after packaging is ready", "Certifi
+  [PASS] dental-chews                     375  CASE PASS  {"MOQ": "from 1,000 units", "Lead time": "Typically 7–15 working days after packaging is ready", "Certifi
+  [PASS] powders                         1440  CASE PASS  {"MOQ": "from 500 units", "Lead time": "Typically 7–15 working days after packaging is ready", "Certifica
+  [PASS] powders                          375  CASE PASS  {"MOQ": "from 500 units", "Lead time": "Typically 7–15 working days after packaging is ready", "Certifica
+  [PASS] pastes                          1440  CASE PASS  {"MOQ": "from 500 units", "Lead time": "Typically 7–15 working days after packaging is ready", "Certifica
+  [PASS] pastes                           375  CASE PASS  {"MOQ": "from 500 units", "Lead time": "Typically 7–15 working days after packaging is ready", "Certifica
+  [PASS] drops                           1440  CASE PASS  {"MOQ": "from 500 units", "Lead time": "Typically 7–15 working days after packaging is ready", "Certifica
+  [PASS] drops                            375  CASE PASS  {"MOQ": "from 500 units", "Lead time": "Typically 7–15 working days after packaging is ready", "Certifica
+  [PASS] liquids                         1440  CASE PASS  {"MOQ": "from 500 units", "Lead time": "Typically 7–15 working days after packaging is ready", "Certifica
+  [PASS] liquids                          375  CASE PASS  {"MOQ": "from 500 units", "Lead time": "Typically 7–15 working days after packaging is ready", "Certifica
+  [PASS] joint-support-soft-chews        1440  CASE PASS  "Soft Chews · MOQ from 500–1,000 units · Lead time Typically 7–15 working days after packaging is ready"
+  [PASS] joint-support-soft-chews         375  CASE PASS  "Soft Chews · MOQ from 500–1,000 units · Lead time Typically 7–15 working days after packaging is ready"
+  [PASS] pure-fish-oil-blend             1440  CASE PASS  "Fish Oil · MOQ from 1,000 units · Lead time Typically 7–15 working days after packaging is ready"
+  [PASS] pure-fish-oil-blend              375  CASE PASS  "Fish Oil · MOQ from 1,000 units · Lead time Typically 7–15 working days after packaging is ready"

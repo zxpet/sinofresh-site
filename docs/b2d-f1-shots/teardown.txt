@@ -1,0 +1,18 @@
+=== F1 拆除记录（2026-09-21） ===
+--- 拆除前预检日志: 75 行（75 候选请求），已存档 docs/b2d-f1-shots/f1-preflight.log.txt ---
+=== 移除 ===
+theme dir gone
+mu-plugin gone
+log gone
+=== mu-plugins 剩余 ===
+total 12
+drwxr-xr-x 2 apache apache 4096 Sep 21 05:15 .
+drwxr-xr-x 9 apache apache 4096 Sep 21 00:16 ..
+-rw-r--r-- 1 apache apache 2510 Sep 20 14:19 zz-sf-dev-lockdown.php
+=== docroot 里 preflight 字符串残留 ===
+(空=代码零残留)
+=== DB 主题指向 ===
+--- 拆除后线上复验 ---
+style.css ver: style.css?ver=2.10.53
+核心事实行 3 项: 3
+无凭据状态码: 401
