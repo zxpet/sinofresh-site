@@ -472,11 +472,11 @@ add_action('admin_enqueue_scripts', function ($hook) {
 		&& get_current_screen()
 		&& 'sf_formula' === get_current_screen()->post_type;
 	$is_settings = in_array($hook, array('toplevel_page_sf-site-settings',
-		/* The submenus are reached via admin.php, so WP derives their hook
-		 * from the fallback parent ("admin_page"), not from the menu slug:
-		 * measured 2026-09-21 with get_plugin_page_hookname(). */
-		'admin_page_sf-containers', 'sf-site-settings_page_sf-containers',
-		'admin_page_sf-global-faq', 'sf-site-settings_page_sf-global-faq'), true);
+		/* WP derives a submenu's hook prefix from sanitize_title(menu_title),
+		 * not from the menu slug: 'Site Settings' -> 'site-settings', so the
+		 * hooks below are site-settings_page_* (recorded live 2026-09-21,
+		 * verified with a temporary hook-diag mu-plugin). */
+		'site-settings_page_sf-containers', 'site-settings_page_sf-global-faq'), true);
 	if (!$is_formula && !$is_settings) {
 		return;
 	}
