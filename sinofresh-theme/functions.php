@@ -28,7 +28,7 @@ add_action('after_setup_theme', function() {
 });
 
 add_action('wp_enqueue_scripts', function() {
-	wp_enqueue_style('sinofresh-style', get_stylesheet_uri(), array(), '2.10.54');
+	wp_enqueue_style('sinofresh-style', get_stylesheet_uri(), array(), '2.10.55');
 	// Sticky nav: every template renders parts/header.html, so this is site-wide.
 	wp_enqueue_script('sinofresh-sticky-header', get_template_directory_uri() . '/assets/js/sticky-header.js', array(), '1.0.0', true);
 	wp_enqueue_script('sinofresh-ui-components', get_template_directory_uri() . '/assets/js/ui-components.js', array(), '1.0.0', true);
@@ -194,7 +194,7 @@ add_action('wp_enqueue_scripts', function() {
 	// the script follows it. Absent, the band still shows the main photo and
 	// its heading — that is the no-JS contract, not a fallback path.
 	if (is_singular('sf_formula')) {
-		wp_enqueue_script('sinofresh-formula-gallery', get_template_directory_uri() . '/assets/js/formula-gallery.js', array(), '1.0.0', true);
+		wp_enqueue_script('sinofresh-formula-gallery', get_template_directory_uri() . '/assets/js/formula-gallery.js', array(), '2.0.0', true);
 	}
 	// Standard Formulas CTAs (K1): the card grid on the eight dosage pages,
 	// the hero button on a formula detail page, and — since 2C Step2 — the
@@ -1531,7 +1531,39 @@ function sinofresh_formula_gallery_file_url($filename) {
 }
 
 /**
- * The gallery's four slots for one dosage form.
+ * The YouTube id inside a stored sf_formula_video_url, or '' when there is
+ * none to find.
+ *
+ * The field takes whatever an editor pastes out of the address bar —
+ * watch?v=, youtu.be/, /embed/, /shorts/ — and a bare id, because the id is
+ * what a person copies when they mean "this video". Anything else (Vimeo, a
+ * playlist, a channel) is not a video this band can play, so it is refused
+ * rather than half-parsed: no id means no video frame, and the strip simply
+ * ends on the photos.
+ */
+function sinofresh_formula_video_id($url) {
+	$url = trim((string) $url);
+	if ($url === '') {
+		return '';
+	}
+	if (preg_match('~(?:youtube\.com/(?:watch\?[^#]*v=|embed/|shorts/)|youtu\.be/)([A-Za-z0-9_-]{6,})~i', $url, $m)) {
+		return $m[1];
+	}
+	if (preg_match('/^[A-Za-z0-9_-]{6,}$/', $url)) {
+		return $url;
+	}
+	return '';
+}
+
+/**
+ * The gallery's slots for one dosage form.
+ *
+ * Four dosage-level frames are the backbone and always in this order: the
+ * form's own product photo, then the facility band. Since batch H2a a record
+ * can add its OWN photos (sf_formula_gallery_ids) and one video
+ * (sf_formula_video_url); the six-frame cap is applied strongest-first, so
+ * the ranking is product photo > own photos > video > facility frames — see
+ * the block inside.
  *
  * `width`/`height` are the photographs' real pixel sizes, read off the
  * uploads folder with getimagesize on the server — not copied from markup
@@ -1540,9 +1572,11 @@ function sinofresh_formula_gallery_file_url($filename) {
  * frame is sized before the bytes arrive. **Replacing a photo at a different
  * size means updating its row here**: this table is the only place those
  * numbers live. tools/b2d_s2_dimensions.py asserts every row against the
- * server so the two cannot drift apart unnoticed.
+ * server so the two cannot drift apart unnoticed. (Rows appended from a
+ * record's own attachments declare the size WordPress reported for the
+ * 'large' rendition, so the same rule holds without a hand-maintained table.)
  */
-function sinofresh_formula_gallery_slots($form) {
+function sinofresh_formula_gallery_slots($form, $post_id = 0) {
 	$form = sanitize_title($form);
 	if ($form === '') {
 		return array();
@@ -1583,9 +1617,76 @@ function sinofresh_formula_gallery_slots($form) {
 		),
 	);
 
+	/* Batch H2a — the record's OWN photos and its video, ranked against the
+	   dosage-level four by this order, strongest first:
+
+	       product photo > record's own photos > record's video > facility frames
+
+	   Frame 1 is the dosage backbone's own product photo and always leads;
+	   the three facility frames are the fallback that fills whatever room is
+	   left. A record that has filled nothing is still exactly the four
+	   frames it had before — which is every one of the 21 today, both fields
+	   shipping empty, so this list does not move a byte until ops fills them.
+
+	   The cap is six frames. The strip is a strip, not a deck: past six the
+	   thumbnails stop being scannable at the 72px column the detail band
+	   gives them. Because the list is built strongest-first and then trimmed
+	   from the tail, a record with several own photos AND a video keeps the
+	   video and drops facility frames. Appending the video last and slicing
+	   instead — the first cut of this — would have dropped the video, since
+	   it would have been the item at the tail. */
+	if ($post_id > 0) {
+		$own = array();
+		foreach (explode(',', (string) get_post_meta($post_id, 'sf_formula_gallery_ids', true)) as $id) {
+			$id = absint($id);
+			if ($id <= 0) {
+				continue;
+			}
+			$src = wp_get_attachment_image_src($id, 'large');
+			if (!$src) {
+				continue;
+			}
+			$alt = trim((string) get_post_meta($id, '_wp_attachment_image_alt', true));
+			$own[] = array(
+				'file'   => '',
+				'url'    => (string) $src[0],
+				/* Real pixels of the chosen size, not the source file's:
+			   the frame is sized before the bytes arrive either way, and a
+			   declared size that does not match the URL would let the
+			   aspect ratio flip once the image lands. */
+				'width'  => (int) $src[1],
+				'height' => (int) $src[2],
+				'alt'    => $alt !== '' ? $alt : sprintf('%s private label pet supplement product photo', $label),
+			);
+		}
+
+		$video = array();
+		$video_id = sinofresh_formula_video_id(get_post_meta($post_id, 'sf_formula_video_url', true));
+		if ($video_id !== '') {
+			$video[] = array(
+				'file'     => '',
+				/* The poster is YouTube's own still for that id, so the
+				   facade needs no upload and no second asset to keep in step. */
+				'url'      => 'https://i.ytimg.com/vi/' . $video_id . '/hqdefault.jpg',
+				'width'    => 480,
+				'height'   => 360,
+				'video_id' => $video_id,
+				'alt'      => sprintf('%s product video', $label),
+			);
+		}
+
+		if ($own || $video) {
+			/* Rebuild strongest-first — backbone photo, own photos, video,
+			   then the facility band — and trim the tail. */
+			$head     = array_slice($slots, 0, 1);
+			$facility = array_slice($slots, 1);
+			$slots    = array_slice(array_merge($head, $own, $video, $facility), 0, 6);
+		}
+	}
+
 	/* A slot whose file is missing is dropped rather than rendered as a broken
 	   image, and if slot 1 ever went missing the next one becomes the main
-	   photo. The band returns '' only once all four are gone. */
+	   photo. The band returns '' only once all of them are gone. */
 	$out = array();
 	foreach ($slots as $slot) {
 		if ($slot['url'] !== '') {
@@ -1599,7 +1700,11 @@ function sinofresh_formula_gallery($atts = array()) {
 	$atts = shortcode_atts(array('form' => ''), $atts, 'sf_formula_gallery');
 	$form = sinofresh_formula_current_form($atts['form']);
 
-	$slots = sinofresh_formula_gallery_slots($form);
+	/* The record's own images and its video are per-post, so the slot list is
+	   built for the post being rendered. Off a single formula (the shortcode
+	   is generic) there is no post to read, and the dosage-level four stand
+	   alone — the pre-H2a behavior. */
+	$slots = sinofresh_formula_gallery_slots($form, is_singular('sf_formula') ? (int) get_queried_object_id() : 0);
 	if (!$slots) {
 		return '';
 	}
@@ -1612,6 +1717,32 @@ function sinofresh_formula_gallery($atts = array()) {
 	$frames = '';
 	foreach ($slots as $index => $slot) {
 		$n = $index + 1;
+		if (!empty($slot['video_id'])) {
+			/* A facade, not an iframe: the poster is server-rendered and
+			   only the play button carries the id, so a page load costs one
+			   image and YouTube's player (≈1MB of JS) is fetched when — and
+			   only when — the visitor asks for it. formula-gallery.js swaps
+			   this button for the player; without JS the frame still shows
+			   the poster and the button does nothing, which is why the
+			   button is a real <button> and not a styled link that would
+			   navigate away to youtube.com. */
+			$frames .= '<figure class="sf-gallery__slide sf-gallery__slide--video"'
+				. ' id="sf-gallery-slide-' . esc_attr($form) . '-' . $n . '"'
+				. ' data-slot="' . $n . '"'
+				. ' data-video-id="' . esc_attr($slot['video_id']) . '"'
+				. ' data-label="' . esc_attr($slot['alt']) . '"'
+				. ($n === 1 ? '' : ' hidden') . '>'
+				. '<button type="button" class="sf-gallery__play">'
+				. '<img src="' . esc_url($slot['url']) . '"'
+				. ' alt="' . esc_attr($slot['alt']) . '"'
+				. ' width="' . (int) $slot['width'] . '" height="' . (int) $slot['height'] . '"'
+				. ' loading="lazy" decoding="async">'
+				. '<span class="sf-gallery__play-icon" aria-hidden="true"></span>'
+				. '<span class="sf-gallery__play-text">Play video</span>'
+				. '</button>'
+				. '</figure>';
+			continue;
+		}
 		$frames .= '<figure class="sf-gallery__slide" id="sf-gallery-slide-' . esc_attr($form) . '-' . $n . '"'
 			. ' data-slot="' . $n . '"'
 			. ' data-label="' . esc_attr($slot['alt']) . '"'
@@ -1619,7 +1750,7 @@ function sinofresh_formula_gallery($atts = array()) {
 			. '<img src="' . esc_url($slot['url']) . '"'
 			. ' alt="' . esc_attr($slot['alt']) . '"'
 			. ' width="' . (int) $slot['width'] . '" height="' . (int) $slot['height'] . '"'
-			/* Only the main photo is worth fetching early: the other three sit
+			/* Only the main photo is worth fetching early: the others sit
 			   behind `hidden` and a click, so eager-loading them would just
 			   compete with the hero. No fetchpriority="high" anywhere — the
 			   LCP element on these pages is the hero's heading text. */
@@ -1825,22 +1956,43 @@ function sinofresh_formula_detail() {
 add_shortcode('sf_formula_detail', 'sinofresh_formula_detail');
 
 /**
- * [sf_formula_factsheet] - the media column's five-row specification list.
+ * [sf_formula_params] — the detail band's parameter rows (batch H2a).
  *
- * <dt>/<dd>, not the .sf-spec-term / .sf-spec-value <span> pair: that pair
- * has two different readers in this theme (a visual one on <dt>/<dd>, and the
- * K6 parser looking for adjacent spans), and emitting the pair here would put
- * a second, richer source in front of the parser. A definition list is read
- * by neither.
+ * Replaces [sf_formula_factsheet], which had exactly one caller (the detail
+ * template) and printed five rows. This one prints up to ten, in the order
+ * the brief fixes, and it is the ONLY reader of the publishing form's
+ * parameter fields on the front end:
  *
- * Order and sources are fixed by the brief: Unit size / Pack options / Shelf
- * life come out of the record's own sf_formula_specs, Certifications and
- * Packaging out of the dosage page's .sf-facts-mini row (the same single
- * source the hero meta reads). Rows with no value are omitted, so the eleven
- * records without a pack segment render four rows and the ten with one render
- * five; the band never prints a label with nothing after it.
+ *   Flavor              sf_formula_flavors      (multi, chips)
+ *   Piece Weight        sf_formula_specs        (parsed: the unit segment)
+ *   Pack Size           sf_formula_specs        (parsed: the "… per …" segment)
+ *   Suitable For        sf_formula_species      (multi, chips)
+ *   Life Stage          sf_formula_lifestage    (radio value)
+ *   Quantity & Pricing  sf_formula_price_tiers  (row list, small table)
+ *   Shelf life          sf_formula_specs        (parsed: the "… shelf life" segment)
+ *   Packaging           dosage page .sf-facts-mini row
+ *   Certifications      Site Settings sf_certifications, via sf_render_cert_badges()
+ *   Lead time           sf_formula_lead_time
+ *
+ * Empty means absent: a row with no value is not rendered at all, so a
+ * record that carries only what batch H1a migrated renders the rows it can
+ * prove and no others. That is the whole point of shipping the renderer
+ * before the data — the sales team fills a field, the row appears, nothing
+ * is deployed. It also means the row set differs per record by design, and
+ * the gate asserts the presence of the renderer rather than a fixed row
+ * count.
+ *
+ * <dt>/<dd>, not the .sf-spec-term / .sf-spec-value <span> pair — same
+ * reason the factsheet gave: that pair feeds the K6 parser, and this list is
+ * read by no parser.
+ *
+ * Certifications reads the Site Settings option (decision A, 2026-09-22) and
+ * NOT the dosage page's .sf-facts-mini certifications cell the hero meta
+ * still reads: the option is the list an admin can correct without a
+ * deploy, and the two are reconciled at gate time — a difference is recorded
+ * in the batch report, never silently merged here.
  */
-function sinofresh_formula_factsheet() {
+function sinofresh_formula_params() {
 	if (!is_singular('sf_formula')) {
 		return '';
 	}
@@ -1853,35 +2005,109 @@ function sinofresh_formula_factsheet() {
 	if (!is_wp_error($form_terms) && $form_terms) {
 		$form_slug = (string) $form_terms[0]->slug;
 	}
-	$specs = trim((string) get_post_meta($post_id, 'sf_formula_specs', true));
-	$parts = sinofresh_formula_specs_parts($specs);
-	$certifications = sf_formula_certifications_value($form_slug);
-	$packaging      = $form_slug !== '' ? sinofresh_formula_spec_cell($form_slug, 'Packaging formats') : '';
-	$rows = array(
-		'Unit size'      => $parts['unit'],
-		'Pack options'   => $parts['pack'],
-		'Shelf life'     => $parts['shelf'],
-		'Certifications' => $certifications,
-		'Packaging'      => $packaging,
-	);
+
+	$parts = sinofresh_formula_specs_parts(trim((string) get_post_meta($post_id, 'sf_formula_specs', true)));
+
+	/* Each cell is already escaped HTML: the chips, the tier table and the
+	   badge row each escape their own values, so the loop below must not
+	   escape a second time (a second pass would print &amp;#8211; for "–"). */
+	$rows = array();
+
+	$flavors = sf_json_array(get_post_meta($post_id, 'sf_formula_flavors', true));
+	if ($flavors) {
+		$rows['Flavor'] = sinofresh_formula_chip_list($flavors);
+	}
+	if (trim((string) $parts['unit']) !== '') {
+		$rows['Piece Weight'] = esc_html(trim((string) $parts['unit']));
+	}
+	if (trim((string) $parts['pack']) !== '') {
+		$rows['Pack Size'] = esc_html(trim((string) $parts['pack']));
+	}
+	$species = sf_json_array(get_post_meta($post_id, 'sf_formula_species', true));
+	if ($species) {
+		$rows['Suitable For'] = sinofresh_formula_chip_list($species);
+	}
+	$lifestage = trim((string) get_post_meta($post_id, 'sf_formula_lifestage', true));
+	if ($lifestage !== '') {
+		$rows['Life Stage'] = esc_html($lifestage);
+	}
+	$tiers = sinofresh_formula_tier_table(sf_json_rows(get_post_meta($post_id, 'sf_formula_price_tiers', true)));
+	if ($tiers !== '') {
+		$rows['Quantity & Pricing'] = $tiers;
+	}
+	if (trim((string) $parts['shelf']) !== '') {
+		$rows['Shelf life'] = esc_html(trim((string) $parts['shelf']));
+	}
+	$packaging = $form_slug !== '' ? sinofresh_formula_spec_cell($form_slug, 'Packaging formats') : '';
+	if (trim($packaging) !== '') {
+		$rows['Packaging'] = esc_html(trim($packaging));
+	}
+	$certs = sf_render_cert_badges();
+	if (trim($certs) !== '') {
+		$rows['Certifications'] = $certs;
+	}
+	$lead = trim((string) get_post_meta($post_id, 'sf_formula_lead_time', true));
+	if ($lead !== '') {
+		$rows['Lead time'] = esc_html($lead);
+	}
+
 	$html = '';
-	foreach ($rows as $label => $value) {
-		$value = trim((string) $value);
-		if ($value === '') {
-			continue;
-		}
-		$html .= sprintf(
-			'<dt class="sf-fdetail-media__term">%s</dt><dd class="sf-fdetail-media__value">%s</dd>',
-			esc_html($label),
-			esc_html($value)
-		);
+	foreach ($rows as $label => $cell) {
+		$html .= '<dt class="sf-fdetail2__term">' . esc_html($label) . '</dt>'
+			. '<dd class="sf-fdetail2__value">' . $cell . '</dd>';
 	}
 	if ($html === '') {
 		return '';
 	}
-	return '<dl class="sf-fdetail-media__facts">' . $html . '</dl>';
+	return '<dl class="sf-fdetail2__params">' . $html . '</dl>';
 }
-add_shortcode('sf_formula_factsheet', 'sinofresh_formula_factsheet');
+add_shortcode('sf_formula_params', 'sinofresh_formula_params');
+
+/** One chip per value, for the multi-select rows (Flavor, Suitable For). */
+function sinofresh_formula_chip_list($items) {
+	$out = '';
+	foreach ((array) $items as $item) {
+		$item = trim((string) $item);
+		if ($item === '') {
+			continue;
+		}
+		$out .= '<span class="sf-fdetail2__chip">' . esc_html($item) . '</span>';
+	}
+	return $out;
+}
+
+/**
+ * The tier rows as a table, or '' when no row carries anything.
+ *
+ * A row is kept when either cell has text: a tier list that is half filled
+ * still tells a buyer something ("from 500 pcs"), and dropping it would hide
+ * the one field the page cannot guess. Fully blank rows are padding from the
+ * admin table widget and are what gets dropped.
+ *
+ * The column headers come from the same labels the admin form shows, so the
+ * page and the form cannot disagree about which column is which.
+ */
+function sinofresh_formula_tier_table($rows) {
+	$body = '';
+	foreach ((array) $rows as $row) {
+		if (!is_array($row)) {
+			continue;
+		}
+		$qty   = trim((string) (isset($row['qty']) ? $row['qty'] : ''));
+		$price = trim((string) (isset($row['price']) ? $row['price'] : ''));
+		if ($qty === '' && $price === '') {
+			continue;
+		}
+		$body .= '<tr><td class="sf-fdetail2__tier-qty">' . esc_html($qty) . '</td>'
+			. '<td class="sf-fdetail2__tier-price">' . esc_html($price) . '</td></tr>';
+	}
+	if ($body === '') {
+		return '';
+	}
+	return '<table class="sf-fdetail2__tiers"><thead><tr>'
+		. '<th scope="col">Min quantity</th><th scope="col">Unit price (USD)</th>'
+		. '</tr></thead><tbody>' . $body . '</tbody></table>';
+}
 
 /**
  * [sf_formula_body] — the formula's own long-form copy (post_content).
@@ -3286,10 +3512,14 @@ function sinofresh_template_placeholders($html) {
 		/* Batch G: the media column's intro. Wrapped in its <p> here,
 		   which is why the map entry below is escaped HTML and not
 		   escaped text like {{FORMULA_META}}. Empty stays empty: no
-		   empty <p> is written. */
+		   empty <p> is written. Batch H2a moved the class to the
+		   second-revision namespace along with the band it sits in —
+		   this string is the only place the class lives, the template
+		   cannot carry it, so renaming the band means renaming it here
+		   too or the paragraph silently loses its styling. */
 		$intro = sinofresh_formula_intro($formula_id);
 		if ($intro !== '') {
-			$formula_intro = '<p class="sf-fdetail-media__intro">' . esc_html($intro) . '</p>';
+			$formula_intro = '<p class="sf-fdetail2__intro">' . esc_html($intro) . '</p>';
 		}
 	}
 	$map = array(

@@ -2,7 +2,7 @@
 Theme Name: SINO FRESH
 Author: Shandong SINO FRESH Pet Food Co., Ltd.
 Text Domain: sinofresh
-Version: 2.10.54
+Version: 2.10.55
 Requires at least: 6.0
 Requires PHP: 7.4
 License: GNU General Public License v2 or later
@@ -8421,5 +8421,357 @@ body.sf-certmodal-lock {
 	.sf-fdetail-media__inner {
 		grid-template-columns: minmax(0, 1fr);
 		gap: 32px;
+	}
+}
+
+/* ===========================================================================
+   38. Formula detail band, second revision — .sf-fdetail2 (H2a, 2.10.55)
+
+   Replaces batch G's .sf-fdetail-media on single-sf_formula.html: the media
+   column on the left (a vertical thumbnail rail beside one main frame) and
+   the parameters column on the right (the ten rows [sf_formula_params]
+   emits). Batch G's own rules above are left byte-for-byte as they are and
+   simply stop being used by that template.
+
+   Mobile-first, at the four widths the brief pins down:
+
+       <=480      one column, thumbnails in a row below the frame, 56px
+       481-768    one column, thumbnails in a row below the frame, 84px
+       769-1024   two columns, 32px gap
+       >=1101     two columns, 48px gap, media = 72px rail + main frame
+
+   Same two house rules batch G held itself to: no :has() anywhere (this
+   site must not depend on a selector old Android/iOS WebViews lack), and no
+   !important (the markup is plain <figure>/<dl>/<table>, not a core block,
+   so nothing here has to out-rank a core sheet).
+
+   The thumbnail strip is built by formula-gallery.js out of the frames. With
+   no JS there is no strip at all — the grid area is simply empty, the main
+   photo stands alone and nothing is left behind, which is the no-JS contract
+   the gallery already had.
+   ------------------------------------------------------------------------- */
+.sf-fdetail2__inner {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr);
+	gap: 32px;
+	align-items: start;
+}
+/* core gives every .is-layout-flow child after the first a 24px block-gap
+   margin, which in a grid row would drop the aside below the media column;
+   the grid gap is what spaces these two. */
+.sf-fdetail2__inner > * {
+	margin-block-start: 0;
+}
+.sf-fdetail2__media,
+.sf-fdetail2__side {
+	min-width: 0;
+}
+
+/* The gallery's inner wrapper is a grid with named areas, so the strip can
+   move to the stage's left at >=1101 without any DOM change and without the
+   script having to know which of the two layouts it is running in. */
+.sf-fdetail2__media .sf-gallery__inner {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr);
+	grid-template-areas:
+		"title"
+		"stage"
+		"thumbs";
+	gap: 16px;
+	align-items: start;
+}
+.sf-fdetail2__media .sf-gallery__title {
+	grid-area: title;
+}
+/* .sf-gallery__stage was written for a full-width band: 680px wide and
+   auto-centred, which inside a column is a narrow box floating in the middle
+   of its own space. It fills the column here; the 1:1 aspect-ratio is kept,
+   so the height arithmetic is exactly what it was. */
+.sf-fdetail2__media .sf-gallery__stage {
+	grid-area: stage;
+	max-width: none;
+	margin: 0;
+}
+/* The strip scrolls rather than shrinking at every width where it is a row:
+   at 84px tiles a six-frame record is wider than the media column long before
+   the phone breakpoint, and a sliver of the next tile staying in view is what
+   makes the strip read as swipeable. */
+.sf-fdetail2__media .sf-gallery__thumbs {
+	grid-area: thumbs;
+	justify-content: flex-start;
+	margin-top: 0;
+	overflow-x: auto;
+	scroll-snap-type: x mandatory;
+	scroll-padding-left: 4px;
+	-webkit-overflow-scrolling: touch;
+}
+.sf-fdetail2__media .sf-gallery__thumb {
+	flex: 0 0 84px;
+	/* This theme has no global box-sizing reset — each component declares its
+	   own, as .sf-tour-card and .sf-cookie-banner__btn do. Here it matters:
+	   at >=1101 the tile sits in a 72px grid track, and the 1px border on each
+	   side would otherwise make the tile 74px and push it into the rail gap. */
+	box-sizing: border-box;
+	width: 84px;
+	height: 84px;
+	scroll-snap-align: start;
+}
+@media (max-width: 480px) {
+	.sf-fdetail2__media .sf-gallery__thumb {
+		flex-basis: 56px;
+		width: 56px;
+		height: 56px;
+	}
+}
+
+/* ---- the video frame ------------------------------------------------------
+
+   A facade, not an embed: the frame ships the poster and a real <button>,
+   and formula-gallery.js injects the player only once it is asked for. With
+   no JS the poster and the button are all there is — and because the control
+   is a <button> and not a styled link, pressing it goes nowhere instead of
+   navigating off to youtube.com. -------------------------------------------- */
+.sf-gallery__play {
+	display: block;
+	position: relative;
+	width: 100%;
+	height: 100%;
+	padding: 0;
+	border: 0;
+	background: none;
+	cursor: pointer;
+}
+.sf-gallery__play img {
+	display: block;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	object-position: center;
+}
+.sf-gallery__play-icon {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 64px;
+	height: 64px;
+	margin: -32px 0 0 -32px;
+	border-radius: 999px;
+	background: rgba(0, 0, 0, 0.55);
+	transition: background-color 0.2s ease;
+}
+/* The triangle is drawn with borders: no icon font, no extra request. */
+.sf-gallery__play-icon::after {
+	content: "";
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	margin: -11px 0 0 -6px;
+	border-style: solid;
+	border-width: 11px 0 11px 18px;
+	border-color: transparent transparent transparent #fff;
+}
+.sf-gallery__play:hover .sf-gallery__play-icon,
+.sf-gallery__play:focus-visible .sf-gallery__play-icon {
+	background: rgba(0, 0, 0, 0.75);
+}
+.sf-gallery__play:focus-visible {
+	outline: 2px solid var(--wp--preset--color--card-white);
+	outline-offset: -6px;
+}
+/* The button's own name for assistive tech; the circle above is the visible
+   affordance, so the words do not need to sit on the poster. */
+.sf-gallery__play-text {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	margin: -1px;
+	padding: 0;
+	overflow: hidden;
+	clip: rect(0 0 0 0);
+	clip-path: inset(50%);
+	white-space: nowrap;
+	border: 0;
+}
+/* The player, once injected, has to fill the same 1:1 box the poster did. */
+.sf-gallery__embed,
+.sf-gallery__embed iframe {
+	display: block;
+	width: 100%;
+	height: 100%;
+	border: 0;
+}
+/* The video tile in the strip carries a scrim and a small triangle so it is
+   not mistaken for a sixth photo. Two pseudo-elements, both above the
+   thumbnail image, which is why the tile needs to be a containing block. */
+.sf-gallery__thumb--video {
+	position: relative;
+}
+.sf-gallery__thumb--video::before {
+	content: "";
+	position: absolute;
+	inset: 0;
+	z-index: 1;
+	background: rgba(0, 0, 0, 0.3);
+}
+.sf-gallery__thumb--video::after {
+	content: "";
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	z-index: 2;
+	margin: -6px 0 0 -4px;
+	border-style: solid;
+	border-width: 6px 0 6px 10px;
+	border-color: transparent transparent transparent var(--wp--preset--color--card-white);
+}
+
+/* ---- the parameters column ----------------------------------------------- */
+.sf-fdetail2__intro {
+	margin: 0 0 24px;
+	font-size: 15px;
+	line-height: 1.6;
+	color: var(--wp--preset--color--text-primary);
+}
+/* Two columns of a grid, not a table: the terms size to their own text, so
+   every value starts on one x whatever the longest term is. Voice copied from
+   .sf-facts-mini / .sf-fdetail-media__facts — 11px letterspaced muted label,
+   ink value. */
+.sf-fdetail2__params {
+	display: grid;
+	grid-template-columns: auto minmax(0, 1fr);
+	gap: 12px 16px;
+	margin: 0 0 28px;
+}
+.sf-fdetail2__term {
+	margin: 0;
+	font-size: 11px;
+	font-weight: 700;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: var(--wp--preset--color--text-secondary);
+	white-space: nowrap;
+}
+.sf-fdetail2__value {
+	min-width: 0;
+	margin: 0;
+	font-size: 14px;
+	line-height: 1.5;
+	color: var(--wp--preset--color--text-primary);
+}
+/* Multi-select rows (Flavor, Suitable For) render one chip per value. */
+.sf-fdetail2__chip {
+	display: inline-block;
+	margin: 0 6px 6px 0;
+	padding: 2px 10px;
+	border: 1px solid var(--wp--preset--color--border-light);
+	border-radius: 999px;
+	background: var(--wp--preset--color--card-white);
+	font-size: 12px;
+	letter-spacing: 0.02em;
+	color: var(--wp--preset--color--text-primary);
+}
+/* Quantity & Pricing. Two columns, the second flush right, so a tier ladder
+   reads as one ladder rather than two loose lists. */
+.sf-fdetail2__tiers {
+	width: 100%;
+	border-collapse: collapse;
+	font-size: 13px;
+}
+.sf-fdetail2__tiers th {
+	padding: 0 0 6px;
+	border-bottom: 1px solid var(--wp--preset--color--border-medium);
+	font-size: 11px;
+	font-weight: 700;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+	text-align: left;
+	color: var(--wp--preset--color--text-secondary);
+}
+.sf-fdetail2__tiers td {
+	padding: 6px 0;
+	border-bottom: 1px solid var(--wp--preset--color--border-light);
+}
+.sf-fdetail2__tiers tr:last-child td {
+	border-bottom: 0;
+}
+.sf-fdetail2__tiers th:last-child,
+.sf-fdetail2__tier-price {
+	text-align: right;
+}
+/* Certifications. sf_render_cert_badges() emits a bare .sf-cert-badge, and
+   the only rule styling that class today is scoped to .sf-topbar-badges — so
+   the band supplies its own pills rather than editing the header's rule. */
+.sf-fdetail2__value .sf-cert-badge {
+	display: inline-block;
+	margin: 0 6px 6px 0;
+	padding: 2px 10px;
+	border: 1px solid var(--wp--preset--color--border-light);
+	border-radius: 999px;
+	background: var(--wp--preset--color--card-white);
+	font-size: 12px;
+	font-weight: 600;
+	text-decoration: none;
+	color: var(--wp--preset--color--text-primary);
+}
+.sf-fdetail2__value a.sf-cert-badge:hover,
+.sf-fdetail2__value a.sf-cert-badge:focus-visible {
+	border-color: var(--wp--preset--color--accent);
+	color: var(--wp--preset--color--accent);
+}
+/* Same orange as the page's closing "Request a Quote": two call-to-action
+   buttons on one page that looked different would read as two different
+   kinds of action. */
+.sf-fdetail2__cta {
+	display: inline-block;
+	padding: 12px 24px;
+	border-radius: 6px;
+	background: var(--wp--preset--color--cta);
+	color: var(--wp--preset--color--card-white);
+	font-size: 15px;
+	font-weight: 600;
+	text-decoration: none;
+	transition: background-color 0.2s ease;
+}
+.sf-fdetail2__cta:hover,
+.sf-fdetail2__cta:focus-visible {
+	background: var(--wp--preset--color--cta-hover);
+	color: var(--wp--preset--color--card-white);
+}
+
+/* From 769px the two columns sit side by side (the site's main breakpoint is
+   768px, the same one batch G used). The 3fr/2fr split is kept so the media
+   column stays the wider one at every width above the phone. */
+@media (min-width: 769px) {
+	.sf-fdetail2__inner {
+		grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+		gap: 32px;
+	}
+}
+/* From 1101px there is room for the rail: the strip turns into a 72px column
+   to the left of the frame, which is the layout the desktop reference shows.
+   1101 rather than 1100 because the site's own .sf-toc hides at <=1100, and
+   the two bands should not change shape at visibly different widths. */
+@media (min-width: 1101px) {
+	.sf-fdetail2__inner {
+		gap: 48px;
+	}
+	.sf-fdetail2__media .sf-gallery__inner {
+		grid-template-columns: 72px minmax(0, 1fr);
+		grid-template-areas:
+			"title title"
+			"thumbs stage";
+		gap: 16px 12px;
+	}
+	/* Column, not row: and the scroll box goes away with it, because a rail
+	   that scrolls sideways would hide tiles on a desktop. */
+	.sf-fdetail2__media .sf-gallery__thumbs {
+		flex-direction: column;
+		overflow: visible;
+	}
+	.sf-fdetail2__media .sf-gallery__thumb {
+		flex-basis: 72px;
+		width: 72px;
+		height: 72px;
+		scroll-snap-align: none;
 	}
 }
