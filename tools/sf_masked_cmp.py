@@ -63,6 +63,21 @@ MASKS = [
     # regression forever. (The 12h GF nonce window and this id are the two
     # per-request artefacts GF contributes.)
     (re.compile(r'gform_phone_dropdown_[0-9a-f]+'), 'gform_phone_dropdown_MASK', 'gf_phone_id'),
+    # Gravity Forms' 12h config nonce is inlined into gform_gravityforms_theme-js
+    # extra data ("config_nonce":"<10 hex>") and rotates when the window rolls
+    # over — measured 2026-09-21: two captures of the same unchanged page a day
+    # apart differed only here. Same class as the phone id above: per-request
+    # GF artefact, never site content.
+    (re.compile(r'"config_nonce":"[0-9a-f]{10}"'), '"config_nonce":"MASK"', 'gf_config_nonce'),
+    # Generic twin of the two masks above: any inline JSON key whose name
+    # contains "nonce" carrying a 10-hex value is a session artefact (GF and
+    # TranslatePress both inline these; measured 2026-09-21 —
+    # config_nonce, gettranslationsnonceregular). Site content never matches.
+    (re.compile(r'"[a-z0-9_]*nonce[a-z0-9_]*":"[0-9a-f]{10}"'),
+     '"nonce":"MASK"', 'inline_nonce'),
+    # URL-query form of the same artefact: admin-ajax action URLs carry
+    # &nonce=<10hex> (wp_statistics, measured 2026-09-21).
+    (re.compile(r'nonce=[0-9a-f]{10}\b'), 'nonce=MASK', 'url_nonce'),
     (re.compile(r"'[A-Za-z0-9+/=]{16,}'"), "'MASK'", 'quoted_blob'),
     (re.compile(r'[A-Za-z0-9+/]{40,}={0,2}'), 'MASK', 'long_b64_run'),
 ]
