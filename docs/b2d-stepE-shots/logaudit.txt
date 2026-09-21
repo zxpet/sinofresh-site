@@ -1,0 +1,142 @@
+==============================================================================
+BATCH 2D STEP 5 — ERROR-LOG AUDIT BY ATTRIBUTION
+==============================================================================
+window, given explicitly (the closure outlived the capture):
+  window : 2026-09-21 03:07:12 -> 2026-09-21 03:30:00
+
+  access log: 12483 line(s), 0 unparsable, 887 distinct client(s), span 2026-09-20 05:39:35 -> 2026-09-21 03:38:32
+
+------------------------------------------------------------------------------
+WHAT ACTUALLY HIT THE BOX INSIDE THAT WINDOW  (dev.zxpet.com-ssl-access.log + dev.zxpet.com-access.log)
+------------------------------------------------------------------------------
+  access-log lines in window          : 873
+  ... authenticated as ours (sfdev)   : 868
+  ... not ours                        : 5
+        status ua (truncated)                                 user       n
+        401    GET /.git/config HTTP/1.1                      -          2
+        401    GET /products/soft-chews/ HTTP/1.1             -          2
+        400    GET / HTTP/1.0                                 -          1
+        status mix: 400=1, 401=4
+        not-ours lines that were NOT denied (i.e. reached PHP): 1
+          2026-09-21 03:12:19  40.124.116.96  - -> 400
+  our first / last                    : 2026-09-21 03:07:12 / 2026-09-21 03:29:42
+          630  Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.
+          162  curl/8.7.1
+           73  Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.
+            3  WordPress/7.1.1; https://dev.zxpet.com
+
+  -> the batch made 868 authenticated requests while writing nothing (see below)
+
+  the discriminator — usernames in the access log:
+        -            6672  
+        sfdev        5807  <- ours
+        admin           2  
+
+==============================================================================
+/var/log/httpd/dev.zxpet.com-ssl-error.log
+  2526 byte(s), mtime 2026-09-21 03:00:22.856077721 +0000  (for the record; not an invariant)
+  13 record(s) over 13 non-empty line(s)
+  [OK  ] 2026-09-20 05:39:35  apache lifecycle notice AH01909 — no client, emitted at a restart
+         [Sun Sep 20 05:39:35.928691 2026] [ssl:warn] [pid 316450:tid 316450] AH01909: dev.zxpet.com:443:0 server certificate does NOT include an ID which matches the se
+  [OK  ] 2026-09-20 05:46:10  apache lifecycle notice AH01909 — no client, emitted at a restart
+         [Sun Sep 20 05:46:10.598353 2026] [ssl:warn] [pid 316450:tid 316450] AH01909: dev.zxpet.com:443:0 server certificate does NOT include an ID which matches the se
+  [OK  ] 2026-09-20 09:36:30  probe of /.htpasswd.bak by - — 1 matching access-log row(s), status 403, never ours
+         [Sun Sep 20 09:36:30.779528 2026] [authz_core:error] [pid 330135:tid 330183] [client 35.205.254.119:45060] AH01630: client denied by server configuration: /var/
+  [OK  ] 2026-09-20 14:18:42  apache lifecycle notice AH01909 — no client, emitted at a restart
+         [Sun Sep 20 14:18:42.087237 2026] [ssl:warn] [pid 316450:tid 316450] AH01909: dev.zxpet.com:443:0 server certificate does NOT include an ID which matches the se
+  [OK  ] 2026-09-20 14:20:26  probe of /.htpasswd by - — 1 matching access-log row(s), status 403, never ours
+         [Sun Sep 20 14:20:26.552871 2026] [authz_core:error] [pid 362847:tid 362891] [client 127.0.0.1:34732] AH01630: client denied by server configuration: /var/www/d
+  [OK  ] 2026-09-20 14:20:41  a third party guessed the username 'admin' — that username occurs 2 time(s) in the whole access log and never as ours
+         [Sun Sep 20 14:20:41.062078 2026] [auth_basic:error] [pid 362847:tid 362909] [client 104.23.170.72:11928] AH01618: user admin not found: /wp-admin/index.php, re
+  [OK  ] 2026-09-20 14:21:32  a third party guessed the username 'admin' — that username occurs 2 time(s) in the whole access log and never as ours
+         [Sun Sep 20 14:21:32.717738 2026] [auth_basic:error] [pid 362847:tid 362914] [client 104.23.170.73:13580] AH01618: user admin not found: /products/soft-chews/, 
+  [OK  ] 2026-09-20 19:31:11  probe of /.htpasswd by - — 1 matching access-log row(s), status 403, never ours
+         [Sun Sep 20 19:31:11.738036 2026] [authz_core:error] [pid 362848:tid 362921] [client 172.71.151.153:10266] AH01630: client denied by server configuration: /var/
+  [OK  ] 2026-09-20 23:23:19  exploit scanner sent a malformed path (/cgi-bin/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/b)
+         [Sun Sep 20 23:23:19.052190 2026] [core:error] [pid 380983:tid 381013] [client 168.144.80.239:54310] AH10244: invalid URI path (/cgi-bin/.%2e/.%2e/.%2e/.%2e/.%2
+  [OK  ] 2026-09-20 23:23:21  exploit scanner sent a malformed path (/cgi-bin/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%6)
+         [Sun Sep 20 23:23:21.511093 2026] [core:error] [pid 381554:tid 381578] [client 168.144.80.239:54320] AH10244: invalid URI path (/cgi-bin/%%32%65%%32%65/%%32%65%
+  [OK  ] 2026-09-21 00:12:45  probe of /.htpasswd by - — 1 matching access-log row(s), status 403, never ours
+         [Mon Sep 21 00:12:45.608120 2026] [authz_core:error] [pid 381554:tid 381581] [client 162.159.113.95:12544] AH01630: client denied by server configuration: /var/
+  [OK  ] 2026-09-21 00:25:16  exploit scanner sent a malformed path (/cgi-bin/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/b)
+         [Mon Sep 21 00:25:16.691740 2026] [core:error] [pid 380983:tid 381016] [client 118.145.104.105:51972] AH10244: invalid URI path (/cgi-bin/.%2e/.%2e/.%2e/.%2e/.%
+  [OK  ] 2026-09-21 03:00:22  probe of /.htpasswd by - — 1 matching access-log row(s), status 403, never ours
+         [Mon Sep 21 03:00:22.857068 2026] [authz_core:error] [pid 380983:tid 381003] [client 108.162.246.186:13434] AH01630: client denied by server configuration: /var
+
+==============================================================================
+/var/log/httpd/dev.zxpet.com-error.log
+  1246 byte(s), mtime 2026-09-21 02:29:29.875909726 +0000  (for the record; not an invariant)
+  6 record(s) over 6 non-empty line(s)
+  [OK  ] 2026-09-21 00:56:57  exploit scanner sent a malformed path (/cgi-bin/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/b)
+         [Mon Sep 21 00:56:57.243561 2026] [core:error] [pid 380983:tid 381017] [client 107.150.97.10:59534] AH10244: invalid URI path (/cgi-bin/.%2e/.%2e/.%2e/.%2e/.%2e
+  [OK  ] 2026-09-21 00:56:57  exploit scanner sent a malformed path (/cgi-bin/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%6)
+         [Mon Sep 21 00:56:57.263217 2026] [core:error] [pid 381554:tid 381587] [client 107.150.97.10:59540] AH10244: invalid URI path (/cgi-bin/%%32%65%%32%65/%%32%65%%
+  [OK  ] 2026-09-21 02:01:44  exploit scanner sent a malformed path (/cgi-bin/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/b)
+         [Mon Sep 21 02:01:44.193881 2026] [core:error] [pid 381554:tid 381579] [client 186.242.162.94:50158] AH10244: invalid URI path (/cgi-bin/.%2e/.%2e/.%2e/.%2e/.%2
+  [OK  ] 2026-09-21 02:01:47  exploit scanner sent a malformed path (/cgi-bin/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%6)
+         [Mon Sep 21 02:01:47.518956 2026] [core:error] [pid 381554:tid 381578] [client 186.242.162.94:50172] AH10244: invalid URI path (/cgi-bin/%%32%65%%32%65/%%32%65%
+  [OK  ] 2026-09-21 02:29:29  a probe for the cgi-bin script /var/www/cgi-bin/luci by - — 2 matching access-log row(s), status 404, never ours
+         [Mon Sep 21 02:29:29.680262 2026] [cgid:error] [pid 381554:tid 381578] [client 221.159.119.6:37718] AH01264: stderr from /var/www/cgi-bin/luci: script not found
+  [OK  ] 2026-09-21 02:29:29  a probe for the cgi-bin script /var/www/cgi-bin/luci by - — 2 matching access-log row(s), status 404, never ours
+         [Mon Sep 21 02:29:29.876548 2026] [cgid:error] [pid 380983:tid 381003] [client 221.159.119.6:37793] AH01264: stderr from /var/www/cgi-bin/luci: script not found
+
+==============================================================================
+/var/log/httpd/error_log
+  2072 byte(s), mtime 2026-09-20 14:18:42.092740676 +0000  (for the record; not an invariant)
+  15 record(s) over 15 non-empty line(s)
+  [OK  ] 2026-09-20 00:00:01  apache lifecycle notice AH02282 — no client, emitted at a restart
+         [Sun Sep 20 00:00:01.927580 2026] [lbmethod_heartbeat:notice] [pid 316450:tid 316450] AH02282: No slotmem from mod_heartmonitor
+  [OK  ] 2026-09-20 00:00:01  apache lifecycle notice AH00489 — no client, emitted at a restart
+         [Sun Sep 20 00:00:01.940508 2026] [mpm_event:notice] [pid 316450:tid 316450] AH00489: Apache/2.4.62 (AlmaLinux) OpenSSL/3.5.5 configured -- resuming normal oper
+  [OK  ] 2026-09-20 00:00:01  apache lifecycle notice AH00094 — no client, emitted at a restart
+         [Sun Sep 20 00:00:01.940566 2026] [core:notice] [pid 316450:tid 316450] AH00094: Command line: '/usr/sbin/httpd -D FOREGROUND'
+  [OK  ] 2026-09-20 05:39:35  apache lifecycle notice AH00493 — no client, emitted at a restart
+         [Sun Sep 20 05:39:35.515104 2026] [mpm_event:notice] [pid 316450:tid 316450] AH00493: SIGUSR1 received.  Doing graceful restart
+  [OK  ] 2026-09-20 05:39:35  apache lifecycle notice AH02282 — no client, emitted at a restart
+         [Sun Sep 20 05:39:35.929520 2026] [lbmethod_heartbeat:notice] [pid 316450:tid 316450] AH02282: No slotmem from mod_heartmonitor
+  [OK  ] 2026-09-20 05:39:35  apache lifecycle notice AH00489 — no client, emitted at a restart
+         [Sun Sep 20 05:39:35.933500 2026] [mpm_event:notice] [pid 316450:tid 316450] AH00489: Apache/2.4.62 (AlmaLinux) OpenSSL/3.5.5 configured -- resuming normal oper
+  [OK  ] 2026-09-20 05:39:35  apache lifecycle notice AH00094 — no client, emitted at a restart
+         [Sun Sep 20 05:39:35.933548 2026] [core:notice] [pid 316450:tid 316450] AH00094: Command line: '/usr/sbin/httpd -D FOREGROUND'
+  [OK  ] 2026-09-20 05:46:10  apache lifecycle notice AH00493 — no client, emitted at a restart
+         [Sun Sep 20 05:46:10.516447 2026] [mpm_event:notice] [pid 316450:tid 316450] AH00493: SIGUSR1 received.  Doing graceful restart
+  [OK  ] 2026-09-20 05:46:10  apache lifecycle notice AH02282 — no client, emitted at a restart
+         [Sun Sep 20 05:46:10.598822 2026] [lbmethod_heartbeat:notice] [pid 316450:tid 316450] AH02282: No slotmem from mod_heartmonitor
+  [OK  ] 2026-09-20 05:46:10  apache lifecycle notice AH00489 — no client, emitted at a restart
+         [Sun Sep 20 05:46:10.601342 2026] [mpm_event:notice] [pid 316450:tid 316450] AH00489: Apache/2.4.62 (AlmaLinux) OpenSSL/3.5.5 configured -- resuming normal oper
+  [OK  ] 2026-09-20 05:46:10  apache lifecycle notice AH00094 — no client, emitted at a restart
+         [Sun Sep 20 05:46:10.601372 2026] [core:notice] [pid 316450:tid 316450] AH00094: Command line: '/usr/sbin/httpd -D FOREGROUND'
+  [OK  ] 2026-09-20 14:18:41  apache lifecycle notice AH00493 — no client, emitted at a restart
+         [Sun Sep 20 14:18:41.638007 2026] [mpm_event:notice] [pid 316450:tid 316450] AH00493: SIGUSR1 received.  Doing graceful restart
+  [OK  ] 2026-09-20 14:18:42  apache lifecycle notice AH02282 — no client, emitted at a restart
+         [Sun Sep 20 14:18:42.088088 2026] [lbmethod_heartbeat:notice] [pid 316450:tid 316450] AH02282: No slotmem from mod_heartmonitor
+  [OK  ] 2026-09-20 14:18:42  apache lifecycle notice AH00489 — no client, emitted at a restart
+         [Sun Sep 20 14:18:42.093721 2026] [mpm_event:notice] [pid 316450:tid 316450] AH00489: Apache/2.4.62 (AlmaLinux) OpenSSL/3.5.5 configured -- resuming normal oper
+  [OK  ] 2026-09-20 14:18:42  apache lifecycle notice AH00094 — no client, emitted at a restart
+         [Sun Sep 20 14:18:42.093766 2026] [core:notice] [pid 316450:tid 316450] AH00094: Command line: '/usr/sbin/httpd -D FOREGROUND'
+
+==============================================================================
+/var/log/php-fpm/www-error.log
+  742 byte(s), mtime 2026-09-21 03:38:30.456099737 +0000  (for the record; not an invariant)
+  3 record(s) over 9 non-empty line(s)
+  [OK  ] 2026-09-20 05:49:31  the file it could not read, /wp-content/themes/sinofresh-theme/parts/footer.html, exists now (16752 byte(s)) — a transient from before the batch
+         [20-Sep-2026 05:49:31 UTC] PHP Warning:  file_get_contents(/var/www/dev.zxpet.com/public/wp-content/themes/sinofresh-theme/parts/footer.html): Failed to open st
+  [OK  ] 2026-09-20 09:36:32  a direct request for /wp-settings.php by - at the same second, status 500 — the message is that request's consequence, not ours  (+3 continuation line(s))
+         [20-Sep-2026 09:36:32 UTC] PHP Fatal error:  Uncaught Error: Undefined constant "ABSPATH" in /var/www/dev.zxpet.com/public/wp-settings.php:34
+  [ALLOW] 2026-09-21 03:38:30  [documented exception] negative control: a /wp-settings.php request we made on purpose at 03:38:30 (the only way to prove this audit fails on our own damage); it wrote one PHP fatal and is the reason --allow exists  (+3 continuation line(s))
+         [21-Sep-2026 03:38:30 UTC] PHP Fatal error:  Uncaught Error: Undefined constant "ABSPATH" in /var/www/dev.zxpet.com/public/wp-settings.php:34
+
+==============================================================================
+wp-content/debug.log
+  does not exist  [OK  ]
+
+==============================================================================
+VERDICT
+==============================================================================
+  lines inside the window, anywhere           : 0 required
+  lines cleared by attribution                : 37
+  lines allowed as documented exceptions      : 1
+      2026-09-21 03:38:30  negative control: a /wp-settings.php request we made on purpose at 03:38:30 (the only way to prove this audit fails on our own damage); it wrote one PHP fatal and is the reason --allow exists
+  lines that could NOT be cleared             : 0
+
+AUDIT PASSED — every line attributable, none ours, none in window

@@ -1,0 +1,470 @@
+================================================================================================
+Batch 2D step E — rendered evidence  (live: True)
+================================================================================================
+
+[p__soft-chews@1440]
+  PASS p__soft-chews@1440   stylesheet is the live theme                   exp=href has sinofresh-theme/, no -preflight act=https://dev.zxpet.com/wp-content/themes/sinofresh-theme/style.css?ver=2.10.52
+  PASS p__soft-chews@1440   stylesheet version is 2.10.52                  exp=ver=2.10.52              act=https://dev.zxpet.com/wp-content/themes/sinofresh-theme/style.css?ver=2.10.52
+      readyState=complete viewport=1440x900 scrollH=5671 scrollW=1440
+      h1='Private Label Soft Chews for Dogs & Cats'
+      gone: {".sf-facts": 0, ".sf-spectable": 0, ".sf-actives": 0, "#actives": 0}   markers: []
+  PASS p__soft-chews@1440   deleted: .sf-facts                             exp=0                        act=0
+  PASS p__soft-chews@1440   deleted: .sf-spectable                         exp=0                        act=0
+  PASS p__soft-chews@1440   deleted: .sf-actives                           exp=0                        act=0
+  PASS p__soft-chews@1440   deleted: #actives                              exp=0                        act=0
+  PASS p__soft-chews@1440   deleted: both markers                          exp=[]                       act=[]
+  PASS p__soft-chews@1440   base carried the actives h2                    exp=present in base capture  act=['Standard Formulas', 'Build Your Soft Chews Formula', 'Active Ingredients & Guaranteed Analysis', 'How We Work', 'Frequently Asked Questions', 'Related Dosage Forms', 'Request a Soft Chews Quote']
+  PASS p__soft-chews@1440   h2 order == base minus actives                 exp=6 heading(s)             act=['Standard Formulas', 'Build Your Soft Chews Formula', 'How We Work', 'Frequently Asked Questions', 'Related Dosage Forms', 'Request a Soft Chews Quote']
+      h2: ["Standard Formulas", "Build Your Soft Chews Formula", "How We Work", "Frequently Asked Questions", "Related Dosage Forms", "Request a Soft Chews Quote"]
+  PASS p__soft-chews@1440   rail is self-consistent (dots == h2)           exp=dots == 6                act=6
+  PASS p__soft-chews@1440   rail count is base minus one                   exp=6                        act=6
+  PASS p__soft-chews@1440   no dot points at a deleted anchor              exp=no #actives in the rail  act=['#sf-sec-0', '#sf-sec-1', '#sf-sec-2', '#sf-sec-3', '#sf-sec-4', '#sf-sec-5']
+  PASS p__soft-chews@1440   rail labels match dots                         exp=labels == dots           act=6 / 6
+  PASS p__soft-chews@1440   spine heading sections strictly increase       exp=strictly increasing (6 sections) act=[472, 1233, 2967, 3598, 3908, 4435]
+  PASS p__soft-chews@1440   each heading still owns its own section        exp=6 distinct sections      act=['#1.sf-formulas', '#2.is-layout-constrained', '#3.has-bg-light-background-color', '#4.is-layout-constrained', '#5.has-bg-light-background-color', '#6.has-card-white-color']
+  PASS p__soft-chews@1440   hero h1 present                                exp=non-empty                act=Private Label Soft Chews for Dogs & Cats
+  PASS p__soft-chews@1440   hero -> card wall gap under 300px              exp=< 300                    act=24 px
+      card wall {"top": 472, "bottom": 1209, "left": 0, "right": 1440, "width": 1440, "height": 736}
+      configurator section {"top": 1233, "bottom": 2943, "left": 0, "right": 1440, "width": 1440, "height": 1710}
+  PASS p__soft-chews@1440   card wall -> configurator gap under 300px      exp=< 300                    act=24 px
+  PASS p__soft-chews@1440   card wall present                              exp=present                  act=True
+  PASS p__soft-chews@1440   configurator present                           exp=present                  act=True
+  PASS p__soft-chews@1440   faq present                                    exp=present                  act=True
+  PASS p__soft-chews@1440   related present                                exp=present                  act=True
+  PASS p__soft-chews@1440   cta present                                    exp=present                  act=True
+  PASS p__soft-chews@1440   faq items > 0                                  exp=> 0                      act=2
+  PASS p__soft-chews@1440   related items > 0                              exp=> 0                      act=4
+  PASS p__soft-chews@1440   toc-nav.js ran                                 exp=> 0                      act=6
+  PASS p__soft-chews@1440   formula cards rendered                         exp=> 0                      act=4
+  PASS p__soft-chews@1440   configurator groups rendered                   exp=> 0                      act=8
+  PASS p__soft-chews@1440   no horizontal scroll                           exp=scrollW == viewport      act=1440 vs 1440
+  PASS p__soft-chews@1440   no JS page errors                              exp=0                        act=0
+  PASS p__soft-chews@1440   no console error lines                         exp=0                        act=0
+      console lines (for the record): 0
+      shot products-soft-chews-1440-viewport.png  213458 bytes
+      shot products-soft-chews-1440-full.png  766903 bytes
+
+[p__tablets@1440]
+  PASS p__tablets@1440      stylesheet is the live theme                   exp=href has sinofresh-theme/, no -preflight act=https://dev.zxpet.com/wp-content/themes/sinofresh-theme/style.css?ver=2.10.52
+  PASS p__tablets@1440      stylesheet version is 2.10.52                  exp=ver=2.10.52              act=https://dev.zxpet.com/wp-content/themes/sinofresh-theme/style.css?ver=2.10.52
+      readyState=complete viewport=1440x900 scrollH=5391 scrollW=1440
+      h1='Private Label Pet Tablets for Dogs & Cats'
+      gone: {".sf-facts": 0, ".sf-spectable": 0, ".sf-actives": 0, "#actives": 0}   markers: []
+  PASS p__tablets@1440      deleted: .sf-facts                             exp=0                        act=0
+  PASS p__tablets@1440      deleted: .sf-spectable                         exp=0                        act=0
+  PASS p__tablets@1440      deleted: .sf-actives                           exp=0                        act=0
+  PASS p__tablets@1440      deleted: #actives                              exp=0                        act=0
+  PASS p__tablets@1440      deleted: both markers                          exp=[]                       act=[]
+  PASS p__tablets@1440      base carried the actives h2                    exp=present in base capture  act=['Standard Formulas', 'Build Your Tablets Formula', 'Active Ingredients & Guaranteed Analysis', 'How We Work', 'Frequently Asked Questions', 'Related Dosage Forms', 'Request a Tablets Quote']
+  PASS p__tablets@1440      h2 order == base minus actives                 exp=6 heading(s)             act=['Standard Formulas', 'Build Your Tablets Formula', 'How We Work', 'Frequently Asked Questions', 'Related Dosage Forms', 'Request a Tablets Quote']
+      h2: ["Standard Formulas", "Build Your Tablets Formula", "How We Work", "Frequently Asked Questions", "Related Dosage Forms", "Request a Tablets Quote"]
+  PASS p__tablets@1440      rail is self-consistent (dots == h2)           exp=dots == 6                act=6
+  PASS p__tablets@1440      rail count is base minus one                   exp=6                        act=6
+  PASS p__tablets@1440      no dot points at a deleted anchor              exp=no #actives in the rail  act=['#sf-sec-0', '#sf-sec-1', '#sf-sec-2', '#sf-sec-3', '#sf-sec-4', '#sf-sec-5']
+  PASS p__tablets@1440      rail labels match dots                         exp=labels == dots           act=6 / 6
+  PASS p__tablets@1440      spine heading sections strictly increase       exp=strictly increasing (6 sections) act=[472, 1255, 2630, 3260, 3628, 4155]
+  PASS p__tablets@1440      each heading still owns its own section        exp=6 distinct sections      act=['#1.sf-formulas', '#2.is-layout-constrained', '#3.has-bg-light-background-color', '#4.is-layout-constrained', '#5.has-bg-light-background-color', '#6.has-card-white-color']
+  PASS p__tablets@1440      hero h1 present                                exp=non-empty                act=Private Label Pet Tablets for Dogs & Cats
+  PASS p__tablets@1440      hero -> card wall gap under 300px              exp=< 300                    act=24 px
+      card wall {"top": 472, "bottom": 1231, "left": 0, "right": 1440, "width": 1440, "height": 759}
+      configurator section {"top": 1255, "bottom": 2606, "left": 0, "right": 1440, "width": 1440, "height": 1351}
+  PASS p__tablets@1440      card wall -> configurator gap under 300px      exp=< 300                    act=24 px
+  PASS p__tablets@1440      card wall present                              exp=present                  act=True
+  PASS p__tablets@1440      configurator present                           exp=present                  act=True
+  PASS p__tablets@1440      faq present                                    exp=present                  act=True
+  PASS p__tablets@1440      related present                                exp=present                  act=True
+  PASS p__tablets@1440      cta present                                    exp=present                  act=True
+  PASS p__tablets@1440      faq items > 0                                  exp=> 0                      act=3
+  PASS p__tablets@1440      related items > 0                              exp=> 0                      act=4
+  PASS p__tablets@1440      toc-nav.js ran                                 exp=> 0                      act=6
+  PASS p__tablets@1440      formula cards rendered                         exp=> 0                      act=3
+  PASS p__tablets@1440      configurator groups rendered                   exp=> 0                      act=7
+  PASS p__tablets@1440      no horizontal scroll                           exp=scrollW == viewport      act=1440 vs 1440
+  PASS p__tablets@1440      no JS page errors                              exp=0                        act=0
+  PASS p__tablets@1440      no console error lines                         exp=0                        act=0
+      console lines (for the record): 0
+      shot products-tablets-1440-viewport.png  180117 bytes
+      shot products-tablets-1440-full.png  688610 bytes
+
+[p__powders@1440]
+  PASS p__powders@1440      stylesheet is the live theme                   exp=href has sinofresh-theme/, no -preflight act=https://dev.zxpet.com/wp-content/themes/sinofresh-theme/style.css?ver=2.10.52
+  PASS p__powders@1440      stylesheet version is 2.10.52                  exp=ver=2.10.52              act=https://dev.zxpet.com/wp-content/themes/sinofresh-theme/style.css?ver=2.10.52
+      readyState=complete viewport=1440x900 scrollH=5338 scrollW=1440
+      h1='Private Label Pet Supplement Powders'
+      gone: {".sf-facts": 0, ".sf-spectable": 0, ".sf-actives": 0, "#actives": 0}   markers: []
+  PASS p__powders@1440      deleted: .sf-facts                             exp=0                        act=0
+  PASS p__powders@1440      deleted: .sf-spectable                         exp=0                        act=0
+  PASS p__powders@1440      deleted: .sf-actives                           exp=0                        act=0
+  PASS p__powders@1440      deleted: #actives                              exp=0                        act=0
+  PASS p__powders@1440      deleted: both markers                          exp=[]                       act=[]
+  PASS p__powders@1440      base carried the actives h2                    exp=present in base capture  act=['Standard Formulas', 'Build Your Powders Formula', 'Active Ingredients & Guaranteed Analysis', 'How We Work', 'Frequently Asked Questions', 'Related Dosage Forms', 'Request a Powders Quote']
+  PASS p__powders@1440      h2 order == base minus actives                 exp=6 heading(s)             act=['Standard Formulas', 'Build Your Powders Formula', 'How We Work', 'Frequently Asked Questions', 'Related Dosage Forms', 'Request a Powders Quote']
+      h2: ["Standard Formulas", "Build Your Powders Formula", "How We Work", "Frequently Asked Questions", "Related Dosage Forms", "Request a Powders Quote"]
+  PASS p__powders@1440      rail is self-consistent (dots == h2)           exp=dots == 6                act=6
+  PASS p__powders@1440      rail count is base minus one                   exp=6                        act=6
+  PASS p__powders@1440      no dot points at a deleted anchor              exp=no #actives in the rail  act=['#sf-sec-0', '#sf-sec-1', '#sf-sec-2', '#sf-sec-3', '#sf-sec-4', '#sf-sec-5']
+  PASS p__powders@1440      rail labels match dots                         exp=labels == dots           act=6 / 6
+  PASS p__powders@1440      spine heading sections strictly increase       exp=strictly increasing (6 sections) act=[472, 1213, 2577, 3208, 3575, 4102]
+  PASS p__powders@1440      each heading still owns its own section        exp=6 distinct sections      act=['#1.sf-formulas', '#2.is-layout-constrained', '#3.has-bg-light-background-color', '#4.is-layout-constrained', '#5.has-bg-light-background-color', '#6.has-card-white-color']
+  PASS p__powders@1440      hero h1 present                                exp=non-empty                act=Private Label Pet Supplement Powders
+  PASS p__powders@1440      hero -> card wall gap under 300px              exp=< 300                    act=24 px
+      card wall {"top": 472, "bottom": 1189, "left": 0, "right": 1440, "width": 1440, "height": 716}
+      configurator section {"top": 1213, "bottom": 2553, "left": 0, "right": 1440, "width": 1440, "height": 1340}
+  PASS p__powders@1440      card wall -> configurator gap under 300px      exp=< 300                    act=24 px
+  PASS p__powders@1440      card wall present                              exp=present                  act=True
+  PASS p__powders@1440      configurator present                           exp=present                  act=True
+  PASS p__powders@1440      faq present                                    exp=present                  act=True
+  PASS p__powders@1440      related present                                exp=present                  act=True
+  PASS p__powders@1440      cta present                                    exp=present                  act=True
+  PASS p__powders@1440      faq items > 0                                  exp=> 0                      act=3
+  PASS p__powders@1440      related items > 0                              exp=> 0                      act=4
+  PASS p__powders@1440      toc-nav.js ran                                 exp=> 0                      act=6
+  PASS p__powders@1440      formula cards rendered                         exp=> 0                      act=3
+  PASS p__powders@1440      configurator groups rendered                   exp=> 0                      act=7
+  PASS p__powders@1440      no horizontal scroll                           exp=scrollW == viewport      act=1440 vs 1440
+  PASS p__powders@1440      no JS page errors                              exp=0                        act=0
+  PASS p__powders@1440      no console error lines                         exp=0                        act=0
+      console lines (for the record): 0
+      shot products-powders-1440-viewport.png  224749 bytes
+      shot products-powders-1440-full.png  726278 bytes
+
+[p__pastes@1440]
+  PASS p__pastes@1440       stylesheet is the live theme                   exp=href has sinofresh-theme/, no -preflight act=https://dev.zxpet.com/wp-content/themes/sinofresh-theme/style.css?ver=2.10.52
+  PASS p__pastes@1440       stylesheet version is 2.10.52                  exp=ver=2.10.52              act=https://dev.zxpet.com/wp-content/themes/sinofresh-theme/style.css?ver=2.10.52
+      readyState=complete viewport=1440x900 scrollH=5218 scrollW=1440
+      h1='Private Label Pet Supplement Pastes'
+      gone: {".sf-facts": 0, ".sf-spectable": 0, ".sf-actives": 0, "#actives": 0}   markers: []
+  PASS p__pastes@1440       deleted: .sf-facts                             exp=0                        act=0
+  PASS p__pastes@1440       deleted: .sf-spectable                         exp=0                        act=0
+  PASS p__pastes@1440       deleted: .sf-actives                           exp=0                        act=0
+  PASS p__pastes@1440       deleted: #actives                              exp=0                        act=0
+  PASS p__pastes@1440       deleted: both markers                          exp=[]                       act=[]
+  PASS p__pastes@1440       base carried the actives h2                    exp=present in base capture  act=['Standard Formulas', 'Build Your Pastes Formula', 'Active Ingredients & Guaranteed Analysis', 'How We Work', 'Frequently Asked Questions', 'Related Dosage Forms', 'Request a Pastes Quote']
+  PASS p__pastes@1440       h2 order == base minus actives                 exp=6 heading(s)             act=['Standard Formulas', 'Build Your Pastes Formula', 'How We Work', 'Frequently Asked Questions', 'Related Dosage Forms', 'Request a Pastes Quote']
+      h2: ["Standard Formulas", "Build Your Pastes Formula", "How We Work", "Frequently Asked Questions", "Related Dosage Forms", "Request a Pastes Quote"]
+  PASS p__pastes@1440       rail is self-consistent (dots == h2)           exp=dots == 6                act=6
+  PASS p__pastes@1440       rail count is base minus one                   exp=6                        act=6
+  PASS p__pastes@1440       no dot points at a deleted anchor              exp=no #actives in the rail  act=['#sf-sec-0', '#sf-sec-1', '#sf-sec-2', '#sf-sec-3', '#sf-sec-4', '#sf-sec-5']
+  PASS p__pastes@1440       rail labels match dots                         exp=labels == dots           act=6 / 6
+  PASS p__pastes@1440       spine heading sections strictly increase       exp=strictly increasing (6 sections) act=[472, 1233, 2457, 3087, 3455, 3982]
+  PASS p__pastes@1440       each heading still owns its own section        exp=6 distinct sections      act=['#1.sf-formulas', '#2.is-layout-constrained', '#3.has-bg-light-background-color', '#4.is-layout-constrained', '#5.has-bg-light-background-color', '#6.has-card-white-color']
+  PASS p__pastes@1440       hero h1 present                                exp=non-empty                act=Private Label Pet Supplement Pastes
+  PASS p__pastes@1440       hero -> card wall gap under 300px              exp=< 300                    act=24 px
+      card wall {"top": 472, "bottom": 1209, "left": 0, "right": 1440, "width": 1440, "height": 736}
+      configurator section {"top": 1233, "bottom": 2433, "left": 0, "right": 1440, "width": 1440, "height": 1200}
+  PASS p__pastes@1440       card wall -> configurator gap under 300px      exp=< 300                    act=24 px
+  PASS p__pastes@1440       card wall present                              exp=present                  act=True
+  PASS p__pastes@1440       configurator present                           exp=present                  act=True
+  PASS p__pastes@1440       faq present                                    exp=present                  act=True
+  PASS p__pastes@1440       related present                                exp=present                  act=True
+  PASS p__pastes@1440       cta present                                    exp=present                  act=True
+  PASS p__pastes@1440       faq items > 0                                  exp=> 0                      act=3
+  PASS p__pastes@1440       related items > 0                              exp=> 0                      act=4
+  PASS p__pastes@1440       toc-nav.js ran                                 exp=> 0                      act=6
+  PASS p__pastes@1440       formula cards rendered                         exp=> 0                      act=2
+  PASS p__pastes@1440       configurator groups rendered                   exp=> 0                      act=6
+  PASS p__pastes@1440       no horizontal scroll                           exp=scrollW == viewport      act=1440 vs 1440
+  PASS p__pastes@1440       no JS page errors                              exp=0                        act=0
+  PASS p__pastes@1440       no console error lines                         exp=0                        act=0
+      console lines (for the record): 0
+      shot products-pastes-1440-viewport.png  156128 bytes
+      shot products-pastes-1440-full.png  636982 bytes
+
+[p__drops@1440]
+  PASS p__drops@1440        stylesheet is the live theme                   exp=href has sinofresh-theme/, no -preflight act=https://dev.zxpet.com/wp-content/themes/sinofresh-theme/style.css?ver=2.10.52
+  PASS p__drops@1440        stylesheet version is 2.10.52                  exp=ver=2.10.52              act=https://dev.zxpet.com/wp-content/themes/sinofresh-theme/style.css?ver=2.10.52
+      readyState=complete viewport=1440x900 scrollH=5311 scrollW=1440
+      h1='Private Label Pet Supplement Drops'
+      gone: {".sf-facts": 0, ".sf-spectable": 0, ".sf-actives": 0, "#actives": 0}   markers: []
+  PASS p__drops@1440        deleted: .sf-facts                             exp=0                        act=0
+  PASS p__drops@1440        deleted: .sf-spectable                         exp=0                        act=0
+  PASS p__drops@1440        deleted: .sf-actives                           exp=0                        act=0
+  PASS p__drops@1440        deleted: #actives                              exp=0                        act=0
+  PASS p__drops@1440        deleted: both markers                          exp=[]                       act=[]
+  PASS p__drops@1440        base carried the actives h2                    exp=present in base capture  act=['Standard Formulas', 'Build Your Drops Formula', 'Active Ingredients & Guaranteed Analysis', 'How We Work', 'Frequently Asked Questions', 'Related Dosage Forms', 'Request a Drops Quote']
+  PASS p__drops@1440        h2 order == base minus actives                 exp=6 heading(s)             act=['Standard Formulas', 'Build Your Drops Formula', 'How We Work', 'Frequently Asked Questions', 'Related Dosage Forms', 'Request a Drops Quote']
+      h2: ["Standard Formulas", "Build Your Drops Formula", "How We Work", "Frequently Asked Questions", "Related Dosage Forms", "Request a Drops Quote"]
+  PASS p__drops@1440        rail is self-consistent (dots == h2)           exp=dots == 6                act=6
+  PASS p__drops@1440        rail count is base minus one                   exp=6                        act=6
+  PASS p__drops@1440        no dot points at a deleted anchor              exp=no #actives in the rail  act=['#sf-sec-0', '#sf-sec-1', '#sf-sec-2', '#sf-sec-3', '#sf-sec-4', '#sf-sec-5']
+  PASS p__drops@1440        rail labels match dots                         exp=labels == dots           act=6 / 6
+  PASS p__drops@1440        spine heading sections strictly increase       exp=strictly increasing (6 sections) act=[472, 1233, 2482, 3189, 3556, 4075]
+  PASS p__drops@1440        each heading still owns its own section        exp=6 distinct sections      act=['#1.sf-formulas', '#2.is-layout-constrained', '#3.has-bg-light-background-color', '#4.is-layout-constrained', '#5.has-bg-light-background-color', '#6.has-card-white-color']
+  PASS p__drops@1440        hero h1 present                                exp=non-empty                act=Private Label Pet Supplement Drops
+  PASS p__drops@1440        hero -> card wall gap under 300px              exp=< 300                    act=24 px
+      card wall {"top": 472, "bottom": 1209, "left": 0, "right": 1440, "width": 1440, "height": 736}
+      configurator section {"top": 1233, "bottom": 2458, "left": 0, "right": 1440, "width": 1440, "height": 1225}
+  PASS p__drops@1440        card wall -> configurator gap under 300px      exp=< 300                    act=24 px
+  PASS p__drops@1440        card wall present                              exp=present                  act=True
+  PASS p__drops@1440        configurator present                           exp=present                  act=True
+  PASS p__drops@1440        faq present                                    exp=present                  act=True
+  PASS p__drops@1440        related present                                exp=present                  act=True
+  PASS p__drops@1440        cta present                                    exp=present                  act=True
+  PASS p__drops@1440        faq items > 0                                  exp=> 0                      act=3
+  PASS p__drops@1440        related items > 0                              exp=> 0                      act=7
+  PASS p__drops@1440        toc-nav.js ran                                 exp=> 0                      act=6
+  PASS p__drops@1440        formula cards rendered                         exp=> 0                      act=2
+  PASS p__drops@1440        configurator groups rendered                   exp=> 0                      act=6
+  PASS p__drops@1440        no horizontal scroll                           exp=scrollW == viewport      act=1440 vs 1440
+  PASS p__drops@1440        no JS page errors                              exp=0                        act=0
+  PASS p__drops@1440        no console error lines                         exp=0                        act=0
+      console lines (for the record): 0
+      shot products-drops-1440-viewport.png  161396 bytes
+      shot products-drops-1440-full.png  644475 bytes
+
+[p__liquids@1440]
+  PASS p__liquids@1440      stylesheet is the live theme                   exp=href has sinofresh-theme/, no -preflight act=https://dev.zxpet.com/wp-content/themes/sinofresh-theme/style.css?ver=2.10.52
+  PASS p__liquids@1440      stylesheet version is 2.10.52                  exp=ver=2.10.52              act=https://dev.zxpet.com/wp-content/themes/sinofresh-theme/style.css?ver=2.10.52
+      readyState=complete viewport=1440x900 scrollH=5303 scrollW=1440
+      h1='Private Label Liquid Pet Supplements'
+      gone: {".sf-facts": 0, ".sf-spectable": 0, ".sf-actives": 0, "#actives": 0}   markers: []
+  PASS p__liquids@1440      deleted: .sf-facts                             exp=0                        act=0
+  PASS p__liquids@1440      deleted: .sf-spectable                         exp=0                        act=0
+  PASS p__liquids@1440      deleted: .sf-actives                           exp=0                        act=0
+  PASS p__liquids@1440      deleted: #actives                              exp=0                        act=0
+  PASS p__liquids@1440      deleted: both markers                          exp=[]                       act=[]
+  PASS p__liquids@1440      base carried the actives h2                    exp=present in base capture  act=['Standard Formulas', 'Build Your Liquids Formula', 'Active Ingredients & Guaranteed Analysis', 'How We Work', 'Frequently Asked Questions', 'Related Dosage Forms', 'Request a Liquids Quote']
+  PASS p__liquids@1440      h2 order == base minus actives                 exp=6 heading(s)             act=['Standard Formulas', 'Build Your Liquids Formula', 'How We Work', 'Frequently Asked Questions', 'Related Dosage Forms', 'Request a Liquids Quote']
+      h2: ["Standard Formulas", "Build Your Liquids Formula", "How We Work", "Frequently Asked Questions", "Related Dosage Forms", "Request a Liquids Quote"]
+  PASS p__liquids@1440      rail is self-consistent (dots == h2)           exp=dots == 6                act=6
+  PASS p__liquids@1440      rail count is base minus one                   exp=6                        act=6
+  PASS p__liquids@1440      no dot points at a deleted anchor              exp=no #actives in the rail  act=['#sf-sec-0', '#sf-sec-1', '#sf-sec-2', '#sf-sec-3', '#sf-sec-4', '#sf-sec-5']
+  PASS p__liquids@1440      rail labels match dots                         exp=labels == dots           act=6 / 6
+  PASS p__liquids@1440      spine heading sections strictly increase       exp=strictly increasing (6 sections) act=[472, 1233, 2474, 3180, 3548, 4067]
+  PASS p__liquids@1440      each heading still owns its own section        exp=6 distinct sections      act=['#1.sf-formulas', '#2.is-layout-constrained', '#3.has-bg-light-background-color', '#4.is-layout-constrained', '#5.has-bg-light-background-color', '#6.has-card-white-color']
+  PASS p__liquids@1440      hero h1 present                                exp=non-empty                act=Private Label Liquid Pet Supplements
+  PASS p__liquids@1440      hero -> card wall gap under 300px              exp=< 300                    act=24 px
+      card wall {"top": 472, "bottom": 1209, "left": 0, "right": 1440, "width": 1440, "height": 736}
+      configurator section {"top": 1233, "bottom": 2450, "left": 0, "right": 1440, "width": 1440, "height": 1217}
+  PASS p__liquids@1440      card wall -> configurator gap under 300px      exp=< 300                    act=24 px
+  PASS p__liquids@1440      card wall present                              exp=present                  act=True
+  PASS p__liquids@1440      configurator present                           exp=present                  act=True
+  PASS p__liquids@1440      faq present                                    exp=present                  act=True
+  PASS p__liquids@1440      related present                                exp=present                  act=True
+  PASS p__liquids@1440      cta present                                    exp=present                  act=True
+  PASS p__liquids@1440      faq items > 0                                  exp=> 0                      act=3
+  PASS p__liquids@1440      related items > 0                              exp=> 0                      act=7
+  PASS p__liquids@1440      toc-nav.js ran                                 exp=> 0                      act=6
+  PASS p__liquids@1440      formula cards rendered                         exp=> 0                      act=2
+  PASS p__liquids@1440      configurator groups rendered                   exp=> 0                      act=6
+  PASS p__liquids@1440      no horizontal scroll                           exp=scrollW == viewport      act=1440 vs 1440
+  PASS p__liquids@1440      no JS page errors                              exp=0                        act=0
+  PASS p__liquids@1440      no console error lines                         exp=0                        act=0
+      console lines (for the record): 0
+      shot products-liquids-1440-viewport.png  153391 bytes
+      shot products-liquids-1440-full.png  635011 bytes
+
+[p__fish-oil@1440]
+  PASS p__fish-oil@1440     stylesheet is the live theme                   exp=href has sinofresh-theme/, no -preflight act=https://dev.zxpet.com/wp-content/themes/sinofresh-theme/style.css?ver=2.10.52
+  PASS p__fish-oil@1440     stylesheet version is 2.10.52                  exp=ver=2.10.52              act=https://dev.zxpet.com/wp-content/themes/sinofresh-theme/style.css?ver=2.10.52
+      readyState=complete viewport=1440x900 scrollH=5416 scrollW=1440
+      h1='Private Label Fish Oil for Dogs & Cats'
+      gone: {".sf-facts": 0, ".sf-spectable": 0, ".sf-actives": 0, "#actives": 0}   markers: []
+  PASS p__fish-oil@1440     deleted: .sf-facts                             exp=0                        act=0
+  PASS p__fish-oil@1440     deleted: .sf-spectable                         exp=0                        act=0
+  PASS p__fish-oil@1440     deleted: .sf-actives                           exp=0                        act=0
+  PASS p__fish-oil@1440     deleted: #actives                              exp=0                        act=0
+  PASS p__fish-oil@1440     deleted: both markers                          exp=[]                       act=[]
+  PASS p__fish-oil@1440     base carried the actives h2                    exp=present in base capture  act=['Standard Formulas', 'Build Your Fish Oil Formula', 'Active Ingredients & Guaranteed Analysis', 'How We Work', 'Frequently Asked Questions', 'Related Dosage Forms', 'Request a Fish Oil Quote']
+  PASS p__fish-oil@1440     h2 order == base minus actives                 exp=6 heading(s)             act=['Standard Formulas', 'Build Your Fish Oil Formula', 'How We Work', 'Frequently Asked Questions', 'Related Dosage Forms', 'Request a Fish Oil Quote']
+      h2: ["Standard Formulas", "Build Your Fish Oil Formula", "How We Work", "Frequently Asked Questions", "Related Dosage Forms", "Request a Fish Oil Quote"]
+  PASS p__fish-oil@1440     rail is self-consistent (dots == h2)           exp=dots == 6                act=6
+  PASS p__fish-oil@1440     rail count is base minus one                   exp=6                        act=6
+  PASS p__fish-oil@1440     no dot points at a deleted anchor              exp=no #actives in the rail  act=['#sf-sec-0', '#sf-sec-1', '#sf-sec-2', '#sf-sec-3', '#sf-sec-4', '#sf-sec-5']
+  PASS p__fish-oil@1440     rail labels match dots                         exp=labels == dots           act=6 / 6
+  PASS p__fish-oil@1440     spine heading sections strictly increase       exp=strictly increasing (6 sections) act=[472, 1233, 2588, 3294, 3662, 4181]
+  PASS p__fish-oil@1440     each heading still owns its own section        exp=6 distinct sections      act=['#1.sf-formulas', '#2.is-layout-constrained', '#3.has-bg-light-background-color', '#4.is-layout-constrained', '#5.has-bg-light-background-color', '#6.has-card-white-color']
+  PASS p__fish-oil@1440     hero h1 present                                exp=non-empty                act=Private Label Fish Oil for Dogs & Cats
+  PASS p__fish-oil@1440     hero -> card wall gap under 300px              exp=< 300                    act=24 px
+      card wall {"top": 472, "bottom": 1209, "left": 0, "right": 1440, "width": 1440, "height": 736}
+      configurator section {"top": 1233, "bottom": 2564, "left": 0, "right": 1440, "width": 1440, "height": 1331}
+  PASS p__fish-oil@1440     card wall -> configurator gap under 300px      exp=< 300                    act=24 px
+  PASS p__fish-oil@1440     card wall present                              exp=present                  act=True
+  PASS p__fish-oil@1440     configurator present                           exp=present                  act=True
+  PASS p__fish-oil@1440     faq present                                    exp=present                  act=True
+  PASS p__fish-oil@1440     related present                                exp=present                  act=True
+  PASS p__fish-oil@1440     cta present                                    exp=present                  act=True
+  PASS p__fish-oil@1440     faq items > 0                                  exp=> 0                      act=3
+  PASS p__fish-oil@1440     related items > 0                              exp=> 0                      act=7
+  PASS p__fish-oil@1440     toc-nav.js ran                                 exp=> 0                      act=6
+  PASS p__fish-oil@1440     formula cards rendered                         exp=> 0                      act=2
+  PASS p__fish-oil@1440     configurator groups rendered                   exp=> 0                      act=7
+  PASS p__fish-oil@1440     no horizontal scroll                           exp=scrollW == viewport      act=1440 vs 1440
+  PASS p__fish-oil@1440     no JS page errors                              exp=0                        act=0
+  PASS p__fish-oil@1440     no console error lines                         exp=0                        act=0
+      console lines (for the record): 0
+      shot products-fish-oil-1440-viewport.png  194436 bytes
+      shot products-fish-oil-1440-full.png  694919 bytes
+
+[p__dental-chews@1440]
+  PASS p__dental-chews@1440 stylesheet is the live theme                   exp=href has sinofresh-theme/, no -preflight act=https://dev.zxpet.com/wp-content/themes/sinofresh-theme/style.css?ver=2.10.52
+  PASS p__dental-chews@1440 stylesheet version is 2.10.52                  exp=ver=2.10.52              act=https://dev.zxpet.com/wp-content/themes/sinofresh-theme/style.css?ver=2.10.52
+      readyState=complete viewport=1440x900 scrollH=5599 scrollW=1440
+      h1='Private Label Dental Chews & Sticks for Dogs'
+      gone: {".sf-facts": 0, ".sf-spectable": 0, ".sf-actives": 0, "#actives": 0}   markers: []
+  PASS p__dental-chews@1440 deleted: .sf-facts                             exp=0                        act=0
+  PASS p__dental-chews@1440 deleted: .sf-spectable                         exp=0                        act=0
+  PASS p__dental-chews@1440 deleted: .sf-actives                           exp=0                        act=0
+  PASS p__dental-chews@1440 deleted: #actives                              exp=0                        act=0
+  PASS p__dental-chews@1440 deleted: both markers                          exp=[]                       act=[]
+  PASS p__dental-chews@1440 base carried the actives h2                    exp=present in base capture  act=['Standard Formulas', 'Build Your Dental Chews Formula', 'Active Ingredients & Guaranteed Analysis', 'How We Work', 'Frequently Asked Questions', 'Related Dosage Forms', 'Request a Dental Chews Quote']
+  PASS p__dental-chews@1440 h2 order == base minus actives                 exp=6 heading(s)             act=['Standard Formulas', 'Build Your Dental Chews Formula', 'How We Work', 'Frequently Asked Questions', 'Related Dosage Forms', 'Request a Dental Chews Quote']
+      h2: ["Standard Formulas", "Build Your Dental Chews Formula", "How We Work", "Frequently Asked Questions", "Related Dosage Forms", "Request a Dental Chews Quote"]
+  PASS p__dental-chews@1440 rail is self-consistent (dots == h2)           exp=dots == 6                act=6
+  PASS p__dental-chews@1440 rail count is base minus one                   exp=6                        act=6
+  PASS p__dental-chews@1440 no dot points at a deleted anchor              exp=no #actives in the rail  act=['#sf-sec-0', '#sf-sec-1', '#sf-sec-2', '#sf-sec-3', '#sf-sec-4', '#sf-sec-5']
+  PASS p__dental-chews@1440 rail labels match dots                         exp=labels == dots           act=6 / 6
+  PASS p__dental-chews@1440 spine heading sections strictly increase       exp=strictly increasing (6 sections) act=[472, 1255, 2770, 3477, 3844, 4363]
+  PASS p__dental-chews@1440 each heading still owns its own section        exp=6 distinct sections      act=['#1.sf-formulas', '#2.is-layout-constrained', '#3.has-bg-light-background-color', '#4.is-layout-constrained', '#5.has-bg-light-background-color', '#6.has-card-white-color']
+  PASS p__dental-chews@1440 hero h1 present                                exp=non-empty                act=Private Label Dental Chews & Sticks for Dogs
+  PASS p__dental-chews@1440 hero -> card wall gap under 300px              exp=< 300                    act=24 px
+      card wall {"top": 472, "bottom": 1231, "left": 0, "right": 1440, "width": 1440, "height": 759}
+      configurator section {"top": 1255, "bottom": 2746, "left": 0, "right": 1440, "width": 1440, "height": 1491}
+  PASS p__dental-chews@1440 card wall -> configurator gap under 300px      exp=< 300                    act=24 px
+  PASS p__dental-chews@1440 card wall present                              exp=present                  act=True
+  PASS p__dental-chews@1440 configurator present                           exp=present                  act=True
+  PASS p__dental-chews@1440 faq present                                    exp=present                  act=True
+  PASS p__dental-chews@1440 related present                                exp=present                  act=True
+  PASS p__dental-chews@1440 cta present                                    exp=present                  act=True
+  PASS p__dental-chews@1440 faq items > 0                                  exp=> 0                      act=3
+  PASS p__dental-chews@1440 related items > 0                              exp=> 0                      act=7
+  PASS p__dental-chews@1440 toc-nav.js ran                                 exp=> 0                      act=6
+  PASS p__dental-chews@1440 formula cards rendered                         exp=> 0                      act=3
+  PASS p__dental-chews@1440 configurator groups rendered                   exp=> 0                      act=8
+  PASS p__dental-chews@1440 no horizontal scroll                           exp=scrollW == viewport      act=1440 vs 1440
+  PASS p__dental-chews@1440 no JS page errors                              exp=0                        act=0
+  PASS p__dental-chews@1440 no console error lines                         exp=0                        act=0
+      console lines (for the record): 0
+      shot products-dental-chews-1440-viewport.png  209746 bytes
+      shot products-dental-chews-1440-full.png  743338 bytes
+
+[p__soft-chews@375]
+  PASS p__soft-chews@375    stylesheet is the live theme                   exp=href has sinofresh-theme/, no -preflight act=https://dev.zxpet.com/wp-content/themes/sinofresh-theme/style.css?ver=2.10.52
+  PASS p__soft-chews@375    stylesheet version is 2.10.52                  exp=ver=2.10.52              act=https://dev.zxpet.com/wp-content/themes/sinofresh-theme/style.css?ver=2.10.52
+      readyState=complete viewport=375x900 scrollH=9736 scrollW=375
+      h1='Private Label Soft Chews for Dogs & Cats'
+      gone: {".sf-facts": 0, ".sf-spectable": 0, ".sf-actives": 0, "#actives": 0}   markers: []
+  PASS p__soft-chews@375    deleted: .sf-facts                             exp=0                        act=0
+  PASS p__soft-chews@375    deleted: .sf-spectable                         exp=0                        act=0
+  PASS p__soft-chews@375    deleted: .sf-actives                           exp=0                        act=0
+  PASS p__soft-chews@375    deleted: #actives                              exp=0                        act=0
+  PASS p__soft-chews@375    deleted: both markers                          exp=[]                       act=[]
+  PASS p__soft-chews@375    base carried the actives h2                    exp=present in base capture  act=['Standard Formulas', 'Build Your Soft Chews Formula', 'Active Ingredients & Guaranteed Analysis', 'How We Work', 'Frequently Asked Questions', 'Related Dosage Forms', 'Request a Soft Chews Quote']
+  PASS p__soft-chews@375    h2 order == base minus actives                 exp=6 heading(s)             act=['Standard Formulas', 'Build Your Soft Chews Formula', 'How We Work', 'Frequently Asked Questions', 'Related Dosage Forms', 'Request a Soft Chews Quote']
+      h2: ["Standard Formulas", "Build Your Soft Chews Formula", "How We Work", "Frequently Asked Questions", "Related Dosage Forms", "Request a Soft Chews Quote"]
+  PASS p__soft-chews@375    rail is self-consistent (dots == h2)           exp=dots == 6                act=6
+  PASS p__soft-chews@375    rail count is base minus one                   exp=6                        act=6
+  PASS p__soft-chews@375    no dot points at a deleted anchor              exp=no #actives in the rail  act=['#sf-sec-0', '#sf-sec-1', '#sf-sec-2', '#sf-sec-3', '#sf-sec-4', '#sf-sec-5']
+  PASS p__soft-chews@375    rail labels match dots                         exp=labels == dots           act=6 / 6
+  PASS p__soft-chews@375    spine heading sections strictly increase       exp=strictly increasing (6 sections) act=[614, 2751, 5810, 6676, 7053, 7907]
+  PASS p__soft-chews@375    each heading still owns its own section        exp=6 distinct sections      act=['#1.sf-formulas', '#2.is-layout-constrained', '#3.has-bg-light-background-color', '#4.is-layout-constrained', '#5.has-bg-light-background-color', '#6.has-card-white-color']
+  PASS p__soft-chews@375    hero h1 present                                exp=non-empty                act=Private Label Soft Chews for Dogs & Cats
+  PASS p__soft-chews@375    hero -> card wall gap under 300px              exp=< 300                    act=24 px
+      card wall {"top": 614, "bottom": 2727, "left": 0, "right": 375, "width": 375, "height": 2113}
+      configurator section {"top": 2751, "bottom": 5786, "left": 0, "right": 375, "width": 375, "height": 3035}
+  PASS p__soft-chews@375    card wall -> configurator gap under 300px      exp=< 300                    act=24 px
+  PASS p__soft-chews@375    card wall present                              exp=present                  act=True
+  PASS p__soft-chews@375    configurator present                           exp=present                  act=True
+  PASS p__soft-chews@375    faq present                                    exp=present                  act=True
+  PASS p__soft-chews@375    related present                                exp=present                  act=True
+  PASS p__soft-chews@375    cta present                                    exp=present                  act=True
+  PASS p__soft-chews@375    faq items > 0                                  exp=> 0                      act=2
+  PASS p__soft-chews@375    related items > 0                              exp=> 0                      act=4
+  PASS p__soft-chews@375    toc-nav.js ran                                 exp=> 0                      act=6
+  PASS p__soft-chews@375    formula cards rendered                         exp=> 0                      act=4
+  PASS p__soft-chews@375    configurator groups rendered                   exp=> 0                      act=8
+  PASS p__soft-chews@375    rail hidden at this width                      exp=none                     act=none
+  PASS p__soft-chews@375    no horizontal scroll                           exp=scrollW == viewport      act=375 vs 375
+  PASS p__soft-chews@375    no JS page errors                              exp=0                        act=0
+  PASS p__soft-chews@375    no console error lines                         exp=0                        act=0
+      console lines (for the record): 0
+      shot products-soft-chews-375-viewport.png  70548 bytes
+      shot products-soft-chews-375-full.png  1021341 bytes
+
+[zh/p__soft-chews@1440]
+  PASS zh/p__soft-chews@1440 stylesheet is the live theme                   exp=href has sinofresh-theme/, no -preflight act=https://dev.zxpet.com/wp-content/themes/sinofresh-theme/style.css?ver=2.10.52
+  PASS zh/p__soft-chews@1440 stylesheet version is 2.10.52                  exp=ver=2.10.52              act=https://dev.zxpet.com/wp-content/themes/sinofresh-theme/style.css?ver=2.10.52
+      readyState=complete viewport=1440x900 scrollH=5671 scrollW=1440
+      h1='Private Label Soft Chews for Dogs & Cats'
+      gone: {".sf-facts": 0, ".sf-spectable": 0, ".sf-actives": 0, "#actives": 0}   markers: []
+  PASS zh/p__soft-chews@1440 deleted: .sf-facts                             exp=0                        act=0
+  PASS zh/p__soft-chews@1440 deleted: .sf-spectable                         exp=0                        act=0
+  PASS zh/p__soft-chews@1440 deleted: .sf-actives                           exp=0                        act=0
+  PASS zh/p__soft-chews@1440 deleted: #actives                              exp=0                        act=0
+  PASS zh/p__soft-chews@1440 deleted: both markers                          exp=[]                       act=[]
+  PASS zh/p__soft-chews@1440 base carried the actives h2                    exp=present in base capture  act=['Standard Formulas', 'Build Your Soft Chews Formula', 'Active Ingredients & Guaranteed Analysis', 'How We Work', 'Frequently Asked Questions', 'Related Dosage Forms', 'Request a Soft Chews Quote']
+  PASS zh/p__soft-chews@1440 h2 order == base minus actives                 exp=6 heading(s)             act=['Standard Formulas', 'Build Your Soft Chews Formula', 'How We Work', 'Frequently Asked Questions', 'Related Dosage Forms', 'Request a Soft Chews Quote']
+      h2: ["Standard Formulas", "Build Your Soft Chews Formula", "How We Work", "Frequently Asked Questions", "Related Dosage Forms", "Request a Soft Chews Quote"]
+  PASS zh/p__soft-chews@1440 rail is self-consistent (dots == h2)           exp=dots == 6                act=6
+  PASS zh/p__soft-chews@1440 rail count is base minus one                   exp=6                        act=6
+  PASS zh/p__soft-chews@1440 no dot points at a deleted anchor              exp=no #actives in the rail  act=['#sf-sec-0', '#sf-sec-1', '#sf-sec-2', '#sf-sec-3', '#sf-sec-4', '#sf-sec-5']
+  PASS zh/p__soft-chews@1440 rail labels match dots                         exp=labels == dots           act=6 / 6
+  PASS zh/p__soft-chews@1440 spine heading sections strictly increase       exp=strictly increasing (6 sections) act=[472, 1233, 2967, 3598, 3908, 4435]
+  PASS zh/p__soft-chews@1440 each heading still owns its own section        exp=6 distinct sections      act=['#1.sf-formulas', '#2.is-layout-constrained', '#3.has-bg-light-background-color', '#4.is-layout-constrained', '#5.has-bg-light-background-color', '#6.has-card-white-color']
+  PASS zh/p__soft-chews@1440 hero h1 present                                exp=non-empty                act=Private Label Soft Chews for Dogs & Cats
+  PASS zh/p__soft-chews@1440 hero -> card wall gap under 300px              exp=< 300                    act=24 px
+      card wall {"top": 472, "bottom": 1209, "left": 0, "right": 1440, "width": 1440, "height": 736}
+      configurator section {"top": 1233, "bottom": 2943, "left": 0, "right": 1440, "width": 1440, "height": 1710}
+  PASS zh/p__soft-chews@1440 card wall -> configurator gap under 300px      exp=< 300                    act=24 px
+  PASS zh/p__soft-chews@1440 card wall present                              exp=present                  act=True
+  PASS zh/p__soft-chews@1440 configurator present                           exp=present                  act=True
+  PASS zh/p__soft-chews@1440 faq present                                    exp=present                  act=True
+  PASS zh/p__soft-chews@1440 related present                                exp=present                  act=True
+  PASS zh/p__soft-chews@1440 cta present                                    exp=present                  act=True
+  PASS zh/p__soft-chews@1440 faq items > 0                                  exp=> 0                      act=2
+  PASS zh/p__soft-chews@1440 related items > 0                              exp=> 0                      act=4
+  PASS zh/p__soft-chews@1440 toc-nav.js ran                                 exp=> 0                      act=6
+  PASS zh/p__soft-chews@1440 formula cards rendered                         exp=> 0                      act=4
+  PASS zh/p__soft-chews@1440 configurator groups rendered                   exp=> 0                      act=8
+  PASS zh/p__soft-chews@1440 no horizontal scroll                           exp=scrollW == viewport      act=1440 vs 1440
+  PASS zh/p__soft-chews@1440 no JS page errors                              exp=0                        act=0
+  PASS zh/p__soft-chews@1440 no console error lines                         exp=0                        act=0
+      console lines (for the record): 0
+      shot zh-products-soft-chews-1440-viewport.png  213805 bytes
+      shot zh-products-soft-chews-1440-full.png  767223 bytes
+
+[zh/p__powders@1440]
+  PASS zh/p__powders@1440   stylesheet is the live theme                   exp=href has sinofresh-theme/, no -preflight act=https://dev.zxpet.com/wp-content/themes/sinofresh-theme/style.css?ver=2.10.52
+  PASS zh/p__powders@1440   stylesheet version is 2.10.52                  exp=ver=2.10.52              act=https://dev.zxpet.com/wp-content/themes/sinofresh-theme/style.css?ver=2.10.52
+      readyState=complete viewport=1440x900 scrollH=5338 scrollW=1440
+      h1='Private Label Pet Supplement Powders'
+      gone: {".sf-facts": 0, ".sf-spectable": 0, ".sf-actives": 0, "#actives": 0}   markers: []
+  PASS zh/p__powders@1440   deleted: .sf-facts                             exp=0                        act=0
+  PASS zh/p__powders@1440   deleted: .sf-spectable                         exp=0                        act=0
+  PASS zh/p__powders@1440   deleted: .sf-actives                           exp=0                        act=0
+  PASS zh/p__powders@1440   deleted: #actives                              exp=0                        act=0
+  PASS zh/p__powders@1440   deleted: both markers                          exp=[]                       act=[]
+  PASS zh/p__powders@1440   base carried the actives h2                    exp=present in base capture  act=['Standard Formulas', 'Build Your Powders Formula', 'Active Ingredients & Guaranteed Analysis', 'How We Work', 'Frequently Asked Questions', 'Related Dosage Forms', 'Request a Powders Quote']
+  PASS zh/p__powders@1440   h2 order == base minus actives                 exp=6 heading(s)             act=['Standard Formulas', 'Build Your Powders Formula', 'How We Work', 'Frequently Asked Questions', 'Related Dosage Forms', 'Request a Powders Quote']
+      h2: ["Standard Formulas", "Build Your Powders Formula", "How We Work", "Frequently Asked Questions", "Related Dosage Forms", "Request a Powders Quote"]
+  PASS zh/p__powders@1440   rail is self-consistent (dots == h2)           exp=dots == 6                act=6
+  PASS zh/p__powders@1440   rail count is base minus one                   exp=6                        act=6
+  PASS zh/p__powders@1440   no dot points at a deleted anchor              exp=no #actives in the rail  act=['#sf-sec-0', '#sf-sec-1', '#sf-sec-2', '#sf-sec-3', '#sf-sec-4', '#sf-sec-5']
+  PASS zh/p__powders@1440   rail labels match dots                         exp=labels == dots           act=6 / 6
+  PASS zh/p__powders@1440   spine heading sections strictly increase       exp=strictly increasing (6 sections) act=[472, 1213, 2577, 3208, 3575, 4102]
+  PASS zh/p__powders@1440   each heading still owns its own section        exp=6 distinct sections      act=['#1.sf-formulas', '#2.is-layout-constrained', '#3.has-bg-light-background-color', '#4.is-layout-constrained', '#5.has-bg-light-background-color', '#6.has-card-white-color']
+  PASS zh/p__powders@1440   hero h1 present                                exp=non-empty                act=Private Label Pet Supplement Powders
+  PASS zh/p__powders@1440   hero -> card wall gap under 300px              exp=< 300                    act=24 px
+      card wall {"top": 472, "bottom": 1189, "left": 0, "right": 1440, "width": 1440, "height": 716}
+      configurator section {"top": 1213, "bottom": 2553, "left": 0, "right": 1440, "width": 1440, "height": 1340}
+  PASS zh/p__powders@1440   card wall -> configurator gap under 300px      exp=< 300                    act=24 px
+  PASS zh/p__powders@1440   card wall present                              exp=present                  act=True
+  PASS zh/p__powders@1440   configurator present                           exp=present                  act=True
+  PASS zh/p__powders@1440   faq present                                    exp=present                  act=True
+  PASS zh/p__powders@1440   related present                                exp=present                  act=True
+  PASS zh/p__powders@1440   cta present                                    exp=present                  act=True
+  PASS zh/p__powders@1440   faq items > 0                                  exp=> 0                      act=3
+  PASS zh/p__powders@1440   related items > 0                              exp=> 0                      act=4
+  PASS zh/p__powders@1440   toc-nav.js ran                                 exp=> 0                      act=6
+  PASS zh/p__powders@1440   formula cards rendered                         exp=> 0                      act=3
+  PASS zh/p__powders@1440   configurator groups rendered                   exp=> 0                      act=7
+  PASS zh/p__powders@1440   no horizontal scroll                           exp=scrollW == viewport      act=1440 vs 1440
+  PASS zh/p__powders@1440   no JS page errors                              exp=0                        act=0
+  PASS zh/p__powders@1440   no console error lines                         exp=0                        act=0
+      console lines (for the record): 0
+      shot zh-products-powders-1440-viewport.png  225084 bytes
+      shot zh-products-powders-1440-full.png  726870 bytes
+
+================================================================================================
+PASS  342 check(s), 0 failed
+================================================================================================

@@ -1,0 +1,9 @@
+tracked files under sinofresh-theme/: 691
+
+[live]  /var/www/dev.zxpet.com/site-repo/sinofresh-theme
+  compared 691 files, mismatches: 0
+
+[preflight]  /var/www/dev.zxpet.com/public/wp-content/themes/sinofresh-theme-preflight
+  compared 691 files, mismatches: 0
+
+PASS  identity chain

@@ -53,6 +53,15 @@ ERROR_LOGS = [
     "/var/log/php-fpm/www-error.log",
 ]
 ACCESS_LOG = "/var/log/httpd/dev.zxpet.com-ssl-access.log"
+# The port-80 vhost has its own access log, and its error log (which this
+# audit reads) belongs to the same vhost. Step E found the gap: a
+# /cgi-bin/luci exploit probe was logged in dev.zxpet.com-error.log, and the
+# access row that proves whose it was lives in dev.zxpet.com-access.log —
+# reading only the SSL log left the error line unattributable.
+ACCESS_LOGS = [
+    "/var/log/httpd/dev.zxpet.com-ssl-access.log",
+    "/var/log/httpd/dev.zxpet.com-access.log",
+]
 DEBUG_LOG = "/var/www/dev.zxpet.com/public/wp-content/debug.log"
 
 # the switch was delivered as a header, so the copy of the log that proves the
@@ -275,6 +284,26 @@ def classify(ts, text, window, rows):
     if m:
         return True, "exploit scanner sent a malformed path (%s)" % m.group(1)[:60]
 
+    # 3.5. cgid "script not found": a request reached /cgi-bin/ for a script
+    #      that does not exist. Apache logs no status for it, so attribute it
+    #      through the access-log rows of the same second that asked for a
+    #      /cgi-bin/ path — which is why the port-80 access log is read too.
+    m = re.search(r"AH01264: stderr from (\S+): script not found", text)
+    if m:
+        script = m.group(1)
+        path = script[len(DOCROOT):] if script.startswith(DOCROOT) else script
+        near = [r for r in rows if r[0] and r[3] and "/cgi-bin/" in r[3]
+                and abs((r[0] - ts).total_seconds()) <= 2]
+        if OUR_USER in {r[2] for r in near}:
+            return False, "we probed the cgi-bin script %s ourselves" % path
+        if not near:
+            return False, ("a cgi-bin script-not-found for %s with no matching "
+                           "access-log row, so it cannot be attributed" % path)
+        return True, ("a probe for the cgi-bin script %s by %s — %d matching "
+                      "access-log row(s), status %s, never ours"
+                      % (path, "/".join(sorted({r[2] or "-" for r in near})),
+                         len(near), "/".join(sorted({r[4] for r in near}))))
+
     # 4. PHP records carry no client either, so attribute through what the
     #    message names: a path the access log shows somebody requesting in that
     #    very second, or else a file whose state can be checked right now.
@@ -316,26 +345,68 @@ def classify(ts, text, window, rows):
 
 def main():
     ap = argparse.ArgumentParser()
+    ap.add_argument("--allow", action="append", default=[],
+                    help="a line the audit must not fail on, stated as "
+                         "'YYYY-MM-DDTHH:MM:SS=reason'. Use it for a line this "
+                         "batch deliberately wrote and documented — e.g. the "
+                         "error a negative control generated on purpose. The "
+                         "exception is printed in the verdict; it is a record, "
+                         "not a suppression: anything not listed still fails")
     ap.add_argument("--margin", type=int, default=5,
                     help="minutes of padding on each side of the window")
     ap.add_argument("--window-from-preflight", default=PREFLIGHT_LOG)
-    ap.add_argument("--access-log", default=ACCESS_LOG)
+    ap.add_argument("--window-from", default=None,
+                    help="explicit window start (UTC 'YYYY-MM-DDTHH:MM:SS'). "
+                         "A batch whose closure continues after the capture — "
+                         "pull, live re-fetch, browser E2E — has an asymmetric "
+                         "window, which equal padding on both sides of the "
+                         "pre-flight log cannot express: padding wide enough to "
+                         "reach the closure also swallows pre-batch scanner noise "
+                         "that then fails the audit for no reason")
+    ap.add_argument("--window-to", default=None,
+                    help="explicit window end; requires --window-from")
+    ap.add_argument("--access-log", action="append", default=None,
+                    help="access log to read (repeatable; default is the SSL "
+                         "vhost's AND the port-80 vhost's, because a port-80 "
+                         "error line is only attributable through the port-80 "
+                         "access log)")
     args = ap.parse_args()
 
-    tight, window, n_pre = load_window(args.window_from_preflight, args.margin)
+    if bool(args.window_from) != bool(args.window_to):
+        raise SystemExit("--window-from and --window-to must be given together")
+    if args.window_from:
+        tight = (parse_iso(args.window_from), parse_iso(args.window_to))
+        window, n_pre = tight, 0
+    else:
+        tight, window, n_pre = load_window(args.window_from_preflight, args.margin)
+    logs = args.access_log or list(ACCESS_LOGS)
+    ALLOWED = {}
+    for spec in args.allow:
+        if "=" not in spec:
+            raise SystemExit("--allow must look like 'YYYY-MM-DDTHH:MM:SS=reason': %s" % spec)
+        ts, why = spec.split("=", 1)
+        ALLOWED[parse_iso(ts)] = why
 
     print("=" * 78)
     print("BATCH 2D STEP 5 — ERROR-LOG AUDIT BY ATTRIBUTION")
     print("=" * 78)
-    print("window, from the archived pre-flight log (%d stamped requests):" % n_pre)
-    print("  tight  : %s -> %s" % (tight[0], tight[1]))
-    print("  padded : %s -> %s  (-/+ %d min)"
-          % (window[0], window[1], args.margin))
+    if args.window_from:
+        print("window, given explicitly (the closure outlived the capture):")
+        print("  window : %s -> %s" % (window[0], window[1]))
+    else:
+        print("window, from the archived pre-flight log (%d stamped requests):" % n_pre)
+        print("  tight  : %s -> %s" % (tight[0], tight[1]))
+        print("  padded : %s -> %s  (-/+ %d min)"
+              % (window[0], window[1], args.margin))
     print()
 
-    access = remote(args.access_log)
-    if access is None:
-        raise SystemExit("cannot read the access log")
+    access_parts = []
+    for p in logs:
+        part = remote(p)
+        if part is None:
+            raise SystemExit("cannot read the access log: %s" % p)
+        access_parts.append(part)
+    access = "\n".join(access_parts)
     rows, in_win, per_ip = load_access(access, window)
 
     # Guard against the silent all-green failure this project has been bitten by
@@ -362,7 +433,8 @@ def main():
     theirs = [r for r in in_win if r[2] != "sfdev"]
 
     print("-" * 78)
-    print("WHAT ACTUALLY HIT THE BOX INSIDE THAT WINDOW  (%s)" % args.access_log)
+    print("WHAT ACTUALLY HIT THE BOX INSIDE THAT WINDOW  (%s)"
+          % " + ".join(os.path.basename(p) for p in logs))
     print("-" * 78)
     print("  access-log lines in window          : %d" % len(in_win))
     print("  ... authenticated as ours (sfdev)   : %d" % len(ours))
@@ -416,6 +488,7 @@ def main():
 
     failures = []
     cleared = 0
+    allowed = 0
     print()
     for path in ERROR_LOGS:
         text = remote(path)
@@ -437,11 +510,18 @@ def main():
               % (len(recs), sum(1 + r["cont"] for r in recs)))
         for r in recs:
             joined = "\n".join(r["lines"])
-            ok, reason = classify(r["ts"], joined, window, rows)
+            allow_reason = ALLOWED.get(r["ts"])
+            if allow_reason:
+                ok, reason = True, "[documented exception] %s" % allow_reason
+                allowed += 1
+            else:
+                ok, reason = classify(r["ts"], joined, window, rows)
             cleared += ok
             if not ok:
                 failures.append((path, str(r["ts"]), reason))
             flag = "OK  " if ok else "FAIL"
+            if allow_reason:
+                flag = "ALLOW"
             print("  [%s] %s  %s%s" % (flag, r["ts"], reason,
                                        "  (+%d continuation line(s))" % r["cont"]
                                        if r["cont"] else ""))
@@ -477,6 +557,9 @@ def main():
     print("=" * 78)
     print("  lines inside the window, anywhere           : 0 required")
     print("  lines cleared by attribution                : %d" % cleared)
+    print("  lines allowed as documented exceptions      : %d" % allowed)
+    for ts, why in sorted(ALLOWED.items()):
+        print("      %s  %s" % (ts, why))
     print("  lines that could NOT be cleared             : %d" % len(failures))
     for path, ts, reason in failures:
         print("      %s  %s  %s" % (path, ts, reason))

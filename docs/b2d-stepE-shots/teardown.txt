@@ -1,0 +1,20 @@
+=== 拆除后复验 ===
+--- 拆除前预检日志行数: 76 (75 候选 + 1 负对照) ---
+--- removed ---
+=== 移除 ===
+theme dir gone
+mu-plugin gone
+log gone
+=== mu-plugins 剩余（必须只剩 lockdown） ===
+total 12
+drwxr-xr-x 2 apache apache 4096 Sep 21 03:29 .
+drwxr-xr-x 9 apache apache 4096 Sep 21 00:16 ..
+-rw-r--r-- 1 apache apache 2510 Sep 20 14:19 zz-sf-dev-lockdown.php
+=== docroot 里残留的 preflight 字符串（应只在无关处） ===
+(以上为空=代码零残留)
+=== DB 里的 theme 选项 ===
+--- 拆除后线上复验 ---
+style.css ver: style.css?ver=2.10.52
+stylesheet 目录: themes/sinofresh-theme/
+三段残留计数(应0): 0
+无凭据状态码: 401

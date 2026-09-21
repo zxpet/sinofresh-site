@@ -1,0 +1,157 @@
+[
+  {
+    "scope": "p__soft-chews@1440",
+    "check": "stylesheet is the live theme",
+    "ok": false
+  },
+  {
+    "scope": "p__soft-chews@1440",
+    "check": "stylesheet version is 2.10.52",
+    "ok": false
+  },
+  {
+    "scope": "p__soft-chews@1440",
+    "check": "deleted: .sf-facts",
+    "ok": false
+  },
+  {
+    "scope": "p__soft-chews@1440",
+    "check": "deleted: .sf-spectable",
+    "ok": false
+  },
+  {
+    "scope": "p__soft-chews@1440",
+    "check": "deleted: .sf-actives",
+    "ok": false
+  },
+  {
+    "scope": "p__soft-chews@1440",
+    "check": "deleted: #actives",
+    "ok": false
+  },
+  {
+    "scope": "p__soft-chews@1440",
+    "check": "deleted: both markers",
+    "ok": false
+  },
+  {
+    "scope": "p__soft-chews@1440",
+    "check": "base carried the actives h2",
+    "ok": true
+  },
+  {
+    "scope": "p__soft-chews@1440",
+    "check": "h2 order == base minus actives",
+    "ok": false
+  },
+  {
+    "scope": "p__soft-chews@1440",
+    "check": "rail is self-consistent (dots == h2)",
+    "ok": true
+  },
+  {
+    "scope": "p__soft-chews@1440",
+    "check": "rail count is base minus one",
+    "ok": false
+  },
+  {
+    "scope": "p__soft-chews@1440",
+    "check": "no dot points at a deleted anchor",
+    "ok": true
+  },
+  {
+    "scope": "p__soft-chews@1440",
+    "check": "rail labels match dots",
+    "ok": true
+  },
+  {
+    "scope": "p__soft-chews@1440",
+    "check": "spine heading sections strictly increase",
+    "ok": true
+  },
+  {
+    "scope": "p__soft-chews@1440",
+    "check": "each heading still owns its own section",
+    "ok": true
+  },
+  {
+    "scope": "p__soft-chews@1440",
+    "check": "hero h1 present",
+    "ok": true
+  },
+  {
+    "scope": "p__soft-chews@1440",
+    "check": "hero -> card wall gap under 300px",
+    "ok": false
+  },
+  {
+    "scope": "p__soft-chews@1440",
+    "check": "card wall -> configurator gap under 300px",
+    "ok": true
+  },
+  {
+    "scope": "p__soft-chews@1440",
+    "check": "card wall present",
+    "ok": true
+  },
+  {
+    "scope": "p__soft-chews@1440",
+    "check": "configurator present",
+    "ok": true
+  },
+  {
+    "scope": "p__soft-chews@1440",
+    "check": "faq present",
+    "ok": true
+  },
+  {
+    "scope": "p__soft-chews@1440",
+    "check": "related present",
+    "ok": true
+  },
+  {
+    "scope": "p__soft-chews@1440",
+    "check": "cta present",
+    "ok": true
+  },
+  {
+    "scope": "p__soft-chews@1440",
+    "check": "faq items > 0",
+    "ok": true
+  },
+  {
+    "scope": "p__soft-chews@1440",
+    "check": "related items > 0",
+    "ok": true
+  },
+  {
+    "scope": "p__soft-chews@1440",
+    "check": "toc-nav.js ran",
+    "ok": true
+  },
+  {
+    "scope": "p__soft-chews@1440",
+    "check": "formula cards rendered",
+    "ok": true
+  },
+  {
+    "scope": "p__soft-chews@1440",
+    "check": "configurator groups rendered",
+    "ok": true
+  },
+  {
+    "scope": "p__soft-chews@1440",
+    "check": "no horizontal scroll",
+    "ok": true
+  },
+  {
+    "scope": "p__soft-chews@1440",
+    "check": "no JS page errors",
+    "ok": true
+  },
+  {
+    "scope": "p__soft-chews@1440",
+    "check": "no console error lines",
+    "ok": true
+  }
+]

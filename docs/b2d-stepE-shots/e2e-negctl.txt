@@ -1,0 +1,59 @@
+================================================================================================
+Batch 2D step E — rendered evidence  (live: False)
+================================================================================================
+
+[p__soft-chews@1440]
+  FAIL p__soft-chews@1440   stylesheet is the live theme                   exp=href has sinofresh-theme/, no -preflight act=https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/style.css?ver=2.10.51
+  FAIL p__soft-chews@1440   stylesheet version is 2.10.52                  exp=ver=2.10.52              act=https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/style.css?ver=2.10.51
+      readyState=complete viewport=1440x900 scrollH=7683 scrollW=1440
+      h1='Private Label Soft Chews for Dogs & Cats'
+      gone: {".sf-facts": 1, ".sf-spectable": 1, ".sf-actives": 1, "#actives": 1}   markers: ['B2D-S5: core facts', 'B2D-S1: actives']
+  FAIL p__soft-chews@1440   deleted: .sf-facts                             exp=0                        act=1
+  FAIL p__soft-chews@1440   deleted: .sf-spectable                         exp=0                        act=1
+  FAIL p__soft-chews@1440   deleted: .sf-actives                           exp=0                        act=1
+  FAIL p__soft-chews@1440   deleted: #actives                              exp=0                        act=1
+  FAIL p__soft-chews@1440   deleted: both markers                          exp=[]                       act=['B2D-S5: core facts', 'B2D-S1: actives']
+  PASS p__soft-chews@1440   base carried the actives h2                    exp=present in base capture  act=['Standard Formulas', 'Build Your Soft Chews Formula', 'Active Ingredients & Guaranteed Analysis', 'How We Work', 'Frequently Asked Questions', 'Related Dosage Forms', 'Request a Soft Chews Quote']
+  FAIL p__soft-chews@1440   h2 order == base minus actives                 exp=6 heading(s)             act=['Standard Formulas', 'Build Your Soft Chews Formula', 'Active Ingredients & Guaranteed Analysis', 'How We Work', 'Frequently Asked Questions', 'Related Dosage Forms', 'Request a Soft Chews Quote']
+      h2: ["Standard Formulas", "Build Your Soft Chews Formula", "Active Ingredients & Guaranteed Analysis", "How We Work", "Frequently Asked Questions", "Related Dosage Forms", "Request a Soft Chews Quote"]
+  PASS p__soft-chews@1440   rail is self-consistent (dots == h2)           exp=dots == 7                act=7
+  FAIL p__soft-chews@1440   rail count is base minus one                   exp=6                        act=7
+  PASS p__soft-chews@1440   no dot points at a deleted anchor              exp=no #actives in the rail  act=['#sf-sec-0', '#sf-sec-1', '#sf-sec-2', '#sf-sec-3', '#sf-sec-4', '#sf-sec-5', '#sf-sec-6']
+  PASS p__soft-chews@1440   rail labels match dots                         exp=labels == dots           act=7 / 7
+  PASS p__soft-chews@1440   spine heading sections strictly increase       exp=strictly increasing (7 sections) act=[972, 1732, 3639, 4979, 5610, 5920, 6447]
+  PASS p__soft-chews@1440   each heading still owns its own section        exp=7 distinct sections      act=['#2.sf-formulas', '#3.is-layout-constrained', '#5.sf-actives', '#6.has-bg-light-background-color', '#7.is-layout-constrained', '#8.has-bg-light-background-color', '#9.has-card-white-color']
+  PASS p__soft-chews@1440   hero h1 present                                exp=non-empty                act=Private Label Soft Chews for Dogs & Cats
+  FAIL p__soft-chews@1440   hero -> card wall gap under 300px              exp=< 300                    act=524 px
+      card wall {"top": 972, "bottom": 1708, "left": 0, "right": 1440, "width": 1440, "height": 736}
+      configurator section {"top": 1732, "bottom": 3442, "left": 0, "right": 1440, "width": 1440, "height": 1710}
+  PASS p__soft-chews@1440   card wall -> configurator gap under 300px      exp=< 300                    act=24 px
+  PASS p__soft-chews@1440   card wall present                              exp=present                  act=True
+  PASS p__soft-chews@1440   configurator present                           exp=present                  act=True
+  PASS p__soft-chews@1440   faq present                                    exp=present                  act=True
+  PASS p__soft-chews@1440   related present                                exp=present                  act=True
+  PASS p__soft-chews@1440   cta present                                    exp=present                  act=True
+  PASS p__soft-chews@1440   faq items > 0                                  exp=> 0                      act=2
+  PASS p__soft-chews@1440   related items > 0                              exp=> 0                      act=4
+  PASS p__soft-chews@1440   toc-nav.js ran                                 exp=> 0                      act=7
+  PASS p__soft-chews@1440   formula cards rendered                         exp=> 0                      act=4
+  PASS p__soft-chews@1440   configurator groups rendered                   exp=> 0                      act=8
+  PASS p__soft-chews@1440   no horizontal scroll                           exp=scrollW == viewport      act=1440 vs 1440
+  PASS p__soft-chews@1440   no JS page errors                              exp=0                        act=0
+  PASS p__soft-chews@1440   no console error lines                         exp=0                        act=0
+      console lines (for the record): 0
+      shot products-soft-chews-1440-viewport.png  150588 bytes
+      shot products-soft-chews-1440-full.png  986161 bytes
+
+================================================================================================
+FAIL  31 check(s), 10 failed
+   FAIL p__soft-chews@1440 — stylesheet is the live theme
+   FAIL p__soft-chews@1440 — stylesheet version is 2.10.52
+   FAIL p__soft-chews@1440 — deleted: .sf-facts
+   FAIL p__soft-chews@1440 — deleted: .sf-spectable
+   FAIL p__soft-chews@1440 — deleted: .sf-actives
+   FAIL p__soft-chews@1440 — deleted: #actives
+   FAIL p__soft-chews@1440 — deleted: both markers
+   FAIL p__soft-chews@1440 — h2 order == base minus actives
+   FAIL p__soft-chews@1440 — rail count is base minus one
+   FAIL p__soft-chews@1440 — hero -> card wall gap under 300px
+================================================================================================
