@@ -1,0 +1,321 @@
+==============================================================================
+Batch G — gates for the two-column media band on the 42 formula pages
+          and the Packaging formats row on the 8 dosage pages, 2.10.53 -> 2.10.54
+==============================================================================
+
+[0] inputs, and proof that the candidate is the candidate
+    base dir _backup/b2d-g-baselines/base : 75 pages
+    new  dir _backup/b2d-g-baselines/base : 75 pages
+    candidate pages carrying the pre-flight theme directory: 0/75
+    live dir mention on the candidate side: 75 page(s) (the pre-flight copy rewrites them all)
+    expected to differ: 58 page(s) — 8 dosage + 8 /zh/ dosage + 21 formula + 21 /zh/ formula
+
+[1] resource inventory (which cache tokens moved?)
+    asset SET changed on 0 page(s) (must be 0)
+
+[2] masked comparison of the 75 pages (?ver= folded, nonces and the pre-flight directory masked)
+    differ    0 page(s)
+    identical 75 page(s)
+    !! formulas__bladder-support-powder.html should have differed and did not
+    !! formulas__calcium-phosphorus-tablets.html should have differed and did not
+    !! formulas__calming-soft-chews.html should have differed and did not
+    !! formulas__digestive-soft-chews.html should have differed and did not
+    !! formulas__ear-care-drops.html should have differed and did not
+    !! formulas__hairball-remedy-paste.html should have differed and did not
+    !! formulas__joint-support-soft-chews.html should have differed and did not
+    !! formulas__joint-support-tablets.html should have differed and did not
+    !! formulas__liquid-joint-support.html should have differed and did not
+    !! formulas__liquid-skin-coat.html should have differed and did not
+    !! formulas__multivitamin-tablets.html should have differed and did not
+    !! formulas__natural-cleaning-dental-sticks.html should have differed and did not
+    !! formulas__nutrition-paste.html should have differed and did not
+    !! formulas__oral-care-dental-sticks.html should have differed and did not
+    !! formulas__plaque-control-dental-chews.html should have differed and did not
+    !! formulas__probiotic-powder.html should have differed and did not
+    !! formulas__pumpkin-digestive-powder.html should have differed and did not
+    !! formulas__pure-fish-oil-blend.html should have differed and did not
+    !! formulas__skin-coat-soft-chews.html should have differed and did not
+    !! formulas__urinary-care-drops.html should have differed and did not
+    !! formulas__wild-alaskan-salmon-oil.html should have differed and did not
+    !! products__dental-chews.html should have differed and did not
+    !! products__drops.html should have differed and did not
+    !! products__fish-oil.html should have differed and did not
+    !! products__liquids.html should have differed and did not
+    !! products__pastes.html should have differed and did not
+    !! products__powders.html should have differed and did not
+    !! products__soft-chews.html should have differed and did not
+    !! products__tablets.html should have differed and did not
+    !! zh__formulas__bladder-support-powder.html should have differed and did not
+    !! zh__formulas__calcium-phosphorus-tablets.html should have differed and did not
+    !! zh__formulas__calming-soft-chews.html should have differed and did not
+    !! zh__formulas__digestive-soft-chews.html should have differed and did not
+    !! zh__formulas__ear-care-drops.html should have differed and did not
+    !! zh__formulas__hairball-remedy-paste.html should have differed and did not
+    !! zh__formulas__joint-support-soft-chews.html should have differed and did not
+    !! zh__formulas__joint-support-tablets.html should have differed and did not
+    !! zh__formulas__liquid-joint-support.html should have differed and did not
+    !! zh__formulas__liquid-skin-coat.html should have differed and did not
+    !! zh__formulas__multivitamin-tablets.html should have differed and did not
+    !! zh__formulas__natural-cleaning-dental-sticks.html should have differed and did not
+    !! zh__formulas__nutrition-paste.html should have differed and did not
+    !! zh__formulas__oral-care-dental-sticks.html should have differed and did not
+    !! zh__formulas__plaque-control-dental-chews.html should have differed and did not
+    !! zh__formulas__probiotic-powder.html should have differed and did not
+    !! zh__formulas__pumpkin-digestive-powder.html should have differed and did not
+    !! zh__formulas__pure-fish-oil-blend.html should have differed and did not
+    !! zh__formulas__skin-coat-soft-chews.html should have differed and did not
+    !! zh__formulas__urinary-care-drops.html should have differed and did not
+    !! zh__formulas__wild-alaskan-salmon-oil.html should have differed and did not
+    !! zh__products__dental-chews.html should have differed and did not
+    !! zh__products__drops.html should have differed and did not
+    !! zh__products__fish-oil.html should have differed and did not
+    !! zh__products__liquids.html should have differed and did not
+    !! zh__products__pastes.html should have differed and did not
+    !! zh__products__powders.html should have differed and did not
+    !! zh__products__soft-chews.html should have differed and did not
+    !! zh__products__tablets.html should have differed and did not
+
+[3] page-level confined proof — TWO directions, asserted separately
+    dosage pages (16): INSERTION — candidate minus the new row must be the base.
+    formula pages (42): RESTRUCTURE — delete the right column, lift the left one back,
+    restore its class/style; that must be the base. Values are cross-read from the
+    candidate dosage page's own row, the same source spec_cell reads.
+    row value vs the template's configurator options:
+        soft-chews     !!   
+        tablets        !!   
+        powders        !!   
+        pastes         !!   
+        drops          !!   
+        liquids        !!   
+        fish-oil       !!   
+        dental-chews   !!   
+    !! formulas__bladder-support-powder.html: outer section x0
+    !! formulas__calcium-phosphorus-tablets.html: outer section x0
+    !! formulas__calming-soft-chews.html: outer section x0
+    !! formulas__digestive-soft-chews.html: outer section x0
+    !! formulas__ear-care-drops.html: outer section x0
+    !! formulas__hairball-remedy-paste.html: outer section x0
+    !! formulas__joint-support-soft-chews.html: outer section x0
+    !! formulas__joint-support-tablets.html: outer section x0
+    !! formulas__liquid-joint-support.html: outer section x0
+    !! formulas__liquid-skin-coat.html: outer section x0
+    !! formulas__multivitamin-tablets.html: outer section x0
+    !! formulas__natural-cleaning-dental-sticks.html: outer section x0
+    !! formulas__nutrition-paste.html: outer section x0
+    !! formulas__oral-care-dental-sticks.html: outer section x0
+    !! formulas__plaque-control-dental-chews.html: outer section x0
+    !! formulas__probiotic-powder.html: outer section x0
+    !! formulas__pumpkin-digestive-powder.html: outer section x0
+    !! formulas__pure-fish-oil-blend.html: outer section x0
+    !! formulas__skin-coat-soft-chews.html: outer section x0
+    !! formulas__urinary-care-drops.html: outer section x0
+    !! formulas__wild-alaskan-salmon-oil.html: outer section x0
+    !! products__dental-chews.html: Packaging rows 0
+    !! products__drops.html: Packaging rows 0
+    !! products__fish-oil.html: Packaging rows 0
+    !! products__liquids.html: Packaging rows 0
+    !! products__pastes.html: Packaging rows 0
+    !! products__powders.html: Packaging rows 0
+    !! products__soft-chews.html: Packaging rows 0
+    !! products__tablets.html: Packaging rows 0
+    !! zh__formulas__bladder-support-powder.html: outer section x0
+    !! zh__formulas__calcium-phosphorus-tablets.html: outer section x0
+    !! zh__formulas__calming-soft-chews.html: outer section x0
+    !! zh__formulas__digestive-soft-chews.html: outer section x0
+    !! zh__formulas__ear-care-drops.html: outer section x0
+    !! zh__formulas__hairball-remedy-paste.html: outer section x0
+    !! zh__formulas__joint-support-soft-chews.html: outer section x0
+    !! zh__formulas__joint-support-tablets.html: outer section x0
+    !! zh__formulas__liquid-joint-support.html: outer section x0
+    !! zh__formulas__liquid-skin-coat.html: outer section x0
+    !! zh__formulas__multivitamin-tablets.html: outer section x0
+    !! zh__formulas__natural-cleaning-dental-sticks.html: outer section x0
+    !! zh__formulas__nutrition-paste.html: outer section x0
+    !! zh__formulas__oral-care-dental-sticks.html: outer section x0
+    !! zh__formulas__plaque-control-dental-chews.html: outer section x0
+    !! zh__formulas__probiotic-powder.html: outer section x0
+    !! zh__formulas__pumpkin-digestive-powder.html: outer section x0
+    !! zh__formulas__pure-fish-oil-blend.html: outer section x0
+    !! zh__formulas__skin-coat-soft-chews.html: outer section x0
+    !! zh__formulas__urinary-care-drops.html: outer section x0
+    !! zh__formulas__wild-alaskan-salmon-oil.html: outer section x0
+    !! zh__products__dental-chews.html: Packaging rows 0
+    !! zh__products__drops.html: Packaging rows 0
+    !! zh__products__fish-oil.html: Packaging rows 0
+    !! zh__products__liquids.html: Packaging rows 0
+    !! zh__products__pastes.html: Packaging rows 0
+    !! zh__products__powders.html: Packaging rows 0
+    !! zh__products__soft-chews.html: Packaging rows 0
+    !! zh__products__tablets.html: Packaging rows 0
+    0/58 page(s) reduce to the base byte-for-byte (dosage 0/16, formula 0/42)
+
+[4] source reconstruction — undo the declared edits, compare to the pre-batch source
+    functions.php            !! php/version literal count != 1
+    functions.php            !! php/init literal count != 1
+    functions.php            !! php/map-row literal count != 1
+    functions.php            !! php/functions start marker missing
+    functions.php            !! php/factsheet end marker missing
+    functions.php            !! php/map-compose start marker missing
+    functions.php            !! php/docblock start marker missing
+    functions.php            base  169510 / new  169510 / undone  169510  undone==base:YES
+    style.css                !! G banner missing
+    templates/page-soft-chews.html !! the candidate carries 0 Packaging lines, expected 1
+    templates/page-tablets.html !! the candidate carries 0 Packaging lines, expected 1
+    templates/page-powders.html !! the candidate carries 0 Packaging lines, expected 1
+    templates/page-pastes.html !! the candidate carries 0 Packaging lines, expected 1
+    templates/page-drops.html !! the candidate carries 0 Packaging lines, expected 1
+    templates/page-liquids.html !! the candidate carries 0 Packaging lines, expected 1
+    templates/page-fish-oil.html !! the candidate carries 0 Packaging lines, expected 1
+    templates/page-dental-chews.html !! the candidate carries 0 Packaging lines, expected 1
+    templates/single-sf_formula.html !! region not locatable
+
+[5] JSON-LD deep-equal (decoded structures, not masked text)
+    identical 75/75 page(s)
+
+==============================================================================
+FAIL — 144 problem(s):
+  * NOTHING moved — the two directories have identical version tokens, so this gate proved nothing (is --new pointing at base?)
+  * formulas__bladder-support-powder.html should have differed and did not
+  * formulas__calcium-phosphorus-tablets.html should have differed and did not
+  * formulas__calming-soft-chews.html should have differed and did not
+  * formulas__digestive-soft-chews.html should have differed and did not
+  * formulas__ear-care-drops.html should have differed and did not
+  * formulas__hairball-remedy-paste.html should have differed and did not
+  * formulas__joint-support-soft-chews.html should have differed and did not
+  * formulas__joint-support-tablets.html should have differed and did not
+  * formulas__liquid-joint-support.html should have differed and did not
+  * formulas__liquid-skin-coat.html should have differed and did not
+  * formulas__multivitamin-tablets.html should have differed and did not
+  * formulas__natural-cleaning-dental-sticks.html should have differed and did not
+  * formulas__nutrition-paste.html should have differed and did not
+  * formulas__oral-care-dental-sticks.html should have differed and did not
+  * formulas__plaque-control-dental-chews.html should have differed and did not
+  * formulas__probiotic-powder.html should have differed and did not
+  * formulas__pumpkin-digestive-powder.html should have differed and did not
+  * formulas__pure-fish-oil-blend.html should have differed and did not
+  * formulas__skin-coat-soft-chews.html should have differed and did not
+  * formulas__urinary-care-drops.html should have differed and did not
+  * formulas__wild-alaskan-salmon-oil.html should have differed and did not
+  * products__dental-chews.html should have differed and did not
+  * products__drops.html should have differed and did not
+  * products__fish-oil.html should have differed and did not
+  * products__liquids.html should have differed and did not
+  * products__pastes.html should have differed and did not
+  * products__powders.html should have differed and did not
+  * products__soft-chews.html should have differed and did not
+  * products__tablets.html should have differed and did not
+  * zh__formulas__bladder-support-powder.html should have differed and did not
+  * zh__formulas__calcium-phosphorus-tablets.html should have differed and did not
+  * zh__formulas__calming-soft-chews.html should have differed and did not
+  * zh__formulas__digestive-soft-chews.html should have differed and did not
+  * zh__formulas__ear-care-drops.html should have differed and did not
+  * zh__formulas__hairball-remedy-paste.html should have differed and did not
+  * zh__formulas__joint-support-soft-chews.html should have differed and did not
+  * zh__formulas__joint-support-tablets.html should have differed and did not
+  * zh__formulas__liquid-joint-support.html should have differed and did not
+  * zh__formulas__liquid-skin-coat.html should have differed and did not
+  * zh__formulas__multivitamin-tablets.html should have differed and did not
+  * zh__formulas__natural-cleaning-dental-sticks.html should have differed and did not
+  * zh__formulas__nutrition-paste.html should have differed and did not
+  * zh__formulas__oral-care-dental-sticks.html should have differed and did not
+  * zh__formulas__plaque-control-dental-chews.html should have differed and did not
+  * zh__formulas__probiotic-powder.html should have differed and did not
+  * zh__formulas__pumpkin-digestive-powder.html should have differed and did not
+  * zh__formulas__pure-fish-oil-blend.html should have differed and did not
+  * zh__formulas__skin-coat-soft-chews.html should have differed and did not
+  * zh__formulas__urinary-care-drops.html should have differed and did not
+  * zh__formulas__wild-alaskan-salmon-oil.html should have differed and did not
+  * zh__products__dental-chews.html should have differed and did not
+  * zh__products__drops.html should have differed and did not
+  * zh__products__fish-oil.html should have differed and did not
+  * zh__products__liquids.html should have differed and did not
+  * zh__products__pastes.html should have differed and did not
+  * zh__products__powders.html should have differed and did not
+  * zh__products__soft-chews.html should have differed and did not
+  * zh__products__tablets.html should have differed and did not
+  * soft-chews: the rendered row is None, the template's options reduce to 'Aluminum Stand-up Pouch, Aluminum Foil Pouch with Zipper, Plastic Bottle, Jar, Blister Pack, Box + Foil, or custom formats'
+  * tablets: the rendered row is None, the template's options reduce to 'Plastic Bottle, Jar, Blister Pack, Foil Pouch, or custom formats'
+  * powders: the rendered row is None, the template's options reduce to 'Jar, Foil Pouch, Stand-up Pouch, or custom formats'
+  * pastes: the rendered row is None, the template's options reduce to 'Plastic Tube, Metal Tube, Aluminum Tube, or custom formats'
+  * drops: the rendered row is None, the template's options reduce to 'Dropper Bottle, Glass Bottle, Plastic Bottle, or custom formats'
+  * liquids: the rendered row is None, the template's options reduce to 'Plastic Bottle, Glass Bottle, Bottle with Cup, or custom formats'
+  * fish-oil: the rendered row is None, the template's options reduce to 'Plastic Bottle, Glass Bottle, Pump Bottle, or custom formats'
+  * dental-chews: the rendered row is None, the template's options reduce to 'Foil Pouch, Stand-up Pouch, Box, or custom formats'
+  * formulas__bladder-support-powder.html: the candidate carries 0 outer section tag(s), expected 1
+  * formulas__calcium-phosphorus-tablets.html: the candidate carries 0 outer section tag(s), expected 1
+  * formulas__calming-soft-chews.html: the candidate carries 0 outer section tag(s), expected 1
+  * formulas__digestive-soft-chews.html: the candidate carries 0 outer section tag(s), expected 1
+  * formulas__ear-care-drops.html: the candidate carries 0 outer section tag(s), expected 1
+  * formulas__hairball-remedy-paste.html: the candidate carries 0 outer section tag(s), expected 1
+  * formulas__joint-support-soft-chews.html: the candidate carries 0 outer section tag(s), expected 1
+  * formulas__joint-support-tablets.html: the candidate carries 0 outer section tag(s), expected 1
+  * formulas__liquid-joint-support.html: the candidate carries 0 outer section tag(s), expected 1
+  * formulas__liquid-skin-coat.html: the candidate carries 0 outer section tag(s), expected 1
+  * formulas__multivitamin-tablets.html: the candidate carries 0 outer section tag(s), expected 1
+  * formulas__natural-cleaning-dental-sticks.html: the candidate carries 0 outer section tag(s), expected 1
+  * formulas__nutrition-paste.html: the candidate carries 0 outer section tag(s), expected 1
+  * formulas__oral-care-dental-sticks.html: the candidate carries 0 outer section tag(s), expected 1
+  * formulas__plaque-control-dental-chews.html: the candidate carries 0 outer section tag(s), expected 1
+  * formulas__probiotic-powder.html: the candidate carries 0 outer section tag(s), expected 1
+  * formulas__pumpkin-digestive-powder.html: the candidate carries 0 outer section tag(s), expected 1
+  * formulas__pure-fish-oil-blend.html: the candidate carries 0 outer section tag(s), expected 1
+  * formulas__skin-coat-soft-chews.html: the candidate carries 0 outer section tag(s), expected 1
+  * formulas__urinary-care-drops.html: the candidate carries 0 outer section tag(s), expected 1
+  * formulas__wild-alaskan-salmon-oil.html: the candidate carries 0 outer section tag(s), expected 1
+  * products__dental-chews.html: expected exactly one Packaging formats row on the candidate, found 0
+  * products__drops.html: expected exactly one Packaging formats row on the candidate, found 0
+  * products__fish-oil.html: expected exactly one Packaging formats row on the candidate, found 0
+  * products__liquids.html: expected exactly one Packaging formats row on the candidate, found 0
+  * products__pastes.html: expected exactly one Packaging formats row on the candidate, found 0
+  * products__powders.html: expected exactly one Packaging formats row on the candidate, found 0
+  * products__soft-chews.html: expected exactly one Packaging formats row on the candidate, found 0
+  * products__tablets.html: expected exactly one Packaging formats row on the candidate, found 0
+  * zh__formulas__bladder-support-powder.html: the candidate carries 0 outer section tag(s), expected 1
+  * zh__formulas__calcium-phosphorus-tablets.html: the candidate carries 0 outer section tag(s), expected 1
+  * zh__formulas__calming-soft-chews.html: the candidate carries 0 outer section tag(s), expected 1
+  * zh__formulas__digestive-soft-chews.html: the candidate carries 0 outer section tag(s), expected 1
+  * zh__formulas__ear-care-drops.html: the candidate carries 0 outer section tag(s), expected 1
+  * zh__formulas__hairball-remedy-paste.html: the candidate carries 0 outer section tag(s), expected 1
+  * zh__formulas__joint-support-soft-chews.html: the candidate carries 0 outer section tag(s), expected 1
+  * zh__formulas__joint-support-tablets.html: the candidate carries 0 outer section tag(s), expected 1
+  * zh__formulas__liquid-joint-support.html: the candidate carries 0 outer section tag(s), expected 1
+  * zh__formulas__liquid-skin-coat.html: the candidate carries 0 outer section tag(s), expected 1
+  * zh__formulas__multivitamin-tablets.html: the candidate carries 0 outer section tag(s), expected 1
+  * zh__formulas__natural-cleaning-dental-sticks.html: the candidate carries 0 outer section tag(s), expected 1
+  * zh__formulas__nutrition-paste.html: the candidate carries 0 outer section tag(s), expected 1
+  * zh__formulas__oral-care-dental-sticks.html: the candidate carries 0 outer section tag(s), expected 1
+  * zh__formulas__plaque-control-dental-chews.html: the candidate carries 0 outer section tag(s), expected 1
+  * zh__formulas__probiotic-powder.html: the candidate carries 0 outer section tag(s), expected 1
+  * zh__formulas__pumpkin-digestive-powder.html: the candidate carries 0 outer section tag(s), expected 1
+  * zh__formulas__pure-fish-oil-blend.html: the candidate carries 0 outer section tag(s), expected 1
+  * zh__formulas__skin-coat-soft-chews.html: the candidate carries 0 outer section tag(s), expected 1
+  * zh__formulas__urinary-care-drops.html: the candidate carries 0 outer section tag(s), expected 1
+  * zh__formulas__wild-alaskan-salmon-oil.html: the candidate carries 0 outer section tag(s), expected 1
+  * zh__products__dental-chews.html: expected exactly one Packaging formats row on the candidate, found 0
+  * zh__products__drops.html: expected exactly one Packaging formats row on the candidate, found 0
+  * zh__products__fish-oil.html: expected exactly one Packaging formats row on the candidate, found 0
+  * zh__products__liquids.html: expected exactly one Packaging formats row on the candidate, found 0
+  * zh__products__pastes.html: expected exactly one Packaging formats row on the candidate, found 0
+  * zh__products__powders.html: expected exactly one Packaging formats row on the candidate, found 0
+  * zh__products__soft-chews.html: expected exactly one Packaging formats row on the candidate, found 0
+  * zh__products__tablets.html: expected exactly one Packaging formats row on the candidate, found 0
+  * only 0/16 dosage pages reduced
+  * only 0/42 formula pages reduced
+  * php/version: '2.10.54' occurs 0 time(s), expected 1
+  * php/init: "\t$formula_intro = '';\n" occurs 0 time(s), expected 1
+  * php/map-row: "\t\t'{{FORMULA_INTRO}}'   => $formula_intro,\n" occurs 0 time(s), expected 1
+  * php/functions: start marker not found
+  * php/factsheet: end marker not found after the start
+  * php/map-compose: start marker not found
+  * php/docblock: start marker not found
+  * style.css: the G banner is missing
+  * templates/page-soft-chews.html: the candidate carries 0 Packaging lines, expected 1
+  * templates/page-tablets.html: the candidate carries 0 Packaging lines, expected 1
+  * templates/page-powders.html: the candidate carries 0 Packaging lines, expected 1
+  * templates/page-pastes.html: the candidate carries 0 Packaging lines, expected 1
+  * templates/page-drops.html: the candidate carries 0 Packaging lines, expected 1
+  * templates/page-liquids.html: the candidate carries 0 Packaging lines, expected 1
+  * templates/page-fish-oil.html: the candidate carries 0 Packaging lines, expected 1
+  * templates/page-dental-chews.html: the candidate carries 0 Packaging lines, expected 1
+  * templates/single-sf_formula.html: cannot locate the batch region (base marker True, candidate -1..-1)
+==============================================================================

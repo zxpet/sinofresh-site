@@ -134,8 +134,13 @@ DETAIL_META_RE = re.compile(r'<p class="sf-formula-hero__meta">[^<]*</p>')
 FORM_MARK_RE = re.compile(r'data-sf-form="([a-z-]+)"')
 SIDE_PARTS = ('<p class="sf-fdetail-media__intro">',
               '<dl class="sf-fdetail-media__facts">',
-              'class="sf-fdetail-media__cta"', 'href="/contact/"',
-              'Request Sample')
+              'class="sf-fdetail-media__cta"', 'Request Sample')
+# The CTA's href is checked as a pattern, never as the literal /contact/: on the
+# localised pages TranslatePress rewrites it to /zh/contact/, exactly as it does
+# every other CTA there, so a literal would fail 21 correct pages. What the gate
+# cares about is where the link goes, not whether one locale prefixed it.
+CTA_RE = re.compile(r'<a class="sf-fdetail-media__cta" href="(?:/[a-z]{2})?/contact/">'
+                    r'Request Sample</a>')
 
 LEAD = 'Typically 7\u201315 working days after packaging is ready'
 CERTS = 'FDA, cGMP, ISO 9001, FSSC 22000, HACCP, BRC'
@@ -288,6 +293,12 @@ def detail_reduce(name, base_norm, cand_norm, dosage_vals, fails, say,
             fails.append('%s: the right column lacks %r' % (name, part))
             say('    !! %s: right column lacks %r' % (name, part))
             return False
+    if not CTA_RE.search(aside):
+        fails.append('%s: the right column CTA is not a Request Sample link to '
+                     'the contact page' % name)
+        say('    !! %s: CTA tag(s) %r'
+            % (name, re.findall(r'<a class="sf-fdetail-media__cta"[^>]*>', aside)))
+        return False
     terms = re.findall(r'<dt class="sf-fdetail-media__term">([^<]*)</dt>'
                        r'<dd class="sf-fdetail-media__value">([^<]*)</dd>', aside)
     if len(terms) not in (4, 5):

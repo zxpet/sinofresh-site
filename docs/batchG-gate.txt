@@ -1,0 +1,61 @@
+==============================================================================
+Batch G — gates for the two-column media band on the 42 formula pages
+          and the Packaging formats row on the 8 dosage pages, 2.10.53 -> 2.10.54
+==============================================================================
+
+[0] inputs, and proof that the candidate is the candidate
+    base dir _backup/b2d-g-baselines/base : 75 pages
+    new  dir _backup/b2d-g-baselines/cand : 75 pages
+    candidate pages carrying the pre-flight theme directory: 75/75
+    live dir mention on the candidate side: 0 page(s) (the pre-flight copy rewrites them all)
+    expected to differ: 58 page(s) — 8 dosage + 8 /zh/ dosage + 21 formula + 21 /zh/ formula
+
+[1] resource inventory (which cache tokens moved?)
+    style.css          2.10.53 -> 2.10.54   on 75 page(s)
+    asset SET changed on 0 page(s) (must be 0)
+
+[2] masked comparison of the 75 pages (?ver= folded, nonces and the pre-flight directory masked)
+    differ    58 page(s)
+    identical 17 page(s)
+
+[3] page-level confined proof — TWO directions, asserted separately
+    dosage pages (16): INSERTION — candidate minus the new row must be the base.
+    formula pages (42): RESTRUCTURE — delete the right column, lift the left one back,
+    restore its class/style; that must be the base. Values are cross-read from the
+    candidate dosage page's own row, the same source spec_cell reads.
+    row value vs the template's configurator options:
+        soft-chews     ok   Aluminum Stand-up Pouch, Aluminum Foil Pouch with Zipper, Plastic 
+        tablets        ok   Plastic Bottle, Jar, Blister Pack, Foil Pouch, or custom formats
+        powders        ok   Jar, Foil Pouch, Stand-up Pouch, or custom formats
+        pastes         ok   Plastic Tube, Metal Tube, Aluminum Tube, or custom formats
+        drops          ok   Dropper Bottle, Glass Bottle, Plastic Bottle, or custom formats
+        liquids        ok   Plastic Bottle, Glass Bottle, Bottle with Cup, or custom formats
+        fish-oil       ok   Plastic Bottle, Glass Bottle, Pump Bottle, or custom formats
+        dental-chews   ok   Foil Pouch, Stand-up Pouch, Box, or custom formats
+    58/58 page(s) reduce to the base byte-for-byte (dosage 16/16, formula 42/42)
+
+[4] source reconstruction — undo the declared edits, compare to the pre-batch source
+    functions.php            base  169510 / new  177224 / undone  169510  undone==base:YES
+    style.css + G block      base  264366 / new  267941 / undone  264366  undone==base:YES (+3575 B)
+    templates/page-soft-chews.html base   54366 / new   54653 / undone   54366  undone==base:YES (+287 B)
+    templates/page-tablets.html base   46055 / new   46284 / undone   46055  undone==base:YES (+229 B)
+    templates/page-powders.html base   45517 / new   45732 / undone   45517  undone==base:YES (+215 B)
+    templates/page-pastes.html base   43601 / new   43824 / undone   43601  undone==base:YES (+223 B)
+    templates/page-drops.html base   44010 / new   44238 / undone   44010  undone==base:YES (+228 B)
+    templates/page-liquids.html base   44354 / new   44583 / undone   44354  undone==base:YES (+229 B)
+    templates/page-fish-oil.html base   43842 / new   44067 / undone   43842  undone==base:YES (+225 B)
+    templates/page-dental-chews.html base   48788 / new   49003 / undone   48788  undone==base:YES (+215 B)
+    templates/single-sf_formula.html base    5307 / new    6272 / undone    5307  undone==base:YES (+965 B)
+
+[5] JSON-LD deep-equal (decoded structures, not masked text)
+    identical 75/75 page(s)
+
+==============================================================================
+PASS — only style.css's version token moved, on all 75 pages, with no asset added or lost;
+       58 pages differ and they are exactly the expected set;
+       all 16 dosage pages reduce to the base once the new row is deleted, and all
+       42 formula pages reduce once the right column is deleted and the left one is
+       lifted back; every value in the column cross-checks against the dosage row;
+       the eleven source files rebuild to their pre-batch bytes;
+       75/75 pages byte-identical in decoded JSON-LD.
+==============================================================================

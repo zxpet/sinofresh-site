@@ -178,6 +178,12 @@ def transform_page(name, html, pack_rows, failures):
         side += factsheet_html(pairs)
         side += ('<a class="sf-fdetail-media__cta" href="/contact/">'
                  'Request Sample</a>')
+        if name.startswith('zh__'):
+            # TranslatePress rewrites in-content links on the localised pages,
+            # so the zh pages carry /zh/contact/ exactly as their other CTAs do.
+            # Modelling that here is what makes this synthetic run exercise the
+            # localised branch of the gate's href check at all.
+            side = side.replace('href="/contact/"', 'href="/zh/contact/"', 1)
         new_region = (SEC_OUTER + '\n\n' + INNER_OPEN + '\n\n' + LEFT_CAND + '\n\n'
                       + payload + '\n\n</section>\n\n\n' + SIDE_OPEN + '\n\n'
                       + side + '\n\n</aside>\n\n</div>\n\n</section>\n\n\n')
@@ -229,6 +235,23 @@ def apply_sabotage(kind, out_dir, names, failures):
                          '<h2 class="wp-block-heading">Specifications</h2>', 1))
         print('    sabotage stray-byte -> %s changes a heading outside the region'
               % os.path.basename(p))
+    elif kind == 'wrong-cta':
+        # the new href check is a pattern, so it needs its own negative control:
+        # a link that is still a CTA but no longer goes to the contact page.
+        p = os.path.join(out_dir, 'formulas__joint-support-tablets.html')
+        html = open(p, encoding='utf-8').read()
+        open(p, 'w', encoding='utf-8').write(
+            html.replace('<a class="sf-fdetail-media__cta" href="/contact/">',
+                         '<a class="sf-fdetail-media__cta" href="/products/">', 1))
+        print('    sabotage wrong-cta -> %s points its Request Sample somewhere '
+              'else' % os.path.basename(p))
+    elif kind == 'zh-cta-dropped':
+        p = os.path.join(out_dir, 'zh__formulas__joint-support-tablets.html')
+        html = open(p, encoding='utf-8').read()
+        open(p, 'w', encoding='utf-8').write(
+            html.replace('<a class="sf-fdetail-media__cta" href="/zh/contact/">'
+                         'Request Sample</a>', '', 1))
+        print('    sabotage zh-cta-dropped -> the localised page loses its button')
     elif kind == 'keep-h2':
         # the dot rail's threshold: the batch must not move it. Simulate the
         # mistake of giving the new band an h2 on two dosage pages.

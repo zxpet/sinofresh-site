@@ -1,0 +1,2768 @@
+{
+ "cases": [
+  {
+   "case": "joint-support-soft-chews",
+   "data": {
+    "checks": [
+     {
+      "detail": "https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/style.css?ver=2.10.54",
+      "name": "stylesheet is the one under test",
+      "ok": true
+     },
+     {
+      "name": "outer band present",
+      "ok": true
+     },
+     {
+      "name": "inner grid present",
+      "ok": true
+     },
+     {
+      "name": "left column present",
+      "ok": true
+     },
+     {
+      "name": "right column present",
+      "ok": true
+     },
+     {
+      "detail": {
+       "display": "grid",
+       "tracks": [
+        "691.188px",
+        "460.797px"
+       ]
+      },
+      "name": "two-column grid",
+      "ok": true
+     },
+     {
+      "detail": "48px",
+      "name": "column gap is 48px",
+      "ok": true
+     },
+     {
+      "detail": "1.499",
+      "name": "columns are 3fr / 2fr",
+      "ok": true
+     },
+     {
+      "detail": {
+       "leftTop": 509,
+       "sideTop": 509
+      },
+      "name": "right column starts level with the left",
+      "ok": true
+     },
+     {
+      "detail": "0px",
+      "name": "right column has no flow margin",
+      "ok": true
+     },
+     {
+      "detail": {
+       "inner": "rgba(0, 0, 0, 0)",
+       "outer": "rgb(243, 246, 244)"
+      },
+      "name": "band background stays on the outer section",
+      "ok": true
+     },
+     {
+      "detail": "none",
+      "name": "gallery stage fills its column (max-width override)",
+      "ok": true
+     },
+     {
+      "detail": "0px",
+      "name": "gallery stage is not centred inside the column",
+      "ok": true
+     },
+     {
+      "detail": {
+       "column": 691,
+       "stage": 691
+      },
+      "name": "gallery stage spans the column",
+      "ok": true
+     },
+     {
+      "detail": 4,
+      "name": "the four slides are still there",
+      "ok": true
+     },
+     {
+      "detail": 359,
+      "name": "intro paragraph present and substantial",
+      "ok": true
+     },
+     {
+      "detail": "from 500–1,000 units",
+      "name": "intro quotes the hero MOQ verbatim",
+      "ok": true
+     },
+     {
+      "detail": "Typically 7–15 working days after packaging is ready",
+      "name": "intro quotes the hero Lead time verbatim",
+      "ok": true
+     },
+     {
+      "detail": "Typically 7–15 working days after packaging is ready",
+      "name": "hero Lead time is the agreed wording",
+      "ok": true
+     },
+     {
+      "detail": {
+       "dd": 5,
+       "dt": 5
+      },
+      "name": "factsheet is a dl with matching rows",
+      "ok": true
+     },
+     {
+      "detail": {
+       "expected": [
+        "Unit size",
+        "Pack options",
+        "Shelf life",
+        "Certifications",
+        "Packaging"
+       ],
+       "got": [
+        "Unit size",
+        "Pack options",
+        "Shelf life",
+        "Certifications",
+        "Packaging"
+       ]
+      },
+      "name": "rows follow the canonical order",
+      "ok": true
+     },
+     {
+      "detail": "2g/piece",
+      "name": "Unit size is not a whole spec line",
+      "ok": true
+     },
+     {
+      "detail": "18 months shelf life",
+      "name": "Shelf life reads as a shelf-life clause",
+      "ok": true
+     },
+     {
+      "detail": "FDA, cGMP, ISO 9001, FSSC 22000, HACCP, BRC",
+      "name": "Certifications is the full set",
+      "ok": true
+     },
+     {
+      "detail": "Aluminum Stand-up Pouch, Aluminum Foil Pouch with Zipper, Plastic Bottle, Jar, Blister Pack, Box + Foil, or custom formats",
+      "name": "Packaging ends with the custom-formats clause",
+      "ok": true
+     },
+     {
+      "name": "one CTA in the right column",
+      "ok": true
+     },
+     {
+      "name": "CTA says Request Sample",
+      "ok": true
+     },
+     {
+      "detail": "/contact/",
+      "name": "CTA points at the contact page of its own locale",
+      "ok": true
+     },
+     {
+      "detail": "rgb(181, 78, 15)",
+      "name": "CTA wears the cta palette colour",
+      "ok": true
+     },
+     {
+      "detail": {
+       "dots": 0,
+       "tocScript": false
+      },
+      "name": "no dot rail on formula detail pages (toc-nav not enqueued here)",
+      "ok": true
+     },
+     {
+      "detail": "A Closer Look at Joint Support Soft Chews",
+      "name": "the gallery keeps its heading",
+      "ok": true
+     },
+     {
+      "detail": [],
+      "name": "no page errors",
+      "ok": true
+     },
+     {
+      "detail": {
+       "sw": 1440,
+       "vw": 1440
+      },
+      "name": "no horizontal scroll",
+      "ok": true
+     }
+    ],
+    "cta": {
+     "bg": "rgb(181, 78, 15)",
+     "href": "/contact/",
+     "text": "Request Sample"
+    },
+    "facts": {
+     "labels": [
+      "Unit size",
+      "Pack options",
+      "Shelf life",
+      "Certifications",
+      "Packaging"
+     ],
+     "values": {
+      "Certifications": "FDA, cGMP, ISO 9001, FSSC 22000, HACCP, BRC",
+      "Pack options": "60/90/120 per bottle",
+      "Packaging": "Aluminum Stand-up Pouch, Aluminum Foil Pouch with Zipper, Plastic Bottle, Jar, Blister Pack, Box + Foil, or custom formats",
+      "Shelf life": "18 months shelf life",
+      "Unit size": "2g/piece"
+     }
+    },
+    "geometry": {
+     "gap": "48px",
+     "left": 691,
+     "leftTop": 509,
+     "side": 461,
+     "sideTop": 509,
+     "tracks": [
+      "691.188px",
+      "460.797px"
+     ],
+     "vw": 1440
+    },
+    "hScroll": false,
+    "hero": {
+     "lead": "Typically 7–15 working days after packaging is ready",
+     "meta": "Soft Chews · MOQ from 500–1,000 units · Lead time Typically 7–15 working days after packaging is ready",
+     "moq": "from 500–1,000 units"
+    },
+    "intro": "Joint Support Soft Chews is a standard Soft Chews formula from the SINO FRESH OEM/ODM range for private-label pet supplements. Produced in a GMP-certified facility in Linyi, China and shipped with full documentation, it is ready for your own brand. Minimum order quantity: from 500–1,000 units. Lead time: Typically 7–15 working days after packaging is ready.",
+    "jsErrors": [],
+    "rail": {
+     "dots": 0,
+     "tocScript": false
+    },
+    "sheet": "https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/style.css?ver=2.10.54",
+    "stage": {
+     "columnWidth": 691,
+     "marginLeft": "0px",
+     "maxWidth": "none",
+     "width": 691
+    }
+   },
+   "path": "/formulas/joint-support-soft-chews/",
+   "viewport": 1440
+  },
+  {
+   "case": "joint-support-soft-chews",
+   "data": {
+    "checks": [
+     {
+      "detail": "https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/style.css?ver=2.10.54",
+      "name": "stylesheet is the one under test",
+      "ok": true
+     },
+     {
+      "name": "outer band present",
+      "ok": true
+     },
+     {
+      "name": "inner grid present",
+      "ok": true
+     },
+     {
+      "name": "left column present",
+      "ok": true
+     },
+     {
+      "name": "right column present",
+      "ok": true
+     },
+     {
+      "detail": [
+       "299px"
+      ],
+      "name": "stacks to one column below 1024px",
+      "ok": true
+     },
+     {
+      "detail": "32px",
+      "name": "the gap tightens to 32px when stacked",
+      "ok": true
+     },
+     {
+      "detail": {
+       "leftTop": 554,
+       "sideTop": 1082
+      },
+      "name": "the right column falls below the left",
+      "ok": true
+     },
+     {
+      "detail": {
+       "inner": "rgba(0, 0, 0, 0)",
+       "outer": "rgb(243, 246, 244)"
+      },
+      "name": "band background stays on the outer section",
+      "ok": true
+     },
+     {
+      "detail": "none",
+      "name": "gallery stage fills its column (max-width override)",
+      "ok": true
+     },
+     {
+      "detail": "0px",
+      "name": "gallery stage is not centred inside the column",
+      "ok": true
+     },
+     {
+      "detail": {
+       "column": 299,
+       "stage": 299
+      },
+      "name": "gallery stage spans the column",
+      "ok": true
+     },
+     {
+      "detail": 4,
+      "name": "the four slides are still there",
+      "ok": true
+     },
+     {
+      "detail": 359,
+      "name": "intro paragraph present and substantial",
+      "ok": true
+     },
+     {
+      "detail": "from 500–1,000 units",
+      "name": "intro quotes the hero MOQ verbatim",
+      "ok": true
+     },
+     {
+      "detail": "Typically 7–15 working days after packaging is ready",
+      "name": "intro quotes the hero Lead time verbatim",
+      "ok": true
+     },
+     {
+      "detail": "Typically 7–15 working days after packaging is ready",
+      "name": "hero Lead time is the agreed wording",
+      "ok": true
+     },
+     {
+      "detail": {
+       "dd": 5,
+       "dt": 5
+      },
+      "name": "factsheet is a dl with matching rows",
+      "ok": true
+     },
+     {
+      "detail": {
+       "expected": [
+        "Unit size",
+        "Pack options",
+        "Shelf life",
+        "Certifications",
+        "Packaging"
+       ],
+       "got": [
+        "Unit size",
+        "Pack options",
+        "Shelf life",
+        "Certifications",
+        "Packaging"
+       ]
+      },
+      "name": "rows follow the canonical order",
+      "ok": true
+     },
+     {
+      "detail": "2g/piece",
+      "name": "Unit size is not a whole spec line",
+      "ok": true
+     },
+     {
+      "detail": "18 months shelf life",
+      "name": "Shelf life reads as a shelf-life clause",
+      "ok": true
+     },
+     {
+      "detail": "FDA, cGMP, ISO 9001, FSSC 22000, HACCP, BRC",
+      "name": "Certifications is the full set",
+      "ok": true
+     },
+     {
+      "detail": "Aluminum Stand-up Pouch, Aluminum Foil Pouch with Zipper, Plastic Bottle, Jar, Blister Pack, Box + Foil, or custom formats",
+      "name": "Packaging ends with the custom-formats clause",
+      "ok": true
+     },
+     {
+      "name": "one CTA in the right column",
+      "ok": true
+     },
+     {
+      "name": "CTA says Request Sample",
+      "ok": true
+     },
+     {
+      "detail": "/contact/",
+      "name": "CTA points at the contact page of its own locale",
+      "ok": true
+     },
+     {
+      "detail": "rgb(181, 78, 15)",
+      "name": "CTA wears the cta palette colour",
+      "ok": true
+     },
+     {
+      "detail": {
+       "dots": 0,
+       "tocScript": false
+      },
+      "name": "no dot rail on formula detail pages (toc-nav not enqueued here)",
+      "ok": true
+     },
+     {
+      "detail": "A Closer Look at Joint Support Soft Chews",
+      "name": "the gallery keeps its heading",
+      "ok": true
+     },
+     {
+      "detail": [],
+      "name": "no page errors",
+      "ok": true
+     },
+     {
+      "detail": {
+       "sw": 375,
+       "vw": 375
+      },
+      "name": "no horizontal scroll",
+      "ok": true
+     }
+    ],
+    "cta": {
+     "bg": "rgb(181, 78, 15)",
+     "href": "/contact/",
+     "text": "Request Sample"
+    },
+    "facts": {
+     "labels": [
+      "Unit size",
+      "Pack options",
+      "Shelf life",
+      "Certifications",
+      "Packaging"
+     ],
+     "values": {
+      "Certifications": "FDA, cGMP, ISO 9001, FSSC 22000, HACCP, BRC",
+      "Pack options": "60/90/120 per bottle",
+      "Packaging": "Aluminum Stand-up Pouch, Aluminum Foil Pouch with Zipper, Plastic Bottle, Jar, Blister Pack, Box + Foil, or custom formats",
+      "Shelf life": "18 months shelf life",
+      "Unit size": "2g/piece"
+     }
+    },
+    "geometry": {
+     "gap": "32px",
+     "left": 299,
+     "leftTop": 554,
+     "side": 299,
+     "sideTop": 1082,
+     "tracks": [
+      "299px"
+     ],
+     "vw": 375
+    },
+    "hScroll": false,
+    "hero": {
+     "lead": "Typically 7–15 working days after packaging is ready",
+     "meta": "Soft Chews · MOQ from 500–1,000 units · Lead time Typically 7–15 working days after packaging is ready",
+     "moq": "from 500–1,000 units"
+    },
+    "intro": "Joint Support Soft Chews is a standard Soft Chews formula from the SINO FRESH OEM/ODM range for private-label pet supplements. Produced in a GMP-certified facility in Linyi, China and shipped with full documentation, it is ready for your own brand. Minimum order quantity: from 500–1,000 units. Lead time: Typically 7–15 working days after packaging is ready.",
+    "jsErrors": [],
+    "rail": {
+     "dots": 0,
+     "tocScript": false
+    },
+    "sheet": "https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/style.css?ver=2.10.54",
+    "stage": {
+     "columnWidth": 299,
+     "marginLeft": "0px",
+     "maxWidth": "none",
+     "width": 299
+    }
+   },
+   "path": "/formulas/joint-support-soft-chews/",
+   "viewport": 375
+  },
+  {
+   "case": "pure-fish-oil-blend",
+   "data": {
+    "checks": [
+     {
+      "detail": "https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/style.css?ver=2.10.54",
+      "name": "stylesheet is the one under test",
+      "ok": true
+     },
+     {
+      "name": "outer band present",
+      "ok": true
+     },
+     {
+      "name": "inner grid present",
+      "ok": true
+     },
+     {
+      "name": "left column present",
+      "ok": true
+     },
+     {
+      "name": "right column present",
+      "ok": true
+     },
+     {
+      "detail": {
+       "display": "grid",
+       "tracks": [
+        "691.188px",
+        "460.797px"
+       ]
+      },
+      "name": "two-column grid",
+      "ok": true
+     },
+     {
+      "detail": "48px",
+      "name": "column gap is 48px",
+      "ok": true
+     },
+     {
+      "detail": "1.499",
+      "name": "columns are 3fr / 2fr",
+      "ok": true
+     },
+     {
+      "detail": {
+       "leftTop": 509,
+       "sideTop": 509
+      },
+      "name": "right column starts level with the left",
+      "ok": true
+     },
+     {
+      "detail": "0px",
+      "name": "right column has no flow margin",
+      "ok": true
+     },
+     {
+      "detail": {
+       "inner": "rgba(0, 0, 0, 0)",
+       "outer": "rgb(243, 246, 244)"
+      },
+      "name": "band background stays on the outer section",
+      "ok": true
+     },
+     {
+      "detail": "none",
+      "name": "gallery stage fills its column (max-width override)",
+      "ok": true
+     },
+     {
+      "detail": "0px",
+      "name": "gallery stage is not centred inside the column",
+      "ok": true
+     },
+     {
+      "detail": {
+       "column": 691,
+       "stage": 691
+      },
+      "name": "gallery stage spans the column",
+      "ok": true
+     },
+     {
+      "detail": 4,
+      "name": "the four slides are still there",
+      "ok": true
+     },
+     {
+      "detail": 348,
+      "name": "intro paragraph present and substantial",
+      "ok": true
+     },
+     {
+      "detail": "from 1,000 units",
+      "name": "intro quotes the hero MOQ verbatim",
+      "ok": true
+     },
+     {
+      "detail": "Typically 7–15 working days after packaging is ready",
+      "name": "intro quotes the hero Lead time verbatim",
+      "ok": true
+     },
+     {
+      "detail": "Typically 7–15 working days after packaging is ready",
+      "name": "hero Lead time is the agreed wording",
+      "ok": true
+     },
+     {
+      "detail": {
+       "dd": 4,
+       "dt": 4
+      },
+      "name": "factsheet is a dl with matching rows",
+      "ok": true
+     },
+     {
+      "detail": {
+       "expected": [
+        "Unit size",
+        "Shelf life",
+        "Certifications",
+        "Packaging"
+       ],
+       "got": [
+        "Unit size",
+        "Shelf life",
+        "Certifications",
+        "Packaging"
+       ]
+      },
+      "name": "rows follow the canonical order",
+      "ok": true
+     },
+     {
+      "detail": "8oz/16oz/32oz pump bottle",
+      "name": "Unit size is not a whole spec line",
+      "ok": true
+     },
+     {
+      "detail": "24 months shelf life",
+      "name": "Shelf life reads as a shelf-life clause",
+      "ok": true
+     },
+     {
+      "detail": "FDA, cGMP, ISO 9001, FSSC 22000, HACCP, BRC",
+      "name": "Certifications is the full set",
+      "ok": true
+     },
+     {
+      "detail": "Plastic Bottle, Glass Bottle, Pump Bottle, or custom formats",
+      "name": "Packaging ends with the custom-formats clause",
+      "ok": true
+     },
+     {
+      "name": "one CTA in the right column",
+      "ok": true
+     },
+     {
+      "name": "CTA says Request Sample",
+      "ok": true
+     },
+     {
+      "detail": "/contact/",
+      "name": "CTA points at the contact page of its own locale",
+      "ok": true
+     },
+     {
+      "detail": "rgb(181, 78, 15)",
+      "name": "CTA wears the cta palette colour",
+      "ok": true
+     },
+     {
+      "detail": {
+       "dots": 0,
+       "tocScript": false
+      },
+      "name": "no dot rail on formula detail pages (toc-nav not enqueued here)",
+      "ok": true
+     },
+     {
+      "detail": "A Closer Look at Pure Fish Oil Blend",
+      "name": "the gallery keeps its heading",
+      "ok": true
+     },
+     {
+      "detail": [],
+      "name": "no page errors",
+      "ok": true
+     },
+     {
+      "detail": {
+       "sw": 1440,
+       "vw": 1440
+      },
+      "name": "no horizontal scroll",
+      "ok": true
+     }
+    ],
+    "cta": {
+     "bg": "rgb(181, 78, 15)",
+     "href": "/contact/",
+     "text": "Request Sample"
+    },
+    "facts": {
+     "labels": [
+      "Unit size",
+      "Shelf life",
+      "Certifications",
+      "Packaging"
+     ],
+     "values": {
+      "Certifications": "FDA, cGMP, ISO 9001, FSSC 22000, HACCP, BRC",
+      "Packaging": "Plastic Bottle, Glass Bottle, Pump Bottle, or custom formats",
+      "Shelf life": "24 months shelf life",
+      "Unit size": "8oz/16oz/32oz pump bottle"
+     }
+    },
+    "geometry": {
+     "gap": "48px",
+     "left": 691,
+     "leftTop": 509,
+     "side": 461,
+     "sideTop": 509,
+     "tracks": [
+      "691.188px",
+      "460.797px"
+     ],
+     "vw": 1440
+    },
+    "hScroll": false,
+    "hero": {
+     "lead": "Typically 7–15 working days after packaging is ready",
+     "meta": "Fish Oil · MOQ from 1,000 units · Lead time Typically 7–15 working days after packaging is ready",
+     "moq": "from 1,000 units"
+    },
+    "intro": "Pure Fish Oil Blend is a standard Fish Oil formula from the SINO FRESH OEM/ODM range for private-label pet supplements. Produced in a GMP-certified facility in Linyi, China and shipped with full documentation, it is ready for your own brand. Minimum order quantity: from 1,000 units. Lead time: Typically 7–15 working days after packaging is ready.",
+    "jsErrors": [],
+    "rail": {
+     "dots": 0,
+     "tocScript": false
+    },
+    "sheet": "https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/style.css?ver=2.10.54",
+    "stage": {
+     "columnWidth": 691,
+     "marginLeft": "0px",
+     "maxWidth": "none",
+     "width": 691
+    }
+   },
+   "path": "/formulas/pure-fish-oil-blend/",
+   "viewport": 1440
+  },
+  {
+   "case": "pure-fish-oil-blend",
+   "data": {
+    "checks": [
+     {
+      "detail": "https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/style.css?ver=2.10.54",
+      "name": "stylesheet is the one under test",
+      "ok": true
+     },
+     {
+      "name": "outer band present",
+      "ok": true
+     },
+     {
+      "name": "inner grid present",
+      "ok": true
+     },
+     {
+      "name": "left column present",
+      "ok": true
+     },
+     {
+      "name": "right column present",
+      "ok": true
+     },
+     {
+      "detail": [
+       "299px"
+      ],
+      "name": "stacks to one column below 1024px",
+      "ok": true
+     },
+     {
+      "detail": "32px",
+      "name": "the gap tightens to 32px when stacked",
+      "ok": true
+     },
+     {
+      "detail": {
+       "leftTop": 499,
+       "sideTop": 1028
+      },
+      "name": "the right column falls below the left",
+      "ok": true
+     },
+     {
+      "detail": {
+       "inner": "rgba(0, 0, 0, 0)",
+       "outer": "rgb(243, 246, 244)"
+      },
+      "name": "band background stays on the outer section",
+      "ok": true
+     },
+     {
+      "detail": "none",
+      "name": "gallery stage fills its column (max-width override)",
+      "ok": true
+     },
+     {
+      "detail": "0px",
+      "name": "gallery stage is not centred inside the column",
+      "ok": true
+     },
+     {
+      "detail": {
+       "column": 299,
+       "stage": 299
+      },
+      "name": "gallery stage spans the column",
+      "ok": true
+     },
+     {
+      "detail": 4,
+      "name": "the four slides are still there",
+      "ok": true
+     },
+     {
+      "detail": 348,
+      "name": "intro paragraph present and substantial",
+      "ok": true
+     },
+     {
+      "detail": "from 1,000 units",
+      "name": "intro quotes the hero MOQ verbatim",
+      "ok": true
+     },
+     {
+      "detail": "Typically 7–15 working days after packaging is ready",
+      "name": "intro quotes the hero Lead time verbatim",
+      "ok": true
+     },
+     {
+      "detail": "Typically 7–15 working days after packaging is ready",
+      "name": "hero Lead time is the agreed wording",
+      "ok": true
+     },
+     {
+      "detail": {
+       "dd": 4,
+       "dt": 4
+      },
+      "name": "factsheet is a dl with matching rows",
+      "ok": true
+     },
+     {
+      "detail": {
+       "expected": [
+        "Unit size",
+        "Shelf life",
+        "Certifications",
+        "Packaging"
+       ],
+       "got": [
+        "Unit size",
+        "Shelf life",
+        "Certifications",
+        "Packaging"
+       ]
+      },
+      "name": "rows follow the canonical order",
+      "ok": true
+     },
+     {
+      "detail": "8oz/16oz/32oz pump bottle",
+      "name": "Unit size is not a whole spec line",
+      "ok": true
+     },
+     {
+      "detail": "24 months shelf life",
+      "name": "Shelf life reads as a shelf-life clause",
+      "ok": true
+     },
+     {
+      "detail": "FDA, cGMP, ISO 9001, FSSC 22000, HACCP, BRC",
+      "name": "Certifications is the full set",
+      "ok": true
+     },
+     {
+      "detail": "Plastic Bottle, Glass Bottle, Pump Bottle, or custom formats",
+      "name": "Packaging ends with the custom-formats clause",
+      "ok": true
+     },
+     {
+      "name": "one CTA in the right column",
+      "ok": true
+     },
+     {
+      "name": "CTA says Request Sample",
+      "ok": true
+     },
+     {
+      "detail": "/contact/",
+      "name": "CTA points at the contact page of its own locale",
+      "ok": true
+     },
+     {
+      "detail": "rgb(181, 78, 15)",
+      "name": "CTA wears the cta palette colour",
+      "ok": true
+     },
+     {
+      "detail": {
+       "dots": 0,
+       "tocScript": false
+      },
+      "name": "no dot rail on formula detail pages (toc-nav not enqueued here)",
+      "ok": true
+     },
+     {
+      "detail": "A Closer Look at Pure Fish Oil Blend",
+      "name": "the gallery keeps its heading",
+      "ok": true
+     },
+     {
+      "detail": [],
+      "name": "no page errors",
+      "ok": true
+     },
+     {
+      "detail": {
+       "sw": 375,
+       "vw": 375
+      },
+      "name": "no horizontal scroll",
+      "ok": true
+     }
+    ],
+    "cta": {
+     "bg": "rgb(181, 78, 15)",
+     "href": "/contact/",
+     "text": "Request Sample"
+    },
+    "facts": {
+     "labels": [
+      "Unit size",
+      "Shelf life",
+      "Certifications",
+      "Packaging"
+     ],
+     "values": {
+      "Certifications": "FDA, cGMP, ISO 9001, FSSC 22000, HACCP, BRC",
+      "Packaging": "Plastic Bottle, Glass Bottle, Pump Bottle, or custom formats",
+      "Shelf life": "24 months shelf life",
+      "Unit size": "8oz/16oz/32oz pump bottle"
+     }
+    },
+    "geometry": {
+     "gap": "32px",
+     "left": 299,
+     "leftTop": 499,
+     "side": 299,
+     "sideTop": 1028,
+     "tracks": [
+      "299px"
+     ],
+     "vw": 375
+    },
+    "hScroll": false,
+    "hero": {
+     "lead": "Typically 7–15 working days after packaging is ready",
+     "meta": "Fish Oil · MOQ from 1,000 units · Lead time Typically 7–15 working days after packaging is ready",
+     "moq": "from 1,000 units"
+    },
+    "intro": "Pure Fish Oil Blend is a standard Fish Oil formula from the SINO FRESH OEM/ODM range for private-label pet supplements. Produced in a GMP-certified facility in Linyi, China and shipped with full documentation, it is ready for your own brand. Minimum order quantity: from 1,000 units. Lead time: Typically 7–15 working days after packaging is ready.",
+    "jsErrors": [],
+    "rail": {
+     "dots": 0,
+     "tocScript": false
+    },
+    "sheet": "https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/style.css?ver=2.10.54",
+    "stage": {
+     "columnWidth": 299,
+     "marginLeft": "0px",
+     "maxWidth": "none",
+     "width": 299
+    }
+   },
+   "path": "/formulas/pure-fish-oil-blend/",
+   "viewport": 375
+  },
+  {
+   "case": "joint-support-soft-chews (zh)",
+   "data": {
+    "checks": [
+     {
+      "detail": "https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/style.css?ver=2.10.54",
+      "name": "stylesheet is the one under test",
+      "ok": true
+     },
+     {
+      "name": "outer band present",
+      "ok": true
+     },
+     {
+      "name": "inner grid present",
+      "ok": true
+     },
+     {
+      "name": "left column present",
+      "ok": true
+     },
+     {
+      "name": "right column present",
+      "ok": true
+     },
+     {
+      "detail": {
+       "display": "grid",
+       "tracks": [
+        "691.188px",
+        "460.797px"
+       ]
+      },
+      "name": "two-column grid",
+      "ok": true
+     },
+     {
+      "detail": "48px",
+      "name": "column gap is 48px",
+      "ok": true
+     },
+     {
+      "detail": "1.499",
+      "name": "columns are 3fr / 2fr",
+      "ok": true
+     },
+     {
+      "detail": {
+       "leftTop": 509,
+       "sideTop": 509
+      },
+      "name": "right column starts level with the left",
+      "ok": true
+     },
+     {
+      "detail": "0px",
+      "name": "right column has no flow margin",
+      "ok": true
+     },
+     {
+      "detail": {
+       "inner": "rgba(0, 0, 0, 0)",
+       "outer": "rgb(243, 246, 244)"
+      },
+      "name": "band background stays on the outer section",
+      "ok": true
+     },
+     {
+      "detail": "none",
+      "name": "gallery stage fills its column (max-width override)",
+      "ok": true
+     },
+     {
+      "detail": "0px",
+      "name": "gallery stage is not centred inside the column",
+      "ok": true
+     },
+     {
+      "detail": {
+       "column": 691,
+       "stage": 691
+      },
+      "name": "gallery stage spans the column",
+      "ok": true
+     },
+     {
+      "detail": 4,
+      "name": "the four slides are still there",
+      "ok": true
+     },
+     {
+      "detail": 359,
+      "name": "intro paragraph present and substantial",
+      "ok": true
+     },
+     {
+      "detail": "from 500–1,000 units",
+      "name": "intro quotes the hero MOQ verbatim",
+      "ok": true
+     },
+     {
+      "detail": "Typically 7–15 working days after packaging is ready",
+      "name": "intro quotes the hero Lead time verbatim",
+      "ok": true
+     },
+     {
+      "detail": "Typically 7–15 working days after packaging is ready",
+      "name": "hero Lead time is the agreed wording",
+      "ok": true
+     },
+     {
+      "detail": {
+       "dd": 5,
+       "dt": 5
+      },
+      "name": "factsheet is a dl with matching rows",
+      "ok": true
+     },
+     {
+      "detail": {
+       "expected": [
+        "Unit size",
+        "Pack options",
+        "Shelf life",
+        "Certifications",
+        "Packaging"
+       ],
+       "got": [
+        "Unit size",
+        "Pack options",
+        "Shelf life",
+        "Certifications",
+        "Packaging"
+       ]
+      },
+      "name": "rows follow the canonical order",
+      "ok": true
+     },
+     {
+      "detail": "2g/piece",
+      "name": "Unit size is not a whole spec line",
+      "ok": true
+     },
+     {
+      "detail": "18 months shelf life",
+      "name": "Shelf life reads as a shelf-life clause",
+      "ok": true
+     },
+     {
+      "detail": "FDA, cGMP, ISO 9001, FSSC 22000, HACCP, BRC",
+      "name": "Certifications is the full set",
+      "ok": true
+     },
+     {
+      "detail": "Aluminum Stand-up Pouch, Aluminum Foil Pouch with Zipper, Plastic Bottle, Jar, Blister Pack, Box + Foil, or custom formats",
+      "name": "Packaging ends with the custom-formats clause",
+      "ok": true
+     },
+     {
+      "name": "one CTA in the right column",
+      "ok": true
+     },
+     {
+      "name": "CTA says Request Sample",
+      "ok": true
+     },
+     {
+      "detail": "/zh/contact/",
+      "name": "CTA points at the contact page of its own locale",
+      "ok": true
+     },
+     {
+      "detail": "rgb(181, 78, 15)",
+      "name": "CTA wears the cta palette colour",
+      "ok": true
+     },
+     {
+      "detail": {
+       "dots": 0,
+       "tocScript": false
+      },
+      "name": "no dot rail on formula detail pages (toc-nav not enqueued here)",
+      "ok": true
+     },
+     {
+      "detail": "A Closer Look at Joint Support Soft Chews",
+      "name": "the gallery keeps its heading",
+      "ok": true
+     },
+     {
+      "detail": [],
+      "name": "no page errors",
+      "ok": true
+     },
+     {
+      "detail": {
+       "sw": 1440,
+       "vw": 1440
+      },
+      "name": "no horizontal scroll",
+      "ok": true
+     }
+    ],
+    "cta": {
+     "bg": "rgb(181, 78, 15)",
+     "href": "/zh/contact/",
+     "text": "Request Sample"
+    },
+    "facts": {
+     "labels": [
+      "Unit size",
+      "Pack options",
+      "Shelf life",
+      "Certifications",
+      "Packaging"
+     ],
+     "values": {
+      "Certifications": "FDA, cGMP, ISO 9001, FSSC 22000, HACCP, BRC",
+      "Pack options": "60/90/120 per bottle",
+      "Packaging": "Aluminum Stand-up Pouch, Aluminum Foil Pouch with Zipper, Plastic Bottle, Jar, Blister Pack, Box + Foil, or custom formats",
+      "Shelf life": "18 months shelf life",
+      "Unit size": "2g/piece"
+     }
+    },
+    "geometry": {
+     "gap": "48px",
+     "left": 691,
+     "leftTop": 509,
+     "side": 461,
+     "sideTop": 509,
+     "tracks": [
+      "691.188px",
+      "460.797px"
+     ],
+     "vw": 1440
+    },
+    "hScroll": false,
+    "hero": {
+     "lead": "Typically 7–15 working days after packaging is ready",
+     "meta": "Soft Chews · MOQ from 500–1,000 units · Lead time Typically 7–15 working days after packaging is ready",
+     "moq": "from 500–1,000 units"
+    },
+    "intro": "Joint Support Soft Chews is a standard Soft Chews formula from the SINO FRESH OEM/ODM range for private-label pet supplements. Produced in a GMP-certified facility in Linyi, China and shipped with full documentation, it is ready for your own brand. Minimum order quantity: from 500–1,000 units. Lead time: Typically 7–15 working days after packaging is ready.",
+    "jsErrors": [],
+    "rail": {
+     "dots": 0,
+     "tocScript": false
+    },
+    "sheet": "https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/style.css?ver=2.10.54",
+    "stage": {
+     "columnWidth": 691,
+     "marginLeft": "0px",
+     "maxWidth": "none",
+     "width": 691
+    }
+   },
+   "path": "/zh/formulas/joint-support-soft-chews/",
+   "viewport": 1440
+  },
+  {
+   "case": "joint-support-soft-chews (zh)",
+   "data": {
+    "checks": [
+     {
+      "detail": "https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/style.css?ver=2.10.54",
+      "name": "stylesheet is the one under test",
+      "ok": true
+     },
+     {
+      "name": "outer band present",
+      "ok": true
+     },
+     {
+      "name": "inner grid present",
+      "ok": true
+     },
+     {
+      "name": "left column present",
+      "ok": true
+     },
+     {
+      "name": "right column present",
+      "ok": true
+     },
+     {
+      "detail": [
+       "299px"
+      ],
+      "name": "stacks to one column below 1024px",
+      "ok": true
+     },
+     {
+      "detail": "32px",
+      "name": "the gap tightens to 32px when stacked",
+      "ok": true
+     },
+     {
+      "detail": {
+       "leftTop": 554,
+       "sideTop": 1082
+      },
+      "name": "the right column falls below the left",
+      "ok": true
+     },
+     {
+      "detail": {
+       "inner": "rgba(0, 0, 0, 0)",
+       "outer": "rgb(243, 246, 244)"
+      },
+      "name": "band background stays on the outer section",
+      "ok": true
+     },
+     {
+      "detail": "none",
+      "name": "gallery stage fills its column (max-width override)",
+      "ok": true
+     },
+     {
+      "detail": "0px",
+      "name": "gallery stage is not centred inside the column",
+      "ok": true
+     },
+     {
+      "detail": {
+       "column": 299,
+       "stage": 299
+      },
+      "name": "gallery stage spans the column",
+      "ok": true
+     },
+     {
+      "detail": 4,
+      "name": "the four slides are still there",
+      "ok": true
+     },
+     {
+      "detail": 359,
+      "name": "intro paragraph present and substantial",
+      "ok": true
+     },
+     {
+      "detail": "from 500–1,000 units",
+      "name": "intro quotes the hero MOQ verbatim",
+      "ok": true
+     },
+     {
+      "detail": "Typically 7–15 working days after packaging is ready",
+      "name": "intro quotes the hero Lead time verbatim",
+      "ok": true
+     },
+     {
+      "detail": "Typically 7–15 working days after packaging is ready",
+      "name": "hero Lead time is the agreed wording",
+      "ok": true
+     },
+     {
+      "detail": {
+       "dd": 5,
+       "dt": 5
+      },
+      "name": "factsheet is a dl with matching rows",
+      "ok": true
+     },
+     {
+      "detail": {
+       "expected": [
+        "Unit size",
+        "Pack options",
+        "Shelf life",
+        "Certifications",
+        "Packaging"
+       ],
+       "got": [
+        "Unit size",
+        "Pack options",
+        "Shelf life",
+        "Certifications",
+        "Packaging"
+       ]
+      },
+      "name": "rows follow the canonical order",
+      "ok": true
+     },
+     {
+      "detail": "2g/piece",
+      "name": "Unit size is not a whole spec line",
+      "ok": true
+     },
+     {
+      "detail": "18 months shelf life",
+      "name": "Shelf life reads as a shelf-life clause",
+      "ok": true
+     },
+     {
+      "detail": "FDA, cGMP, ISO 9001, FSSC 22000, HACCP, BRC",
+      "name": "Certifications is the full set",
+      "ok": true
+     },
+     {
+      "detail": "Aluminum Stand-up Pouch, Aluminum Foil Pouch with Zipper, Plastic Bottle, Jar, Blister Pack, Box + Foil, or custom formats",
+      "name": "Packaging ends with the custom-formats clause",
+      "ok": true
+     },
+     {
+      "name": "one CTA in the right column",
+      "ok": true
+     },
+     {
+      "name": "CTA says Request Sample",
+      "ok": true
+     },
+     {
+      "detail": "/zh/contact/",
+      "name": "CTA points at the contact page of its own locale",
+      "ok": true
+     },
+     {
+      "detail": "rgb(181, 78, 15)",
+      "name": "CTA wears the cta palette colour",
+      "ok": true
+     },
+     {
+      "detail": {
+       "dots": 0,
+       "tocScript": false
+      },
+      "name": "no dot rail on formula detail pages (toc-nav not enqueued here)",
+      "ok": true
+     },
+     {
+      "detail": "A Closer Look at Joint Support Soft Chews",
+      "name": "the gallery keeps its heading",
+      "ok": true
+     },
+     {
+      "detail": [],
+      "name": "no page errors",
+      "ok": true
+     },
+     {
+      "detail": {
+       "sw": 375,
+       "vw": 375
+      },
+      "name": "no horizontal scroll",
+      "ok": true
+     }
+    ],
+    "cta": {
+     "bg": "rgb(181, 78, 15)",
+     "href": "/zh/contact/",
+     "text": "Request Sample"
+    },
+    "facts": {
+     "labels": [
+      "Unit size",
+      "Pack options",
+      "Shelf life",
+      "Certifications",
+      "Packaging"
+     ],
+     "values": {
+      "Certifications": "FDA, cGMP, ISO 9001, FSSC 22000, HACCP, BRC",
+      "Pack options": "60/90/120 per bottle",
+      "Packaging": "Aluminum Stand-up Pouch, Aluminum Foil Pouch with Zipper, Plastic Bottle, Jar, Blister Pack, Box + Foil, or custom formats",
+      "Shelf life": "18 months shelf life",
+      "Unit size": "2g/piece"
+     }
+    },
+    "geometry": {
+     "gap": "32px",
+     "left": 299,
+     "leftTop": 554,
+     "side": 299,
+     "sideTop": 1082,
+     "tracks": [
+      "299px"
+     ],
+     "vw": 375
+    },
+    "hScroll": false,
+    "hero": {
+     "lead": "Typically 7–15 working days after packaging is ready",
+     "meta": "Soft Chews · MOQ from 500–1,000 units · Lead time Typically 7–15 working days after packaging is ready",
+     "moq": "from 500–1,000 units"
+    },
+    "intro": "Joint Support Soft Chews is a standard Soft Chews formula from the SINO FRESH OEM/ODM range for private-label pet supplements. Produced in a GMP-certified facility in Linyi, China and shipped with full documentation, it is ready for your own brand. Minimum order quantity: from 500–1,000 units. Lead time: Typically 7–15 working days after packaging is ready.",
+    "jsErrors": [],
+    "rail": {
+     "dots": 0,
+     "tocScript": false
+    },
+    "sheet": "https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/style.css?ver=2.10.54",
+    "stage": {
+     "columnWidth": 299,
+     "marginLeft": "0px",
+     "maxWidth": "none",
+     "width": 299
+    }
+   },
+   "path": "/zh/formulas/joint-support-soft-chews/",
+   "viewport": 375
+  },
+  {
+   "case": "joint-support-soft-chews @768",
+   "data": {
+    "checks": [
+     {
+      "detail": [
+       "692px"
+      ],
+      "name": "stacks to one column",
+      "ok": true
+     },
+     {
+      "detail": {
+       "leftBottom": 1303,
+       "leftWidth": 692,
+       "sideTop": 1335,
+       "sideWidth": 692,
+       "tracks": [
+        "692px"
+       ]
+      },
+      "name": "right column sits below the left",
+      "ok": true
+     },
+     {
+      "detail": {
+       "leftBottom": 1303,
+       "leftWidth": 692,
+       "sideTop": 1335,
+       "sideWidth": 692,
+       "tracks": [
+        "692px"
+       ]
+      },
+      "name": "both columns use the full width",
+      "ok": true
+     },
+     {
+      "detail": {
+       "sw": 768
+      },
+      "name": "no horizontal scroll when stacked",
+      "ok": true
+     }
+    ],
+    "geometry": {
+     "leftBottom": 1303,
+     "leftWidth": 692,
+     "sideTop": 1335,
+     "sideWidth": 692,
+     "tracks": [
+      "692px"
+     ]
+    },
+    "hScroll": false,
+    "sheet": "https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/style.css?ver=2.10.54"
+   },
+   "path": "/formulas/joint-support-soft-chews/",
+   "viewport": 768
+  },
+  {
+   "case": "soft-chews",
+   "data": {
+    "checks": [
+     {
+      "detail": "https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/style.css?ver=2.10.54",
+      "name": "stylesheet is the one under test",
+      "ok": true
+     },
+     {
+      "name": "the facts band is there",
+      "ok": true
+     },
+     {
+      "name": "band still carries no heading",
+      "ok": true
+     },
+     {
+      "detail": 4,
+      "name": "four labelled values now",
+      "ok": true
+     },
+     {
+      "detail": [
+       "MOQ",
+       "Lead time",
+       "Certifications",
+       "Packaging formats"
+      ],
+      "name": "the fourth one is Packaging formats",
+      "ok": true
+     },
+     {
+      "detail": "Aluminum Stand-up Pouch, Aluminum Foil Pouch with Zipper, Plastic Bottle, Jar, Blister Pack, Box + Foil, or custom formats",
+      "name": "Packaging ends with the custom-formats clause",
+      "ok": true
+     },
+     {
+      "detail": "FDA, cGMP, ISO 9001, FSSC 22000, HACCP, BRC",
+      "name": "Certifications is the full set",
+      "ok": true
+     },
+     {
+      "detail": [
+       "MOQ",
+       "Lead time",
+       "Certifications",
+       "Packaging formats"
+      ],
+      "name": "the first three labels are unchanged",
+      "ok": true
+     },
+     {
+      "detail": 4,
+      "name": "all four items are rendered",
+      "ok": true
+     },
+     {
+      "detail": {
+       "bandHeight": 55,
+       "items": 4,
+       "rows": 2,
+       "tops": [
+        473,
+        473,
+        473,
+        505
+       ],
+       "vw": 1440
+      },
+      "name": "the band wraps to at most two rows on desktop",
+      "ok": true
+     },
+     {
+      "detail": 6,
+      "name": "dot rail still 6",
+      "ok": true
+     },
+     {
+      "detail": {
+       "dots": 6,
+       "hs": 6
+      },
+      "name": "rail self-consistent (dots == h2)",
+      "ok": true
+     },
+     {
+      "detail": [],
+      "name": "no page errors",
+      "ok": true
+     },
+     {
+      "detail": {
+       "sw": 1440,
+       "vw": 1440
+      },
+      "name": "no horizontal scroll",
+      "ok": true
+     }
+    ],
+    "hScroll": false,
+    "jsErrors": [],
+    "rail": {
+     "dots": 6,
+     "h2": 6
+    },
+    "sheet": "https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/style.css?ver=2.10.54",
+    "values": {
+     "Certifications": "FDA, cGMP, ISO 9001, FSSC 22000, HACCP, BRC",
+     "Lead time": "Typically 7–15 working days after packaging is ready",
+     "MOQ": "from 500–1,000 units",
+     "Packaging formats": "Aluminum Stand-up Pouch, Aluminum Foil Pouch with Zipper, Plastic Bottle, Jar, Blister Pack, Box + Foil, or custom formats"
+    },
+    "wrap": {
+     "bandHeight": 55,
+     "items": 4,
+     "rows": 2,
+     "tops": [
+      473,
+      473,
+      473,
+      505
+     ],
+     "vw": 1440
+    }
+   },
+   "path": "/products/soft-chews/",
+   "viewport": 1440
+  },
+  {
+   "case": "tablets",
+   "data": {
+    "checks": [
+     {
+      "detail": "https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/style.css?ver=2.10.54",
+      "name": "stylesheet is the one under test",
+      "ok": true
+     },
+     {
+      "name": "the facts band is there",
+      "ok": true
+     },
+     {
+      "name": "band still carries no heading",
+      "ok": true
+     },
+     {
+      "detail": 4,
+      "name": "four labelled values now",
+      "ok": true
+     },
+     {
+      "detail": [
+       "MOQ",
+       "Lead time",
+       "Certifications",
+       "Packaging formats"
+      ],
+      "name": "the fourth one is Packaging formats",
+      "ok": true
+     },
+     {
+      "detail": "Plastic Bottle, Jar, Blister Pack, Foil Pouch, or custom formats",
+      "name": "Packaging ends with the custom-formats clause",
+      "ok": true
+     },
+     {
+      "detail": "FDA, cGMP, ISO 9001, FSSC 22000, HACCP, BRC",
+      "name": "Certifications is the full set",
+      "ok": true
+     },
+     {
+      "detail": [
+       "MOQ",
+       "Lead time",
+       "Certifications",
+       "Packaging formats"
+      ],
+      "name": "the first three labels are unchanged",
+      "ok": true
+     },
+     {
+      "detail": 4,
+      "name": "all four items are rendered",
+      "ok": true
+     },
+     {
+      "detail": {
+       "bandHeight": 55,
+       "items": 4,
+       "rows": 2,
+       "tops": [
+        473,
+        473,
+        473,
+        505
+       ],
+       "vw": 1440
+      },
+      "name": "the band wraps to at most two rows on desktop",
+      "ok": true
+     },
+     {
+      "detail": 6,
+      "name": "dot rail still 6",
+      "ok": true
+     },
+     {
+      "detail": {
+       "dots": 6,
+       "hs": 6
+      },
+      "name": "rail self-consistent (dots == h2)",
+      "ok": true
+     },
+     {
+      "detail": [],
+      "name": "no page errors",
+      "ok": true
+     },
+     {
+      "detail": {
+       "sw": 1440,
+       "vw": 1440
+      },
+      "name": "no horizontal scroll",
+      "ok": true
+     }
+    ],
+    "hScroll": false,
+    "jsErrors": [],
+    "rail": {
+     "dots": 6,
+     "h2": 6
+    },
+    "sheet": "https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/style.css?ver=2.10.54",
+    "values": {
+     "Certifications": "FDA, cGMP, ISO 9001, FSSC 22000, HACCP, BRC",
+     "Lead time": "Typically 7–15 working days after packaging is ready",
+     "MOQ": "from 1,000 units",
+     "Packaging formats": "Plastic Bottle, Jar, Blister Pack, Foil Pouch, or custom formats"
+    },
+    "wrap": {
+     "bandHeight": 55,
+     "items": 4,
+     "rows": 2,
+     "tops": [
+      473,
+      473,
+      473,
+      505
+     ],
+     "vw": 1440
+    }
+   },
+   "path": "/products/tablets/",
+   "viewport": 1440
+  },
+  {
+   "case": "powders",
+   "data": {
+    "checks": [
+     {
+      "detail": "https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/style.css?ver=2.10.54",
+      "name": "stylesheet is the one under test",
+      "ok": true
+     },
+     {
+      "name": "the facts band is there",
+      "ok": true
+     },
+     {
+      "name": "band still carries no heading",
+      "ok": true
+     },
+     {
+      "detail": 4,
+      "name": "four labelled values now",
+      "ok": true
+     },
+     {
+      "detail": [
+       "MOQ",
+       "Lead time",
+       "Certifications",
+       "Packaging formats"
+      ],
+      "name": "the fourth one is Packaging formats",
+      "ok": true
+     },
+     {
+      "detail": "Jar, Foil Pouch, Stand-up Pouch, or custom formats",
+      "name": "Packaging ends with the custom-formats clause",
+      "ok": true
+     },
+     {
+      "detail": "FDA, cGMP, ISO 9001, FSSC 22000, HACCP, BRC",
+      "name": "Certifications is the full set",
+      "ok": true
+     },
+     {
+      "detail": [
+       "MOQ",
+       "Lead time",
+       "Certifications",
+       "Packaging formats"
+      ],
+      "name": "the first three labels are unchanged",
+      "ok": true
+     },
+     {
+      "detail": 4,
+      "name": "all four items are rendered",
+      "ok": true
+     },
+     {
+      "detail": {
+       "bandHeight": 55,
+       "items": 4,
+       "rows": 2,
+       "tops": [
+        473,
+        473,
+        473,
+        505
+       ],
+       "vw": 1440
+      },
+      "name": "the band wraps to at most two rows on desktop",
+      "ok": true
+     },
+     {
+      "detail": 6,
+      "name": "dot rail still 6",
+      "ok": true
+     },
+     {
+      "detail": {
+       "dots": 6,
+       "hs": 6
+      },
+      "name": "rail self-consistent (dots == h2)",
+      "ok": true
+     },
+     {
+      "detail": [],
+      "name": "no page errors",
+      "ok": true
+     },
+     {
+      "detail": {
+       "sw": 1440,
+       "vw": 1440
+      },
+      "name": "no horizontal scroll",
+      "ok": true
+     }
+    ],
+    "hScroll": false,
+    "jsErrors": [],
+    "rail": {
+     "dots": 6,
+     "h2": 6
+    },
+    "sheet": "https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/style.css?ver=2.10.54",
+    "values": {
+     "Certifications": "FDA, cGMP, ISO 9001, FSSC 22000, HACCP, BRC",
+     "Lead time": "Typically 7–15 working days after packaging is ready",
+     "MOQ": "from 500 units",
+     "Packaging formats": "Jar, Foil Pouch, Stand-up Pouch, or custom formats"
+    },
+    "wrap": {
+     "bandHeight": 55,
+     "items": 4,
+     "rows": 2,
+     "tops": [
+      473,
+      473,
+      473,
+      505
+     ],
+     "vw": 1440
+    }
+   },
+   "path": "/products/powders/",
+   "viewport": 1440
+  },
+  {
+   "case": "pastes",
+   "data": {
+    "checks": [
+     {
+      "detail": "https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/style.css?ver=2.10.54",
+      "name": "stylesheet is the one under test",
+      "ok": true
+     },
+     {
+      "name": "the facts band is there",
+      "ok": true
+     },
+     {
+      "name": "band still carries no heading",
+      "ok": true
+     },
+     {
+      "detail": 4,
+      "name": "four labelled values now",
+      "ok": true
+     },
+     {
+      "detail": [
+       "MOQ",
+       "Lead time",
+       "Certifications",
+       "Packaging formats"
+      ],
+      "name": "the fourth one is Packaging formats",
+      "ok": true
+     },
+     {
+      "detail": "Plastic Tube, Metal Tube, Aluminum Tube, or custom formats",
+      "name": "Packaging ends with the custom-formats clause",
+      "ok": true
+     },
+     {
+      "detail": "FDA, cGMP, ISO 9001, FSSC 22000, HACCP, BRC",
+      "name": "Certifications is the full set",
+      "ok": true
+     },
+     {
+      "detail": [
+       "MOQ",
+       "Lead time",
+       "Certifications",
+       "Packaging formats"
+      ],
+      "name": "the first three labels are unchanged",
+      "ok": true
+     },
+     {
+      "detail": 4,
+      "name": "all four items are rendered",
+      "ok": true
+     },
+     {
+      "detail": {
+       "bandHeight": 55,
+       "items": 4,
+       "rows": 2,
+       "tops": [
+        473,
+        473,
+        473,
+        505
+       ],
+       "vw": 1440
+      },
+      "name": "the band wraps to at most two rows on desktop",
+      "ok": true
+     },
+     {
+      "detail": 6,
+      "name": "dot rail still 6",
+      "ok": true
+     },
+     {
+      "detail": {
+       "dots": 6,
+       "hs": 6
+      },
+      "name": "rail self-consistent (dots == h2)",
+      "ok": true
+     },
+     {
+      "detail": [],
+      "name": "no page errors",
+      "ok": true
+     },
+     {
+      "detail": {
+       "sw": 1440,
+       "vw": 1440
+      },
+      "name": "no horizontal scroll",
+      "ok": true
+     }
+    ],
+    "hScroll": false,
+    "jsErrors": [],
+    "rail": {
+     "dots": 6,
+     "h2": 6
+    },
+    "sheet": "https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/style.css?ver=2.10.54",
+    "values": {
+     "Certifications": "FDA, cGMP, ISO 9001, FSSC 22000, HACCP, BRC",
+     "Lead time": "Typically 7–15 working days after packaging is ready",
+     "MOQ": "from 500 units",
+     "Packaging formats": "Plastic Tube, Metal Tube, Aluminum Tube, or custom formats"
+    },
+    "wrap": {
+     "bandHeight": 55,
+     "items": 4,
+     "rows": 2,
+     "tops": [
+      473,
+      473,
+      473,
+      505
+     ],
+     "vw": 1440
+    }
+   },
+   "path": "/products/pastes/",
+   "viewport": 1440
+  },
+  {
+   "case": "drops",
+   "data": {
+    "checks": [
+     {
+      "detail": "https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/style.css?ver=2.10.54",
+      "name": "stylesheet is the one under test",
+      "ok": true
+     },
+     {
+      "name": "the facts band is there",
+      "ok": true
+     },
+     {
+      "name": "band still carries no heading",
+      "ok": true
+     },
+     {
+      "detail": 4,
+      "name": "four labelled values now",
+      "ok": true
+     },
+     {
+      "detail": [
+       "MOQ",
+       "Lead time",
+       "Certifications",
+       "Packaging formats"
+      ],
+      "name": "the fourth one is Packaging formats",
+      "ok": true
+     },
+     {
+      "detail": "Dropper Bottle, Glass Bottle, Plastic Bottle, or custom formats",
+      "name": "Packaging ends with the custom-formats clause",
+      "ok": true
+     },
+     {
+      "detail": "FDA, cGMP, ISO 9001, FSSC 22000, HACCP, BRC",
+      "name": "Certifications is the full set",
+      "ok": true
+     },
+     {
+      "detail": [
+       "MOQ",
+       "Lead time",
+       "Certifications",
+       "Packaging formats"
+      ],
+      "name": "the first three labels are unchanged",
+      "ok": true
+     },
+     {
+      "detail": 4,
+      "name": "all four items are rendered",
+      "ok": true
+     },
+     {
+      "detail": {
+       "bandHeight": 55,
+       "items": 4,
+       "rows": 2,
+       "tops": [
+        473,
+        473,
+        473,
+        505
+       ],
+       "vw": 1440
+      },
+      "name": "the band wraps to at most two rows on desktop",
+      "ok": true
+     },
+     {
+      "detail": 6,
+      "name": "dot rail still 6",
+      "ok": true
+     },
+     {
+      "detail": {
+       "dots": 6,
+       "hs": 6
+      },
+      "name": "rail self-consistent (dots == h2)",
+      "ok": true
+     },
+     {
+      "detail": [],
+      "name": "no page errors",
+      "ok": true
+     },
+     {
+      "detail": {
+       "sw": 1440,
+       "vw": 1440
+      },
+      "name": "no horizontal scroll",
+      "ok": true
+     }
+    ],
+    "hScroll": false,
+    "jsErrors": [],
+    "rail": {
+     "dots": 6,
+     "h2": 6
+    },
+    "sheet": "https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/style.css?ver=2.10.54",
+    "values": {
+     "Certifications": "FDA, cGMP, ISO 9001, FSSC 22000, HACCP, BRC",
+     "Lead time": "Typically 7–15 working days after packaging is ready",
+     "MOQ": "from 500 units",
+     "Packaging formats": "Dropper Bottle, Glass Bottle, Plastic Bottle, or custom formats"
+    },
+    "wrap": {
+     "bandHeight": 55,
+     "items": 4,
+     "rows": 2,
+     "tops": [
+      473,
+      473,
+      473,
+      505
+     ],
+     "vw": 1440
+    }
+   },
+   "path": "/products/drops/",
+   "viewport": 1440
+  },
+  {
+   "case": "liquids",
+   "data": {
+    "checks": [
+     {
+      "detail": "https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/style.css?ver=2.10.54",
+      "name": "stylesheet is the one under test",
+      "ok": true
+     },
+     {
+      "name": "the facts band is there",
+      "ok": true
+     },
+     {
+      "name": "band still carries no heading",
+      "ok": true
+     },
+     {
+      "detail": 4,
+      "name": "four labelled values now",
+      "ok": true
+     },
+     {
+      "detail": [
+       "MOQ",
+       "Lead time",
+       "Certifications",
+       "Packaging formats"
+      ],
+      "name": "the fourth one is Packaging formats",
+      "ok": true
+     },
+     {
+      "detail": "Plastic Bottle, Glass Bottle, Bottle with Cup, or custom formats",
+      "name": "Packaging ends with the custom-formats clause",
+      "ok": true
+     },
+     {
+      "detail": "FDA, cGMP, ISO 9001, FSSC 22000, HACCP, BRC",
+      "name": "Certifications is the full set",
+      "ok": true
+     },
+     {
+      "detail": [
+       "MOQ",
+       "Lead time",
+       "Certifications",
+       "Packaging formats"
+      ],
+      "name": "the first three labels are unchanged",
+      "ok": true
+     },
+     {
+      "detail": 4,
+      "name": "all four items are rendered",
+      "ok": true
+     },
+     {
+      "detail": {
+       "bandHeight": 55,
+       "items": 4,
+       "rows": 2,
+       "tops": [
+        473,
+        473,
+        473,
+        505
+       ],
+       "vw": 1440
+      },
+      "name": "the band wraps to at most two rows on desktop",
+      "ok": true
+     },
+     {
+      "detail": 6,
+      "name": "dot rail still 6",
+      "ok": true
+     },
+     {
+      "detail": {
+       "dots": 6,
+       "hs": 6
+      },
+      "name": "rail self-consistent (dots == h2)",
+      "ok": true
+     },
+     {
+      "detail": [],
+      "name": "no page errors",
+      "ok": true
+     },
+     {
+      "detail": {
+       "sw": 1440,
+       "vw": 1440
+      },
+      "name": "no horizontal scroll",
+      "ok": true
+     }
+    ],
+    "hScroll": false,
+    "jsErrors": [],
+    "rail": {
+     "dots": 6,
+     "h2": 6
+    },
+    "sheet": "https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/style.css?ver=2.10.54",
+    "values": {
+     "Certifications": "FDA, cGMP, ISO 9001, FSSC 22000, HACCP, BRC",
+     "Lead time": "Typically 7–15 working days after packaging is ready",
+     "MOQ": "from 500 units",
+     "Packaging formats": "Plastic Bottle, Glass Bottle, Bottle with Cup, or custom formats"
+    },
+    "wrap": {
+     "bandHeight": 55,
+     "items": 4,
+     "rows": 2,
+     "tops": [
+      473,
+      473,
+      473,
+      505
+     ],
+     "vw": 1440
+    }
+   },
+   "path": "/products/liquids/",
+   "viewport": 1440
+  },
+  {
+   "case": "fish-oil",
+   "data": {
+    "checks": [
+     {
+      "detail": "https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/style.css?ver=2.10.54",
+      "name": "stylesheet is the one under test",
+      "ok": true
+     },
+     {
+      "name": "the facts band is there",
+      "ok": true
+     },
+     {
+      "name": "band still carries no heading",
+      "ok": true
+     },
+     {
+      "detail": 4,
+      "name": "four labelled values now",
+      "ok": true
+     },
+     {
+      "detail": [
+       "MOQ",
+       "Lead time",
+       "Certifications",
+       "Packaging formats"
+      ],
+      "name": "the fourth one is Packaging formats",
+      "ok": true
+     },
+     {
+      "detail": "Plastic Bottle, Glass Bottle, Pump Bottle, or custom formats",
+      "name": "Packaging ends with the custom-formats clause",
+      "ok": true
+     },
+     {
+      "detail": "FDA, cGMP, ISO 9001, FSSC 22000, HACCP, BRC",
+      "name": "Certifications is the full set",
+      "ok": true
+     },
+     {
+      "detail": [
+       "MOQ",
+       "Lead time",
+       "Certifications",
+       "Packaging formats"
+      ],
+      "name": "the first three labels are unchanged",
+      "ok": true
+     },
+     {
+      "detail": 4,
+      "name": "all four items are rendered",
+      "ok": true
+     },
+     {
+      "detail": {
+       "bandHeight": 55,
+       "items": 4,
+       "rows": 2,
+       "tops": [
+        473,
+        473,
+        473,
+        505
+       ],
+       "vw": 1440
+      },
+      "name": "the band wraps to at most two rows on desktop",
+      "ok": true
+     },
+     {
+      "detail": 6,
+      "name": "dot rail still 6",
+      "ok": true
+     },
+     {
+      "detail": {
+       "dots": 6,
+       "hs": 6
+      },
+      "name": "rail self-consistent (dots == h2)",
+      "ok": true
+     },
+     {
+      "detail": [],
+      "name": "no page errors",
+      "ok": true
+     },
+     {
+      "detail": {
+       "sw": 1440,
+       "vw": 1440
+      },
+      "name": "no horizontal scroll",
+      "ok": true
+     }
+    ],
+    "hScroll": false,
+    "jsErrors": [],
+    "rail": {
+     "dots": 6,
+     "h2": 6
+    },
+    "sheet": "https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/style.css?ver=2.10.54",
+    "values": {
+     "Certifications": "FDA, cGMP, ISO 9001, FSSC 22000, HACCP, BRC",
+     "Lead time": "Typically 7–15 working days after packaging is ready",
+     "MOQ": "from 1,000 units",
+     "Packaging formats": "Plastic Bottle, Glass Bottle, Pump Bottle, or custom formats"
+    },
+    "wrap": {
+     "bandHeight": 55,
+     "items": 4,
+     "rows": 2,
+     "tops": [
+      473,
+      473,
+      473,
+      505
+     ],
+     "vw": 1440
+    }
+   },
+   "path": "/products/fish-oil/",
+   "viewport": 1440
+  },
+  {
+   "case": "dental-chews",
+   "data": {
+    "checks": [
+     {
+      "detail": "https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/style.css?ver=2.10.54",
+      "name": "stylesheet is the one under test",
+      "ok": true
+     },
+     {
+      "name": "the facts band is there",
+      "ok": true
+     },
+     {
+      "name": "band still carries no heading",
+      "ok": true
+     },
+     {
+      "detail": 4,
+      "name": "four labelled values now",
+      "ok": true
+     },
+     {
+      "detail": [
+       "MOQ",
+       "Lead time",
+       "Certifications",
+       "Packaging formats"
+      ],
+      "name": "the fourth one is Packaging formats",
+      "ok": true
+     },
+     {
+      "detail": "Foil Pouch, Stand-up Pouch, Box, or custom formats",
+      "name": "Packaging ends with the custom-formats clause",
+      "ok": true
+     },
+     {
+      "detail": "FDA, cGMP, ISO 9001, FSSC 22000, HACCP, BRC",
+      "name": "Certifications is the full set",
+      "ok": true
+     },
+     {
+      "detail": [
+       "MOQ",
+       "Lead time",
+       "Certifications",
+       "Packaging formats"
+      ],
+      "name": "the first three labels are unchanged",
+      "ok": true
+     },
+     {
+      "detail": 4,
+      "name": "all four items are rendered",
+      "ok": true
+     },
+     {
+      "detail": {
+       "bandHeight": 55,
+       "items": 4,
+       "rows": 2,
+       "tops": [
+        473,
+        473,
+        473,
+        505
+       ],
+       "vw": 1440
+      },
+      "name": "the band wraps to at most two rows on desktop",
+      "ok": true
+     },
+     {
+      "detail": 6,
+      "name": "dot rail still 6",
+      "ok": true
+     },
+     {
+      "detail": {
+       "dots": 6,
+       "hs": 6
+      },
+      "name": "rail self-consistent (dots == h2)",
+      "ok": true
+     },
+     {
+      "detail": [],
+      "name": "no page errors",
+      "ok": true
+     },
+     {
+      "detail": {
+       "sw": 1440,
+       "vw": 1440
+      },
+      "name": "no horizontal scroll",
+      "ok": true
+     }
+    ],
+    "hScroll": false,
+    "jsErrors": [],
+    "rail": {
+     "dots": 6,
+     "h2": 6
+    },
+    "sheet": "https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/style.css?ver=2.10.54",
+    "values": {
+     "Certifications": "FDA, cGMP, ISO 9001, FSSC 22000, HACCP, BRC",
+     "Lead time": "Typically 7–15 working days after packaging is ready",
+     "MOQ": "from 1,000 units",
+     "Packaging formats": "Foil Pouch, Stand-up Pouch, Box, or custom formats"
+    },
+    "wrap": {
+     "bandHeight": 55,
+     "items": 4,
+     "rows": 2,
+     "tops": [
+      473,
+      473,
+      473,
+      505
+     ],
+     "vw": 1440
+    }
+   },
+   "path": "/products/dental-chews/",
+   "viewport": 1440
+  },
+  {
+   "case": "soft-chews @375",
+   "data": {
+    "checks": [
+     {
+      "detail": "https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/style.css?ver=2.10.54",
+      "name": "stylesheet is the one under test",
+      "ok": true
+     },
+     {
+      "name": "the facts band is there",
+      "ok": true
+     },
+     {
+      "name": "band still carries no heading",
+      "ok": true
+     },
+     {
+      "detail": 4,
+      "name": "four labelled values now",
+      "ok": true
+     },
+     {
+      "detail": [
+       "MOQ",
+       "Lead time",
+       "Certifications",
+       "Packaging formats"
+      ],
+      "name": "the fourth one is Packaging formats",
+      "ok": true
+     },
+     {
+      "detail": "Aluminum Stand-up Pouch, Aluminum Foil Pouch with Zipper, Plastic Bottle, Jar, Blister Pack, Box + Foil, or custom formats",
+      "name": "Packaging ends with the custom-formats clause",
+      "ok": true
+     },
+     {
+      "detail": "FDA, cGMP, ISO 9001, FSSC 22000, HACCP, BRC",
+      "name": "Certifications is the full set",
+      "ok": true
+     },
+     {
+      "detail": [
+       "MOQ",
+       "Lead time",
+       "Certifications",
+       "Packaging formats"
+      ],
+      "name": "the first three labels are unchanged",
+      "ok": true
+     },
+     {
+      "detail": 4,
+      "name": "all four items are rendered",
+      "ok": true
+     },
+     {
+      "detail": {
+       "bandHeight": 289,
+       "items": 4,
+       "rows": 4,
+       "tops": [
+        615,
+        677,
+        738,
+        800
+       ],
+       "vw": 375
+      },
+      "name": "every item is on its own line when narrow",
+      "ok": true
+     },
+     {
+      "detail": 6,
+      "name": "dot rail still 6",
+      "ok": true
+     },
+     {
+      "detail": {
+       "dots": 6,
+       "hs": 6
+      },
+      "name": "rail self-consistent (dots == h2)",
+      "ok": true
+     },
+     {
+      "detail": [],
+      "name": "no page errors",
+      "ok": true
+     },
+     {
+      "detail": {
+       "sw": 375,
+       "vw": 375
+      },
+      "name": "no horizontal scroll",
+      "ok": true
+     }
+    ],
+    "hScroll": false,
+    "jsErrors": [],
+    "rail": {
+     "dots": 6,
+     "h2": 6
+    },
+    "sheet": "https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/style.css?ver=2.10.54",
+    "values": {
+     "Certifications": "FDA, cGMP, ISO 9001, FSSC 22000, HACCP, BRC",
+     "Lead time": "Typically 7–15 working days after packaging is ready",
+     "MOQ": "from 500–1,000 units",
+     "Packaging formats": "Aluminum Stand-up Pouch, Aluminum Foil Pouch with Zipper, Plastic Bottle, Jar, Blister Pack, Box + Foil, or custom formats"
+    },
+    "wrap": {
+     "bandHeight": 289,
+     "items": 4,
+     "rows": 4,
+     "tops": [
+      615,
+      677,
+      738,
+      800
+     ],
+     "vw": 375
+    }
+   },
+   "path": "/products/soft-chews/",
+   "viewport": 375
+  },
+  {
+   "case": "rail detail, live vs test",
+   "data": {
+    "cand": {
+     "dots": 0,
+     "h2": 5,
+     "sheet": "https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/style.css?ver=2.10.54",
+     "tocScript": false
+    },
+    "live": {
+     "dots": 0,
+     "h2": 5,
+     "sheet": "https://dev.zxpet.com/wp-content/themes/sinofresh-theme/style.css?ver=2.10.53",
+     "tocScript": false
+    }
+   },
+   "path": "/formulas/joint-support-soft-chews/",
+   "viewport": 1440
+  },
+  {
+   "case": "rail dosage, live vs test",
+   "data": {
+    "cand": {
+     "dots": 6,
+     "h2": 6,
+     "sheet": "https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/style.css?ver=2.10.54",
+     "tocScript": true
+    },
+    "live": {
+     "dots": 6,
+     "h2": 6,
+     "sheet": "https://dev.zxpet.com/wp-content/themes/sinofresh-theme/style.css?ver=2.10.53",
+     "tocScript": true
+    }
+   },
+   "path": "/products/soft-chews/",
+   "viewport": 1440
+  }
+ ],
+ "checks": 340,
+ "failures": 0,
+ "preflight": true,
+ "site": "https://dev.zxpet.com"
+}
