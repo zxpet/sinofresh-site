@@ -28,14 +28,12 @@ add_action('after_setup_theme', function() {
 });
 
 add_action('wp_enqueue_scripts', function() {
-	wp_enqueue_style('sinofresh-style', get_stylesheet_uri(), array(), '2.10.66');
+	wp_enqueue_style('sinofresh-style', get_stylesheet_uri(), array(), '2.10.67');
 	// Sticky nav: every template renders parts/header.html, so this is site-wide.
 	wp_enqueue_script('sinofresh-sticky-header', get_template_directory_uri() . '/assets/js/sticky-header.js', array(), '1.0.0', true);
 	wp_enqueue_script('sinofresh-ui-components', get_template_directory_uri() . '/assets/js/ui-components.js', array(), '1.0.0', true);
 	// Mobile nav: collapse the overlay's submenus until their chevron is tapped.
 	wp_enqueue_script('sinofresh-mobile-nav', get_template_directory_uri() . '/assets/js/mobile-nav.js', array(), '1.1.0', true);
-	// Inquiry basket storage API + header bag/badge/drawer UI — global by design.
-	wp_enqueue_script('sinofresh-basket', get_template_directory_uri() . '/assets/js/basket.js', array(), '1.3.0', true);
 	// Quote CTA smart scroll: in-page form -> smooth scroll, else native /contact/#quote.
 	wp_enqueue_script('sinofresh-quote-cta', get_template_directory_uri() . '/assets/js/quote-cta.js', array(), '1.0.0', true);
 	/* Inquiry dialog (batch H4): the capsule is rendered by [sf_inquiry_button]
@@ -3067,8 +3065,9 @@ add_shortcode('sf_formula_sampling', 'sinofresh_formula_sampling');
  * Four decisions (user, 2026-09-22) shape it. All four exist because batch
  * H2b2 deleted the configurator:
  *
- *   1. "Your Selection" is the record being read, not a basket. Nothing calls
- *      SFBasket.add() any more — its only caller was configurator.js — and a
+ *   1. "Your Selection" is the record being read, not a basket. Nothing called
+ *      SFBasket.add() any more — its only caller was configurator.js (batch
+ *      H7f has since deleted that API and its UI outright) — and a
  *      detail page has no control to tick, so the dialog renders this
  *      record's own Flavor / Piece Weight / Pack Size / Suitable For /
  *      Life Stage / Quantity & Pricing from the SAME meta the parameter band

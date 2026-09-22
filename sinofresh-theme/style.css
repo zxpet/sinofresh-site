@@ -2,7 +2,7 @@
 Theme Name: SINO FRESH
 Author: Shandong SINO FRESH Pet Food Co., Ltd.
 Text Domain: sinofresh
-Version: 2.10.66
+Version: 2.10.67
 Requires at least: 6.0
 Requires PHP: 7.4
 License: GNU General Public License v2 or later
@@ -2171,20 +2171,21 @@ body.admin-bar .sf-header.is-sticky {
 		flex-wrap: nowrap;
 		align-items: center;
 	}
-	/* Hide only the Get a Quote button on phones (it wrapped onto its own
-	   40px row); the inquiry basket icon inside the same container stays. */
+	/* Hide the Get a Quote button on phones (it wrapped onto its own 40px
+	   row); the hero already carries the same action. The basket icon that
+	   used to sit beside it went in batch H7f. */
 	.sf-header .sf-header__cta .wp-block-button {
 		display: none;
 	}
 	.sf-header .wp-block-navigation {
 		flex: 0 0 auto;
 	}
-	/* Hug the basket: under space-between the auto margin soaks up all free
-	   space, so the hamburger stops floating mid-bar (24px column gap minus
-	   the open button's -10px right margin = a 14px visual gap to the bag).
-	   Child combinator is required — the overlay's inner <ul> ALSO carries
-	   .wp-block-navigation, and an auto margin there shoves the whole open
-	   menu column to the right edge. */
+	/* Hug the right edge: under space-between the auto margin soaks up all
+	   free space, so the hamburger stops floating mid-bar. (Before batch H7f
+	   it hugged the basket button that sat to its right.) Child combinator is
+	   required — the overlay's inner <ul> ALSO carries .wp-block-navigation,
+	   and an auto margin there shoves the whole open menu column to the right
+	   edge. */
 	.sf-header > .wp-block-navigation {
 		margin-left: auto;
 	}
@@ -5947,67 +5948,17 @@ html:not(.sf-js) .sf-fchips-wrap {
 	white-space: nowrap;
 }
 
-/* === 45. Inquiry basket: header bag + badge + slide-in drawer ============
-   Stage 2 of the cross-page inquiry basket. The bag button lives inside
-   .sf-header__cta (so it hugs the Get a Quote button); the drawer + overlay
-   are a global pair in parts/footer.html, driven by assets/js/basket.js.
-   Drawer sits above the sticky header (999) and the float stack (9998). */
-
-/* --- Header bag button --------------------------------------------------- */
+/* === 45. Header CTA alignment (the inquiry basket's former section) =======
+   The bag button that used to sit inside .sf-header__cta was removed in batch
+   H7f, with its drawer, its script and this section's rules. The container
+   stays because the Get a Quote button lives in it, and this rule is what
+   keeps that button centred against the taller logo row. */
 .sf-header .sf-header__cta {
 	align-items: center;
 }
-
-.sf-basket-btn {
-	position: relative;
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
-	width: 40px;
-	height: 40px;
-	padding: 0;
-	background-color: transparent;
-	border: 1px solid rgba(255, 255, 255, 0.35);
-	border-radius: 6px;
-	color: #ffffff;
-	cursor: pointer;
-	transition: background-color 0.15s ease, border-color 0.15s ease;
-}
-
-.sf-basket-btn:hover {
-	background-color: rgba(255, 255, 255, 0.12);
-	border-color: rgba(255, 255, 255, 0.6);
-}
-
-.sf-basket-btn__badge {
-	position: absolute;
-	top: -7px;
-	right: -8px;
-	min-width: 18px;
-	height: 18px;
-	box-sizing: border-box;
-	padding: 0 5px;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	background-color: var(--wp--preset--color--brand-green);
-	border-radius: 999px;
-	font-size: 11px;
-	font-weight: 700;
-	line-height: 1;
-	color: #ffffff;
-	font-variant-numeric: tabular-nums;
-}
-
-.sf-basket-btn__badge[hidden] {
-	display: none;
-}
-
-/* --- Overlay + drawer ----------------------------------------------------- */
-/* Shared by the inquiry basket, the certificate dialog (section 50) and the
-   inquiry dialog (batch H4): one backdrop, one fade, one z-index stack — the
-   three components cannot drift. */
-.sf-basket-overlay,
+/* --- Overlay: certificate dialog + inquiry dialog ------------------------- */
+/* Shared by the certificate dialog (section 50) and the inquiry dialog (batch
+   H4): one backdrop, one fade, one z-index stack — the two cannot drift. */
 .sf-certmodal,
 .sf-inquiry-modal {
 	position: fixed;
@@ -6018,353 +5969,28 @@ html:not(.sf-js) .sf-fchips-wrap {
 	transition: opacity 0.3s ease;
 }
 
-.sf-basket-overlay.is-open,
 .sf-certmodal.is-open,
 .sf-inquiry-modal.is-open {
 	opacity: 1;
 }
 
-.sf-basket-overlay[hidden],
 .sf-certmodal[hidden],
 .sf-inquiry-modal[hidden] {
 	display: none;
 }
 
-.sf-basket-drawer {
-	position: fixed;
-	top: 0;
-	right: 0;
-	bottom: 0;
-	z-index: 10001;
-	width: 400px;
-	max-width: 100%;
-	display: flex;
-	flex-direction: column;
-	background-color: var(--wp--preset--color--card-white);
-	box-shadow: -8px 0 32px rgba(15, 26, 21, 0.18);
-	transform: translateX(100%);
-	transition: transform 0.3s ease;
-}
-
-.sf-basket-drawer.is-open {
-	transform: translateX(0);
-}
-
-.sf-basket-drawer[hidden] {
-	display: none;
-}
-
-.sf-basket-drawer__header {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	padding: 18px 20px;
-	border-bottom: 1px solid var(--wp--preset--color--border-light);
-}
-
-.sf-basket-drawer__header h3 {
-	margin: 0;
-	font-size: 18px;
-	color: var(--wp--preset--color--primary);
-}
-
-.sf-basket-drawer__close {
-	background: none;
-	border: none;
-	font-size: 26px;
-	line-height: 1;
-	padding: 2px 8px;
-	cursor: pointer;
-	color: var(--wp--preset--color--text-secondary);
-}
-
-.sf-basket-drawer__close:hover {
-	color: var(--wp--preset--color--primary);
-}
-
-.sf-basket-drawer__content {
-	flex: 1;
-	overflow-y: auto;
-	overscroll-behavior: contain;
-	-webkit-overflow-scrolling: touch;
-	padding: 8px 20px;
-}
-
-.sf-basket-drawer__empty {
-	margin: 32px 0;
-	text-align: center;
-	font-size: 14px;
-	line-height: 1.6;
-	color: var(--wp--preset--color--text-secondary);
-}
-
-.sf-basket-drawer__item {
-	display: flex;
-	align-items: flex-start;
-	gap: 12px;
-	padding: 14px 0;
-	border-bottom: 1px solid var(--wp--preset--color--border-light);
-}
-
-.sf-basket-drawer__item:last-child {
-	border-bottom: none;
-}
-
-.sf-basket-drawer__item-info {
-	flex: 1;
-	min-width: 0;
-}
-
-.sf-basket-drawer__item-title {
-	margin: 0 0 4px;
-	font-size: 15px;
-	font-weight: 700;
-	color: var(--wp--preset--color--primary);
-}
-
-.sf-basket-drawer__item-summary {
-	margin: 0;
-	font-size: 12.5px;
-	line-height: 1.55;
-	color: var(--wp--preset--color--text-secondary);
-	overflow-wrap: anywhere;
-}
-
-.sf-basket-drawer__item-remove {
-	flex: none;
-	width: 30px;
-	height: 30px;
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
-	padding: 0;
-	background-color: var(--wp--preset--color--card-white);
-	border: 1px solid var(--wp--preset--color--border-light);
-	border-radius: 6px;
-	font-size: 18px;
-	line-height: 1;
-	color: var(--wp--preset--color--text-secondary);
-	cursor: pointer;
-	transition: border-color 0.15s ease, color 0.15s ease;
-}
-
-.sf-basket-drawer__item-remove:hover {
-	border-color: var(--wp--preset--color--cta);
-	color: var(--wp--preset--color--cta);
-}
-
-/* --- Bottom actions: pinned, buttons mirror the configurator family ------ */
-.sf-basket-drawer__actions {
-	flex-shrink: 0;
-	padding: 14px 20px 18px;
-	border-top: 1px solid var(--wp--preset--color--border-light);
-}
-
-.sf-basket-drawer__row {
-	display: flex;
-	gap: 8px;
-}
-
-.sf-basket-drawer__clear {
-	flex: 0 0 auto;
-	padding: 13px 18px;
-	background-color: var(--wp--preset--color--card-white);
-	border: 1px solid var(--wp--preset--color--border-medium);
-	border-radius: 6px;
-	font-family: inherit;
-	font-size: 14px;
-	font-weight: 600;
-	color: var(--wp--preset--color--text-primary);
-	cursor: pointer;
-	transition: border-color 0.15s ease, background-color 0.15s ease;
-}
-
-.sf-basket-drawer__clear:hover {
-	border-color: var(--wp--preset--color--accent);
-	background-color: var(--wp--preset--color--bg-light);
-}
-
-.sf-basket-drawer__submit {
-	flex: 1;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	padding: 13px 18px;
-	background-color: var(--wp--preset--color--cta);
-	border: none;
-	border-radius: 6px;
-	font-family: inherit;
-	font-size: 15px;
-	font-weight: 600;
-	color: var(--wp--preset--color--card-white);
-	text-decoration: none;
-	cursor: pointer;
-	transition: background-color 0.15s ease;
-}
-
-.sf-basket-drawer__submit:hover {
-	background-color: var(--wp--preset--color--cta-hover);
-	color: var(--wp--preset--color--card-white);
-}
-
-.sf-basket-drawer__pdf {
-	display: block;
-	width: 100%;
-	box-sizing: border-box;
-	margin-top: 8px;
-	padding: 12px 18px;
-	background-color: var(--wp--preset--color--card-white);
-	border: 1px solid var(--wp--preset--color--border-medium);
-	border-radius: 6px;
-	font-family: inherit;
-	font-size: 14px;
-	font-weight: 600;
-	color: var(--wp--preset--color--primary);
-	cursor: pointer;
-	transition: border-color 0.15s ease, background-color 0.15s ease;
-}
-
-.sf-basket-drawer__pdf:hover {
-	border-color: var(--wp--preset--color--accent);
-	background-color: var(--wp--preset--color--bg-light);
-}
-
-/* Email-a-copy row (stage 4): revealed after a successful download. */
-.sf-basket-drawer__mail {
-	display: flex;
-	gap: 8px;
-	margin-top: 8px;
-}
-
-.sf-basket-drawer__mail[hidden] {
-	display: none;
-}
-
-.sf-basket-drawer__mail-input {
-	flex: 1;
-	min-width: 0;
-	box-sizing: border-box;
-	padding: 11px 12px;
-	border: 1px solid var(--wp--preset--color--border-medium);
-	border-radius: 6px;
-	font-family: inherit;
-	font-size: 14px;
-	color: var(--wp--preset--color--text-primary);
-	background-color: var(--wp--preset--color--card-white);
-}
-
-.sf-basket-drawer__mail-input:focus {
-	outline: none;
-	border-color: var(--wp--preset--color--accent);
-}
-
-.sf-basket-drawer__mail-send {
-	flex: none;
-	padding: 11px 18px;
-	background-color: var(--wp--preset--color--brand-green);
-	border: none;
-	border-radius: 6px;
-	font-family: inherit;
-	font-size: 14px;
-	font-weight: 600;
-	color: var(--wp--preset--color--card-white);
-	cursor: pointer;
-	transition: opacity 0.15s ease;
-}
-
-.sf-basket-drawer__mail-send:hover {
-	opacity: 0.88;
-}
-
-.sf-basket-drawer__mail-send:disabled {
-	opacity: 0.6;
-	cursor: wait;
-}
-
-/* Scroll lock while the drawer is open. */
-body.sf-basket-lock,
+/* Scroll lock while a dialog is open. */
 body.sf-certmodal-lock,
 body.sf-inquiry-lock {
 	overflow: hidden;
 }
 
-/* --- Responsive ------------------------------------------------------------ */
-@media (max-width: 480px) {
-	.sf-basket-drawer {
-		width: 100%;
-	}
-
-	.sf-basket-drawer__row {
-		flex-direction: column;
-	}
-
-	.sf-basket-drawer__clear {
-		width: 100%;
-		box-sizing: border-box;
-		min-height: 44px;
-	}
-
-	.sf-basket-drawer__submit {
-		width: 100%;
-		box-sizing: border-box;
-		min-height: 44px;
-	}
-}
-
 @media (prefers-reduced-motion: reduce) {
-	.sf-basket-btn,
-	.sf-basket-drawer__item-remove,
-	.sf-basket-drawer__clear,
-	.sf-basket-drawer__submit,
-	.sf-basket-drawer__pdf {
-		transition: none;
-	}
-
-	.sf-basket-overlay,
-	.sf-basket-drawer,
 	.sf-certmodal,
 	.sf-certmodal__panel {
 		transition: none;
 	}
 }
-
-/* === 46. Basket pre-fill notice (contact page, stage 3) ==================
-   Injected by basket.js above .gform_wrapper when /contact/?from=basket
-   lands with basket items: "N items ... pre-filled below." Dismissible. */
-.sf-basket-notice {
-	display: flex;
-	align-items: flex-start;
-	gap: 10px;
-	margin: 0 0 16px;
-	padding: 12px 14px;
-	background-color: var(--wp--preset--color--cta-selected-bg);
-	border: 1px solid var(--wp--preset--color--brand-green);
-	border-radius: 6px;
-}
-
-.sf-basket-notice__text {
-	flex: 1;
-	margin: 0;
-	font-size: 14px;
-	line-height: 1.5;
-	color: var(--wp--preset--color--primary);
-}
-
-.sf-basket-notice__close {
-	flex: none;
-	padding: 0 2px;
-	background: none;
-	border: none;
-	font-size: 20px;
-	line-height: 1;
-	color: var(--wp--preset--color--text-secondary);
-	cursor: pointer;
-}
-
-.sf-basket-notice__close:hover {
-	color: var(--wp--preset--color--primary);
-}
-
 /* === 47. Contact page: inquiry band split (form left / contact cards right)
    Replaces the standalone "Get in Touch" section: its four info cards plus
    a 200px Map placeholder card now live in the right column of the green
@@ -6706,8 +6332,9 @@ body.sf-inquiry-lock {
 
    Only the dialog shell lives here. The backdrop colour, its 0.3s fade, the
    z-index stack (10000 / this panel sits inside it) and the body scroll lock
-   are the inquiry basket's — section 45 carries both class names on those
-   rules, so there is one definition and no drift. A centred dialog needs the
+   are shared with the inquiry dialog — section 45 carries both class names on
+   those rules, so there is one definition and no drift. A centred dialog needs
+   the
    flex centring, the 520px measure and the mobile sheet, which is all that
    follows. */
 .sf-certmodal {
@@ -6724,10 +6351,9 @@ body.sf-inquiry-lock {
 	padding: 24px;
 	overflow-y: auto;
 	-webkit-overflow-scrolling: touch;
-	/* The backdrop rules at section 45 hand out 10000 and the basket drawer
-	   adds 10001 on top of them. The dialog is the active layer whenever it
-	   is up, so it takes its own step above the whole basket stack instead of
-	   relying on document order to break the tie. */
+	/* The backdrop rules at section 45 hand out 10000. The dialog is the
+	   active layer whenever it is up, so it takes its own step above that
+	   stack instead of relying on document order to break the tie. */
 	z-index: 10010;
 }
 
@@ -9280,9 +8906,9 @@ body.sf-config-lock { overflow: hidden; }
    parameter band.
 
    The dialog follows the certificate dialog's shape rather than the basket
-   drawer's: the outer element is the backdrop AND the centring box (flex,
-   inset 0), the panel inside it is what fades and rises. One backdrop
-   definition, three components. */
+   drawer's (deleted in batch H7f): the outer element is the backdrop AND the
+   centring box (flex, inset 0), the panel inside it is what fades and rises.
+   One backdrop definition, two components. */
 
 .sf-float-btn--inquiry {
 	/* `.sf-float-stack` owns the alignment (align-items:flex-end at 3913), so
@@ -9349,8 +8975,8 @@ body.sf-config-lock { overflow: hidden; }
 	padding: 24px;
 	overflow-y: auto;
 	-webkit-overflow-scrolling: touch;
-	/* One generous step above the basket stack (10000/10001): the dialog is
-	   the active layer whenever it is up. */
+	/* One generous step above the backdrop's 10000: the dialog is the active
+	   layer whenever it is up. */
 	z-index: 10010;
 }
 

@@ -14,13 +14,11 @@
  *            "x@y.z"       -> generate + email a copy (cc sales@zxpet.com),
  *                             answer { sent: true, ref, filename }
  * }
- * OR basket mode (inquiry basket, stage 4):
- * {
- *   basket: [{ slug, summary: "Dosage Form: X | Key: Value | ...", formula: "name" }, ...]  (1-8)
- *   email:  same dual mode as above
- * }
- * Basket mode renders ONE SF reference across all pages: a summary page,
- * one configuration page per dosage form, and the shared company page.
+ *
+ * The inquiry basket's "basket" mode lived here until batch H7f deleted the
+ * basket — `basket.js` was its only caller. A POST that still carries a
+ * `basket` key now falls through to the slug check below and is answered
+ * 400 "Unknown dosage form slug." (asserted by the batch gate).
  *
  * Dompdf lives in wp-content/vendor/ (composer). NOTE FOR LAUNCH: the vendor/
  * directory is NOT part of the theme — it must be shipped to production too.
@@ -49,73 +47,7 @@ function sinofresh_config_pdf_endpoint(WP_REST_Request $request) {
 		return new WP_REST_Response(array('message' => 'Invalid JSON body.'), 400);
 	}
 
-	/* === Basket mode (stage 4): one SF reference for the whole basket ==== */
-	$basket_raw = isset($data['basket']) && is_array($data['basket']) ? $data['basket'] : array();
-	if ($basket_raw) {
-		if (count($basket_raw) > 8) {
-			return new WP_REST_Response(array('message' => 'Basket can contain at most 8 items.'), 422);
-		}
-		$items = array();
-		$seen  = array();
-		foreach ($basket_raw as $raw_item) {
-			if (!is_array($raw_item)) {
-				continue;
-			}
-			$s = isset($raw_item['slug']) ? sanitize_key((string) $raw_item['slug']) : '';
-			if (!isset($slugs[$s]) || isset($seen[$s])) {
-				continue;
-			}
-			$seen[$s] = true;
-			$items[] = array(
-				'label'   => $slugs[$s],
-				'pairs'   => sinofresh_config_pdf_parse_summary(isset($raw_item['summary']) ? (string) $raw_item['summary'] : ''),
-				'formula' => isset($raw_item['formula']) ? mb_substr(sanitize_text_field(sinofresh_config_pdf_raw($raw_item['formula'])), 0, 80) : '',
-			);
-		}
-		if (!$items) {
-			return new WP_REST_Response(array('message' => 'No valid basket items.'), 422);
-		}
-
-		$ref = sinofresh_config_pdf_ref();
-		$pdf_bytes = sinofresh_basket_pdf_render($items, $ref);
-		if (is_wp_error($pdf_bytes)) {
-			return new WP_REST_Response(array('message' => $pdf_bytes->get_error_message()), 503);
-		}
-		$filename = 'SINO-FRESH-Basket-' . $ref . '.pdf';
-
-		$email = isset($data['email']) ? trim((string) $data['email']) : '';
-		if ($email !== '') {
-			$email = sanitize_email($email);
-			if (!is_email($email)) {
-				return new WP_REST_Response(array('message' => 'Invalid email address.'), 422);
-			}
-			$tmp = tempnam(sys_get_temp_dir(), 'sf-pdf-');
-			file_put_contents($tmp, $pdf_bytes);
-			$names = implode(', ', wp_list_pluck($items, 'label'));
-			$subject = 'Your SINO FRESH Inquiry Basket Summary (' . $ref . ')';
-			$body = "Thank you for configuring products with SINO FRESH.\n\n"
-				. 'Reference: ' . $ref . "\n"
-				. 'Items in this basket (' . count($items) . '): ' . $names . "\n\n"
-				. "A copy of your inquiry basket summary is attached.\n"
-				. "Quote the reference above when you contact us for a faster response.\n\n"
-				. "SINO FRESH — zxpet.com";
-			$headers = array('Cc: sales@zxpet.com');
-			$sent = wp_mail($email, $subject, $body, $headers, array($tmp));
-			wp_delete_file($tmp);
-			if (!$sent) {
-				return new WP_REST_Response(array('message' => 'Email could not be sent. Please try again.'), 502);
-			}
-			return new WP_REST_Response(array('sent' => true, 'ref' => $ref, 'filename' => $filename), 200);
-		}
-
-		header('Content-Type: application/pdf');
-		header('Content-Disposition: attachment; filename="' . $filename . '"');
-		header('Cache-Control: no-store');
-		header('X-Robots-Tag: noindex');
-		echo $pdf_bytes;
-		exit;
-	}
-	/* === Single-configuration mode (unchanged) ============================ */
+	/* === Single-configuration mode ======================================== */
 
 	$slug = isset($data['slug']) ? sanitize_key((string) $data['slug']) : '';
 	if (!isset($slugs[$slug])) {
@@ -265,27 +197,7 @@ function sinofresh_config_pdf_esc($text) {
 	return esc_html(sinofresh_config_pdf_raw($text));
 }
 
-/* Basket summaries arrive as "Dosage Form: X | Key: Value | ..." strings
-   built by configurator.js. Split into label/value pairs for the tables.
-   Splitting happens BEFORE any decode, so a decoded value can never
-   introduce a fresh separator. */
-function sinofresh_config_pdf_parse_summary($summary) {
-	$pairs = array();
-	foreach (explode('|', sanitize_text_field($summary)) as $chunk) {
-		$chunk = trim($chunk);
-		$pos = $chunk !== '' ? strpos($chunk, ':') : false;
-		if ($pos === false) {
-			continue;
-		}
-		$pairs[] = array(
-			'label' => mb_substr(sinofresh_config_pdf_raw(substr($chunk, 0, $pos)), 0, 40),
-			'value' => mb_substr(sinofresh_config_pdf_raw(substr($chunk, $pos + 1)), 0, 120),
-		);
-	}
-	return $pairs;
-}
-
-/* Shared stylesheet for both renderers. DejaVu Sans: the Dompdf bundled
+/* Shared stylesheet for the PDF renderer. DejaVu Sans: the Dompdf bundled
    Unicode face — the Helvetica core font lacks the ≥ and → glyphs
    (closest bundled stand-in for the Inter face used on the site). */
 function sinofresh_config_pdf_css() {
@@ -348,106 +260,6 @@ function sinofresh_config_pdf_dompdf($html) {
 	} catch (\Throwable $e) {
 		return new WP_Error('pdf_render_failed', 'PDF rendering failed: ' . $e->getMessage());
 	}
-}
-
-/* Basket PDF (stage 4): a summary page, one configuration page per dosage
-   form, and the shared company page — all under ONE SF reference. */
-function sinofresh_basket_pdf_render($items, $ref) {
-	$esc = 'sinofresh_config_pdf_esc';
-	$date = gmdate('F j, Y');
-	$total = count($items) + 2;
-
-	$page_header = function ($page) use ($esc, $ref, $date) {
-		return '<div class="hd"><span class="hd-logo">SINO FRESH</span><span class="hd-meta">Inquiry Basket Summary<br>Ref: ' . call_user_func($esc, $ref) . ' &middot; Date: ' . $date . '</span></div>';
-	};
-	$page_footer = function ($page, $total) use ($esc) {
-		$f = $page === $total
-			? 'Page ' . $page . ' of ' . $total . ' &middot; Shandong SINO FRESH Pet Food Co., Ltd. &middot; zxpet.com'
-			: 'Page ' . $page . ' of ' . $total . ' &middot; zxpet.com';
-		return '<div class="ft">' . $f . '</div>';
-	};
-
-	/* Page 1: summary table across the whole basket. */
-	$sum_rows = '';
-	foreach ($items as $i => $item) {
-		$func = '';
-		foreach ($item['pairs'] as $p) {
-			if (strcasecmp($p['label'], 'Function') === 0) {
-				$func = $p['value'];
-				break;
-			}
-		}
-		$sum_rows .= '<tr>'
-			. '<td class="sum-n">' . ($i + 1) . '</td>'
-			. '<td class="sum-f">' . call_user_func($esc, $item['label']) . '</td>'
-			. '<td class="sum-v">' . call_user_func($esc, $func !== '' ? $func : 'Custom') . '</td>'
-			. '<td class="sum-o">' . call_user_func($esc, $item['formula'] !== '' ? $item['formula'] . ' (Standard)' : 'Custom') . '</td>'
-			. '</tr>';
-	}
-	$pages = $page_header(1)
-		. '<div class="accent-rule"></div>'
-		. '<h1>Inquiry Basket Summary</h1>'
-		. '<p class="sec-p">' . count($items) . ' dosage forms &middot; configured ' . $date . '</p>'
-		. '<table class="sum">'
-		. '<tr class="sum-head"><td>#</td><td>Dosage Form</td><td>Function</td><td>Formula Base</td></tr>'
-		. $sum_rows
-		. '</table>'
-		. '<p class="ref-note">Detailed configuration per dosage form on the following pages.</p>'
-		. $page_footer(1, $total);
-
-	/* Pages 2..N+1: one configuration page per basket item. */
-	$pn = 2;
-	foreach ($items as $item) {
-		$tr = '';
-		foreach ($item['pairs'] as $p) {
-			$tr .= '<tr><td class="cfg-k">' . call_user_func($esc, $p['label']) . '</td><td class="cfg-v">' . call_user_func($esc, $p['value']) . '</td></tr>';
-		}
-		if ($item['formula'] !== '') {
-			$fb = '<p class="formula-tag">FORMULA (Standard)</p>'
-				. '<p class="formula-name">' . call_user_func($esc, $item['formula']) . '</p>';
-		} else {
-			$fb = '<p class="formula-tag">FORMULA</p>'
-				. '<p class="formula-name">Custom Formula — to be developed</p>'
-				. '<p class="sec-p">Our R&amp;D team will develop a custom formula based on your requirements. Submit an inquiry to proceed.</p>';
-		}
-		$pages .= '<div class="page-break"></div>'
-			. $page_header($pn)
-			. '<div class="accent-rule"></div>'
-			. '<h1>' . call_user_func($esc, $item['label']) . ' — Configuration</h1>'
-			. '<table class="cfg">' . $tr . '</table>'
-			. '<div class="formula-box">' . $fb . '</div>'
-			. $page_footer($pn, $total);
-		$pn++;
-	}
-
-	/* Final page: company info + next steps (same content as the single summary). */
-	$badge_html = '';
-	foreach (array('FDA', 'cGMP', 'ISO 9001', 'FSSC 22000', 'HACCP', 'BRC') as $c) {
-		$badge_html .= '<span class="badge">' . call_user_func($esc, $c) . '</span>';
-	}
-	$pages .= '<div class="page-break"></div>'
-		. $page_header($pn)
-		. '<div class="accent-rule"></div>'
-		. '<h2>MANUFACTURING</h2>'
-		. '<p class="sec-p">15,000 m&sup2; production facility &middot; ISO 8 cleanroom &middot; 1,000 m&sup2; R&amp;D laboratory &middot; 100+ production &amp; testing equipment</p>'
-		. '<h2>CERTIFICATIONS</h2>'
-		. '<div class="badges">' . $badge_html . '</div>'
-		. '<h2>QUALITY ASSURANCE</h2>'
-		. '<ul class="qa"><li>Every batch tested with COA</li><li>Full traceability from raw material</li><li>Retention samples kept per batch</li></ul>'
-		. '<h2>NEXT STEPS</h2>'
-		. '<p class="sec-p">To proceed with these configurations:</p>'
-		. '<ul class="steps">'
-		. '<li><strong>Request samples</strong><br>sales@zxpet.com &middot; +86 539 866 9539</li>'
-		. '<li><strong>Book a factory tour</strong><br>zxpet.com/factory-tour</li>'
-		. '<li><strong>Submit an inquiry</strong><br>zxpet.com/contact</li>'
-		. '</ul>'
-		. '<p class="ref-note">Quote reference <strong>' . call_user_func($esc, $ref) . '</strong> for faster response.</p>'
-		. $page_footer($pn, $total);
-
-	$html = '<html><head><meta charset="utf-8"><style>' . sinofresh_config_pdf_css() . '</style></head><body>'
-		. $pages
-		. '</body></html>';
-	return sinofresh_config_pdf_dompdf($html);
 }
 
 /**
