@@ -1,0 +1,50 @@
+E1  the capsule appears once the band is reached, and stays
+   ok   E1 at the top: capsule hidden, bandTop=677 beyond the 500 threshold
+   ..   E1 the page was short enough that no intermediate state was observed; the threshold crossing is still asserted
+   ok   E1 after 1 wheel step(s): capsule visible, box 150x52
+   ok   E1 one-way: still visible at scrollY=0 after scrolling back up
+E2  the four buttons: one column, same right edge, same gap
+   ok   E2 the three pre-existing buttons hold their exact boxes: sf-float-btn--whatsapp(1364,720), sf-float-btn--email(1364,784), sf-float-btn--top(1364,848)
+   ok   E2 the capsule is the stack's first element child (dir=column, gap=12px)
+   ok   E2 four buttons on one right edge (24px from the right), three 52px circles and a 150px capsule, gaps [12, 12, 12], capsule topmost at y=656
+   ok   E2 label 'Send Inquiry', fallback /contact/#quote
+E3  the dialog opens
+   ok   E3 open: hidden off, is-open on, display=flex
+   ok   E3 the body is locked while the dialog is up
+   ok   E3 the panel is role=dialog aria-modal=true
+   ok   E3 focus moved to <input name=name> inside the panel
+   ok   E3 panel is 560px wide, 730px tall, radius 8px
+   ok   E3 E9 two rows from the record: Piece Weight = 2g/piece | Pack Size = 60/90/120 per bottle
+   ok   E3 the four shared sampling steps: Submit Inquiry / Confirm Details / Sampling & Quality Check / Ship & Evaluate
+   ok   E3 the form carries post id 158
+E4  the closes
+   ok   E4 Escape closes it, unlocks the body and returns focus to the capsule
+   ok   E4 a click inside the panel leaves it open
+   ok   E4 the backdrop click closes it and unlocks the body
+E5  the honeypot is checked first
+   ok   E5 the honeypot is refused before anything else: 'Submission rejected.'
+E6  the three-second floor
+   ..   E6 reopen (attempt 1): a dialog was still open; closing it before the click
+   ..   the session is on about:blank; restarting it and re-opening
+   ok   E6 refused at 1124ms since the dialog opened: 'Please take a moment to complete the form.'
+   ok   E6 the form survives a rejection, ready for the visitor to retry
+E7  a real submission, and the self-close
+   ..   E7 (attempt 1): a dialog was still open; closing it before the click
+   ok   E7 delivered: 'Thank you — your inquiry is on its way.A member of our sales team will' (form replaced, ts stamped 1790051206837)
+   ok   E7 the dialog closed itself 2.5s after the confirmation
+   ..   E7 reopening after a success shows the confirmation, not an empty form — flagged for H6 (no reset path exists)
+E10 the phone: 44px targets in a 16px gutter, panel as a bottom sheet
+   ok   E10 three 44px circles and a 136px capsule, all 16px from the right edge, at 390x844
+   ok   E10 the panel fills the width and is anchored to the bottom: 390x844 at y=0 of 844
+E9  one row where the record has one
+   ok   E9 one row on Bladder Support Powder: ['4oz/8oz/16oz jar']
+E8  the ZH page carries the same widget
+   ok   E8 ZH: capsule 'Send Inquiry' joins the stack
+   ok   E8 ZH dialog opens with 1 rows and 4 shared steps
+E8  the plain pages carry none of it
+   ok   E8 /about/: no capsule, no dialog, no inquiry.js
+E11 console errors
+   ok   E11 no console errors on any page visited
+------------------------------------------------------------------------
+VERDICT: PASS — 30 ok, 0 FAIL
+NOTE: one real test message was sent to the sf_contact_email inbox (marker "H4 E2E").

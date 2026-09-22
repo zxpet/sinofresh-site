@@ -1,0 +1,11 @@
+   ok   shot 1: capsule still hidden at the top of the page
+------------------------------------------------------------------------
+  h4-01-desktop-top.png           490757 B  the top of a detail page — no capsule
+  h4-02-desktop-capsule.png       709074 B  the capsule revealed, above the three existing buttons
+  h4-03-desktop-dialog.png        425763 B  the dialog: Your Selection (2 rows) and the four shared steps
+  h4-04-desktop-honeypot.png      439141 B  the honeypot refusal — the endpoint is reachable and refusing
+  h4-05-mobile-capsule.png         74677 B  390x844: three 44px circles and a 136px capsule, 16px gutter
+  h4-06-mobile-sheet.png           39514 B  the dialog as a full-height bottom sheet (390x844)
+  h4-07-zh-dialog.png             381156 B  the ZH page: the same capsule and dialog, English copy (the strings are new and not in TranslatePress yet)
+  h4-08-plain-page.png            430357 B  a plain page: none of it, and no inquiry.js enqueued
+VERDICT: PASS — 8 shots, all above the floor

@@ -1,0 +1,1544 @@
+{
+  "fails": [],
+  "notes": [
+    "E1 at the top: capsule hidden, bandTop=677 beyond the 500 threshold",
+    "E1 after 1 wheel step(s): capsule visible, box 150x52",
+    "E1 one-way: still visible at scrollY=0 after scrolling back up",
+    "E2 the three pre-existing buttons hold their exact boxes: sf-float-btn--whatsapp(1364,720), sf-float-btn--email(1364,784), sf-float-btn--top(1364,848)",
+    "E2 the capsule is the stack's first element child (dir=column, gap=12px)",
+    "E2 four buttons on one right edge (24px from the right), three 52px circles and a 150px capsule, gaps [12, 12, 12], capsule topmost at y=656",
+    "E2 label 'Send Inquiry', fallback /contact/#quote",
+    "E3 open: hidden off, is-open on, display=flex",
+    "E3 the body is locked while the dialog is up",
+    "E3 the panel is role=dialog aria-modal=true",
+    "E3 focus moved to <input name=name> inside the panel",
+    "E3 panel is 560px wide, 730px tall, radius 8px",
+    "E3 E9 two rows from the record: Piece Weight = 2g/piece | Pack Size = 60/90/120 per bottle",
+    "E3 the four shared sampling steps: Submit Inquiry / Confirm Details / Sampling & Quality Check / Ship & Evaluate",
+    "E3 the form carries post id 158",
+    "E3 the dialog covers the float stack: a point over the capsule resolves to the backdrop, not the capsule",
+    "E4 Escape closes it, unlocks the body and returns focus to the capsule",
+    "E4 a click inside the panel leaves it open",
+    "E4 the backdrop click closes it and unlocks the body",
+    "E5 the honeypot is refused before anything else: 'Submission rejected.'",
+    "E6 refused at 1105ms since the dialog opened: 'Please take a moment to complete the form.'",
+    "E6 the form survives a rejection, ready for the visitor to retry",
+    "E7 delivered: 'Thank you — your inquiry is on its way.A member of our sales team will' (form replaced, ts stamped 1790051400466)",
+    "E7 the dialog closed itself 2.5s after the confirmation",
+    "E10 three 44px circles and a 136px capsule, all 16px from the right edge, at 390x844",
+    "E10 the panel fills the width and is anchored to the bottom: 390x844 at y=0 of 844",
+    "E9 one row on Bladder Support Powder: ['4oz/8oz/16oz jar']",
+    "E8 ZH: capsule 'Send Inquiry' joins the stack",
+    "E8 ZH dialog opens with 1 rows and 4 shared steps",
+    "E8 /about/: no capsule, no dialog, no inquiry.js",
+    "E11 no console errors on any page visited"
+  ],
+  "data": {
+    "E1_top": {
+      "bandFound": true,
+      "bandTop": 677,
+      "bodyClass": "wp-singular sf_formula-template-default single single-sf_formula postid-158 wp-custom-logo wp-embed-responsive wp-theme-sinofresh-theme-preflight translatepress-en_US has-cookie-banner",
+      "capBg": "rgb(181, 78, 15)",
+      "capBox": {
+        "bottom": 1000,
+        "h": 0,
+        "right": 1440,
+        "w": 0,
+        "x": 0,
+        "y": 0
+      },
+      "capDisplay": "none",
+      "capFirstChild": true,
+      "capHidden": true,
+      "capHref": "/contact/#quote",
+      "capIsVisible": false,
+      "capLabel": null,
+      "capPresent": true,
+      "capRadius": "26px",
+      "capText": "Send Inquiry",
+      "focus": {
+        "cls": "wp-singular sf_formula-template-default single single-sf_formula postid-158 wp-custom-logo wp-embed-responsive wp-theme-sinofresh-theme-preflight translatepress-en_US has-cookie-banner",
+        "inModal": false,
+        "name": null,
+        "tag": "BODY"
+      },
+      "formHidden": false,
+      "formulaValue": "158",
+      "hasScript": true,
+      "href": "https://dev.zxpet.com/formulas/joint-support-soft-chews/?sfcap=e1122851",
+      "leadText": "Joint Support Soft Chews",
+      "lock": false,
+      "modalDisplay": "none",
+      "modalHidden": true,
+      "modalOpen": false,
+      "modalPresent": true,
+      "panelAriaModal": "true",
+      "panelBox": {
+        "bottom": 1000,
+        "h": 0,
+        "right": 1440,
+        "w": 0,
+        "x": 0,
+        "y": 0
+      },
+      "panelRadius": "8px",
+      "panelRole": "dialog",
+      "rawAnchors": 0,
+      "rockers": [
+        {
+          "box": {
+            "bottom": 228,
+            "h": 52,
+            "right": 24,
+            "w": 52,
+            "x": 1364,
+            "y": 720
+          },
+          "cls": "sf-float-btn--whatsapp",
+          "visible": true
+        },
+        {
+          "box": {
+            "bottom": 164,
+            "h": 52,
+            "right": 24,
+            "w": 52,
+            "x": 1364,
+            "y": 784
+          },
+          "cls": "sf-float-btn--email",
+          "visible": true
+        },
+        {
+          "box": {
+            "bottom": 100,
+            "h": 52,
+            "right": 24,
+            "w": 52,
+            "x": 1364,
+            "y": 848
+          },
+          "cls": "sf-float-btn--top",
+          "visible": true
+        }
+      ],
+      "scrollY": 0,
+      "sheet": "https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/style.css?ver=2.10.59",
+      "stackDir": "column",
+      "stackGap": "12px",
+      "status": "",
+      "stepCount": 4,
+      "stepTitles": [
+        "Submit Inquiry",
+        "Confirm Details",
+        "Sampling & Quality Check",
+        "Ship & Evaluate"
+      ],
+      "submitDisabled": false,
+      "successHidden": true,
+      "successText": "Thank you — your inquiry is on its way.A member of our sales team will reply within 24 hours.",
+      "terms": [
+        "Piece Weight",
+        "Pack Size"
+      ],
+      "titleText": "Send Inquiry",
+      "tsValue": "0",
+      "values": [
+        "2g/piece",
+        "60/90/120 per bottle"
+      ],
+      "vh": 1000,
+      "vw": 1440
+    },
+    "E1_steps": 1,
+    "E1_band": {
+      "bandFound": true,
+      "bandTop": 276,
+      "bodyClass": "wp-singular sf_formula-template-default single single-sf_formula postid-158 wp-custom-logo wp-embed-responsive wp-theme-sinofresh-theme-preflight translatepress-en_US has-cookie-banner",
+      "capBg": "rgb(181, 78, 15)",
+      "capBox": {
+        "bottom": 292,
+        "h": 52,
+        "right": 24,
+        "w": 150,
+        "x": 1266,
+        "y": 656
+      },
+      "capDisplay": "flex",
+      "capFirstChild": true,
+      "capHidden": false,
+      "capHref": "/contact/#quote",
+      "capIsVisible": true,
+      "capLabel": null,
+      "capPresent": true,
+      "capRadius": "26px",
+      "capText": "Send Inquiry",
+      "focus": {
+        "cls": "wp-singular sf_formula-template-default single single-sf_formula postid-158 wp-custom-logo wp-embed-responsive wp-theme-sinofresh-theme-preflight translatepress-en_US has-cookie-banner",
+        "inModal": false,
+        "name": null,
+        "tag": "BODY"
+      },
+      "formHidden": false,
+      "formulaValue": "158",
+      "hasScript": true,
+      "href": "https://dev.zxpet.com/formulas/joint-support-soft-chews/?sfcap=e1122851",
+      "leadText": "Joint Support Soft Chews",
+      "lock": false,
+      "modalDisplay": "none",
+      "modalHidden": true,
+      "modalOpen": false,
+      "modalPresent": true,
+      "panelAriaModal": "true",
+      "panelBox": {
+        "bottom": 1000,
+        "h": 0,
+        "right": 1440,
+        "w": 0,
+        "x": 0,
+        "y": 0
+      },
+      "panelRadius": "8px",
+      "panelRole": "dialog",
+      "rawAnchors": 0,
+      "rockers": [
+        {
+          "box": {
+            "bottom": 228,
+            "h": 52,
+            "right": 24,
+            "w": 52,
+            "x": 1364,
+            "y": 720
+          },
+          "cls": "sf-float-btn--whatsapp",
+          "visible": true
+        },
+        {
+          "box": {
+            "bottom": 164,
+            "h": 52,
+            "right": 24,
+            "w": 52,
+            "x": 1364,
+            "y": 784
+          },
+          "cls": "sf-float-btn--email",
+          "visible": true
+        },
+        {
+          "box": {
+            "bottom": 100,
+            "h": 52,
+            "right": 24,
+            "w": 52,
+            "x": 1364,
+            "y": 848
+          },
+          "cls": "sf-float-btn--top",
+          "visible": true
+        }
+      ],
+      "scrollY": 400,
+      "sheet": "https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/style.css?ver=2.10.59",
+      "stackDir": "column",
+      "stackGap": "12px",
+      "status": "",
+      "stepCount": 4,
+      "stepTitles": [
+        "Submit Inquiry",
+        "Confirm Details",
+        "Sampling & Quality Check",
+        "Ship & Evaluate"
+      ],
+      "submitDisabled": false,
+      "successHidden": true,
+      "successText": "Thank you — your inquiry is on its way.A member of our sales team will reply within 24 hours.",
+      "terms": [
+        "Piece Weight",
+        "Pack Size"
+      ],
+      "titleText": "Send Inquiry",
+      "tsValue": "0",
+      "values": [
+        "2g/piece",
+        "60/90/120 per bottle"
+      ],
+      "vh": 1000,
+      "vw": 1440
+    },
+    "E2": {
+      "bandFound": true,
+      "bandTop": 677,
+      "bodyClass": "wp-singular sf_formula-template-default single single-sf_formula postid-158 wp-custom-logo wp-embed-responsive wp-theme-sinofresh-theme-preflight translatepress-en_US has-cookie-banner",
+      "capBg": "rgb(181, 78, 15)",
+      "capBox": {
+        "bottom": 292,
+        "h": 52,
+        "right": 24,
+        "w": 150,
+        "x": 1266,
+        "y": 656
+      },
+      "capDisplay": "flex",
+      "capFirstChild": true,
+      "capHidden": false,
+      "capHref": "/contact/#quote",
+      "capIsVisible": true,
+      "capLabel": null,
+      "capPresent": true,
+      "capRadius": "26px",
+      "capText": "Send Inquiry",
+      "focus": {
+        "cls": "wp-singular sf_formula-template-default single single-sf_formula postid-158 wp-custom-logo wp-embed-responsive wp-theme-sinofresh-theme-preflight translatepress-en_US has-cookie-banner",
+        "inModal": false,
+        "name": null,
+        "tag": "BODY"
+      },
+      "formHidden": false,
+      "formulaValue": "158",
+      "hasScript": true,
+      "href": "https://dev.zxpet.com/formulas/joint-support-soft-chews/?sfcap=e1122851",
+      "leadText": "Joint Support Soft Chews",
+      "lock": false,
+      "modalDisplay": "none",
+      "modalHidden": true,
+      "modalOpen": false,
+      "modalPresent": true,
+      "panelAriaModal": "true",
+      "panelBox": {
+        "bottom": 1000,
+        "h": 0,
+        "right": 1440,
+        "w": 0,
+        "x": 0,
+        "y": 0
+      },
+      "panelRadius": "8px",
+      "panelRole": "dialog",
+      "rawAnchors": 0,
+      "rockers": [
+        {
+          "box": {
+            "bottom": 228,
+            "h": 52,
+            "right": 24,
+            "w": 52,
+            "x": 1364,
+            "y": 720
+          },
+          "cls": "sf-float-btn--whatsapp",
+          "visible": true
+        },
+        {
+          "box": {
+            "bottom": 164,
+            "h": 52,
+            "right": 24,
+            "w": 52,
+            "x": 1364,
+            "y": 784
+          },
+          "cls": "sf-float-btn--email",
+          "visible": true
+        },
+        {
+          "box": {
+            "bottom": 100,
+            "h": 52,
+            "right": 24,
+            "w": 52,
+            "x": 1364,
+            "y": 848
+          },
+          "cls": "sf-float-btn--top",
+          "visible": true
+        }
+      ],
+      "scrollY": 0,
+      "sheet": "https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/style.css?ver=2.10.59",
+      "stackDir": "column",
+      "stackGap": "12px",
+      "status": "",
+      "stepCount": 4,
+      "stepTitles": [
+        "Submit Inquiry",
+        "Confirm Details",
+        "Sampling & Quality Check",
+        "Ship & Evaluate"
+      ],
+      "submitDisabled": false,
+      "successHidden": true,
+      "successText": "Thank you — your inquiry is on its way.A member of our sales team will reply within 24 hours.",
+      "terms": [
+        "Piece Weight",
+        "Pack Size"
+      ],
+      "titleText": "Send Inquiry",
+      "tsValue": "0",
+      "values": [
+        "2g/piece",
+        "60/90/120 per bottle"
+      ],
+      "vh": 1000,
+      "vw": 1440
+    },
+    "E3_open": {
+      "bandFound": true,
+      "bandTop": 677,
+      "bodyClass": "wp-singular sf_formula-template-default single single-sf_formula postid-158 wp-custom-logo wp-embed-responsive wp-theme-sinofresh-theme-preflight translatepress-en_US has-cookie-banner sf-inquiry-lock",
+      "capBg": "rgb(181, 78, 15)",
+      "capBox": {
+        "bottom": 292,
+        "h": 52,
+        "right": 24,
+        "w": 150,
+        "x": 1266,
+        "y": 656
+      },
+      "capDisplay": "flex",
+      "capFirstChild": true,
+      "capHidden": false,
+      "capHref": "/contact/#quote",
+      "capIsVisible": true,
+      "capLabel": null,
+      "capPresent": true,
+      "capRadius": "26px",
+      "capText": "Send Inquiry",
+      "focus": {
+        "cls": "",
+        "inModal": true,
+        "name": "name",
+        "tag": "INPUT"
+      },
+      "formHidden": false,
+      "formulaValue": "158",
+      "hasScript": true,
+      "href": "https://dev.zxpet.com/formulas/joint-support-soft-chews/?sfcap=e1122851",
+      "leadText": "Joint Support Soft Chews",
+      "lock": true,
+      "modalDisplay": "flex",
+      "modalHidden": false,
+      "modalOpen": true,
+      "modalPresent": true,
+      "panelAriaModal": "true",
+      "panelBox": {
+        "bottom": 135,
+        "h": 730,
+        "right": 440,
+        "w": 560,
+        "x": 440,
+        "y": 135
+      },
+      "panelRadius": "8px",
+      "panelRole": "dialog",
+      "rawAnchors": 0,
+      "rockers": [
+        {
+          "box": {
+            "bottom": 228,
+            "h": 52,
+            "right": 24,
+            "w": 52,
+            "x": 1364,
+            "y": 720
+          },
+          "cls": "sf-float-btn--whatsapp",
+          "visible": true
+        },
+        {
+          "box": {
+            "bottom": 164,
+            "h": 52,
+            "right": 24,
+            "w": 52,
+            "x": 1364,
+            "y": 784
+          },
+          "cls": "sf-float-btn--email",
+          "visible": true
+        },
+        {
+          "box": {
+            "bottom": 100,
+            "h": 52,
+            "right": 24,
+            "w": 52,
+            "x": 1364,
+            "y": 848
+          },
+          "cls": "sf-float-btn--top",
+          "visible": true
+        }
+      ],
+      "scrollY": 0,
+      "sheet": "https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/style.css?ver=2.10.59",
+      "stackDir": "column",
+      "stackGap": "12px",
+      "status": "",
+      "stepCount": 4,
+      "stepTitles": [
+        "Submit Inquiry",
+        "Confirm Details",
+        "Sampling & Quality Check",
+        "Ship & Evaluate"
+      ],
+      "submitDisabled": false,
+      "successHidden": true,
+      "successText": "Thank you — your inquiry is on its way.A member of our sales team will reply within 24 hours.",
+      "terms": [
+        "Piece Weight",
+        "Pack Size"
+      ],
+      "titleText": "Send Inquiry",
+      "tsValue": "1790051338620",
+      "values": [
+        "2g/piece",
+        "60/90/120 per bottle"
+      ],
+      "vh": 1000,
+      "vw": 1440
+    },
+    "E4_esc": {
+      "bandFound": true,
+      "bandTop": 677,
+      "bodyClass": "wp-singular sf_formula-template-default single single-sf_formula postid-158 wp-custom-logo wp-embed-responsive wp-theme-sinofresh-theme-preflight translatepress-en_US has-cookie-banner",
+      "capBg": "rgb(150, 63, 11)",
+      "capBox": {
+        "bottom": 290,
+        "h": 56,
+        "right": 18,
+        "w": 162,
+        "x": 1260,
+        "y": 654
+      },
+      "capDisplay": "flex",
+      "capFirstChild": true,
+      "capHidden": false,
+      "capHref": "/contact/#quote",
+      "capIsVisible": true,
+      "capLabel": null,
+      "capPresent": true,
+      "capRadius": "26px",
+      "capText": "Send Inquiry",
+      "focus": {
+        "cls": "sf-float-btn sf-float-btn--inquiry is-visible",
+        "inModal": false,
+        "name": null,
+        "tag": "A"
+      },
+      "formHidden": false,
+      "formulaValue": "158",
+      "hasScript": true,
+      "href": "https://dev.zxpet.com/formulas/joint-support-soft-chews/?sfcap=e1122851",
+      "leadText": "Joint Support Soft Chews",
+      "lock": false,
+      "modalDisplay": "none",
+      "modalHidden": true,
+      "modalOpen": false,
+      "modalPresent": true,
+      "panelAriaModal": "true",
+      "panelBox": {
+        "bottom": 1000,
+        "h": 0,
+        "right": 1440,
+        "w": 0,
+        "x": 0,
+        "y": 0
+      },
+      "panelRadius": "8px",
+      "panelRole": "dialog",
+      "rawAnchors": 0,
+      "rockers": [
+        {
+          "box": {
+            "bottom": 228,
+            "h": 52,
+            "right": 24,
+            "w": 52,
+            "x": 1364,
+            "y": 720
+          },
+          "cls": "sf-float-btn--whatsapp",
+          "visible": true
+        },
+        {
+          "box": {
+            "bottom": 164,
+            "h": 52,
+            "right": 24,
+            "w": 52,
+            "x": 1364,
+            "y": 784
+          },
+          "cls": "sf-float-btn--email",
+          "visible": true
+        },
+        {
+          "box": {
+            "bottom": 100,
+            "h": 52,
+            "right": 24,
+            "w": 52,
+            "x": 1364,
+            "y": 848
+          },
+          "cls": "sf-float-btn--top",
+          "visible": true
+        }
+      ],
+      "scrollY": 0,
+      "sheet": "https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/style.css?ver=2.10.59",
+      "stackDir": "column",
+      "stackGap": "12px",
+      "status": "",
+      "stepCount": 4,
+      "stepTitles": [
+        "Submit Inquiry",
+        "Confirm Details",
+        "Sampling & Quality Check",
+        "Ship & Evaluate"
+      ],
+      "submitDisabled": false,
+      "successHidden": true,
+      "successText": "Thank you — your inquiry is on its way.A member of our sales team will reply within 24 hours.",
+      "terms": [
+        "Piece Weight",
+        "Pack Size"
+      ],
+      "titleText": "Send Inquiry",
+      "tsValue": "1790051338620",
+      "values": [
+        "2g/piece",
+        "60/90/120 per bottle"
+      ],
+      "vh": 1000,
+      "vw": 1440
+    },
+    "E5": {
+      "inject": {
+        "delta": 10000,
+        "now": 1790051346775,
+        "ts": "1790051336775"
+      },
+      "submit": {
+        "delta": 10169,
+        "now": 1790051346944,
+        "tsBefore": 1790051336775
+      }
+    },
+    "E5_state": {
+      "bandFound": true,
+      "bandTop": 677,
+      "bodyClass": "wp-singular sf_formula-template-default single single-sf_formula postid-158 wp-custom-logo wp-embed-responsive wp-theme-sinofresh-theme-preflight translatepress-en_US has-cookie-banner sf-inquiry-lock",
+      "capBg": "rgb(181, 78, 15)",
+      "capBox": {
+        "bottom": 292,
+        "h": 52,
+        "right": 24,
+        "w": 150,
+        "x": 1266,
+        "y": 656
+      },
+      "capDisplay": "flex",
+      "capFirstChild": true,
+      "capHidden": false,
+      "capHref": "/contact/#quote",
+      "capIsVisible": true,
+      "capLabel": null,
+      "capPresent": true,
+      "capRadius": "26px",
+      "capText": "Send Inquiry",
+      "focus": {
+        "cls": "",
+        "inModal": true,
+        "name": "name",
+        "tag": "INPUT"
+      },
+      "formHidden": false,
+      "formulaValue": "158",
+      "hasScript": true,
+      "href": "https://dev.zxpet.com/formulas/joint-support-soft-chews/?sfcap=e1122851",
+      "leadText": "Joint Support Soft Chews",
+      "lock": true,
+      "modalDisplay": "flex",
+      "modalHidden": false,
+      "modalOpen": true,
+      "modalPresent": true,
+      "panelAriaModal": "true",
+      "panelBox": {
+        "bottom": 134,
+        "h": 733,
+        "right": 440,
+        "w": 560,
+        "x": 440,
+        "y": 134
+      },
+      "panelRadius": "8px",
+      "panelRole": "dialog",
+      "rawAnchors": 0,
+      "rockers": [
+        {
+          "box": {
+            "bottom": 228,
+            "h": 52,
+            "right": 24,
+            "w": 52,
+            "x": 1364,
+            "y": 720
+          },
+          "cls": "sf-float-btn--whatsapp",
+          "visible": true
+        },
+        {
+          "box": {
+            "bottom": 164,
+            "h": 52,
+            "right": 24,
+            "w": 52,
+            "x": 1364,
+            "y": 784
+          },
+          "cls": "sf-float-btn--email",
+          "visible": true
+        },
+        {
+          "box": {
+            "bottom": 100,
+            "h": 52,
+            "right": 24,
+            "w": 52,
+            "x": 1364,
+            "y": 848
+          },
+          "cls": "sf-float-btn--top",
+          "visible": true
+        }
+      ],
+      "scrollY": 0,
+      "sheet": "https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/style.css?ver=2.10.59",
+      "stackDir": "column",
+      "stackGap": "12px",
+      "status": "Submission rejected.",
+      "stepCount": 4,
+      "stepTitles": [
+        "Submit Inquiry",
+        "Confirm Details",
+        "Sampling & Quality Check",
+        "Ship & Evaluate"
+      ],
+      "submitDisabled": false,
+      "successHidden": true,
+      "successText": "Thank you — your inquiry is on its way.A member of our sales team will reply within 24 hours.",
+      "terms": [
+        "Piece Weight",
+        "Pack Size"
+      ],
+      "titleText": "Send Inquiry",
+      "tsValue": "1790051347336",
+      "values": [
+        "2g/piece",
+        "60/90/120 per bottle"
+      ],
+      "vh": 1000,
+      "vw": 1440
+    },
+    "E6": {
+      "inject": {
+        "delta": 946,
+        "now": 1790051397161,
+        "ts": "1790051396215"
+      },
+      "submit": {
+        "delta": 1105,
+        "now": 1790051397320,
+        "tsBefore": 1790051396215
+      }
+    },
+    "E6_state": {
+      "bandFound": true,
+      "bandTop": -1,
+      "bodyClass": "wp-singular sf_formula-template-default single single-sf_formula postid-158 wp-custom-logo wp-embed-responsive wp-theme-sinofresh-theme-preflight translatepress-en_US has-cookie-banner sf-inquiry-lock",
+      "capBg": "rgb(181, 78, 15)",
+      "capBox": {
+        "bottom": 292,
+        "h": 52,
+        "right": 24,
+        "w": 150,
+        "x": 1266,
+        "y": 656
+      },
+      "capDisplay": "flex",
+      "capFirstChild": true,
+      "capHidden": false,
+      "capHref": "/contact/#quote",
+      "capIsVisible": true,
+      "capLabel": null,
+      "capPresent": true,
+      "capRadius": "26px",
+      "capText": "Send Inquiry",
+      "focus": {
+        "cls": "",
+        "inModal": true,
+        "name": "name",
+        "tag": "INPUT"
+      },
+      "formHidden": false,
+      "formulaValue": "158",
+      "hasScript": true,
+      "href": "https://dev.zxpet.com/formulas/joint-support-soft-chews/?sfcap=e1122851",
+      "leadText": "Joint Support Soft Chews",
+      "lock": true,
+      "modalDisplay": "flex",
+      "modalHidden": false,
+      "modalOpen": true,
+      "modalPresent": true,
+      "panelAriaModal": "true",
+      "panelBox": {
+        "bottom": 134,
+        "h": 733,
+        "right": 440,
+        "w": 560,
+        "x": 440,
+        "y": 134
+      },
+      "panelRadius": "8px",
+      "panelRole": "dialog",
+      "rawAnchors": 0,
+      "rockers": [
+        {
+          "box": {
+            "bottom": 228,
+            "h": 52,
+            "right": 24,
+            "w": 52,
+            "x": 1364,
+            "y": 720
+          },
+          "cls": "sf-float-btn--whatsapp",
+          "visible": true
+        },
+        {
+          "box": {
+            "bottom": 164,
+            "h": 52,
+            "right": 24,
+            "w": 52,
+            "x": 1364,
+            "y": 784
+          },
+          "cls": "sf-float-btn--email",
+          "visible": true
+        },
+        {
+          "box": {
+            "bottom": 100,
+            "h": 52,
+            "right": 24,
+            "w": 52,
+            "x": 1364,
+            "y": 848
+          },
+          "cls": "sf-float-btn--top",
+          "visible": true
+        }
+      ],
+      "scrollY": 677,
+      "sheet": "https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/style.css?ver=2.10.59",
+      "stackDir": "column",
+      "stackGap": "12px",
+      "status": "Please take a moment to complete the form.",
+      "stepCount": 4,
+      "stepTitles": [
+        "Submit Inquiry",
+        "Confirm Details",
+        "Sampling & Quality Check",
+        "Ship & Evaluate"
+      ],
+      "submitDisabled": false,
+      "successHidden": true,
+      "successText": "Thank you — your inquiry is on its way.A member of our sales team will reply within 24 hours.",
+      "terms": [
+        "Piece Weight",
+        "Pack Size"
+      ],
+      "titleText": "Send Inquiry",
+      "tsValue": "1790051397713",
+      "values": [
+        "2g/piece",
+        "60/90/120 per bottle"
+      ],
+      "vh": 1000,
+      "vw": 1440
+    },
+    "E7_state": {
+      "bandFound": true,
+      "bandTop": -1,
+      "bodyClass": "wp-singular sf_formula-template-default single single-sf_formula postid-158 wp-custom-logo wp-embed-responsive wp-theme-sinofresh-theme-preflight translatepress-en_US has-cookie-banner sf-inquiry-lock",
+      "capBg": "rgb(181, 78, 15)",
+      "capBox": {
+        "bottom": 292,
+        "h": 52,
+        "right": 24,
+        "w": 150,
+        "x": 1266,
+        "y": 656
+      },
+      "capDisplay": "flex",
+      "capFirstChild": true,
+      "capHidden": false,
+      "capHref": "/contact/#quote",
+      "capIsVisible": true,
+      "capLabel": null,
+      "capPresent": true,
+      "capRadius": "26px",
+      "capText": "Send Inquiry",
+      "focus": {
+        "cls": "wp-singular sf_formula-template-default single single-sf_formula postid-158 wp-custom-logo wp-embed-responsive wp-theme-sinofresh-theme-preflight translatepress-en_US has-cookie-banner sf-inquiry-lock",
+        "inModal": false,
+        "name": null,
+        "tag": "BODY"
+      },
+      "formHidden": true,
+      "formulaValue": "158",
+      "hasScript": true,
+      "href": "https://dev.zxpet.com/formulas/joint-support-soft-chews/?sfcap=e1122851",
+      "leadText": "Joint Support Soft Chews",
+      "lock": true,
+      "modalDisplay": "flex",
+      "modalHidden": false,
+      "modalOpen": true,
+      "modalPresent": true,
+      "panelAriaModal": "true",
+      "panelBox": {
+        "bottom": 278,
+        "h": 445,
+        "right": 440,
+        "w": 560,
+        "x": 440,
+        "y": 278
+      },
+      "panelRadius": "8px",
+      "panelRole": "dialog",
+      "rawAnchors": 0,
+      "rockers": [
+        {
+          "box": {
+            "bottom": 228,
+            "h": 52,
+            "right": 24,
+            "w": 52,
+            "x": 1364,
+            "y": 720
+          },
+          "cls": "sf-float-btn--whatsapp",
+          "visible": true
+        },
+        {
+          "box": {
+            "bottom": 164,
+            "h": 52,
+            "right": 24,
+            "w": 52,
+            "x": 1364,
+            "y": 784
+          },
+          "cls": "sf-float-btn--email",
+          "visible": true
+        },
+        {
+          "box": {
+            "bottom": 100,
+            "h": 52,
+            "right": 24,
+            "w": 52,
+            "x": 1364,
+            "y": 848
+          },
+          "cls": "sf-float-btn--top",
+          "visible": true
+        }
+      ],
+      "scrollY": 677,
+      "sheet": "https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/style.css?ver=2.10.59",
+      "stackDir": "column",
+      "stackGap": "12px",
+      "status": "",
+      "stepCount": 4,
+      "stepTitles": [
+        "Submit Inquiry",
+        "Confirm Details",
+        "Sampling & Quality Check",
+        "Ship & Evaluate"
+      ],
+      "submitDisabled": false,
+      "successHidden": false,
+      "successText": "Thank you — your inquiry is on its way.A member of our sales team will reply within 24 hours.",
+      "terms": [
+        "Piece Weight",
+        "Pack Size"
+      ],
+      "titleText": "Send Inquiry",
+      "tsValue": "1790051400466",
+      "values": [
+        "2g/piece",
+        "60/90/120 per bottle"
+      ],
+      "vh": 1000,
+      "vw": 1440
+    },
+    "E7_close_after": 2.5393738746643066,
+    "E10": {
+      "bandFound": true,
+      "bandTop": 67,
+      "bodyClass": "wp-singular sf_formula-template-default single single-sf_formula postid-158 wp-custom-logo wp-embed-responsive wp-theme-sinofresh-theme-preflight translatepress-en_US has-cookie-banner",
+      "capBg": "rgb(181, 78, 15)",
+      "capBox": {
+        "bottom": 436,
+        "h": 44,
+        "right": 16,
+        "w": 136,
+        "x": 238,
+        "y": 364
+      },
+      "capDisplay": "flex",
+      "capFirstChild": true,
+      "capHidden": false,
+      "capHref": "/contact/#quote",
+      "capIsVisible": true,
+      "capLabel": null,
+      "capPresent": true,
+      "capRadius": "22px",
+      "capText": "Send Inquiry",
+      "focus": {
+        "cls": "wp-singular sf_formula-template-default single single-sf_formula postid-158 wp-custom-logo wp-embed-responsive wp-theme-sinofresh-theme-preflight translatepress-en_US has-cookie-banner",
+        "inModal": false,
+        "name": null,
+        "tag": "BODY"
+      },
+      "formHidden": false,
+      "formulaValue": "158",
+      "hasScript": true,
+      "href": "https://dev.zxpet.com/formulas/joint-support-soft-chews/?sfcap=e10123013",
+      "leadText": "Joint Support Soft Chews",
+      "lock": false,
+      "modalDisplay": "none",
+      "modalHidden": true,
+      "modalOpen": false,
+      "modalPresent": true,
+      "panelAriaModal": "true",
+      "panelBox": {
+        "bottom": 844,
+        "h": 0,
+        "right": 390,
+        "w": 0,
+        "x": 0,
+        "y": 0
+      },
+      "panelRadius": "0px",
+      "panelRole": "dialog",
+      "rawAnchors": 0,
+      "rockers": [
+        {
+          "box": {
+            "bottom": 380,
+            "h": 44,
+            "right": 16,
+            "w": 44,
+            "x": 330,
+            "y": 420
+          },
+          "cls": "sf-float-btn--whatsapp",
+          "visible": true
+        },
+        {
+          "box": {
+            "bottom": 324,
+            "h": 44,
+            "right": 16,
+            "w": 44,
+            "x": 330,
+            "y": 476
+          },
+          "cls": "sf-float-btn--email",
+          "visible": true
+        },
+        {
+          "box": {
+            "bottom": 268,
+            "h": 44,
+            "right": 16,
+            "w": 44,
+            "x": 330,
+            "y": 532
+          },
+          "cls": "sf-float-btn--top",
+          "visible": true
+        }
+      ],
+      "scrollY": 1200,
+      "sheet": "https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/style.css?ver=2.10.59",
+      "stackDir": "column",
+      "stackGap": "12px",
+      "status": "",
+      "stepCount": 4,
+      "stepTitles": [
+        "Submit Inquiry",
+        "Confirm Details",
+        "Sampling & Quality Check",
+        "Ship & Evaluate"
+      ],
+      "submitDisabled": false,
+      "successHidden": true,
+      "successText": "Thank you — your inquiry is on its way.A member of our sales team will reply within 24 hours.",
+      "terms": [
+        "Piece Weight",
+        "Pack Size"
+      ],
+      "titleText": "Send Inquiry",
+      "tsValue": "0",
+      "values": [
+        "2g/piece",
+        "60/90/120 per bottle"
+      ],
+      "vh": 844,
+      "vw": 390
+    },
+    "E10_open": {
+      "bandFound": true,
+      "bandTop": 67,
+      "bodyClass": "wp-singular sf_formula-template-default single single-sf_formula postid-158 wp-custom-logo wp-embed-responsive wp-theme-sinofresh-theme-preflight translatepress-en_US has-cookie-banner sf-inquiry-lock",
+      "capBg": "rgb(181, 78, 15)",
+      "capBox": {
+        "bottom": 436,
+        "h": 44,
+        "right": 16,
+        "w": 136,
+        "x": 238,
+        "y": 364
+      },
+      "capDisplay": "flex",
+      "capFirstChild": true,
+      "capHidden": false,
+      "capHref": "/contact/#quote",
+      "capIsVisible": true,
+      "capLabel": null,
+      "capPresent": true,
+      "capRadius": "22px",
+      "capText": "Send Inquiry",
+      "focus": {
+        "cls": "",
+        "inModal": true,
+        "name": "name",
+        "tag": "INPUT"
+      },
+      "formHidden": false,
+      "formulaValue": "158",
+      "hasScript": true,
+      "href": "https://dev.zxpet.com/formulas/joint-support-soft-chews/?sfcap=e10123013",
+      "leadText": "Joint Support Soft Chews",
+      "lock": true,
+      "modalDisplay": "flex",
+      "modalHidden": false,
+      "modalOpen": true,
+      "modalPresent": true,
+      "panelAriaModal": "true",
+      "panelBox": {
+        "bottom": 0,
+        "h": 844,
+        "right": 0,
+        "w": 390,
+        "x": 0,
+        "y": 0
+      },
+      "panelRadius": "0px",
+      "panelRole": "dialog",
+      "rawAnchors": 0,
+      "rockers": [
+        {
+          "box": {
+            "bottom": 380,
+            "h": 44,
+            "right": 16,
+            "w": 44,
+            "x": 330,
+            "y": 420
+          },
+          "cls": "sf-float-btn--whatsapp",
+          "visible": true
+        },
+        {
+          "box": {
+            "bottom": 324,
+            "h": 44,
+            "right": 16,
+            "w": 44,
+            "x": 330,
+            "y": 476
+          },
+          "cls": "sf-float-btn--email",
+          "visible": true
+        },
+        {
+          "box": {
+            "bottom": 268,
+            "h": 44,
+            "right": 16,
+            "w": 44,
+            "x": 330,
+            "y": 532
+          },
+          "cls": "sf-float-btn--top",
+          "visible": true
+        }
+      ],
+      "scrollY": 1200,
+      "sheet": "https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/style.css?ver=2.10.59",
+      "stackDir": "column",
+      "stackGap": "12px",
+      "status": "",
+      "stepCount": 4,
+      "stepTitles": [
+        "Submit Inquiry",
+        "Confirm Details",
+        "Sampling & Quality Check",
+        "Ship & Evaluate"
+      ],
+      "submitDisabled": false,
+      "successHidden": true,
+      "successText": "Thank you — your inquiry is on its way.A member of our sales team will reply within 24 hours.",
+      "terms": [
+        "Piece Weight",
+        "Pack Size"
+      ],
+      "titleText": "Send Inquiry",
+      "tsValue": "1790051420278",
+      "values": [
+        "2g/piece",
+        "60/90/120 per bottle"
+      ],
+      "vh": 844,
+      "vw": 390
+    },
+    "E9": {
+      "bandFound": true,
+      "bandTop": 276,
+      "bodyClass": "wp-singular sf_formula-template-default single single-sf_formula postid-167 wp-custom-logo wp-embed-responsive wp-theme-sinofresh-theme-preflight translatepress-en_US has-cookie-banner sf-inquiry-lock",
+      "capBg": "rgb(181, 78, 15)",
+      "capBox": {
+        "bottom": 292,
+        "h": 52,
+        "right": 24,
+        "w": 150,
+        "x": 1266,
+        "y": 656
+      },
+      "capDisplay": "flex",
+      "capFirstChild": true,
+      "capHidden": false,
+      "capHref": "/contact/#quote",
+      "capIsVisible": true,
+      "capLabel": null,
+      "capPresent": true,
+      "capRadius": "26px",
+      "capText": "Send Inquiry",
+      "focus": {
+        "cls": "",
+        "inModal": true,
+        "name": "name",
+        "tag": "INPUT"
+      },
+      "formHidden": false,
+      "formulaValue": "167",
+      "hasScript": true,
+      "href": "https://dev.zxpet.com/formulas/bladder-support-powder/?sfcap=e9123021",
+      "leadText": "Bladder Support Powder",
+      "lock": true,
+      "modalDisplay": "flex",
+      "modalHidden": false,
+      "modalOpen": true,
+      "modalPresent": true,
+      "panelAriaModal": "true",
+      "panelBox": {
+        "bottom": 149,
+        "h": 703,
+        "right": 440,
+        "w": 560,
+        "x": 440,
+        "y": 149
+      },
+      "panelRadius": "8px",
+      "panelRole": "dialog",
+      "rawAnchors": 0,
+      "rockers": [
+        {
+          "box": {
+            "bottom": 228,
+            "h": 52,
+            "right": 24,
+            "w": 52,
+            "x": 1364,
+            "y": 720
+          },
+          "cls": "sf-float-btn--whatsapp",
+          "visible": true
+        },
+        {
+          "box": {
+            "bottom": 164,
+            "h": 52,
+            "right": 24,
+            "w": 52,
+            "x": 1364,
+            "y": 784
+          },
+          "cls": "sf-float-btn--email",
+          "visible": true
+        },
+        {
+          "box": {
+            "bottom": 100,
+            "h": 52,
+            "right": 24,
+            "w": 52,
+            "x": 1364,
+            "y": 848
+          },
+          "cls": "sf-float-btn--top",
+          "visible": true
+        }
+      ],
+      "scrollY": 400,
+      "sheet": "https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/style.css?ver=2.10.59",
+      "stackDir": "column",
+      "stackGap": "12px",
+      "status": "",
+      "stepCount": 4,
+      "stepTitles": [
+        "Submit Inquiry",
+        "Confirm Details",
+        "Sampling & Quality Check",
+        "Ship & Evaluate"
+      ],
+      "submitDisabled": false,
+      "successHidden": true,
+      "successText": "Thank you — your inquiry is on its way.A member of our sales team will reply within 24 hours.",
+      "terms": [
+        "Piece Weight"
+      ],
+      "titleText": "Send Inquiry",
+      "tsValue": "1790051427064",
+      "values": [
+        "4oz/8oz/16oz jar"
+      ],
+      "vh": 1000,
+      "vw": 1440
+    },
+    "E8_zh": {
+      "bandFound": true,
+      "bandTop": 276,
+      "bodyClass": "wp-singular sf_formula-template-default single single-sf_formula postid-167 wp-custom-logo wp-embed-responsive wp-theme-sinofresh-theme-preflight translatepress-zh_CN has-cookie-banner",
+      "capBg": "rgb(181, 78, 15)",
+      "capBox": {
+        "bottom": 292,
+        "h": 52,
+        "right": 24,
+        "w": 150,
+        "x": 1266,
+        "y": 656
+      },
+      "capDisplay": "flex",
+      "capFirstChild": true,
+      "capHidden": false,
+      "capHref": "/zh/contact/#quote",
+      "capIsVisible": true,
+      "capLabel": null,
+      "capPresent": true,
+      "capRadius": "26px",
+      "capText": "Send Inquiry",
+      "focus": {
+        "cls": "wp-singular sf_formula-template-default single single-sf_formula postid-167 wp-custom-logo wp-embed-responsive wp-theme-sinofresh-theme-preflight translatepress-zh_CN has-cookie-banner",
+        "inModal": false,
+        "name": null,
+        "tag": "BODY"
+      },
+      "formHidden": false,
+      "formulaValue": "167",
+      "hasScript": true,
+      "href": "https://dev.zxpet.com/zh/formulas/bladder-support-powder/?sfcap=e8123028",
+      "leadText": "Bladder Support Powder",
+      "lock": false,
+      "modalDisplay": "none",
+      "modalHidden": true,
+      "modalOpen": false,
+      "modalPresent": true,
+      "panelAriaModal": "true",
+      "panelBox": {
+        "bottom": 1000,
+        "h": 0,
+        "right": 1440,
+        "w": 0,
+        "x": 0,
+        "y": 0
+      },
+      "panelRadius": "8px",
+      "panelRole": "dialog",
+      "rawAnchors": 0,
+      "rockers": [
+        {
+          "box": {
+            "bottom": 228,
+            "h": 52,
+            "right": 24,
+            "w": 52,
+            "x": 1364,
+            "y": 720
+          },
+          "cls": "sf-float-btn--whatsapp",
+          "visible": true
+        },
+        {
+          "box": {
+            "bottom": 164,
+            "h": 52,
+            "right": 24,
+            "w": 52,
+            "x": 1364,
+            "y": 784
+          },
+          "cls": "sf-float-btn--email",
+          "visible": true
+        },
+        {
+          "box": {
+            "bottom": 100,
+            "h": 52,
+            "right": 24,
+            "w": 52,
+            "x": 1364,
+            "y": 848
+          },
+          "cls": "sf-float-btn--top",
+          "visible": true
+        }
+      ],
+      "scrollY": 400,
+      "sheet": "https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/style.css?ver=2.10.59",
+      "stackDir": "column",
+      "stackGap": "12px",
+      "status": "",
+      "stepCount": 4,
+      "stepTitles": [
+        "Submit Inquiry",
+        "Confirm Details",
+        "Sampling & Quality Check",
+        "Ship & Evaluate"
+      ],
+      "submitDisabled": false,
+      "successHidden": true,
+      "successText": "Thank you — your inquiry is on its way.A member of our sales team will reply within 24 hours.",
+      "terms": [
+        "Piece Weight"
+      ],
+      "titleText": "Send Inquiry",
+      "tsValue": "0",
+      "values": [
+        "4oz/8oz/16oz jar"
+      ],
+      "vh": 1000,
+      "vw": 1440
+    },
+    "E8_plain": {
+      "bandFound": false,
+      "bandTop": null,
+      "bodyClass": "wp-singular page-template-default page page-id-14 wp-custom-logo wp-embed-responsive wp-theme-sinofresh-theme-preflight translatepress-en_US has-cookie-banner",
+      "capBg": null,
+      "capBox": null,
+      "capDisplay": null,
+      "capFirstChild": null,
+      "capHidden": null,
+      "capHref": null,
+      "capIsVisible": null,
+      "capLabel": null,
+      "capPresent": false,
+      "capRadius": null,
+      "capText": null,
+      "focus": {
+        "cls": "wp-singular page-template-default page page-id-14 wp-custom-logo wp-embed-responsive wp-theme-sinofresh-theme-preflight translatepress-en_US has-cookie-banner",
+        "inModal": false,
+        "name": null,
+        "tag": "BODY"
+      },
+      "formHidden": null,
+      "formulaValue": "",
+      "hasScript": false,
+      "href": "https://dev.zxpet.com/about/?sfcap=e8plain123035",
+      "leadText": "",
+      "lock": false,
+      "modalDisplay": null,
+      "modalHidden": null,
+      "modalOpen": null,
+      "modalPresent": false,
+      "panelAriaModal": null,
+      "panelBox": null,
+      "panelRadius": null,
+      "panelRole": null,
+      "rawAnchors": 0,
+      "rockers": [
+        {
+          "box": {
+            "bottom": 228,
+            "h": 52,
+            "right": 24,
+            "w": 52,
+            "x": 1364,
+            "y": 720
+          },
+          "cls": "sf-float-btn--whatsapp",
+          "visible": true
+        },
+        {
+          "box": {
+            "bottom": 164,
+            "h": 52,
+            "right": 24,
+            "w": 52,
+            "x": 1364,
+            "y": 784
+          },
+          "cls": "sf-float-btn--email",
+          "visible": true
+        },
+        {
+          "box": {
+            "bottom": 100,
+            "h": 52,
+            "right": 24,
+            "w": 52,
+            "x": 1364,
+            "y": 848
+          },
+          "cls": "sf-float-btn--top",
+          "visible": true
+        }
+      ],
+      "scrollY": 0,
+      "sheet": "https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/style.css?ver=2.10.59",
+      "stackDir": "column",
+      "stackGap": "12px",
+      "status": "",
+      "stepCount": 0,
+      "stepTitles": [],
+      "submitDisabled": false,
+      "successHidden": null,
+      "successText": null,
+      "terms": [],
+      "titleText": "",
+      "tsValue": "",
+      "values": [],
+      "vh": 1000,
+      "vw": 1440
+    }
+  },
+  "mail_sent": true
+}

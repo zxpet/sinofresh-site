@@ -1,0 +1,16 @@
+  ok  [0] both sides hold 75 pages
+  ok  [0] candidate manifest records the pre-flight header
+  ok  [0] every candidate asset resolves into sinofresh-theme-preflight/
+  ok  [1] capsule = dialog = inquiry.js = parameter band = 42 pages, same set
+  ok  [1] all 75 candidate pages advertise ver=2.10.59, none advertises ver=2.10.57
+  ok  [2] strip_declared(candidate) == baseline byte-for-byte after norm on all 75 pages
+  ok  [3] 33 pages carry neither the capsule nor the dialog nor the script
+  ok  [4] capsule is the stack's first child, hidden, labelled, on all 42 pages
+  ok  [5] the three pre-existing float buttons are byte-identical on all 75 pages
+  ok  [6] all 42 dialogs print the four titles from sinofresh_sampling_steps(): Submit Inquiry / Confirm Details / Sampling & Quality Check / Ship & Evaluate
+  ok  [7] selection labels all come from the declared set: Pack Size x20, Piece Weight x42
+  ok  [8] every decoded Cloudflare address is sales@zxpet.com on both sides
+  ok  [9] JSON-LD blocks are identical on all 75 pages
+  ok  [10] h1 count, parameter band and shortcode rendering unchanged on all 75 pages
+  ok  [11] all 42 dialogs carry the honeypot, the two hidden fields, the five fields and a submit
+MAIN VERDICT: PASS — 0 failed assertions

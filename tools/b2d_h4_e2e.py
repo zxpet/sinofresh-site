@@ -79,6 +79,7 @@ MAIL_TAG = 'H4 E2E'
 
 STATE = r"""
 (() => {
+  try {
   const box = el => {
     if (!el) return null;
     const r = el.getBoundingClientRect();
@@ -165,6 +166,7 @@ STATE = r"""
 
     rawAnchors: document.querySelectorAll('a[href*="email-protection"]').length
   };
+  } catch (e) { return {error: String(e), url: location.href}; }
 })()
 """
 
@@ -232,6 +234,7 @@ class Pass(object):
         self.out = out
         self.fails, self.notes, self.data = [], [], {}
         self.mail_sent = False
+        self.url, self.width, self.height = None, 1440, 1000
 
     def fail(self, m):
         self.fails.append(m)
@@ -265,24 +268,43 @@ class Pass(object):
 
     def goto(self, path, tag, width=1440, height=1000, wait=0.7):
         url = HOST + path + '?sfcap=%s%s' % (tag, time.strftime('%H%M%S'))
-        run(['agent-browser', 'open', url])
-        run(['agent-browser', 'reload'])         # reload is what keeps the header
-        run(['agent-browser', 'set', 'viewport', str(width), str(height)])
-        ev('window.scrollTo(0,0)')
-        time.sleep(wait)
-        st = ev(STATE)
-        if st.get('vw') and abs(st['vw'] - width) > 2:
-            raise SystemExit('FATAL the viewport did not take: innerWidth %s != %s'
-                             % (st['vw'], width))
-        # The provenance assertion the H4e pass learned to insist on: a wrong
-        # header order serves the live theme and every check below would pass
-        # against the wrong bytes, silently.
-        sheet = st.get('sheet') or ''
-        if PREFLIGHT_DIR not in sheet or NEW_VER not in sheet:
-            raise SystemExit('FATAL not the pre-flight copy — stylesheet is %r. '
-                             'A wrong header order silently serves the live theme.'
-                             % sheet)
-        return st
+        self.width, self.height = width, height
+        return self.goto_url(url, tag, wait=wait)
+
+    def goto_url(self, url, tag, wait=0.7):
+        """Open a URL and prove the bytes are the candidate's.
+
+        Three attempts, because a long browser session can end up on a Chrome
+        error page after a navigation the page itself aborted, and re-opening
+        is what clears it. The provenance assertion is not relaxed by the
+        retry: it is the only thing standing between a green run and a run
+        that compared the live theme by accident.
+        """
+        self.url = url
+        st = None
+        for attempt in (1, 2, 3):
+            run(['agent-browser', 'open', url])
+            run(['agent-browser', 'reload'])     # reload is what keeps the header
+            run(['agent-browser', 'set', 'viewport',
+                 str(self.width), str(self.height)])
+            ev('window.scrollTo(0,0)')
+            time.sleep(wait)
+            st = self.state('goto %s' % tag)
+            if st.get('vw') and abs(st['vw'] - self.width) > 2:
+                raise SystemExit('FATAL the viewport did not take: innerWidth %s != %s'
+                                 % (st['vw'], self.width))
+            # The provenance assertion the H4e pass learned to insist on: a
+            # wrong header order serves the live theme and every check below
+            # would pass against the wrong bytes, silently.
+            sheet = st.get('sheet') or ''
+            if PREFLIGHT_DIR in sheet and NEW_VER in sheet:
+                return st
+            self.note('goto %s attempt %d served %r; re-opening'
+                      % (tag, attempt, sheet or 'no stylesheet'))
+            time.sleep(0.8)
+        raise SystemExit('FATAL not the pre-flight copy after three attempts — '
+                         'stylesheet is %r. A wrong header order silently serves '
+                         'the live theme.' % (st.get('sheet') if st else None))
 
     def wheel(self, dy):
         run(['agent-browser', 'mouse', 'wheel', str(dy)])
@@ -312,6 +334,97 @@ class Pass(object):
                  % jsstr(selector))
         return box if isinstance(box, dict) and box.get('w') else None
 
+    def recover(self, why):
+        """Put the browser back on the page under test.
+
+        Measured, not guessed: after a long run of eval round trips the
+        browser ends up on about:blank or a Chrome error page, and every read
+        then describes that blank document — which reads exactly like "the
+        capsule vanished from the DOM" and produced a whole screenful of
+        false product failures. Restart the session (the long-lived one is
+        what went wrong) and re-open through the provenance-checked path.
+        """
+        if not getattr(self, 'url', None):
+            return False
+        self.note('the session is on %s; restarting it and re-opening' % why)
+        self.attach()
+        self.goto_url(self.url, 'recover')
+        # The capsule only reveals once the band is reached; a fresh page is
+        # back at the top, so nudge it there again.
+        ev("(() => { const b = document.querySelector('.sf-fdetail2__params');"
+           " if (b) b.scrollIntoView(); return true; })()")
+        time.sleep(0.6)
+        return True
+
+    def state(self, tag=''):
+        """The page state, or a loud stop.
+
+        A transient failure in the eval round trip used to return an empty
+        object, and the next three assertions then read the *absence* of data
+        as a product failure — "an impossibly fast submission reached the
+        success state" was one false report produced that way. A blank page
+        is the same trap with a clearer signature, so it is recovered from
+        rather than reported. Anything else is refused loudly.
+        """
+        st = ev(STATE)
+        if not isinstance(st, dict) or 'capPresent' not in st:
+            time.sleep(0.6)
+            st = ev(STATE)
+        if isinstance(st, dict) and not st.get('error'):
+            href = str(st.get('href') or '')
+            if href.startswith('about:') or 'chromewebdata' in href:
+                if self.recover(href.split('/')[0] or href):
+                    st = ev(STATE)
+        if not isinstance(st, dict) or 'capPresent' not in st:
+            raise SystemExit('FATAL the page state could not be read (%s): %r'
+                             % (tag or '-', st))
+        if st.get('error'):
+            raise SystemExit('FATAL the state probe threw (%s): %s'
+                             % (tag or '-', st['error']))
+        href = str(st.get('href') or '')
+        if href.startswith('about:') or 'chromewebdata' in href:
+            raise SystemExit('FATAL the session is stuck on %s (%s)' % (href, tag or '-'))
+        return st
+
+    def form_ready(self, tag):
+        """A dialog that is open, with a visible form and a live clock.
+
+        Every submit case assumes this. Asserting it is what keeps a bad read
+        from being reported as a product defect.
+        """
+        st = self.state(tag)
+        if not st.get('modalPresent'):
+            return False, 'no dialog on this page'
+        if st.get('modalHidden'):
+            return False, 'the dialog did not open'
+        if st.get('formHidden') or not st.get('successHidden'):
+            return False, 'the form is not the visible block'
+        if not str(st.get('tsValue') or '').isdigit():
+            return False, 'the clock was not stamped (%r)' % st.get('tsValue')
+        return True, 'ok'
+
+    def ensure_open(self, tag):
+        """Click the capsule, then verify the dialog is up with a live form.
+
+        A click can land while the page is still settling; opening twice costs
+        less than reporting a harness race as a product defect.
+        """
+        for attempt in (1, 2):
+            if attempt == 2 and self.url:
+                self.note('%s: restarting the session before the retry' % tag)
+                self.attach()
+                self.goto_url(self.url, '%s retry' % tag)
+            if not self.click_capsule('%s (attempt %d)' % (tag, attempt)):
+                time.sleep(0.5)
+                continue
+            ready, why = self.form_ready(tag)
+            if ready:
+                return True
+            self.note('%s: the form was not ready after the click (%s)' % (tag, why))
+            time.sleep(0.6)
+        self.fail('%s: the dialog could not be brought up with a live form' % tag)
+        return False
+
     def click_capsule(self, tag):
         """The capsule's box, re-read immediately before the click.
 
@@ -319,11 +432,24 @@ class Pass(object):
         the reveal moves the stack, and a stale coordinate is the one failure
         mode that produces a *pass* by clicking something that happens to be
         inert.
+
+        Also: an open dialog covers the whole viewport with its backdrop, so
+        the capsule is physically unclickable while one is up. Closing first
+        is not a convenience — the previous run clicked the backdrop and read
+        the miss as a broken capsule.
         """
-        st = ev(STATE)
+        st = self.state(tag)
+        if st.get('modalPresent') and not st.get('modalHidden'):
+            self.note('%s: a dialog was still open; closing it before the click' % tag)
+            run(['agent-browser', 'press', 'Escape'])
+            time.sleep(0.45)
+            st = self.state(tag)
         if st.get('capHidden') or not st.get('capBox') or not st['capBox']['w']:
-            self.fail('%s: the capsule is not clickable (hidden=%s box=%s)'
-                      % (tag, st.get('capHidden'), st.get('capBox')))
+            self.fail('%s: the capsule is not clickable — present=%s hidden=%s '
+                      'box=%s on %s (modal present=%s hidden=%s, script=%s)'
+                      % (tag, st.get('capPresent'), st.get('capHidden'),
+                         st.get('capBox'), st.get('href'), st.get('modalPresent'),
+                         st.get('modalHidden'), st.get('hasScript')))
             return False
         return self.click_at(st['capBox'], 'sf-float-btn--inquiry', tag)
 
@@ -436,7 +562,7 @@ def main():
         p.wheel(400)
         stepped += 1
         prev = st
-        st = ev(STATE)
+        st = p.state()
         if st['bandTop'] is not None and st['bandTop'] > st['vh'] * 0.5 \
                 and prev['bandTop'] is not None and prev['bandTop'] > st['vh'] * 0.5:
             mid_hidden = st['capHidden']
@@ -469,7 +595,7 @@ def main():
     p.wheel(2000)
     p.wheel(-9000)
     time.sleep(0.4)
-    st = ev(STATE)
+    st = p.state()
     if st['scrollY'] > 20:
         p.note('E1 could not return to the top (scrollY=%s); one-way check is partial'
                % st['scrollY'])
@@ -536,7 +662,7 @@ def main():
     # ------------------------------------------------------------------ E3 --
     print('E3  the dialog opens')
     p.click_capsule('E3 capsule click')
-    st = ev(STATE)
+    st = p.state()
     p.data['E3_open'] = st
     if st['modalHidden'] or not st['modalOpen']:
         p.fail('E3: the dialog did not open (hidden=%s is-open=%s)'
@@ -581,11 +707,27 @@ def main():
         p.ok('E3 the form carries post id %s' % st['formulaValue'])
     p.shot('h4-e3-desktop-open.png')
 
+    # The dialog has to actually cover the float stack. A call-to-action
+    # floating over an open dialog's veil is exactly the kind of thing a
+    # screenshot shows and nobody asserts: elementFromPoint at the capsule's
+    # centre must resolve inside the modal (9998 under 10000), which is also
+    # why a click there opens nothing.
+    cap = st['capBox']
+    if cap and cap['w']:
+        probe = p.hit(cap['x'] + cap['w'] // 2, cap['y'] + cap['h'] // 2,
+                      'sf-inquiry-modal')
+        if not probe or not probe.get('ok'):
+            p.fail('E3: with the dialog open the capsule is still on top of the '
+                   'backdrop — it would float over the veil (probe %s)' % (probe,))
+        else:
+            p.ok('E3 the dialog covers the float stack: a point over the capsule '
+                 'resolves to the backdrop, not the capsule')
+
     # ------------------------------------------------------------------ E4 --
     print('E4  the closes')
     run(['agent-browser', 'press', 'Escape'])
     time.sleep(0.5)
-    st = ev(STATE)
+    st = p.state()
     p.data['E4_esc'] = st
     if not st['modalHidden'] or st['modalOpen']:
         p.fail('E4 Escape: the dialog is still up (hidden=%s is-open=%s)'
@@ -598,15 +740,17 @@ def main():
         p.ok('E4 Escape closes it, unlocks the body and returns focus to the capsule')
 
     p.click_capsule('E4 reopen')
-    st = ev(STATE)
+    st = p.state()
     if st['modalHidden']:
         p.fail('E4: the dialog did not reopen')
     else:
-        # A click inside the panel must not close it.
+        # A click inside the panel must not close it. The expectation is the
+        # panel, not the title: the point lands in the head's padding as often
+        # as on the heading, and "inside the panel" is the claim under test.
         inner = st['panelBox']
         p.click_at({'x': inner['x'] + 20, 'y': inner['y'] + 14,
-                    'w': 8, 'h': 8}, 'sf-inquiry-modal__title', 'E4 inner click')
-        st2 = ev(STATE)
+                    'w': 8, 'h': 8}, 'sf-inquiry-modal__panel', 'E4 inner click')
+        st2 = p.state()
         if st2['modalHidden']:
             p.fail('E4: a click inside the panel closed the dialog')
         else:
@@ -614,7 +758,7 @@ def main():
         # The backdrop is the dialog's own outer box: aim at the far corner.
         p.click_at({'x': 4, 'y': 4, 'w': 8, 'h': 8}, 'sf-inquiry-modal',
                    'E4 backdrop click')
-        st3 = ev(STATE)
+        st3 = p.state()
         if not st3['modalHidden']:
             p.fail('E4: a click on the backdrop did not close the dialog')
         elif st3['lock']:
@@ -624,7 +768,7 @@ def main():
 
     # ------------------------------------------------------------------ E5 --
     print('E5  the honeypot is checked first')
-    p.click_capsule('E5 reopen')
+    p.ensure_open('E5 reopen')
     res = ev(INJECT % (jsstr('Sino Fresh E2E'), jsstr('e2e@example.com'),
                        jsstr('Sino Fresh'), jsstr('CN'),
                        jsstr('[%s] honeypot probe — please ignore' % MAIL_TAG),
@@ -634,7 +778,7 @@ def main():
     sub = ev(SUBMIT)
     p.data['E5'] = {'inject': res, 'submit': sub}
     time.sleep(1.2)
-    st = ev(STATE)
+    st = p.state()
     p.data['E5_state'] = st
     if 'rejected' in st['status'].lower():
         p.ok('E5 the honeypot is refused before anything else: %r' % st['status'])
@@ -649,7 +793,17 @@ def main():
 
     # ------------------------------------------------------------------ E6 --
     print('E6  the three-second floor')
-    p.click_capsule('E6 reopen')
+    # The clock starts when the dialog opens, so prove it restarted: the
+    # measured delta below is only meaningful if this click re-stamped it.
+    ts_before = (p.state() or {}).get('tsValue')
+    opened = p.ensure_open('E6 reopen')
+    st = p.state()
+    if not opened:
+        p.fail('E6: no dialog to submit against')
+    elif st.get('tsValue') == ts_before:
+        p.fail('E6: the timestamp did not change across the open (%r) — the '
+               'elapsed time below would be measured against the wrong clock'
+               % ts_before)
     res = ev(INJECT % (jsstr('Sino Fresh E2E'), jsstr('e2e@example.com'),
                        jsstr('Sino Fresh'), jsstr('CN'),
                        jsstr('[%s] speed probe — please ignore' % MAIL_TAG),
@@ -658,7 +812,7 @@ def main():
     delta = sub.get('delta')
     p.data['E6'] = {'inject': res, 'submit': sub}
     time.sleep(1.2)
-    st = ev(STATE)
+    st = p.state()
     p.data['E6_state'] = st
     if delta is None or delta >= 3000:
         p.fail('E6: the submission was %sms after the stamp, not under the 3000ms '
@@ -678,9 +832,11 @@ def main():
     if args.skip_mail:
         p.note('E7 skipped by --skip-mail: the delivery path was not exercised')
     else:
-        st = ev(STATE)
-        # The client re-stamps on failure, so the clock has to be allowed to
-        # pass again before the real attempt.
+        # Open it here rather than inherit E6's dialog: the clock starts when a
+        # dialog opens, and an inherited one makes the three-second wait
+        # impossible to reason about.
+        if not p.ensure_open('E7'):
+            p.fail('E7: no dialog to submit against')
         time.sleep(3.4)
         run(['agent-browser', 'fill', 'input[name="name"]', 'Sino Fresh E2E'])
         run(['agent-browser', 'fill', 'input[name="email"]', 'sales@zxpet.com'])
@@ -690,7 +846,7 @@ def main():
              '[%s] automated end-to-end check from the pre-flight copy. '
              'If you are reading this, the inquiry path delivered a lead.'
              % MAIL_TAG])
-        st = ev(STATE)
+        st = p.state()
         filled = st['tsValue']
         if not p.click_selector('.sf-inquiry-form__submit',
                                 'sf-inquiry-form__submit', 'E7 submit'):
@@ -699,7 +855,7 @@ def main():
             ok_seen = False
             for _ in range(20):
                 time.sleep(0.3)
-                st = ev(STATE)
+                st = p.state()
                 if not st['successHidden']:
                     ok_seen = True
                     break
@@ -719,7 +875,7 @@ def main():
             closed_at = None
             for _ in range(24):
                 time.sleep(0.25)
-                st = ev(STATE)
+                st = p.state()
                 if st['modalHidden']:
                     closed_at = time.time() - t0
                     break
@@ -736,7 +892,7 @@ def main():
             # visitor sees the confirmation rather than an empty form. Not a
             # defect this batch created (nothing resets it), but worth a note.
             if p.click_capsule('E7 reopen after success'):
-                st = ev(STATE)
+                st = p.state()
                 if st['formHidden'] and not st['successHidden']:
                     p.note('E7 reopening after a success shows the confirmation, not '
                            'an empty form — flagged for H6 (no reset path exists)')
@@ -751,7 +907,7 @@ def main():
         if st['bandTop'] is not None and st['bandTop'] <= st['vh'] * 0.5:
             break
         p.wheel(400)
-        st = ev(STATE)
+        st = p.state()
     p.data['E10'] = st
     if st['capHidden']:
         p.fail('E10: the capsule never revealed at 390px wide')
@@ -770,7 +926,7 @@ def main():
     p.shot('h4-e10-mobile-capsule.png')
     if st['capBox']:
         p.click_capsule('E10 capsule click')
-        st = ev(STATE)
+        st = p.state()
         p.data['E10_open'] = st
         if st['modalHidden']:
             p.fail('E10: the dialog does not open on a phone')
@@ -793,9 +949,9 @@ def main():
         if st['bandTop'] is not None and st['bandTop'] <= st['vh'] * 0.5:
             break
         p.wheel(400)
-        st = ev(STATE)
+        st = p.state()
     p.click_capsule('E9 capsule click')
-    st = ev(STATE)
+    st = p.state()
     p.data['E9'] = st
     if st['terms'] != ['Piece Weight']:
         p.fail('E9 %s: the selection rows are %s, expected [Piece Weight]'
@@ -814,14 +970,14 @@ def main():
         if st['bandTop'] is not None and st['bandTop'] <= st['vh'] * 0.5:
             break
         p.wheel(400)
-        st = ev(STATE)
+        st = p.state()
     p.data['E8_zh'] = st
     if not st['capPresent'] or st['capHidden']:
         p.fail('E8 the ZH detail page has no revealed capsule')
     else:
         p.ok('E8 ZH: capsule %r joins the stack' % st['capText'])
     p.click_capsule('E8 capsule click')
-    st = ev(STATE)
+    st = p.state()
     if st['modalHidden'] or st['stepCount'] != 4:
         p.fail('E8 the ZH dialog did not open intact (hidden=%s steps=%d)'
                % (st['modalHidden'], st['stepCount']))

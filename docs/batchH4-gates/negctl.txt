@@ -1,0 +1,7 @@
+  served-manifest-missing          FAIL (as required)  [0] candidate MANIFEST.tsv is missing
+  baseline-empty                   FAIL (as required)  [0] sides are not 75/75 (baseline 0, candidate 75)
+  candidate-equals-baseline        FAIL (as required)  [1] capsule and parameter band disagree: 0 vs 42 pages
+  page-missing-from-candidate      FAIL (as required)  [0] sides are not 75/75 (baseline 75, candidate 74)
+  ver-token-unchanged              FAIL (as required)  [1] 75 candidate pages still advertise ver=2.10.57
+  5/5 controls failed as required
+NEGCONTROL VERDICT: PASS

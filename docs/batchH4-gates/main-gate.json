@@ -1,0 +1,19 @@
+{
+  "data": {
+    "band": 42,
+    "capsule": 42,
+    "dialog": 42,
+    "diff_pages": 0,
+    "script": 42,
+    "selection_rows": {
+      "Pack Size": 20,
+      "Piece Weight": 42
+    },
+    "stripped": {
+      "capsule": 42,
+      "dialog": 42,
+      "script": 42
+    }
+  },
+  "fails": []
+}
