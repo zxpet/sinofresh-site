@@ -5,7 +5,7 @@
  * Phase 1 of the detail-page rebuild: every product carries its own data
  * instead of borrowing the dosage page's. This file is the admin half —
  * meta boxes, sanitising, the phase-1 warning banner, and the two Site
- * Settings subpages (Container Library, Global FAQ). Front-end readers of
+ * Settings subpages (Container Library, Shape Library, Global FAQ). Front-end readers of
  * the new keys land in batch H2; nothing here changes a rendered byte, so
  * style.css and the front-end enqueue versions stay untouched.
  *
@@ -496,7 +496,8 @@ add_action('admin_enqueue_scripts', function ($hook) {
 		 * not from the menu slug: 'Site Settings' -> 'site-settings', so the
 		 * hooks below are site-settings_page_* (recorded live 2026-09-21,
 		 * verified with a temporary hook-diag mu-plugin). */
-		'site-settings_page_sf-containers', 'site-settings_page_sf-global-faq'), true);
+		'site-settings_page_sf-containers', 'site-settings_page_sf-shapes',
+		'site-settings_page_sf-global-faq'), true);
 	if (!$is_formula && !$is_settings) {
 		return;
 	}
@@ -508,7 +509,7 @@ add_action('admin_enqueue_scripts', function ($hook) {
 	}
 	if ($is_settings) {
 		wp_enqueue_media(); /* the Container Library picks images via wp.media */
-		wp_enqueue_script('sf-site-settings', $dir . '/assets/admin/sf-site-settings.js', array(), '1.0.0', true);
+		wp_enqueue_script('sf-site-settings', $dir . '/assets/admin/sf-site-settings.js', array(), '1.0.1', true);
 	}
 });
 
@@ -545,6 +546,43 @@ function sf_container_library() {
 	return $out;
 }
 
+/* Batch H7g — the shape library. Same shape as the container library on
+   purpose: an admin who learned one page can run the other, and the front
+   end reads both through the same option/label/attachment_id triple.
+   The slugs are permanent because the configurator posts them and the PDF
+   endpoint validates against them — renaming a slug orphans the saved
+   choice, so "cylinder" stays "cylinder" even if the label is reworded. */
+function sf_default_shapes() {
+	return array(
+		array('slug' => 'bone',     'label' => 'Bone',     'attachment_id' => 0),
+		array('slug' => 'round',    'label' => 'Round',    'attachment_id' => 0),
+		array('slug' => 'square',   'label' => 'Square',   'attachment_id' => 0),
+		array('slug' => 'heart',    'label' => 'Heart',    'attachment_id' => 0),
+		array('slug' => 'star',     'label' => 'Star',     'attachment_id' => 0),
+		array('slug' => 'paw',      'label' => 'Paw',      'attachment_id' => 0),
+		array('slug' => 'cylinder', 'label' => 'Cylinder', 'attachment_id' => 0),
+		array('slug' => 'custom',   'label' => 'Custom',   'attachment_id' => 0),
+	);
+}
+
+/** The global shape library, with images from the media library. */
+function sf_shape_library() {
+	$opt = get_option('sf_shapes', null);
+	if (!is_array($opt)) {
+		return sf_default_shapes();
+	}
+	$out = array();
+	foreach ($opt as $row) {
+		$row = (array) $row;
+		$out[] = array(
+			'slug'          => sanitize_title(isset($row['slug']) ? $row['slug'] : ''),
+			'label'         => sanitize_text_field(isset($row['label']) ? $row['label'] : ''),
+			'attachment_id' => absint(isset($row['attachment_id']) ? $row['attachment_id'] : 0),
+		);
+	}
+	return $out;
+}
+
 add_action('admin_init', function () {
 	/* Batch H7e reads its fallbacks from the same array the Site Settings page
 	   uses, rather than repeating the two strings here: one value, one source,
@@ -552,6 +590,28 @@ add_action('admin_init', function () {
 	   a blank row on 42 product pages. */
 	$d = sf_site_settings_defaults();
 	register_setting('sf_site_settings', 'sf_containers', array(
+		'type'              => 'array',
+		'sanitize_callback' => function ($v) {
+			$out = array();
+			foreach ((array) $v as $row) {
+				$row = (array) $row;
+				$slug = sanitize_title(isset($row['slug']) ? $row['slug'] : '');
+				if ($slug === '') {
+					continue;
+				}
+				$out[] = array(
+					'slug'          => $slug,
+					'label'         => sanitize_text_field(isset($row['label']) ? $row['label'] : ''),
+					'attachment_id' => absint(isset($row['attachment_id']) ? $row['attachment_id'] : 0),
+				);
+			}
+			return $out;
+		},
+	));
+	/* Batch H7g — same contract as sf_containers: rows with a slug survive,
+	   fully-empty rows are dropped, an absent option falls back to the eight
+	   shipped shapes. */
+	register_setting('sf_site_settings', 'sf_shapes', array(
 		'type'              => 'array',
 		'sanitize_callback' => function ($v) {
 			$out = array();
@@ -605,6 +665,7 @@ add_action('admin_init', function () {
 
 add_action('admin_menu', function () {
 	add_submenu_page('sf-site-settings', 'Container Library', 'Container Library', 'manage_options', 'sf-containers', 'sf_render_containers_page');
+	add_submenu_page('sf-site-settings', 'Shape Library', 'Shape Library', 'manage_options', 'sf-shapes', 'sf_render_shapes_page');
 	add_submenu_page('sf-site-settings', 'Global FAQ', 'Global FAQ', 'manage_options', 'sf-global-faq', 'sf_render_global_faq_page');
 	/* Batch H7e. No hook for this page in admin_enqueue_scripts(): it has no
 	   repeating row for sf-mb-tables.js to clone and no image for wp.media to
@@ -654,6 +715,47 @@ function sf_render_containers_page() {
 				</tbody>
 			</table>
 			<p><button type="button" class="button" id="sf-containers-add">+ Add container type</button></p>
+			<?php submit_button(); ?>
+		</form>
+	</div>
+	<?php
+}
+
+/* Batch H7g — same table, same JS, different option name. The pick/add/del
+   handlers in sf-site-settings.js were generalized to read the attachment
+   input by its [attachment_id] suffix rather than by the sf_containers
+   prefix, so this page needs no script of its own. */
+function sf_render_shapes_page() {
+	if (!current_user_can('manage_options')) {
+		return;
+	}
+	$rows = sf_shape_library();
+	?>
+	<div class="wrap">
+		<h1>Shape Library</h1>
+		<p>The eight chew/tablet shapes every product's Shape picker offers. Upload a 400×400 (1:1) photo per shape; the label shows under the image, and an empty slot shows the name in a dashed box until a photo lands.</p>
+		<form method="post" action="options.php">
+			<?php settings_fields('sf_site_settings'); ?>
+			<table class="widefat sf-containers" id="sf-shapes">
+				<thead><tr><th>Image (400×400)</th><th>Label</th><th>Slug</th><th></th></tr></thead>
+				<tbody>
+				<?php foreach ($rows as $s) : ?>
+					<tr>
+						<td class="sf-containers__media">
+							<input type="hidden" name="sf_shapes[attachment_id][]" value="<?php echo (int) $s['attachment_id']; ?>"/>
+							<div class="sf-containers__preview"><?php
+								echo $s['attachment_id'] ? wp_get_attachment_image((int) $s['attachment_id'], array(80, 80)) : '';
+							?></div>
+							<button type="button" class="button sf-shapes__pick">Choose</button>
+						</td>
+						<td><input type="text" class="regular-text" name="sf_shapes[label][]" value="<?php echo esc_attr($s['label']); ?>"/></td>
+						<td><input type="text" class="regular-text code" name="sf_shapes[slug][]" value="<?php echo esc_attr($s['slug']); ?>"/></td>
+						<td><button type="button" class="button-link sf-containers__del">Remove</button></td>
+					</tr>
+				<?php endforeach; ?>
+				</tbody>
+			</table>
+			<p><button type="button" class="button" id="sf-shapes-add">+ Add shape</button></p>
 			<?php submit_button(); ?>
 		</form>
 	</div>

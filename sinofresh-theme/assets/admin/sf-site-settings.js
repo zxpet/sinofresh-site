@@ -61,25 +61,31 @@
 		}
 	});
 
-	/* --- container library rows --------------------------------------------- */
+	/* --- container + shape library rows (H7g generalizes to both) --------- */
 	document.addEventListener('click', function (e) {
-		var add = e.target.closest('#sf-containers-add');
+		var add = e.target.closest('#sf-containers-add, #sf-shapes-add');
 		if (add) {
-			var tbody = document.querySelector('#sf-containers tbody');
+			var table = document.getElementById(add.id === 'sf-shapes-add' ? 'sf-shapes' : 'sf-containers');
+			var tbody = table ? table.querySelector('tbody') : null;
+			if (!tbody) { return; }
 			var last = tbody.querySelector('tr:last-child');
 			if (!last) { return; }
 			var tr = last.cloneNode(true);
 			tr.querySelectorAll('input[type="text"]').forEach(function (el) { el.value = ''; });
-			tr.querySelector('input[name^="sf_containers[attachment_id]"]').value = '0';
-			tr.querySelector('.sf-containers__preview').innerHTML = '';
+			/* Read by suffix, not by option name: the same handler serves
+			   sf_containers[attachment_id][] and sf_shapes[attachment_id][]. */
+			var att = tr.querySelector('input[name$="[attachment_id]"]');
+			if (att) { att.value = '0'; }
+			var prev = tr.querySelector('.sf-containers__preview');
+			if (prev) { prev.innerHTML = ''; }
 			tbody.appendChild(tr);
 			return;
 		}
 		var del = e.target.closest('.sf-containers__del');
 		if (del) {
-			var tbody2 = document.querySelector('#sf-containers tbody');
 			var row = del.closest('tr');
-			if (row && tbody2.querySelectorAll('tr').length > 1) {
+			var tbody2 = row ? row.closest('tbody') : null;
+			if (row && tbody2 && tbody2.querySelectorAll('tr').length > 1) {
 				row.remove();
 			} else if (row) {
 				row.querySelectorAll('input[type="text"]').forEach(function (el) { el.value = ''; });
@@ -87,18 +93,21 @@
 		}
 	});
 
-	/* single-image picker for one container row */
+	/* single-image picker for one container/shape row */
 	document.addEventListener('click', function (e) {
-		var pick = e.target.closest('.sf-containers__pick');
+		var pick = e.target.closest('.sf-containers__pick, .sf-shapes__pick');
 		if (!pick || !window.wp || !window.wp.media) { return; }
 		var row = pick.closest('tr');
-		var frame = window.wp.media({ title: 'Choose container image', multiple: false, library: { type: 'image' } });
+		var frame = window.wp.media({ title: 'Choose image', multiple: false, library: { type: 'image' } });
 		frame.on('select', function () {
 			var att = frame.state().get('selection').first().toJSON();
-			row.querySelector('input[name^="sf_containers[attachment_id]"]').value = String(att.id);
+			var attInput = row.querySelector('input[name$="[attachment_id]"]');
+			if (attInput) { attInput.value = String(att.id); }
 			var thumb = (att.sizes && att.sizes.thumbnail) ? att.sizes.thumbnail.url : att.url;
-			row.querySelector('.sf-containers__preview').innerHTML =
-				'<img src="' + thumb + '" alt="" width="80" height="80"/>';
+			var previewEl = row.querySelector('.sf-containers__preview');
+			if (previewEl) {
+				previewEl.innerHTML = '<img src="' + thumb + '" alt="" width="80" height="80"/>';
+			}
 		});
 		frame.open();
 	});

@@ -2,7 +2,7 @@
 Theme Name: SINO FRESH
 Author: Shandong SINO FRESH Pet Food Co., Ltd.
 Text Domain: sinofresh
-Version: 2.10.67
+Version: 2.10.68
 Requires at least: 6.0
 Requires PHP: 7.4
 License: GNU General Public License v2 or later
@@ -7954,17 +7954,32 @@ body.sf-inquiry-lock {
 }
 .sf-fdetail-config__img {
 	flex: none;
-	width: 46px;
-	height: 46px;
+	width: 60px;
+	height: 60px;
 	object-fit: contain;
 	border-radius: 8px;
 	background-color: var(--wp--preset--color--card-white);
 }
-/* A container the library has no picture for yet. Dashed, not broken: every
-   attachment_id in the Container Library ships at 0, so the picker's empty
-   state is the state it will be in on the day this deploys. */
+/* A container or shape the library has no picture for yet. Dashed, not
+   broken: every attachment_id in both libraries ships at 0, so the picker's
+   empty state is the state it will be in on the day this deploys. The name
+   lives inside the box, centred — the placeholder is the label, so an
+   empty slot reads as clearly as a filled one. */
 .sf-fdetail-config__img--empty {
+	display: flex;
+	align-items: center;
+	justify-content: center;
 	border: 1px dashed var(--wp--preset--color--border-medium);
+	background-color: transparent;
+}
+.sf-fdetail-config__empty-label {
+	padding: 0 4px;
+	font-size: 11px;
+	font-weight: 500;
+	line-height: 1.25;
+	text-align: center;
+	color: var(--wp--preset--color--text-secondary);
+	overflow-wrap: break-word;
 }
 .sf-fdetail-config__note {
 	font-size: 12px;
@@ -7991,6 +8006,35 @@ body.sf-inquiry-lock {
 }
 .sf-fdetail-config__summary[hidden],
 .sf-fdetail-config__note[hidden] { display: none; }
+/* H7g compacting — the value-preview line only matters when no script can
+   speak for the group. config.js sets --js on the root; with it, each
+   group's current value is the selection itself (or nothing chosen yet,
+   which the summary line says honestly), so the static echo goes. Without
+   the script the meta row is the only place the record's own value
+   appears — which is why this is a JS-gated rule and not an unbinding. */
+.sf-fdetail-config--js .sf-fdetail-config__meta { display: none; }
+/* H7g — the main image area's preview mode. Absolute over the stage (the
+   stage is position:relative), so the gallery's own box never moves: the
+   fixed 1:1 stage and its layout are untouched, the layer only covers it
+   while a Shape or Container choice is being previewed. */
+.sf-gallery__preview {
+	position: absolute;
+	inset: 0;
+	z-index: 2;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 24px;
+	background-color: var(--wp--preset--color--card-white);
+}
+.sf-gallery__preview[hidden] { display: none; }
+.sf-gallery__preview img {
+	max-width: 100%;
+	max-height: 100%;
+	width: auto;
+	height: auto;
+	object-fit: contain;
+}
 /* Both are created by config.js, so a visitor without the script is never shown
    a button that opens nothing. */
 .sf-fdetail-config__open,
@@ -8014,6 +8058,11 @@ body.sf-config-lock { overflow: hidden; }
 	/* --js is set by config.js. Without it the list stays inline: the drawer
 	   exists only where something can open and close it. */
 	.sf-fdetail-config--js .sf-fdetail-config__list { display: none; }
+	/* H7g — the library thumbnails step down one size on a phone. */
+	.sf-fdetail-config__img {
+		width: 48px;
+		height: 48px;
+	}
 	/* The drawer is a full-screen overlay, so it has to outrank every fixed
 	   layer on the page -- and the page is not only ours. At z-index 96
 	   (batch H7d's first value) three things stood on it, measured at 420px

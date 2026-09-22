@@ -28,7 +28,7 @@ add_action('after_setup_theme', function() {
 });
 
 add_action('wp_enqueue_scripts', function() {
-	wp_enqueue_style('sinofresh-style', get_stylesheet_uri(), array(), '2.10.67');
+	wp_enqueue_style('sinofresh-style', get_stylesheet_uri(), array(), '2.10.68');
 	// Sticky nav: every template renders parts/header.html, so this is site-wide.
 	wp_enqueue_script('sinofresh-sticky-header', get_template_directory_uri() . '/assets/js/sticky-header.js', array(), '1.0.0', true);
 	wp_enqueue_script('sinofresh-ui-components', get_template_directory_uri() . '/assets/js/ui-components.js', array(), '1.0.0', true);
@@ -47,7 +47,7 @@ add_action('wp_enqueue_scripts', function() {
 		   same list seen twice, so the two scripts are enqueued together and
 		   conditionally together — on the other 33 pages there is no band to
 		   configure and no dialog to carry a selection into. */
-		wp_enqueue_script('sinofresh-config', get_template_directory_uri() . '/assets/js/config.js', array(), '1.0.0', true);
+		wp_enqueue_script('sinofresh-config', get_template_directory_uri() . '/assets/js/config.js', array(), '1.1.0', true);
 	}
 	// On-this-page TOC (dot rail on marketing pages, text list on articles) +
 	// article extras (progress bar, inline CTA, feedback, print URL). The JS
@@ -1631,7 +1631,14 @@ function sinofresh_formula_gallery($atts = array()) {
 	   with whichever photo is showing. */
 	return '<div class="sf-gallery__inner" data-gallery="' . esc_attr($form) . '">'
 		. '<div class="sf-gallery__stage" role="tabpanel" id="sf-gallery-panel-' . esc_attr($form) . '"'
-		. ' aria-label="' . esc_attr($slots[0]['alt']) . '">' . $frames . '</div>'
+		. ' aria-label="' . esc_attr($slots[0]['alt']) . '">' . $frames
+		/* H7g — the preview layer. Empty in the markup, filled by config.js
+		   when a Shape or Container thumbnail is chosen; any click on the
+		   gallery's own controls hides it again. It adds a node to the stage
+		   rather than touching a slide, so the gallery's markup, its slide
+		   ids and formula-gallery.js all keep working unchanged. */
+		. '<div class="sf-gallery__preview" data-sf-gallery-preview hidden></div>'
+		. '</div>'
 		. $tabs
 		. '</div>';
 }
@@ -2048,6 +2055,41 @@ function sinofresh_formula_config_groups($post_id) {
 		);
 	}
 
+	/* Batch H7g — Shape, the second global library and the first group whose
+	   OPTIONS are constant on every detail page. Container waits for the
+	   record's own meta before it renders (which is why only pages with a
+	   sf_formula_container value show it); Shape does not wait, because the
+	   eight shapes are a catalog-level choice a buyer makes regardless of
+	   what the record says (user ruling, 2026-09-23). The record still gets
+	   a word in: when its specs-sheet sf_formula_shape text matches a
+	   library label, that label is the meta line — the value preview, and
+	   the same no-JS answer every other group gives. It never pre-checks
+	   the radio: nothing here is checked until the visitor checks it. */
+	$shape_meta = trim((string) get_post_meta($post_id, 'sf_formula_shape', true));
+	$shape_own  = '';
+	$shape_opts = array();
+	foreach (sf_shape_library() as $s) {
+		$image = '';
+		if (!empty($s['attachment_id'])) {
+			$url = wp_get_attachment_image_url((int) $s['attachment_id'], 'medium');
+			$image = $url ? (string) $url : '';
+		}
+		if ($shape_meta !== '' && strcasecmp($shape_meta, (string) $s['label']) === 0) {
+			$shape_own = (string) $s['label'];
+		}
+		$shape_opts[] = array(
+			'value' => (string) $s['slug'], 'label' => (string) $s['label'],
+			'image' => $image, 'note' => '',
+		);
+	}
+	if ($shape_opts) {
+		$groups[] = array(
+			'key' => 'shape', 'label' => 'Shape', 'meta' => $shape_own,
+			'type' => 'single', 'style' => 'image', 'hint' => 'Choose one',
+			'options' => $shape_opts,
+		);
+	}
+
 	/* Container Type is the one group whose OPTIONS are not the record's own
 	   values: the seven containers are a global library that Site Settings
 	   owns, because "Pouch" has to mean the same picture on every page. The
@@ -2217,15 +2259,25 @@ function sinofresh_formula_config() {
 			$value   = (string) $option['value'];
 			$img     = (string) $option['image'];
 			$media   = '';
+			$in_slot = false;
 			if ($group['style'] === 'image') {
 				/* An empty library slot degrades to the label, never to a broken
 				   image: the Container Library ships with every attachment_id
 				   at 0, and a picker that renders seven broken icons because an
 				   admin has not uploaded anything yet is worse than a picker
 				   that renders seven names. */
-				$media = $img !== ''
-					? '<img class="sf-fdetail-config__img" src="' . esc_url($img) . '" alt="" loading="lazy">'
-					: '<span class="sf-fdetail-config__img sf-fdetail-config__img--empty" aria-hidden="true"></span>';
+				if ($img !== '') {
+					$media = '<img class="sf-fdetail-config__img" src="' . esc_url($img) . '" alt="" loading="lazy">';
+				} else {
+					$in_slot = true;
+					/* H7g: the dashed box carries the name itself, centred —
+					   the placeholder the brief describes. The separate text
+					   span is skipped so the name is written once, and
+					   config.js reads the label back out of the box. */
+					$media = '<span class="sf-fdetail-config__img sf-fdetail-config__img--empty">'
+						. '<span class="sf-fdetail-config__empty-label">' . esc_html((string) $option['label']) . '</span>'
+						. '</span>';
+				}
 			}
 			$note = (string) $option['note'];
 			$opts .= '<label class="sf-fdetail-config__opt">'
@@ -2234,7 +2286,9 @@ function sinofresh_formula_config() {
 				. ' data-sf-config-opt="' . esc_attr($key) . '">'
 				. '<span class="sf-fdetail-config__box" aria-hidden="true"></span>'
 				. $media
-				. '<span class="sf-fdetail-config__text">' . esc_html((string) $option['label']) . '</span>'
+				. ($in_slot
+					? ''
+					: '<span class="sf-fdetail-config__text">' . esc_html((string) $option['label']) . '</span>')
 				. ($note !== ''
 					? '<span class="sf-fdetail-config__note">' . esc_html($note) . '</span>' : '')
 				. '</label>';

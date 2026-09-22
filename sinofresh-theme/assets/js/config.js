@@ -76,9 +76,14 @@
 						return;
 					}
 					var text = opt.querySelector('.sf-fdetail-config__text');
+					/* H7g: an image-style option with no upload carries its name
+					   inside the dashed placeholder box instead of a text span,
+					   so the label is read from there when the span is absent. */
+					var emptyLabel = opt.querySelector('.sf-fdetail-config__empty-label');
 					picked.push({
 						value: input.value,
-						label: text ? text.textContent.trim() : input.value,
+						label: text ? text.textContent.trim()
+							: (emptyLabel ? emptyLabel.textContent.trim() : input.value),
 						note: (function () {
 							var n = opt.querySelector('.sf-fdetail-config__note');
 							return n ? n.textContent.trim() : '';
@@ -167,6 +172,65 @@
 
 		root.addEventListener('change', refresh);
 		refresh();
+
+		/* --------------------------------------------- gallery preview (H7g) */
+
+		/* The main image area's three modes. Default is the product gallery;
+		   choosing a Shape or Container thumbnail overlays the stage with that
+		   library image; clicking any of the gallery's own controls — a
+		   thumbnail or the Photos/Video switch — hides the overlay and hands
+		   the stage back. The layer adds a node, it does not touch a slide, so
+		   formula-gallery.js keeps working unchanged. */
+		var stage = document.querySelector('[data-gallery]');
+		var preview = stage ? stage.querySelector('[data-sf-gallery-preview]') : null;
+
+		function hidePreview() {
+			if (preview && !preview.hidden) {
+				preview.hidden = true;
+			}
+		}
+
+		function showPreview(input) {
+			if (!preview) {
+				return;
+			}
+			var opt = input.closest('.sf-fdetail-config__opt');
+			var img = opt ? opt.querySelector('img.sf-fdetail-config__img') : null;
+			/* An empty library slot has no large image to show: the main area
+			   keeps the product gallery. A stretched dashed placeholder where
+			   a product photo should be would be a claim about a picture the
+			   site does not have. */
+			if (!img) {
+				hidePreview();
+				return;
+			}
+			var labelEl = opt.querySelector('.sf-fdetail-config__text')
+				|| opt.querySelector('.sf-fdetail-config__empty-label');
+			var big = document.createElement('img');
+			big.src = img.currentSrc || img.src;
+			big.alt = labelEl ? labelEl.textContent.trim() : input.value;
+			preview.replaceChildren(big);
+			preview.hidden = false;
+		}
+
+		root.addEventListener('change', function (event) {
+			var input = event.target;
+			if (!input.matches || !input.matches('.sf-fdetail-config__input[type="radio"]') || !input.checked) {
+				return;
+			}
+			var group = input.closest('[data-sf-config-group]');
+			var key = group ? group.getAttribute('data-sf-config-group') : '';
+			if (key === 'shape' || key === 'container') {
+				showPreview(input);
+			}
+		});
+		if (stage) {
+			stage.addEventListener('click', function (event) {
+				if (preview && !preview.hidden && !preview.contains(event.target)) {
+					hidePreview();
+				}
+			});
+		}
 
 		/* ------------------------------------------------------------- drawer */
 
