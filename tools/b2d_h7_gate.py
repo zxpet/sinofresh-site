@@ -1217,6 +1217,221 @@ BATCHES['h7d'] = {
 }
 
 
+# ------------------------------------------------------------------ H7e -----
+# The first batch whose rendered output does not move at all, and the first
+# whose direction is a NULL EDIT: `symmetric` with an identity transform.
+#
+# Place of Origin and OEM / ODM were constants inside the specification-sheet
+# renderer. H7e moves them into Site Settings and reads them back through one
+# reader. The two fields ship with the constants they replaced, character for
+# character, so the question the gate has to answer is not "is the new string
+# right" but "did anything else move" — and the answer must be no.
+#
+# That shape has consequences for what each pass is FOR, and they are why this
+# declaration is longer than its diff:
+#
+#   * the main proof is an identity comparison plus a token fold. It is not a
+#     formality: it fails the moment the default is mistyped by one character,
+#     the moment the candidate forgets to bump its version token, and the
+#     moment any stray byte lands on any of the 75 pages. NC13 runs the other
+#     way round for this batch — the main proof is SIGHTED, not blind, because
+#     nothing is carved out of either side before the comparison.
+#   * a green main proof still cannot say the two rows are THERE, because it
+#     would be equally green if they had vanished from both sides. `scoped`
+#     owns that: one <dd> per detail page, carrying the default value.
+#   * and nothing on a rendered page can say where a value CAME FROM. That is
+#     the source pass — the reader and its fallback, the renderer calling it,
+#     the absence of the two constants, the subpage and its two registrations
+#     — and it is the only pass that can tell this batch apart from doing
+#     nothing at all.
+
+def _h7e_transform(text):
+    """The null edit, and it is the claim rather than a placeholder.
+
+    `symmetric` applies one function to both sides; here that function is the
+    identity and the count it returns is 0, which is exactly what the
+    declaration says the batch applies to a page: nothing. Reading
+    `applies: 0` as "the gate is not really checking" would be the mistake —
+    what it means is that the check IS the comparison, with no declared region
+    carved out of it first. Every byte of every page is compared, including the
+    two rows whose source this batch moved.
+    """
+    return text, 0
+
+
+# The two cells as they actually render, which is a stronger claim than the
+# bare value: it pins the string to the specification sheet's own <dd> rather
+# than to "somewhere on the page".
+H7E_ORIGIN_ROW = '<dd class="sf-fdetail-specs__value">Linyi, Shandong, China</dd>'
+H7E_OEM_ROW = '<dd class="sf-fdetail-specs__value">Available</dd>'
+
+BATCHES['h7e'] = {
+    'name': 'H7e — Place of Origin and OEM/ODM move from constants to Site Settings',
+    'mode': 'symmetric',
+    'tokens': [
+        ('?ver=2.10.65', '?ver=2.10.66'),                        # style.css
+    ],
+    'transform': _h7e_transform,
+    'applies': 0,
+    'applies_base': 0,
+    'coverage': [
+        # The one declared edit this batch makes to a page, and the reason the
+        # main proof is not a capture compared with itself.
+        ('?ver=2.10.65', 0),
+    ],
+    'insertions': [
+        ('?ver=2.10.66', 75),
+    ],
+    'counts': [
+        # BOTH sides measured, and the two numbers are equal on purpose: this
+        # is where "the value did not move" is actually stated. The first two
+        # lock a value to its cell — not "the string is somewhere on the page"
+        # but "it is the spec sheet's own <dd>" — which is the difference
+        # between the swap being correct and the swap being invisible because
+        # the row was dropped.
+        ('the origin row still carries its default', H7E_ORIGIN_ROW, 42, 42),
+        ('the OEM row still carries its default', H7E_OEM_ROW, 42, 42),
+        ('the origin row label is unmoved', '>Place of Origin<', 42, 42),
+        ('the OEM row label is unmoved', '>OEM / ODM<', 42, 42),
+        # The 154 occurrences that are NOT this row: the about page's copy, the
+        # contact page's address line, and the Organization schema's
+        # streetAddress. H7e leaves every one of them alone, and measuring them
+        # here is what keeps a later batch from absorbing them silently — the
+        # scanner found all three and the batch declined all three.
+        ('every other origin mention is untouched', 'Linyi, Shandong, China', 196, 196),
+    ],
+    'unmoved': [
+        ('media parameter list', r'sf-fdetail2__params', 42),
+        ('the config band', r'sf-fdetail-config', 42),
+        ('the spec sheet', r'class="sf-fdetail-specs"', 42),
+        ('certification badges', r'sf-cert-badge', None),
+        # The submenu slug, which must not reach the front end. A settings page
+        # that leaked its own slug onto a product page is a bug no other check
+        # in this gate would see.
+        ('the factory settings slug stays in wp-admin', r'sf-factory-info', 0),
+    ],
+    'per_page': [
+        ('h1', r'<h1[ >]', 1),
+    ],
+    'scoped': [
+        ('the spec sheet is on each detail page, once',
+         'class="sf-fdetail-specs"', _is_formula_detail, 1),
+        ('each detail page gets two column groups',
+         'sf-fdetail-specs__group"', _is_formula_detail, 2),
+        # The claim the main proof cannot make: the row is still there, once,
+        # on the pages that had it, carrying the value the field ships with.
+        ('each detail page carries the origin row and its default',
+         H7E_ORIGIN_ROW, _is_formula_detail, 1),
+        ('each detail page carries the OEM row and its default',
+         H7E_OEM_ROW, _is_formula_detail, 1),
+    ],
+    'order': [
+        ('the spec sheet follows the media band', 'sf-fdetail2__params',
+         'class="sf-fdetail-specs"', _is_formula_detail),
+        ('and precedes the Specification band', 'class="sf-fdetail-specs"',
+         'sf-fdetail__grid', _is_formula_detail),
+        ('and precedes the Ingredients band', 'class="sf-fdetail-specs"',
+         'sf-fdetail-actives__inner', _is_formula_detail),
+    ],
+    'h2_delta': None,
+    'sources': {
+        'tpl': 'templates/single-sf_formula.html',
+        'pools': 'inc/formula-pools.php',
+        'admin': 'inc/formula-admin.php',
+    },
+    # NC3/NC4 read these. Which string is the sharp one is batch-specific.
+    'reinject': ('an old version token put back fails coverage',
+                 'formulas__joint-support-soft-chews.html', '</head>',
+                 "<link rel='stylesheet' href='style.css?ver=2.10.65'>"),
+    'delete': ('one origin row deleted fails coverage',
+               'formulas__calming-soft-chews.html', H7E_ORIGIN_ROW),
+    # The main proof compares the payload on this direction, so it must SEE an
+    # edit made inside it. Stated here rather than assumed by the control.
+    'nc13_mode': 'sighted',
+    'matrix': [
+        # Every mutant must break the proof AND must actually have changed
+        # something (a no-op reports INVALID, not pass).
+        ('the version token is not folded', {'tokens': []}, None),
+        # A mutant of the DECLARATION rather than of a page: with the real
+        # `applies` at 0, claiming the batch applied something must fail the
+        # count. This is the count doing its job on a direction where it would
+        # otherwise be trivially satisfied.
+        ('the null edit claims to have applied something', {'applies': 1}, None),
+        ('the OEM row is renamed on one page',
+         {}, ('formulas__joint-support-soft-chews.html',
+              lambda s: s.replace('>OEM / ODM<', '>OEM / ODMs<', 1))),
+        ('a stray character on one page',
+         {}, ('formulas__calming-soft-chews.html',
+              lambda s: s.replace('</body>', '<!-- stray --></body>', 1))),
+    ],
+    'nc_source': [
+        ('NC17 the source pass fails when the reader stops falling back to the default',
+         'inc/formula-pools.php', "return ($value !== '') ? $value : $default;", 'return $value;'),
+        ('NC18 the source pass fails when the renderer goes back to a constant',
+         'functions.php', "sf_formula_factory_value('sf_factory_origin')", "'Linyi, Shandong, China'"),
+    ],
+    'nc_page': [
+        ('NC19 the scoped invariant fails on an origin row in the wrong page',
+         'about.html',
+         lambda s: s.replace('</body>', H7E_ORIGIN_ROW + '</body>', 1)),
+        ('NC20 the scoped invariant fails when a detail page loses its origin row',
+         'formulas__joint-support-soft-chews.html',
+         lambda s: s.replace(H7E_ORIGIN_ROW, '<dd class="sf-fdetail-specs__value">X</dd>', 1)),
+    ],
+    'nc_blind': ('formulas__joint-support-soft-chews.html',
+                 '>Place of Origin<', '>Place of Originn<'),
+    'source': [
+        # --- the reader: where the value now comes from -----------------------
+        ('the reader is defined', 'pools_live',
+         r'function sf_formula_factory_value\(\$key\)', True),
+        ('...and reads the option by key', 'pools_live',
+         r'get_option\(\$key, \$default\)', True),
+        ('...and falls back to the Site Settings default, not a second copy', 'pools_live',
+         r"\$default = isset\(\$d\[\$key\]\) \? \(string\) \$d\[\$key\] : '';", True),
+        ('...and treats an empty value as the default', 'pools_live',
+         r"return \(\$value !== ''\) \? \$value : \$default;", True),
+        # --- the defaults: one value, one source ------------------------------
+        ('the defaults carry the origin the constant used to hold', 'php_live',
+         r"'sf_factory_origin'   => 'Linyi, Shandong, China'", True),
+        ('...and the OEM value the constant used to hold', 'php_live',
+         r"'sf_factory_oem'      => 'Available'", True),
+        # --- the renderer: it reads, it no longer spells ----------------------
+        ('the renderer reads the origin through the reader', 'php_live',
+         r"\$value = sf_formula_factory_value\('sf_factory_origin'\);"
+         r"[\s\S]{0,120}\$rows\['Place of Origin'\] = esc_html\(\$value\);", True),
+        ('...and the OEM value the same way', 'php_live',
+         r"\$value = sf_formula_factory_value\('sf_factory_oem'\);"
+         r"[\s\S]{0,120}\$rows\['OEM / ODM'\] = esc_html\(\$value\);", True),
+        ('the origin constant is gone from the renderer', 'php_live',
+         r"esc_html\('Linyi, Shandong, China'\)", False),
+        ('the OEM constant is gone from the renderer', 'php_live',
+         r"esc_html\('Available'\)", False),
+        # --- the settings page: what an admin can now reach -------------------
+        ('the subpage is registered under Site Settings', 'admin_live',
+         r"add_submenu_page\('sf-site-settings', 'Factory Information', 'Factory Information', "
+         r"'manage_options', 'sf-factory-info', 'sf_render_factory_info_page'\)", True),
+        ('the page renderer exists', 'admin_live',
+         r'function sf_render_factory_info_page\(\)', True),
+        ('both fields are registered in the Site Settings group', 'admin_live',
+         r"foreach \(array\('sf_factory_origin', 'sf_factory_oem'\) as \$key\)", True),
+        ('...with the parent page\'s empty-falls-back sanitizer', 'admin_live',
+         r"register_setting\('sf_site_settings', \$key, array\([\s\S]{0,220}"
+         r"return \(\$v !== ''\) \? \$v : \$d\[\$key\];", True),
+        ('the hook list still names the other two subpages and no more', 'admin_live',
+         r"'site-settings_page_sf-containers', 'site-settings_page_sf-global-faq'\), true\);", True),
+        ('...and no factory hook was added to it', 'admin_live',
+         r'site-settings_page_sf-factory-info', False),
+        # --- the version token ------------------------------------------------
+        ('the style token is bumped in the enqueue', 'php',
+         r"wp_enqueue_style\('sinofresh-style', get_stylesheet_uri\(\), array\(\), '2\.10\.66'\)", True),
+        ('no 2.10.65 enqueue survives', 'php_live', r"'2\.10\.65'", False),
+        # --- the stylesheet, which this batch touched one line of -------------
+        ('style.css declares 2.10.66', 'css', r'Version: 2\.10\.66', True),
+        ('no 2.10.65 header survives', 'css', r'Version: 2\.10\.65', False),
+    ],
+}
+
+
 # ------------------------------------------------------------------- machinery
 
 def fold(text, pairs):
@@ -1815,15 +2030,33 @@ def negctl(decl, base, cand, theme, verbose=True):
         # coverage pass, which counts on the raw candidate, owns the payload's
         # content. An NC that only showed the failure would leave the blast
         # radius unmeasured.
+        #
+        # WHICH VERDICT IS THE RIGHT ONE IS A PROPERTY OF THE DIRECTION, so it
+        # is read off the declaration (`nc13_mode`) instead of being written
+        # into the control. H7c/H7d remove a region, so the main proof is blind
+        # to it and `blind` is the pass. H7e is the first batch with a NULL edit
+        # — `symmetric` with an identity transform, because it moves where two
+        # values come from and not what they are — and on that direction the
+        # main proof compares every byte of the payload, so the honest verdict
+        # is the opposite: it must SEE the edit, and coverage must confirm it.
+        # Hard-coding either verdict would have made this control assert the
+        # direction rather than test it, and H7e is the batch that proves that
+        # can be wrong: run against the old literal, it would have reported a
+        # perfectly working gate as FAIL.
         page, needle, replacement = decl['nc_blind']
         c = _clone(cand, os.path.join(work, 'ncb'))
         p = os.path.join(c, page)
         _write(p, read(p).replace(needle, replacement, 1))
-        blind = main_proof(decl, base, c, verbose=False)['ok']
+        main = main_proof(decl, base, c, verbose=False)['ok']
         caught = not coverage(decl, base, c, verbose=False)['ok']
-        report('NC13 the main proof is blind to the payload, coverage is not',
-               blind and caught,
-               'page=%s main_green=%s coverage_red=%s' % (page, blind, caught))
+        if decl.get('nc13_mode', 'blind') == 'sighted':
+            report('NC13 the null edit SEES the payload, and coverage confirms it',
+                   (not main) and caught,
+                   'page=%s main_red=%s coverage_red=%s' % (page, not main, caught))
+        else:
+            report('NC13 the main proof is blind to the payload, coverage is not',
+                   main and caught,
+                   'page=%s main_green=%s coverage_red=%s' % (page, main, caught))
 
         # NC14 — the strict A/A guard is itself a signal. It exists because this
         # batch was run with --aa pointed at a baseline-era capture, which showed
