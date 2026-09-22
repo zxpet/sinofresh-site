@@ -5,7 +5,8 @@
 The browser pass asserts the states numerically. A number can be right about a
 page that renders nothing: "the summary element's `hidden` is false" is true of a
 summary that is off-screen, under an overlay, or one pixel tall. So the pass
-leaves six frames behind, and this checks that they are photographs of something:
+leaves seven frames behind, and this checks that they are photographs of
+something:
 
   * each frame is a real PNG, at the viewport width and height it claims — a
     screenshot of a 401 page, or of about:blank, is the right file with the wrong
@@ -48,11 +49,11 @@ EXPECT = [
     ('h7d-04-phone-closed.png', PHONE,
      '420px: the list collapsed behind one button'),
     ('h7d-05-phone-drawer-open.png', PHONE,
-     'the drawer open — and the layers standing on it'),
+     'the drawer open, over the page — and over its other fixed layers'),
     ('h7d-06-phone-drawer-zh.png', PHONE,
      'the same drawer on /zh/'),
-    ('h7d-07-banner-over-drawer.png', PHONE,
-     'the overlap on its own: the cookie banner over the drawer exit'),
+    ('h7d-07-phone-layers.png', PHONE,
+     'the layering measured on its own: who owns the pixels on the drawer'),
 ]
 # Pairs that must not be identical: (a, b, the change they are supposed to show)
 MUST_DIFFER = [

@@ -1,24 +1,26 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""Batch H7d — is the drawer's Done button really covered on a phone?
+"""Batch H7d — what the page paints on the drawer, and who owns each pixel.
 
-The browser pass failed seven assertions from one cause: the click aimed at
+Written to answer one product question and nothing else: when a first-time phone
+visitor opens the drawer, is its Done button really covered? The browser pass had
+failed seven assertions from that one cause — the click aimed at
 `.sf-fdetail-config__close` landed on `.sf-cookie-banner__manage`. Seven failures
-from one hit is what a harness does, and it says nothing about whether a visitor
-would hit the same thing. This probe answers the product question and only the
-product question:
+from one hit is what a harness does, not what a visitor does. The answers,
+measured at 420px while the drawer was at z-index 96: the banner was on screen
+(fixed bottom, 9999); 19 of the 19 points along the Done button's own centre line
+hit the banner rather than the button, so a first-time visitor could not close
+the drawer; the layer that also reached the exit from the right was the
+TranslatePress floating switcher at 99999 — pinned there by the plugin's own
+stylesheet, which this theme cannot re-order; and the only other way out was one
+Escape. The drawer now ships above all of them.
 
-  * IS THE COOKIE BANNER ON SCREEN when a first-time phone visitor opens the
-    drawer? (It is fixed at the bottom, z-index 9999, and the drawer's Done
-    button is fixed at bottom:20px, z-index 97 — so the numbers say yes. The
-    numbers are not the evidence; the overlap is.)
-  * HOW MUCH of the Done button is covered, and does the pixel at its centre
-    belong to the banner?
-  * IS THERE ANY OTHER WAY OUT of the drawer — a close control above the banner,
-    a tap outside, one Escape? If not, the only exit is behind another overlay.
-
-It measures and reports; it changes nothing and asserts nothing about the
-candidate being right or wrong.
+The tool is kept because the numbers it takes are exactly what a stacking order
+is made of — the ladder, the per-point attribution along the exit, the bands down
+the middle of the screen, and the ancestor chain of whatever is painted at the
+bottom right — so the next layer added to this site can be checked against it the
+same way. It measures and reports; it changes nothing and asserts nothing about
+the candidate.
 
 usage:
     b2d_h7d_banner.py --want-ver 2.10.65
@@ -131,6 +133,7 @@ PROBE = """
   banner:{shown:shown(b), box:br, z:z(b), text:(b?b.textContent.trim().slice(0,60):null)},
   done:{shown:shown(d), box:dr, z:z(d)},
   opener:{shown:shown(o), box:orr},
+  listZ:z(document.querySelector('.sf-fdetail-config__list')),
   open:!!document.querySelector('[data-sf-config].sf-fdetail-config--open'),
   centreElement:at,
   grid:grid,
@@ -166,7 +169,7 @@ def main():
     e0 = h7b.ev(PROBE) or {}
     rec('banner before anything', e0.get('banner'))
     rec('Done button (drawer shut)', e0.get('done'))
-    rec('drawer state', {'open': e0.get('open')})
+    rec('drawer state', {'open': e0.get('open'), 'list_z': e0.get('listZ')})
 
     # --- open the drawer -----------------------------------------------------
     box, why = E.click_opt(r, 'Chicken')          # a real selection, inside nothing
@@ -177,7 +180,7 @@ def main():
     e1 = h7b.ev(PROBE) or {}
     rec('banner with the drawer open', e1.get('banner'))
     rec('Done button (drawer open)', e1.get('done'))
-    rec('drawer open', {'open': e1.get('open')})
+    rec('drawer open', {'open': e1.get('open'), 'list_z': e1.get('listZ')})
     rec('what is painted at the Done button centre', e1.get('centreElement'))
     rec('how much of the Done button is covered', e1.get('grid'))
     rec('which layer covers the exit, at which x — banner up', e1.get('sweep'))
@@ -198,7 +201,7 @@ def main():
             runs.append({'from': x['y'], 'to': x['y'], 'n': 1,
                          'cls': x['cls']})
     rec('as contiguous bands', runs)
-    r.shot('h7d-07-banner-over-drawer.png')
+    r.shot('h7d-07-phone-layers.png')
 
     # --- is a tap outside the list a way out? --------------------------------
     tapped = h7b.ev("(()=>{const x=Math.round(innerWidth/2), y=60;"

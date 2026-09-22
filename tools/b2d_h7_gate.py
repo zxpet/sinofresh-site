@@ -884,6 +884,28 @@ def _h7d_dead_phone_step(css):
     return rest.replace(anchor, block + anchor, 1)
 
 
+def _h7d_drawer_out_of_query(css):
+    """NC24: lift the opened-list rule OUT of the 768px query.
+
+    The check it guards is a CONTAINMENT claim — the drawer may only leave the
+    flow inside the phone step — and containment is exactly what a character
+    budget stops measuring as the block around the rule grows. This mutant keeps
+    every byte of the file and only moves the rule to the other side of the
+    brace, so a check that has quietly become "the selector exists somewhere"
+    fails here, while one that still reads the braces does not.
+    """
+    rule = re.search(r'\n(\t\.sf-fdetail-config--open \.sf-fdetail-config__list '
+                     r'\{.*?\n\t\})\n', css, re.S)
+    if not rule:
+        return css
+    mq = css.rfind('\n@media (max-width: 768px) {', 0, rule.start())
+    if mq < 0:
+        return css
+    s = rule.start() + 1
+    return (css[:mq + 1] + rule.group(1) + '\n' + css[mq + 1:s]
+            + css[rule.end():])
+
+
 BATCHES['h7d'] = {
     'name': 'H7d — seven parameter rows become choices, and leave the list they were in',
     'mode': 'symmetric',
@@ -1073,6 +1095,8 @@ BATCHES['h7d'] = {
          'functions.php', 'sf-fdetail-config__img--empty', 'sf-fdetail-config__img-x'),
         ('NC23 the source pass fails when the phone step moves above its base rule',
          'style.css', _h7d_dead_phone_step, None),
+        ('NC24 the source pass fails when the opened-drawer rule leaves the phone step',
+         'style.css', _h7d_drawer_out_of_query, None),
     ],
     'nc_page': [
         ('NC20 the scoped invariant fails on a band in the wrong page',
@@ -1164,8 +1188,18 @@ BATCHES['h7d'] = {
          r'\.sf-fdetail-config__input:checked \+ \.sf-fdetail-config__box', True),
         ('the phone drawer hides the inline list', 'css_live',
          r'\.sf-fdetail-config--js \.sf-fdetail-config__list \{ display: none; \}', True),
+        # Containment, not proximity. This used a 900-character budget between
+        # the media query and the rule, and the rule now carries the reason for
+        # its own z-index above it -- a comment longer than any budget a reader
+        # would accept. Raising the budget would be the wrong repair: a bigger
+        # one can leap out of the block and be satisfied by a LATER 768 block,
+        # which is the very thing the check exists to refuse. `(?!\n\})` refuses
+        # to cross the end of a top-level block instead: rules inside the media
+        # query close with a tab-indented brace, and the block closes with one
+        # at column 0. NC24 is the control that watches this fail.
         ('the drawer is only taken out of the flow inside the phone step', 'css_live',
-         r'@media \(max-width: 768px\) \{[\s\S]{0,900}\.sf-fdetail-config--open \.sf-fdetail-config__list', True),
+         r'@media \(max-width: 768px\) \{(?:(?!\n\})[\s\S])*?'
+         r'\.sf-fdetail-config--open \.sf-fdetail-config__list', True),
         # The ordering claim as ONE chain, each link anchored twice — the media
         # query AND a marker only this band carries — so it cannot be satisfied
         # by some other component's 768 block later in the file. H7b shipped the

@@ -8388,17 +8388,38 @@ body.sf-config-lock { overflow: hidden; }
 	/* --js is set by config.js. Without it the list stays inline: the drawer
 	   exists only where something can open and close it. */
 	.sf-fdetail-config--js .sf-fdetail-config__list { display: none; }
+	/* The drawer is a full-screen overlay, so it has to outrank every fixed
+	   layer on the page -- and the page is not only ours. At z-index 96
+	   (batch H7d's first value) three things stood on it, measured at 420px
+	   with the drawer open: the sticky header (999), the cookie banner
+	   (9999), and the TranslatePress floating language switcher, which the
+	   plugin pins at 99999 in its own stylesheet and which this theme cannot
+	   re-order. The drawer's only exit -- the Done button at y840-880 -- was
+	   under the banner for a first-time visitor: all 19 points along its own
+	   centre line hit the banner instead, so the drawer could not be closed
+	   by tapping. The value below is one step above the top of the stack,
+	   which is the lightbox's 99999. It costs nothing: an image cannot be
+	   opened from under an opaque full-screen drawer, so the two are never
+	   up together. While the drawer is up the banner and the switcher are
+	   covered, which is the point -- the drawer is the active layer then, and
+	   it brings its own exit. The browser pass asserts the ordering against
+	   the switcher's measured z, so a plugin that moves it says so. */
 	.sf-fdetail-config--open .sf-fdetail-config__list {
 		display: block;
 		position: fixed;
 		inset: 0;
-		z-index: 96;
+		z-index: 100000;
 		margin: 0;
 		padding: 20px 20px 96px;
 		overflow-y: auto;
 		background-color: var(--wp--preset--color--card-white);
 		-webkit-overflow-scrolling: touch;
 	}
+	/* 97 is not a second layer and is not stale: config.js appends the exit
+	   INSIDE the list, so the list's own stacking context (above) already
+	   paints the button over the drawer's content. This number only orders it
+	   against what is inside that context, so it stays small while the list's
+	   is huge -- raising it would imply the two were siblings. */
 	.sf-fdetail-config--open .sf-fdetail-config__close {
 		display: inline-flex;
 		align-items: center;

@@ -30,10 +30,18 @@ adds, and why none of it is a second opinion on the bytes:
     single radio, again after unticking the last checkbox — the panel has to
     come back byte-for-byte, not merely stop updating.
   * WHETHER THE DRAWER IS A DRAWER. `position: fixed; inset: 0` covering the
-    viewport, a close button above it, the body locked, focus moved in and back
-    out, one Escape closing it once, and a resize out of the breakpoint closing
-    it rather than stranding it. Six claims, all of them about pixels at a
-    width, none of them about a string.
+    viewport, a close button painted with it, the body locked, focus moved in and
+    back out, one Escape closing it once, and a resize out of the breakpoint
+    closing it rather than stranding it. Six claims, all of them about pixels at
+    a width, none of them about a string.
+  * WHETHER IT IS THE LAYER ON TOP. A full-screen overlay reports `inset: 0` in
+    its own box whatever is painted over it, and the fixed layers on this page
+    are not all ours: the sticky header, the cookie banner, and the
+    TranslatePress floating switcher, which the plugin pins at 99999 in its own
+    stylesheet and which this theme cannot re-order. The batch first shipped the
+    drawer at 96, below all three, which left its only exit under the banner for
+    a first-time visitor. A pass that never asked what the pixels belonged to
+    would have called that drawer finished.
   * WHETHER THE NO-JS PAGE IS STILL USABLE. The controls are server-rendered
     checkboxes and radios and the two buttons are created by the script. The
     claim "a visitor without the script is never shown a button that cannot open
@@ -208,6 +216,8 @@ STATE = """
   listOverflowY:lcs?lcs.overflowY:null,
   listBox:box(list), openBox:box(openBtn),
   openZ:ocs?ocs.zIndex:null, closeZ:ccs?ccs.zIndex:null,
+  closeInsideList:!!(closeBtn&&closeBtn.parentElement&&closeBtn.parentElement===list),
+  closeParent:closeBtn&&closeBtn.parentElement?closeBtn.parentElement.className:null,
   viewport:[window.innerWidth,window.innerHeight],
   focus:document.activeElement?(document.activeElement.className||document.activeElement.tagName):null,
   h1:document.querySelectorAll('h1').length,
@@ -271,6 +281,7 @@ PIERCE = """
  return {
   open:true,
   bands:bands,
+  listZ:z(list),
   done:{box:dr,z:z(done),hits:hits,total:total,covered:total-hits},
   header:{box:r(hdr),cls:name(hdr),z:z(hdr),sticky:hdr?hdr.classList.contains('is-sticky'):null},
   banner:{box:r(ban),z:z(ban),shown:vis(ban)},
@@ -284,11 +295,12 @@ PIERCE = """
 def dismiss_banner():
     """Take the cookie banner out of the way, as a returning visitor has it.
 
-    Not a workaround: the drawer's own behaviour (Done, Escape, resize, focus)
-    has to be measured in a state where another overlay is not standing on the
-    only exit. What the overlap itself is, is asserted before this, on its own,
-    so the finding is stated once and loudly instead of hiding inside seven
-    cascading failures of the tests that come after it.
+    A second state for the same measurement, not a workaround. The batch first
+    met this page with the banner standing on the drawer's only exit, and the
+    drawer shipped above it; both states are now read — banner up, and banner
+    answered — rather than one being inferred from the other. What follows is
+    about the drawer's own logic (Done, Escape, resize, focus), which is clearer
+    with nothing else on the page.
     """
     return ev("(()=>{const b=document.querySelector('.sf-cookie-banner');"
               "if(b){b.hidden=true;b.style.display='none';} return true;})()")
@@ -656,8 +668,13 @@ def mode_full(r, want_ver):
          d1.get('listOverflowY') in ('auto', 'scroll'), 'overflow-y=%r' % d1.get('listOverflowY'))
     r.ok('the close button is painted', d1.get('closeVisible') is True)
     r.eq('and it says Done', d1.get('closeText'), 'Done')
-    r.ok('it stacks above the list', int(d1.get('closeZ') or 0) > int(d1.get('listZ') or 0),
-         'list z=%r close z=%r' % (d1.get('listZ'), d1.get('closeZ')))
+    # Not a comparison of those two numbers: config.js appends the exit INSIDE
+    # the list, so the list's own z-index makes a stacking context and the button
+    # is painted within it. The two values are not siblings and their order says
+    # nothing about the exit being visible; the DOM fact plus the paint asserted
+    # on the next screen are what state it.
+    r.ok('the exit is a child of the drawer, so it is painted with it',
+         d1.get('closeInsideList') is True, 'parent=%r' % d1.get('closeParent'))
     r.ok('focus moved into the drawer',
          'sf-fdetail-config__close' in (d1.get('focus') or ''), d1.get('focus'))
     print('   ..   frame 05: the drawer is fixed, so its own scroll is separate '
@@ -666,71 +683,78 @@ def mode_full(r, want_ver):
     r.shot('h7d-05-phone-drawer-open.png')
 
     # ---- is the drawer actually ON TOP? -----------------------------------
-    # The declaration puts the list at z-index 96 and its exit at 97. Every other
-    # full-screen layer in this stylesheet is at 9998 or above and says so in a
-    # comment -- the float stack 9998, the toast and the cookie banner 9999, the
-    # inquiry modal 10000/10010, the basket drawer 10001, the lightbox 99999 --
-    # all of them deliberately above the banner. A drawer at 96 is below the
-    # sticky header (999) as well. That is a stacking order, and a stacking order
-    # is only observable in pixels.
+    # A full-screen overlay reports `inset: 0` whatever is painted over it, so
+    # "the drawer is the layer on top" is only observable in pixels -- and the
+    # fixed layers on this page are not all ours: the sticky header (999), the
+    # cookie banner (9999), and the TranslatePress floating switcher, which the
+    # plugin pins at 99999 in its own stylesheet. The batch's first value, 96,
+    # sat below all three and left the drawer's only exit under the banner.
     print('-- the drawer against the site\'s other fixed layers')
     pc = ev(PIERCE) or {}
     r.eq('the drawer is the layer being measured', pc.get('open'), True)
-    bands = pc.get('bands') or []
-    r.ok('nothing is painted over the open drawer', bands == [],
-         'pierced by %s' % '; '.join(
-             'y%d-%d %s (z=%s)' % (b['from'], b['to'], b['cls'], b['z'])
-             for b in bands))
-    dn = pc.get('done') or {}
-    r.ok('and the drawer\'s only exit is reachable', (dn.get('covered') or 0) == 0,
-         'the Done button (%sx%s at y%s) is covered at %s of %s points along its '
-         'own centre line'
-         % ((dn.get('box') or {}).get('w'), (dn.get('box') or {}).get('h'),
-            (dn.get('box') or {}).get('top'), dn.get('covered'), dn.get('total')))
-    # Named on purpose: whoever reads the failure should see WHICH layer, not
-    # have to reproduce the scan.
     hd = pc.get('header') or {}
     bn = pc.get('banner') or {}
     tp = pc.get('trp') or {}
     print('   ..   the fixed layers on this page: header z=%s sticky=%s box=%s | '
-          'cookie banner z=%s shown=%s box=%s | language switcher z=%s pos=%s box=%s '
-          '| the drawer: list z=96, exit z=97'
+          'cookie banner z=%s shown=%s box=%s | language switcher z=%s pos=%s box=%s'
           % (hd.get('z'), hd.get('sticky'), hd.get('box'),
              bn.get('z'), bn.get('shown'), bn.get('box'),
              tp.get('z'), tp.get('pos'), tp.get('box')))
-    r.ok('the drawer stacks above every fixed layer on the page',
-         int(pc.get('listZ') if pc.get('listZ') is not None else
-             (d1.get('listZ') or 0)) > max(int(hd.get('z') or 0),
-                                           int(bn.get('z') or 0),
-                                           int(tp.get('z') or 0)),
+    # The invariant, not the literal: whatever the values happen to be, the
+    # drawer's own layer has to outrank every fixed layer this page puts up --
+    # including the one the theme does not own, so a plugin that moves its
+    # switcher is reported rather than silently obeyed.
+    dz = int(pc.get('listZ') if pc.get('listZ') is not None else (d1.get('listZ') or 0))
+    r.ok('the drawer outranks every fixed layer on the page',
+         dz > max(int(hd.get('z') or 0), int(bn.get('z') or 0), int(tp.get('z') or 0)),
          'the drawer is at %s; header %s, banner %s, switcher %s'
-         % (d1.get('listZ'), hd.get('z'), bn.get('z'), tp.get('z')))
+         % (dz, hd.get('z'), bn.get('z'), tp.get('z')))
+    bands = pc.get('bands') or []
+    r.ok('so nothing is painted over the open drawer, the banner included',
+         bands == [], 'pierced by %s' % ('; '.join(
+             'y%d-%d %s (z=%s)' % (b['from'], b['to'], b['cls'], b['z'])
+             for b in bands) or 'nothing'))
+    # The banner has to still be up for this to be the first-visit state: if an
+    # earlier step had answered it, the reachability below would prove nothing.
+    r.eq('and the cookie banner is still up, underneath it', bn.get('shown'), True)
+    dn = pc.get('done') or {}
+    r.ok('the drawer\'s only exit is reachable through it',
+         (dn.get('covered') or 0) == 0,
+         'the Done button (%sx%s at y%s) is covered at %s of %s points along its '
+         'own centre line'
+         % ((dn.get('box') or {}).get('w'), (dn.get('box') or {}).get('h'),
+            (dn.get('box') or {}).get('top'), dn.get('covered'), dn.get('total')))
+    centre = ev("(()=>{const b=document.querySelector('.sf-fdetail-config__close');"
+                "const x=b.getBoundingClientRect();"
+                "const e=document.elementFromPoint(Math.round(x.left+x.width/2),"
+                "Math.round(x.top+x.height/2));"
+                "return {own:e===b||b.contains(e),cls:e?e.className:null};})()") or {}
+    r.ok('and a tap at its centre lands on the exit, not on the banner',
+         centre.get('own') is True, '%r' % (centre,))
+    # The defect this batch stopped on, stated as the thing a visitor does.
+    box, why = r.click('.sf-fdetail-config__close')
+    r.ok('so pressing Done closes the drawer with the banner still unanswered',
+         box is not None, why)
+    r.eq('the drawer really shut', (ev(STATE) or {}).get('open'), False)
+    box, why = r.click('.sf-fdetail-config__open')
+    r.ok('and it opens again for the rest of this pass', box is not None, why)
+    r.eq('open again', (ev(STATE) or {}).get('open'), True)
 
-    # Everything below runs with the banner out of the way: those assertions are
-    # about the drawer's own logic, and an overlay standing on its exit would
-    # turn each of them into a second report of the same defect.
-    print('-- the drawer\'s own logic, with no other overlay in the way')
+    # The same claim once the banner has been answered, so both states are read
+    # rather than one inferred from the other.
+    print('-- the same drawer with the banner answered')
     dismiss_banner()
     time.sleep(0.3)
     pc2 = ev(PIERCE) or {}
     bands2 = pc2.get('bands') or []
-    r.ok('with the banner answered, nothing but the sticky header paints over '
-         'the drawer', bands2 == [] or
-         all((b.get('cls') or '').startswith('wp-block-group sf-header') for b in bands2),
-         'still pierced by %s' % ('; '.join(
+    r.ok('nothing paints over it when there is nothing else on the page either',
+         bands2 == [], 'still pierced by %s' % ('; '.join(
              'y%d-%d %s (z=%s)' % (b['from'], b['to'], b['cls'], b['z'])
              for b in bands2) or 'nothing'))
     dn2 = pc2.get('done') or {}
-    centre2 = ev("(()=>{const b=document.querySelector('.sf-fdetail-config__close');"
-                 "const x=b.getBoundingClientRect();"
-                 "const e=document.elementFromPoint(Math.round(x.left+x.width/2),"
-                 "Math.round(x.top+x.height/2));"
-                 "return {own:e===b||b.contains(e),cls:e?e.className:null};})()") or {}
-    r.ok('and a tap at the exit\'s centre reaches it — the drawer is closable '
-         'once the banner is answered', centre2.get('own') is True, '%r' % (centre2,))
-    r.ok('but no other layer overlaps the exit at all', (dn2.get('covered') or 1) == 0,
-         'covered at %s of %s points along its centre line' % (dn2.get('covered'),
-                                                               dn2.get('total')))
+    r.ok('and the exit is clear along the whole of its centre line',
+         (dn2.get('covered') or 1) == 0, 'covered at %s of %s points along its '
+         'centre line' % (dn2.get('covered'), dn2.get('total')))
 
     # the drawer is not inert: an option inside it is still a real control
     box, why = click_opt(r, 'Salmon')
@@ -801,6 +825,21 @@ def mode_full(r, want_ver):
     r.ok('and the drawer exists on /zh/ too', box is not None, why)
     r.eq('open', (ev(STATE) or {}).get('open'), True)
     zb = ev(PIERCE) or {}
+    # A second page, the same stylesheet -- and the banner is back, because it
+    # was hidden in the DOM of the page we just left rather than answered. So
+    # this is the first-visit state again, read on a different document.
+    zbz = int(zb.get('listZ') or 0)
+    zhd = zb.get('header') or {}
+    zbn = zb.get('banner') or {}
+    ztp = zb.get('trp') or {}
+    r.ok('and the drawer is the top layer there too, the banner included',
+         zb.get('bands') == [] and zbz > max(int(zhd.get('z') or 0),
+                                             int(zbn.get('z') or 0),
+                                             int(ztp.get('z') or 0)),
+         'drawer z=%s vs header %s / banner %s / switcher %s; pierced by %s'
+         % (zbz, zhd.get('z'), zbn.get('z'), ztp.get('z'),
+            '; '.join('%s (z=%s)' % (b['cls'], b['z'])
+                      for b in (zb.get('bands') or [])) or 'nothing'))
     print('   ..   frame 06: the same drawer on /zh/. Labels stay English because '
           'the band is the shortcode; pierced here by %s'
           % ('; '.join('%s (z=%s)' % (b['cls'], b['z'])
