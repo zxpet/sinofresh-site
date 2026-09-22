@@ -8286,13 +8286,6 @@ body.sf-inquiry-lock {
 		width: 56px;
 		height: 56px;
 	}
-	/* Batch H7b: the column title's phone step. 32px was sized for the
-	   two-column band; at 480px the column is the whole width and the longest
-	   names still wrap to two lines, so the step is for the wrap, not the
-	   measure. */
-	.sf-fdetail2__title {
-		font-size: 26px;
-	}
 }
 
 /* ---- the video frame ------------------------------------------------------
@@ -8466,6 +8459,19 @@ body.sf-inquiry-lock {
 	line-height: 1.3;
 	letter-spacing: -0.01em;
 	color: var(--wp--preset--color--text-primary);
+}
+/* The phone step. It has to sit BELOW the rule above, not in the 480px block
+   that handles this band's thumbnails: a media query adds no specificity, so
+   with the base rule later in the file the base rule wins at every width and
+   the step is silently dead. The browser pass caught this — 420px still
+   measured 32px — and the gate now asserts the two rules' order, not just their
+   contents. 32px was sized for the two-column band; at 480px the column is the
+   whole width and the longest names ("Wild Alaskan Salmon Oil") still wrap to
+   two lines, so the step is for the wrap, not the measure. */
+@media (max-width: 480px) {
+	.sf-fdetail2__title {
+		font-size: 26px;
+	}
 }
 .sf-fdetail2__intro {
 	margin: 0 0 24px;

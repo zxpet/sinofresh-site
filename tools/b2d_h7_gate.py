@@ -414,8 +414,16 @@ BATCHES['h7b'] = {
          r'\.sf-fdetail2__title \{[^}]*margin: 0 0 24px', True),
         ('the column title keeps its weight', 'css',
          r'\.sf-fdetail2__title \{[^}]*font-weight: 700', True),
-        ('the phone step is 26px', 'css',
-         r'\.sf-fdetail2__title \{\s+font-size: 26px;', True),
+        ('the phone step is 26px AND follows the rule it steps',
+         'css',
+         # Contents alone are not the claim. A media query adds no specificity,
+         # so a 480px override placed ABOVE the base rule is dead at every width
+         # — which is how the first cut of this batch shipped, and what the
+         # browser pass caught at 420px. The regex therefore spans from the base
+         # rule to the media block, which only matches while the order holds.
+         r'\.sf-fdetail2__title \{[^}]*font-size: 32px;[\s\S]*?'
+         r'@media \(max-width: 480px\) \{\s*\.sf-fdetail2__title \{\s*font-size: 26px;',
+         True),
         ('no 28px column title survives', 'css_live',
          r'\.sf-fdetail2__title \{\s+font-size: 28px;', False),
         ('the anchor keeps its button surface', 'css',
