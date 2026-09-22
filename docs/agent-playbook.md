@@ -1137,6 +1137,21 @@ commit message 格式：
 | 14 | ⚠️ **成功之后没有复位路径**：`form.hidden`/`success.hidden` 一翻转就不再复原 ⇒ 提交过的访客再点胶囊看到的是确认页。**不是本批引入**（本批没写复位），登记 H6 第 11 项 | H6 |
 | 15 | ✅ **本批最该记住的一句**：**两个产品缺陷（#1 顺序、#2 几何）在主门上都是 0 FAIL**。字节门能证"净效应就是这个声明"，**证不了交互**；凡改动触及**顺序或几何**，行为门不是补充而是**唯一**的判据 | 批次立项与门集合的取舍 |
 
+## A.11 H5 Step 0 扫描期实测（2026-09-22，SEO/GEO 批次）
+
+| # | 结论 | 影响 |
+|---|---|---|
+| 1 | ⛔⛔ **断面的「0 覆盖」必须先把断面的构成查一遍，再下结论**。75 页断面**不含博客单篇**（只有 `blog.html` 列表页）⇒ 直接读「`Article` 0/75」会得出"博客没有 Article schema"的**反向结论**；实际 `functions.php:5017-5100` 的 `is_singular('post')` 生成器**是活的**（`datePublished`/`dateModified`/`author`/`publisher` 齐全）。**本批首轮就差点把这个误报成缺口** | 一切基于固定页集断面的覆盖率统计；与 §Q.5「掩码门的盲区」同源：**工具没覆盖的地方，静默就是全绿／全缺** |
+| 2 | ⛔ **注释会与实况脱节，而且脱节处正好是死代码**。剂型页 Product 生成器的注释宣称 `additionalProperty = the Specifications rows (sf-spec-list, with a fallback for the legacy key-facts table)`，实测该页 `sf-spec-list`、`sf-spec-term`、遗留 `flex-basis:35%` 表**命中全是 0** ⇒ 两条分支永不匹配、字段静默缺席 **16 页**（8 剂型 ×2 语言）。H2b1/F1 早已把该带换成 `sf-facts-mini` | **读注释判断"这个字段应该有"之前，先 grep 一遍锚点在渲染产物里是否真的存在** |
+| 3 | ⛔ **同一个类名有 `dt`/`dd` 与 `span` 两种历史形态，grep 形态错会得出"两边都缺"的错结论**。配方详情页的真实标记是 `<dt class="sf-spec-term">`／`<dd class="sf-spec-value">`，而生成器的正则是 `<span …>`。详情页之所以有 `additionalProperty`，是因为它**走 post meta，压根不经过那条正则** ⇒ 修剂型页时**不能顺手把 `span` 改成 `dt`**（那条正则只服务剂型页，而剂型页早已不用 spec-list） | 任何"照着现有正则去修另一个页组"的动作 |
+| 4 | ⛔ **手册写「自动生成」时，那描述的是期望，不是现状 —— 先量缺口，再决定动词**。手册 H5 第 3 项「图片 ALT 自动生成」，实测 **840 个 `<img>`、缺 alt = 0**，174 个空 alt **全部是刻意装饰件**（语言国旗 150 ＋ 博客头像 24）⇒ 没有"生成"的对象；真正该做的动词是**规范化**（logo `alt="sinofresh"` ×150 该写成 `SINO FRESH logo`）。若照字面做，只能加一层运行时字符串替换，与「模板即单一真源」的架构冲突 | **每次把手册条目翻译成动作前，先量它的前提** |
+| 5 | ⛔ **粗算指标必须连口径一起报**。同一页正文词数：粗算（`<main>` 去标签后空白切分）**1,934**，严算（只数 `h/p/li/td/th/dt/dd` 标签内容）**777** —— **差 2.5 倍**，但排序一致。只报数字不报口径，等于给了一个可被任意解释的数 | 一切"内容量/密度"类审计 |
+| 6 | ⛔⛔ **换批次类型时，先量「合法 DIFF 集」再决定门的形状**。H2b1–H4 的字节门在 H5 **不能沿用**：加 `knowsAbout` ＝ **75/75 页合法 DIFF**、剂型页加 `additionalProperty` ＝ **16 页合法 DIFF**、logo alt 规范化 ＝ **75 页合法 DIFF**。⇒ H5 的门必须＝**JSON-LD 语义门**（`json.loads` 后 deep-equal，**允许新增键、禁止改值/删键**）＋渲染 HTML 白名单字节门。**沿用字节门 ⇒ 第一批绿就是假绿；放宽成"能 parse 就过" ⇒ 删掉 `brand` 也能过，另一种假绿** | 每批立项的第一步：**这次改动会产生哪些合法差异？** |
+| 7 | ⛔ **"数据一直在、只是没人读"是可复用的诊断句式**。手册 H5 要的「包装」数据早在 `sf-facts-mini` 第 4 行（`Packaging formats`，16/16 页齐备），而生成器读的是已消失的 `sf-spec-list`；且 `functions.php:646-690` 的 `sinofresh_formula_spec_cell()` **已有作用域正确的读取器**（限定在 `.sf-facts-mini` 块内）⇒ **零新代码即可修**。先找"现成的读法"再考虑新写 | 一切"字段缺失"类需求：先分清是**没数据**还是**没读对** |
+| 8 | ⚠️ **`sf-facts-mini` 与 H3 内容区参数行有 3 项语义重叠**（Certifications / Lead time / Packaging 双处渲染）⇒ 双真源漂移风险。`functions.php:1994` 已有注释承认过这个坑（H3 原作者踩过一次）。H5 若用 `sf-facts-mini` 供 schema，会让"同一事实两个来源"从 2 处变 3 处 ⇒ **登记 H6 第 12 项，并入第 4 项「MOQ 三处对账」** | H6 |
+| 9 | ✅ **无 SEO 插件是这条链路的隐性前提**。活跃插件仅 GF / TranslatePress×2 / consent-api / mail-logging / statistics ⇒ 主题 schema 具**唯一权威性**，不需要 FAQPage 那样的 "stand down if an SEO plugin is present" 守卫。**但换环境前这条会变**，guard 该留 | 一切手写 JSON-LD 的站点 |
+| 10 | ✅ **`offers` 缺的不是代码而是决策**。数据源 `sf_formula_price_tiers` 存在（渲染器 `sinofresh_formula_tier_table()` 也在），但 21 个配方**全空**；而配方详情页源码已写死不报价的理由（`functions.php:4846-4849`：*"a standard formula is an OEM reference, not a priced SKU, and inventing a price would be worse than omitting the property"*）⇒ 手册要 `offers` ↔ 源码说 OEM 不报价，**两条互斥路线必须先裁决**，代码本身随时可写 | 批次立项时区分「缺实现」与「缺决策」 |
+
 ---
 
 | 批次 | 状态 | commit | 说明 |
