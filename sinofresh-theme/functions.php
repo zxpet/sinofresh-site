@@ -28,7 +28,7 @@ add_action('after_setup_theme', function() {
 });
 
 add_action('wp_enqueue_scripts', function() {
-	wp_enqueue_style('sinofresh-style', get_stylesheet_uri(), array(), '2.10.60');
+	wp_enqueue_style('sinofresh-style', get_stylesheet_uri(), array(), '2.10.61');
 	// Sticky nav: every template renders parts/header.html, so this is site-wide.
 	wp_enqueue_script('sinofresh-sticky-header', get_template_directory_uri() . '/assets/js/sticky-header.js', array(), '1.0.0', true);
 	wp_enqueue_script('sinofresh-ui-components', get_template_directory_uri() . '/assets/js/ui-components.js', array(), '1.0.0', true);
@@ -202,12 +202,12 @@ add_action('wp_enqueue_scripts', function() {
 	}
 	// Standard Formulas CTAs (K1): the card grid on the eight dosage pages,
 	// the hero button on a formula detail page, and — since 2C Step2 — the
-	// same 21-card grid on the sf_formula archive. Enqueued independently of
-	// the configurator because neither single-sf_formula.html nor
-	// archive-sf_formula.html has an #configurator — 1.1.0 reads data-form
-	// off the button and simply does not scroll when the target is absent.
+	// same 21-card grid on the sf_formula archive. It was already independent
+	// of the configurator (batch H2b2 deleted that); batch H6 then dropped the
+	// scroll target with it, because no template carries an #configurator any
+	// more — the handler copies the formula name and does nothing else.
 	if ($is_dosage_page || is_singular('sf_formula') || is_post_type_archive('sf_formula')) {
-		wp_enqueue_script('sinofresh-formulas', get_template_directory_uri() . '/assets/js/formulas.js', array(), '1.1.0', true);
+		wp_enqueue_script('sinofresh-formulas', get_template_directory_uri() . '/assets/js/formulas.js', array(), '1.2.0', true);
 	}
 	// Archive-only: the dosage-form filter bar on /formulas/. Nothing else on
 	// the site renders [sf_formula_filters], so nothing else pays for it.
@@ -1089,10 +1089,15 @@ function sinofresh_formula_script_json($data) {
  * Data contracts — do not break:
  *   K1  every card's primary button keeps class="sf-formula__cta" and
  *       data-formula="<name>"; assets/js/formulas.js binds to that pair and
- *       stores the name under the sessionStorage key configurator.js reads.
- *   K2  the same records are mirrored into <script class="sf-formulas-data">
- *       so configurator.js readFormula() can stop scraping <details> markup
- *       for the three fields (batch 2B switches it over).
+ *       copies the name to the clipboard. 1.1.0 also mirrored it into
+ *       sessionStorage for configurator.js's PDF summary — H2b2 deleted that
+ *       reader and left the writer behind, and batch H6 removed the writer.
+ *   K2  retired in batch H6 (2.10.61). The records used to be mirrored into
+ *       <script class="sf-formulas-data"> so configurator.js readFormula()
+ *       could stop scraping <details> markup for the three fields. When
+ *       configurator.js went in H2b2 the mirror became a 1.2 KB payload with
+ *       no reader, shipped on all 60 grid pages. The ItemList below is the
+ *       only JSON this shortcode emits.
  *   K3  card titles are <h3>, never <h2>: toc-nav.js numbers the page from its
  *       <h2> sequence, so a card heading would shift every downstream anchor.
  *   K4  JSON inside <script> is written raw ("&", not "&amp;") — see
@@ -1180,14 +1185,13 @@ function sinofresh_formula_grid($atts = array()) {
 		return '';
 	}
 
-	$cards   = '';
-	$items   = array();
-	$payload = array();
+	$cards = '';
+	$items = array();
 
 	foreach ($formulas as $formula) {
 		/* One authoritative name string. get_the_title() is entity-encoded
 		   ("Skin &amp; Coat"), and the name has to appear verbatim in three
-		   places — the <h3> text, the JSON payload and data-formula.
+		   places — the <h3> text, the ItemList name and data-formula.
 		   Decoding once here and re-escaping per context is what keeps those
 		   three identical. */
 		$name = html_entity_decode(get_the_title($formula), ENT_QUOTES, 'UTF-8');
@@ -1200,9 +1204,10 @@ function sinofresh_formula_grid($atts = array()) {
 		$form_slug  = (!is_wp_error($form_slugs) && $form_slugs) ? (string) $form_slugs[0] : '';
 		$use_terms  = wp_get_post_terms($formula->ID, 'sf_formula_use');
 		$use_name   = (!is_wp_error($use_terms) && $use_terms) ? $use_terms[0]->name : '';
-		$ingredients = (string) get_post_meta($formula->ID, 'sf_formula_ingredients', true);
-		$analysis    = (string) get_post_meta($formula->ID, 'sf_formula_analysis', true);
-		$specs       = (string) get_post_meta($formula->ID, 'sf_formula_specs', true);
+		/* Only Standard Specs reaches the card. Ingredients and Guaranteed
+		   Analysis were read here for the K2 payload as well; batch H6
+		   retired that document, so they are not fetched any more. */
+		$specs = (string) get_post_meta($formula->ID, 'sf_formula_specs', true);
 
 		$items[] = array(
 			'@type'    => 'ListItem',
@@ -1211,37 +1216,19 @@ function sinofresh_formula_grid($atts = array()) {
 			'url'      => $url,
 		);
 
-		$payload[] = array(
-			'name'     => $name,
-			'slug'     => $formula->post_name,
-			'url'      => $url,
-			'form'     => $form_slug,
-			/* K4 — decode before JSON: wp_terms stores "Skin &amp; coat";
-			   the .sf-formulas-data payload must carry the raw label. */
-			'use'      => wp_specialchars_decode($use_name),
-			'sections' => array(
-				array('label' => 'Ingredients',         'value' => $ingredients),
-				array('label' => 'Guaranteed Analysis', 'value' => $analysis),
-				array('label' => 'Standard Specs',      'value' => $specs),
-			),
-		);
-
 		$actions = '';
 		if ($links) {
 			$actions .= sprintf('<a class="sf-fcard__more" href="%s">View formula →</a>', esc_url($url));
 		}
 		if ($cta_on) {
-			/* K1 — formulas.js binds clicks on .sf-formula__cta to the
-			   sessionStorage key configurator.js later reads back, so
-			   data-formula must carry the name verbatim.
-			   2C Step2 adds data-form: without it the script fell back to
-			   the last path segment, which happens to be the dosage form on
-			   a dosage page but is the FORMULA slug on a detail page — the
-			   related grid therefore wrote sinofresh_formula_<formula-slug>,
-			   a key configurator.js never reads. On /formulas/ the fallback
-			   was worse still: the key sinofresh_formula_formulas. The
-			   value here equals what the fallback already produced on the
-			   eight dosage pages, so those pages change no behaviour. */
+			/* K1 — formulas.js binds clicks on .sf-formula__cta and copies
+			   data-formula verbatim into the clipboard, so the name has to
+			   reach that attribute undamaged.
+			   data-form is the 2C Step2 addition: its only reader was the
+			   sessionStorage write batch H6 retired, so nothing reads it
+			   now. It stays because H6's declared scope is the dead
+			   CSS/PHP/JS, and dropping an attribute off every card is a
+			   markup change with a gate of its own. */
 			$actions .= sprintf(
 				'<button type="button" class="sf-formula__cta" data-formula="%s" data-form="%s">Reference this formula →</button>',
 				esc_attr($name),
@@ -1283,7 +1270,6 @@ function sinofresh_formula_grid($atts = array()) {
 		);
 	}
 
-	$json = sinofresh_formula_script_json($payload);
 	$list = sinofresh_formula_script_json(array(
 		'@context'        => 'https://schema.org',
 		'@type'           => 'ItemList',
@@ -1291,12 +1277,11 @@ function sinofresh_formula_grid($atts = array()) {
 		'numberOfItems'   => count($items),
 		'itemListElement' => $items,
 	));
-	if ($json === '' || $list === '') {
+	if ($list === '') {
 		return '';
 	}
 
 	return sprintf('<div class="sf-fgrid" style="--sf-fgrid-cols:%d">', $columns)
-		. '<script type="application/json" class="sf-formulas-data">' . $json . '</script>'
 		. '<script type="application/ld+json">' . $list . '</script>'
 		. $cards
 		. '</div>';
@@ -1318,6 +1303,10 @@ add_shortcode('sf_formula_grid', 'sinofresh_formula_grid');
  *
  * Returns a trimmed list with empty segments dropped; '' and whitespace give an
  * empty array, never one empty element.
+ *
+ * Written for the [sf_formula_actives] band, which batch H6 retired; it is
+ * still load-bearing — sinofresh_formula_analysis_pairs() below and
+ * [sf_formula_detail_actives] both split through it.
  */
 function sinofresh_formula_split_top_level($value) {
 	$value = (string) $value;
@@ -1356,6 +1345,9 @@ function sinofresh_formula_split_top_level($value) {
  * further text verbatim ("Omega-3 ≥30%" → term "Omega-3", value "≥30%"). A
  * segment with no ≥ is kept as a term with an empty value — the caller decides
  * — while a value with no subject is dropped here, because that is not a row.
+ *
+ * Written for the [sf_formula_actives] band, which batch H6 retired;
+ * [sf_formula_detail_actives] is its only remaining caller.
  */
 function sinofresh_formula_analysis_pairs($value) {
 	$pairs = array();
@@ -1376,124 +1368,6 @@ function sinofresh_formula_analysis_pairs($value) {
 }
 
 /**
- * [sf_formula_actives form="soft-chews"] — the "Active Ingredients &
- * Guaranteed Analysis" band on the eight dosage pages.
- *
- * Reads the same post meta [sf_formula_detail] reads (sf_formula_ingredients,
- * sf_formula_analysis), so the formula record stays the single source of truth
- * and stays editable in wp-admin: the eight block templates sit behind the
- * authority guard, post meta does not.
- *
- * Server-side by necessity. The K2 JSON mirror is a [sf_formula_grid]
- * by-product, so reading it would mean keeping the grid on the page, painting
- * nothing without JavaScript, and coupling this band to the grid. Querying the
- * records directly is crawlable, degrades to plain HTML, and cannot be broken
- * by editing the cards.
- *
- * Emits no JSON and no ItemList of its own: the page already carries the grid's
- * ItemList and the dosage Product schema, and a second copy would only
- * duplicate them. Returns '' when the dosage form has no published formula, so
- * the band collapses instead of leaving an empty padded section — the same
- * convention [sf_formula_body] follows.
- *
- * The query mirrors [sf_formula_grid]'s exactly (same post type, status,
- * orderby, tax_query) so a recipe holds the same position in the table as its
- * card holds in the grid above it.
- *
- * Labels are plain English literals, not gettext: that is how the eight
- * templates' own copy is written (and how [sf_formula_grid] writes "View
- * formula →"), so these strings land on the same TranslatePress path as the
- * rest of the page. No TP strings are registered in this batch.
- */
-function sinofresh_formula_actives($atts = array()) {
-	$atts = shortcode_atts(array('form' => ''), $atts, 'sf_formula_actives');
-	$form = sinofresh_formula_current_form($atts['form']);
-
-	$args = array(
-		'post_type'           => 'sf_formula',
-		'post_status'         => 'publish',
-		'posts_per_page'      => -1,
-		'orderby'             => array('menu_order' => 'ASC', 'title' => 'ASC'),
-		'ignore_sticky_posts' => true,
-		'no_found_rows'       => true,
-	);
-	if ($form !== '') {
-		$args['tax_query'] = array(
-			array('taxonomy' => 'sf_formula_form', 'field' => 'slug', 'terms' => $form),
-		);
-	}
-	$formulas = get_posts($args);
-	if (!$formulas) {
-		return '';
-	}
-
-	$items = '';
-	foreach ($formulas as $formula) {
-		/* One authoritative name string, decoded once and re-escaped per
-		   context — the rule [sf_formula_grid] follows ("Skin & Coat Soft
-		   Chews" is stored entity-encoded). */
-		$name = html_entity_decode(get_the_title($formula), ENT_QUOTES, 'UTF-8');
-		if ($name === '') {
-			continue;
-		}
-		$ingredients = trim((string) get_post_meta($formula->ID, 'sf_formula_ingredients', true));
-		$analysis    = trim((string) get_post_meta($formula->ID, 'sf_formula_analysis', true));
-		if ($ingredients === '' && $analysis === '') {
-			continue;
-		}
-
-		$body = '<h3 class="sf-actives__name">' . esc_html($name) . '</h3>';
-
-		$pills = '';
-		foreach (sinofresh_formula_split_top_level($ingredients) as $term) {
-			$pills .= '<li class="sf-actives__pill">' . esc_html($term) . '</li>';
-		}
-		if ($pills !== '') {
-			$body .= '<p class="sf-actives__label">' . esc_html('Ingredients') . '</p>'
-				. '<ul class="sf-actives__ing">' . $pills . '</ul>';
-		}
-
-		/* A segment with no level, or with no subject, is not a row: the dry
-		   run (tools/b2d1_parser_dryrun.php §2/§3) finds zero such segments
-		   in the 21 live records, and rendering one would emit an empty <dd>. */
-		$rows = '';
-		foreach (sinofresh_formula_analysis_pairs($analysis) as $pair) {
-			if ($pair['term'] === '' || $pair['value'] === '') {
-				continue;
-			}
-			$rows .= '<div class="sf-spec-row">'
-				. '<dt class="sf-spec-term">' . esc_html($pair['term']) . '</dt>'
-				. '<dd class="sf-spec-value">' . esc_html($pair['value']) . '</dd>'
-				. '</div>';
-		}
-		if ($rows !== '') {
-			$body .= '<p class="sf-actives__label">' . esc_html('Guaranteed Analysis') . '</p>'
-				. '<dl class="sf-spec-list">' . $rows . '</dl>';
-		}
-
-		$items .= '<article class="sf-actives__item">' . $body . '</article>';
-	}
-	if ($items === '') {
-		return '';
-	}
-
-	$label = sinofresh_formula_label($form);
-	if ($label === '') {
-		$label = 'dosage';
-	}
-
-	return '<div class="sf-actives__inner">'
-		. '<h2 class="sf-actives__title">' . esc_html('Active Ingredients & Guaranteed Analysis') . '</h2>'
-		. '<p class="sf-actives__intro">' . esc_html(sprintf(
-			'Every formula in our standard %s range, with the ingredient list and the guaranteed analysis we hold to in production. Use one as a starting point, or ask us to adjust the actives and the levels for your own label.',
-			$label
-		)) . '</p>'
-		. '<div class="sf-actives__list">' . $items . '</div>'
-		. '</div>';
-}
-add_shortcode('sf_formula_actives', 'sinofresh_formula_actives');
-
-/**
  * [sf_formula_gallery form="soft-chews"] — the product-gallery band on the
  * eight dosage pages.
  *
@@ -1507,8 +1381,8 @@ add_shortcode('sf_formula_actives', 'sinofresh_formula_actives');
  * Four frames, one data source. Slot 1 is the dosage's own photo and the only
  * frame the server renders visible; slots 2-4 ship `hidden`, and
  * formula-gallery.js is what turns them into a thumbnail strip. Nothing here
- * emits K2 (the .sf-formulas-data mirror) or an ItemList — the gallery is
- * presentation, not a second copy of the product data.
+ * emits an ItemList — the gallery is presentation, not a second copy of the
+ * product data.
  *
  * Placeholder notice: slots 2-4 are stock facility photographs, not this
  * product's own line, and every photo in the library still carries an AI
@@ -1919,9 +1793,9 @@ add_action('wp_head', function () {
  * still written, and the Product JSON-LD builds its additionalProperty from
  * the meta directly, so the machine-readable copy is untouched.
  *
- * The field is read straight from post meta rather than from the
- * .sf-formulas-data payload: on a detail page that payload belongs to the
- * related grid, not to this formula. A field with no value is skipped,
+ * The field is read straight from post meta rather than from the grid's
+ * JSON: the grid is a sibling band, not this formula's own record, and its
+ * K2 payload went in batch H6 anyway. A field with no value is skipped,
  * never rendered as an empty card. When exactly one card is rendered the
  * grid takes the --solo modifier — style.css caps that variant's width, so
  * the cap can never reach a multi-card grid.
@@ -2173,13 +2047,16 @@ add_shortcode('sf_formula_body', 'sinofresh_formula_body');
  * than parse a sentence. Both readings are deliberate: the card is the record,
  * the band is the comparison.
  *
- * Reads post meta directly rather than the K2 mirror ([sf_formula_grid]'s
- * by-product): this page has no grid to keep alive, and post meta stays
- * editable in wp-admin while the template does not (authority guard).
+ * Reads post meta directly: the record stays editable in wp-admin while the
+ * template does not (authority guard), and there is no longer a JSON mirror
+ * to prefer — the grid's K2 payload went in batch H6.
  *
- * Parsing is [sf_formula_actives]' own two helpers, unchanged — the same
- * split that band uses on the same fields, so the two pages cannot disagree
- * about where an ingredient ends.
+ * Parsing reuses the two helpers the retired [sf_formula_actives] band left
+ * behind — sinofresh_formula_split_top_level() and
+ * sinofresh_formula_analysis_pairs(). They were written for that band, which
+ * batch H6 removed once no template called it; this function is now their
+ * only consumer, and the split they implement is unchanged, so the pills and
+ * the term/value rows cannot disagree about where an ingredient ends.
  *
  * Emits its own <section> and returns '' when both fields are empty, so the
  * band collapses to zero bytes: no empty padded section, no orphan heading.

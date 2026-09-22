@@ -2,28 +2,32 @@
  * Standard Formulas reference buttons (K1).
  *
  * Loaded on the eight dosage pages (the card grid) and on a formula detail
- * page (the hero button). One click copies the formula name, remembers it for
- * the configurator's PDF summary, and — when this page actually carries a
- * configurator — scrolls to it and shows a lightweight toast. Copy failure
- * degrades to scroll + a "reference it manually" toast.
+ * page (the hero button). One click copies the formula name and shows a
+ * lightweight toast.
  *
- * 1.1.0 — the sessionStorage key comes from data-form first. On a detail page
- * the last path segment is the FORMULA slug, so the 1.0.0 heuristic ("last
- * segment is the dosage form") wrote sinofresh_formula_skin-coat-soft-chews
- * and the configurator on /products/soft-chews/ never found it. data-form
- * carries the dosage form slug, which is the key configurator.js reads back.
- * The scroll is skipped entirely when there is no #configurator (detail page),
- * where the button's job is copy-only.
+ * 1.2.0 — batch H6 deleted the two things batch H2b2 had already orphaned when
+ * it removed configurator.js: the sessionStorage write
+ * ('sinofresh_formula_' + slug), whose only reader was the configurator's PDF
+ * summary, and the #configurator scroll, which no template has carried the id
+ * for since. The button is copy-only everywhere now, and reduceMotion went with
+ * the scroll — the scroll was its only reader, and .sf-toast already disables
+ * its own transition under the same media query in style.css.
  *
- * No dependencies. Additive — mirrors configurator.js conventions
- * (IIFE, ES5-style, reduceMotion respect, textarea fallback).
+ * data-form is still emitted on the markup. H6's declared scope was the dead
+ * JS/CSS/PHP, not the attributes, so it stays until the next markup pass;
+ * nothing in this file reads it any more.
+ *
+ * 1.1.0 — (history) the sessionStorage key was taken from data-form first,
+ * because on a detail page the last path segment is the FORMULA slug: the
+ * 1.0.0 heuristic ("last segment is the dosage form") wrote
+ * sinofresh_formula_skin-coat-soft-chews, a key the configurator on
+ * /products/soft-chews/ never found.
+ *
+ * No dependencies. ES5-style IIFE with a textarea copy fallback — the
+ * conventions configurator.js used to share with it (deleted in batch H2b2).
  */
 (function () {
 	'use strict';
-
-	var reduceMotion = window.matchMedia
-		? window.matchMedia('(prefers-reduced-motion: reduce)').matches
-		: false;
 
 	/* --- Toast: one element, reused for every click ---------------------- */
 	var toastEl = null;
@@ -49,7 +53,7 @@
 		}, 2600);
 	}
 
-	/* --- Clipboard with textarea fallback (same shape as configurator.js) */
+	/* --- Clipboard with textarea fallback (toc-nav.js copies the same way) ----- */
 	function copyText(text, onDone, onFail) {
 		if (navigator.clipboard && navigator.clipboard.writeText) {
 			navigator.clipboard.writeText(text).then(onDone, onFail);
@@ -80,37 +84,12 @@
 		btn.addEventListener('click', function () {
 			var name = btn.getAttribute('data-formula') || '';
 
-			/* Persist the referenced formula per dosage form so the
-			   configurator's PDF summary can render it as the (Standard)
-			   formula base. data-form wins: on a detail page the URL's last
-			   segment is the formula slug, not the dosage form, so the old
-			   path heuristic produced a key the configurator never reads. */
-			var slug = (btn.getAttribute('data-form') || '').toLowerCase();
-			if (!slug) {
-				var segments = window.location.pathname.replace(/\/+$/, '').split('/');
-				slug = (segments[segments.length - 1] || '').toLowerCase();
-			}
-			if (slug && /^[a-z0-9][a-z0-9-]*$/.test(slug)) {
-				try {
-					sessionStorage.setItem('sinofresh_formula_' + slug, name);
-				} catch (e) {
-					/* storage unavailable — PDF falls back to "to be developed" */
-				}
-			}
-
 			copyText(name, function () {
 				showToast('Formula name copied. Paste it in your inquiry.');
 			}, function () {
-				/* copy unavailable — still scroll, ask user to type it */
+				/* copy unavailable — ask the user to type it instead */
 				showToast('Copy unavailable — reference "' + name + '" in your inquiry.');
 			});
-
-			/* Detail pages carry no configurator: the button is copy-only
-			   there, and the scroll is skipped rather than aimed at nothing. */
-			var target = document.getElementById('configurator');
-			if (target) {
-				target.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
-			}
 		});
 	});
 })();

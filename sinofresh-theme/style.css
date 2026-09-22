@@ -2,7 +2,7 @@
 Theme Name: SINO FRESH
 Author: Shandong SINO FRESH Pet Food Co., Ltd.
 Text Domain: sinofresh
-Version: 2.10.60
+Version: 2.10.61
 Requires at least: 6.0
 Requires PHP: 7.4
 License: GNU General Public License v2 or later
@@ -1216,8 +1216,7 @@ h1.sf-slide__title {
 
 /* === 19. Tabular figures for specification data ------------------------ */
 .wp-block-table table,
-.sf-num,
-.configurator__summary-value {
+.sf-num {
 	font-variant-numeric: tabular-nums;
 }
 
@@ -1895,59 +1894,6 @@ body.admin-bar .sf-header.is-sticky {
 	padding-top: 40px !important;
 	padding-bottom: 0 !important;
 }
-.sf-spectable__table {
-	width: 100%;
-	margin: 0;
-	border-collapse: collapse;
-	/* fixed + the per-column widths below: auto layout let the longest value
-	   ("7–15 working days after packaging ready") eat 434 of the 1200px and
-	   squeezed Shelf life to 142px, which read as a ragged grid. */
-	table-layout: fixed;
-	font-size: 14px;
-	line-height: 1.45;
-	font-variant-numeric: tabular-nums;
-	text-align: left;
-}
-.sf-spectable__table thead th:nth-child(1) { width: 19%; }
-.sf-spectable__table thead th:nth-child(2) { width: 19%; }
-.sf-spectable__table thead th:nth-child(3) { width: 13%; }
-.sf-spectable__table thead th:nth-child(4) { width: 19%; }
-.sf-spectable__table thead th:nth-child(5) { width: 30%; }
-.sf-spectable__caption {
-	caption-side: top;
-	padding: 0 0 10px;
-	text-align: left;
-	font-size: 11px;
-	font-weight: 700;
-	letter-spacing: 0.08em;
-	text-transform: uppercase;
-	color: var(--wp--preset--color--text-secondary);
-}
-.sf-spectable__table th,
-.sf-spectable__table td {
-	text-align: left;
-	vertical-align: top;
-}
-.sf-spectable__table thead th {
-	padding: 10px 14px;
-	background-color: var(--wp--preset--color--brand-green);
-	font-size: 12px;
-	font-weight: 700;
-	letter-spacing: 0.04em;
-	text-transform: uppercase;
-	color: var(--wp--preset--color--text-primary);
-}
-.sf-spectable__table thead th:first-child {
-	border-top-left-radius: 6px;
-}
-.sf-spectable__table thead th:last-child {
-	border-top-right-radius: 6px;
-}
-.sf-spectable__table tbody td {
-	padding: 12px 14px;
-	border-bottom: 1px solid var(--wp--preset--color--border-light);
-	color: var(--wp--preset--color--text-primary);
-}
 
 /* Phone: six columns of spec copy cannot be read sideways, so each field
    stacks as a labelled row. display:block on the table parts drops the table
@@ -1957,35 +1903,6 @@ body.admin-bar .sf-header.is-sticky {
 @media (max-width: 767px) {
 	.sf-spectable {
 		padding-top: 24px !important;
-	}
-	.sf-spectable__table,
-	.sf-spectable__table thead,
-	.sf-spectable__table tbody,
-	.sf-spectable__table tr,
-	.sf-spectable__table th,
-	.sf-spectable__table td {
-		display: block;
-		width: 100%;
-	}
-	.sf-spectable__table thead {
-		display: none;
-	}
-	.sf-spectable__table tbody tr {
-		padding: 12px 0 14px;
-		border-bottom: 1px solid var(--wp--preset--color--border-light);
-	}
-	.sf-spectable__table tbody td {
-		padding: 4px 0;
-		border-bottom: 0;
-	}
-	.sf-spectable__table tbody td::before {
-		content: attr(data-label);
-		display: block;
-		font-size: 11px;
-		font-weight: 700;
-		letter-spacing: 0.06em;
-		text-transform: uppercase;
-		color: var(--wp--preset--color--text-secondary);
 	}
 }
 
@@ -5585,14 +5502,16 @@ body.page-id-28 .wp-block-columns:has(> .wp-block-column > .wp-block-group.has-c
 
 /* === 37. Formula card grid (dosage pages) ================================
    2B Stage3: the legacy <details> accordion is gone — sf_formula_grid now
-   renders self-supporting cards (.sf-fcard) fed by the .sf-formulas-data
-   JSON mirror. The grid carries its own columns via --sf-fgrid-cols (the
+   renders self-supporting cards (.sf-fcard) straight from the formula
+   records. The .sf-formulas-data JSON mirror that used to ride along with
+   them went in batch H6, once the configurator that was its only reader had
+   been deleted. The grid carries its own columns via --sf-fgrid-cols (the
    shortcode sets it inline), so nothing here depends on wp-container-core
    layout classes. Column geometry mirrors .sf-dosage-grid: 4 × minmax(0,1fr)
    with a 24px gap on desktop.
 
-   The .sf-formula__cta button keeps its class (K1 — formulas.js binds it,
-   configurator.js reads data-formula back via sessionStorage).
+   The .sf-formula__cta button keeps its class and its data-formula (K1 —
+   formulas.js binds it and copies the name into the inquiry).
 
    2C Step0 adds the dosage still: .sf-fcard__media is a full-bleed 4:3
    frame (the uploads/2026/09/{form}.webp 720x720 renders, cropped by
@@ -5723,9 +5642,10 @@ body.page-id-28 .wp-block-columns:has(> .wp-block-column > .wp-block-group.has-c
    plain elements for the same reason.
 
    The K1 contract is unchanged: the hero button keeps
-   class="sf-formula__cta" + data-formula + data-form (now data-form is
-   actually used — formulas.js 1.1.0 prefers it over parsing the card link,
-   and the detail page has no card link to parse). */
+   class="sf-formula__cta" + data-formula, and formulas.js copies the name
+   into the clipboard. data-form still rides along — it fed the
+   sessionStorage key batch H6 retired, nothing reads it today, and it goes
+   in the next markup pass. */
 
 /* 37b-i. Hero. The section carries .sf-hero-inner as well, so the band tone
    and the phone inset come from rule 25b / 27s exactly like every other
@@ -8173,79 +8093,6 @@ body.sf-inquiry-lock {
 		padding-right: 20px;
 	}
 }
-
-/* B2D Step5 — core facts + direct answer, between the hero and #formulas on
-   the eight dosage pages. The facts a buyer (or a crawler) needs first — MOQ,
-   sampling, lead time, certifications, packaging — were four sections down in
-   .sf-spectable; this band puts them one screen up. It duplicates three of
-   them on purpose and the two bands will drift; that reconciliation is its own
-   batch.
-
-   A new class group (.sf-facts__*) rather than a reuse of .sf-spectable: the
-   two bands carry overlapping facts, and separate names stop an edit to one
-   from silently restyling the other. The visual tokens are copied from
-   .sf-spectable so the page keeps one voice — hairline rows, no vertical
-   rules, 11px letterspaced caption in the secondary text colour, ink values.
-   Labels stay muted instead of taking the green header band, because five
-   stacked full-width green rows would out-weigh the hero above them. ------ */
-/* No padding declaration here: the 40px top/bottom lives in the block's own
-   spacing attribute and reaches the page as an inline style, which a plain
-   class rule would lose to. CSS only overrides it below 768px, and that one
-   does need !important for the same reason. ------------------------------- */
-.sf-facts__table {
-	width: 100%;
-	margin: 0;
-	border-collapse: collapse;
-	table-layout: fixed;
-	font-size: 14px;
-	line-height: 1.5;
-	font-variant-numeric: tabular-nums;
-	text-align: left;
-}
-.sf-facts__caption {
-	caption-side: top;
-	padding: 0 0 10px;
-	text-align: left;
-	font-size: 11px;
-	font-weight: 700;
-	letter-spacing: 0.08em;
-	text-transform: uppercase;
-	color: var(--wp--preset--color--text-secondary);
-}
-/* 220px holds "Production lead time" on one line at 12px/700 uppercase; the
-   value column then takes whatever is left, which is where the long Packaging
-   and Certifications strings need the room. */
-.sf-facts__table tbody th {
-	width: 220px;
-	padding: 9px 24px 9px 0;
-	border-bottom: 1px solid var(--wp--preset--color--border-light);
-	font-size: 12px;
-	font-weight: 700;
-	letter-spacing: 0.04em;
-	text-transform: uppercase;
-	color: var(--wp--preset--color--text-secondary);
-	vertical-align: top;
-}
-.sf-facts__table tbody td {
-	padding: 9px 0;
-	border-bottom: 1px solid var(--wp--preset--color--border-light);
-	color: var(--wp--preset--color--text-primary);
-	vertical-align: top;
-}
-/* Two selectors: the block is a direct child of a core constrained-layout
-   container, and core ships
-   `:root :where(.is-layout-constrained) > * { margin-block-start: 24px }`
-   at specificity (0,1,0) — the same as a bare class. Pairing the section class
-   with the paragraph class wins that without !important. */
-.sf-facts .sf-facts__answer {
-	max-width: 860px;
-	margin: 24px 0 0;
-	padding-top: 20px;
-	border-top: 1px solid var(--wp--preset--color--border-light);
-	font-size: 15px;
-	line-height: 1.65;
-	color: var(--wp--preset--color--text-primary);
-}
 /* <=767px: the label column cannot hold "Production lead time" next to a
    value, so each field stacks as a labelled row. Same trade .sf-spectable
    makes — display:block drops the table semantics for assistive tech, and
@@ -8255,22 +8102,6 @@ body.sf-inquiry-lock {
 	.sf-facts {
 		padding-top: 24px !important;
 		padding-bottom: 28px !important;
-	}
-	.sf-facts__table,
-	.sf-facts__table tbody,
-	.sf-facts__table tr,
-	.sf-facts__table th,
-	.sf-facts__table td {
-		display: block;
-		width: 100%;
-	}
-	.sf-facts__table tbody th {
-		padding: 14px 0 2px;
-		border-bottom: 0;
-	}
-	.sf-facts__table tbody td {
-		padding: 0 0 10px;
-		border-bottom: 1px solid var(--wp--preset--color--border-light);
 	}
 }
 
@@ -8343,113 +8174,15 @@ body.sf-inquiry-lock {
 	}
 }
 
-/* G — formula detail: media + facts, two columns.
-
-   The gallery stops being a full-width band and becomes the left column of a
-   3fr/2fr grid, with the intro, the five-row factsheet and the sample CTA in
-   the right column. Layout only: the four slides, the #gallery anchor and
-   its h2 are untouched, and the dot rail still counts the same five h2 (four
-   dots) it counted before.
-
-   minmax(0, ...) on both tracks is load-bearing, not tidiness: the packaging
-   value is a 124-character list, and a bare 3fr track refuses to shrink below
-   its content, so the two columns would push the page into horizontal scroll
-   at every width where the value does not wrap on its own.
-
-   Every rule stays inside the .sf-fdetail-media namespace. No !important
-   anywhere except the one core override below, which needs it for the reason
-   written there. ------------------------------------------------------------ */
-.sf-fdetail-media__inner {
-	display: grid;
-	grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
-	gap: 48px;
-	align-items: start;
-}
-/* core gives every .is-layout-flow child after the first a 24px block-gap
-   margin (":root :where(.is-layout-flow) > *"). In a grid row that lands on
-   the aside and drops the right column 24px below the left one. The gap is
-   the grid's job here, so the margins go. */
-.sf-fdetail-media__inner > * {
-	margin-block-start: 0;
-}
-/* .sf-gallery__stage was written for a full-width band: 680px wide and
-   auto-centred. Inside the 3fr column that is a narrow box floating in the
-   middle of its own column. Widened to the column and pinned left; its
-   aspect-ratio (1/1) keeps the height arithmetic exactly as it was. */
-.sf-fdetail-media__left .sf-gallery__stage {
-	max-width: none;
-	margin-inline: 0;
-}
-.sf-fdetail-media__side {
-	min-width: 0;
-}
-.sf-fdetail-media__intro {
-	margin: 0 0 24px;
-	font-size: 15px;
-	line-height: 1.6;
-	color: var(--wp--preset--color--text-primary);
-}
-/* Two columns of a grid, not a table: the terms size to their own text so
-   the five values start on one x, whatever the longest term is. Voice copied
-   from .sf-facts-mini — 11px letterspaced muted label, ink value. */
-.sf-fdetail-media__facts {
-	display: grid;
-	grid-template-columns: auto minmax(0, 1fr);
-	gap: 10px 16px;
-	margin: 0 0 28px;
-}
-.sf-fdetail-media__term {
-	margin: 0;
-	font-size: 11px;
-	font-weight: 700;
-	letter-spacing: 0.08em;
-	text-transform: uppercase;
-	color: var(--wp--preset--color--text-secondary);
-	white-space: nowrap;
-}
-.sf-fdetail-media__value {
-	margin: 0;
-	font-size: 14px;
-	line-height: 1.5;
-	color: var(--wp--preset--color--text-primary);
-}
-/* Same orange as the page's closing "Request a Quote": two call-to-action
-   buttons on one page that looked different would read as two different
-   kinds of action. */
-.sf-fdetail-media__cta {
-	display: inline-block;
-	padding: 12px 24px;
-	border-radius: 6px;
-	background: var(--wp--preset--color--cta);
-	color: var(--wp--preset--color--card-white);
-	font-size: 15px;
-	font-weight: 600;
-	text-decoration: none;
-	transition: background-color 0.2s ease;
-}
-.sf-fdetail-media__cta:hover,
-.sf-fdetail-media__cta:focus-visible {
-	background: var(--wp--preset--color--cta-hover);
-	color: var(--wp--preset--color--card-white);
-}
-/* <=768px (the site's main breakpoint): one column, gallery first, facts
-   under it. 32px because the desktop 48px is a column gap, not a section
-   gap, and the band's own padding still supplies the outer rhythm. */
-@media (max-width: 768px) {
-	.sf-fdetail-media__inner {
-		grid-template-columns: minmax(0, 1fr);
-		gap: 32px;
-	}
-}
-
 /* ===========================================================================
    38. Formula detail band, second revision — .sf-fdetail2 (H2a, 2.10.55)
 
    Replaces batch G's .sf-fdetail-media on single-sf_formula.html: the media
    column on the left (a vertical thumbnail rail beside one main frame) and
    the parameters column on the right (the ten rows [sf_formula_params]
-   emits). Batch G's own rules above are left byte-for-byte as they are and
-   simply stop being used by that template.
+   emits). Batch G's own rules were deleted in batch H6 (2.10.61) once no
+   template referenced them, so this band is the only one the detail page
+   carries.
 
    Mobile-first, at the four widths the brief pins down:
 
@@ -8666,8 +8399,7 @@ body.sf-inquiry-lock {
 }
 /* Two columns of a grid, not a table: the terms size to their own text, so
    every value starts on one x whatever the longest term is. Voice copied from
-   .sf-facts-mini / .sf-fdetail-media__facts — 11px letterspaced muted label,
-   ink value. */
+   .sf-facts-mini — 11px letterspaced muted label, ink value. */
 .sf-fdetail2__params {
 	display: grid;
 	grid-template-columns: auto minmax(0, 1fr);
@@ -9016,8 +8748,8 @@ body.sf-inquiry-lock {
 	line-height: 1.5;
 	color: var(--wp--preset--color--text-primary);
 }
-/* Collapsed borders with a hairline under each row — the .sf-facts__table
-   treatment, so a carton row and a fact row read as the same kind of record.
+/* Collapsed borders with a hairline under each row, so a carton row and a
+   fact row read as the same kind of record.
    A third column is the widest cell, so the trailing right padding is dropped
    or the table would end short of the text above it. */
 .sf-fdetail-content__cartons {
