@@ -2,7 +2,7 @@
 Theme Name: SINO FRESH
 Author: Shandong SINO FRESH Pet Food Co., Ltd.
 Text Domain: sinofresh
-Version: 2.10.62
+Version: 2.10.63
 Requires at least: 6.0
 Requires PHP: 7.4
 License: GNU General Public License v2 or later
@@ -5641,11 +5641,15 @@ body.page-id-28 .wp-block-columns:has(> .wp-block-column > .wp-block-group.has-c
    bands that come from PHP ([sf_formula_detail] / [sf_formula_body]) are
    plain elements for the same reason.
 
-   The K1 contract is unchanged: the hero button keeps
+   The K1 contract on the CARD GRID is unchanged: the card button keeps
    class="sf-formula__cta" + data-formula, and formulas.js copies the name
    into the clipboard. data-form still rides along — it fed the
    sessionStorage key batch H6 retired, nothing reads it today, and it goes
-   in the next markup pass. */
+   in the next markup pass.
+
+   Batch H7b took the detail page's hero CTA out of that contract: it is an
+   <a href="/contact/#quote" data-sf-inquiry-open> that opens the inquiry
+   dialog, so the class pair stays for the paint and formulas.js skips it. */
 
 /* 37b-i. Hero. The section carries .sf-hero-inner as well, so the band tone
    and the phone inset come from rule 25b / 27s exactly like every other
@@ -5700,17 +5704,23 @@ body.page-id-28 .wp-block-columns:has(> .wp-block-column > .wp-block-group.has-c
 /* 37b-ii. The K1 button inverts on the dark band. The base .sf-formula__cta
    is Forest-on-white for the card grid; Forest-on-Forest would be invisible
    here, so the --solid modifier puts ink on brand-green (5.8:1) and flips to
-   white-on-Forest on hover. Markup, data attributes and the click behaviour
-   are untouched — only the surface colours change. */
+   white-on-Forest on hover. The card grid's copy behaviour and its data
+   attributes are untouched. On this band alone the element is batch H7b's
+   inquiry opener and therefore an <a>, so the decoration is pinned off on both
+   states: theme.json gives every link an underline on hover, and a filled
+   button that grows an underline under the pointer reads as a link that lost
+   its button. The fills above stay exactly as they were. */
 .sf-formula-hero .sf-formula__cta--solid {
 	border-color: var(--wp--preset--color--brand-green);
 	background-color: var(--wp--preset--color--brand-green);
 	color: var(--wp--preset--color--text-primary);
+	text-decoration: none;
 }
 .sf-formula-hero .sf-formula__cta--solid:hover {
 	border-color: var(--wp--preset--color--card-white);
 	background-color: var(--wp--preset--color--card-white);
 	color: var(--wp--preset--color--primary);
+	text-decoration: none;
 }
 .sf-formula-hero__build {
 	font-size: 14px;
@@ -8276,6 +8286,13 @@ body.sf-inquiry-lock {
 		width: 56px;
 		height: 56px;
 	}
+	/* Batch H7b: the column title's phone step. 32px was sized for the
+	   two-column band; at 480px the column is the whole width and the longest
+	   names still wrap to two lines, so the step is for the wrap, not the
+	   measure. */
+	.sf-fdetail2__title {
+		font-size: 26px;
+	}
 }
 
 /* ---- the video frame ------------------------------------------------------
@@ -8432,14 +8449,21 @@ body.sf-inquiry-lock {
 /* Batch H5-0: the product name, and the page's only h1. It used to be the
    hero's, above the gallery band; the brief puts it here, at the top of the
    column beside the frames, which is also where it is the first thing read in
-   the right-hand half of the band. 28px/700 ink on Mist — a step below the
-   hero's clamp(30-44px), because the column is narrower and the same string is
-   already set at 44px a screen above it in the hero. */
+   the right-hand half of the band.
+
+   Batch H7b: 28px -> 32px, line-height 1.2 -> 1.3 and margin 16px -> 24px,
+   plus a 26px step on a phone. The column title is the page's h1 and now reads
+   as one: a step below the hero's clamp(30-44px) was the right relation when
+   the same string was set at 44px a screen above it, but this is the name the
+   page is about, and at 28px it read as a caption to the frames. The margin
+   follows the type — 32px of ink needs more air under it than 28px did — and
+   the phone step keeps the two-line names ("Wild Alaskan Salmon Oil") off the
+   480px edge. */
 .sf-fdetail2__title {
-	margin: 0 0 16px;
-	font-size: 28px;
+	margin: 0 0 24px;
+	font-size: 32px;
 	font-weight: 700;
-	line-height: 1.2;
+	line-height: 1.3;
 	letter-spacing: -0.01em;
 	color: var(--wp--preset--color--text-primary);
 }

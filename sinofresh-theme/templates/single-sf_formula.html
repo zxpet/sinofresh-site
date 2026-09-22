@@ -6,7 +6,18 @@
      are the same string rendered twice — the h1 for the outline and the div
      for the band, which is what keeps the count at one. The breadcrumb
      generator (functions.php) walks this nav: class before href on every
-     crumb <a>, exact class order on the current crumb. -->
+     crumb <a>, exact class order on the current crumb.
+
+     Batch H7b: the hero's primary action is an <a>, not the <button> that
+     copied the formula name. The copy had no reader left after H6 deleted the
+     configurator's sessionStorage key, so the button asked for a click and
+     gave nothing back; it now opens the same inquiry dialog the float capsule
+     opens, and href="/contact/#quote" is the no-JS path. The class pair
+     .sf-formula__cta--solid stays — the stylesheet keys on it, and it is the
+     one thing on the page that tells this CTA apart from the 160 card buttons
+     that still copy (they keep .sf-formula__cta bare, and formulas.js now
+     skips anything carrying data-sf-inquiry-open). data-formula/data-form went
+     with the copy behaviour: nothing read them on this element. -->
 <!-- wp:group {"tagName":"section","className":"sf-hero-inner sf-formula-hero","textColor":"card-white","layout":{"type":"constrained"},"style":{"spacing":{"padding":{"top":"var:preset|spacing|80","bottom":"var:preset|spacing|80"}}}} -->
 <section class="wp-block-group has-card-white-color has-text-color sf-hero-inner sf-formula-hero" style="padding-top:var(--wp--preset--spacing--80);padding-bottom:var(--wp--preset--spacing--80)">
 <!-- wp:html -->
@@ -14,7 +25,7 @@
 <span class="sf-fcard__use">{{FORMULA_USE}}</span>
 <div class="sf-formula-hero__title">{{TITLE}}</div>
 <p class="sf-formula-hero__meta">{{FORMULA_META}}</p>
-<div class="sf-formula-hero__actions"><button type="button" class="sf-formula__cta sf-formula__cta--solid" data-formula="{{TITLE}}" data-form="{{FORM_SLUG}}">Reference this formula →</button><a class="sf-formula-hero__build sf-quote-cta" href="/contact/#quote">Build Custom Formula</a></div>
+<div class="sf-formula-hero__actions"><a class="sf-formula__cta sf-formula__cta--solid" href="/contact/#quote" data-sf-inquiry-open>Send Inquiry</a><a class="sf-formula-hero__build sf-quote-cta" href="/contact/#quote">Build Custom Formula</a></div>
 <!-- /wp:html -->
 </section>
 <!-- /wp:group -->

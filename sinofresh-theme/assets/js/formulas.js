@@ -2,8 +2,15 @@
  * Standard Formulas reference buttons (K1).
  *
  * Loaded on the eight dosage pages (the card grid) and on a formula detail
- * page (the hero button). One click copies the formula name and shows a
- * lightweight toast.
+ * page, where it now binds only the sibling cards. One click copies the
+ * formula name and shows a lightweight toast.
+ *
+ * 1.3.0 — batch H7b moved the DETAIL page's hero CTA out of this file's remit:
+ * it opens the inquiry dialog instead of copying, and carries
+ * data-sf-inquiry-open for the dialog's script. This file skips any CTA that
+ * has the attribute, so the two click behaviours cannot both fire on one
+ * element — the failure that would have shipped a toast on top of a modal.
+ * The card buttons are untouched, class and attributes included.
  *
  * 1.2.0 — batch H6 deleted the two things batch H2b2 had already orphaned when
  * it removed configurator.js: the sessionStorage write
@@ -78,9 +85,19 @@
 		document.body.removeChild(ta);
 	}
 
-	/* --- Bind every formula CTA ------------------------------------------ */
+	/* --- Bind the formula CTAs that still copy --------------------------- */
+	/* Batch H7b turned the hero CTA on a detail page from "copy the name" into
+	   "open the inquiry dialog", so it now carries data-sf-inquiry-open and the
+	   dialog owns its click. Skipping on that attribute rather than on the
+	   --solid modifier keeps the rule about BEHAVIOUR — one click, one outcome;
+	   anything that opens a dialog must not also fire a toast — instead of about
+	   which page or which variant it is. The 160 card buttons keep the class,
+	   the attributes and the copy. */
 	var buttons = document.querySelectorAll('.sf-formula__cta');
 	Array.prototype.forEach.call(buttons, function (btn) {
+		if (btn.hasAttribute('data-sf-inquiry-open')) {
+			return;
+		}
 		btn.addEventListener('click', function () {
 			var name = btn.getAttribute('data-formula') || '';
 

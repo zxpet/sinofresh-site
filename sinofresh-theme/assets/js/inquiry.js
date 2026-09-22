@@ -3,7 +3,13 @@
  *
  * Two jobs, both of them about the same widget: reveal the capsule in the
  * float stack once the visitor has reached the parameter band, and drive the
- * dialog the capsule opens.
+ * dialog the openers open.
+ *
+ * 1.1.0 — batch H7b gave the hero CTA the same data-sf-inquiry-open the float
+ * capsule has, so "the opener" stopped being a single element. Both bind, the
+ * capsule keeps the reveal, and the focus-return target is the element that was
+ * actually clicked. The hero CTA carries href="/contact/#quote" like the
+ * capsule, so a visitor without this file is navigated instead of ignored.
  *
  * Reveal: the capsule is emitted with `hidden` (sinofresh_inquiry_button()
  * sets it in the markup, not in CSS) and this file removes it when the
@@ -37,11 +43,23 @@
 	   that wrong is silent — no error, no dialog, a capsule that never shows.
 	   Wait for the parser to finish rather than assume an order. */
 	function init() {
-		var btn   = document.querySelector('[data-sf-inquiry-open]');
+		/* EVERY opener, not the first one. Until batch H7b the float capsule was
+		   the only element carrying this attribute, so `querySelector` — singular
+		   — was the same thing as "all of them". H7b gave the hero CTA the same
+		   attribute, and the hero sits EARLIER in the document than the capsule
+		   (both the capsule and the dialog are printed from the footer), so a
+		   singular query would have returned the hero button and left the capsule
+		   inert: its click unbound, `hidden` never removed, focus never returned.
+		   No error, valid markup, and the byte gate cannot see it — the same
+		   silent shape as the wp_footer priority that bit this file in H4. */
+		var openers = document.querySelectorAll('[data-sf-inquiry-open]');
+		/* The reveal below is about the capsule specifically, so the two roles are
+		   named apart even though both open the same dialog. */
+		var capsule = document.querySelector('.sf-float-btn--inquiry[data-sf-inquiry-open]');
 		/* One element is both the backdrop and the centring box (see style.css), so
 		   "clicked outside the panel" is "the event target is the backdrop". */
 		var modal = document.querySelector('.sf-inquiry-modal');
-		if (!btn || !modal) {
+		if (!openers.length || !modal) {
 			return;
 		}
 
@@ -64,8 +82,10 @@
 
 		function reveal() {
 			revealed = true;
-			btn.hidden = false;
-			btn.classList.add('is-visible');
+			if (capsule) {
+				capsule.hidden = false;
+				capsule.classList.add('is-visible');
+			}
 			window.removeEventListener('scroll', onScroll);
 			window.removeEventListener('resize', onScroll);
 		}
@@ -86,7 +106,10 @@
 			});
 		}
 
-		if (!band) {
+		/* Nothing to reveal and nowhere to reveal it -> reveal() (a no-op for the
+		   capsule) and no listeners. Otherwise the band's position drives the
+		   capsule, never the hero button. */
+		if (!band || !capsule) {
 			reveal();
 		} else {
 			window.addEventListener('scroll', onScroll, { passive: true });
@@ -96,11 +119,13 @@
 
 		/* ----------------------------------------------------------------- dialog */
 
-		function open() {
+		function open(from) {
 			if (!modal.hidden) {
 				return;
 			}
-			opener = btn;
+			/* Recorded per call, not read from a closure: with two openers the
+			   focus-return target is whichever one was clicked. */
+			opener = from || null;
 			modal.hidden = false;
 			document.body.classList.add(LOCK);
 			if (stamp) {
@@ -136,11 +161,14 @@
 			}
 		}
 
-		btn.addEventListener('click', function (event) {
-			/* The href is /contact/#quote so the markup works without this file;
-			   with it, the click belongs to the dialog. */
-			event.preventDefault();
-			open();
+		/* One listener per opener, each closing over its own element. */
+		Array.prototype.forEach.call(openers, function (el) {
+			el.addEventListener('click', function (event) {
+				/* The href is /contact/#quote so the markup works without this
+				   file; with it, the click belongs to the dialog. */
+				event.preventDefault();
+				open(el);
+			});
 		});
 		if (closeBtn) {
 			closeBtn.addEventListener('click', close);

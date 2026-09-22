@@ -28,7 +28,7 @@ add_action('after_setup_theme', function() {
 });
 
 add_action('wp_enqueue_scripts', function() {
-	wp_enqueue_style('sinofresh-style', get_stylesheet_uri(), array(), '2.10.62');
+	wp_enqueue_style('sinofresh-style', get_stylesheet_uri(), array(), '2.10.63');
 	// Sticky nav: every template renders parts/header.html, so this is site-wide.
 	wp_enqueue_script('sinofresh-sticky-header', get_template_directory_uri() . '/assets/js/sticky-header.js', array(), '1.0.0', true);
 	wp_enqueue_script('sinofresh-ui-components', get_template_directory_uri() . '/assets/js/ui-components.js', array(), '1.0.0', true);
@@ -44,7 +44,7 @@ add_action('wp_enqueue_scripts', function() {
 	   already been deleted for being enqueued where they had nothing to do
 	   (H2b2), and this one has nothing to do on the other 33 pages. */
 	if (is_singular('sf_formula')) {
-		wp_enqueue_script('sinofresh-inquiry', get_template_directory_uri() . '/assets/js/inquiry.js', array(), '1.0.0', true);
+		wp_enqueue_script('sinofresh-inquiry', get_template_directory_uri() . '/assets/js/inquiry.js', array(), '1.1.0', true);
 	}
 	// On-this-page TOC (dot rail on marketing pages, text list on articles) +
 	// article extras (progress bar, inline CTA, feedback, print URL). The JS
@@ -202,13 +202,16 @@ add_action('wp_enqueue_scripts', function() {
 		wp_enqueue_script('sinofresh-formula-gallery', get_template_directory_uri() . '/assets/js/formula-gallery.js', array(), '2.1.0', true);
 	}
 	// Standard Formulas CTAs (K1): the card grid on the eight dosage pages,
-	// the hero button on a formula detail page, and — since 2C Step2 — the
-	// same 21-card grid on the sf_formula archive. It was already independent
-	// of the configurator (batch H2b2 deleted that); batch H6 then dropped the
-	// scroll target with it, because no template carries an #configurator any
-	// more — the handler copies the formula name and does nothing else.
+	// the same 21-card grid on the sf_formula archive, and — since batch H7b
+	// — only the sibling cards on a formula detail page. It was already
+	// independent of the configurator (batch H2b2 deleted that); batch H6 then
+	// dropped the scroll target with it, because no template carries an
+	// #configurator any more — the handler copies the formula name and does
+	// nothing else. H7b moved the detail page's hero CTA to the inquiry dialog,
+	// so this file now skips any CTA carrying data-sf-inquiry-open: the script
+	// is still enqueued there for the sibling cards, which keep the copy.
 	if ($is_dosage_page || is_singular('sf_formula') || is_post_type_archive('sf_formula')) {
-		wp_enqueue_script('sinofresh-formulas', get_template_directory_uri() . '/assets/js/formulas.js', array(), '1.2.0', true);
+		wp_enqueue_script('sinofresh-formulas', get_template_directory_uri() . '/assets/js/formulas.js', array(), '1.3.0', true);
 	}
 	// Archive-only: the dosage-form filter bar on /formulas/. Nothing else on
 	// the site renders [sf_formula_filters], so nothing else pays for it.
@@ -2519,6 +2522,8 @@ add_shortcode('sf_formula_sampling', 'sinofresh_formula_sampling');
  * id is "gallery". Before this batch the ways off a detail page were the two
  * hero buttons — "Reference this formula" (copies the name, formulas.js) and
  * "Build Custom Formula" (/contact/#quote) — plus the float stack's mailto.
+ * (Batch H7b later replaced the first of the two: it opens the dialog below
+ * instead of copying a name nothing consumed.)
  * This batch adds the low-friction path: a capsule at the top of the existing
  * float stack, revealed once the visitor has reached the parameter band, and
  * a dialog holding a five-field form that posts to the endpoint below.
