@@ -166,7 +166,7 @@ function sinofresh_cert_download_endpoint(WP_REST_Request $request) {
 	$spec = $certs[$cert];
 	$path = sinofresh_cert_file_path($cert, $spec);
 	if ('' === $path || !is_readable($path)) {
-		return new WP_REST_Response(array('message' => 'The document is temporarily unavailable. Please email info@zxpet.com.'), 404);
+		return new WP_REST_Response(array('message' => 'The document is temporarily unavailable. Please email sales@zxpet.com.'), 404);
 	}
 
 	nocache_headers();

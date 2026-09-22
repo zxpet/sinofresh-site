@@ -14,8 +14,8 @@
 
 | 项 | 结果 |
 |---|---|
-| 主题侧 `info@zxpet.com` | **7 处需改**（另 6 处已是 `sales@`，是注释与收件人，**不动**） |
-| DB 侧 | ⛔ **12 行 / 3 表**：`wp_options` ×1、`wp_posts` ×4、TranslatePress ×6 |
+| 主题侧 `info@zxpet.com` | **8 处需改**（另 **5** 处已是 `sales@`，是注释与收件人，**不动**） |
+| DB 侧 | ⛔ **11 行 / 3 表**（跳过 revision 后实改 **10 行**）：`wp_options` ×1、`wp_posts` ×4、TranslatePress ×6 |
 | 渲染侧实测 | **75/75 页**都带这个地址：CF 混淆 **155 处**（全解码为 `info@`）＋ JSON-LD `email` **75 处** |
 | DIFF 集合 | **75 / 75 页全变**（不是 42 页）—— 因为 header topbar ＋ footer ＋ 悬浮按钮 ＋ Organization schema 都是全站件 |
 | 合规面 | 3 张法务页正文（Privacy ×2、Cookie ×1、Terms ×1）＋ 3 行 TP 原串 |
@@ -46,7 +46,7 @@
 
 ---
 
-## 2. 【前置】邮箱变更：DB 侧（12 行 / 3 张表）
+## 2. 【前置】邮箱变更：DB 侧（11 行 / 3 张表；跳过 revision 后实改 10 行）
 
 只读探针输出（`tools/b2d_h4_emailprobe.php`）：
 
@@ -115,7 +115,7 @@ CF 的 `email-protection` 是**异或混淆**（首字节为密钥）。对 75 �
 |---|---|
 | playbook §第九部分【前置改动：邮箱变更】第 5 条 | *「**涉及改 DB 时停下汇报**」* |
 | 停机分类 | **第 ③ 类「需改数据」** |
-| 实测触发 | DB 侧 **12 行 / 3 表**（含 TP 自有的 6 行）；且 **`sf_contact_email` 是真源**，不改它则顶栏/页脚/悬浮按钮 4 个界面全部滞留旧值 |
+| 实测触发 | DB 侧 **11 行 / 3 表**（含 TP 自有的 6 行；跳过 revision 后实改 10 行）；且 **`sf_contact_email` 是真源**，不改它则顶栏/页脚/悬浮按钮 4 个界面全部滞留旧值 |
 | 未改证据 | 主题 0 字节；DB 只读（`SHOW COLUMNS` / `SELECT` / `get_option` / `get_post_meta`） |
 
 ---

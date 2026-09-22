@@ -99,7 +99,7 @@ $html .= '<table class="sig"><tr>'
 	. '</tr></table>';
 
 $html .= '<p class="ft">Shandong SINO FRESH Pet Food Co., Ltd. &middot; Building B3, No. 22 Zhongshan Road, Yihe New Area, Linyi, Shandong, China'
-	. ' &middot; www.zxpet.com &middot; info@zxpet.com' . '</p>';
+	. ' &middot; www.zxpet.com &middot; sales@zxpet.com' . '</p>';
 
 $html .= '</body></html>';
 

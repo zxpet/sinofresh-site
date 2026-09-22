@@ -4037,7 +4037,7 @@ function sf_social_networks() {
  */
 function sf_site_settings_defaults() {
 	return array(
-		'sf_contact_email'    => 'info@zxpet.com',
+		'sf_contact_email'    => 'sales@zxpet.com',
 		'sf_working_hours'    => 'Mon–Fri · 9:00–18:00 GMT+8',
 		'sf_contact_phone'    => '+86 539 866 9539',
 		'sf_contact_address'  => 'No. 22 Zhongshan Road B3, Yihe New District, Linyi, Shandong, China',
@@ -4090,7 +4090,7 @@ add_action('admin_init', function () {
 		'type'              => 'string',
 		'sanitize_callback' => function ($v) {
 			$v = sanitize_email($v);
-			return ($v !== '') ? $v : 'info@zxpet.com';
+			return ($v !== '') ? $v : 'sales@zxpet.com';
 		},
 	));
 	register_setting('sf_site_settings', 'sf_certifications', array(
@@ -4552,7 +4552,7 @@ add_action('wp_head', function () {
 		'name'         => 'Shandong SINO FRESH Pet Food Co., Ltd.',
 		'alternateName' => 'SINO FRESH',
 		'url'          => home_url('/'),
-		'email'        => get_option('sf_contact_email', 'info@zxpet.com'),
+		'email'        => get_option('sf_contact_email', 'sales@zxpet.com'),
 		'telephone'    => get_option('sf_contact_phone', '+86 539 866 9539'),
 		'address'      => array(
 			'@type'            => 'PostalAddress',
@@ -4959,7 +4959,7 @@ add_action('gform_after_submission_5', function ($entry, $form) {
 		$lines[] = 'Best regards,';
 		$lines[] = 'Sales Team';
 		$lines[] = 'Shandong SINO FRESH Pet Food Co., Ltd.';
-		$lines[] = 'info@zxpet.com · +86 539 866 9539 · zxpet.com';
+		$lines[] = 'sales@zxpet.com · +86 539 866 9539 · zxpet.com';
 		$sent    = wp_mail($g['email'], $subject, implode("\n", $lines), array('Cc: ' . $sales), $attachments);
 	} else {
 		$subject = 'Certificate request without a usable email — ' . $g['label'];
