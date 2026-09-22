@@ -28,7 +28,7 @@ add_action('after_setup_theme', function() {
 });
 
 add_action('wp_enqueue_scripts', function() {
-	wp_enqueue_style('sinofresh-style', get_stylesheet_uri(), array(), '2.10.63');
+	wp_enqueue_style('sinofresh-style', get_stylesheet_uri(), array(), '2.10.64');
 	// Sticky nav: every template renders parts/header.html, so this is site-wide.
 	wp_enqueue_script('sinofresh-sticky-header', get_template_directory_uri() . '/assets/js/sticky-header.js', array(), '1.0.0', true);
 	wp_enqueue_script('sinofresh-ui-components', get_template_directory_uri() . '/assets/js/ui-components.js', array(), '1.0.0', true);
@@ -1979,6 +1979,178 @@ function sinofresh_formula_params() {
 	return '<dl class="sf-fdetail2__params">' . $html . '</dl>';
 }
 add_shortcode('sf_formula_params', 'sinofresh_formula_params');
+
+/**
+ * [sf_formula_specs_table] — the buyer's spec sheet (batch H7c).
+ *
+ * Twelve rows at the top of the detail page's reading area, before the long
+ * copy and the "Formula & nutrition" band that carries Ingredients: what the
+ * product IS (dosage form, shape, unit weight, pack size, shelf life), what
+ * goes into it (applicable pet, life stage, main ingredients), and what a
+ * buyer has to know before asking for a quote (MOQ, certifications, place of
+ * origin, OEM/ODM).
+ *
+ * Twelve, not thirteen. The brief listed Lead Time as a thirteenth row and
+ * left it to this renderer to keep or fold. It is dropped rather than merged:
+ * it already has a row of its own in the media column's parameter list, and
+ * the only cell it could share — MOQ — would put "from 500–1,000 units" beside
+ * "Typically 7–15 working days after packaging is ready" as one sentence about
+ * quantity. Dropping it costs the page nothing, because the fact is still on
+ * the page.
+ *
+ * Every value comes from a source the page already trusts:
+ *
+ *   Dosage Form        taxonomy sf_formula_form          (the term's own name)
+ *   Applicable Pet     sf_formula_species                (multi, chips)
+ *   Life Stage         sf_formula_lifestage              (text)
+ *   Shape              sf_formula_shape                  (text)
+ *   Unit Weight        sf_formula_specs                  (parsed: unit segment)
+ *   Pack Size          sf_formula_specs                  (parsed: "… per …")
+ *   Shelf Life         sf_formula_specs                  (parsed: "… shelf life")
+ *   Main Ingredients   sf_formula_ingredients            (the first three)
+ *   MOQ                dosage page .sf-facts-mini row    (via spec_cell)
+ *   Certifications     Site Settings sf_certifications   (the same reader the
+ *                      factsheet row and the batch C FAQ answer use, so the
+ *                      three cannot disagree about the credential list)
+ *   Place of Origin    hard-coded, until batch H7e moves it to Site Settings
+ *   OEM / ODM          hard-coded, until batch H7e moves it to Site Settings
+ *
+ * sf_formula_shape is read although nothing registers it. The field predates
+ * the meta registry and exists on one record; WordPress reads an unregistered
+ * key without complaint, and registering it here would advertise a publishing
+ * field the rest of the form does not offer yet.
+ *
+ * Main Ingredients stops at three. The "Formula & nutrition" band one screen
+ * below prints the whole list as pills, so this row only has to answer "what
+ * is this made of" at a glance. The cut is silent on purpose: an "and more"
+ * tail would make the table promise a list it then truncates, and the complete
+ * list is a band away.
+ *
+ * Empty means absent, the contract [sf_formula_params] keeps: a row with no
+ * value is not rendered at all, so the row set differs per record by design
+ * and the gate asserts the renderer rather than a fixed row count. On today's
+ * 21 records that drops Applicable Pet and Life Stage everywhere (neither meta
+ * key exists yet) and Shape on twenty of them — the first two rows are for the
+ * sales team to fill in, not for a deploy.
+ *
+ * The rows are dealt into two columns by the stylesheet, and the split is made
+ * over the rows ACTUALLY rendered rather than over the field list: a record
+ * with nine rows gets five and four. Splitting the field list instead would
+ * leave a column that lost three fields with a gap under it, which is the
+ * opposite of what two columns are for.
+ *
+ * Returns '' outside a single sf_formula, so a stray shortcode in the editor
+ * cannot leak another formula's specification into an article.
+ */
+function sinofresh_formula_specs_table() {
+	if (!is_singular('sf_formula')) {
+		return '';
+	}
+	$post_id = (int) get_queried_object_id();
+	if ($post_id <= 0) {
+		return '';
+	}
+
+	$form_slug = '';
+	$form_name = '';
+	$form_terms = wp_get_post_terms($post_id, 'sf_formula_form');
+	if (!is_wp_error($form_terms) && $form_terms) {
+		$form_slug = (string) $form_terms[0]->slug;
+		$form_name = (string) $form_terms[0]->name;
+	}
+
+	$parts = sinofresh_formula_specs_parts(trim((string) get_post_meta($post_id, 'sf_formula_specs', true)));
+
+	/* Each cell is escaped where it is built — the chip builder escapes its own
+	   values — so the row loop below must not escape a second time. */
+	$rows = array();
+
+	if ($form_name !== '') {
+		$rows['Dosage Form'] = esc_html($form_name);
+	}
+	$species = sf_json_array(get_post_meta($post_id, 'sf_formula_species', true));
+	if ($species) {
+		$rows['Applicable Pet'] = sinofresh_formula_specs_table_chips($species);
+	}
+	$value = trim((string) get_post_meta($post_id, 'sf_formula_lifestage', true));
+	if ($value !== '') {
+		$rows['Life Stage'] = esc_html($value);
+	}
+	$value = trim((string) get_post_meta($post_id, 'sf_formula_shape', true));
+	if ($value !== '') {
+		$rows['Shape'] = esc_html($value);
+	}
+	if (trim((string) $parts['unit']) !== '') {
+		$rows['Unit Weight'] = esc_html(trim((string) $parts['unit']));
+	}
+	if (trim((string) $parts['pack']) !== '') {
+		$rows['Pack Size'] = esc_html(trim((string) $parts['pack']));
+	}
+	if (trim((string) $parts['shelf']) !== '') {
+		$rows['Shelf Life'] = esc_html(trim((string) $parts['shelf']));
+	}
+	/* The comma is the separator every sf_formula_ingredients value uses. */
+	$ingredients = array();
+	foreach (explode(',', (string) get_post_meta($post_id, 'sf_formula_ingredients', true)) as $line) {
+		$line = trim($line);
+		if ($line !== '') {
+			$ingredients[] = $line;
+		}
+	}
+	$ingredients = array_slice($ingredients, 0, 3);
+	if ($ingredients) {
+		$rows['Main Ingredients'] = sinofresh_formula_specs_table_chips($ingredients);
+	}
+	$value = ($form_slug !== '') ? sinofresh_formula_spec_cell($form_slug, 'MOQ') : '';
+	if (trim((string) $value) !== '') {
+		$rows['MOQ'] = esc_html(trim((string) $value));
+	}
+	$value = sf_formula_certifications_value($form_slug);
+	if (trim((string) $value) !== '') {
+		$rows['Certifications'] = esc_html(trim((string) $value));
+	}
+	/* Batch H7e moves both of these to Site Settings. Until then they are
+	   constants, and a constant is still a value the page can prove. */
+	$rows['Place of Origin'] = esc_html('Linyi, Shandong, China');
+	$rows['OEM / ODM'] = esc_html('Available');
+
+	if (!$rows) {
+		return '';
+	}
+
+	$half = (int) ceil(count($rows) / 2);
+	$html = '';
+	foreach (array(array_slice($rows, 0, $half, true), array_slice($rows, $half, null, true)) as $group) {
+		if (!$group) {
+			continue;
+		}
+		$body = '';
+		foreach ($group as $label => $cell) {
+			$body .= '<div class="sf-fdetail-specs__row">'
+				. '<dt class="sf-fdetail-specs__term">' . esc_html($label) . '</dt>'
+				. '<dd class="sf-fdetail-specs__value">' . $cell . '</dd>'
+				. '</div>';
+		}
+		$html .= '<dl class="sf-fdetail-specs__group">' . $body . '</dl>';
+	}
+	return '<section class="sf-fdetail-specs"><div class="sf-fdetail-specs__inner">'
+		. $html
+		. '</div></section>';
+}
+add_shortcode('sf_formula_specs_table', 'sinofresh_formula_specs_table');
+
+/** The spec sheet's multi-value rows: chips. '' when nothing is left. */
+function sinofresh_formula_specs_table_chips($items) {
+	$out = '';
+	foreach ((array) $items as $item) {
+		$item = trim((string) $item);
+		if ($item === '') {
+			continue;
+		}
+		$out .= '<span class="sf-fdetail-specs__chip">' . esc_html($item) . '</span>';
+	}
+	return $out;
+}
 
 /** One chip per value, for the multi-select rows (Flavor, Suitable For). */
 function sinofresh_formula_chip_list($items) {
