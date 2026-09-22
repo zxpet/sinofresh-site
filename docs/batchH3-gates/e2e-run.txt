@@ -1,0 +1,41 @@
+E1  the two bands: presence, order, document outline
+   ok   EN: order media < spec < actives < content < faq < sampling < more
+   ok   EN: content band group heading is h2, no h3 (1 block(s), 1 spec(s))
+   ok   EN: content band labels ['Storage']
+   ok   EN: sampling band is 1 h2 title + 4 h3 steps
+   ok   EN: the four step titles are the declared ones
+   ok   EN: exactly one note line states the turnaround
+   ok   ZH: order media < spec < actives < content < faq < sampling < more
+   ok   ZH: content band group heading is h2, no h3 (1 block(s), 1 spec(s))
+   ok   ZH: content band labels ['Storage']
+   ok   ZH: sampling band is 1 h2 title + 4 h3 steps
+   ok   ZH: the four step titles are the declared ones
+   ok   ZH: exactly one note line states the turnaround
+E2  the page and its HowTo schema cannot drift
+   ok   EN: all 4 steps agree between the DOM and the JSON-LD, title and text
+   ok   ZH: all 4 steps agree between the DOM and the JSON-LD, title and text
+E3  one continuous white reading surface
+   ok   EN: spec -> actives -> content -> FAQ -> sampling are all rgb(255, 255, 255)
+   ok   EN: the gallery band above and the related grid below are both bg-light rgb(243, 246, 244)
+   ok   ZH: spec -> actives -> content -> FAQ -> sampling are all rgb(255, 255, 255)
+   ok   ZH: the gallery band above and the related grid below are both bg-light rgb(243, 246, 244)
+E4  the step marker and the step type
+   ok   EN: 44x44 circular, primary rgb(27, 77, 62) background, card-white numeral
+   ok   EN: h3 17px titles, step copy in text-secondary
+   ok   ZH: 44x44 circular, primary rgb(27, 77, 62) background, card-white numeral
+   ok   ZH: h3 17px titles, step copy in text-secondary
+E5  responsive: the row, the inset, and no sideways scroll
+   ok   EN: 4 columns down to 769px, 1 column from 768px, insets 0/38/20px, no sideways scroll at any of the 8 viewports
+   ok   ZH: 4 columns down to 769px, 1 column from 768px, insets 0/38/20px, no sideways scroll at any of the 8 viewports
+E6  the invariants this batch must not have disturbed
+   ok   EN: no point rail, hero CTA present, 3 floating buttons, no configurator h2
+   ok   ZH: no point rail, hero CTA present, 3 floating buttons, no configurator h2
+E7  the FAQ accordion still opens, with a real mouse
+   ok   EN: a real click on FAQ answer 1 opened it (1 -> 2 of 9); the 3 footer accordions stayed put (3 open)
+   ok   EN: 9 answers in the FAQ band, 6 related cards, one h1
+   ok   ZH: a real click on FAQ answer 1 opened it (1 -> 2 of 9); the 3 footer accordions stayed put (3 open)
+   ok   ZH: 9 answers in the FAQ band, 6 related cards, one h1
+console errors
+   ok   no console errors on any page visited
+------------------------------------------------------------------------
+VERDICT: PASS — 31 ok, 0 FAIL

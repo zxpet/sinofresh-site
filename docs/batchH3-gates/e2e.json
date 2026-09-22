@@ -1,0 +1,4790 @@
+{
+ "fails": [],
+ "notes": [
+  "EN: order media < spec < actives < content < faq < sampling < more",
+  "EN: content band group heading is h2, no h3 (1 block(s), 1 spec(s))",
+  "EN: content band labels ['Storage']",
+  "EN: sampling band is 1 h2 title + 4 h3 steps",
+  "EN: the four step titles are the declared ones",
+  "EN: exactly one note line states the turnaround",
+  "ZH: order media < spec < actives < content < faq < sampling < more",
+  "ZH: content band group heading is h2, no h3 (1 block(s), 1 spec(s))",
+  "ZH: content band labels ['Storage']",
+  "ZH: sampling band is 1 h2 title + 4 h3 steps",
+  "ZH: the four step titles are the declared ones",
+  "ZH: exactly one note line states the turnaround",
+  "EN: all 4 steps agree between the DOM and the JSON-LD, title and text",
+  "ZH: all 4 steps agree between the DOM and the JSON-LD, title and text",
+  "EN: spec -> actives -> content -> FAQ -> sampling are all rgb(255, 255, 255)",
+  "EN: the gallery band above and the related grid below are both bg-light rgb(243, 246, 244)",
+  "ZH: spec -> actives -> content -> FAQ -> sampling are all rgb(255, 255, 255)",
+  "ZH: the gallery band above and the related grid below are both bg-light rgb(243, 246, 244)",
+  "EN: 44x44 circular, primary rgb(27, 77, 62) background, card-white numeral",
+  "EN: h3 17px titles, step copy in text-secondary",
+  "ZH: 44x44 circular, primary rgb(27, 77, 62) background, card-white numeral",
+  "ZH: h3 17px titles, step copy in text-secondary",
+  "EN: 4 columns down to 769px, 1 column from 768px, insets 0/38/20px, no sideways scroll at any of the 8 viewports",
+  "ZH: 4 columns down to 769px, 1 column from 768px, insets 0/38/20px, no sideways scroll at any of the 8 viewports",
+  "EN: no point rail, hero CTA present, 3 floating buttons, no configurator h2",
+  "ZH: no point rail, hero CTA present, 3 floating buttons, no configurator h2",
+  "EN: a real click on FAQ answer 1 opened it (1 -> 2 of 9); the 3 footer accordions stayed put (3 open)",
+  "EN: 9 answers in the FAQ band, 6 related cards, one h1",
+  "ZH: a real click on FAQ answer 1 opened it (1 -> 2 of 9); the 3 footer accordions stayed put (3 open)",
+  "ZH: 9 answers in the FAQ band, 6 related cards, one h1",
+  "no console errors on any page visited"
+ ],
+ "rows": {
+  "E1_EN": {
+   "bands": {
+    "actives": {
+     "box": {
+      "h": 381,
+      "left": 0,
+      "top": 1545,
+      "w": 1440
+     },
+     "cls": "sf-fdetail-actives",
+     "effBg": "rgb(255, 255, 255)",
+     "padBottom": "48px",
+     "padLeft": "0px",
+     "padTop": "48px"
+    },
+    "content": {
+     "box": {
+      "h": 189,
+      "left": 0,
+      "top": 1950,
+      "w": 1440
+     },
+     "cls": "sf-fdetail-content",
+     "effBg": "rgb(255, 255, 255)",
+     "padBottom": "48px",
+     "padLeft": "0px",
+     "padTop": "48px"
+    },
+    "faq": {
+     "box": {
+      "h": 747,
+      "left": 0,
+      "top": 2163,
+      "w": 1440
+     },
+     "cls": "sf-fdetail.sf-fdetail-faq.has-card-white-background-color.has-background",
+     "effBg": "rgb(255, 255, 255)",
+     "padBottom": "48px",
+     "padLeft": "38px",
+     "padTop": "48px"
+    },
+    "media": {
+     "box": {
+      "h": 758,
+      "left": 0,
+      "top": 461,
+      "w": 1440
+     },
+     "cls": "sf-fdetail2.has-bg-light-background-color.has-background",
+     "effBg": "rgb(243, 246, 244)",
+     "padBottom": "48px",
+     "padLeft": "38px",
+     "padTop": "48px"
+    },
+    "more": {
+     "box": {
+      "h": 610,
+      "left": 0,
+      "top": 3316,
+      "w": 1440
+     },
+     "cls": "sf-fdetail-more.has-bg-light-background-color.has-background",
+     "effBg": "rgb(243, 246, 244)",
+     "padBottom": "48px",
+     "padLeft": "38px",
+     "padTop": "48px"
+    },
+    "sampling": {
+     "box": {
+      "h": 358,
+      "left": 0,
+      "top": 2934,
+      "w": 1440
+     },
+     "cls": "sf-sampling",
+     "effBg": "rgb(255, 255, 255)",
+     "padBottom": "48px",
+     "padLeft": "0px",
+     "padTop": "48px"
+    },
+    "spec": {
+     "box": {
+      "h": 278,
+      "left": 0,
+      "top": 1243,
+      "w": 1440
+     },
+     "cls": "sf-fdetail.has-card-white-background-color.has-background",
+     "effBg": "rgb(255, 255, 255)",
+     "padBottom": "48px",
+     "padLeft": "38px",
+     "padTop": "48px"
+    }
+   },
+   "bodyScrollWidth": 1440,
+   "contentHeadingTag": "h2",
+   "contentHeadingText": "Packaging & Specifications",
+   "counts": {
+    "contentBlocks": 1,
+    "contentCartons": 0,
+    "contentChips": 0,
+    "contentH2": 1,
+    "contentH3": 0,
+    "contentHeadings": [
+     {
+      "cls": "sf-fdetail-content__subtitle",
+      "tag": "h2",
+      "text": "Packaging & Specifications"
+     }
+    ],
+    "contentLabels": [
+     "Storage"
+    ],
+    "contentSpecs": 1,
+    "faqItems": 9,
+    "faqOpen": 1,
+    "floatBtns": 3,
+    "gridCards": 6,
+    "heroBuild": 1,
+    "heroH2": 0,
+    "note": 1,
+    "nums": 4,
+    "pageDetails": 12,
+    "quoteCta": 3,
+    "samplingH2": 1,
+    "samplingH3": 4,
+    "samplingHeadings": [
+     {
+      "cls": "sf-sampling__title",
+      "tag": "h2",
+      "text": "How Sampling Works"
+     },
+     {
+      "cls": "sf-sampling__step-title",
+      "tag": "h3",
+      "text": "Submit Inquiry"
+     },
+     {
+      "cls": "sf-sampling__step-title",
+      "tag": "h3",
+      "text": "Confirm Details"
+     },
+     {
+      "cls": "sf-sampling__step-title",
+      "tag": "h3",
+      "text": "Sampling & Quality Check"
+     },
+     {
+      "cls": "sf-sampling__step-title",
+      "tag": "h3",
+      "text": "Ship & Evaluate"
+     }
+    ],
+    "samplingSections": 1,
+    "steps": 4,
+    "toc": 0
+   },
+   "docScrollWidth": 1440,
+   "domSteps": [
+    {
+     "text": "Tell us your target formula, flavor, and packaging ideas.",
+     "title": "Submit Inquiry"
+    },
+    {
+     "text": "We'll provide a sample spec sheet and a proforma invoice for the sample fee.",
+     "title": "Confirm Details"
+    },
+    {
+     "text": "Our lab produces your sample and runs a full quality check.",
+     "title": "Sampling & Quality Check"
+    },
+    {
+     "text": "We ship the sample to you. You evaluate it and send us your feedback.",
+     "title": "Ship & Evaluate"
+    }
+   ],
+   "h1Count": 1,
+   "href": "https://dev.zxpet.com/formulas/joint-support-soft-chews/?sfcap=e1EN1109041440",
+   "lang": "en-US",
+   "noteStyle": {
+    "color": "rgb(27, 77, 62)",
+    "fontSize": "14px",
+    "fontWeight": "700",
+    "text": "Typically 3-7 working days."
+   },
+   "num": {
+    "bg": "rgb(27, 77, 62)",
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "16px",
+    "fontWeight": "700",
+    "h": 44,
+    "radius": "50%",
+    "w": 44
+   },
+   "order": [
+    [
+     "media",
+     461
+    ],
+    [
+     "spec",
+     1243
+    ],
+    [
+     "actives",
+     1545
+    ],
+    [
+     "content",
+     1950
+    ],
+    [
+     "faq",
+     2163
+    ],
+    [
+     "sampling",
+     2934
+    ],
+    [
+     "more",
+     3316
+    ]
+   ],
+   "samplingTitle": "How Sampling Works",
+   "schemaName": "How Sampling Works",
+   "schemaSteps": [
+    {
+     "text": "Tell us your target formula, flavor, and packaging ideas.",
+     "title": "Submit Inquiry"
+    },
+    {
+     "text": "We'll provide a sample spec sheet and a proforma invoice for the sample fee.",
+     "title": "Confirm Details"
+    },
+    {
+     "text": "Our lab produces your sample and runs a full quality check.",
+     "title": "Sampling & Quality Check"
+    },
+    {
+     "text": "We ship the sample to you. You evaluate it and send us your feedback.",
+     "title": "Ship & Evaluate"
+    }
+   ],
+   "schemaTotalTime": "P3D",
+   "sheet": "https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/style.css?ver=2.10.57",
+   "stepLayout": {
+    "descColor": "rgb(95, 107, 101)",
+    "descFontSize": "14px",
+    "firstRow": 4,
+    "numMarginTop": "0px",
+    "rows": 1,
+    "titleFontSize": "17px",
+    "titleTag": "h3",
+    "titleWeight": "600",
+    "tops": [
+     3053,
+     3053,
+     3053,
+     3053
+    ]
+   },
+   "viewportW": 1440
+  },
+  "E1_ZH": {
+   "bands": {
+    "actives": {
+     "box": {
+      "h": 381,
+      "left": 0,
+      "top": 1545,
+      "w": 1440
+     },
+     "cls": "sf-fdetail-actives",
+     "effBg": "rgb(255, 255, 255)",
+     "padBottom": "48px",
+     "padLeft": "0px",
+     "padTop": "48px"
+    },
+    "content": {
+     "box": {
+      "h": 189,
+      "left": 0,
+      "top": 1950,
+      "w": 1440
+     },
+     "cls": "sf-fdetail-content",
+     "effBg": "rgb(255, 255, 255)",
+     "padBottom": "48px",
+     "padLeft": "0px",
+     "padTop": "48px"
+    },
+    "faq": {
+     "box": {
+      "h": 747,
+      "left": 0,
+      "top": 2163,
+      "w": 1440
+     },
+     "cls": "sf-fdetail.sf-fdetail-faq.has-card-white-background-color.has-background",
+     "effBg": "rgb(255, 255, 255)",
+     "padBottom": "48px",
+     "padLeft": "38px",
+     "padTop": "48px"
+    },
+    "media": {
+     "box": {
+      "h": 758,
+      "left": 0,
+      "top": 461,
+      "w": 1440
+     },
+     "cls": "sf-fdetail2.has-bg-light-background-color.has-background",
+     "effBg": "rgb(243, 246, 244)",
+     "padBottom": "48px",
+     "padLeft": "38px",
+     "padTop": "48px"
+    },
+    "more": {
+     "box": {
+      "h": 610,
+      "left": 0,
+      "top": 3316,
+      "w": 1440
+     },
+     "cls": "sf-fdetail-more.has-bg-light-background-color.has-background",
+     "effBg": "rgb(243, 246, 244)",
+     "padBottom": "48px",
+     "padLeft": "38px",
+     "padTop": "48px"
+    },
+    "sampling": {
+     "box": {
+      "h": 358,
+      "left": 0,
+      "top": 2934,
+      "w": 1440
+     },
+     "cls": "sf-sampling",
+     "effBg": "rgb(255, 255, 255)",
+     "padBottom": "48px",
+     "padLeft": "0px",
+     "padTop": "48px"
+    },
+    "spec": {
+     "box": {
+      "h": 278,
+      "left": 0,
+      "top": 1243,
+      "w": 1440
+     },
+     "cls": "sf-fdetail.has-card-white-background-color.has-background",
+     "effBg": "rgb(255, 255, 255)",
+     "padBottom": "48px",
+     "padLeft": "38px",
+     "padTop": "48px"
+    }
+   },
+   "bodyScrollWidth": 1440,
+   "contentHeadingTag": "h2",
+   "contentHeadingText": "Packaging & Specifications",
+   "counts": {
+    "contentBlocks": 1,
+    "contentCartons": 0,
+    "contentChips": 0,
+    "contentH2": 1,
+    "contentH3": 0,
+    "contentHeadings": [
+     {
+      "cls": "sf-fdetail-content__subtitle",
+      "tag": "h2",
+      "text": "Packaging & Specifications"
+     }
+    ],
+    "contentLabels": [
+     "Storage"
+    ],
+    "contentSpecs": 1,
+    "faqItems": 9,
+    "faqOpen": 1,
+    "floatBtns": 3,
+    "gridCards": 6,
+    "heroBuild": 1,
+    "heroH2": 0,
+    "note": 1,
+    "nums": 4,
+    "pageDetails": 12,
+    "quoteCta": 3,
+    "samplingH2": 1,
+    "samplingH3": 4,
+    "samplingHeadings": [
+     {
+      "cls": "sf-sampling__title",
+      "tag": "h2",
+      "text": "How Sampling Works"
+     },
+     {
+      "cls": "sf-sampling__step-title",
+      "tag": "h3",
+      "text": "Submit Inquiry"
+     },
+     {
+      "cls": "sf-sampling__step-title",
+      "tag": "h3",
+      "text": "Confirm Details"
+     },
+     {
+      "cls": "sf-sampling__step-title",
+      "tag": "h3",
+      "text": "Sampling & Quality Check"
+     },
+     {
+      "cls": "sf-sampling__step-title",
+      "tag": "h3",
+      "text": "Ship & Evaluate"
+     }
+    ],
+    "samplingSections": 1,
+    "steps": 4,
+    "toc": 0
+   },
+   "docScrollWidth": 1440,
+   "domSteps": [
+    {
+     "text": "Tell us your target formula, flavor, and packaging ideas.",
+     "title": "Submit Inquiry"
+    },
+    {
+     "text": "We'll provide a sample spec sheet and a proforma invoice for the sample fee.",
+     "title": "Confirm Details"
+    },
+    {
+     "text": "Our lab produces your sample and runs a full quality check.",
+     "title": "Sampling & Quality Check"
+    },
+    {
+     "text": "We ship the sample to you. You evaluate it and send us your feedback.",
+     "title": "Ship & Evaluate"
+    }
+   ],
+   "h1Count": 1,
+   "href": "https://dev.zxpet.com/zh/formulas/joint-support-soft-chews/?sfcap=e1ZH1109081440",
+   "lang": "zh-CN",
+   "noteStyle": {
+    "color": "rgb(27, 77, 62)",
+    "fontSize": "14px",
+    "fontWeight": "700",
+    "text": "Typically 3-7 working days."
+   },
+   "num": {
+    "bg": "rgb(27, 77, 62)",
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "16px",
+    "fontWeight": "700",
+    "h": 44,
+    "radius": "50%",
+    "w": 44
+   },
+   "order": [
+    [
+     "media",
+     461
+    ],
+    [
+     "spec",
+     1243
+    ],
+    [
+     "actives",
+     1545
+    ],
+    [
+     "content",
+     1950
+    ],
+    [
+     "faq",
+     2163
+    ],
+    [
+     "sampling",
+     2934
+    ],
+    [
+     "more",
+     3316
+    ]
+   ],
+   "samplingTitle": "How Sampling Works",
+   "schemaName": "How Sampling Works",
+   "schemaSteps": [
+    {
+     "text": "Tell us your target formula, flavor, and packaging ideas.",
+     "title": "Submit Inquiry"
+    },
+    {
+     "text": "We'll provide a sample spec sheet and a proforma invoice for the sample fee.",
+     "title": "Confirm Details"
+    },
+    {
+     "text": "Our lab produces your sample and runs a full quality check.",
+     "title": "Sampling & Quality Check"
+    },
+    {
+     "text": "We ship the sample to you. You evaluate it and send us your feedback.",
+     "title": "Ship & Evaluate"
+    }
+   ],
+   "schemaTotalTime": "P3D",
+   "sheet": "https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/style.css?ver=2.10.57",
+   "stepLayout": {
+    "descColor": "rgb(95, 107, 101)",
+    "descFontSize": "14px",
+    "firstRow": 4,
+    "numMarginTop": "0px",
+    "rows": 1,
+    "titleFontSize": "17px",
+    "titleTag": "h3",
+    "titleWeight": "600",
+    "tops": [
+     3053,
+     3053,
+     3053,
+     3053
+    ]
+   },
+   "viewportW": 1440
+  },
+  "E5_EN_1440": {
+   "bands": {
+    "actives": {
+     "box": {
+      "h": 381,
+      "left": 0,
+      "top": 1545,
+      "w": 1440
+     },
+     "cls": "sf-fdetail-actives",
+     "effBg": "rgb(255, 255, 255)",
+     "padBottom": "48px",
+     "padLeft": "0px",
+     "padTop": "48px"
+    },
+    "content": {
+     "box": {
+      "h": 189,
+      "left": 0,
+      "top": 1950,
+      "w": 1440
+     },
+     "cls": "sf-fdetail-content",
+     "effBg": "rgb(255, 255, 255)",
+     "padBottom": "48px",
+     "padLeft": "0px",
+     "padTop": "48px"
+    },
+    "faq": {
+     "box": {
+      "h": 747,
+      "left": 0,
+      "top": 2163,
+      "w": 1440
+     },
+     "cls": "sf-fdetail.sf-fdetail-faq.has-card-white-background-color.has-background",
+     "effBg": "rgb(255, 255, 255)",
+     "padBottom": "48px",
+     "padLeft": "38px",
+     "padTop": "48px"
+    },
+    "media": {
+     "box": {
+      "h": 758,
+      "left": 0,
+      "top": 461,
+      "w": 1440
+     },
+     "cls": "sf-fdetail2.has-bg-light-background-color.has-background",
+     "effBg": "rgb(243, 246, 244)",
+     "padBottom": "48px",
+     "padLeft": "38px",
+     "padTop": "48px"
+    },
+    "more": {
+     "box": {
+      "h": 610,
+      "left": 0,
+      "top": 3316,
+      "w": 1440
+     },
+     "cls": "sf-fdetail-more.has-bg-light-background-color.has-background",
+     "effBg": "rgb(243, 246, 244)",
+     "padBottom": "48px",
+     "padLeft": "38px",
+     "padTop": "48px"
+    },
+    "sampling": {
+     "box": {
+      "h": 358,
+      "left": 0,
+      "top": 2934,
+      "w": 1440
+     },
+     "cls": "sf-sampling",
+     "effBg": "rgb(255, 255, 255)",
+     "padBottom": "48px",
+     "padLeft": "0px",
+     "padTop": "48px"
+    },
+    "spec": {
+     "box": {
+      "h": 278,
+      "left": 0,
+      "top": 1243,
+      "w": 1440
+     },
+     "cls": "sf-fdetail.has-card-white-background-color.has-background",
+     "effBg": "rgb(255, 255, 255)",
+     "padBottom": "48px",
+     "padLeft": "38px",
+     "padTop": "48px"
+    }
+   },
+   "bodyScrollWidth": 1440,
+   "contentHeadingTag": "h2",
+   "contentHeadingText": "Packaging & Specifications",
+   "counts": {
+    "contentBlocks": 1,
+    "contentCartons": 0,
+    "contentChips": 0,
+    "contentH2": 1,
+    "contentH3": 0,
+    "contentHeadings": [
+     {
+      "cls": "sf-fdetail-content__subtitle",
+      "tag": "h2",
+      "text": "Packaging & Specifications"
+     }
+    ],
+    "contentLabels": [
+     "Storage"
+    ],
+    "contentSpecs": 1,
+    "faqItems": 9,
+    "faqOpen": 1,
+    "floatBtns": 3,
+    "gridCards": 6,
+    "heroBuild": 1,
+    "heroH2": 0,
+    "note": 1,
+    "nums": 4,
+    "pageDetails": 12,
+    "quoteCta": 3,
+    "samplingH2": 1,
+    "samplingH3": 4,
+    "samplingHeadings": [
+     {
+      "cls": "sf-sampling__title",
+      "tag": "h2",
+      "text": "How Sampling Works"
+     },
+     {
+      "cls": "sf-sampling__step-title",
+      "tag": "h3",
+      "text": "Submit Inquiry"
+     },
+     {
+      "cls": "sf-sampling__step-title",
+      "tag": "h3",
+      "text": "Confirm Details"
+     },
+     {
+      "cls": "sf-sampling__step-title",
+      "tag": "h3",
+      "text": "Sampling & Quality Check"
+     },
+     {
+      "cls": "sf-sampling__step-title",
+      "tag": "h3",
+      "text": "Ship & Evaluate"
+     }
+    ],
+    "samplingSections": 1,
+    "steps": 4,
+    "toc": 0
+   },
+   "docScrollWidth": 1440,
+   "domSteps": [
+    {
+     "text": "Tell us your target formula, flavor, and packaging ideas.",
+     "title": "Submit Inquiry"
+    },
+    {
+     "text": "We'll provide a sample spec sheet and a proforma invoice for the sample fee.",
+     "title": "Confirm Details"
+    },
+    {
+     "text": "Our lab produces your sample and runs a full quality check.",
+     "title": "Sampling & Quality Check"
+    },
+    {
+     "text": "We ship the sample to you. You evaluate it and send us your feedback.",
+     "title": "Ship & Evaluate"
+    }
+   ],
+   "h1Count": 1,
+   "href": "https://dev.zxpet.com/formulas/joint-support-soft-chews/?sfcap=e5EN14401109121440",
+   "lang": "en-US",
+   "noteStyle": {
+    "color": "rgb(27, 77, 62)",
+    "fontSize": "14px",
+    "fontWeight": "700",
+    "text": "Typically 3-7 working days."
+   },
+   "num": {
+    "bg": "rgb(27, 77, 62)",
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "16px",
+    "fontWeight": "700",
+    "h": 44,
+    "radius": "50%",
+    "w": 44
+   },
+   "order": [
+    [
+     "media",
+     461
+    ],
+    [
+     "spec",
+     1243
+    ],
+    [
+     "actives",
+     1545
+    ],
+    [
+     "content",
+     1950
+    ],
+    [
+     "faq",
+     2163
+    ],
+    [
+     "sampling",
+     2934
+    ],
+    [
+     "more",
+     3316
+    ]
+   ],
+   "samplingTitle": "How Sampling Works",
+   "schemaName": "How Sampling Works",
+   "schemaSteps": [
+    {
+     "text": "Tell us your target formula, flavor, and packaging ideas.",
+     "title": "Submit Inquiry"
+    },
+    {
+     "text": "We'll provide a sample spec sheet and a proforma invoice for the sample fee.",
+     "title": "Confirm Details"
+    },
+    {
+     "text": "Our lab produces your sample and runs a full quality check.",
+     "title": "Sampling & Quality Check"
+    },
+    {
+     "text": "We ship the sample to you. You evaluate it and send us your feedback.",
+     "title": "Ship & Evaluate"
+    }
+   ],
+   "schemaTotalTime": "P3D",
+   "sheet": "https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/style.css?ver=2.10.57",
+   "stepLayout": {
+    "descColor": "rgb(95, 107, 101)",
+    "descFontSize": "14px",
+    "firstRow": 4,
+    "numMarginTop": "0px",
+    "rows": 1,
+    "titleFontSize": "17px",
+    "titleTag": "h3",
+    "titleWeight": "600",
+    "tops": [
+     3053,
+     3053,
+     3053,
+     3053
+    ]
+   },
+   "viewportW": 1440
+  },
+  "E5_EN_1241": {
+   "bands": {
+    "actives": {
+     "box": {
+      "h": 381,
+      "left": 0,
+      "top": 1561,
+      "w": 1241
+     },
+     "cls": "sf-fdetail-actives",
+     "effBg": "rgb(255, 255, 255)",
+     "padBottom": "48px",
+     "padLeft": "0px",
+     "padTop": "48px"
+    },
+    "content": {
+     "box": {
+      "h": 189,
+      "left": 0,
+      "top": 1966,
+      "w": 1241
+     },
+     "cls": "sf-fdetail-content",
+     "effBg": "rgb(255, 255, 255)",
+     "padBottom": "48px",
+     "padLeft": "0px",
+     "padTop": "48px"
+    },
+    "faq": {
+     "box": {
+      "h": 747,
+      "left": 0,
+      "top": 2179,
+      "w": 1241
+     },
+     "cls": "sf-fdetail.sf-fdetail-faq.has-card-white-background-color.has-background",
+     "effBg": "rgb(255, 255, 255)",
+     "padBottom": "48px",
+     "padLeft": "38px",
+     "padTop": "48px"
+    },
+    "media": {
+     "box": {
+      "h": 776,
+      "left": 0,
+      "top": 459,
+      "w": 1241
+     },
+     "cls": "sf-fdetail2.has-bg-light-background-color.has-background",
+     "effBg": "rgb(243, 246, 244)",
+     "padBottom": "48px",
+     "padLeft": "38px",
+     "padTop": "48px"
+    },
+    "more": {
+     "box": {
+      "h": 603,
+      "left": 0,
+      "top": 3332,
+      "w": 1241
+     },
+     "cls": "sf-fdetail-more.has-bg-light-background-color.has-background",
+     "effBg": "rgb(243, 246, 244)",
+     "padBottom": "48px",
+     "padLeft": "38px",
+     "padTop": "48px"
+    },
+    "sampling": {
+     "box": {
+      "h": 358,
+      "left": 0,
+      "top": 2950,
+      "w": 1241
+     },
+     "cls": "sf-sampling",
+     "effBg": "rgb(255, 255, 255)",
+     "padBottom": "48px",
+     "padLeft": "0px",
+     "padTop": "48px"
+    },
+    "spec": {
+     "box": {
+      "h": 278,
+      "left": 0,
+      "top": 1259,
+      "w": 1241
+     },
+     "cls": "sf-fdetail.has-card-white-background-color.has-background",
+     "effBg": "rgb(255, 255, 255)",
+     "padBottom": "48px",
+     "padLeft": "38px",
+     "padTop": "48px"
+    }
+   },
+   "bodyScrollWidth": 1241,
+   "contentHeadingTag": "h2",
+   "contentHeadingText": "Packaging & Specifications",
+   "counts": {
+    "contentBlocks": 1,
+    "contentCartons": 0,
+    "contentChips": 0,
+    "contentH2": 1,
+    "contentH3": 0,
+    "contentHeadings": [
+     {
+      "cls": "sf-fdetail-content__subtitle",
+      "tag": "h2",
+      "text": "Packaging & Specifications"
+     }
+    ],
+    "contentLabels": [
+     "Storage"
+    ],
+    "contentSpecs": 1,
+    "faqItems": 9,
+    "faqOpen": 1,
+    "floatBtns": 3,
+    "gridCards": 6,
+    "heroBuild": 1,
+    "heroH2": 0,
+    "note": 1,
+    "nums": 4,
+    "pageDetails": 12,
+    "quoteCta": 3,
+    "samplingH2": 1,
+    "samplingH3": 4,
+    "samplingHeadings": [
+     {
+      "cls": "sf-sampling__title",
+      "tag": "h2",
+      "text": "How Sampling Works"
+     },
+     {
+      "cls": "sf-sampling__step-title",
+      "tag": "h3",
+      "text": "Submit Inquiry"
+     },
+     {
+      "cls": "sf-sampling__step-title",
+      "tag": "h3",
+      "text": "Confirm Details"
+     },
+     {
+      "cls": "sf-sampling__step-title",
+      "tag": "h3",
+      "text": "Sampling & Quality Check"
+     },
+     {
+      "cls": "sf-sampling__step-title",
+      "tag": "h3",
+      "text": "Ship & Evaluate"
+     }
+    ],
+    "samplingSections": 1,
+    "steps": 4,
+    "toc": 0
+   },
+   "docScrollWidth": 1241,
+   "domSteps": [
+    {
+     "text": "Tell us your target formula, flavor, and packaging ideas.",
+     "title": "Submit Inquiry"
+    },
+    {
+     "text": "We'll provide a sample spec sheet and a proforma invoice for the sample fee.",
+     "title": "Confirm Details"
+    },
+    {
+     "text": "Our lab produces your sample and runs a full quality check.",
+     "title": "Sampling & Quality Check"
+    },
+    {
+     "text": "We ship the sample to you. You evaluate it and send us your feedback.",
+     "title": "Ship & Evaluate"
+    }
+   ],
+   "h1Count": 1,
+   "href": "https://dev.zxpet.com/formulas/joint-support-soft-chews/?sfcap=e5EN12411109151241",
+   "lang": "en-US",
+   "noteStyle": {
+    "color": "rgb(27, 77, 62)",
+    "fontSize": "14px",
+    "fontWeight": "700",
+    "text": "Typically 3-7 working days."
+   },
+   "num": {
+    "bg": "rgb(27, 77, 62)",
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "16px",
+    "fontWeight": "700",
+    "h": 44,
+    "radius": "50%",
+    "w": 44
+   },
+   "order": [
+    [
+     "media",
+     459
+    ],
+    [
+     "spec",
+     1259
+    ],
+    [
+     "actives",
+     1561
+    ],
+    [
+     "content",
+     1966
+    ],
+    [
+     "faq",
+     2179
+    ],
+    [
+     "sampling",
+     2950
+    ],
+    [
+     "more",
+     3332
+    ]
+   ],
+   "samplingTitle": "How Sampling Works",
+   "schemaName": "How Sampling Works",
+   "schemaSteps": [
+    {
+     "text": "Tell us your target formula, flavor, and packaging ideas.",
+     "title": "Submit Inquiry"
+    },
+    {
+     "text": "We'll provide a sample spec sheet and a proforma invoice for the sample fee.",
+     "title": "Confirm Details"
+    },
+    {
+     "text": "Our lab produces your sample and runs a full quality check.",
+     "title": "Sampling & Quality Check"
+    },
+    {
+     "text": "We ship the sample to you. You evaluate it and send us your feedback.",
+     "title": "Ship & Evaluate"
+    }
+   ],
+   "schemaTotalTime": "P3D",
+   "sheet": "https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/style.css?ver=2.10.57",
+   "stepLayout": {
+    "descColor": "rgb(95, 107, 101)",
+    "descFontSize": "14px",
+    "firstRow": 4,
+    "numMarginTop": "0px",
+    "rows": 1,
+    "titleFontSize": "17px",
+    "titleTag": "h3",
+    "titleWeight": "600",
+    "tops": [
+     3069,
+     3069,
+     3069,
+     3069
+    ]
+   },
+   "viewportW": 1241
+  },
+  "E5_EN_1240": {
+   "bands": {
+    "actives": {
+     "box": {
+      "h": 381,
+      "left": 0,
+      "top": 1560,
+      "w": 1240
+     },
+     "cls": "sf-fdetail-actives",
+     "effBg": "rgb(255, 255, 255)",
+     "padBottom": "48px",
+     "padLeft": "38px",
+     "padTop": "48px"
+    },
+    "content": {
+     "box": {
+      "h": 189,
+      "left": 0,
+      "top": 1965,
+      "w": 1240
+     },
+     "cls": "sf-fdetail-content",
+     "effBg": "rgb(255, 255, 255)",
+     "padBottom": "48px",
+     "padLeft": "38px",
+     "padTop": "48px"
+    },
+    "faq": {
+     "box": {
+      "h": 747,
+      "left": 0,
+      "top": 2179,
+      "w": 1240
+     },
+     "cls": "sf-fdetail.sf-fdetail-faq.has-card-white-background-color.has-background",
+     "effBg": "rgb(255, 255, 255)",
+     "padBottom": "48px",
+     "padLeft": "38px",
+     "padTop": "48px"
+    },
+    "media": {
+     "box": {
+      "h": 776,
+      "left": 0,
+      "top": 459,
+      "w": 1240
+     },
+     "cls": "sf-fdetail2.has-bg-light-background-color.has-background",
+     "effBg": "rgb(243, 246, 244)",
+     "padBottom": "48px",
+     "padLeft": "38px",
+     "padTop": "48px"
+    },
+    "more": {
+     "box": {
+      "h": 603,
+      "left": 0,
+      "top": 3331,
+      "w": 1240
+     },
+     "cls": "sf-fdetail-more.has-bg-light-background-color.has-background",
+     "effBg": "rgb(243, 246, 244)",
+     "padBottom": "48px",
+     "padLeft": "38px",
+     "padTop": "48px"
+    },
+    "sampling": {
+     "box": {
+      "h": 358,
+      "left": 0,
+      "top": 2949,
+      "w": 1240
+     },
+     "cls": "sf-sampling",
+     "effBg": "rgb(255, 255, 255)",
+     "padBottom": "48px",
+     "padLeft": "38px",
+     "padTop": "48px"
+    },
+    "spec": {
+     "box": {
+      "h": 278,
+      "left": 0,
+      "top": 1258,
+      "w": 1240
+     },
+     "cls": "sf-fdetail.has-card-white-background-color.has-background",
+     "effBg": "rgb(255, 255, 255)",
+     "padBottom": "48px",
+     "padLeft": "38px",
+     "padTop": "48px"
+    }
+   },
+   "bodyScrollWidth": 1240,
+   "contentHeadingTag": "h2",
+   "contentHeadingText": "Packaging & Specifications",
+   "counts": {
+    "contentBlocks": 1,
+    "contentCartons": 0,
+    "contentChips": 0,
+    "contentH2": 1,
+    "contentH3": 0,
+    "contentHeadings": [
+     {
+      "cls": "sf-fdetail-content__subtitle",
+      "tag": "h2",
+      "text": "Packaging & Specifications"
+     }
+    ],
+    "contentLabels": [
+     "Storage"
+    ],
+    "contentSpecs": 1,
+    "faqItems": 9,
+    "faqOpen": 1,
+    "floatBtns": 3,
+    "gridCards": 6,
+    "heroBuild": 1,
+    "heroH2": 0,
+    "note": 1,
+    "nums": 4,
+    "pageDetails": 12,
+    "quoteCta": 3,
+    "samplingH2": 1,
+    "samplingH3": 4,
+    "samplingHeadings": [
+     {
+      "cls": "sf-sampling__title",
+      "tag": "h2",
+      "text": "How Sampling Works"
+     },
+     {
+      "cls": "sf-sampling__step-title",
+      "tag": "h3",
+      "text": "Submit Inquiry"
+     },
+     {
+      "cls": "sf-sampling__step-title",
+      "tag": "h3",
+      "text": "Confirm Details"
+     },
+     {
+      "cls": "sf-sampling__step-title",
+      "tag": "h3",
+      "text": "Sampling & Quality Check"
+     },
+     {
+      "cls": "sf-sampling__step-title",
+      "tag": "h3",
+      "text": "Ship & Evaluate"
+     }
+    ],
+    "samplingSections": 1,
+    "steps": 4,
+    "toc": 0
+   },
+   "docScrollWidth": 1240,
+   "domSteps": [
+    {
+     "text": "Tell us your target formula, flavor, and packaging ideas.",
+     "title": "Submit Inquiry"
+    },
+    {
+     "text": "We'll provide a sample spec sheet and a proforma invoice for the sample fee.",
+     "title": "Confirm Details"
+    },
+    {
+     "text": "Our lab produces your sample and runs a full quality check.",
+     "title": "Sampling & Quality Check"
+    },
+    {
+     "text": "We ship the sample to you. You evaluate it and send us your feedback.",
+     "title": "Ship & Evaluate"
+    }
+   ],
+   "h1Count": 1,
+   "href": "https://dev.zxpet.com/formulas/joint-support-soft-chews/?sfcap=e5EN12401109181240",
+   "lang": "en-US",
+   "noteStyle": {
+    "color": "rgb(27, 77, 62)",
+    "fontSize": "14px",
+    "fontWeight": "700",
+    "text": "Typically 3-7 working days."
+   },
+   "num": {
+    "bg": "rgb(27, 77, 62)",
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "16px",
+    "fontWeight": "700",
+    "h": 44,
+    "radius": "50%",
+    "w": 44
+   },
+   "order": [
+    [
+     "media",
+     459
+    ],
+    [
+     "spec",
+     1258
+    ],
+    [
+     "actives",
+     1560
+    ],
+    [
+     "content",
+     1965
+    ],
+    [
+     "faq",
+     2179
+    ],
+    [
+     "sampling",
+     2949
+    ],
+    [
+     "more",
+     3331
+    ]
+   ],
+   "samplingTitle": "How Sampling Works",
+   "schemaName": "How Sampling Works",
+   "schemaSteps": [
+    {
+     "text": "Tell us your target formula, flavor, and packaging ideas.",
+     "title": "Submit Inquiry"
+    },
+    {
+     "text": "We'll provide a sample spec sheet and a proforma invoice for the sample fee.",
+     "title": "Confirm Details"
+    },
+    {
+     "text": "Our lab produces your sample and runs a full quality check.",
+     "title": "Sampling & Quality Check"
+    },
+    {
+     "text": "We ship the sample to you. You evaluate it and send us your feedback.",
+     "title": "Ship & Evaluate"
+    }
+   ],
+   "schemaTotalTime": "P3D",
+   "sheet": "https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/style.css?ver=2.10.57",
+   "stepLayout": {
+    "descColor": "rgb(95, 107, 101)",
+    "descFontSize": "14px",
+    "firstRow": 4,
+    "numMarginTop": "0px",
+    "rows": 1,
+    "titleFontSize": "17px",
+    "titleTag": "h3",
+    "titleWeight": "600",
+    "tops": [
+     3068,
+     3068,
+     3068,
+     3068
+    ]
+   },
+   "viewportW": 1240
+  },
+  "E5_EN_1101": {
+   "bands": {
+    "actives": {
+     "box": {
+      "h": 380,
+      "left": 0,
+      "top": 1499,
+      "w": 1101
+     },
+     "cls": "sf-fdetail-actives",
+     "effBg": "rgb(255, 255, 255)",
+     "padBottom": "48px",
+     "padLeft": "38px",
+     "padTop": "48px"
+    },
+    "content": {
+     "box": {
+      "h": 189,
+      "left": 0,
+      "top": 1903,
+      "w": 1101
+     },
+     "cls": "sf-fdetail-content",
+     "effBg": "rgb(255, 255, 255)",
+     "padBottom": "48px",
+     "padLeft": "38px",
+     "padTop": "48px"
+    },
+    "faq": {
+     "box": {
+      "h": 746,
+      "left": 0,
+      "top": 2116,
+      "w": 1101
+     },
+     "cls": "sf-fdetail.sf-fdetail-faq.has-card-white-background-color.has-background",
+     "effBg": "rgb(255, 255, 255)",
+     "padBottom": "48px",
+     "padLeft": "38px",
+     "padTop": "48px"
+    },
+    "media": {
+     "box": {
+      "h": 721,
+      "left": 0,
+      "top": 453,
+      "w": 1101
+     },
+     "cls": "sf-fdetail2.has-bg-light-background-color.has-background",
+     "effBg": "rgb(243, 246, 244)",
+     "padBottom": "48px",
+     "padLeft": "38px",
+     "padTop": "48px"
+    },
+    "more": {
+     "box": {
+      "h": 614,
+      "left": 0,
+      "top": 3289,
+      "w": 1101
+     },
+     "cls": "sf-fdetail-more.has-bg-light-background-color.has-background",
+     "effBg": "rgb(243, 246, 244)",
+     "padBottom": "48px",
+     "padLeft": "38px",
+     "padTop": "48px"
+    },
+    "sampling": {
+     "box": {
+      "h": 380,
+      "left": 0,
+      "top": 2886,
+      "w": 1101
+     },
+     "cls": "sf-sampling",
+     "effBg": "rgb(255, 255, 255)",
+     "padBottom": "48px",
+     "padLeft": "38px",
+     "padTop": "48px"
+    },
+    "spec": {
+     "box": {
+      "h": 277,
+      "left": 0,
+      "top": 1198,
+      "w": 1101
+     },
+     "cls": "sf-fdetail.has-card-white-background-color.has-background",
+     "effBg": "rgb(255, 255, 255)",
+     "padBottom": "48px",
+     "padLeft": "38px",
+     "padTop": "48px"
+    }
+   },
+   "bodyScrollWidth": 1101,
+   "contentHeadingTag": "h2",
+   "contentHeadingText": "Packaging & Specifications",
+   "counts": {
+    "contentBlocks": 1,
+    "contentCartons": 0,
+    "contentChips": 0,
+    "contentH2": 1,
+    "contentH3": 0,
+    "contentHeadings": [
+     {
+      "cls": "sf-fdetail-content__subtitle",
+      "tag": "h2",
+      "text": "Packaging & Specifications"
+     }
+    ],
+    "contentLabels": [
+     "Storage"
+    ],
+    "contentSpecs": 1,
+    "faqItems": 9,
+    "faqOpen": 1,
+    "floatBtns": 3,
+    "gridCards": 6,
+    "heroBuild": 1,
+    "heroH2": 0,
+    "note": 1,
+    "nums": 4,
+    "pageDetails": 12,
+    "quoteCta": 3,
+    "samplingH2": 1,
+    "samplingH3": 4,
+    "samplingHeadings": [
+     {
+      "cls": "sf-sampling__title",
+      "tag": "h2",
+      "text": "How Sampling Works"
+     },
+     {
+      "cls": "sf-sampling__step-title",
+      "tag": "h3",
+      "text": "Submit Inquiry"
+     },
+     {
+      "cls": "sf-sampling__step-title",
+      "tag": "h3",
+      "text": "Confirm Details"
+     },
+     {
+      "cls": "sf-sampling__step-title",
+      "tag": "h3",
+      "text": "Sampling & Quality Check"
+     },
+     {
+      "cls": "sf-sampling__step-title",
+      "tag": "h3",
+      "text": "Ship & Evaluate"
+     }
+    ],
+    "samplingSections": 1,
+    "steps": 4,
+    "toc": 0
+   },
+   "docScrollWidth": 1101,
+   "domSteps": [
+    {
+     "text": "Tell us your target formula, flavor, and packaging ideas.",
+     "title": "Submit Inquiry"
+    },
+    {
+     "text": "We'll provide a sample spec sheet and a proforma invoice for the sample fee.",
+     "title": "Confirm Details"
+    },
+    {
+     "text": "Our lab produces your sample and runs a full quality check.",
+     "title": "Sampling & Quality Check"
+    },
+    {
+     "text": "We ship the sample to you. You evaluate it and send us your feedback.",
+     "title": "Ship & Evaluate"
+    }
+   ],
+   "h1Count": 1,
+   "href": "https://dev.zxpet.com/formulas/joint-support-soft-chews/?sfcap=e5EN11011109211101",
+   "lang": "en-US",
+   "noteStyle": {
+    "color": "rgb(27, 77, 62)",
+    "fontSize": "14px",
+    "fontWeight": "700",
+    "text": "Typically 3-7 working days."
+   },
+   "num": {
+    "bg": "rgb(27, 77, 62)",
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "16px",
+    "fontWeight": "700",
+    "h": 44,
+    "radius": "50%",
+    "w": 44
+   },
+   "order": [
+    [
+     "media",
+     453
+    ],
+    [
+     "spec",
+     1198
+    ],
+    [
+     "actives",
+     1499
+    ],
+    [
+     "content",
+     1903
+    ],
+    [
+     "faq",
+     2116
+    ],
+    [
+     "sampling",
+     2886
+    ],
+    [
+     "more",
+     3289
+    ]
+   ],
+   "samplingTitle": "How Sampling Works",
+   "schemaName": "How Sampling Works",
+   "schemaSteps": [
+    {
+     "text": "Tell us your target formula, flavor, and packaging ideas.",
+     "title": "Submit Inquiry"
+    },
+    {
+     "text": "We'll provide a sample spec sheet and a proforma invoice for the sample fee.",
+     "title": "Confirm Details"
+    },
+    {
+     "text": "Our lab produces your sample and runs a full quality check.",
+     "title": "Sampling & Quality Check"
+    },
+    {
+     "text": "We ship the sample to you. You evaluate it and send us your feedback.",
+     "title": "Ship & Evaluate"
+    }
+   ],
+   "schemaTotalTime": "P3D",
+   "sheet": "https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/style.css?ver=2.10.57",
+   "stepLayout": {
+    "descColor": "rgb(95, 107, 101)",
+    "descFontSize": "14px",
+    "firstRow": 4,
+    "numMarginTop": "0px",
+    "rows": 1,
+    "titleFontSize": "17px",
+    "titleTag": "h3",
+    "titleWeight": "600",
+    "tops": [
+     3004,
+     3004,
+     3004,
+     3004
+    ]
+   },
+   "viewportW": 1101
+  },
+  "E5_EN_1024": {
+   "bands": {
+    "actives": {
+     "box": {
+      "h": 377,
+      "left": 0,
+      "top": 1613,
+      "w": 1024
+     },
+     "cls": "sf-fdetail-actives",
+     "effBg": "rgb(255, 255, 255)",
+     "padBottom": "48px",
+     "padLeft": "38px",
+     "padTop": "48px"
+    },
+    "content": {
+     "box": {
+      "h": 189,
+      "left": 0,
+      "top": 2014,
+      "w": 1024
+     },
+     "cls": "sf-fdetail-content",
+     "effBg": "rgb(255, 255, 255)",
+     "padBottom": "48px",
+     "padLeft": "38px",
+     "padTop": "48px"
+    },
+    "faq": {
+     "box": {
+      "h": 743,
+      "left": 0,
+      "top": 2227,
+      "w": 1024
+     },
+     "cls": "sf-fdetail.sf-fdetail-faq.has-card-white-background-color.has-background",
+     "effBg": "rgb(255, 255, 255)",
+     "padBottom": "48px",
+     "padLeft": "38px",
+     "padTop": "48px"
+    },
+    "media": {
+     "box": {
+      "h": 840,
+      "left": 0,
+      "top": 450,
+      "w": 1024
+     },
+     "cls": "sf-fdetail2.has-bg-light-background-color.has-background",
+     "effBg": "rgb(243, 246, 244)",
+     "padBottom": "48px",
+     "padLeft": "38px",
+     "padTop": "48px"
+    },
+    "more": {
+     "box": {
+      "h": 597,
+      "left": 0,
+      "top": 3395,
+      "w": 1024
+     },
+     "cls": "sf-fdetail-more.has-bg-light-background-color.has-background",
+     "effBg": "rgb(243, 246, 244)",
+     "padBottom": "48px",
+     "padLeft": "38px",
+     "padTop": "48px"
+    },
+    "sampling": {
+     "box": {
+      "h": 377,
+      "left": 0,
+      "top": 2994,
+      "w": 1024
+     },
+     "cls": "sf-sampling",
+     "effBg": "rgb(255, 255, 255)",
+     "padBottom": "48px",
+     "padLeft": "38px",
+     "padTop": "48px"
+    },
+    "spec": {
+     "box": {
+      "h": 274,
+      "left": 0,
+      "top": 1314,
+      "w": 1024
+     },
+     "cls": "sf-fdetail.has-card-white-background-color.has-background",
+     "effBg": "rgb(255, 255, 255)",
+     "padBottom": "48px",
+     "padLeft": "38px",
+     "padTop": "48px"
+    }
+   },
+   "bodyScrollWidth": 1024,
+   "contentHeadingTag": "h2",
+   "contentHeadingText": "Packaging & Specifications",
+   "counts": {
+    "contentBlocks": 1,
+    "contentCartons": 0,
+    "contentChips": 0,
+    "contentH2": 1,
+    "contentH3": 0,
+    "contentHeadings": [
+     {
+      "cls": "sf-fdetail-content__subtitle",
+      "tag": "h2",
+      "text": "Packaging & Specifications"
+     }
+    ],
+    "contentLabels": [
+     "Storage"
+    ],
+    "contentSpecs": 1,
+    "faqItems": 9,
+    "faqOpen": 1,
+    "floatBtns": 3,
+    "gridCards": 6,
+    "heroBuild": 1,
+    "heroH2": 0,
+    "note": 1,
+    "nums": 4,
+    "pageDetails": 12,
+    "quoteCta": 3,
+    "samplingH2": 1,
+    "samplingH3": 4,
+    "samplingHeadings": [
+     {
+      "cls": "sf-sampling__title",
+      "tag": "h2",
+      "text": "How Sampling Works"
+     },
+     {
+      "cls": "sf-sampling__step-title",
+      "tag": "h3",
+      "text": "Submit Inquiry"
+     },
+     {
+      "cls": "sf-sampling__step-title",
+      "tag": "h3",
+      "text": "Confirm Details"
+     },
+     {
+      "cls": "sf-sampling__step-title",
+      "tag": "h3",
+      "text": "Sampling & Quality Check"
+     },
+     {
+      "cls": "sf-sampling__step-title",
+      "tag": "h3",
+      "text": "Ship & Evaluate"
+     }
+    ],
+    "samplingSections": 1,
+    "steps": 4,
+    "toc": 0
+   },
+   "docScrollWidth": 1024,
+   "domSteps": [
+    {
+     "text": "Tell us your target formula, flavor, and packaging ideas.",
+     "title": "Submit Inquiry"
+    },
+    {
+     "text": "We'll provide a sample spec sheet and a proforma invoice for the sample fee.",
+     "title": "Confirm Details"
+    },
+    {
+     "text": "Our lab produces your sample and runs a full quality check.",
+     "title": "Sampling & Quality Check"
+    },
+    {
+     "text": "We ship the sample to you. You evaluate it and send us your feedback.",
+     "title": "Ship & Evaluate"
+    }
+   ],
+   "h1Count": 1,
+   "href": "https://dev.zxpet.com/formulas/joint-support-soft-chews/?sfcap=e5EN10241109251024",
+   "lang": "en-US",
+   "noteStyle": {
+    "color": "rgb(27, 77, 62)",
+    "fontSize": "14px",
+    "fontWeight": "700",
+    "text": "Typically 3-7 working days."
+   },
+   "num": {
+    "bg": "rgb(27, 77, 62)",
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "16px",
+    "fontWeight": "700",
+    "h": 44,
+    "radius": "50%",
+    "w": 44
+   },
+   "order": [
+    [
+     "media",
+     450
+    ],
+    [
+     "spec",
+     1314
+    ],
+    [
+     "actives",
+     1613
+    ],
+    [
+     "content",
+     2014
+    ],
+    [
+     "faq",
+     2227
+    ],
+    [
+     "sampling",
+     2994
+    ],
+    [
+     "more",
+     3395
+    ]
+   ],
+   "samplingTitle": "How Sampling Works",
+   "schemaName": "How Sampling Works",
+   "schemaSteps": [
+    {
+     "text": "Tell us your target formula, flavor, and packaging ideas.",
+     "title": "Submit Inquiry"
+    },
+    {
+     "text": "We'll provide a sample spec sheet and a proforma invoice for the sample fee.",
+     "title": "Confirm Details"
+    },
+    {
+     "text": "Our lab produces your sample and runs a full quality check.",
+     "title": "Sampling & Quality Check"
+    },
+    {
+     "text": "We ship the sample to you. You evaluate it and send us your feedback.",
+     "title": "Ship & Evaluate"
+    }
+   ],
+   "schemaTotalTime": "P3D",
+   "sheet": "https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/style.css?ver=2.10.57",
+   "stepLayout": {
+    "descColor": "rgb(95, 107, 101)",
+    "descFontSize": "14px",
+    "firstRow": 4,
+    "numMarginTop": "0px",
+    "rows": 1,
+    "titleFontSize": "17px",
+    "titleTag": "h3",
+    "titleWeight": "600",
+    "tops": [
+     3109,
+     3109,
+     3109,
+     3109
+    ]
+   },
+   "viewportW": 1024
+  },
+  "E5_EN_769": {
+   "bands": {
+    "actives": {
+     "box": {
+      "h": 372,
+      "left": 0,
+      "top": 1827,
+      "w": 769
+     },
+     "cls": "sf-fdetail-actives",
+     "effBg": "rgb(255, 255, 255)",
+     "padBottom": "48px",
+     "padLeft": "38px",
+     "padTop": "48px"
+    },
+    "content": {
+     "box": {
+      "h": 189,
+      "left": 0,
+      "top": 2223,
+      "w": 769
+     },
+     "cls": "sf-fdetail-content",
+     "effBg": "rgb(255, 255, 255)",
+     "padBottom": "48px",
+     "padLeft": "38px",
+     "padTop": "48px"
+    },
+    "faq": {
+     "box": {
+      "h": 738,
+      "left": 0,
+      "top": 2436,
+      "w": 769
+     },
+     "cls": "sf-fdetail.sf-fdetail-faq.has-card-white-background-color.has-background",
+     "effBg": "rgb(255, 255, 255)",
+     "padBottom": "48px",
+     "padLeft": "38px",
+     "padTop": "48px"
+    },
+    "media": {
+     "box": {
+      "h": 937,
+      "left": 0,
+      "top": 574,
+      "w": 769
+     },
+     "cls": "sf-fdetail2.has-bg-light-background-color.has-background",
+     "effBg": "rgb(243, 246, 244)",
+     "padBottom": "48px",
+     "padLeft": "38px",
+     "padTop": "48px"
+    },
+    "more": {
+     "box": {
+      "h": 600,
+      "left": 0,
+      "top": 3617,
+      "w": 769
+     },
+     "cls": "sf-fdetail-more.has-bg-light-background-color.has-background",
+     "effBg": "rgb(243, 246, 244)",
+     "padBottom": "48px",
+     "padLeft": "38px",
+     "padTop": "48px"
+    },
+    "sampling": {
+     "box": {
+      "h": 395,
+      "left": 0,
+      "top": 3198,
+      "w": 769
+     },
+     "cls": "sf-sampling",
+     "effBg": "rgb(255, 255, 255)",
+     "padBottom": "48px",
+     "padLeft": "38px",
+     "padTop": "48px"
+    },
+    "spec": {
+     "box": {
+      "h": 269,
+      "left": 0,
+      "top": 1535,
+      "w": 769
+     },
+     "cls": "sf-fdetail.has-card-white-background-color.has-background",
+     "effBg": "rgb(255, 255, 255)",
+     "padBottom": "48px",
+     "padLeft": "38px",
+     "padTop": "48px"
+    }
+   },
+   "bodyScrollWidth": 769,
+   "contentHeadingTag": "h2",
+   "contentHeadingText": "Packaging & Specifications",
+   "counts": {
+    "contentBlocks": 1,
+    "contentCartons": 0,
+    "contentChips": 0,
+    "contentH2": 1,
+    "contentH3": 0,
+    "contentHeadings": [
+     {
+      "cls": "sf-fdetail-content__subtitle",
+      "tag": "h2",
+      "text": "Packaging & Specifications"
+     }
+    ],
+    "contentLabels": [
+     "Storage"
+    ],
+    "contentSpecs": 1,
+    "faqItems": 9,
+    "faqOpen": 1,
+    "floatBtns": 3,
+    "gridCards": 6,
+    "heroBuild": 1,
+    "heroH2": 0,
+    "note": 1,
+    "nums": 4,
+    "pageDetails": 12,
+    "quoteCta": 3,
+    "samplingH2": 1,
+    "samplingH3": 4,
+    "samplingHeadings": [
+     {
+      "cls": "sf-sampling__title",
+      "tag": "h2",
+      "text": "How Sampling Works"
+     },
+     {
+      "cls": "sf-sampling__step-title",
+      "tag": "h3",
+      "text": "Submit Inquiry"
+     },
+     {
+      "cls": "sf-sampling__step-title",
+      "tag": "h3",
+      "text": "Confirm Details"
+     },
+     {
+      "cls": "sf-sampling__step-title",
+      "tag": "h3",
+      "text": "Sampling & Quality Check"
+     },
+     {
+      "cls": "sf-sampling__step-title",
+      "tag": "h3",
+      "text": "Ship & Evaluate"
+     }
+    ],
+    "samplingSections": 1,
+    "steps": 4,
+    "toc": 0
+   },
+   "docScrollWidth": 769,
+   "domSteps": [
+    {
+     "text": "Tell us your target formula, flavor, and packaging ideas.",
+     "title": "Submit Inquiry"
+    },
+    {
+     "text": "We'll provide a sample spec sheet and a proforma invoice for the sample fee.",
+     "title": "Confirm Details"
+    },
+    {
+     "text": "Our lab produces your sample and runs a full quality check.",
+     "title": "Sampling & Quality Check"
+    },
+    {
+     "text": "We ship the sample to you. You evaluate it and send us your feedback.",
+     "title": "Ship & Evaluate"
+    }
+   ],
+   "h1Count": 1,
+   "href": "https://dev.zxpet.com/formulas/joint-support-soft-chews/?sfcap=e5EN769110928769",
+   "lang": "en-US",
+   "noteStyle": {
+    "color": "rgb(27, 77, 62)",
+    "fontSize": "14px",
+    "fontWeight": "700",
+    "text": "Typically 3-7 working days."
+   },
+   "num": {
+    "bg": "rgb(27, 77, 62)",
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "16px",
+    "fontWeight": "700",
+    "h": 44,
+    "radius": "50%",
+    "w": 44
+   },
+   "order": [
+    [
+     "media",
+     574
+    ],
+    [
+     "spec",
+     1535
+    ],
+    [
+     "actives",
+     1827
+    ],
+    [
+     "content",
+     2223
+    ],
+    [
+     "faq",
+     2436
+    ],
+    [
+     "sampling",
+     3198
+    ],
+    [
+     "more",
+     3617
+    ]
+   ],
+   "samplingTitle": "How Sampling Works",
+   "schemaName": "How Sampling Works",
+   "schemaSteps": [
+    {
+     "text": "Tell us your target formula, flavor, and packaging ideas.",
+     "title": "Submit Inquiry"
+    },
+    {
+     "text": "We'll provide a sample spec sheet and a proforma invoice for the sample fee.",
+     "title": "Confirm Details"
+    },
+    {
+     "text": "Our lab produces your sample and runs a full quality check.",
+     "title": "Sampling & Quality Check"
+    },
+    {
+     "text": "We ship the sample to you. You evaluate it and send us your feedback.",
+     "title": "Ship & Evaluate"
+    }
+   ],
+   "schemaTotalTime": "P3D",
+   "sheet": "https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/style.css?ver=2.10.57",
+   "stepLayout": {
+    "descColor": "rgb(95, 107, 101)",
+    "descFontSize": "14px",
+    "firstRow": 4,
+    "numMarginTop": "0px",
+    "rows": 1,
+    "titleFontSize": "17px",
+    "titleTag": "h3",
+    "titleWeight": "600",
+    "tops": [
+     3308,
+     3308,
+     3308,
+     3308
+    ]
+   },
+   "viewportW": 769
+  },
+  "E5_EN_768": {
+   "bands": {
+    "actives": {
+     "box": {
+      "h": 371,
+      "left": 0,
+      "top": 2114,
+      "w": 768
+     },
+     "cls": "sf-fdetail-actives",
+     "effBg": "rgb(255, 255, 255)",
+     "padBottom": "48px",
+     "padLeft": "20px",
+     "padTop": "48px"
+    },
+    "content": {
+     "box": {
+      "h": 189,
+      "left": 0,
+      "top": 2509,
+      "w": 768
+     },
+     "cls": "sf-fdetail-content",
+     "effBg": "rgb(255, 255, 255)",
+     "padBottom": "48px",
+     "padLeft": "20px",
+     "padTop": "48px"
+    },
+    "faq": {
+     "box": {
+      "h": 679,
+      "left": 0,
+      "top": 2721,
+      "w": 768
+     },
+     "cls": "sf-fdetail.sf-fdetail-faq.has-card-white-background-color.has-background",
+     "effBg": "rgb(255, 255, 255)",
+     "padBottom": "48px",
+     "padLeft": "20px",
+     "padTop": "48px"
+    },
+    "media": {
+     "box": {
+      "h": 1410,
+      "left": 0,
+      "top": 396,
+      "w": 768
+     },
+     "cls": "sf-fdetail2.has-bg-light-background-color.has-background",
+     "effBg": "rgb(243, 246, 244)",
+     "padBottom": "48px",
+     "padLeft": "38px",
+     "padTop": "48px"
+    },
+    "more": {
+     "box": {
+      "h": 2337,
+      "left": 0,
+      "top": 4184,
+      "w": 768
+     },
+     "cls": "sf-fdetail-more.has-bg-light-background-color.has-background",
+     "effBg": "rgb(243, 246, 244)",
+     "padBottom": "48px",
+     "padLeft": "20px",
+     "padTop": "48px"
+    },
+    "sampling": {
+     "box": {
+      "h": 736,
+      "left": 0,
+      "top": 3424,
+      "w": 768
+     },
+     "cls": "sf-sampling",
+     "effBg": "rgb(255, 255, 255)",
+     "padBottom": "48px",
+     "padLeft": "20px",
+     "padTop": "48px"
+    },
+    "spec": {
+     "box": {
+      "h": 261,
+      "left": 0,
+      "top": 1829,
+      "w": 768
+     },
+     "cls": "sf-fdetail.has-card-white-background-color.has-background",
+     "effBg": "rgb(255, 255, 255)",
+     "padBottom": "48px",
+     "padLeft": "20px",
+     "padTop": "48px"
+    }
+   },
+   "bodyScrollWidth": 768,
+   "contentHeadingTag": "h2",
+   "contentHeadingText": "Packaging & Specifications",
+   "counts": {
+    "contentBlocks": 1,
+    "contentCartons": 0,
+    "contentChips": 0,
+    "contentH2": 1,
+    "contentH3": 0,
+    "contentHeadings": [
+     {
+      "cls": "sf-fdetail-content__subtitle",
+      "tag": "h2",
+      "text": "Packaging & Specifications"
+     }
+    ],
+    "contentLabels": [
+     "Storage"
+    ],
+    "contentSpecs": 1,
+    "faqItems": 9,
+    "faqOpen": 1,
+    "floatBtns": 3,
+    "gridCards": 6,
+    "heroBuild": 1,
+    "heroH2": 0,
+    "note": 1,
+    "nums": 4,
+    "pageDetails": 12,
+    "quoteCta": 3,
+    "samplingH2": 1,
+    "samplingH3": 4,
+    "samplingHeadings": [
+     {
+      "cls": "sf-sampling__title",
+      "tag": "h2",
+      "text": "How Sampling Works"
+     },
+     {
+      "cls": "sf-sampling__step-title",
+      "tag": "h3",
+      "text": "Submit Inquiry"
+     },
+     {
+      "cls": "sf-sampling__step-title",
+      "tag": "h3",
+      "text": "Confirm Details"
+     },
+     {
+      "cls": "sf-sampling__step-title",
+      "tag": "h3",
+      "text": "Sampling & Quality Check"
+     },
+     {
+      "cls": "sf-sampling__step-title",
+      "tag": "h3",
+      "text": "Ship & Evaluate"
+     }
+    ],
+    "samplingSections": 1,
+    "steps": 4,
+    "toc": 0
+   },
+   "docScrollWidth": 768,
+   "domSteps": [
+    {
+     "text": "Tell us your target formula, flavor, and packaging ideas.",
+     "title": "Submit Inquiry"
+    },
+    {
+     "text": "We'll provide a sample spec sheet and a proforma invoice for the sample fee.",
+     "title": "Confirm Details"
+    },
+    {
+     "text": "Our lab produces your sample and runs a full quality check.",
+     "title": "Sampling & Quality Check"
+    },
+    {
+     "text": "We ship the sample to you. You evaluate it and send us your feedback.",
+     "title": "Ship & Evaluate"
+    }
+   ],
+   "h1Count": 1,
+   "href": "https://dev.zxpet.com/formulas/joint-support-soft-chews/?sfcap=e5EN768110931768",
+   "lang": "en-US",
+   "noteStyle": {
+    "color": "rgb(27, 77, 62)",
+    "fontSize": "14px",
+    "fontWeight": "700",
+    "text": "Typically 3-7 working days."
+   },
+   "num": {
+    "bg": "rgb(27, 77, 62)",
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "16px",
+    "fontWeight": "700",
+    "h": 44,
+    "radius": "50%",
+    "w": 44
+   },
+   "order": [
+    [
+     "media",
+     396
+    ],
+    [
+     "spec",
+     1829
+    ],
+    [
+     "actives",
+     2114
+    ],
+    [
+     "content",
+     2509
+    ],
+    [
+     "faq",
+     2721
+    ],
+    [
+     "sampling",
+     3424
+    ],
+    [
+     "more",
+     4184
+    ]
+   ],
+   "samplingTitle": "How Sampling Works",
+   "schemaName": "How Sampling Works",
+   "schemaSteps": [
+    {
+     "text": "Tell us your target formula, flavor, and packaging ideas.",
+     "title": "Submit Inquiry"
+    },
+    {
+     "text": "We'll provide a sample spec sheet and a proforma invoice for the sample fee.",
+     "title": "Confirm Details"
+    },
+    {
+     "text": "Our lab produces your sample and runs a full quality check.",
+     "title": "Sampling & Quality Check"
+    },
+    {
+     "text": "We ship the sample to you. You evaluate it and send us your feedback.",
+     "title": "Ship & Evaluate"
+    }
+   ],
+   "schemaTotalTime": "P3D",
+   "sheet": "https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/style.css?ver=2.10.57",
+   "stepLayout": {
+    "descColor": "rgb(95, 107, 101)",
+    "descFontSize": "14px",
+    "firstRow": 1,
+    "numMarginTop": "0px",
+    "rows": 4,
+    "titleFontSize": "17px",
+    "titleTag": "h3",
+    "titleWeight": "600",
+    "tops": [
+     3534,
+     3671,
+     3808,
+     3946
+    ]
+   },
+   "viewportW": 768
+  },
+  "E5_EN_480": {
+   "bands": {
+    "actives": {
+     "box": {
+      "h": 406,
+      "left": 0,
+      "top": 1991,
+      "w": 480
+     },
+     "cls": "sf-fdetail-actives",
+     "effBg": "rgb(255, 255, 255)",
+     "padBottom": "48px",
+     "padLeft": "20px",
+     "padTop": "48px"
+    },
+    "content": {
+     "box": {
+      "h": 214,
+      "left": 0,
+      "top": 2421,
+      "w": 480
+     },
+     "cls": "sf-fdetail-content",
+     "effBg": "rgb(255, 255, 255)",
+     "padBottom": "48px",
+     "padLeft": "20px",
+     "padTop": "48px"
+    },
+    "faq": {
+     "box": {
+      "h": 701,
+      "left": 0,
+      "top": 2659,
+      "w": 480
+     },
+     "cls": "sf-fdetail.sf-fdetail-faq.has-card-white-background-color.has-background",
+     "effBg": "rgb(255, 255, 255)",
+     "padBottom": "48px",
+     "padLeft": "20px",
+     "padTop": "48px"
+    },
+    "media": {
+     "box": {
+      "h": 1268,
+      "left": 0,
+      "top": 414,
+      "w": 480
+     },
+     "cls": "sf-fdetail2.has-bg-light-background-color.has-background",
+     "effBg": "rgb(243, 246, 244)",
+     "padBottom": "48px",
+     "padLeft": "38px",
+     "padTop": "48px"
+    },
+    "more": {
+     "box": {
+      "h": 1689,
+      "left": 0,
+      "top": 4191,
+      "w": 480
+     },
+     "cls": "sf-fdetail-more.has-bg-light-background-color.has-background",
+     "effBg": "rgb(243, 246, 244)",
+     "padBottom": "48px",
+     "padLeft": "20px",
+     "padTop": "48px"
+    },
+    "sampling": {
+     "box": {
+      "h": 783,
+      "left": 0,
+      "top": 3384,
+      "w": 480
+     },
+     "cls": "sf-sampling",
+     "effBg": "rgb(255, 255, 255)",
+     "padBottom": "48px",
+     "padLeft": "20px",
+     "padTop": "48px"
+    },
+    "spec": {
+     "box": {
+      "h": 261,
+      "left": 0,
+      "top": 1706,
+      "w": 480
+     },
+     "cls": "sf-fdetail.has-card-white-background-color.has-background",
+     "effBg": "rgb(255, 255, 255)",
+     "padBottom": "48px",
+     "padLeft": "20px",
+     "padTop": "48px"
+    }
+   },
+   "bodyScrollWidth": 480,
+   "contentHeadingTag": "h2",
+   "contentHeadingText": "Packaging & Specifications",
+   "counts": {
+    "contentBlocks": 1,
+    "contentCartons": 0,
+    "contentChips": 0,
+    "contentH2": 1,
+    "contentH3": 0,
+    "contentHeadings": [
+     {
+      "cls": "sf-fdetail-content__subtitle",
+      "tag": "h2",
+      "text": "Packaging & Specifications"
+     }
+    ],
+    "contentLabels": [
+     "Storage"
+    ],
+    "contentSpecs": 1,
+    "faqItems": 9,
+    "faqOpen": 1,
+    "floatBtns": 3,
+    "gridCards": 6,
+    "heroBuild": 1,
+    "heroH2": 0,
+    "note": 1,
+    "nums": 4,
+    "pageDetails": 12,
+    "quoteCta": 3,
+    "samplingH2": 1,
+    "samplingH3": 4,
+    "samplingHeadings": [
+     {
+      "cls": "sf-sampling__title",
+      "tag": "h2",
+      "text": "How Sampling Works"
+     },
+     {
+      "cls": "sf-sampling__step-title",
+      "tag": "h3",
+      "text": "Submit Inquiry"
+     },
+     {
+      "cls": "sf-sampling__step-title",
+      "tag": "h3",
+      "text": "Confirm Details"
+     },
+     {
+      "cls": "sf-sampling__step-title",
+      "tag": "h3",
+      "text": "Sampling & Quality Check"
+     },
+     {
+      "cls": "sf-sampling__step-title",
+      "tag": "h3",
+      "text": "Ship & Evaluate"
+     }
+    ],
+    "samplingSections": 1,
+    "steps": 4,
+    "toc": 0
+   },
+   "docScrollWidth": 480,
+   "domSteps": [
+    {
+     "text": "Tell us your target formula, flavor, and packaging ideas.",
+     "title": "Submit Inquiry"
+    },
+    {
+     "text": "We'll provide a sample spec sheet and a proforma invoice for the sample fee.",
+     "title": "Confirm Details"
+    },
+    {
+     "text": "Our lab produces your sample and runs a full quality check.",
+     "title": "Sampling & Quality Check"
+    },
+    {
+     "text": "We ship the sample to you. You evaluate it and send us your feedback.",
+     "title": "Ship & Evaluate"
+    }
+   ],
+   "h1Count": 1,
+   "href": "https://dev.zxpet.com/formulas/joint-support-soft-chews/?sfcap=e5EN480110934480",
+   "lang": "en-US",
+   "noteStyle": {
+    "color": "rgb(27, 77, 62)",
+    "fontSize": "14px",
+    "fontWeight": "700",
+    "text": "Typically 3-7 working days."
+   },
+   "num": {
+    "bg": "rgb(27, 77, 62)",
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "16px",
+    "fontWeight": "700",
+    "h": 44,
+    "radius": "50%",
+    "w": 44
+   },
+   "order": [
+    [
+     "media",
+     414
+    ],
+    [
+     "spec",
+     1706
+    ],
+    [
+     "actives",
+     1991
+    ],
+    [
+     "content",
+     2421
+    ],
+    [
+     "faq",
+     2659
+    ],
+    [
+     "sampling",
+     3384
+    ],
+    [
+     "more",
+     4191
+    ]
+   ],
+   "samplingTitle": "How Sampling Works",
+   "schemaName": "How Sampling Works",
+   "schemaSteps": [
+    {
+     "text": "Tell us your target formula, flavor, and packaging ideas.",
+     "title": "Submit Inquiry"
+    },
+    {
+     "text": "We'll provide a sample spec sheet and a proforma invoice for the sample fee.",
+     "title": "Confirm Details"
+    },
+    {
+     "text": "Our lab produces your sample and runs a full quality check.",
+     "title": "Sampling & Quality Check"
+    },
+    {
+     "text": "We ship the sample to you. You evaluate it and send us your feedback.",
+     "title": "Ship & Evaluate"
+    }
+   ],
+   "schemaTotalTime": "P3D",
+   "sheet": "https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/style.css?ver=2.10.57",
+   "stepLayout": {
+    "descColor": "rgb(95, 107, 101)",
+    "descFontSize": "14px",
+    "firstRow": 1,
+    "numMarginTop": "0px",
+    "rows": 4,
+    "titleFontSize": "17px",
+    "titleTag": "h3",
+    "titleWeight": "600",
+    "tops": [
+     3494,
+     3631,
+     3792,
+     3929
+    ]
+   },
+   "viewportW": 480
+  },
+  "E5_ZH_1440": {
+   "bands": {
+    "actives": {
+     "box": {
+      "h": 381,
+      "left": 0,
+      "top": 1545,
+      "w": 1440
+     },
+     "cls": "sf-fdetail-actives",
+     "effBg": "rgb(255, 255, 255)",
+     "padBottom": "48px",
+     "padLeft": "0px",
+     "padTop": "48px"
+    },
+    "content": {
+     "box": {
+      "h": 189,
+      "left": 0,
+      "top": 1950,
+      "w": 1440
+     },
+     "cls": "sf-fdetail-content",
+     "effBg": "rgb(255, 255, 255)",
+     "padBottom": "48px",
+     "padLeft": "0px",
+     "padTop": "48px"
+    },
+    "faq": {
+     "box": {
+      "h": 747,
+      "left": 0,
+      "top": 2163,
+      "w": 1440
+     },
+     "cls": "sf-fdetail.sf-fdetail-faq.has-card-white-background-color.has-background",
+     "effBg": "rgb(255, 255, 255)",
+     "padBottom": "48px",
+     "padLeft": "38px",
+     "padTop": "48px"
+    },
+    "media": {
+     "box": {
+      "h": 758,
+      "left": 0,
+      "top": 461,
+      "w": 1440
+     },
+     "cls": "sf-fdetail2.has-bg-light-background-color.has-background",
+     "effBg": "rgb(243, 246, 244)",
+     "padBottom": "48px",
+     "padLeft": "38px",
+     "padTop": "48px"
+    },
+    "more": {
+     "box": {
+      "h": 610,
+      "left": 0,
+      "top": 3316,
+      "w": 1440
+     },
+     "cls": "sf-fdetail-more.has-bg-light-background-color.has-background",
+     "effBg": "rgb(243, 246, 244)",
+     "padBottom": "48px",
+     "padLeft": "38px",
+     "padTop": "48px"
+    },
+    "sampling": {
+     "box": {
+      "h": 358,
+      "left": 0,
+      "top": 2934,
+      "w": 1440
+     },
+     "cls": "sf-sampling",
+     "effBg": "rgb(255, 255, 255)",
+     "padBottom": "48px",
+     "padLeft": "0px",
+     "padTop": "48px"
+    },
+    "spec": {
+     "box": {
+      "h": 278,
+      "left": 0,
+      "top": 1243,
+      "w": 1440
+     },
+     "cls": "sf-fdetail.has-card-white-background-color.has-background",
+     "effBg": "rgb(255, 255, 255)",
+     "padBottom": "48px",
+     "padLeft": "38px",
+     "padTop": "48px"
+    }
+   },
+   "bodyScrollWidth": 1440,
+   "contentHeadingTag": "h2",
+   "contentHeadingText": "Packaging & Specifications",
+   "counts": {
+    "contentBlocks": 1,
+    "contentCartons": 0,
+    "contentChips": 0,
+    "contentH2": 1,
+    "contentH3": 0,
+    "contentHeadings": [
+     {
+      "cls": "sf-fdetail-content__subtitle",
+      "tag": "h2",
+      "text": "Packaging & Specifications"
+     }
+    ],
+    "contentLabels": [
+     "Storage"
+    ],
+    "contentSpecs": 1,
+    "faqItems": 9,
+    "faqOpen": 1,
+    "floatBtns": 3,
+    "gridCards": 6,
+    "heroBuild": 1,
+    "heroH2": 0,
+    "note": 1,
+    "nums": 4,
+    "pageDetails": 12,
+    "quoteCta": 3,
+    "samplingH2": 1,
+    "samplingH3": 4,
+    "samplingHeadings": [
+     {
+      "cls": "sf-sampling__title",
+      "tag": "h2",
+      "text": "How Sampling Works"
+     },
+     {
+      "cls": "sf-sampling__step-title",
+      "tag": "h3",
+      "text": "Submit Inquiry"
+     },
+     {
+      "cls": "sf-sampling__step-title",
+      "tag": "h3",
+      "text": "Confirm Details"
+     },
+     {
+      "cls": "sf-sampling__step-title",
+      "tag": "h3",
+      "text": "Sampling & Quality Check"
+     },
+     {
+      "cls": "sf-sampling__step-title",
+      "tag": "h3",
+      "text": "Ship & Evaluate"
+     }
+    ],
+    "samplingSections": 1,
+    "steps": 4,
+    "toc": 0
+   },
+   "docScrollWidth": 1440,
+   "domSteps": [
+    {
+     "text": "Tell us your target formula, flavor, and packaging ideas.",
+     "title": "Submit Inquiry"
+    },
+    {
+     "text": "We'll provide a sample spec sheet and a proforma invoice for the sample fee.",
+     "title": "Confirm Details"
+    },
+    {
+     "text": "Our lab produces your sample and runs a full quality check.",
+     "title": "Sampling & Quality Check"
+    },
+    {
+     "text": "We ship the sample to you. You evaluate it and send us your feedback.",
+     "title": "Ship & Evaluate"
+    }
+   ],
+   "h1Count": 1,
+   "href": "https://dev.zxpet.com/zh/formulas/joint-support-soft-chews/?sfcap=e5ZH14401109371440",
+   "lang": "zh-CN",
+   "noteStyle": {
+    "color": "rgb(27, 77, 62)",
+    "fontSize": "14px",
+    "fontWeight": "700",
+    "text": "Typically 3-7 working days."
+   },
+   "num": {
+    "bg": "rgb(27, 77, 62)",
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "16px",
+    "fontWeight": "700",
+    "h": 44,
+    "radius": "50%",
+    "w": 44
+   },
+   "order": [
+    [
+     "media",
+     461
+    ],
+    [
+     "spec",
+     1243
+    ],
+    [
+     "actives",
+     1545
+    ],
+    [
+     "content",
+     1950
+    ],
+    [
+     "faq",
+     2163
+    ],
+    [
+     "sampling",
+     2934
+    ],
+    [
+     "more",
+     3316
+    ]
+   ],
+   "samplingTitle": "How Sampling Works",
+   "schemaName": "How Sampling Works",
+   "schemaSteps": [
+    {
+     "text": "Tell us your target formula, flavor, and packaging ideas.",
+     "title": "Submit Inquiry"
+    },
+    {
+     "text": "We'll provide a sample spec sheet and a proforma invoice for the sample fee.",
+     "title": "Confirm Details"
+    },
+    {
+     "text": "Our lab produces your sample and runs a full quality check.",
+     "title": "Sampling & Quality Check"
+    },
+    {
+     "text": "We ship the sample to you. You evaluate it and send us your feedback.",
+     "title": "Ship & Evaluate"
+    }
+   ],
+   "schemaTotalTime": "P3D",
+   "sheet": "https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/style.css?ver=2.10.57",
+   "stepLayout": {
+    "descColor": "rgb(95, 107, 101)",
+    "descFontSize": "14px",
+    "firstRow": 4,
+    "numMarginTop": "0px",
+    "rows": 1,
+    "titleFontSize": "17px",
+    "titleTag": "h3",
+    "titleWeight": "600",
+    "tops": [
+     3053,
+     3053,
+     3053,
+     3053
+    ]
+   },
+   "viewportW": 1440
+  },
+  "E5_ZH_1241": {
+   "bands": {
+    "actives": {
+     "box": {
+      "h": 381,
+      "left": 0,
+      "top": 1561,
+      "w": 1241
+     },
+     "cls": "sf-fdetail-actives",
+     "effBg": "rgb(255, 255, 255)",
+     "padBottom": "48px",
+     "padLeft": "0px",
+     "padTop": "48px"
+    },
+    "content": {
+     "box": {
+      "h": 189,
+      "left": 0,
+      "top": 1966,
+      "w": 1241
+     },
+     "cls": "sf-fdetail-content",
+     "effBg": "rgb(255, 255, 255)",
+     "padBottom": "48px",
+     "padLeft": "0px",
+     "padTop": "48px"
+    },
+    "faq": {
+     "box": {
+      "h": 747,
+      "left": 0,
+      "top": 2179,
+      "w": 1241
+     },
+     "cls": "sf-fdetail.sf-fdetail-faq.has-card-white-background-color.has-background",
+     "effBg": "rgb(255, 255, 255)",
+     "padBottom": "48px",
+     "padLeft": "38px",
+     "padTop": "48px"
+    },
+    "media": {
+     "box": {
+      "h": 776,
+      "left": 0,
+      "top": 459,
+      "w": 1241
+     },
+     "cls": "sf-fdetail2.has-bg-light-background-color.has-background",
+     "effBg": "rgb(243, 246, 244)",
+     "padBottom": "48px",
+     "padLeft": "38px",
+     "padTop": "48px"
+    },
+    "more": {
+     "box": {
+      "h": 603,
+      "left": 0,
+      "top": 3332,
+      "w": 1241
+     },
+     "cls": "sf-fdetail-more.has-bg-light-background-color.has-background",
+     "effBg": "rgb(243, 246, 244)",
+     "padBottom": "48px",
+     "padLeft": "38px",
+     "padTop": "48px"
+    },
+    "sampling": {
+     "box": {
+      "h": 358,
+      "left": 0,
+      "top": 2950,
+      "w": 1241
+     },
+     "cls": "sf-sampling",
+     "effBg": "rgb(255, 255, 255)",
+     "padBottom": "48px",
+     "padLeft": "0px",
+     "padTop": "48px"
+    },
+    "spec": {
+     "box": {
+      "h": 278,
+      "left": 0,
+      "top": 1259,
+      "w": 1241
+     },
+     "cls": "sf-fdetail.has-card-white-background-color.has-background",
+     "effBg": "rgb(255, 255, 255)",
+     "padBottom": "48px",
+     "padLeft": "38px",
+     "padTop": "48px"
+    }
+   },
+   "bodyScrollWidth": 1241,
+   "contentHeadingTag": "h2",
+   "contentHeadingText": "Packaging & Specifications",
+   "counts": {
+    "contentBlocks": 1,
+    "contentCartons": 0,
+    "contentChips": 0,
+    "contentH2": 1,
+    "contentH3": 0,
+    "contentHeadings": [
+     {
+      "cls": "sf-fdetail-content__subtitle",
+      "tag": "h2",
+      "text": "Packaging & Specifications"
+     }
+    ],
+    "contentLabels": [
+     "Storage"
+    ],
+    "contentSpecs": 1,
+    "faqItems": 9,
+    "faqOpen": 1,
+    "floatBtns": 3,
+    "gridCards": 6,
+    "heroBuild": 1,
+    "heroH2": 0,
+    "note": 1,
+    "nums": 4,
+    "pageDetails": 12,
+    "quoteCta": 3,
+    "samplingH2": 1,
+    "samplingH3": 4,
+    "samplingHeadings": [
+     {
+      "cls": "sf-sampling__title",
+      "tag": "h2",
+      "text": "How Sampling Works"
+     },
+     {
+      "cls": "sf-sampling__step-title",
+      "tag": "h3",
+      "text": "Submit Inquiry"
+     },
+     {
+      "cls": "sf-sampling__step-title",
+      "tag": "h3",
+      "text": "Confirm Details"
+     },
+     {
+      "cls": "sf-sampling__step-title",
+      "tag": "h3",
+      "text": "Sampling & Quality Check"
+     },
+     {
+      "cls": "sf-sampling__step-title",
+      "tag": "h3",
+      "text": "Ship & Evaluate"
+     }
+    ],
+    "samplingSections": 1,
+    "steps": 4,
+    "toc": 0
+   },
+   "docScrollWidth": 1241,
+   "domSteps": [
+    {
+     "text": "Tell us your target formula, flavor, and packaging ideas.",
+     "title": "Submit Inquiry"
+    },
+    {
+     "text": "We'll provide a sample spec sheet and a proforma invoice for the sample fee.",
+     "title": "Confirm Details"
+    },
+    {
+     "text": "Our lab produces your sample and runs a full quality check.",
+     "title": "Sampling & Quality Check"
+    },
+    {
+     "text": "We ship the sample to you. You evaluate it and send us your feedback.",
+     "title": "Ship & Evaluate"
+    }
+   ],
+   "h1Count": 1,
+   "href": "https://dev.zxpet.com/zh/formulas/joint-support-soft-chews/?sfcap=e5ZH12411109411241",
+   "lang": "zh-CN",
+   "noteStyle": {
+    "color": "rgb(27, 77, 62)",
+    "fontSize": "14px",
+    "fontWeight": "700",
+    "text": "Typically 3-7 working days."
+   },
+   "num": {
+    "bg": "rgb(27, 77, 62)",
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "16px",
+    "fontWeight": "700",
+    "h": 44,
+    "radius": "50%",
+    "w": 44
+   },
+   "order": [
+    [
+     "media",
+     459
+    ],
+    [
+     "spec",
+     1259
+    ],
+    [
+     "actives",
+     1561
+    ],
+    [
+     "content",
+     1966
+    ],
+    [
+     "faq",
+     2179
+    ],
+    [
+     "sampling",
+     2950
+    ],
+    [
+     "more",
+     3332
+    ]
+   ],
+   "samplingTitle": "How Sampling Works",
+   "schemaName": "How Sampling Works",
+   "schemaSteps": [
+    {
+     "text": "Tell us your target formula, flavor, and packaging ideas.",
+     "title": "Submit Inquiry"
+    },
+    {
+     "text": "We'll provide a sample spec sheet and a proforma invoice for the sample fee.",
+     "title": "Confirm Details"
+    },
+    {
+     "text": "Our lab produces your sample and runs a full quality check.",
+     "title": "Sampling & Quality Check"
+    },
+    {
+     "text": "We ship the sample to you. You evaluate it and send us your feedback.",
+     "title": "Ship & Evaluate"
+    }
+   ],
+   "schemaTotalTime": "P3D",
+   "sheet": "https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/style.css?ver=2.10.57",
+   "stepLayout": {
+    "descColor": "rgb(95, 107, 101)",
+    "descFontSize": "14px",
+    "firstRow": 4,
+    "numMarginTop": "0px",
+    "rows": 1,
+    "titleFontSize": "17px",
+    "titleTag": "h3",
+    "titleWeight": "600",
+    "tops": [
+     3069,
+     3069,
+     3069,
+     3069
+    ]
+   },
+   "viewportW": 1241
+  },
+  "E5_ZH_1240": {
+   "bands": {
+    "actives": {
+     "box": {
+      "h": 381,
+      "left": 0,
+      "top": 1560,
+      "w": 1240
+     },
+     "cls": "sf-fdetail-actives",
+     "effBg": "rgb(255, 255, 255)",
+     "padBottom": "48px",
+     "padLeft": "38px",
+     "padTop": "48px"
+    },
+    "content": {
+     "box": {
+      "h": 189,
+      "left": 0,
+      "top": 1965,
+      "w": 1240
+     },
+     "cls": "sf-fdetail-content",
+     "effBg": "rgb(255, 255, 255)",
+     "padBottom": "48px",
+     "padLeft": "38px",
+     "padTop": "48px"
+    },
+    "faq": {
+     "box": {
+      "h": 747,
+      "left": 0,
+      "top": 2179,
+      "w": 1240
+     },
+     "cls": "sf-fdetail.sf-fdetail-faq.has-card-white-background-color.has-background",
+     "effBg": "rgb(255, 255, 255)",
+     "padBottom": "48px",
+     "padLeft": "38px",
+     "padTop": "48px"
+    },
+    "media": {
+     "box": {
+      "h": 776,
+      "left": 0,
+      "top": 459,
+      "w": 1240
+     },
+     "cls": "sf-fdetail2.has-bg-light-background-color.has-background",
+     "effBg": "rgb(243, 246, 244)",
+     "padBottom": "48px",
+     "padLeft": "38px",
+     "padTop": "48px"
+    },
+    "more": {
+     "box": {
+      "h": 603,
+      "left": 0,
+      "top": 3331,
+      "w": 1240
+     },
+     "cls": "sf-fdetail-more.has-bg-light-background-color.has-background",
+     "effBg": "rgb(243, 246, 244)",
+     "padBottom": "48px",
+     "padLeft": "38px",
+     "padTop": "48px"
+    },
+    "sampling": {
+     "box": {
+      "h": 358,
+      "left": 0,
+      "top": 2949,
+      "w": 1240
+     },
+     "cls": "sf-sampling",
+     "effBg": "rgb(255, 255, 255)",
+     "padBottom": "48px",
+     "padLeft": "38px",
+     "padTop": "48px"
+    },
+    "spec": {
+     "box": {
+      "h": 278,
+      "left": 0,
+      "top": 1258,
+      "w": 1240
+     },
+     "cls": "sf-fdetail.has-card-white-background-color.has-background",
+     "effBg": "rgb(255, 255, 255)",
+     "padBottom": "48px",
+     "padLeft": "38px",
+     "padTop": "48px"
+    }
+   },
+   "bodyScrollWidth": 1240,
+   "contentHeadingTag": "h2",
+   "contentHeadingText": "Packaging & Specifications",
+   "counts": {
+    "contentBlocks": 1,
+    "contentCartons": 0,
+    "contentChips": 0,
+    "contentH2": 1,
+    "contentH3": 0,
+    "contentHeadings": [
+     {
+      "cls": "sf-fdetail-content__subtitle",
+      "tag": "h2",
+      "text": "Packaging & Specifications"
+     }
+    ],
+    "contentLabels": [
+     "Storage"
+    ],
+    "contentSpecs": 1,
+    "faqItems": 9,
+    "faqOpen": 1,
+    "floatBtns": 3,
+    "gridCards": 6,
+    "heroBuild": 1,
+    "heroH2": 0,
+    "note": 1,
+    "nums": 4,
+    "pageDetails": 12,
+    "quoteCta": 3,
+    "samplingH2": 1,
+    "samplingH3": 4,
+    "samplingHeadings": [
+     {
+      "cls": "sf-sampling__title",
+      "tag": "h2",
+      "text": "How Sampling Works"
+     },
+     {
+      "cls": "sf-sampling__step-title",
+      "tag": "h3",
+      "text": "Submit Inquiry"
+     },
+     {
+      "cls": "sf-sampling__step-title",
+      "tag": "h3",
+      "text": "Confirm Details"
+     },
+     {
+      "cls": "sf-sampling__step-title",
+      "tag": "h3",
+      "text": "Sampling & Quality Check"
+     },
+     {
+      "cls": "sf-sampling__step-title",
+      "tag": "h3",
+      "text": "Ship & Evaluate"
+     }
+    ],
+    "samplingSections": 1,
+    "steps": 4,
+    "toc": 0
+   },
+   "docScrollWidth": 1240,
+   "domSteps": [
+    {
+     "text": "Tell us your target formula, flavor, and packaging ideas.",
+     "title": "Submit Inquiry"
+    },
+    {
+     "text": "We'll provide a sample spec sheet and a proforma invoice for the sample fee.",
+     "title": "Confirm Details"
+    },
+    {
+     "text": "Our lab produces your sample and runs a full quality check.",
+     "title": "Sampling & Quality Check"
+    },
+    {
+     "text": "We ship the sample to you. You evaluate it and send us your feedback.",
+     "title": "Ship & Evaluate"
+    }
+   ],
+   "h1Count": 1,
+   "href": "https://dev.zxpet.com/zh/formulas/joint-support-soft-chews/?sfcap=e5ZH12401109451240",
+   "lang": "zh-CN",
+   "noteStyle": {
+    "color": "rgb(27, 77, 62)",
+    "fontSize": "14px",
+    "fontWeight": "700",
+    "text": "Typically 3-7 working days."
+   },
+   "num": {
+    "bg": "rgb(27, 77, 62)",
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "16px",
+    "fontWeight": "700",
+    "h": 44,
+    "radius": "50%",
+    "w": 44
+   },
+   "order": [
+    [
+     "media",
+     459
+    ],
+    [
+     "spec",
+     1258
+    ],
+    [
+     "actives",
+     1560
+    ],
+    [
+     "content",
+     1965
+    ],
+    [
+     "faq",
+     2179
+    ],
+    [
+     "sampling",
+     2949
+    ],
+    [
+     "more",
+     3331
+    ]
+   ],
+   "samplingTitle": "How Sampling Works",
+   "schemaName": "How Sampling Works",
+   "schemaSteps": [
+    {
+     "text": "Tell us your target formula, flavor, and packaging ideas.",
+     "title": "Submit Inquiry"
+    },
+    {
+     "text": "We'll provide a sample spec sheet and a proforma invoice for the sample fee.",
+     "title": "Confirm Details"
+    },
+    {
+     "text": "Our lab produces your sample and runs a full quality check.",
+     "title": "Sampling & Quality Check"
+    },
+    {
+     "text": "We ship the sample to you. You evaluate it and send us your feedback.",
+     "title": "Ship & Evaluate"
+    }
+   ],
+   "schemaTotalTime": "P3D",
+   "sheet": "https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/style.css?ver=2.10.57",
+   "stepLayout": {
+    "descColor": "rgb(95, 107, 101)",
+    "descFontSize": "14px",
+    "firstRow": 4,
+    "numMarginTop": "0px",
+    "rows": 1,
+    "titleFontSize": "17px",
+    "titleTag": "h3",
+    "titleWeight": "600",
+    "tops": [
+     3068,
+     3068,
+     3068,
+     3068
+    ]
+   },
+   "viewportW": 1240
+  },
+  "E5_ZH_1101": {
+   "bands": {
+    "actives": {
+     "box": {
+      "h": 380,
+      "left": 0,
+      "top": 1499,
+      "w": 1101
+     },
+     "cls": "sf-fdetail-actives",
+     "effBg": "rgb(255, 255, 255)",
+     "padBottom": "48px",
+     "padLeft": "38px",
+     "padTop": "48px"
+    },
+    "content": {
+     "box": {
+      "h": 189,
+      "left": 0,
+      "top": 1903,
+      "w": 1101
+     },
+     "cls": "sf-fdetail-content",
+     "effBg": "rgb(255, 255, 255)",
+     "padBottom": "48px",
+     "padLeft": "38px",
+     "padTop": "48px"
+    },
+    "faq": {
+     "box": {
+      "h": 746,
+      "left": 0,
+      "top": 2116,
+      "w": 1101
+     },
+     "cls": "sf-fdetail.sf-fdetail-faq.has-card-white-background-color.has-background",
+     "effBg": "rgb(255, 255, 255)",
+     "padBottom": "48px",
+     "padLeft": "38px",
+     "padTop": "48px"
+    },
+    "media": {
+     "box": {
+      "h": 721,
+      "left": 0,
+      "top": 453,
+      "w": 1101
+     },
+     "cls": "sf-fdetail2.has-bg-light-background-color.has-background",
+     "effBg": "rgb(243, 246, 244)",
+     "padBottom": "48px",
+     "padLeft": "38px",
+     "padTop": "48px"
+    },
+    "more": {
+     "box": {
+      "h": 614,
+      "left": 0,
+      "top": 3289,
+      "w": 1101
+     },
+     "cls": "sf-fdetail-more.has-bg-light-background-color.has-background",
+     "effBg": "rgb(243, 246, 244)",
+     "padBottom": "48px",
+     "padLeft": "38px",
+     "padTop": "48px"
+    },
+    "sampling": {
+     "box": {
+      "h": 380,
+      "left": 0,
+      "top": 2886,
+      "w": 1101
+     },
+     "cls": "sf-sampling",
+     "effBg": "rgb(255, 255, 255)",
+     "padBottom": "48px",
+     "padLeft": "38px",
+     "padTop": "48px"
+    },
+    "spec": {
+     "box": {
+      "h": 277,
+      "left": 0,
+      "top": 1198,
+      "w": 1101
+     },
+     "cls": "sf-fdetail.has-card-white-background-color.has-background",
+     "effBg": "rgb(255, 255, 255)",
+     "padBottom": "48px",
+     "padLeft": "38px",
+     "padTop": "48px"
+    }
+   },
+   "bodyScrollWidth": 1101,
+   "contentHeadingTag": "h2",
+   "contentHeadingText": "Packaging & Specifications",
+   "counts": {
+    "contentBlocks": 1,
+    "contentCartons": 0,
+    "contentChips": 0,
+    "contentH2": 1,
+    "contentH3": 0,
+    "contentHeadings": [
+     {
+      "cls": "sf-fdetail-content__subtitle",
+      "tag": "h2",
+      "text": "Packaging & Specifications"
+     }
+    ],
+    "contentLabels": [
+     "Storage"
+    ],
+    "contentSpecs": 1,
+    "faqItems": 9,
+    "faqOpen": 1,
+    "floatBtns": 3,
+    "gridCards": 6,
+    "heroBuild": 1,
+    "heroH2": 0,
+    "note": 1,
+    "nums": 4,
+    "pageDetails": 12,
+    "quoteCta": 3,
+    "samplingH2": 1,
+    "samplingH3": 4,
+    "samplingHeadings": [
+     {
+      "cls": "sf-sampling__title",
+      "tag": "h2",
+      "text": "How Sampling Works"
+     },
+     {
+      "cls": "sf-sampling__step-title",
+      "tag": "h3",
+      "text": "Submit Inquiry"
+     },
+     {
+      "cls": "sf-sampling__step-title",
+      "tag": "h3",
+      "text": "Confirm Details"
+     },
+     {
+      "cls": "sf-sampling__step-title",
+      "tag": "h3",
+      "text": "Sampling & Quality Check"
+     },
+     {
+      "cls": "sf-sampling__step-title",
+      "tag": "h3",
+      "text": "Ship & Evaluate"
+     }
+    ],
+    "samplingSections": 1,
+    "steps": 4,
+    "toc": 0
+   },
+   "docScrollWidth": 1101,
+   "domSteps": [
+    {
+     "text": "Tell us your target formula, flavor, and packaging ideas.",
+     "title": "Submit Inquiry"
+    },
+    {
+     "text": "We'll provide a sample spec sheet and a proforma invoice for the sample fee.",
+     "title": "Confirm Details"
+    },
+    {
+     "text": "Our lab produces your sample and runs a full quality check.",
+     "title": "Sampling & Quality Check"
+    },
+    {
+     "text": "We ship the sample to you. You evaluate it and send us your feedback.",
+     "title": "Ship & Evaluate"
+    }
+   ],
+   "h1Count": 1,
+   "href": "https://dev.zxpet.com/zh/formulas/joint-support-soft-chews/?sfcap=e5ZH11011109491101",
+   "lang": "zh-CN",
+   "noteStyle": {
+    "color": "rgb(27, 77, 62)",
+    "fontSize": "14px",
+    "fontWeight": "700",
+    "text": "Typically 3-7 working days."
+   },
+   "num": {
+    "bg": "rgb(27, 77, 62)",
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "16px",
+    "fontWeight": "700",
+    "h": 44,
+    "radius": "50%",
+    "w": 44
+   },
+   "order": [
+    [
+     "media",
+     453
+    ],
+    [
+     "spec",
+     1198
+    ],
+    [
+     "actives",
+     1499
+    ],
+    [
+     "content",
+     1903
+    ],
+    [
+     "faq",
+     2116
+    ],
+    [
+     "sampling",
+     2886
+    ],
+    [
+     "more",
+     3289
+    ]
+   ],
+   "samplingTitle": "How Sampling Works",
+   "schemaName": "How Sampling Works",
+   "schemaSteps": [
+    {
+     "text": "Tell us your target formula, flavor, and packaging ideas.",
+     "title": "Submit Inquiry"
+    },
+    {
+     "text": "We'll provide a sample spec sheet and a proforma invoice for the sample fee.",
+     "title": "Confirm Details"
+    },
+    {
+     "text": "Our lab produces your sample and runs a full quality check.",
+     "title": "Sampling & Quality Check"
+    },
+    {
+     "text": "We ship the sample to you. You evaluate it and send us your feedback.",
+     "title": "Ship & Evaluate"
+    }
+   ],
+   "schemaTotalTime": "P3D",
+   "sheet": "https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/style.css?ver=2.10.57",
+   "stepLayout": {
+    "descColor": "rgb(95, 107, 101)",
+    "descFontSize": "14px",
+    "firstRow": 4,
+    "numMarginTop": "0px",
+    "rows": 1,
+    "titleFontSize": "17px",
+    "titleTag": "h3",
+    "titleWeight": "600",
+    "tops": [
+     3004,
+     3004,
+     3004,
+     3004
+    ]
+   },
+   "viewportW": 1101
+  },
+  "E5_ZH_1024": {
+   "bands": {
+    "actives": {
+     "box": {
+      "h": 377,
+      "left": 0,
+      "top": 1613,
+      "w": 1024
+     },
+     "cls": "sf-fdetail-actives",
+     "effBg": "rgb(255, 255, 255)",
+     "padBottom": "48px",
+     "padLeft": "38px",
+     "padTop": "48px"
+    },
+    "content": {
+     "box": {
+      "h": 189,
+      "left": 0,
+      "top": 2014,
+      "w": 1024
+     },
+     "cls": "sf-fdetail-content",
+     "effBg": "rgb(255, 255, 255)",
+     "padBottom": "48px",
+     "padLeft": "38px",
+     "padTop": "48px"
+    },
+    "faq": {
+     "box": {
+      "h": 743,
+      "left": 0,
+      "top": 2227,
+      "w": 1024
+     },
+     "cls": "sf-fdetail.sf-fdetail-faq.has-card-white-background-color.has-background",
+     "effBg": "rgb(255, 255, 255)",
+     "padBottom": "48px",
+     "padLeft": "38px",
+     "padTop": "48px"
+    },
+    "media": {
+     "box": {
+      "h": 840,
+      "left": 0,
+      "top": 450,
+      "w": 1024
+     },
+     "cls": "sf-fdetail2.has-bg-light-background-color.has-background",
+     "effBg": "rgb(243, 246, 244)",
+     "padBottom": "48px",
+     "padLeft": "38px",
+     "padTop": "48px"
+    },
+    "more": {
+     "box": {
+      "h": 597,
+      "left": 0,
+      "top": 3395,
+      "w": 1024
+     },
+     "cls": "sf-fdetail-more.has-bg-light-background-color.has-background",
+     "effBg": "rgb(243, 246, 244)",
+     "padBottom": "48px",
+     "padLeft": "38px",
+     "padTop": "48px"
+    },
+    "sampling": {
+     "box": {
+      "h": 377,
+      "left": 0,
+      "top": 2994,
+      "w": 1024
+     },
+     "cls": "sf-sampling",
+     "effBg": "rgb(255, 255, 255)",
+     "padBottom": "48px",
+     "padLeft": "38px",
+     "padTop": "48px"
+    },
+    "spec": {
+     "box": {
+      "h": 274,
+      "left": 0,
+      "top": 1314,
+      "w": 1024
+     },
+     "cls": "sf-fdetail.has-card-white-background-color.has-background",
+     "effBg": "rgb(255, 255, 255)",
+     "padBottom": "48px",
+     "padLeft": "38px",
+     "padTop": "48px"
+    }
+   },
+   "bodyScrollWidth": 1024,
+   "contentHeadingTag": "h2",
+   "contentHeadingText": "Packaging & Specifications",
+   "counts": {
+    "contentBlocks": 1,
+    "contentCartons": 0,
+    "contentChips": 0,
+    "contentH2": 1,
+    "contentH3": 0,
+    "contentHeadings": [
+     {
+      "cls": "sf-fdetail-content__subtitle",
+      "tag": "h2",
+      "text": "Packaging & Specifications"
+     }
+    ],
+    "contentLabels": [
+     "Storage"
+    ],
+    "contentSpecs": 1,
+    "faqItems": 9,
+    "faqOpen": 1,
+    "floatBtns": 3,
+    "gridCards": 6,
+    "heroBuild": 1,
+    "heroH2": 0,
+    "note": 1,
+    "nums": 4,
+    "pageDetails": 12,
+    "quoteCta": 3,
+    "samplingH2": 1,
+    "samplingH3": 4,
+    "samplingHeadings": [
+     {
+      "cls": "sf-sampling__title",
+      "tag": "h2",
+      "text": "How Sampling Works"
+     },
+     {
+      "cls": "sf-sampling__step-title",
+      "tag": "h3",
+      "text": "Submit Inquiry"
+     },
+     {
+      "cls": "sf-sampling__step-title",
+      "tag": "h3",
+      "text": "Confirm Details"
+     },
+     {
+      "cls": "sf-sampling__step-title",
+      "tag": "h3",
+      "text": "Sampling & Quality Check"
+     },
+     {
+      "cls": "sf-sampling__step-title",
+      "tag": "h3",
+      "text": "Ship & Evaluate"
+     }
+    ],
+    "samplingSections": 1,
+    "steps": 4,
+    "toc": 0
+   },
+   "docScrollWidth": 1024,
+   "domSteps": [
+    {
+     "text": "Tell us your target formula, flavor, and packaging ideas.",
+     "title": "Submit Inquiry"
+    },
+    {
+     "text": "We'll provide a sample spec sheet and a proforma invoice for the sample fee.",
+     "title": "Confirm Details"
+    },
+    {
+     "text": "Our lab produces your sample and runs a full quality check.",
+     "title": "Sampling & Quality Check"
+    },
+    {
+     "text": "We ship the sample to you. You evaluate it and send us your feedback.",
+     "title": "Ship & Evaluate"
+    }
+   ],
+   "h1Count": 1,
+   "href": "https://dev.zxpet.com/zh/formulas/joint-support-soft-chews/?sfcap=e5ZH10241109531024",
+   "lang": "zh-CN",
+   "noteStyle": {
+    "color": "rgb(27, 77, 62)",
+    "fontSize": "14px",
+    "fontWeight": "700",
+    "text": "Typically 3-7 working days."
+   },
+   "num": {
+    "bg": "rgb(27, 77, 62)",
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "16px",
+    "fontWeight": "700",
+    "h": 44,
+    "radius": "50%",
+    "w": 44
+   },
+   "order": [
+    [
+     "media",
+     450
+    ],
+    [
+     "spec",
+     1314
+    ],
+    [
+     "actives",
+     1613
+    ],
+    [
+     "content",
+     2014
+    ],
+    [
+     "faq",
+     2227
+    ],
+    [
+     "sampling",
+     2994
+    ],
+    [
+     "more",
+     3395
+    ]
+   ],
+   "samplingTitle": "How Sampling Works",
+   "schemaName": "How Sampling Works",
+   "schemaSteps": [
+    {
+     "text": "Tell us your target formula, flavor, and packaging ideas.",
+     "title": "Submit Inquiry"
+    },
+    {
+     "text": "We'll provide a sample spec sheet and a proforma invoice for the sample fee.",
+     "title": "Confirm Details"
+    },
+    {
+     "text": "Our lab produces your sample and runs a full quality check.",
+     "title": "Sampling & Quality Check"
+    },
+    {
+     "text": "We ship the sample to you. You evaluate it and send us your feedback.",
+     "title": "Ship & Evaluate"
+    }
+   ],
+   "schemaTotalTime": "P3D",
+   "sheet": "https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/style.css?ver=2.10.57",
+   "stepLayout": {
+    "descColor": "rgb(95, 107, 101)",
+    "descFontSize": "14px",
+    "firstRow": 4,
+    "numMarginTop": "0px",
+    "rows": 1,
+    "titleFontSize": "17px",
+    "titleTag": "h3",
+    "titleWeight": "600",
+    "tops": [
+     3109,
+     3109,
+     3109,
+     3109
+    ]
+   },
+   "viewportW": 1024
+  },
+  "E5_ZH_769": {
+   "bands": {
+    "actives": {
+     "box": {
+      "h": 372,
+      "left": 0,
+      "top": 1827,
+      "w": 769
+     },
+     "cls": "sf-fdetail-actives",
+     "effBg": "rgb(255, 255, 255)",
+     "padBottom": "48px",
+     "padLeft": "38px",
+     "padTop": "48px"
+    },
+    "content": {
+     "box": {
+      "h": 189,
+      "left": 0,
+      "top": 2223,
+      "w": 769
+     },
+     "cls": "sf-fdetail-content",
+     "effBg": "rgb(255, 255, 255)",
+     "padBottom": "48px",
+     "padLeft": "38px",
+     "padTop": "48px"
+    },
+    "faq": {
+     "box": {
+      "h": 738,
+      "left": 0,
+      "top": 2436,
+      "w": 769
+     },
+     "cls": "sf-fdetail.sf-fdetail-faq.has-card-white-background-color.has-background",
+     "effBg": "rgb(255, 255, 255)",
+     "padBottom": "48px",
+     "padLeft": "38px",
+     "padTop": "48px"
+    },
+    "media": {
+     "box": {
+      "h": 937,
+      "left": 0,
+      "top": 574,
+      "w": 769
+     },
+     "cls": "sf-fdetail2.has-bg-light-background-color.has-background",
+     "effBg": "rgb(243, 246, 244)",
+     "padBottom": "48px",
+     "padLeft": "38px",
+     "padTop": "48px"
+    },
+    "more": {
+     "box": {
+      "h": 600,
+      "left": 0,
+      "top": 3617,
+      "w": 769
+     },
+     "cls": "sf-fdetail-more.has-bg-light-background-color.has-background",
+     "effBg": "rgb(243, 246, 244)",
+     "padBottom": "48px",
+     "padLeft": "38px",
+     "padTop": "48px"
+    },
+    "sampling": {
+     "box": {
+      "h": 395,
+      "left": 0,
+      "top": 3198,
+      "w": 769
+     },
+     "cls": "sf-sampling",
+     "effBg": "rgb(255, 255, 255)",
+     "padBottom": "48px",
+     "padLeft": "38px",
+     "padTop": "48px"
+    },
+    "spec": {
+     "box": {
+      "h": 269,
+      "left": 0,
+      "top": 1535,
+      "w": 769
+     },
+     "cls": "sf-fdetail.has-card-white-background-color.has-background",
+     "effBg": "rgb(255, 255, 255)",
+     "padBottom": "48px",
+     "padLeft": "38px",
+     "padTop": "48px"
+    }
+   },
+   "bodyScrollWidth": 769,
+   "contentHeadingTag": "h2",
+   "contentHeadingText": "Packaging & Specifications",
+   "counts": {
+    "contentBlocks": 1,
+    "contentCartons": 0,
+    "contentChips": 0,
+    "contentH2": 1,
+    "contentH3": 0,
+    "contentHeadings": [
+     {
+      "cls": "sf-fdetail-content__subtitle",
+      "tag": "h2",
+      "text": "Packaging & Specifications"
+     }
+    ],
+    "contentLabels": [
+     "Storage"
+    ],
+    "contentSpecs": 1,
+    "faqItems": 9,
+    "faqOpen": 1,
+    "floatBtns": 3,
+    "gridCards": 6,
+    "heroBuild": 1,
+    "heroH2": 0,
+    "note": 1,
+    "nums": 4,
+    "pageDetails": 12,
+    "quoteCta": 3,
+    "samplingH2": 1,
+    "samplingH3": 4,
+    "samplingHeadings": [
+     {
+      "cls": "sf-sampling__title",
+      "tag": "h2",
+      "text": "How Sampling Works"
+     },
+     {
+      "cls": "sf-sampling__step-title",
+      "tag": "h3",
+      "text": "Submit Inquiry"
+     },
+     {
+      "cls": "sf-sampling__step-title",
+      "tag": "h3",
+      "text": "Confirm Details"
+     },
+     {
+      "cls": "sf-sampling__step-title",
+      "tag": "h3",
+      "text": "Sampling & Quality Check"
+     },
+     {
+      "cls": "sf-sampling__step-title",
+      "tag": "h3",
+      "text": "Ship & Evaluate"
+     }
+    ],
+    "samplingSections": 1,
+    "steps": 4,
+    "toc": 0
+   },
+   "docScrollWidth": 769,
+   "domSteps": [
+    {
+     "text": "Tell us your target formula, flavor, and packaging ideas.",
+     "title": "Submit Inquiry"
+    },
+    {
+     "text": "We'll provide a sample spec sheet and a proforma invoice for the sample fee.",
+     "title": "Confirm Details"
+    },
+    {
+     "text": "Our lab produces your sample and runs a full quality check.",
+     "title": "Sampling & Quality Check"
+    },
+    {
+     "text": "We ship the sample to you. You evaluate it and send us your feedback.",
+     "title": "Ship & Evaluate"
+    }
+   ],
+   "h1Count": 1,
+   "href": "https://dev.zxpet.com/zh/formulas/joint-support-soft-chews/?sfcap=e5ZH769110957769",
+   "lang": "zh-CN",
+   "noteStyle": {
+    "color": "rgb(27, 77, 62)",
+    "fontSize": "14px",
+    "fontWeight": "700",
+    "text": "Typically 3-7 working days."
+   },
+   "num": {
+    "bg": "rgb(27, 77, 62)",
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "16px",
+    "fontWeight": "700",
+    "h": 44,
+    "radius": "50%",
+    "w": 44
+   },
+   "order": [
+    [
+     "media",
+     574
+    ],
+    [
+     "spec",
+     1535
+    ],
+    [
+     "actives",
+     1827
+    ],
+    [
+     "content",
+     2223
+    ],
+    [
+     "faq",
+     2436
+    ],
+    [
+     "sampling",
+     3198
+    ],
+    [
+     "more",
+     3617
+    ]
+   ],
+   "samplingTitle": "How Sampling Works",
+   "schemaName": "How Sampling Works",
+   "schemaSteps": [
+    {
+     "text": "Tell us your target formula, flavor, and packaging ideas.",
+     "title": "Submit Inquiry"
+    },
+    {
+     "text": "We'll provide a sample spec sheet and a proforma invoice for the sample fee.",
+     "title": "Confirm Details"
+    },
+    {
+     "text": "Our lab produces your sample and runs a full quality check.",
+     "title": "Sampling & Quality Check"
+    },
+    {
+     "text": "We ship the sample to you. You evaluate it and send us your feedback.",
+     "title": "Ship & Evaluate"
+    }
+   ],
+   "schemaTotalTime": "P3D",
+   "sheet": "https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/style.css?ver=2.10.57",
+   "stepLayout": {
+    "descColor": "rgb(95, 107, 101)",
+    "descFontSize": "14px",
+    "firstRow": 4,
+    "numMarginTop": "0px",
+    "rows": 1,
+    "titleFontSize": "17px",
+    "titleTag": "h3",
+    "titleWeight": "600",
+    "tops": [
+     3308,
+     3308,
+     3308,
+     3308
+    ]
+   },
+   "viewportW": 769
+  },
+  "E5_ZH_768": {
+   "bands": {
+    "actives": {
+     "box": {
+      "h": 371,
+      "left": 0,
+      "top": 2114,
+      "w": 768
+     },
+     "cls": "sf-fdetail-actives",
+     "effBg": "rgb(255, 255, 255)",
+     "padBottom": "48px",
+     "padLeft": "20px",
+     "padTop": "48px"
+    },
+    "content": {
+     "box": {
+      "h": 189,
+      "left": 0,
+      "top": 2509,
+      "w": 768
+     },
+     "cls": "sf-fdetail-content",
+     "effBg": "rgb(255, 255, 255)",
+     "padBottom": "48px",
+     "padLeft": "20px",
+     "padTop": "48px"
+    },
+    "faq": {
+     "box": {
+      "h": 679,
+      "left": 0,
+      "top": 2721,
+      "w": 768
+     },
+     "cls": "sf-fdetail.sf-fdetail-faq.has-card-white-background-color.has-background",
+     "effBg": "rgb(255, 255, 255)",
+     "padBottom": "48px",
+     "padLeft": "20px",
+     "padTop": "48px"
+    },
+    "media": {
+     "box": {
+      "h": 1410,
+      "left": 0,
+      "top": 396,
+      "w": 768
+     },
+     "cls": "sf-fdetail2.has-bg-light-background-color.has-background",
+     "effBg": "rgb(243, 246, 244)",
+     "padBottom": "48px",
+     "padLeft": "38px",
+     "padTop": "48px"
+    },
+    "more": {
+     "box": {
+      "h": 2337,
+      "left": 0,
+      "top": 4184,
+      "w": 768
+     },
+     "cls": "sf-fdetail-more.has-bg-light-background-color.has-background",
+     "effBg": "rgb(243, 246, 244)",
+     "padBottom": "48px",
+     "padLeft": "20px",
+     "padTop": "48px"
+    },
+    "sampling": {
+     "box": {
+      "h": 736,
+      "left": 0,
+      "top": 3424,
+      "w": 768
+     },
+     "cls": "sf-sampling",
+     "effBg": "rgb(255, 255, 255)",
+     "padBottom": "48px",
+     "padLeft": "20px",
+     "padTop": "48px"
+    },
+    "spec": {
+     "box": {
+      "h": 261,
+      "left": 0,
+      "top": 1829,
+      "w": 768
+     },
+     "cls": "sf-fdetail.has-card-white-background-color.has-background",
+     "effBg": "rgb(255, 255, 255)",
+     "padBottom": "48px",
+     "padLeft": "20px",
+     "padTop": "48px"
+    }
+   },
+   "bodyScrollWidth": 768,
+   "contentHeadingTag": "h2",
+   "contentHeadingText": "Packaging & Specifications",
+   "counts": {
+    "contentBlocks": 1,
+    "contentCartons": 0,
+    "contentChips": 0,
+    "contentH2": 1,
+    "contentH3": 0,
+    "contentHeadings": [
+     {
+      "cls": "sf-fdetail-content__subtitle",
+      "tag": "h2",
+      "text": "Packaging & Specifications"
+     }
+    ],
+    "contentLabels": [
+     "Storage"
+    ],
+    "contentSpecs": 1,
+    "faqItems": 9,
+    "faqOpen": 1,
+    "floatBtns": 3,
+    "gridCards": 6,
+    "heroBuild": 1,
+    "heroH2": 0,
+    "note": 1,
+    "nums": 4,
+    "pageDetails": 12,
+    "quoteCta": 3,
+    "samplingH2": 1,
+    "samplingH3": 4,
+    "samplingHeadings": [
+     {
+      "cls": "sf-sampling__title",
+      "tag": "h2",
+      "text": "How Sampling Works"
+     },
+     {
+      "cls": "sf-sampling__step-title",
+      "tag": "h3",
+      "text": "Submit Inquiry"
+     },
+     {
+      "cls": "sf-sampling__step-title",
+      "tag": "h3",
+      "text": "Confirm Details"
+     },
+     {
+      "cls": "sf-sampling__step-title",
+      "tag": "h3",
+      "text": "Sampling & Quality Check"
+     },
+     {
+      "cls": "sf-sampling__step-title",
+      "tag": "h3",
+      "text": "Ship & Evaluate"
+     }
+    ],
+    "samplingSections": 1,
+    "steps": 4,
+    "toc": 0
+   },
+   "docScrollWidth": 768,
+   "domSteps": [
+    {
+     "text": "Tell us your target formula, flavor, and packaging ideas.",
+     "title": "Submit Inquiry"
+    },
+    {
+     "text": "We'll provide a sample spec sheet and a proforma invoice for the sample fee.",
+     "title": "Confirm Details"
+    },
+    {
+     "text": "Our lab produces your sample and runs a full quality check.",
+     "title": "Sampling & Quality Check"
+    },
+    {
+     "text": "We ship the sample to you. You evaluate it and send us your feedback.",
+     "title": "Ship & Evaluate"
+    }
+   ],
+   "h1Count": 1,
+   "href": "https://dev.zxpet.com/zh/formulas/joint-support-soft-chews/?sfcap=e5ZH768111001768",
+   "lang": "zh-CN",
+   "noteStyle": {
+    "color": "rgb(27, 77, 62)",
+    "fontSize": "14px",
+    "fontWeight": "700",
+    "text": "Typically 3-7 working days."
+   },
+   "num": {
+    "bg": "rgb(27, 77, 62)",
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "16px",
+    "fontWeight": "700",
+    "h": 44,
+    "radius": "50%",
+    "w": 44
+   },
+   "order": [
+    [
+     "media",
+     396
+    ],
+    [
+     "spec",
+     1829
+    ],
+    [
+     "actives",
+     2114
+    ],
+    [
+     "content",
+     2509
+    ],
+    [
+     "faq",
+     2721
+    ],
+    [
+     "sampling",
+     3424
+    ],
+    [
+     "more",
+     4184
+    ]
+   ],
+   "samplingTitle": "How Sampling Works",
+   "schemaName": "How Sampling Works",
+   "schemaSteps": [
+    {
+     "text": "Tell us your target formula, flavor, and packaging ideas.",
+     "title": "Submit Inquiry"
+    },
+    {
+     "text": "We'll provide a sample spec sheet and a proforma invoice for the sample fee.",
+     "title": "Confirm Details"
+    },
+    {
+     "text": "Our lab produces your sample and runs a full quality check.",
+     "title": "Sampling & Quality Check"
+    },
+    {
+     "text": "We ship the sample to you. You evaluate it and send us your feedback.",
+     "title": "Ship & Evaluate"
+    }
+   ],
+   "schemaTotalTime": "P3D",
+   "sheet": "https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/style.css?ver=2.10.57",
+   "stepLayout": {
+    "descColor": "rgb(95, 107, 101)",
+    "descFontSize": "14px",
+    "firstRow": 1,
+    "numMarginTop": "0px",
+    "rows": 4,
+    "titleFontSize": "17px",
+    "titleTag": "h3",
+    "titleWeight": "600",
+    "tops": [
+     3534,
+     3671,
+     3808,
+     3946
+    ]
+   },
+   "viewportW": 768
+  },
+  "E5_ZH_480": {
+   "bands": {
+    "actives": {
+     "box": {
+      "h": 406,
+      "left": 0,
+      "top": 1991,
+      "w": 480
+     },
+     "cls": "sf-fdetail-actives",
+     "effBg": "rgb(255, 255, 255)",
+     "padBottom": "48px",
+     "padLeft": "20px",
+     "padTop": "48px"
+    },
+    "content": {
+     "box": {
+      "h": 214,
+      "left": 0,
+      "top": 2421,
+      "w": 480
+     },
+     "cls": "sf-fdetail-content",
+     "effBg": "rgb(255, 255, 255)",
+     "padBottom": "48px",
+     "padLeft": "20px",
+     "padTop": "48px"
+    },
+    "faq": {
+     "box": {
+      "h": 701,
+      "left": 0,
+      "top": 2659,
+      "w": 480
+     },
+     "cls": "sf-fdetail.sf-fdetail-faq.has-card-white-background-color.has-background",
+     "effBg": "rgb(255, 255, 255)",
+     "padBottom": "48px",
+     "padLeft": "20px",
+     "padTop": "48px"
+    },
+    "media": {
+     "box": {
+      "h": 1268,
+      "left": 0,
+      "top": 414,
+      "w": 480
+     },
+     "cls": "sf-fdetail2.has-bg-light-background-color.has-background",
+     "effBg": "rgb(243, 246, 244)",
+     "padBottom": "48px",
+     "padLeft": "38px",
+     "padTop": "48px"
+    },
+    "more": {
+     "box": {
+      "h": 1689,
+      "left": 0,
+      "top": 4191,
+      "w": 480
+     },
+     "cls": "sf-fdetail-more.has-bg-light-background-color.has-background",
+     "effBg": "rgb(243, 246, 244)",
+     "padBottom": "48px",
+     "padLeft": "20px",
+     "padTop": "48px"
+    },
+    "sampling": {
+     "box": {
+      "h": 783,
+      "left": 0,
+      "top": 3384,
+      "w": 480
+     },
+     "cls": "sf-sampling",
+     "effBg": "rgb(255, 255, 255)",
+     "padBottom": "48px",
+     "padLeft": "20px",
+     "padTop": "48px"
+    },
+    "spec": {
+     "box": {
+      "h": 261,
+      "left": 0,
+      "top": 1706,
+      "w": 480
+     },
+     "cls": "sf-fdetail.has-card-white-background-color.has-background",
+     "effBg": "rgb(255, 255, 255)",
+     "padBottom": "48px",
+     "padLeft": "20px",
+     "padTop": "48px"
+    }
+   },
+   "bodyScrollWidth": 480,
+   "contentHeadingTag": "h2",
+   "contentHeadingText": "Packaging & Specifications",
+   "counts": {
+    "contentBlocks": 1,
+    "contentCartons": 0,
+    "contentChips": 0,
+    "contentH2": 1,
+    "contentH3": 0,
+    "contentHeadings": [
+     {
+      "cls": "sf-fdetail-content__subtitle",
+      "tag": "h2",
+      "text": "Packaging & Specifications"
+     }
+    ],
+    "contentLabels": [
+     "Storage"
+    ],
+    "contentSpecs": 1,
+    "faqItems": 9,
+    "faqOpen": 1,
+    "floatBtns": 3,
+    "gridCards": 6,
+    "heroBuild": 1,
+    "heroH2": 0,
+    "note": 1,
+    "nums": 4,
+    "pageDetails": 12,
+    "quoteCta": 3,
+    "samplingH2": 1,
+    "samplingH3": 4,
+    "samplingHeadings": [
+     {
+      "cls": "sf-sampling__title",
+      "tag": "h2",
+      "text": "How Sampling Works"
+     },
+     {
+      "cls": "sf-sampling__step-title",
+      "tag": "h3",
+      "text": "Submit Inquiry"
+     },
+     {
+      "cls": "sf-sampling__step-title",
+      "tag": "h3",
+      "text": "Confirm Details"
+     },
+     {
+      "cls": "sf-sampling__step-title",
+      "tag": "h3",
+      "text": "Sampling & Quality Check"
+     },
+     {
+      "cls": "sf-sampling__step-title",
+      "tag": "h3",
+      "text": "Ship & Evaluate"
+     }
+    ],
+    "samplingSections": 1,
+    "steps": 4,
+    "toc": 0
+   },
+   "docScrollWidth": 480,
+   "domSteps": [
+    {
+     "text": "Tell us your target formula, flavor, and packaging ideas.",
+     "title": "Submit Inquiry"
+    },
+    {
+     "text": "We'll provide a sample spec sheet and a proforma invoice for the sample fee.",
+     "title": "Confirm Details"
+    },
+    {
+     "text": "Our lab produces your sample and runs a full quality check.",
+     "title": "Sampling & Quality Check"
+    },
+    {
+     "text": "We ship the sample to you. You evaluate it and send us your feedback.",
+     "title": "Ship & Evaluate"
+    }
+   ],
+   "h1Count": 1,
+   "href": "https://dev.zxpet.com/zh/formulas/joint-support-soft-chews/?sfcap=e5ZH480111006480",
+   "lang": "zh-CN",
+   "noteStyle": {
+    "color": "rgb(27, 77, 62)",
+    "fontSize": "14px",
+    "fontWeight": "700",
+    "text": "Typically 3-7 working days."
+   },
+   "num": {
+    "bg": "rgb(27, 77, 62)",
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "16px",
+    "fontWeight": "700",
+    "h": 44,
+    "radius": "50%",
+    "w": 44
+   },
+   "order": [
+    [
+     "media",
+     414
+    ],
+    [
+     "spec",
+     1706
+    ],
+    [
+     "actives",
+     1991
+    ],
+    [
+     "content",
+     2421
+    ],
+    [
+     "faq",
+     2659
+    ],
+    [
+     "sampling",
+     3384
+    ],
+    [
+     "more",
+     4191
+    ]
+   ],
+   "samplingTitle": "How Sampling Works",
+   "schemaName": "How Sampling Works",
+   "schemaSteps": [
+    {
+     "text": "Tell us your target formula, flavor, and packaging ideas.",
+     "title": "Submit Inquiry"
+    },
+    {
+     "text": "We'll provide a sample spec sheet and a proforma invoice for the sample fee.",
+     "title": "Confirm Details"
+    },
+    {
+     "text": "Our lab produces your sample and runs a full quality check.",
+     "title": "Sampling & Quality Check"
+    },
+    {
+     "text": "We ship the sample to you. You evaluate it and send us your feedback.",
+     "title": "Ship & Evaluate"
+    }
+   ],
+   "schemaTotalTime": "P3D",
+   "sheet": "https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/style.css?ver=2.10.57",
+   "stepLayout": {
+    "descColor": "rgb(95, 107, 101)",
+    "descFontSize": "14px",
+    "firstRow": 1,
+    "numMarginTop": "0px",
+    "rows": 4,
+    "titleFontSize": "17px",
+    "titleTag": "h3",
+    "titleWeight": "600",
+    "tops": [
+     3494,
+     3631,
+     3792,
+     3929
+    ]
+   },
+   "viewportW": 480
+  }
+ }
+}

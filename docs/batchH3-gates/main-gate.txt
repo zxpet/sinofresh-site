@@ -1,0 +1,23 @@
+========================================================================
+  ok   [0] both captures hold 75 pages; the renderer declares 4 steps
+  ok   [1] exactly the declared 42 detail pages differ; 33 identical
+  ok   [1] the token moved on all 75 pages, and folding it leaves exactly the 42 detail pages differing
+  ok   [1] all 42 detail pages carry the content band, the sampling band and the HowTo schema exactly once each
+  ok   [1] none of the 33 other pages carries any of them
+  ok   [2] all 42 pages rebuild byte-for-byte as the baseline plus exactly the three declared runs, and the other 33 are unchanged apart from the token
+  ok   [3] both served bands are byte-identical to the local render of the shipped functions on all 42 pages
+  ok   [3] each declared run appears exactly once per detail page
+  ok   [4] all 347 files match the served pre-flight copy byte-for-byte
+  ok   [4] the four K1-K7 contract files are present
+  ok   [4] the theme change set versus 3b9fc23 is exactly functions.php, style.css and the detail template
+  ok   [5] every baselined JSON-LD block is byte-identical on all 75 pages
+  ok   [5] exactly one HowTo per detail page, none anywhere else
+  ok   [5] the HowTo parses and equals the steps the band renders from
+  ok   [5] exactly one h1 per page on all 75 pages
+  ok   [6] on all 42 pages the order is actives < content < FAQ < sampling < grid
+  ok   [6] the content band renders one h2 per group, no h3, in the declared order (only the packaging group has data today, within it only Storage)
+  ok   [6] params, FAQ accordion, hero CTA and the related grid all survive
+  ok   [7] style.css 2.10.56 -> 2.10.57 on all 75 pages
+  ok   [7] no other asset version token moved on any page
+------------------------------------------------------------------------
+VERDICT: PASS — all eight gates hold

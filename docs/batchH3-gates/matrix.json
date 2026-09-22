@@ -1,0 +1,211 @@
+{
+  "matrix": [
+    {
+      "variant": "content-band-removed",
+      "caught": true,
+      "gates": [
+        "[1]",
+        "[2]",
+        "[3]",
+        "[6]"
+      ],
+      "detail": [
+        "[1] a detail page is missing one of the three runs: ['formulas__joint-support-soft-chews.html has content/sampling/howto = (0, 1, 1)']",
+        "[2] the page is not the declared addition: ['formulas__joint-support-soft-chews.html']",
+        "[3] a served band is not what the renderer produces: ['formulas__joint-support-soft-chews.html: content band  != the renderer']"
+      ]
+    },
+    {
+      "variant": "sampling-band-removed",
+      "caught": true,
+      "gates": [
+        "[1]",
+        "[2]",
+        "[3]",
+        "[6]"
+      ],
+      "detail": [
+        "[1] a detail page is missing one of the three runs: ['formulas__joint-support-soft-chews.html has content/sampling/howto = (1, 0, 1)']",
+        "[2] the page is not the declared addition: ['formulas__joint-support-soft-chews.html']",
+        "[3] a served band is not what the renderer produces: ['formulas__joint-support-soft-chews.html: sampling band  != the renderer']"
+      ]
+    },
+    {
+      "variant": "howto-removed",
+      "caught": true,
+      "gates": [
+        "[1]",
+        "[2]",
+        "[3]",
+        "[5]"
+      ],
+      "detail": [
+        "[1] a detail page is missing one of the three runs: ['formulas__joint-support-soft-chews.html has content/sampling/howto = (1, 1, 0)']",
+        "[2] the page is not the declared addition: ['formulas__joint-support-soft-chews.html']",
+        "[3] a declared run appears more than once: ['formulas__joint-support-soft-chews.html: the HowTo run appears 0 times']"
+      ]
+    },
+    {
+      "variant": "howto-step-dropped",
+      "caught": true,
+      "gates": [
+        "[2]",
+        "[3]",
+        "[5]"
+      ],
+      "detail": [
+        "[2] the page is not the declared addition: ['formulas__joint-support-soft-chews.html']",
+        "[3] a declared run appears more than once: ['formulas__joint-support-soft-chews.html: the HowTo payload is not the one the band renders from']",
+        "[5] the HowTo payload is not the declared schema: ['formulas__joint-support-soft-chews.html does not match the declared steps']"
+      ]
+    },
+    {
+      "variant": "content-band-on-a-dosage-page",
+      "caught": true,
+      "gates": [
+        "[1]",
+        "[2]"
+      ],
+      "detail": [
+        "[1] page set wrong: 43 differ, expected 42; missing=[] extra=['products__soft-chews.html']",
+        "[1] a non-detail page carries a new run: ['products__soft-chews.html carries (1, 0, 0)']",
+        "[2] the page is not the declared addition: ['products__soft-chews.html']"
+      ]
+    },
+    {
+      "variant": "style-token-not-bumped",
+      "caught": true,
+      "gates": [
+        "[2]",
+        "[5]",
+        "[7]"
+      ],
+      "detail": [
+        "[2] the page is not the declared addition: ['zh__formulas__joint-support-soft-chews.html']",
+        "[5] a pre-existing JSON-LD block changed: ['zh__formulas__joint-support-soft-chews.html']",
+        "[7] the style token did not move as declared: ['zh__formulas__joint-support-soft-chews.html candidate style ver 2.10.56']"
+      ]
+    },
+    {
+      "variant": "undeclared-token-moved",
+      "caught": true,
+      "gates": [
+        "[2]",
+        "[7]"
+      ],
+      "detail": [
+        "[2] the page is not the declared addition: ['zh__formulas__joint-support-soft-chews.html']",
+        "[7] an undeclared version token moved: ['zh__formulas__joint-support-soft-chews.html formulas.js 1.1.0 -> 1.1.1']"
+      ]
+    },
+    {
+      "variant": "faqpage-changed",
+      "caught": true,
+      "gates": [
+        "[2]",
+        "[5]"
+      ],
+      "detail": [
+        "[2] the page is not the declared addition: ['formulas__joint-support-soft-chews.html']",
+        "[5] a pre-existing JSON-LD block changed: ['formulas__joint-support-soft-chews.html']"
+      ]
+    },
+    {
+      "variant": "detail-page-unchanged",
+      "caught": true,
+      "gates": [
+        "[1]",
+        "[2]",
+        "[3]",
+        "[5]",
+        "[6]",
+        "[7]"
+      ],
+      "detail": [
+        "[1] page set wrong: 41 differ, expected 42; missing=['formulas__joint-support-soft-chews.html'] extra=[]",
+        "[1] the token did not move on every page: 74 of 75 differ before the fold is applied",
+        "[1] a detail page is missing one of the three runs: ['formulas__joint-support-soft-chews.html has content/sampling/howto = (0, 0, 0)']"
+      ]
+    },
+    {
+      "variant": "storage-line-changed",
+      "caught": true,
+      "gates": [
+        "[2]",
+        "[3]"
+      ],
+      "detail": [
+        "[2] the page is not the declared addition: ['formulas__joint-support-soft-chews.html']",
+        "[3] a served band is not what the renderer produces: ['formulas__joint-support-soft-chews.html: content band <section class=\"sf-fdetail-content\"><div != the renderer']"
+      ]
+    },
+    {
+      "variant": "packaging-heading-demoted",
+      "caught": true,
+      "gates": [
+        "[2]",
+        "[3]",
+        "[6]"
+      ],
+      "detail": [
+        "[2] the page is not the declared addition: ['formulas__joint-support-soft-chews.html']",
+        "[3] a served band is not what the renderer produces: ['formulas__joint-support-soft-chews.html: content band <section class=\"sf-fdetail-content\"><div != the renderer']",
+        "[6] the content band headings are wrong: ['formulas__joint-support-soft-chews.html: an h2 in the band is not a group heading']"
+      ]
+    },
+    {
+      "variant": "band-moved-after-the-grid",
+      "caught": true,
+      "gates": [
+        "[2]",
+        "[6]"
+      ],
+      "detail": [
+        "[2] the page is not the declared addition: ['formulas__joint-support-soft-chews.html']",
+        "[6] the new bands are not where the template puts them: ['formulas__joint-support-soft-chews.html [84234, 122807, 85981, 90619, 91819]']"
+      ]
+    },
+    {
+      "variant": "second-h1-introduced",
+      "caught": true,
+      "gates": [
+        "[2]",
+        "[5]"
+      ],
+      "detail": [
+        "[2] the page is not the declared addition: ['formulas__joint-support-soft-chews.html']",
+        "[5] h1 count is not 1: ['formulas__joint-support-soft-chews.html']"
+      ]
+    },
+    {
+      "variant": "zh-howto-payload-changed",
+      "caught": true,
+      "gates": [
+        "[2]",
+        "[3]",
+        "[5]"
+      ],
+      "detail": [
+        "[2] the page is not the declared addition: ['zh__formulas__joint-support-soft-chews.html']",
+        "[3] a declared run appears more than once: ['zh__formulas__joint-support-soft-chews.html: the HowTo payload is not the one the band renders from']",
+        "[5] the HowTo payload is not the declared schema: ['zh__formulas__joint-support-soft-chews.html does not match the declared steps']"
+      ]
+    },
+    {
+      "variant": "zh-content-band-removed",
+      "caught": true,
+      "gates": [
+        "[1]",
+        "[2]",
+        "[3]",
+        "[6]"
+      ],
+      "detail": [
+        "[1] a detail page is missing one of the three runs: ['zh__formulas__joint-support-soft-chews.html has content/sampling/howto = (0, 1, 1)']",
+        "[2] the page is not the declared addition: ['zh__formulas__joint-support-soft-chews.html']",
+        "[3] a served band is not what the renderer produces: ['zh__formulas__joint-support-soft-chews.html: content band  != the renderer']"
+      ]
+    }
+  ],
+  "missed": []
+}

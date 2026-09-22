@@ -239,7 +239,12 @@
 | Certifications | Site Settings | global | 不渲染 |
 | Lead time | sf_formula_lead_time | string | 不渲染 |
 
-**④ 详细内容区（H3 要做）**
+**④ 详细内容区（H3 已做 ⇒ ⚠️ 只落地 4 块，Shelf Life 不单列）**
+
+> ⛔ **下面这段模块顺序是 H3 的原始计划，已被用户裁决部分作废**（详见 §第九部分【H3】"原文/裁决后"对照表
+> 与 `docs/batch2d-stepH3.md` §1）。**实际落地**：Recommended For / Use Cases / Who It's For /
+> Packaging & Specifications（Container Options / Additional Packaging / Color Options / Storage / Carton Dimensions）。
+> **Ingredients / Guaranteed Analysis / Formula 不再渲染**（⑤ 两带已承担）；**Shelf Life 无独立行**。
 
 模块顺序：
 
@@ -313,7 +318,11 @@
 
 **⑤ FAQ**（批 C 已做，不动）
 
-**⑥ Sampling Process（H3 要做）**
+**⑥ Sampling Process（H3 已做）**
+
+> ✅ 文案与 4 步结构的**唯一真源**＝`sinofresh_sampling_steps()`（`functions.php`）。
+> 它同时喂 ① 可见带 `[sf_formula_sampling]` ② HowTo JSON-LD ③ **H4 弹窗**（H4 必须复用，不得另写一份文案）。
+> 改它 ⇒ 三处同步。下面这段结构描述保留作设计意图参考。
 
 结构：
 
@@ -719,27 +728,21 @@ admin JS/CSS 改动后，E2E 前必须 `agent-browser close --all` 清缓存。
 - **桌面点轨条目 6 → 5**，断言第 2 条为 How We Work
 - 遗留引擎（`html.no-has`）：`.sf-float-stack` / `.trp-language-switcher` 底距回到 `style.css` 基线（H2b2 删 `configurator.css:700/705` 后）
 
-### 【H3】内容区 + FAQ + Sampling
+### 【H3】内容区 + FAQ + Sampling —— ✅ 已执行（`4ca3aea`，2026-09-22）
 
-**范围：**
+> ⚠️ **本节原文的三处范围已被用户裁决改写**（见 `docs/batch2d-stepH3-scan.md`），落地以裁决为准：
 
-1. 详细内容区 6 块
-   - Ingredients / Guaranteed Analysis / Formula / Recommended For / Use Cases / Who It's For
-   - Packaging & Specifications（含 6 子块）
-2. Sampling Process 4 步 + HowTo Schema
-3. 模板插入
-4. meta 空值整块不渲染
+| 原文 | 裁决后 | 理由 |
+|---|---|---|
+| 内容区 6 块，含 **Ingredients / Guaranteed Analysis / Formula** | **只做新增**：Recommended For / Use Cases / Who It's For / Packaging & Specifications（5 子块）。三块**不重渲染** | ⑤ `[sf_formula_detail_actives]` 两带已承担；`functions.php:1893-1900` 记载重复渲染是上一批专门删掉的 |
+| **背景交替 white / bg-light**（逐块） | **内容区整段一色 `card-white`**；交替**只用在相邻带之间** | ④/⑤/⑥ 同色是一整片"this formula's data"面（`style.css:8103-8111`），逐块条纹会从中间切开它 |
+| 6 子块含 Shelf Life 单列 | **Shelf Life 不单列**（H2a 参数表已展示） | 同一事实两个来源 ⇒ 必然漂；`sf_formula_shelf_life` 死键登记 H6 |
+| （补充）Sampling 4 步 + HowTo | 做成**单一渲染函数** `sinofresh_sampling_steps()`，**H4 弹窗复用同一份** | 否则三条消费路径（带 / schema / 弹窗）会各自漂 |
 
-**样式：**
-- 命名空间 `.sf-fdetail-content`
-- 每块间距 48px
-- 背景交替 white / bg-light
-- 表格 border-collapse
-
-**回归：**
-- DIFF 集合：21 详情页 + 21 zh = 42 页
-- JSON-LD：FAQPage 不变，HowTo 新增
-- 点轨：详情页无点轨（实测铁律）
+**仍成立的部分：** 命名空间 `.sf-fdetail-content`；meta 空值整块不渲染；DIFF 集合 21＋21＝42 页；
+JSON-LD FAQPage 不变 + HowTo 新增；详情页无点轨（实测铁律）。
+Sampling 四步是否与 playbook 第十部分【⑥】的文案逐字一致，以 `sinofresh_sampling_steps()` 为唯一真源。
+**Step 1–5 全过门 + E2E 全过 ⇒ 详见 `docs/batch2d-stepH3.md`。**
 
 ### 【H4】弹窗表单 + 悬浮按钮
 
@@ -757,7 +760,8 @@ admin JS/CSS 改动后，E2E 前必须 `agent-browser close --all` 清缓存。
    - 滚动到参数区后出现
    - 点击打开弹窗
 4. 勾选内容自动带入
-5. 4 步打样流程内嵌
+5. 4 步打样流程内嵌 —— ⛔ **必须复用 `sinofresh_sampling_steps()`（H3 已建立，见 `docs/batch2d-stepH3.md` §10）**，
+   **不得另写一份文案**；改它 ⇒ 可见带 / HowTo JSON-LD / 弹窗**三处同步**
 6. 弹窗移动端全屏抽屉
 
 **回归：**
@@ -799,6 +803,17 @@ admin JS/CSS 改动后，E2E 前必须 `agent-browser close --all` 清缓存。
 **回归：**
 - DIFF 集合：仅 ver 令牌
 - 全站功能回归
+
+**⛔ H6 待办累计清单（9 项）—— 收尾时逐项裁决，不得遗漏：**
+
+| # | 待办 | 出处 |
+|---|---|---|
+| 1–4 | H6 原始 4 项：旧 CSS 三类残留 / 已删短码的 PHP 残留 / 无引用 JS / MOQ 三处对账 | 本节上方 |
+| 5 | `sinofresh_formula_*` sessionStorage **写侧无读者** | `docs/batch2d-stepH2b2.md` §8 #4 |
+| 6 | K2 `.sf-formulas-data` 失去唯一读者（60/75 页、72,720 B） | `docs/batch2d-stepH2b2.md` §8 #1 |
+| 7 | `formulas.js:110` 的 `getElementById('configurator')` 死支（有 `if` 保护，不报错） | `docs/batch2d-stepH2b2.md` §8 #2 |
+| 8 | `style.css:1220` 的 `.configurator__summary-value` 死选择器 | `docs/batch2d-stepH2b2.md` §8 #3 |
+| 9 | ⛔ **`sf_formula_shelf_life` 无渲染器的死键**（`inc/formula-admin.php:42/106` 注册；H2a 行读的是 `sf_formula_specs`）—— 与 H2a 的 `Shelf life` 行是**一对**，必须同时裁决 | `docs/batch2d-stepH3.md` §8 #1 |
 
 ---
 
@@ -1015,17 +1030,35 @@ commit message 格式：
 | 5 | **只读探针要一次把"全库同前缀键清单"打出来**，不要只查预期的那几个键：`WHERE meta_key LIKE 'sf_formula%' GROUP BY meta_key` 一次就证明「21 条记录只有 8 个键 × 21 = 168 行」，比逐个 `get_post_meta` 更能排除"换了个拼写"的假阴性 | `tools/b2d_h3_dataprobe.php` |
 | 6 | **Step 0 的探针必须是零写入**：只用 `get_posts` / `get_post_meta` / `get_option` / `wp_json_encode`，不碰 `update_*`、不建 option、不写 transient。停机报告的说服力来自「**未改任何字节**」这句可被验证的话 | §7 停机声明 |
 
+## A.8 H3 执行期实测（2026-09-22，Step 1–5）
 
+| # | 结论 | 影响 |
+|---|---|---|
+| 1 | ⛔ **JSON-LD 的序列化在语言管线上不稳定 ⇒ 任何"字面序列化匹配"的断言都对一半页面瞎**。TranslatePress 会把块**重新序列化**：EN 是紧凑 `"@type":"HowTo"` ＋ `https://schema.org`，zh 是 pretty-printed `"@type": "HowTo"` ＋ `https:\/\/schema.org`。实测 **21 紧凑 / 21 精美**，基线候选两侧一致。首版门的标记常量 `'"@type":"HowTo"'` 因此漏掉**全部 21 个 zh 页** | 一切跨语言的结构化数据断言；判据必须走**解析**（`json.loads` 取 `@type`） |
+| 2 | ⛔ **"折叠令牌"的断言要写成"折叠后恰好剩 N 页有别"，而不是"折叠后等于 diff 条数"**：本批令牌在 **75 页全部移动**，但只有 **42 页**有实质差异。写成 `folded == len(diff)` 会得到 75 vs 42 的**无解断言** | 所有带 ver bump 的批次的 [1] 门 |
+| 3 | ⛔ **掩码比较必须两侧对称干净**：一侧折叠了令牌、另一侧没有 ⇒ 会把令牌判成 75 页全差（假 FAIL） | §3.1 #3；RULES §B/§C 的具象案例 |
+| 4 | ✅ **"渲染器先发、数据后填"的批，必须有离线单测兜底**：11/12 个数据源在 21 条记录上全空 ⇒ 实时抓取**永远只走空分支**，页面门在原理上分不出"渲染器работает"和"返回 `''`"。做法＝从 `functions.php` **按内容寻址的 START/END 标记逐字抽取函数体**（不是行号）再跑单测：**54 passed / 0 failed** | 任何"先发渲染器"的批次；与 H2a 的 `functions.php:1975-1977` 同一口径 |
+| 5 | ⛔ **负对照要"具名"，`rc != 0` 不算**：`functions.php` 整个缺失时首版靠 `FileNotFoundError` 退出，数值上"抓到"了却没有任何判据。改为每条对照必须打出一行 `FAIL <label>` | 所有负对照台（H2b2 附录 A.6 #8 的延伸） |
+| 6 | ⛔ **不可达的守卫是死断言，会一直"通过"**：`sinofresh_formula_content_block()` 里的空值守卫，四个调用方各自先测了自己的字段 ⇒ 任何变异都不可能让它失败。删掉死守卫、把责任落到真正会走到的函数，对照才开始失败 | 写"空值不渲染"类断言前先问"谁能让它失败" |
+| 7 | ⛔ **不要拿函数自己的返回值当断言期望**：Storage 断言原写"页面等于 `sinofresh_formula_storage_line()` 的返回"，那函数返回什么都会通过。钉到**字面量**才有约束力 | 一切 `assert(page == f())` 形状的检查 |
+| 8 | ⛔ **`set viewport '1440x1000'` 会被 `agent-browser 0.27.0` 静默忽略**：单参数字符串被接受、什么都不做，`innerWidth` 八档恒为 1280 ⇒ E5 "八档响应式"其实把**同一个布局量了八次**。正确写法是**两个参数** `set viewport <w> <h>`，并且必须加 `viewportW == 请求值` 的 **FATAL 断言** | 一切响应式/多视口测试；与 A.5 #1（init-script 只挂在启动命令上）同类：**文档与二进制不一致时以二进制为准** |
+| 9 | ⛔ **数 `<details>` 时别忘了页脚手风琴，也别忘了"默认展开第一条"**：详情页共 **12 个** `<details>` ＝ 9 个 FAQ 答案 ＋ 3 个页脚手风琴，且 FAQ 块**默认展开第一条** ⇒ "点第一条"其实是把它**关上**。正确做法＝限定 `.sf-fdetail-faq`、要求 `faqItems==9 && faqOpen==1`、**点一条闭合的**、并断言页脚 3 个手风琴**未动** | E7；任何"点一下打开"的断言 |
+| 10 | ⛔ **`<!-- wp:html -->` 分界不进产物，普通注释进**：模板里用它做插入锚点在源码上"看得见"，在抓取页面上**根本不存在**；而 `<!-- Batch C: the formula FAQ.` 这类普通注释**会到达输出**。三处 run 的锚点因此必须分成"源码锚"与"产物锚"两套 | 一切"在模板里插一段"的补丁器 |
+| 11 | ✅ **同一 URL 的两种请求头＝live 与候选的复核锚点**：H3 收尾实测无头 `2.10.55`＋2 条 configurator＋210 次/132 行，带头 **`2.10.57`**＋0 资产＋`link` 指向 `-preflight/`＋详情页 HowTo=1。⚠️ 只断版本号不够 —— 必须同时断样式表**来自 `sinofresh-theme-preflight`**，否则顺序错了会静默比**旧字节**（A.5 #1 的同类教训） | 每批 Step 4/5 的候选确证；RULES §Q.4 |
+| 12 | ✅ **主题树 695 vs 服务/提交 347 的疑团**：347 是**排除嵌套 `sinofresh-theme/_backup/`（348 个文件）**后的比对集；用 `git ls-tree -z` 数树同得 695。⚠️ `git ls-tree --name-only` 给非 ASCII 路径加引号 ⇒ 别拿它跟 `find` 直接比（A.6 #7） | 一切"文件数/文件集"断言 |
+| 13 | **"先发渲染器"不是缺陷，但必须把裁决反写进 playbook 的范围段**：H3 原范围写的 6 块里 3 块与既有两带重复、背景交替与既有连续面色冲突 ⇒ 若只改代码不回写文档，下一批会照着**作废的范围**再犯一次 | 每次裁决后的文档回写（本批 §第九部分【H3】已加"原文/裁决后"对照表） |
+
+---
 
 | 批次 | 状态 | commit | 说明 |
 |---|---|---|---|
 | H2b | **Step 0 完成 → 5 项不符已裁决（① 改 D / ②③④⑤ 同意）** | — | `docs/batch2d-stepH2b-scan.md` |
 | **H2b1** | **Step 1–5 全过门 + E2E 全过 → 用户确认通过；`git pull` 跳过（playbook 明确不执行上线）** | 产品 `ebe8f50` + 证据 `69d4c21`/`d8ffd53`（均已 push） | `docs/batch2d-stepH2b1.md` |
 | **H2b2** | **Step 1–5 全过门 + E2E 全过（2026-09-22）；Step 6 `git pull` 按规则跳过** | 产品 `3b9fc23`（已 push）；基线 `ebe8f50` | `docs/batch2d-stepH2b2.md` |
-| H3 | **Step 0 完成 → 停机待裁决（C1 重复 / C2 背景交替 / C3 Shelf Life 单一真源）** | — | `docs/batch2d-stepH3-scan.md`（内容区 + FAQ + Sampling） |
-| H4 | 未开工 | — | 前置：邮箱 `info@` → `sales@` |
+| **H3** | **Step 1–5 全过门 + E2E 全过（2026-09-22）；Step 6 `git pull` 按规则跳过** | 产品 `4ca3aea`（已 push）；基线 `109be91` | `docs/batch2d-stepH3.md`（内容区 + Sampling，三项裁决见扫描档） |
+| H4 | 未开工 | — | 前置：邮箱 `info@` → `sales@`；**必须复用 `sinofresh_sampling_steps()`** |
 | H5 | 未开工 | — | — |
-| H6 | 未开工 | — | 待办已增至 **8 项**（H2b2 新造 4 项见 `docs/batch2d-stepH2b2.md` §8） |
+| H6 | 未开工 | — | 待办已增至 **9 项**（H3 新造 1 项见 `docs/batch2d-stepH3.md` §8；H2b2 新造 4 项见其 §8） |
 
 **H2b1 门/E2E 摘要**：静态 S1–S8 全过；75 页基线 + 75 页候选；主门 **PASS 21 条 / 0 FAIL**
 （58 页差 / 17 页同，逐字节重建）；破坏矩阵 **10/10**；三条负对照全 FAIL（as required）；
@@ -1043,12 +1076,28 @@ commit message 格式：
 那是预期状态，不是漏做 pull。
 ③ **新增停靠豁免**：扫描与预期**方向一致**、仅**派生数字/行号**有误 ⇒ 就地更正、**不停机汇报**，自动继续。
 
+**H3 门/E2E 摘要**：纯新增 **554 增 / 2 删**，恰 3 文件（`functions.php` +354−1、`style.css` +184−1、模板 +16）；
+基线重抓 **75/75 掩码 identical**（另加独立两轮交叉复现 **60/60 SAME**）；服务器副本 = 本地 `4ca3aea` 树 **347/347 逐字节**；
+主门 **PASS 21 条 / 0 FAIL**（42 页逐字节重建 = 基线 ＋ 恰好三段 run、33 页仅令牌动、无第二处令牌移动）；
+破坏矩阵 **15/15**（含两条新增的中文侧变异）；负对照 **3/3**（均具名）；
+离线单测 **54 passed / 0 failed** ＋ 负对照 **6/6 具名**；E2E **E1–E7（31 ok / 0 FAIL）**、0 console error；
+JSON-LD 由 0→**42 HowTo**，67 FAQPage **逐字节未动**；实拍 25 图 / 2.9 MB。
+计划外行为变化：**无**。7 源 0/21 是"先发渲染器"预期态。详见 `docs/batch2d-stepH3.md`。
+
+**⛔ 立项规则变更（用户 2026-09-22 明确）**：① **playbook 不执行上线** ⇒ 各批**不开 Step 6 `git pull`**；
+② **H2b2 起的基线＝上一批的预检副本，不是 live** ⇒ 预检副本成为"当前最新候选"的唯一载体，
+**在下一批用完之前禁拆**（H2a 的"pull 完再拆"顺序作废）。因此 dev 站 live 主题会长期停在 pre-H2b1（`2.10.55`＋配置器），
+那是预期状态，不是漏做 pull。
+③ **新增停靠豁免**：扫描与预期**方向一致**、仅**派生数字/行号**有误 ⇒ 就地更正、**不停机汇报**，自动继续。
+
 **服务器状态**：未 pull；authority guard 未删；DB 未动。
 **预检副本仍然挂着且必须保留**：`wp-content/themes/sinofresh-theme-preflight/`
-（现＝**`3b9fc23`** 树，**347/347 逐字节**；H2b1 时期曾是 `ebe8f50` 的 349/349）
-＋ mu-plugin `zz-sf-preflight.php`。**H3 的基线就是它，拆掉等于自毁基线。**
-复核锚点（2026-09-22 H2b2 收尾实测，同 URL 两种请求头）：
+（现＝**`4ca3aea`** 树，**347/347 逐字节**；此前 H2b2 时期是 `3b9fc23`、H2b1 时期是 `ebe8f50` 的 349/349）
+＋ mu-plugin `zz-sf-preflight.php`。**H4 的基线就是它，拆掉等于自毁基线。**
+复核锚点（2026-09-22 H3 收尾实测，同 URL 两种请求头）：
 无头 → `2.10.55` ＋ 2 条 configurator 资产 ＋ `class="configurator` 210 次/132 行（＝H2a 状态，预期）；
-带头 → `2.10.56` ＋ 0 条资产 ＋ `link` 指向 `themes/sinofresh-theme-preflight/`。
+带头 → **`2.10.57`** ＋ 0 条资产 ＋ `link` 指向 `themes/sinofresh-theme-preflight/` ＋ 详情页 **HowTo=1**。
 ⚠️ 引用这两个计数时必须写明是**出现次数**还是 **`grep -c` 行数**（210 vs 132）。
+⚠️ **H3 起，一个页面上的资源确证不能只看版本号**：必须同时断言样式表来自 `sinofresh-theme-preflight`，
+否则顺序错了会静默比较**旧字节**、给出全绿假结论（H2b1 附录 A.5 #1 的同类教训）。
 

@@ -1,0 +1,18 @@
+=== sabotage matrix — every variant must be caught ===
+  content-band-removed               CAUGHT   [1] [2] [3] [6]
+  sampling-band-removed              CAUGHT   [1] [2] [3] [6]
+  howto-removed                      CAUGHT   [1] [2] [3] [5]
+  howto-step-dropped                 CAUGHT   [2] [3] [5]
+  content-band-on-a-dosage-page      CAUGHT   [1] [2]
+  style-token-not-bumped             CAUGHT   [2] [5] [7]
+  undeclared-token-moved             CAUGHT   [2] [7]
+  faqpage-changed                    CAUGHT   [2] [5]
+  detail-page-unchanged              CAUGHT   [1] [2] [3] [5] [6] [7]
+  storage-line-changed               CAUGHT   [2] [3]
+  packaging-heading-demoted          CAUGHT   [2] [3] [6]
+  band-moved-after-the-grid          CAUGHT   [2] [6]
+  second-h1-introduced               CAUGHT   [2] [5]
+  zh-howto-payload-changed           CAUGHT   [2] [3] [5]
+  zh-content-band-removed            CAUGHT   [1] [2] [3] [6]
+------------------------------------------------------------------------
+  15/15 variants caught

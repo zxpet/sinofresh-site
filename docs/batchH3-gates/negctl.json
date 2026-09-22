@@ -1,0 +1,33 @@
+{
+  "controls": [
+    {
+      "control": "served-manifest-missing",
+      "description": "served manifest points at a nonexistent path",
+      "failed": true,
+      "named_verdict": true,
+      "detail": [
+        "[4] no served manifest: the tree cannot be shown to be the copy the server holds (a missing reference is a failure, not a skip)"
+      ]
+    },
+    {
+      "control": "baseline-empty",
+      "description": "baseline directory is empty",
+      "failed": true,
+      "named_verdict": true,
+      "detail": [
+        "[0] baseline holds 0 pages, expected 75"
+      ]
+    },
+    {
+      "control": "candidate-equals-baseline",
+      "description": "candidate is a copy of the baseline",
+      "failed": true,
+      "named_verdict": true,
+      "detail": [
+        "[1] page set wrong: 0 differ, expected 42; missing=['formulas__bladder-support-powder.html', 'formulas__calcium-phosphorus-tablets.html', 'formulas__calming-soft-chews.html', 'formulas__digestive-soft-chews.html'] extra=[]",
+        "[1] the token did not move on every page: 0 of 75 differ before the fold is applied"
+      ]
+    }
+  ],
+  "wrong": []
+}

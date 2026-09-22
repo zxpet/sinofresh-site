@@ -1,0 +1,16 @@
+=== negative controls — every mutation must produce a NAMED failure ===
+  empty-prose-field-still-rendered           CAUGHT (as required)  no heading for an empty field
+                                                means: Recommended For would be rendered on a record with no value
+  spec-guard-removed                         CAUGHT (as required)  Storage is the only sub-block
+                                                means: an empty chips list would leave its label behind
+  storage-line-emptied                       CAUGHT (as required)  Storage label + the exact line are on the page
+                                                means: the band would collapse, and with it the two guards that keep it whole
+  numeral-not-rendered                       CAUGHT (as required)  the numerals are 1,2,3,4 and are real text
+                                                means: the step numerals would disappear
+  single-use-case-sent-to-the-list-branch    CAUGHT (as required)  one line -> paragraph, no bullet
+                                                means: one use case would render as a one-item bullet list
+  content-shortcode-unregistered             CAUGHT (as required)  sf_formula_content is registered
+                                                means: the content band would never render at all
+------------------------------------------------------------------------
+  6/6 controls caught
+NEGCTL VERDICT: PASS
