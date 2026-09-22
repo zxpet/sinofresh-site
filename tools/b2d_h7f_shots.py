@@ -97,14 +97,13 @@ def png_probe(path):
     return w, h, len(set(zlib.decompress(bytes(idat)))), hashlib.sha256(data).hexdigest()
 
 
-def main():
-    ap = argparse.ArgumentParser()
-    ap.add_argument('--dir', default=os.path.join(ROOT, 'docs', 'batchH7f-shots'))
-    args = ap.parse_args()
-
+def verify(expect, must_differ, shots_dir, floor=FLOOR, min_distinct=MIN_DISTINCT):
+    """Check a frame set. Split out so a batch with two frames reuses this
+    rather than growing a second copy of the probe -- H7a's Video path does, and
+    two copies of a checker drift until one of them stops checking."""
     fails, taken, digests = [], [], {}
-    for name, want, note in EXPECT:
-        path = os.path.join(args.dir, name)
+    for name, want, note in expect:
+        path = os.path.join(shots_dir, name)
         if not os.path.exists(path):
             fails.append('%s was never written' % name)
             print('   %-38s  MISSING   %s' % (name, note))
@@ -121,9 +120,9 @@ def main():
         bad = []
         if abs(w - want[0]) > 1 or abs(h - want[1]) > 1:
             bad.append('is %dx%d, expected %dx%d' % (w, h, want[0], want[1]))
-        if distinct < MIN_DISTINCT:
+        if distinct < min_distinct:
             bad.append('only %d distinct byte values — a flat capture' % distinct)
-        if size < FLOOR:
+        if size < floor:
             bad.append('%d bytes — truncated' % size)
         if bad:
             fails.append('%s %s' % (name, '; '.join(bad)))
@@ -134,7 +133,7 @@ def main():
                   % (name, size, w, h, distinct, note))
 
     print()
-    for a, b, note in MUST_DIFFER:
+    for a, b, note in must_differ:
         if a not in digests or b not in digests:
             fails.append('%s vs %s could not be compared (one is missing)' % (a, b))
             print('   %-38s  cannot compare  %s' % ('%s vs %s' % (a, b), note))
@@ -144,6 +143,15 @@ def main():
             fails.append('%s and %s are byte-identical: %s' % (a, b, note))
         print('   %-38s  %s  %s' % ('%s vs %s' % (a[:8], b[:8]),
                                     'IDENTICAL' if same else 'differ  ', note))
+    return fails, taken
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument('--dir', default=os.path.join(ROOT, 'docs', 'batchH7f-shots'))
+    args = ap.parse_args()
+
+    fails, taken = verify(EXPECT, MUST_DIFFER, args.dir)
 
     if fails:
         print()
