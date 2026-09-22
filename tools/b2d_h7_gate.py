@@ -765,6 +765,424 @@ BATCHES['h7c'] = {
 }
 
 
+# ------------------------------------------------------------------ H7d -----
+# The first batch that does two opposite things to the same band, and the first
+# that needs the `symmetric` direction — because neither side can be built from
+# the other.
+#
+#   * it ADDS a region: seven choice groups, whose content is per-record and
+#     which the baseline does not carry in that shape anywhere;
+#   * it REMOVES rows: the same seven parameters leave .sf-fdetail2__params.
+#
+# `insert` would need the added region's bytes. `delete` would need the removed
+# rows' bytes. Both are per-record, so neither is available, and reconstructing
+# either one means teaching the gate to render — the homeopathy H7c already
+# refused. What is left is a single pure function applied to BOTH sides: delete
+# the added band, the added script and the moved rows wherever they are found,
+# then require the remainders to be identical byte for byte.
+#
+# The blind spot is the one H7c declared, and it stays a division of labour
+# rather than a hole: a region deleted from both sides is not compared. The
+# band's CONTENT is owned by the coverage pass (counts on the raw candidate),
+# its per-page SHAPE by `scoped`, its PLACEMENT by `order` — and the fact that
+# the moved values SURVIVED is its own count, because a rename that dropped one
+# flavour and duplicated another would keep every count that only asks how many
+# rows there are.
+
+H7D_MOVED_LABELS = (
+    'Flavor', 'Piece Weight', 'Pack Size', 'Suitable For', 'Life Stage',
+    'Container Type', 'Quantity &amp; Pricing',
+)
+
+# One parameter row: its <dt> and the <dd> that follows. Bounded by the next
+# </dd>, which is safe here because no row nests one — the tier row puts a
+# <table> inside its <dd>, and that table contains no </dd>.
+H7D_MOVED_ROW = re.compile(
+    r'<dt class="sf-fdetail2__term">(?:%s)</dt>'
+    r'<dd class="sf-fdetail2__value">.*?</dd>'
+    % '|'.join(re.escape(x) for x in H7D_MOVED_LABELS), re.S)
+
+# The added band. Bounded by the element that follows it, not by counting
+# </div>s: <dl class="sf-fdetail2__params"> occurs once per page, so a lookahead
+# pins the end without this pattern having to know how deep the band nests. The
+# trailing newline is part of the insertion — the band arrives on a line of its
+# own and the <dl> was already on the next one.
+H7D_BAND = re.compile(
+    r'<div class="sf-fdetail-config" data-sf-config>.*?</div>\n'
+    r'(?=<dl class="sf-fdetail2__params">)', re.S)
+
+# The added <script>. Path-independent on purpose: the same theme renders from
+# sinofresh-theme-preflight on the dev box and from sinofresh-theme in
+# production, and a declaration that spelled either directory name would be a
+# declaration about the harness rather than about the product.
+H7D_SCRIPT = re.compile(
+    r'\n<script id="sinofresh-config-js" src="[^"]*assets/js/config\.js\?ver=[0-9.]+"></script>')
+
+
+def _h7d_transform(text):
+    """Delete this batch's added region, its added script and its removed rows,
+    wherever it finds them. Applied to BOTH sides (mode: symmetric)."""
+    text, band = H7D_BAND.subn('', text)
+    text, script = H7D_SCRIPT.subn('', text)
+    text, rows = H7D_MOVED_ROW.subn('', text)
+    return text, band + script + rows
+
+
+def _h7d_partial(band=True, script=True, rows=True):
+    """The sabotage variants, each leaving ONE of the three declarations out.
+    `rows=False` is the batch that adds the controls without taking the rows out
+    of the list; `band=False` is the one that adds them without declaring them;
+    `script=False` is the one that forgets the enqueue."""
+    def run(text):
+        n = 0
+        if band:
+            text, k = H7D_BAND.subn('', text)
+            n += k
+        if script:
+            text, k = H7D_SCRIPT.subn('', text)
+            n += k
+        if rows:
+            text, k = H7D_MOVED_ROW.subn('', text)
+            n += k
+        return text, n
+    return run
+
+
+# The dialog's carrier field, as a substitution. A FIXED insertion on all 42
+# pages, so it is declared as a token rather than as a region the transform
+# deletes — and the difference matters. As a token, the bytes on either side of
+# it stay inside the comparison, so the main proof still says WHERE the carrier
+# sits (between the formula's ts field and the honeypot). As a deleted region it
+# would only say that a carrier exists somewhere, which is already the coverage
+# pass's claim.
+H7D_CARRIER = ('name="ts" value="0"><div class="sf-inquiry-form__trap"',
+               'name="ts" value="0"><input type="hidden" name="config" value="">'
+               '<div class="sf-inquiry-form__trap"')
+
+
+def _h7d_dead_phone_step(css):
+    """The batch H7b mistake, re-made on purpose for THIS band: lift the phone
+    step out and put it ABOVE the base rule it means to override. A media query
+    adds no specificity, so that is the version which is dead at every width,
+    and the source pass has to say so. Without this control the ordering claim
+    is decoration — a check nobody has watched fail is a comment."""
+    anchor = '.sf-fdetail-config {\n\tmargin: 0 0 16px;'
+    i = css.find('@media (max-width: 768px) {\n\t.sf-fdetail-config__open {')
+    if i < 0 or anchor not in css:
+        return css
+    depth, j = 0, i
+    while j < len(css):
+        if css[j] == '{':
+            depth += 1
+        elif css[j] == '}':
+            depth -= 1
+            if depth == 0:
+                break
+        j += 1
+    block = css[i:j + 1] + '\n'
+    rest = css[:i] + css[j + 1:]
+    return rest.replace(anchor, block + anchor, 1)
+
+
+BATCHES['h7d'] = {
+    'name': 'H7d — seven parameter rows become choices, and leave the list they were in',
+    'mode': 'symmetric',
+    'tokens': [
+        ('?ver=2.10.64', '?ver=2.10.65'),                       # style.css
+        ('inquiry.js?ver=1.1.0', 'inquiry.js?ver=1.2.0'),       # inquiry.js
+        H7D_CARRIER,                                            # the dialog's field
+    ],
+    'transform': _h7d_transform,
+    # Two sides, two numbers. 84 = 42 bands + 42 script tags on the candidate;
+    # 66 = the rows that left the parameter lists on the baseline, which is
+    # 2 + 42 + 20 + 2 and matches the 234 -> 168 term count below. Declaring one
+    # number for both sides would let each side be wrong in a way the other
+    # cancels.
+    'applies': 84,
+    'applies_base': 66,
+    'coverage': [
+        # Absent from the candidate, counted on the raw bytes.
+        ('?ver=2.10.64', 0),
+        ('inquiry.js?ver=1.1.0', 0),
+    ],
+    'insertions': [
+        # Present on the candidate, at a declared total. The first two are
+        # structural and the rest are the payload's CONTENT, which the main
+        # proof cannot see (the band is deleted from both sides): these counts
+        # are not a second opinion, they are the only opinion.
+        ('?ver=2.10.65', 75),
+        ('<div class="sf-fdetail-config" data-sf-config>', 42),
+        ('id="sinofresh-config-js"', 42),
+        ('inquiry.js?ver=1.2.0', 42),
+        ('data-sf-config-summary', 42),
+        ('data-sf-config-note', 42),
+        ('data-sf-config-group="', 68),
+        ('class="sf-fdetail-config__opt"', 132),
+        ('class="sf-fdetail-config__input"', 132),
+        # The dialog carries the choice in one hidden field. It is declared as a
+        # token, which is what keeps this count honest as a *content* claim
+        # rather than the only claim there is.
+        ('<input type="hidden" name="config" value="">', 42),
+    ],
+    'counts': [
+        # The seven labels leave the parameter list, measured per label so a
+        # renderer that dropped the wrong row cannot hide behind the total.
+        ('Flavor leaves the parameter list', 'sf-fdetail2__term">Flavor<', 2, 0),
+        ('Piece Weight leaves it', 'sf-fdetail2__term">Piece Weight<', 42, 0),
+        ('Pack Size leaves it', 'sf-fdetail2__term">Pack Size<', 20, 0),
+        ('Quantity & Pricing leaves it', 'sf-fdetail2__term">Quantity &amp; Pricing<', 2, 0),
+        # The four rows that are NOT choices stay, unchanged.
+        ('Shelf life stays', 'sf-fdetail2__term">Shelf life<', 42, 42),
+        ('Packaging stays', 'sf-fdetail2__term">Packaging<', 42, 42),
+        ('Certifications stays', 'sf-fdetail2__term">Certifications<', 42, 42),
+        ('Lead time stays', 'sf-fdetail2__term">Lead time<', 42, 42),
+        ('the list loses exactly the 66 rows the seven labels accounted for',
+         'sf-fdetail2__term', 234, 168),
+        # The same seven arrive as groups, with the same labels: the band is the
+        # rows' new address, not a second, differently-worded set of names.
+        ('the band names Flavor', 'sf-fdetail-config__label">Flavor<', 0, 2),
+        ('...Piece Weight', 'sf-fdetail-config__label">Piece Weight<', 0, 42),
+        ('...Pack Size', 'sf-fdetail-config__label">Pack Size<', 0, 20),
+        ('...Quantity & Pricing', 'sf-fdetail-config__label">Quantity &amp; Pricing<', 0, 2),
+        # The values MOVED rather than being replaced. A rename that dropped one
+        # flavour and duplicated another keeps every count that only asks how
+        # many rows there are; these four do not.
+        ('the flavor values survive the move', '>Chicken</span>', 2, 2),
+        ('...and Beef', '>Beef</span>', 2, 2),
+        ('...and Lamb', '>Lamb</span>', 2, 2),
+        ('...and Salmon', '>Salmon</span>', 2, 2),
+        # What left, and what it left with.
+        ('the old chip vocabulary is what left the list', 'sf-fdetail2__chip', 14, 0),
+        ('the tier table left with its row', 'sf-fdetail2__tiers', 2, 0),
+        # The empty library has no images yet, so the picker degrades to a
+        # dashed slot. 14 = 7 containers x the 2 pages of the one record that
+        # has a container. Had it rendered <img src=""> these would be broken
+        # icons instead, and the count would be 0.
+        ('the empty library ships dashed slots, not broken images',
+         'sf-fdetail-config__img--empty', 0, 14),
+        # The hint a reader sees. `>Per per <` is the doubled word the first cut
+        # printed on all 20 pack pages, and a count of "how many hints exist"
+        # cannot see a doubled word — which is why the assertion names it. The
+        # other two are the same fact read positively: the tail is shown as a
+        # sentence, 14 pages of bottles and 6 of bags.
+        ('no hint reads "Per per"', 'sf-fdetail-config__hint">Per per ', 0, 0),
+        ('the pack hint reads as a sentence', 'sf-fdetail-config__hint">Per bottle<', 0, 14),
+        ('...and the bag one', 'sf-fdetail-config__hint">Per bag<', 0, 6),
+        # Every option is rendered and none of them is ticked. The bare word
+        # "checked" occurs twice on both sides in a pre-existing form, which is
+        # why the claim is the attribute and not the word.
+        ('no option is pre-checked', 'checked="checked"', 0, 0),
+        # Everything the batch did not touch.
+        ('the H7c spec sheet is untouched', 'sf-fdetail-specs__group"', 84, 84),
+        ('the actives band is untouched', 'sf-fdetail-actives__inner', 42, 42),
+        ('the content band is untouched', 'sf-fdetail-content__inner', 42, 42),
+        ('the inquiry dialog is untouched', 'class="sf-inquiry-modal"', 42, 42),
+        ('the column title is untouched', 'sf-fdetail2__title', 42, 42),
+    ],
+    'unmoved': [
+        ('H7c spec sheet', r'sf-fdetail-specs__inner', 42),
+        ('actives band', r'sf-fdetail-actives__inner', 42),
+        ('content band', r'sf-fdetail-content__inner', 42),
+        ('column title', r'sf-fdetail2__title', 42),
+        ('H7b hero openers', r'data-sf-inquiry-open', 42),
+        ('inquiry dialog', r'class="sf-inquiry-modal"', 42),
+        ('certification badges', r'sf-cert-badge', None),
+    ],
+    'per_page': [
+        ('h1', r'<h1[ >]', 1),
+    ],
+    # Once per detail page, nowhere else. A site total of 42 would also be
+    # produced by one page carrying 42 of them, so the claim is made per page.
+    # The "nowhere else" half is not a separate entry: `scoped` requires ZERO on
+    # every page outside the declared subset, which is what makes one entry here
+    # worth more than a site total. (The first cut of this batch added a third
+    # entry with the predicate inverted, expecting zero on the detail pages too,
+    # and the gate failed on all 42 — correctly.)
+    'scoped': [
+        ('the configurator is on each detail page, once',
+         '<div class="sf-fdetail-config" data-sf-config>', _is_formula_detail, 1),
+        ('so is its script', 'id="sinofresh-config-js"', _is_formula_detail, 1),
+        ('and the dialog carries one selection field',
+         '<input type="hidden" name="config" value="">', _is_formula_detail, 1),
+    ],
+    # Where the band SITS. The main proof cannot see this — a region deleted from
+    # both sides is equally deleted wherever it was.
+    'order': [
+        ('the choices sit below the column title', 'sf-fdetail2__title',
+         '<div class="sf-fdetail-config" data-sf-config>', _is_formula_detail),
+        ('and above the parameter list', '<div class="sf-fdetail-config" data-sf-config>',
+         '<dl class="sf-fdetail2__params">', _is_formula_detail),
+        ('which still precedes the H7c spec sheet', '<dl class="sf-fdetail2__params">',
+         'class="sf-fdetail-specs"', _is_formula_detail),
+        ('the carrier sits in the dialog, after the formula id',
+         'name="formula" value=', '<input type="hidden" name="config" value="">',
+         _is_formula_detail),
+    ],
+    'h2_delta': None,
+    'sources': {
+        'js': 'assets/js/config.js',
+        'inquiry': 'assets/js/inquiry.js',
+        'tpl': 'templates/single-sf_formula.html',
+    },
+    # The renderer whose body the `source_body` claims are about.
+    'body_of': 'sinofresh_formula_config',
+    'source_body': [
+        ('nothing is pre-checked in the renderer', 'checked', False),
+        ('the summary ships empty and hidden', 'data-sf-config-summary hidden', True),
+        ('an empty container library degrades to a dashed slot',
+         'sf-fdetail-config__img--empty', True),
+        ('the band is emitted whole, zero bytes when there is nothing',
+         "return '<div class=\"sf-fdetail-config\" data-sf-config>'", True),
+    ],
+    # NC3/NC4 read these.
+    'reinject': ('an old version token put back fails coverage',
+                 'formulas__calming-soft-chews.html', '</head>',
+                 '<link rel="stylesheet" href="style.css?ver=2.10.64">'),
+    'delete': ('one configurator deleted fails coverage',
+               'formulas__calming-soft-chews.html',
+               '<div class="sf-fdetail-config" data-sf-config>'),
+    'matrix': [
+        ('the moved rows are never taken out of the parameter list',
+         {'transform': _h7d_partial(rows=False)}, None),
+        ('the band is added but not declared',
+         {'transform': _h7d_partial(band=False)}, None),
+        ('the added script is not declared',
+         {'transform': _h7d_partial(script=False)}, None),
+        ('the old style token is not folded',
+         {'tokens': [('inquiry.js?ver=1.1.0', 'inquiry.js?ver=1.2.0'), H7D_CARRIER]}, None),
+        # Deleting a band a page never had is a no-op on the bytes — the
+        # transform would have removed it anyway — so this mutant leaves the
+        # diff EMPTY and is caught by the applied count alone, which is why the
+        # matrix reports both numbers.
+        ('the band is missing from one page',
+         {}, ('formulas__calming-soft-chews.html',
+              lambda s: H7D_BAND.sub('', s, count=1))),
+        ('a stray character on one page',
+         {}, ('formulas__calming-soft-chews.html',
+              lambda s: s.replace('</body>', '<!-- stray --></body>', 1))),
+    ],
+    'nc_source': [
+        ('NC17 the source pass fails when the style token is not bumped',
+         'functions.php', "'2.10.65'", "'2.10.64'"),
+        ('NC18 the source pass fails when the two scripts lose their page guard',
+         'functions.php', "is_singular('sf_formula')) {\n\t\twp_enqueue_script('sinofresh-inquiry'",
+         "true) {\n\t\twp_enqueue_script('sinofresh-inquiry'"),
+        ('NC19 the source pass fails when the endpoint stops filtering posted values',
+         'functions.php', '!in_array($value, $allowed, true)', 'false'),
+        ('NC22 the source pass fails when the container picker stops degrading',
+         'functions.php', 'sf-fdetail-config__img--empty', 'sf-fdetail-config__img-x'),
+        ('NC23 the source pass fails when the phone step moves above its base rule',
+         'style.css', _h7d_dead_phone_step, None),
+    ],
+    'nc_page': [
+        ('NC20 the scoped invariant fails on a band in the wrong page',
+         'about.html',
+         lambda s: s.replace('</body>',
+                             '<div class="sf-fdetail-config" data-sf-config></div></body>', 1)),
+        ('NC21 the scoped invariant fails when a detail page loses its band',
+         'formulas__calming-soft-chews.html',
+         lambda s: s.replace('<div class="sf-fdetail-config" data-sf-config>',
+                             '<div class="sf-detail-config-gone">', 1)),
+    ],
+    # Renaming a label INSIDE the band: the main proof deletes the band whole,
+    # so it stays green — which is the point — and the per-label count is what
+    # notices. The first cut of this control renamed the group's data attribute,
+    # and coverage did NOT go red: the declared needle was the prefix
+    # `data-sf-config-group="`, which a rename of what FOLLOWS the quote leaves
+    # intact. A control that names a string the declaration does not count
+    # proves nothing about the declaration.
+    'nc_blind': ('formulas__calming-soft-chews.html',
+                 'sf-fdetail-config__label">Piece Weight<',
+                 'sf-fdetail-config__label">Piece Waight<'),
+    'source': [
+        # --- the template: the call site, and where it sits -------------------
+        ('the template calls the configurator', 'tpl_live',
+         r'\[sf_formula_config\]', True),
+        ('...before the parameter list', 'tpl_live',
+         r'\[sf_formula_config\][\s\S]*?\[sf_formula_params\]', True),
+        ('...and after the column title', 'tpl_live',
+         r'\{\{FORMULA_INTRO\}\}[\s\S]*?\[sf_formula_config\]', True),
+        # --- the renderer: the claims a page cannot show ----------------------
+        ('the renderer is registered', 'php_live',
+         r"add_shortcode\('sf_formula_config', 'sinofresh_formula_config'\)", True),
+        ('it guards the post type', 'php_live',
+         r"function sinofresh_formula_config\(\)[\s\S]{0,160}is_singular\('sf_formula'\)", True),
+        ('one provider feeds the band and the endpoint', 'php_live',
+         r'function sinofresh_formula_config_groups\(\$post_id\)', True),
+        ('the endpoint drops values the record does not offer', 'php_live',
+         r'!in_array\(\$value, \$allowed, true\)', True),
+        ('the pack tail travels with the choice', 'php_live',
+         r"\$rows\[\$group\['label'\]\] \.\= ' ' \. \$group\['unit_phrase'\]", True),
+        # The display string and the machine string are two fields because one
+        # cannot be both. This is the assertion that would have caught the first
+        # cut, which printed "Per per bottle" beside "60 / 90 / 120" on every
+        # pack page: the splitter's tail already BEGINS with the preposition.
+        ('the hint is not the preposition prefixed onto the tail', 'php_live',
+         r"'Per ' \. \$pack_tail", False),
+        ('the renderer shows the tail as a sentence', 'php_live',
+         r"\$pack_tail !== '' \? ucfirst\(\$pack_tail\)", True),
+        ('the pack splitter still refuses a single size', 'php_live',
+         r"if \(count\(\$nums\) < 2\) \{\n\t\treturn array\(array\(\$pack\), ''\);", True),
+        ('the choices are not pre-selected', 'php_live', r'\$checked', False),
+        # --- the two enqueues -------------------------------------------------
+        ('the configurator is enqueued only on a formula page', 'php_live',
+         r"is_singular\('sf_formula'\)\) \{[\s\S]{0,420}sinofresh-config", True),
+        ('config.js is versioned 1.0.0', 'php',
+         r"sinofresh-config'[^;]*'1\.0\.0'", True),
+        ('inquiry.js is bumped to 1.2.0', 'php',
+         r"sinofresh-inquiry'[^;]*'1\.2\.0'", True),
+        ('no 1.1.0 inquiry enqueue survives', 'php_live',
+         r"sinofresh-inquiry'[^;]*'1\.1\.0'", False),
+        ('the style token is bumped in the enqueue', 'php',
+         r"wp_enqueue_style\('sinofresh-style', get_stylesheet_uri\(\), array\(\), '2\.10\.65'\)", True),
+        ('no 2.10.64 enqueue survives', 'php_live', r"'2\.10\.64'", False),
+        # --- the script -------------------------------------------------------
+        ('the carrier is keyed the way the endpoint reads it', 'js_live',
+         r"form\.querySelector\('input\[name=\"config\"\]'\)", True),
+        ('the choice is written as one JSON object per group', 'js_live',
+         r'payload\[group\.key\] = values\.length > 1 \? values : values\[0\]', True),
+        ('an empty choice empties the carrier rather than posting a stale one', 'js_live',
+         r"carrier\.value = sel\.length \? carrierValue\(sel\) : ''", True),
+        ('the summary is emitted empty and revealed by the script', 'js_live',
+         r"summary\.hidden = text === ''", True),
+        ('the dialog panel falls back to the server rendering', 'js_live',
+         r'serverRows', True),
+        ('the drawer button is created by the script, not by the markup', 'js_live',
+         r"openBtn\.className = 'sf-fdetail-config__open'", True),
+        ('the drawer reuses inquiry.js\'s Escape rather than fighting it', 'js_live',
+         r'if \(modal && !modal\.hidden\) \{', True),
+        ('the script keys off the data attribute, not a class', 'js_live',
+         r"document\.querySelector\('\[data-sf-config\]'\)", True),
+        # --- the stylesheet: the geometry a page links rather than contains ---
+        ('style.css declares 2.10.65', 'css', r'Version: 2\.10\.65', True),
+        ('no 2.10.64 header survives', 'css', r'Version: 2\.10\.64', False),
+        ('the pills are pills', 'css_live',
+         r'\.sf-fdetail-config__opt \{[^}]*border-radius: 999px', True),
+        ('the input is 1px and transparent, not display:none', 'css_live',
+         r'\.sf-fdetail-config__input \{[^}]*width: 1px', True),
+        ('the checked pill is drawn from the input state', 'css_live',
+         r'\.sf-fdetail-config__input:checked \+ \.sf-fdetail-config__box', True),
+        ('the phone drawer hides the inline list', 'css_live',
+         r'\.sf-fdetail-config--js \.sf-fdetail-config__list \{ display: none; \}', True),
+        ('the drawer is only taken out of the flow inside the phone step', 'css_live',
+         r'@media \(max-width: 768px\) \{[\s\S]{0,900}\.sf-fdetail-config--open \.sf-fdetail-config__list', True),
+        # The ordering claim as ONE chain, each link anchored twice — the media
+        # query AND a marker only this band carries — so it cannot be satisfied
+        # by some other component's 768 block later in the file. H7b shipped the
+        # reversed version of this and it was dead at every width.
+        #
+        # The 5200 between the base rule and the phone step is a measurement,
+        # not a guess: the band's own rules occupy 4344 characters of the
+        # comment-stripped file. A budget this size still refuses a chain that
+        # skipped to a 768 block belonging to something else, and NC23 is the
+        # control that proves the claim can fail at all.
+        ('base rules, then the phone step, in that order', 'css_live',
+         r'\.sf-fdetail-config \{[^}]*margin:[\s\S]{0,5200}'
+         r'@media \(max-width: 768px\) \{[\s\S]{0,400}\.sf-fdetail-config__open \{', True),
+    ],
+}
+
+
 # ------------------------------------------------------------------- machinery
 
 def fold(text, pairs):
@@ -775,33 +1193,61 @@ def fold(text, pairs):
 
 def main_proof(decl, base, cand, verbose=True):
     """mask(transform(baseline)) == mask(candidate) — or, when the declaration
-    says `mode: 'delete'`, mask(transform(candidate)) == mask(fold(baseline)).
+    says `mode: 'delete'`, mask(transform(candidate)) == mask(fold(baseline)),
+    or, when it says `mode: 'symmetric'`, mask(transform(baseline)) ==
+    mask(transform(candidate)) with the same tokens folded on the first.
 
-    The two directions exist because there are two kinds of batch. H7a and H7b
-    rewrote a string the baseline already carried, so the expected page could be
-    BUILT from the baseline and the transform ran on it. H7c's payload is new
-    markup whose content is per-record, so there is nothing fixed to splice in:
-    the only honest proof is to REMOVE the declared region from the candidate
-    and require the remainder to equal the baseline. Reconstructing that table
-    from the baseline's own copy would have meant teaching the gate to render,
-    and a gate that renders is a gate that can agree with a broken renderer.
+    The directions exist because there are three kinds of batch, and the
+    difference is which side can be BUILT from the other.
+
+      * `insert` (H7a, H7b): the batch rewrites a string the baseline already
+        carried, so the expected page can be built from the baseline.
+      * `delete` (H7c): the batch adds markup whose content is per-record, so
+        there is nothing fixed to splice in; the only honest proof is to REMOVE
+        the declared region from the candidate and require the remainder to
+        equal the baseline. Reconstructing that markup from the baseline's own
+        copy would have meant teaching the gate to render, and a gate that
+        renders is a gate that can agree with a broken renderer.
+      * `symmetric` (H7d): the batch REMOVES one declared region and ADDS
+        another, and both deltas are per-record, so neither side can be built
+        from the other. What is left is to apply ONE pure function to both sides
+        and require the remainders to be identical: whatever the transform
+        declares is deleted from the baseline and from the candidate alike.
+        The cost is the same one `delete` pays and it is stated in NC13 again —
+        a region removed from both sides is not compared, so its content is
+        owned by the coverage pass and its shape by `scoped`.
 
     Read the direction off the declaration, never off the batch's name: the
     assertion is the same either way — everything outside the declared payload
     is byte-identical, and the payload is exactly as declared.
+
+    On the `insert` branch the proof must compare against `b`. It did not for
+    one batch: a generalisation left `mask(act)` in place, which on this branch
+    is the transformed BASELINE, so the check silently compared the baseline
+    with itself and the candidate was never read. It failed closed (red on every
+    page, not green), which is why the H7c batch it shipped with still passed —
+    H7c takes the `delete` branch — but H7a/H7b would have been unable to prove
+    anything. NC16 is the control: the insert direction must refuse a candidate
+    that is the baseline, unmodified.
     """
     names = sorted(set(pages(base)) & set(pages(cand)))
     mode = decl.get('mode', 'insert')
-    rows, applied, ok = [], 0, True
+    rows, applied, applied_b, ok = [], 0, 0, True
     for n in names:
         a = read(os.path.join(base, n + '.html'))
         b = read(os.path.join(cand, n + '.html'))
         if mode == 'delete':
             exp = fold(a, decl['tokens'])
             act, cnt = decl['transform'](b)
+        elif mode == 'symmetric':
+            act, cnt = decl['transform'](b)
+            exp, cnt_b = decl['transform'](a)
+            exp = fold(exp, decl['tokens'])
+            applied_b += cnt_b
         else:
-            act, cnt = decl['transform'](a)
-            exp = fold(act, decl['tokens'])
+            exp, cnt = decl['transform'](a)
+            exp = fold(exp, decl['tokens'])
+            act = b
         applied += cnt
         am, _ = mask(exp)
         bm, _ = mask(act)
@@ -813,20 +1259,32 @@ def main_proof(decl, base, cand, verbose=True):
                      'expected_len': len(am), 'candidate_len': len(bm)})
     if applied != decl['applies']:
         ok = False
+    # The baseline side's count, when the declaration states one. For
+    # `symmetric` this is not a formality: it is the number that says the
+    # function which removes the ADDED region found nothing to remove on the
+    # baseline, and the function which removes the REMOVED rows found them all
+    # there. One number for two sides would let each side's declaration be wrong
+    # in a way the other cancels.
+    if decl.get('applies_base') is not None and applied_b != decl['applies_base']:
+        ok = False
     if verbose:
         for r in rows[:8]:
             print('  %-42s expected %d B / candidate %d B' % (r['page'], r['expected_len'], r['candidate_len']))
             print('      expected : %r' % r['expected'])
             print('      candidate: %r' % r['candidate'])
+        print('  direction               : %s' % mode)
         print('  pages compared          : %d' % len(names))
         print('  differing pages         : %d' % len(rows))
         print('  declared edits applied   : %d (declared %d)' % (applied, decl['applies']))
-        print('  %s  main proof: mask(transform(%s)) == mask(%s)'
-              % ('PASS' if ok else 'FAIL',
-                 'candidate' if mode == 'delete' else 'baseline',
-                 'fold(baseline)' if mode == 'delete' else 'candidate'))
+        if decl.get('applies_base') is not None:
+            print('  ...and on the baseline   : %d (declared %d)' % (applied_b, decl['applies_base']))
+        shape = {'delete': 'mask(transform(candidate)) == mask(fold(baseline))',
+                 'symmetric': 'mask(transform(baseline)) == mask(transform(candidate))'}.get(
+                     mode, 'mask(transform(baseline)) == mask(candidate)')
+        print('  %s  main proof: %s' % ('PASS' if ok else 'FAIL', shape))
     return {'ok': ok, 'pages': len(names), 'differing': len(rows), 'applied': applied,
-            'declared': decl['applies'], 'mode': mode, 'rows': rows[:8]}
+            'applied_base': applied_b, 'declared': decl['applies'], 'mode': mode,
+            'rows': rows[:8]}
 
 
 def coverage(decl, base, cand, verbose=True):
@@ -1355,6 +1813,46 @@ def negctl(decl, base, cand, theme, verbose=True):
                (not r['ok']) and r['only_a'] == [missing],
                'short by %s' % missing)
 
+        # NC16 — THE INSERT DIRECTION ITSELF, because it was silently inverted.
+        # During H7c the generalisation that added `mode` left `mask(act)` on the
+        # branch where `act` is the transformed BASELINE, so the proof compared
+        # the baseline with itself and never read the candidate. H7c takes the
+        # `delete` branch and stayed green, which is exactly why this control
+        # exists: a direction no batch of the moment exercises is a direction
+        # nobody is watching.
+        #
+        # Built from scratch rather than borrowed from a capture directory: a
+        # control that depends on scratch state nobody is obliged to keep is a
+        # control that turns itself into a silent pass the week the directory is
+        # cleaned. The pair is one synthetic page carrying H7b's own shapes.
+        #
+        # TWO halves, because "it refuses" on its own is satisfied by a direction
+        # that is broken in the red direction — which is what the real bug was.
+        # So it must also ACCEPT the genuine edit.
+        old_page = (
+            '<html><head><link rel="stylesheet" href="style.css?ver=2.10.62">'
+            '</head><body>'
+            '<button type="button" class="sf-formula__cta sf-formula__cta--solid"'
+            ' data-formula="f" data-form="d">Reference this formula →</button>'
+            '<a class="sf-formula-hero__build sf-quote-cta" href="/contact/#quote">'
+            'Build Custom Formula</a>'
+            '</body></html>')
+        d_a = os.path.join(work, 'ins_a')
+        d_b = os.path.join(work, 'ins_b')
+        for d, text in ((d_a, old_page), (d_b, old_page)):
+            os.makedirs(d, exist_ok=True)
+            _write(os.path.join(d, 'synth.html'), text)
+        # the genuine candidate: the declared edit actually applied
+        d_c = os.path.join(work, 'ins_c')
+        os.makedirs(d_c, exist_ok=True)
+        _write(os.path.join(d_c, 'synth.html'), fold(_h7b_transform(old_page)[0],
+                                                     [('?ver=2.10.62', '?ver=2.10.63')]))
+        synth = dict(BATCHES['h7b'], applies=1, applies_base=None)
+        refused = not main_proof(synth, d_a, d_b, verbose=False)['ok']
+        accepted = main_proof(synth, d_a, d_c, verbose=False)['ok']
+        report('NC16 the insert direction refuses an unapplied candidate and takes a real one',
+               refused and accepted, 'refused=%s accepted=%s' % (refused, accepted))
+
     finally:
         shutil.rmtree(work, ignore_errors=True)
 
@@ -1425,12 +1923,17 @@ def source_checks(decl, theme, verbose=True):
                   % (label, target, 'x%d' % n, 'ok' if good else 'FAIL'))
 
     if decl.get('source_body'):
-        m = re.search(r'\nfunction sinofresh_formula_gallery\(.*?\n\}\n', live['php'], re.S)
+        # Which renderer the claims are about comes from the declaration. It was
+        # hard-coded to the gallery, which made the mechanism unusable by any
+        # batch that adds a different renderer — and a check that can only be
+        # written about one function is a check that gets skipped.
+        fn = decl.get('body_of', 'sinofresh_formula_gallery')
+        m = re.search(r'\nfunction %s\(.*?\n\}\n' % re.escape(fn), live['php'], re.S)
         body = m.group(0) if m else ''
         if not body:
             ok = False
             if verbose:
-                print('  %-52s FAIL  the renderer could not be located' % 'renderer body')
+                print('  %-52s FAIL  %s() could not be located' % ('renderer body', fn))
         for label, needle, want in decl['source_body']:
             n = body.count(needle)
             good = (n > 0) if want else (n == 0)
@@ -1439,7 +1942,7 @@ def source_checks(decl, theme, verbose=True):
                          'got': n, 'ok': good})
             if verbose:
                 print('  %-52s %-9s %-4s %s'
-                      % (label, 'renderer', 'x%d' % n, 'ok' if good else 'FAIL'))
+                      % (label, fn[:9], 'x%d' % n, 'ok' if good else 'FAIL'))
 
     if verbose:
         print('  %s  source: the theme-side claims hold' % ('PASS' if ok else 'FAIL'))

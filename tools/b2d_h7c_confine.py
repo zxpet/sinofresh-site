@@ -91,6 +91,7 @@ def diff_files(base, cand, repo):
 
 VERSION_LINE = re.compile(r'^\s*Version:\s*([0-9][0-9A-Za-z._-]*)\s*$')
 ENQUEUE_LINE = re.compile(r"wp_enqueue_style\(\s*'sinofresh-style'.*?'([0-9][0-9A-Za-z._-]*)'\s*\)")
+FN_DECL = re.compile(r'^\s*function\s+([A-Za-z_][A-Za-z0-9_]*)\s*\(')
 
 
 def _openers(block):
@@ -171,7 +172,30 @@ def _inject_second_run(files):
 
 
 def check(base, cand, repo, namespaces, verbose=True, inject=None,
-          expect_php='sf_formula_specs_table', tpl_line='[sf_formula_specs_table]'):
+          expect_php='sf_formula_specs_table', tpl_line='[sf_formula_specs_table]',
+          js_removed_ok=None, allowed_files=None, fns=None):
+    """The confinement claim, per file.
+
+    WHICH FILES THIS GUARDS, AND WHY IT IS NOT ALL OF THEM. A stylesheet or a
+    script reaches a page as a URL: the page carries a link and the bytes live
+    elsewhere. So an edit to an EXISTING rule or an existing branch changes what
+    a reader sees and leaves every one of the 75 captured pages byte-identical —
+    the main proof cannot see it, and neither can coverage. That is the class of
+    file this proof exists for, and H7d widened it from style.css to include the
+    scripts.
+
+    PHP is the other case: functions.php's output IS the page's bytes, so a
+    deletion or an edit there moves the candidate. Those changes are owned by
+    the main proof (everything outside the declared region must be identical)
+    and by the coverage counts (a row that stopped being printed drops a count).
+    This proof still asserts the two things PHP can hide: that the file retires
+    the old style token through its enqueue line, and that its additions are ONE
+    contiguous block containing the declared symbol. What it does not do is
+    pretend to enumerate the removals, because a rule that says "every removed
+    line must be listed here" over a 40-line renderer rewrite is a rule that
+    gets satisfied by a catch-all regex — a rubber stamp wearing a check's
+    clothes.
+    """
     rows = []
 
     def ok(label, cond, detail=''):
@@ -181,6 +205,8 @@ def check(base, cand, repo, namespaces, verbose=True, inject=None,
         return bool(cond)
 
     files = diff_files(base, cand, repo)
+    if allowed_files is None:
+        allowed_files = {STYLE, PHP, TPL}
     if inject in ('media', 'media1line'):
         if not _inject_inside_media(files, one_line=(inject == 'media1line')):
             raise SystemExit('FATAL %s could not build its mutant' % inject)
@@ -226,28 +252,70 @@ def check(base, cand, repo, namespaces, verbose=True, inject=None,
         ok('the block carries the namespace at all',
            any(any(ns in l for ns in namespaces) for l in block),
            'ns=%s' % (list(namespaces),))
-    ok('no page-reaching file besides the three is touched',
-       set(files) <= {STYLE, PHP, TPL}, 'files=%s' % sorted(files))
+    # The DECLARED FILE SET, exactly. Named for what it is: a batch also commits
+    # documents, and pretending otherwise would mean either an implicit
+    # exclusion list or a check that fails on its own batch record. Declaring
+    # every path is the point — the set is a claim, not a filter.
+    ok('the diff touches only the declared files',
+       set(files) <= allowed_files, 'files=%s' % sorted(files))
+
+    # ---- the scripts: linked, not contained -----------------------------
+    # The same hazard as the stylesheet, and the reason H7d has these rules:
+    # inquiry.js lost exactly one line, and that line decides which band the
+    # reveal watches. A page cannot see it.
+    js_removed_ok = js_removed_ok or {}
+    for rel, (jrem, jruns) in sorted(files.items()):
+        if not rel.endswith('.js'):
+            continue
+        allowed = [re.compile(p) for p in js_removed_ok.get(rel, [])]
+        bad = [l for l in jrem if not any(p.search(l) for p in allowed)]
+        ok('%s loses only its declared lines' % rel, not bad,
+           'removed=%d, undeclared=%s' % (len(jrem), bad[:3] or 'none'))
+        if rel in js_removed_ok:
+            ok('  ...and that declaration is used, not vacuous',
+               bool(jrem), 'removed=%d' % len(jrem))
 
     # ---- functions.php --------------------------------------------------
     removed, runs = files.get(PHP, ([], []))
-    bad = [l for l in removed if not ENQUEUE_LINE.search(l)]
-    ok('functions.php loses the enqueue line and nothing else',
-       len(removed) == 1 and not bad,
-       'removed=%d %s' % (len(removed), bad[:3] or ''))
-    if removed:
-        m = ENQUEUE_LINE.search(removed[0])
+    enc = [l for l in removed if ENQUEUE_LINE.search(l)]
+    ok('functions.php retires the old style token', len(enc) == 1,
+       'enqueue lines removed = %d' % len(enc))
+    if enc:
+        m = ENQUEUE_LINE.search(enc[0])
         ok('...and it is the old style token', bool(m) and m.group(1) == old_ver,
            'token=%r' % (m.group(1) if m else None))
-    block_runs = [r for r in runs
-                  if not (len(r) == 1 and ENQUEUE_LINE.search(r[0]))]
-    ok('functions.php gains exactly one contiguous block', len(block_runs) == 1,
-       '%d block run(s)' % len(block_runs))
-    if len(block_runs) == 1:
-        body = '\n'.join(block_runs[0])
-        ok('and that block is the new renderer',
-           expect_php in body,
-           '%d lines, expects %r' % (len(block_runs[0]), expect_php))
+    ok('functions.php loses %d line(s), owned by the byte proof' % len(removed), True,
+       'the main proof and coverage see every PHP change; this proof does not '
+       're-enumerate them')
+
+    # WHICH FUNCTIONS THE BATCH ADDS -- the PHP analogue of "every selector
+    # belongs to the namespace". The set must be EQUAL, not merely contained:
+    # a stray function added on a path no captured page exercises (the REST
+    # endpoint is exactly that) leaves every byte on disk unchanged, so this is
+    # the only check that would see it.
+    added_fns = set()
+    for r in runs:
+        for l in r:
+            m = FN_DECL.match(l)
+            if m:
+                added_fns.add(m.group(1))
+    declared_fns = set(fns) if fns else {expect_php}
+    ok('functions.php adds exactly the declared functions',
+       added_fns == declared_fns,
+       'added=%s declared=%s' % (sorted(added_fns), sorted(declared_fns)))
+
+    # NOT a claim: the number of change sites. With -U0 an addition is split
+    # wherever a removal falls, so "one contiguous block" measures the editor's
+    # diff shape rather than the batch's blast radius — it held for H7c, whose
+    # edit was one insertion, and is 11 for H7d, whose edit also REWRITES a
+    # renderer. Printed so the shape is visible, not asserted, and the PHP side
+    # is owned by the byte proof plus the equality above.
+    ok('functions.php change sites (informational)', True,
+       '%d added run(s), %d removed line(s), %d added line(s)'
+       % (len(runs), len(removed), sum(len(r) for r in runs)))
+    ok('the declared symbol is among the additions',
+       any(expect_php in '\n'.join(r) for r in runs),
+       'expects %r' % expect_php)
 
     # ---- the template ---------------------------------------------------
     removed, runs = files.get(TPL, ([], []))
@@ -283,13 +351,43 @@ def main():
                     help='the symbol the added PHP block must contain')
     ap.add_argument('--tpl-line', default='[sf_formula_specs_table]',
                     help='the template line the batch adds exactly once')
+    ap.add_argument('--js-removed-ok', action='append', default=None,
+                    metavar='FILE=REGEX',
+                    help='a removed line in FILE that the batch declares '
+                         '(repeatable). Every JS file in the diff must have '
+                         'each of its removed lines declared.')
+    ap.add_argument('--allow-file', action='append', default=None, metavar='PATH',
+                    help='a file this batch is allowed to touch IN ADDITION to '
+                         'style.css, functions.php and the template (repeatable). '
+                         'Use it for the batch record and for any scratch file it '
+                         'commits. The flag used to REPLACE the default three, so '
+                         'the first batch that also committed a document reported '
+                         'its own theme files as unexpected -- and a check whose '
+                         'declaration silently narrows to one path is one that can '
+                         'never fail on the files it was written for.')
+    ap.add_argument('--fn', action='append', default=None, metavar='NAME',
+                    help='a function this batch adds (repeatable); the set must '
+                         'match exactly. Default: --expect-php alone.')
     ap.add_argument('--negctl', action='store_true')
     args = ap.parse_args()
 
     global old_ver
     old_ver = _ver_of(args.base, args.repo)
     namespaces = tuple(args.ns) if args.ns else DEFAULT_NS
-    extra = {'expect_php': args.expect_php, 'tpl_line': args.tpl_line}
+    js_removed_ok = {}
+    for spec in args.js_removed_ok or []:
+        if '=' not in spec:
+            raise SystemExit('FATAL --js-removed-ok wants FILE=REGEX, got %r' % spec)
+        f, pat = spec.split('=', 1)
+        js_removed_ok.setdefault(f, []).append(pat)
+    extra = {'expect_php': args.expect_php, 'tpl_line': args.tpl_line,
+             'js_removed_ok': js_removed_ok,
+             # `--allow-file` ADDS to the theme's own three, which is what its
+             # help has always said it does. Passing it must not be a way to
+             # shrink the declaration to a single path.
+             'allowed_files': (({STYLE, PHP, TPL} | set(args.allow_file))
+                               if args.allow_file else None),
+             'fns': args.fn}
 
     print('== confinement: %s -> %s ==' % (args.base[:8], args.cand[:8]))
     print('   namespace: %s   old token: %s' % (', '.join(namespaces), old_ver))
@@ -341,7 +439,36 @@ def main():
                      [x['label'] for x in r4 if not x['ok']][:1]))
             ok &= caught
 
-    print('\n%s  batch H7c confinement' % ('PASS' if ok else 'FAIL'))
+        # NC6 -- the JS rule is a signal, not a comment. Dropping the batch's
+        # own declaration must make the same diff fail. It is only meaningful
+        # when the batch declares something, so when it declares nothing this
+        # control says so out loud rather than passing quietly: a control that
+        # reports success for "there was nothing to test" is the shape this
+        # project has been bitten by before.
+        if js_removed_ok:
+            r5 = check(args.base, args.cand, args.repo, namespaces, verbose=False,
+                       **dict(extra, js_removed_ok={}))
+            why = [x['label'] for x in r5
+                   if not x['ok'] and x['label'].endswith('loses only its declared lines')]
+            print('  %s  NC6 an undeclared script removal fails  %s'
+                  % ('ok  ' if why else 'FAIL', why[:1] or 'the rule did not fire'))
+            ok &= bool(why)
+        else:
+            print('  %s  NC6 an undeclared script removal fails  (not applicable: '
+                  'this batch declares no JS removals)' % 'ok  ')
+
+        # NC7 -- the function-set equality is a signal. A batch that adds a
+        # function it did not declare must fail, which is the only check that
+        # would see a stray function on a path no captured page exercises.
+        r6 = check(args.base, args.cand, args.repo, namespaces, verbose=False,
+                   **dict(extra, fns=(list(args.fn or []) + ['zz_not_declared'])))
+        why = [x['label'] for x in r6
+               if not x['ok'] and x['label'].startswith('functions.php adds exactly')]
+        print('  %s  NC7 an undeclared function in the diff fails  %s'
+              % ('ok  ' if why else 'FAIL', why[:1] or 'the rule did not fire'))
+        ok &= bool(why)
+
+    print('\n%s  batch confinement' % ('PASS' if ok else 'FAIL'))
     return 0 if ok else 1
 
 
