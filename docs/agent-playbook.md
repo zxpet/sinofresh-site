@@ -975,6 +975,19 @@ commit message 格式：
 | 7 | `--wp--preset--spacing--80` 实测 = **48px**（slug 名仍叫 80，legacy 映射）⇒ 相邻 section 实际间距 96px；新带子 section 取 `padding: 0 / 48px` 使带子读作卡墙的"尾巴" | §9【H2b1】2 |
 | 8 | `style.css` 无任何 `.sf-explore*` **规则**（仅 5931/5977 两处注释引用其几何）⇒ 迁入无同名冲突；但为保住"后加载覆盖"语义，**追加到 `style.css` 末尾** | §9【H2b1】4 |
 
+## A.5 H2b1 执行期实测（2026-09-22，Step 1–5）
+
+| # | 结论 | 影响 |
+|---|---|---|
+| 1 | ⛔ **`AGENT_BROWSER_INIT_SCRIPTS` / `--init-script` 只在「启动浏览器的那条命令」上生效，而那是 `set credentials` 不是 `open`**。挂在 `open` 上＝注册太晚、脚本静默不跑（E8 首次就是这样假绿：`no-has` 永不出现，看起来像"stub 没生效"）。`agent-browser 0.27.0` **没有** `addinitscript` 子命令，尽管它自带的 `skills get core --full` 里写着有 ⇒ 文档与二进制不一致时以二进制为准。四条排序实测见 `docs/batchH2b1-gates/e8-init-script-probe.json` | 一切需要"页面加载前改环境"的测试（媒体查询/特性探测正负对照） |
+| 2 | ⛔ **`agent-browser screenshot <selector> <path>` 写出空白图**（1440×259 的 section → 1.7 KB 纯白）。文件存在、看着像证据、其实什么都没有。可用做法＝滚到目标 + 视口整屏截图（`set viewport w band_h+240` → `scrollTo` → `screenshot <path>`），并加**字节下限**把空白变成 FAIL | E9；任何"截图交付" |
+| 3 | ⛔ **取景要扣掉 sticky 头部，而它在 `scrollY=0` 时是 `static`**（滚动后才被 JS 立起来）⇒ 偏移必须**两段式测**：先粗滚让 sticky 生效，再量"顶部遮挡高度"并校正 | 移动端截图；`<header>` 有多个、`querySelector('header')` 拿到的不是 sticky 那个 |
+| 4 | ⛔ **不要用固定 sleep 等平滑滚动**：约 1.2s 才落定，固定 1.2s 采样会抓到中途值（E4 误报 177px）。改法＝轮询 `scrollY` 至"连续两次相同"，并**断言落定在 `scroll-margin-top` 上**（实测 96 vs 96.0）而非一个拍出来的容差 | E4；任何锚点/滚动测试 |
+| 5 | ⛔ **断言先在候选文本上跑、再落盘**：`apply_detail` 第一版先写后断言且期望值写错（`{{FORM_HREF}}` 2→1，不是 2→2），一次**正确**的编辑被报成失败、文件却已改写。改法＝pure 校验（写前后各一次）＋同进程回读 | 一切写文件的补丁器 |
+| 6 | ✅ **可复现性可以做成一条门**：`tools/b2d_h2b1_repro.py` 用 `git archive <batch>~1` 搭沙盒、重跑补丁器、与提交比对 ⇒ H2b1 **12/12 逐字节相同**。这同时补上"首次运行时断言还不对"造成的证据洞（`_backup/b2d-h2b1-apply.json` 里的 `ok:false` 是假警报） | 「不是零差异批」的收尾 |
+| 7 | **删掉 `body:has(.configurator__bar)` 之后，两个固定层落回 `style.css` 取值**：live（有条）恒为 float `132px` / lang `68px`；候选（无条）现代引擎 = 横幅在场 1440 `100px`、480 `268px`，无横幅 24/16px，lang `0px` —— 与**非剂型页**（`/about/`）完全一致 ⇒ 是向全站一致性收敛。旧引擎因 `:700-707` 的无条件复刻仍是 132/68 | H2b2 必须把 `:667-707` **整段**删掉，删后旧引擎应与现代引擎差值归零 |
+| 8 | `--wp--preset--spacing--80` 实测 **48px**；`.sf-explore` 是 `content-box` ⇒ 其边框盒 = `1200px 内容列 + 2×32px padding` = 1264px；面板**居中**（gutter 左右相等），且 1440 时其**内容列**正好压在卡墙内容列（x120）上 | 判断"通栏"要看 `section` 而不是面板 |
+
 ---
 
 # 附录 B：进度区
@@ -982,11 +995,17 @@ commit message 格式：
 | 批次 | 状态 | commit | 说明 |
 |---|---|---|---|
 | H2b | **Step 0 完成 → 5 项不符已裁决（① 改 D / ②③④⑤ 同意）** | — | `docs/batch2d-stepH2b-scan.md` |
-| **H2b1** | **详案已出，停等确认后进 Step 1** | — | `docs/batch2d-stepH2b1-plan.md` |
-| H2b2 | 未开工（H2b1 闭环后） | — | 停入队 + 删资产 |
+| **H2b1** | **Step 1–5 全过门 + E2E 全过 → 停等 Step 6** | `ebe8f50`（已 push） | `docs/batch2d-stepH2b1.md` |
+| H2b2 | 未开工（H2b1 上线后） | — | 停入队 + 删资产；⚠️ `configurator.css:667-707` 要整段删 |
 | H3 | 未开工 | — | — |
 | H4 | 未开工 | — | 前置：邮箱 `info@` → `sales@` |
 | H5 | 未开工 | — | — |
 | H6 | 未开工 | — | 候选 +1：`sinofresh_formula_*` sessionStorage 无读者 |
 
+**H2b1 门/E2E 摘要**：静态 S1–S8 全过；75 页基线 + 75 页候选；主门 **PASS 21 条 / 0 FAIL**
+（58 页差 / 17 页同，逐字节重建）；破坏矩阵 **10/10**；三条负对照全 FAIL（as required）；
+**可复现性 12/12 逐字节**；E2E **E1–E9 全过**。计划外行为变化（两个固定层落位 132/68 → 现代引擎收敛到
+全站取值）已实测并列出，**待裁决**。详见 `docs/batch2d-stepH2b1.md`。
+
 **服务器状态**：未 pull（`git pull` 属「不执行」）；authority guard 未删；DB 未动；主题仅新增扫描器/文档。
+

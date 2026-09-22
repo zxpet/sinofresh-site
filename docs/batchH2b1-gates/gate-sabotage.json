@@ -1,0 +1,122 @@
+{
+  "matrix": [
+    {
+      "variant": "keep-h2",
+      "caught": true,
+      "gates": [
+        "[3]"
+      ],
+      "detail": [
+        "[3] the page is not the declared edit: ['products__soft-chews.html']",
+        "[3] Build Your … Formula H2: ['products__soft-chews.html 1->1']"
+      ]
+    },
+    {
+      "variant": "band-not-moved",
+      "caught": true,
+      "gates": [
+        "[3]",
+        "[6]"
+      ],
+      "detail": [
+        "[3] the page is not the declared edit: [\"products__soft-chews.html: ['candidate band section']\"]",
+        "[6] render order is not #formulas -> band -> How We Work: ['products__soft-chews.html wall=76308 band=-1 howwework=83280']"
+      ]
+    },
+    {
+      "variant": "chip-missing",
+      "caught": true,
+      "gates": [
+        "[3]"
+      ],
+      "detail": [
+        "[3] the band was not moved intact (bytes differ from the baseline): ['products__soft-chews.html']"
+      ]
+    },
+    {
+      "variant": "cta-not-retargeted",
+      "caught": true,
+      "gates": [
+        "[3]",
+        "[6]"
+      ],
+      "detail": [
+        "[3] the page is not the declared edit: ['products__soft-chews.html']",
+        "[3] the #configurator anchor survives: ['products__soft-chews.html']",
+        "[6] hero CTA: ['products__soft-chews.html']"
+      ]
+    },
+    {
+      "variant": "ver-stale",
+      "caught": true,
+      "gates": [
+        "[1]"
+      ],
+      "detail": [
+        "[1] candidate style token is ['2.10.55', '2.10.56'], expected only 2.10.56"
+      ]
+    },
+    {
+      "variant": "old-css-left",
+      "caught": true,
+      "gates": [
+        "[4]"
+      ],
+      "detail": [
+        "[4] served vs working tree: ['assets/css/configurator.css 91d42872de4a != 7d59a5b66b89']",
+        "[4] configurator.css still defines .sf-explore*: ['.sf-explore__btn']"
+      ]
+    },
+    {
+      "variant": "stray-byte-on-a-stable-page",
+      "caught": true,
+      "gates": [
+        "[2]",
+        "[3]"
+      ],
+      "detail": [
+        "[2] page set wrong: 59 differ, expected 58; missing=[] extra=['blog.html']",
+        "[3] the page is not the declared edit: ['blog.html']"
+      ]
+    },
+    {
+      "variant": "declared-page-unchanged",
+      "caught": true,
+      "gates": [
+        "[2]",
+        "[3]",
+        "[6]"
+      ],
+      "detail": [
+        "[2] page set wrong: 57 differ, expected 58; missing=['products__soft-chews.html'] extra=[]",
+        "[3] the page is not the declared edit: [\"products__soft-chews.html: ['candidate Block 4 comment', 'candidate band section']\"]",
+        "[6] render order is not #formulas -> band -> How We Work: ['products__soft-chews.html wall=76203 band=-1 howwework=110726']"
+      ]
+    },
+    {
+      "variant": "detail-cta-reverted",
+      "caught": true,
+      "gates": [
+        "[2]",
+        "[3]",
+        "[6]"
+      ],
+      "detail": [
+        "[2] page set wrong: 57 differ, expected 58; missing=['formulas__calming-soft-chews.html'] extra=[]",
+        "[3] the page is not the declared edit: ['formulas__calming-soft-chews.html']",
+        "[3] the #configurator anchor survives: ['formulas__calming-soft-chews.html hero anchor', 'formulas__calming-soft-chews.html']"
+      ]
+    },
+    {
+      "variant": "band-entity-changed",
+      "caught": true,
+      "gates": [
+        "[3]"
+      ],
+      "detail": [
+        "[3] the band was not moved intact (bytes differ from the baseline): ['products__soft-chews.html']"
+      ]
+    }
+  ],
+  "missed": []
+}

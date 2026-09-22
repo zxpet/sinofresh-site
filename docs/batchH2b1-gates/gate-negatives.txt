@@ -1,0 +1,13 @@
+=== H2b1 negative controls (2026-09-22T00:20:38Z) ===
+
+--- A. one byte: &rarr; -> → inside the band (renders identically) ---
+  FAIL [3] the band was not moved intact (bytes differ from the baseline): ['products__soft-chews.html']
+VERDICT: FAIL — 1 gate problem(s)
+
+--- B. missing served-hash reference must FAIL, not skip ---
+  FAIL [4] no served-hash table: the candidate cannot be shown to be the server's copy (a missing reference is a failure, not a skip)
+VERDICT: FAIL — 1 gate problem(s)
+
+--- C. candidate == baseline (nothing changed) must FAIL ---
+9
+  (FAIL 行数如上)

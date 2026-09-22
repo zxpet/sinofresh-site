@@ -1,0 +1,131 @@
+{
+  "base": "ebe8f50~1",
+  "sandbox": "/var/folders/zj/1y28wlw93p567b4x4j7116800000gn/T/h2b1-repro-keh3rvxt",
+  "files": [
+    {
+      "file": "templates/page-soft-chews.html",
+      "sha256": "a80dfab4d3e0d5282111918b70613c7e918d4e42c633966c17ca732769882b46",
+      "committed": "a80dfab4d3e0d5282111918b70613c7e918d4e42c633966c17ca732769882b46",
+      "identical": true
+    },
+    {
+      "file": "templates/page-tablets.html",
+      "sha256": "7e5d1c3621327cb7de4418461edccefad689773cb2c1fdd41ab94926548a34d4",
+      "committed": "7e5d1c3621327cb7de4418461edccefad689773cb2c1fdd41ab94926548a34d4",
+      "identical": true
+    },
+    {
+      "file": "templates/page-powders.html",
+      "sha256": "b963d4ac19eb8990c5fffeb0c6aa4987f498ad20f8e99d1323746d01b7b769e4",
+      "committed": "b963d4ac19eb8990c5fffeb0c6aa4987f498ad20f8e99d1323746d01b7b769e4",
+      "identical": true
+    },
+    {
+      "file": "templates/page-pastes.html",
+      "sha256": "f4fcc1251b72289612b54769eeb0622dd8ca89c99f2f5c1124da44b5044802f0",
+      "committed": "f4fcc1251b72289612b54769eeb0622dd8ca89c99f2f5c1124da44b5044802f0",
+      "identical": true
+    },
+    {
+      "file": "templates/page-drops.html",
+      "sha256": "5382be41c87cb0f22c23d156939d48944b847e483cfa8632b9b91b3146ae36cd",
+      "committed": "5382be41c87cb0f22c23d156939d48944b847e483cfa8632b9b91b3146ae36cd",
+      "identical": true
+    },
+    {
+      "file": "templates/page-liquids.html",
+      "sha256": "7c28daa47080f9b82a17eaec4790d0c4d0801a2efe8478114858fb70f4618b96",
+      "committed": "7c28daa47080f9b82a17eaec4790d0c4d0801a2efe8478114858fb70f4618b96",
+      "identical": true
+    },
+    {
+      "file": "templates/page-fish-oil.html",
+      "sha256": "0a21f59b3339df7c21f2d524bdef3fa890aed383f8d496ec21cb29734bdae3e3",
+      "committed": "0a21f59b3339df7c21f2d524bdef3fa890aed383f8d496ec21cb29734bdae3e3",
+      "identical": true
+    },
+    {
+      "file": "templates/page-dental-chews.html",
+      "sha256": "a2232c54fe267e2668a1a28aa8854ac10684098f2497d6d8209a39df139d78be",
+      "committed": "a2232c54fe267e2668a1a28aa8854ac10684098f2497d6d8209a39df139d78be",
+      "identical": true
+    },
+    {
+      "file": "templates/single-sf_formula.html",
+      "sha256": "04877bb70807f30da675550b1f5101cb46d355352efb9acd89bd29cde93def99",
+      "committed": "04877bb70807f30da675550b1f5101cb46d355352efb9acd89bd29cde93def99",
+      "identical": true
+    },
+    {
+      "file": "style.css",
+      "sha256": "2ffa6158027e2413529a111422de89a3b5fb1b4341f1a77b70f1e0483b2df60a",
+      "committed": "2ffa6158027e2413529a111422de89a3b5fb1b4341f1a77b70f1e0483b2df60a",
+      "identical": true
+    },
+    {
+      "file": "functions.php",
+      "sha256": "42e8f63ecf69dd4ccef945514a1c641297d47a5e7325dcc20f39c9bffa83f0fe",
+      "committed": "42e8f63ecf69dd4ccef945514a1c641297d47a5e7325dcc20f39c9bffa83f0fe",
+      "identical": true
+    },
+    {
+      "file": "assets/css/configurator.css",
+      "sha256": "7d59a5b66b89c5d0018fd233d81081a8d8d8638e5c3803b485f83215edc1b7b7",
+      "committed": "7d59a5b66b89c5d0018fd233d81081a8d8d8638e5c3803b485f83215edc1b7b7",
+      "identical": true
+    }
+  ],
+  "patchers": [
+    {
+      "tool": "b2d_h2b1_patch.py --apply",
+      "rc": 0,
+      "stdout": "templates/single-sf_formula.html L13          OK\npage-soft-chews.html       region L55-L271     217 lines  band L226-L230   sha 835c81666e2a  cta L22\npage-tablets.html          region L55-L207     153 lines  band L163-L167   sha 835c81666e2a  cta L22\npage-dental-chews.html     region L55-L220     166 lines  band L175-L179   sha 835c81666e2a  cta L22\npage-powders.html          region L55-L203     149 lines  band L159-L163   sha 835c81666e2a  cta L22\npage-fish-oil.html         region L55-L203     149 lines  band L159-L163   sha 835c81666e2a  cta L22\npage-pastes.html           region L55-L190     136 lines  band L147-L151   sha 835c81666e2a  cta L22\npage-liquids.html          region L55-L190     136 lines  band L147-L151   sha 835c81666e2a  cta L22\npage-drops.html            region L55-L189     135 lines  band L146-L150   sha 835c81666e2a  cta L22\n\nanchors OK on all 8 pages + the detail template; region total 1241 lines;\nexpected after apply: delete 1241 + insert 96 = net -1145 lines\n\n--- apply ---\npage-soft-chews.html       delta -205  band sha 835c81666e2a  balance 0 -> 0\npage-tablets.html          delta -141  band sha 835c81666e2a  balance 0 -> 0\npage-dental-chews.html     delta -154  band sha 835c81666e2a  balance 0 -> 0\npage-powders.html          delta -137  band sha 835c81666e2a  balance 0 -> 0\npage-fish-oil.html         delta -137  band sha 835c81666e2a  balance 0 -> 0\npage-pastes.html           delta -124  band sha 835c81666e2a  balance 0 -> 0\npage-liquids.html          delta -124  band sha 835c81666e2a  balance 0 -> 0\npage-drops.html            delta -123  band sha 835c81666e2a  balance 0 -> 0\ntemplates/single-sf_formula.html CTA rewritten, {{FORM_HREF}} kept for the breadcrumb\n\nAPPLIED: 8 pages, net -1145 lines",
+      "stderr": ""
+    },
+    {
+      "tool": "b2d_h2b1_css.py --apply",
+      "rc": 0,
+      "stdout": "configurator.css: block L833-L957 (125 lines, 3036 bytes)\ntransform: 125 -> 127 lines\nstyle.css: compensation block L5915-L5921 (7 lines)\nconfigurator.css: 15 .sf-explore* rule head(s) to move\nver anchor OK: functions.php style ver 2.10.55 -> 2.10.56\nver anchor OK: style.css header ver 2.10.55 -> 2.10.56\nver anchor OK: configurator.css ver 2.9 -> 2.10 (its contents changed)\nledger: style.css :has( = 164, configurator.css :has( = 7\n\n--- read back ---\nphp -l functions.php: No syntax errors detected in /var/folders/zj/1y28wlw93p567b4x4j7116800000gn/T/h2b1-repro-keh3rvxt/sinofresh-theme/functions.php\nconfigurator.css 958 -> 832 lines\nstyle.css        8778 -> 8899 lines\nstyle.css :has(  164 -> 164\nconfigurator.css :has( 7 -> 7\n\nAPPLIED and read back clean.",
+      "stderr": ""
+    }
+  ],
+  "ok": true,
+  "patch_ok": true,
+  "patch_errors": [],
+  "patch_deltas": [
+    [
+      "page-soft-chews.html",
+      -205
+    ],
+    [
+      "page-tablets.html",
+      -141
+    ],
+    [
+      "page-dental-chews.html",
+      -154
+    ],
+    [
+      "page-powders.html",
+      -137
+    ],
+    [
+      "page-fish-oil.html",
+      -137
+    ],
+    [
+      "page-pastes.html",
+      -124
+    ],
+    [
+      "page-liquids.html",
+      -124
+    ],
+    [
+      "page-drops.html",
+      -123
+    ]
+  ],
+  "identical": 12,
+  "total": 12
+}

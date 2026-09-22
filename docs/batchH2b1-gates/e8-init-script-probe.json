@@ -1,0 +1,38 @@
+{
+  "A  AGENT_BROWSER_INIT_SCRIPTS on `open` only": {
+    "ok": false,
+    "probe": {
+      "ran": 0,
+      "cls": "",
+      "supports": true,
+      "sheet": "https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/assets/images/favicon-32.png"
+    }
+  },
+  "B  AGENT_BROWSER_INIT_SCRIPTS on every call": {
+    "ok": false,
+    "probe": {
+      "ran": 0,
+      "cls": "",
+      "supports": true,
+      "sheet": "https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/assets/images/favicon-32.png"
+    }
+  },
+  "C  `--init-script` before the subcommand": {
+    "ok": false,
+    "probe": {
+      "ran": 0,
+      "cls": "",
+      "supports": true,
+      "sheet": "https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/assets/images/favicon-32.png"
+    }
+  },
+  "D  `--init-script` after the url (what the first run did)": {
+    "ok": false,
+    "probe": {
+      "ran": 0,
+      "cls": "",
+      "supports": true,
+      "sheet": "https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/assets/images/favicon-32.png"
+    }
+  }
+}

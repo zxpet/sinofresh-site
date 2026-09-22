@@ -1,0 +1,42 @@
+--- E1/E2/E3/E6/E7  dosage page /products/soft-chews/ at six widths ---
+   ok   provenance: stylesheet https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/style.css?ver=2.10.56
+   ok   provenance: cells left from the configurator = 0, Build Your h2 = 0
+   ok   consent banner still present after Accept All -> hidden for the shots
+    480px  overflow=0  band x0 w480  explore x38 w404  gutter 38/38  toc=none  wallPadB=48
+    768px  overflow=0  band x0 w768  explore x38 w692  gutter 38/38  toc=none  wallPadB=48
+   1024px  overflow=0  band x0 w1024  explore x38 w948  gutter 38/38  toc=none  wallPadB=48
+   1100px  overflow=0  band x0 w1100  explore x38 w1024  gutter 38/38  toc=none  wallPadB=48
+   1101px  overflow=0  band x0 w1101  explore x38 w1025  gutter 38/38  toc=block  wallPadB=48
+   1440px  overflow=0  band x0 w1440  explore x88 w1264  gutter 88/88  toc=block  wallPadB=48
+   ok   E1 zero horizontal overflow and exactly one band at all six widths (480/768/1024/1100/1101/1440)
+   ok   E3 the band is full bleed with the panel centred (gutters equal at every width), eight pills at the 14px / 10px 16px / 8px scale, is-current on Soft Chews, one swipeable row below 769px and a wrapping row above
+   ok   E3 the panel content column now lands on the wall content column at 1440px (x120 vs x120); below that the panel edge does, because `.sf-explore` is content-box, so its 32px padding sits outside the 1200px max-width
+   ok   E2 dot rail: 5 entries (live had 6 — "Build Your Soft Chews Formula" left with the configurator), entry 2 = How We Work, hidden at <=1100px
+   ok   E6 "Browse All Formulas" keeps its outline and both of its branches — the values are identical to the live baseline at every width (12px 18px block 44px below 769px, 12px 24px inline-block above)
+   ok   E7 the compensation is repaid: the card wall holds its 48px bottom padding at every width (live forced it to 0 below 769px) and the band starts exactly one site block gap below it — 24px from the edge, 72px from the last card, the same rhythm as live
+--- E4  hero CTA behaviour ---
+   before: {'href': '/contact/#quote', 'cls': 'wp-block-button__link has-card-white-color has-text-color wp-element-button sf-quote-cta', 'hash': '', 'y': 0}
+   after:  {'y': 3386, 'top': 96, 'margin': '96px', 'hash': '#inquiry-form'}
+   ok   E4 the hero CTA smooth-scrolled to this page's #inquiry-form and came to rest on its scroll-margin-top (hash=#inquiry-form, form top 96px vs margin 96.0px, href=/contact/#quote, class carries sf-quote-cta) — live pointed the same anchor at #configurator
+--- E5  no-JS contract (the href attribute decides) ---
+   ok   detail page provenance: https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/style.css?ver=2.10.56
+   detail hero anchor: {'href': '/contact/#quote', 'cls': 'sf-formula-hero__build sf-quote-cta'}
+   after click: {'url': '/contact/#quote', 'inquiry': 2}
+   ok   E5 no-JS contract: dose href /contact/#quote (en) / /zh/contact/#quote (zh) and the detail anchor navigates natively to /contact/#quote (live sent it to /products/soft-chews/#configurator)
+--- E8  legacy-engine branch (html.no-has) ---
+   negative control (no stub, 480px): stubRan=0 no-has=False float=268px lang=0px
+   with stub (480px): stubRan=1 no-has=True float=132px lang=68px
+   ok   E8 html.no-has appears only when CSS.supports refuses selector(): negative control False / with stub True (stub ran 1 time(s))
+   ok   E8 H2b2 baseline under html.no-has at 480px: .sf-float-stack bottom=132px, .trp-language-switcher bottom=68px — after configurator.css is deleted these must come back to the same values
+--- E9  corroborating screenshots ---
+   ok   consent banner still present after Accept All -> hidden for the shots
+    480px  chrome 57  band top 73 h 243 in a 480x499 frame -> 38895 bytes
+    768px  chrome 57  band top 73 h 243 in a 768x483 frame -> 43716 bytes
+   1024px  chrome 61  band top 77 h 259 in a 1024x483 frame -> 49220 bytes
+   1100px  chrome 61  band top 77 h 259 in a 1100x499 frame -> 53291 bytes
+   1101px  chrome 61  band top 77 h 259 in a 1101x499 frame -> 54468 bytes
+   1440px  chrome 61  band top 77 h 259 in a 1440x499 frame -> 56193 bytes
+   ok   E9 six real screenshots (37-54 KB, the band framed clear of the sticky chrome at every width), taken at a raised viewport so nothing is painted blank; geometry above remains the evidence
+
+========================================================================
+E2E: E1-E9 all pass

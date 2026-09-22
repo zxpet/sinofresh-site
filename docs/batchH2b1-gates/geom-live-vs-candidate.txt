@@ -1,0 +1,221 @@
+
+html.no-has at 480px (.sf-float-stack / .trp-language-switcher bottom)
+           no stub (modern engine)      with stub (legacy)          
+live       float=132px    lang=68px       float=132px    lang=68px      nohas=False/True ran=1
+cand       float=268px    lang=0px        float=132px    lang=68px      nohas=False/True ran=1
+
+field (per width)          LIVE                           CANDIDATE                      verdict
+--------------------------------------------------------------------------------------------------------
+overflowX    480px  0                              0                              same
+overflowX    768px  0                              0                              same
+overflowX    1024px 0                              0                              same
+overflowX    1100px 0                              0                              same
+overflowX    1101px 0                              0                              same
+overflowX    1440px 0                              0                              same
+--------------------------------------------------------------------------------------------------------
+bandSections 480px  0                              1                              C H A N G E D
+bandSections 768px  0                              1                              C H A N G E D
+bandSections 1024px 0                              1                              C H A N G E D
+bandSections 1100px 0                              1                              C H A N G E D
+bandSections 1101px 0                              1                              C H A N G E D
+bandSections 1440px 0                              1                              C H A N G E D
+--------------------------------------------------------------------------------------------------------
+gutterL      480px  38                             38                             same
+gutterL      768px  38                             38                             same
+gutterL      1024px 38                             38                             same
+gutterL      1100px 38                             38                             same
+gutterL      1101px 38                             38                             same
+gutterL      1440px 120                            88                             C H A N G E D
+--------------------------------------------------------------------------------------------------------
+gutterR      480px  None                           38                             C H A N G E D
+gutterR      768px  None                           38                             C H A N G E D
+gutterR      1024px None                           38                             C H A N G E D
+gutterR      1100px None                           38                             C H A N G E D
+gutterR      1101px None                           38                             C H A N G E D
+gutterR      1440px None                           88                             C H A N G E D
+--------------------------------------------------------------------------------------------------------
+exploreContentX 480px  62                             62                             same
+exploreContentX 768px  62                             62                             same
+exploreContentX 1024px 70                             70                             same
+exploreContentX 1100px 70                             70                             same
+exploreContentX 1101px 70                             70                             same
+exploreContentX 1440px 152                            120                            C H A N G E D
+--------------------------------------------------------------------------------------------------------
+wallContentX 480px  38                             38                             same
+wallContentX 768px  38                             38                             same
+wallContentX 1024px 38                             38                             same
+wallContentX 1100px 38                             38                             same
+wallContentX 1101px 38                             38                             same
+wallContentX 1440px 120                            120                            same
+--------------------------------------------------------------------------------------------------------
+wallPadBottom 480px  0                              48                             C H A N G E D
+wallPadBottom 768px  0                              48                             C H A N G E D
+wallPadBottom 1024px 48                             48                             same
+wallPadBottom 1100px 48                             48                             same
+wallPadBottom 1101px 48                             48                             same
+wallPadBottom 1440px 48                             48                             same
+--------------------------------------------------------------------------------------------------------
+wallContentBottom 480px  3060                           3060                           same
+wallContentBottom 768px  3601                           3601                           same
+wallContentBottom 1024px 1247                           1247                           same
+wallContentBottom 1100px 1267                           1267                           same
+wallContentBottom 1101px 1267                           1267                           same
+wallContentBottom 1440px 1240                           1240                           same
+--------------------------------------------------------------------------------------------------------
+gapWallContentToBand 480px  2241                           72                             C H A N G E D
+gapWallContentToBand 768px  1592                           72                             C H A N G E D
+gapWallContentToBand 1024px 1808                           72                             C H A N G E D
+gapWallContentToBand 1100px 1627                           72                             C H A N G E D
+gapWallContentToBand 1101px 1628                           72                             C H A N G E D
+gapWallContentToBand 1440px 1525                           72                             C H A N G E D
+--------------------------------------------------------------------------------------------------------
+gapWallEdgeToBand 480px  2241                           24                             C H A N G E D
+gapWallEdgeToBand 768px  1592                           24                             C H A N G E D
+gapWallEdgeToBand 1024px 1760                           24                             C H A N G E D
+gapWallEdgeToBand 1100px 1579                           24                             C H A N G E D
+gapWallEdgeToBand 1101px 1580                           24                             C H A N G E D
+gapWallEdgeToBand 1440px 1477                           24                             C H A N G E D
+--------------------------------------------------------------------------------------------------------
+chipCount    480px  8                              8                              same
+chipCount    768px  8                              8                              same
+chipCount    1024px 8                              8                              same
+chipCount    1100px 8                              8                              same
+chipCount    1101px 8                              8                              same
+chipCount    1440px 8                              8                              same
+--------------------------------------------------------------------------------------------------------
+chipCurrent  480px  Soft Chews                     Soft Chews                     same
+chipCurrent  768px  Soft Chews                     Soft Chews                     same
+chipCurrent  1024px Soft Chews                     Soft Chews                     same
+chipCurrent  1100px Soft Chews                     Soft Chews                     same
+chipCurrent  1101px Soft Chews                     Soft Chews                     same
+chipCurrent  1440px Soft Chews                     Soft Chews                     same
+--------------------------------------------------------------------------------------------------------
+chipFont     480px  13px                           14px                           C H A N G E D
+chipFont     768px  13px                           14px                           C H A N G E D
+chipFont     1024px 13px                           14px                           C H A N G E D
+chipFont     1100px 13px                           14px                           C H A N G E D
+chipFont     1101px 13px                           14px                           C H A N G E D
+chipFont     1440px 13px                           14px                           C H A N G E D
+--------------------------------------------------------------------------------------------------------
+chipPad      480px  8px 12px                       10px 16px                      C H A N G E D
+chipPad      768px  8px 12px                       10px 16px                      C H A N G E D
+chipPad      1024px 8px 12px                       10px 16px                      C H A N G E D
+chipPad      1100px 8px 12px                       10px 16px                      C H A N G E D
+chipPad      1101px 8px 12px                       10px 16px                      C H A N G E D
+chipPad      1440px 8px 12px                       10px 16px                      C H A N G E D
+--------------------------------------------------------------------------------------------------------
+chipsGap     480px  6px                            8px                            C H A N G E D
+chipsGap     768px  6px                            8px                            C H A N G E D
+chipsGap     1024px 6px                            8px                            C H A N G E D
+chipsGap     1100px 6px                            8px                            C H A N G E D
+chipsGap     1101px 6px                            8px                            C H A N G E D
+chipsGap     1440px 6px                            8px                            C H A N G E D
+--------------------------------------------------------------------------------------------------------
+chipsScroll  480px  316                            426                            C H A N G E D
+chipsScroll  768px  28                             138                            C H A N G E D
+chipsScroll  1024px 0                              0                              same
+chipsScroll  1100px 0                              0                              same
+chipsScroll  1101px 0                              0                              same
+chipsScroll  1440px 0                              0                              same
+--------------------------------------------------------------------------------------------------------
+chipsNowrap  480px  nowrap                         nowrap                         same
+chipsNowrap  768px  nowrap                         nowrap                         same
+chipsNowrap  1024px wrap                           wrap                           same
+chipsNowrap  1100px wrap                           wrap                           same
+chipsNowrap  1101px wrap                           wrap                           same
+chipsNowrap  1440px wrap                           wrap                           same
+--------------------------------------------------------------------------------------------------------
+tocDisplay   480px  none                           none                           same
+tocDisplay   768px  none                           none                           same
+tocDisplay   1024px none                           none                           same
+tocDisplay   1100px none                           none                           same
+tocDisplay   1101px block                          block                          same
+tocDisplay   1440px block                          block                          same
+--------------------------------------------------------------------------------------------------------
+configuratorLeft 480px  2                              0                              C H A N G E D
+configuratorLeft 768px  2                              0                              C H A N G E D
+configuratorLeft 1024px 2                              0                              C H A N G E D
+configuratorLeft 1100px 2                              0                              C H A N G E D
+configuratorLeft 1101px 2                              0                              C H A N G E D
+configuratorLeft 1440px 2                              0                              C H A N G E D
+--------------------------------------------------------------------------------------------------------
+buildH2      480px  1                              0                              C H A N G E D
+buildH2      768px  1                              0                              C H A N G E D
+buildH2      1024px 1                              0                              C H A N G E D
+buildH2      1100px 1                              0                              C H A N G E D
+buildH2      1101px 1                              0                              C H A N G E D
+buildH2      1440px 1                              0                              C H A N G E D
+--------------------------------------------------------------------------------------------------------
+heroBtnHref  480px  None                           /contact/#quote                C H A N G E D
+heroBtnHref  768px  None                           /contact/#quote                C H A N G E D
+heroBtnHref  1024px None                           /contact/#quote                C H A N G E D
+heroBtnHref  1100px None                           /contact/#quote                C H A N G E D
+heroBtnHref  1101px None                           /contact/#quote                C H A N G E D
+heroBtnHref  1440px None                           /contact/#quote                C H A N G E D
+--------------------------------------------------------------------------------------------------------
+band         480px  None                           x0 w480 h243                   C H A N G E D
+band         768px  None                           x0 w768 h243                   C H A N G E D
+band         1024px None                           x0 w1024 h259                  C H A N G E D
+band         1100px None                           x0 w1100 h259                  C H A N G E D
+band         1101px None                           x0 w1101 h259                  C H A N G E D
+band         1440px None                           x0 w1440 h259                  C H A N G E D
+--------------------------------------------------------------------------------------------------------
+explore      480px  x38 w404 h193                  x38 w404 h195                  changed
+explore      768px  x38 w692 h193                  x38 w692 h195                  changed
+explore      1024px x38 w590 h256                  x38 w948 h211                  changed
+explore      1100px x38 w640 h256                  x38 w1024 h211                 changed
+explore      1101px x38 w640 h256                  x38 w1025 h211                 changed
+explore      1440px x120 w754 h210                 x88 w1264 h211                 changed
+--------------------------------------------------------------------------------------------------------
+wall         480px  x0 w480 h2193                  x0 w480 h2241                  C H A N G E D
+wall         768px  x0 w768 h3033                  x0 w768 h3081                  C H A N G E D
+wall         1024px x0 w1024 h724                  x0 w1024 h724                  same
+wall         1100px x0 w1100 h740                  x0 w1100 h740                  same
+wall         1101px x0 w1101 h741                  x0 w1101 h741                  same
+wall         1440px x0 w1440 h736                  x0 w1440 h736                  same
+--------------------------------------------------------------------------------------------------------
+wallH2       480px  x38 w404 h44                   x38 w404 h44                   same
+wallH2       768px  x38 w692 h44                   x38 w692 h44                   same
+wallH2       1024px x38 w948 h51                   x38 w948 h51                   same
+wallH2       1100px x38 w1024 h54                  x38 w1024 h54                  same
+wallH2       1101px x38 w1025 h54                  x38 w1025 h54                  same
+wallH2       1440px x120 w1200 h55                 x120 w1200 h55                 same
+--------------------------------------------------------------------------------------------------------
+
+bandBtn (per width)
+  480    live {'border': '2px solid rgb(27, 77, 62)', 'color': 'rgb(27, 77, 62)', 'padding': '12px 18px', 'radius': '6px', 'minHeight': '44px', 'display': 'block', 'w': 404}
+         cand {'border': '2px solid rgb(27, 77, 62)', 'color': 'rgb(27, 77, 62)', 'padding': '12px 18px', 'radius': '6px', 'minHeight': '44px', 'display': 'block', 'w': 404}   same
+  768    live {'border': '2px solid rgb(27, 77, 62)', 'color': 'rgb(27, 77, 62)', 'padding': '12px 18px', 'radius': '6px', 'minHeight': '44px', 'display': 'block', 'w': 692}
+         cand {'border': '2px solid rgb(27, 77, 62)', 'color': 'rgb(27, 77, 62)', 'padding': '12px 18px', 'radius': '6px', 'minHeight': '44px', 'display': 'block', 'w': 692}   same
+  1024   live {'border': '2px solid rgb(27, 77, 62)', 'color': 'rgb(27, 77, 62)', 'padding': '12px 24px', 'radius': '6px', 'minHeight': '0px', 'display': 'inline-block', 'w': 217}
+         cand {'border': '2px solid rgb(27, 77, 62)', 'color': 'rgb(27, 77, 62)', 'padding': '12px 24px', 'radius': '6px', 'minHeight': '0px', 'display': 'inline-block', 'w': 217}   same
+  1100   live {'border': '2px solid rgb(27, 77, 62)', 'color': 'rgb(27, 77, 62)', 'padding': '12px 24px', 'radius': '6px', 'minHeight': '0px', 'display': 'inline-block', 'w': 217}
+         cand {'border': '2px solid rgb(27, 77, 62)', 'color': 'rgb(27, 77, 62)', 'padding': '12px 24px', 'radius': '6px', 'minHeight': '0px', 'display': 'inline-block', 'w': 217}   same
+  1101   live {'border': '2px solid rgb(27, 77, 62)', 'color': 'rgb(27, 77, 62)', 'padding': '12px 24px', 'radius': '6px', 'minHeight': '0px', 'display': 'inline-block', 'w': 217}
+         cand {'border': '2px solid rgb(27, 77, 62)', 'color': 'rgb(27, 77, 62)', 'padding': '12px 24px', 'radius': '6px', 'minHeight': '0px', 'display': 'inline-block', 'w': 217}   same
+  1440   live {'border': '2px solid rgb(27, 77, 62)', 'color': 'rgb(27, 77, 62)', 'padding': '12px 24px', 'radius': '6px', 'minHeight': '0px', 'display': 'inline-block', 'w': 217}
+         cand {'border': '2px solid rgb(27, 77, 62)', 'color': 'rgb(27, 77, 62)', 'padding': '12px 24px', 'radius': '6px', 'minHeight': '0px', 'display': 'inline-block', 'w': 217}   same
+
+band width vs viewport (candidate should be full bleed)
+  480    band x0 w480   vw 480   explore x38 w404  pad24px/38px  box content-box
+  768    band x0 w768   vw 768   explore x38 w692  pad24px/38px  box content-box
+  1024   band x0 w1024   vw 1024   explore x38 w948  pad32px/38px  box content-box
+  1100   band x0 w1100   vw 1100   explore x38 w1024  pad32px/38px  box content-box
+  1101   band x0 w1101   vw 1101   explore x38 w1025  pad32px/38px  box content-box
+  1440   band x0 w1440   vw 1440   explore x88 w1264  pad32px/0px  box content-box
+
+live: was there a band at all?
+  480    band None   explore {'x': 38, 'y': 5301, 'w': 404, 'h': 193, 'top': 5301, 'bottom': 5494}   wallPadB 0  cfgLeft 2
+  768    band None   explore {'x': 38, 'y': 5193, 'w': 692, 'h': 193, 'top': 5193, 'bottom': 5386}   wallPadB 0  cfgLeft 2
+  1024   band None   explore {'x': 38, 'y': 3055, 'w': 590, 'h': 256, 'top': 3055, 'bottom': 3311}   wallPadB 48  cfgLeft 2
+  1100   band None   explore {'x': 38, 'y': 2894, 'w': 640, 'h': 256, 'top': 2894, 'bottom': 3150}   wallPadB 48  cfgLeft 2
+  1101   band None   explore {'x': 38, 'y': 2895, 'w': 640, 'h': 256, 'top': 2895, 'bottom': 3150}   wallPadB 48  cfgLeft 2
+  1440   band None   explore {'x': 120, 'y': 2765, 'w': 754, 'h': 210, 'top': 2765, 'bottom': 2974}   wallPadB 48  cfgLeft 2
+
+zh / detail
+  live zh None
+  cand zh {'heroHref': '/zh/contact/#quote', 'sheet': 'https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/style.css?ver=2.10.56'}
+  live detail {'sheet': 'https://dev.zxpet.com/wp-content/themes/sinofresh-theme/style.css?ver=2.10.55', 'anchor': {'href': '/products/soft-chews/#configurator', 'cls': 'sf-formula-hero__build'}, 'configuratorLeft': 0, 'buildH2': 0}
+  cand detail {'sheet': 'https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/style.css?ver=2.10.56', 'anchor': {'href': '/contact/#quote', 'cls': 'sf-formula-hero__build sf-quote-cta'}, 'configuratorLeft': 0, 'buildH2': 0}
+
+-> docs/batchH2b1-shots/geom-live-cand.json

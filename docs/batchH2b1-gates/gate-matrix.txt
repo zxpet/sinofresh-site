@@ -1,0 +1,13 @@
+=== sabotage matrix — every variant must be caught ===
+  keep-h2                          CAUGHT   [3]
+  band-not-moved                   CAUGHT   [3] [6]
+  chip-missing                     CAUGHT   [3]
+  cta-not-retargeted               CAUGHT   [3] [6]
+  ver-stale                        CAUGHT   [1]
+  old-css-left                     CAUGHT   [4]
+  stray-byte-on-a-stable-page      CAUGHT   [2] [3]
+  declared-page-unchanged          CAUGHT   [2] [3] [6]
+  detail-cta-reverted              CAUGHT   [2] [3] [6]
+  band-entity-changed              CAUGHT   [3]
+------------------------------------------------------------------------
+  10/10 variants caught

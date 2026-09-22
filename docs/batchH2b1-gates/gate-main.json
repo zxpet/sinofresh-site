@@ -1,0 +1,26 @@
+{
+  "fails": [],
+  "notes": [
+    "[1] baseline: style.css 2.10.55 on all 75 pages",
+    "[1] candidate: style.css 2.10.56 on all 75 pages",
+    "[1] configurator.css 2.9 -> 2.10 on exactly the 16 dosage pages, absent elsewhere",
+    "[1] no other asset version moved on any of the 75 pages",
+    "[2] exactly the declared 58 pages differ (16 dosage + 42 detail); 17 identical",
+    "[2] unfolded: all 75 pages differ, so folding ?ver= hides exactly the declared token",
+    "[3] all 58 declared pages rebuild byte-for-byte from the baseline",
+    "[3] the band is byte-identical to the baseline on all 8 dosage pages (a move, not a re-typing)",
+    "[3] the configurator H2 is gone from all 8 pages (1 -> 0) and the detail pages keep their heading count",
+    "[3] no #configurator anchor survives anywhere",
+    "[4] all 13 files match the served copy byte-for-byte",
+    "[4] contract file present and untouched: assets/js/formulas.js",
+    "[4] contract file present and untouched: assets/js/basket.js",
+    "[4] contract file present and untouched: inc/config-pdf.php",
+    "[4] contract file present and untouched: inc/formula-pools.php",
+    "[4] configurator.css defines no .sf-explore* head (no silent override left)",
+    "[5] JSON-LD byte-identical on all 58 pages (8 dosage + 42 detail)",
+    "[5] exactly one h1 per page on all 58 pages",
+    "[6] on all 16 dosage pages the band sits between the card wall and How We Work",
+    "[6] the retargeted hero CTA is present exactly once on all 16 pages",
+    "[6] all 42 detail pages carry the declared hero CTA"
+  ]
+}
