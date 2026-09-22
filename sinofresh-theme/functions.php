@@ -28,7 +28,7 @@ add_action('after_setup_theme', function() {
 });
 
 add_action('wp_enqueue_scripts', function() {
-	wp_enqueue_style('sinofresh-style', get_stylesheet_uri(), array(), '2.10.65');
+	wp_enqueue_style('sinofresh-style', get_stylesheet_uri(), array(), '2.10.66');
 	// Sticky nav: every template renders parts/header.html, so this is site-wide.
 	wp_enqueue_script('sinofresh-sticky-header', get_template_directory_uri() . '/assets/js/sticky-header.js', array(), '1.0.0', true);
 	wp_enqueue_script('sinofresh-ui-components', get_template_directory_uri() . '/assets/js/ui-components.js', array(), '1.0.0', true);
@@ -2363,8 +2363,9 @@ add_shortcode('sf_formula_config', 'sinofresh_formula_config');
  *   Certifications     Site Settings sf_certifications   (the same reader the
  *                      factsheet row and the batch C FAQ answer use, so the
  *                      three cannot disagree about the credential list)
- *   Place of Origin    hard-coded, until batch H7e moves it to Site Settings
- *   OEM / ODM          hard-coded, until batch H7e moves it to Site Settings
+ *   Place of Origin    Site Settings sf_factory_origin   (batch H7e; the field
+ *                      ships with the constant it replaced, so no page moved)
+ *   OEM / ODM          Site Settings sf_factory_oem      (batch H7e, same)
  *
  * sf_formula_shape is read although nothing registers it. The field predates
  * the meta registry and exists on one record; WordPress reads an unregistered
@@ -2460,10 +2461,22 @@ function sinofresh_formula_specs_table() {
 	if (trim((string) $value) !== '') {
 		$rows['Certifications'] = esc_html(trim((string) $value));
 	}
-	/* Batch H7e moves both of these to Site Settings. Until then they are
-	   constants, and a constant is still a value the page can prove. */
-	$rows['Place of Origin'] = esc_html('Linyi, Shandong, China');
-	$rows['OEM / ODM'] = esc_html('Available');
+	/* Batch H7e moved both of these out of this function and into Site Settings
+	   -> Factory Information. They are read through one reader rather than
+	   through get_option() twice, so the fallback is the settings page's own
+	   default instead of a second copy living here — and the values those two
+	   fields ship with are the constants that used to stand on these two lines,
+	   character for character, which is why none of the 75 captured pages
+	   moved. The empty-means-absent contract reaches them as well: a row with
+	   no value is not rendered at all. */
+	$value = sf_formula_factory_value('sf_factory_origin');
+	if ($value !== '') {
+		$rows['Place of Origin'] = esc_html($value);
+	}
+	$value = sf_formula_factory_value('sf_factory_oem');
+	if ($value !== '') {
+		$rows['OEM / ODM'] = esc_html($value);
+	}
 
 	if (!$rows) {
 		return '';
@@ -4895,6 +4908,14 @@ function sf_social_networks() {
  * info (top bar + footer + Organization schema) and the certification badges.
  * Native Settings API, no ACF. Registered on admin_menu priority 9 so the
  * item lands above the Social Links menu below.
+ *
+ * Batch H7e added the last two keys. They are not contact details and they do
+ * not appear in the top bar or the footer: they are the two factory facts the
+ * specification sheet prints on every product page, which were constants in
+ * sinofresh_formula_specs_table() until this batch. They live here anyway
+ * because this array is the single source of a Site Settings default — the
+ * subpage that edits them and the reader that prints them both fall back to
+ * the entry below, so the two cannot drift apart.
  */
 function sf_site_settings_defaults() {
 	return array(
@@ -4905,6 +4926,10 @@ function sf_site_settings_defaults() {
 		'sf_contact_whatsapp' => '+86 133 8539 7805',
 		'sf_copyright_company' => 'Shandong SINO FRESH Pet Food Co., Ltd.',
 		'sf_copyright_suffix'  => 'All rights reserved.',
+		/* Batch H7e. The values are the constants they replaced, character for
+		   character — including the comma and the space around the slash. */
+		'sf_factory_origin'   => 'Linyi, Shandong, China',
+		'sf_factory_oem'      => 'Available',
 	);
 }
 

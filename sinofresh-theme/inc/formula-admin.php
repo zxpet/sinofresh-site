@@ -546,6 +546,11 @@ function sf_container_library() {
 }
 
 add_action('admin_init', function () {
+	/* Batch H7e reads its fallbacks from the same array the Site Settings page
+	   uses, rather than repeating the two strings here: one value, one source,
+	   and an admin who clears a field gets the shipped default back instead of
+	   a blank row on 42 product pages. */
+	$d = sf_site_settings_defaults();
 	register_setting('sf_site_settings', 'sf_containers', array(
 		'type'              => 'array',
 		'sanitize_callback' => function ($v) {
@@ -582,11 +587,29 @@ add_action('admin_init', function () {
 			return $rows;
 		},
 	));
+	/* Batch H7e — the two factory facts the spec sheet prints. They had no
+	   field anywhere: sinofresh_formula_specs_table() spelled them out as
+	   constants, so the only way to change them was a deploy. Same contract as
+	   the text fields on the parent page — an emptied field falls back to the
+	   shipped default instead of storing "". */
+	foreach (array('sf_factory_origin', 'sf_factory_oem') as $key) {
+		register_setting('sf_site_settings', $key, array(
+			'type'              => 'string',
+			'sanitize_callback' => function ($v) use ($d, $key) {
+				$v = sanitize_text_field($v);
+				return ($v !== '') ? $v : $d[$key];
+			},
+		));
+	}
 });
 
 add_action('admin_menu', function () {
 	add_submenu_page('sf-site-settings', 'Container Library', 'Container Library', 'manage_options', 'sf-containers', 'sf_render_containers_page');
 	add_submenu_page('sf-site-settings', 'Global FAQ', 'Global FAQ', 'manage_options', 'sf-global-faq', 'sf_render_global_faq_page');
+	/* Batch H7e. No hook for this page in admin_enqueue_scripts(): it has no
+	   repeating row for sf-mb-tables.js to clone and no image for wp.media to
+	   pick, so the shared admin assets stay off it on purpose. */
+	add_submenu_page('sf-site-settings', 'Factory Information', 'Factory Information', 'manage_options', 'sf-factory-info', 'sf_render_factory_info_page');
 }, 20); // after the parent menu registers (priority 9) and Social Links (default 10)
 
 /** Row template the tables JS clones for new rows. */
@@ -670,6 +693,52 @@ function sf_render_global_faq_page() {
 				</tbody>
 			</table>
 			<p><button type="button" class="button sf-reptable__add sf-reptable__add--empty" data-sf-name="sf_global_faq">+ Add row</button></p>
+			<?php submit_button(); ?>
+		</form>
+	</div>
+	<?php
+}
+
+/**
+ * Site Settings → Factory Information (batch H7e).
+ *
+ * Two facts the specification sheet prints on every product page had no home in
+ * Site Settings: they were constants inside sinofresh_formula_specs_table().
+ * This page gives them one. The defaults are those constants character for
+ * character, which is what lets the batch claim that the 75 captured pages are
+ * byte-identical before and after the swap — the change is where the value
+ * COMES FROM, and a value that does not move is the only honest way to say so.
+ *
+ * A plain form-table page, and deliberately not listed in the hook array of
+ * admin_enqueue_scripts(): nothing here is a repeating row and nothing here
+ * picks an image, so sf-mb.css, sf-mb-tables.js, sf-site-settings.js and
+ * wp.media() all stay off it. The page is the field, and the field is core's.
+ */
+function sf_render_factory_info_page() {
+	if (!current_user_can('manage_options')) {
+		return;
+	}
+	$d      = sf_site_settings_defaults();
+	$origin = get_option('sf_factory_origin', $d['sf_factory_origin']);
+	$oem    = get_option('sf_factory_oem', $d['sf_factory_oem']);
+	?>
+	<div class="wrap">
+		<h1>Factory Information</h1>
+		<p>Facts every product's specification sheet prints. Clearing a field restores its default.</p>
+		<form method="post" action="options.php">
+			<?php settings_fields('sf_site_settings'); ?>
+			<table class="form-table" role="presentation">
+				<tr>
+					<th scope="row"><label for="sf_factory_origin">Place of Origin</label></th>
+					<td><input name="sf_factory_origin" id="sf_factory_origin" type="text" class="large-text" value="<?php echo esc_attr($origin); ?>">
+					<p class="description">The <em>Place of Origin</em> row of each product's specification sheet.</p></td>
+				</tr>
+				<tr>
+					<th scope="row"><label for="sf_factory_oem">OEM / ODM</label></th>
+					<td><input name="sf_factory_oem" id="sf_factory_oem" type="text" class="large-text" value="<?php echo esc_attr($oem); ?>">
+					<p class="description">The <em>OEM / ODM</em> row of each product's specification sheet.</p></td>
+				</tr>
+			</table>
 			<?php submit_button(); ?>
 		</form>
 	</div>

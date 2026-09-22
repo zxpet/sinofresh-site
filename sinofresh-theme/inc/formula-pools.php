@@ -203,3 +203,31 @@ function sf_formula_certifications_value($form_slug) {
 	}
 	return ($form_slug !== '') ? sinofresh_formula_spec_cell($form_slug, 'Certifications') : '';
 }
+
+/**
+ * One factory fact for the specification sheet — 'sf_factory_origin' (Place of
+ * Origin) and 'sf_factory_oem' (OEM / ODM). Batch H7e.
+ *
+ * Until H7e these two were constants inside sinofresh_formula_specs_table().
+ * They are now Site Settings fields, and the defaults are those constants
+ * unchanged, so the swap moves WHERE the value comes from without moving the
+ * value: every one of the 75 captured pages stays byte-identical, which is the
+ * only reason the change can be proved rather than merely asserted.
+ *
+ * The fallback is read from sf_site_settings_defaults() and not repeated here.
+ * Two copies of a default are two chances to disagree, and the copy this would
+ * duplicate is the one the settings page itself falls back to — so an admin who
+ * clears the field and the renderer that prints it would be reading different
+ * strings. An empty stored value also falls back, for the same reason the rest
+ * of Site Settings does: clearing a field must not blank 42 pages.
+ *
+ * Returns '' for a key with no default, which the caller treats as "no row".
+ * That is how the empty-means-absent contract reaches a field whose source is
+ * an option rather than post meta.
+ */
+function sf_formula_factory_value($key) {
+	$d       = sf_site_settings_defaults();
+	$default = isset($d[$key]) ? (string) $d[$key] : '';
+	$value   = trim((string) get_option($key, $default));
+	return ($value !== '') ? $value : $default;
+}
