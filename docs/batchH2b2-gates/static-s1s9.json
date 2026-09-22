@@ -1,0 +1,60 @@
+{
+  "checks": [
+    {
+      "id": "S1",
+      "title": "functions.php: guard kept, enqueues gone",
+      "ok": true,
+      "detail": "is_dosage_page x2, formulas guard intact, -4 lines"
+    },
+    {
+      "id": "S2",
+      "title": "php -l functions.php",
+      "ok": true,
+      "detail": "No syntax errors detected in /Users/meng/Workbuddy/sinofresh外贸网站建设/sinofresh-theme/functions.php"
+    },
+    {
+      "id": "S3",
+      "title": "both assets gone; no path reference left",
+      "ok": true,
+      "detail": "gone=2, assets/css dir=no, refs=none"
+    },
+    {
+      "id": "S4",
+      "title": "theme file set is base minus exactly the two assets",
+      "ok": true,
+      "detail": "347 now vs 349 at ebe8f50; gone=['assets/css/configurator.css', 'assets/js/configurator.js'] added=none"
+    },
+    {
+      "id": "S5",
+      "title": ":has( occurrences total 164, style.css 164",
+      "ok": true,
+      "detail": "total=164 [style.css=164]"
+    },
+    {
+      "id": "S6",
+      "title": "configurator.js survives in exactly 5 comment lines",
+      "ok": true,
+      "detail": "lines [507, 1084, 1086, 1227, 1233]; live refs=0"
+    },
+    {
+      "id": "S7",
+      "title": "K1-K7 contract files byte-identical to ebe8f50",
+      "ok": true,
+      "detail": "drift=none"
+    },
+    {
+      "id": "S8",
+      "title": "style.css keeps .sf-explore*; 8 templates keep the H2b1 note",
+      "ok": true,
+      "detail": "heads=15 notes=8/8"
+    },
+    {
+      "id": "S9",
+      "title": "git diff vs base is exactly the three declared files",
+      "ok": true,
+      "detail": "got=['D\\tsinofresh-theme/assets/css/configurator.css', 'D\\tsinofresh-theme/assets/js/configurator.js', 'M\\tsinofresh-theme/functions.php']"
+    }
+  ],
+  "errors": [],
+  "ok": true
+}

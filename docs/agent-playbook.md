@@ -988,6 +988,20 @@ commit message 格式：
 | 7 | **删掉 `body:has(.configurator__bar)` 之后，两个固定层落回 `style.css` 取值**：live（有条）恒为 float `132px` / lang `68px`；候选（无条）现代引擎 = 横幅在场 1440 `100px`、480 `268px`，无横幅 24/16px，lang `0px` —— 与**非剂型页**（`/about/`）完全一致 ⇒ 是向全站一致性收敛。旧引擎因 **`:700` / `:705`** 的无条件复刻仍是 132/68 | H2b2 直接把 `configurator.css` **整个文件**删掉（原先写的「`:667-707` 整段」行号不成立：`:667` 只是注释首行、`:707` 不是块边界；容器是 L642 的媒体查询、直开到 L831），删后旧引擎应与现代引擎差值归零 |
 | 8 | `--wp--preset--spacing--80` 实测 **48px**；`.sf-explore` 是 `content-box` ⇒ 其边框盒 = `1200px 内容列 + 2×32px padding` = 1264px；面板**居中**（gutter 左右相等），且 1440 时其**内容列**正好压在卡墙内容列（x120）上 | 判断"通栏"要看 `section` 而不是面板 |
 
+## A.6 H2b2 执行期实测（2026-09-22，Step 1–5）
+
+| # | 结论 | 影响 |
+|---|---|---|
+| 1 | ⛔ **`install` 的"先删后建"前提检查必须是 `if … exit`，不能是 `A && B`**。原写 `git cat-file -e <sha>^{commit} && echo present`，SHA 未 fetch ⇒ 检查失败但 **`set -e` 不拦 `&&` 列表左操作数**，脚本继续 `rm -rf $PRE; mkdir -p $PRE`、死在空 tar：**副本目录还在、里面是空的**。症状不是"install 失败"而是**该主题注册的 CPT 全部 301 回首页**（本次 44 页：`/formulas/` 归档 + 21 详情 ×2 语言）。已修为 `if ! <check>; then echo FATAL >&2; rm -f $MU.tmp; exit 4; fi` ＋ 解包后 `[ -f $PRE/functions.php ] \|\| exit 5` | 一切"先删后建"的脚手架脚本；RULES §Q.3 |
+| 2 | ⛔ **换候选前必须 `git -C <server-repo> fetch --prune origin`**：`install` 只从**服务器上的 repo** 取对象，本地 push 到 GitHub ≠ 服务器有该对象。`git fetch` 只取对象、不动工作树（实测 HEAD 与 `git status` 均未变） | Step 4 前置 |
+| 3 | ✅ **"删掉一个脚本"可以用注入证明是零行为变化**：`configurator.js` 是**裸 IIFE**（非 `DOMContentLoaded` 包裹，L12 `(function () {`），首句即 `.configurator` 不存在就 `return`。把基线自己那份字节 + 哨兵注进候选页 ⇒ `cfgRan=1`、`sessionStorage` 键不变、`<body>` 轮廓恒 455 节点、几何相同、configurator 请求 0→0 | 任何"惰性脚本"的删除批；⚠️ 若是 `DOMContentLoaded` 包裹则晚注入不执行，必须先确认入口形态 |
+| 4 | ⛔ **测"点一下没反应"时不能点会跳转的锚点**：`a.sf-explore__btn` 的 `href="/formulas/"` ⇒ 页面导航、哨兵随旧文档消失、轮廓数"从 485 变 460"其实是在量另一个页面。改法＝**捕获阶段 `preventDefault`**（事件照常传播给元素自身处理器、只抑制跳转）＋ 断言"点击后仍在原路径" | E3；任何"点击后无变化"断言 |
+| 5 | **几何对照必须用参考工具的**字段定义**，不能自己重新写一份**：首版 `rect()` 漏了 `bottom` ⇒ `gapWallEdgeToBand` 算成 `NaN`（JSON 序列化成 `null`）；`bandBtn` 漏了 `w`。补齐口径后 **210 项（35 字段 × 6 档）全部一致** | E5；跨批次几何对照 |
+| 6 | **"上一批留下的唯一行为变化"要在这一批翻向验证**：删掉承载旧引擎复刻的整个文件后，正确断言是**旧引擎 stub 开/关两态必须相等**，而不是"旧引擎还是老值"。实测 480px `268/0`、1440px `100/0`，差值 **0** | E4；H2b1 附录 A.5 #7 的收口 |
+| 7 | ⛔ **`git ls-tree --name-only` 给非 ASCII 路径加引号** ⇒ 与 `find` 的结果直接比会得到"同时新增和删除 12 个文件"的假结论。要用 `-z`（NUL 分隔）。另：工作树里的 `.DS_Store` / `__pycache__` 是未跟踪落地物，文件数断言必须排除 | S4 首轮 349 vs 154 假失败 |
+| 8 | ⛔ **负对照要求"非零退出 **且** 有具名判据"**：`functions.php` 整个缺失时，首版是靠 `FileNotFoundError` 退出（rc=1）——数值上"抓到"了，却没有任何判据。静态门因此新增 **S0「必需输入存在」**，负对照台也改成必须带具名检查 | 所有负对照台 |
+| 9 | **`class="configurator` 的"出现次数"与 `grep -c` 的"行数"不同**：live 剂型页实测 **210 次 / 132 行**。引用数字必须写明口径（RULES §Q.2） | 全站计数类断言 |
+
 ---
 
 # 附录 B：进度区
@@ -996,24 +1010,34 @@ commit message 格式：
 |---|---|---|---|
 | H2b | **Step 0 完成 → 5 项不符已裁决（① 改 D / ②③④⑤ 同意）** | — | `docs/batch2d-stepH2b-scan.md` |
 | **H2b1** | **Step 1–5 全过门 + E2E 全过 → 用户确认通过；`git pull` 跳过（playbook 明确不执行上线）** | 产品 `ebe8f50` + 证据 `69d4c21`/`d8ffd53`（均已 push） | `docs/batch2d-stepH2b1.md` |
-| H2b2 | **Step 0 扫描完成（2026-09-22）**，无裁决项 | — | 停入队 + 删资产；`configurator.css` / `configurator.js` **整文件删除**；⚠️ 删 `functions.php` **187–190 共 4 行**（185–186 必须保留，205 行仍在用）；基线＝H2b1 预检副本 |
-| H3 | 未开工 | — | — |
+| **H2b2** | **Step 1–5 全过门 + E2E 全过（2026-09-22）；Step 6 `git pull` 按规则跳过** | 产品 `3b9fc23`（已 push）；基线 `ebe8f50` | `docs/batch2d-stepH2b2.md` |
+| H3 | **未开工 —— 下一批** | — | 内容区 + FAQ + Sampling |
 | H4 | 未开工 | — | 前置：邮箱 `info@` → `sales@` |
 | H5 | 未开工 | — | — |
-| H6 | 未开工 | — | 候选 +1：`sinofresh_formula_*` sessionStorage 无读者 |
+| H6 | 未开工 | — | 待办已增至 **8 项**（H2b2 新造 4 项见 `docs/batch2d-stepH2b2.md` §8） |
 
 **H2b1 门/E2E 摘要**：静态 S1–S8 全过；75 页基线 + 75 页候选；主门 **PASS 21 条 / 0 FAIL**
 （58 页差 / 17 页同，逐字节重建）；破坏矩阵 **10/10**；三条负对照全 FAIL（as required）；
 **可复现性 12/12 逐字节**；E2E **E1–E9 全过**。计划外行为变化（两个固定层落位 132/68 → 现代引擎收敛到
 全站取值）已实测，**用户判定为收敛而非回归**。详见 `docs/batch2d-stepH2b1.md`。
 
+**H2b2 门/E2E 摘要**：纯删除 **1,710 删 / 0 增**；静态 S1–S9 全过 + 负对照 6/6；基线重抓 **75/75 掩码 identical**；
+服务器副本 = 本地树 **347/347 逐字节**；主门 **PASS 18 条 / 0 FAIL**（16 页恰少两行、59 页逐字节同、无 ver bump）；
+破坏矩阵 **10/10**；负对照 **3/3**（均具名）；E2E **E1–E6 全过**、几何 **210 项逐值相同**。
+唯一行为变化＝旧引擎差值归零（480px `268/0`、1440px `100/0`）。详见 `docs/batch2d-stepH2b2.md`。
+
 **⛔ 立项规则变更（用户 2026-09-22 明确）**：① **playbook 不执行上线** ⇒ 各批**不开 Step 6 `git pull`**；
 ② **H2b2 起的基线＝上一批的预检副本，不是 live** ⇒ 预检副本成为"当前最新候选"的唯一载体，
 **在下一批用完之前禁拆**（H2a 的"pull 完再拆"顺序作废）。因此 dev 站 live 主题会长期停在 pre-H2b1（`2.10.55`＋配置器），
 那是预期状态，不是漏做 pull。
+③ **新增停靠豁免**：扫描与预期**方向一致**、仅**派生数字/行号**有误 ⇒ 就地更正、**不停机汇报**，自动继续。
 
 **服务器状态**：未 pull；authority guard 未删；DB 未动。
-**预检副本仍然挂着且必须保留**：`wp-content/themes/sinofresh-theme-preflight/`（＝`ebe8f50` 树，349/349 逐字节）
-＋ mu-plugin `zz-sf-preflight.php`。H2b2 的基线就是它，**拆掉等于自毁基线**。
-复核锚点（2026-09-22）：无头命中 `2.10.55` ＋ 132 处 `class="configurator`；带头命中 `2.10.56` ＋ 0 处。
+**预检副本仍然挂着且必须保留**：`wp-content/themes/sinofresh-theme-preflight/`
+（现＝**`3b9fc23`** 树，**347/347 逐字节**；H2b1 时期曾是 `ebe8f50` 的 349/349）
+＋ mu-plugin `zz-sf-preflight.php`。**H3 的基线就是它，拆掉等于自毁基线。**
+复核锚点（2026-09-22 H2b2 收尾实测，同 URL 两种请求头）：
+无头 → `2.10.55` ＋ 2 条 configurator 资产 ＋ `class="configurator` 210 次/132 行（＝H2a 状态，预期）；
+带头 → `2.10.56` ＋ 0 条资产 ＋ `link` 指向 `themes/sinofresh-theme-preflight/`。
+⚠️ 引用这两个计数时必须写明是**出现次数**还是 **`grep -c` 行数**（210 vs 132）。
 

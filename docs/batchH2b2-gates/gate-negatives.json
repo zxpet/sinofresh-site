@@ -1,0 +1,33 @@
+{
+  "controls": [
+    {
+      "control": "served-manifest-missing",
+      "description": "served manifest points at a nonexistent path",
+      "failed": true,
+      "named_verdict": true,
+      "detail": [
+        "[4] no served manifest: the tree cannot be shown to be the copy the server holds (a missing reference is a failure, not a skip)"
+      ]
+    },
+    {
+      "control": "baseline-empty",
+      "description": "baseline directory is empty",
+      "failed": true,
+      "named_verdict": true,
+      "detail": [
+        "[0] baseline directory holds no .html captures: /var/folders/zj/1y28wlw93p567b4x4j7116800000gn/T/h2b2-neg-3lb4wihi/empty"
+      ]
+    },
+    {
+      "control": "candidate-equals-baseline",
+      "description": "candidate is a copy of the baseline",
+      "failed": true,
+      "named_verdict": true,
+      "detail": [
+        "[1] asset inventory: ['products__dental-chews.html (1, 1)->(1, 1)', 'products__dental-chews.html still mentions sinofresh-configurator', 'products__drops.html (1, 1)->(1, 1)', 'products__drops.html still mentions sinofresh-configurator']",
+        "[2] page set wrong: 0 differ, expected 16; missing=['products__dental-chews.html', 'products__drops.html', 'products__fish-oil.html', 'products__liquids.html'] extra=[]"
+      ]
+    }
+  ],
+  "wrong": []
+}

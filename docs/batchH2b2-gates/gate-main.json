@@ -1,0 +1,23 @@
+{
+  "fails": [],
+  "notes": [
+    "[0] both captures hold 75 pages",
+    "[1] the two configurator refs are present once each on exactly the 16 dosage pages in the baseline and absent on all 75 in the candidate",
+    "[1] style.css stays 2.10.56 on all 75 pages — no version bump, and no token moved anywhere else either",
+    "[2] exactly the declared 16 pages differ; 59 identical",
+    "[2] folding ?ver= changes nothing: no version token moved on any page",
+    "[3] all 16 pages rebuild byte-for-byte as the baseline minus exactly the two id-claimed lines",
+    "[3] the other 59 pages are byte-identical and never referenced the assets",
+    "[4] all 347 files match the served pre-flight copy byte-for-byte",
+    "[4] contract file present and untouched: assets/js/formulas.js",
+    "[4] contract file present and untouched: assets/js/basket.js",
+    "[4] contract file present and untouched: inc/config-pdf.php",
+    "[4] contract file present and untouched: inc/formula-pools.php",
+    "[4] both configurator assets are gone from the tree",
+    "[5] JSON-LD byte-identical on all 75 pages",
+    "[5] exactly one h1 per page on all 75 pages",
+    "[6] on all 16 dosage pages the band still sits between #formulas and How We Work",
+    "[6] hero CTA, the H2b1 note, and the absence of #configurator all hold",
+    "[6] all 42 detail pages keep the retargeted hero CTA"
+  ]
+}

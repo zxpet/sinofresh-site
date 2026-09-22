@@ -1,0 +1,21 @@
+========================================================================
+  ok   [0] both captures hold 75 pages
+  ok   [1] the two configurator refs are present once each on exactly the 16 dosage pages in the baseline and absent on all 75 in the candidate
+  ok   [1] style.css stays 2.10.56 on all 75 pages — no version bump, and no token moved anywhere else either
+  ok   [2] exactly the declared 16 pages differ; 59 identical
+  ok   [2] folding ?ver= changes nothing: no version token moved on any page
+  ok   [3] all 16 pages rebuild byte-for-byte as the baseline minus exactly the two id-claimed lines
+  ok   [3] the other 59 pages are byte-identical and never referenced the assets
+  ok   [4] all 347 files match the served pre-flight copy byte-for-byte
+  ok   [4] contract file present and untouched: assets/js/formulas.js
+  ok   [4] contract file present and untouched: assets/js/basket.js
+  ok   [4] contract file present and untouched: inc/config-pdf.php
+  ok   [4] contract file present and untouched: inc/formula-pools.php
+  ok   [4] both configurator assets are gone from the tree
+  ok   [5] JSON-LD byte-identical on all 75 pages
+  ok   [5] exactly one h1 per page on all 75 pages
+  ok   [6] on all 16 dosage pages the band still sits between #formulas and How We Work
+  ok   [6] hero CTA, the H2b1 note, and the absence of #configurator all hold
+  ok   [6] all 42 detail pages keep the retargeted hero CTA
+------------------------------------------------------------------------
+VERDICT: PASS — all seven gates hold

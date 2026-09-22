@@ -1,0 +1,12 @@
+=== H2b2 static checks ===
+  S1   functions.php: guard kept, enqueues gone       PASS  is_dosage_page x2, formulas guard intact, -4 lines
+  S2   php -l functions.php                           PASS  No syntax errors detected in /Users/meng/Workbuddy/sinofresh外贸网站建设/sinofresh-theme/functions.php
+  S3   both assets gone; no path reference left       PASS  gone=2, assets/css dir=no, refs=none
+  S4   theme file set is base minus exactly the two assets PASS  347 now vs 349 at ebe8f50; gone=['assets/css/configurator.css', 'assets/js/configurator.js'] added=none
+  S5   :has( occurrences total 164, style.css 164     PASS  total=164 [style.css=164]
+  S6   configurator.js survives in exactly 5 comment lines PASS  lines [507, 1084, 1086, 1227, 1233]; live refs=0
+  S7   K1-K7 contract files byte-identical to ebe8f50 PASS  drift=none
+  S8   style.css keeps .sf-explore*; 8 templates keep the H2b1 note PASS  heads=15 notes=8/8
+  S9   git diff vs base is exactly the three declared files PASS  got=['D\tsinofresh-theme/assets/css/configurator.css', 'D\tsinofresh-theme/assets/js/configurator.js', 'M\tsinofresh-theme/functions.php']
+------------------------------------------------------------------------
+  VERDICT: PASS — all 9 checks hold

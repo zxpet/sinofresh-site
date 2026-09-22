@@ -72,11 +72,28 @@ def install(commit):
     # 1. upload the gate (scp, so the file's bytes are the repo's bytes)
     subprocess.run(["scp", "-q", MU_SRC, HOST + ":" + MU + ".tmp"], check=True)
     # 2. build the copy theme from the commit and arm the gate
+    #
+    # The commit check MUST be an `if ! …; then exit; fi`, not `check && echo`.
+    # Measured 2026-09-22, and it cost the pre-flight copy: under `set -e` a
+    # failing left operand of `&&` does NOT stop the script (the exception is
+    # exactly "a command in a && list that is not the last one"), so the script
+    # sailed past the failed `git cat-file -e`, ran `rm -rf {PRE}`, and then
+    # died on the empty tar — leaving the theme directory present but EMPTY.
+    # The site then 301s every sf_formula URL to the home page, because the CPT
+    # the theme registers no longer exists. Distinguishing "install failed" from
+    # "install succeeded and emptied the copy" is the whole point of this guard.
     ssh(f"""set -euo pipefail
-git -C {REPO} cat-file -e {shlex.quote(commit)}^{{commit}} && echo "commit {commit} present"
+if ! git -C {REPO} cat-file -e {shlex.quote(commit)}^{{commit}} 2>/dev/null; then
+  echo "FATAL: commit {commit} is not in {REPO} — run a fetch first" >&2
+  rm -f {MU}.tmp
+  exit 4
+fi
+echo "commit {commit} present"
 rm -rf {PRE}
 mkdir -p {PRE}
 git -C {REPO} archive {shlex.quote(commit)} sinofresh-theme | tar -x -C {PRE} --strip-components=1
+[ -f {PRE}/functions.php ] || {{ echo "FATAL: extraction left no functions.php" >&2; exit 5; }}
+[ -f {PRE}/style.css ] || {{ echo "FATAL: extraction left no style.css" >&2; exit 5; }}
 mv {MU}.tmp {MU}
 # Rotate, do not delete: the A-pass log is the only proof the gate fired for
 # the baseline commit, and an install for the B pass used to wipe it.

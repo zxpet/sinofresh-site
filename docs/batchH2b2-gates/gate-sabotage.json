@@ -1,0 +1,126 @@
+{
+  "matrix": [
+    {
+      "variant": "link-restored",
+      "caught": true,
+      "gates": [
+        "[1]",
+        "[3]"
+      ],
+      "detail": [
+        "[1] asset inventory: ['products__soft-chews.html (1, 1)->(1, 0)', 'products__soft-chews.html still mentions sinofresh-configurator']",
+        "[3] the page is not the declared edit: ['products__soft-chews.html']"
+      ]
+    },
+    {
+      "variant": "script-restored",
+      "caught": true,
+      "gates": [
+        "[1]",
+        "[3]"
+      ],
+      "detail": [
+        "[1] asset inventory: ['products__soft-chews.html (1, 1)->(0, 1)', 'products__soft-chews.html still mentions sinofresh-configurator']",
+        "[3] the page is not the declared edit: ['products__soft-chews.html']"
+      ]
+    },
+    {
+      "variant": "third-line-removed",
+      "caught": true,
+      "gates": [
+        "[3]",
+        "[6]"
+      ],
+      "detail": [
+        "[3] the page is not the declared edit: ['products__soft-chews.html']",
+        "[6] the H2b1 author note is gone: ['products__soft-chews.html']"
+      ]
+    },
+    {
+      "variant": "band-chip-missing",
+      "caught": true,
+      "gates": [
+        "[3]"
+      ],
+      "detail": [
+        "[3] the page is not the declared edit: ['products__soft-chews.html']"
+      ]
+    },
+    {
+      "variant": "stable-page-touched",
+      "caught": true,
+      "gates": [
+        "[2]",
+        "[3]"
+      ],
+      "detail": [
+        "[2] page set wrong: 17 differ, expected 16; missing=[] extra=['blog.html']",
+        "[3] the 59 non-dosage pages are not untouched: ['blog.html']"
+      ]
+    },
+    {
+      "variant": "style-token-moved",
+      "caught": true,
+      "gates": [
+        "[1]",
+        "[2]",
+        "[3]"
+      ],
+      "detail": [
+        "[1] style token moved: base=['2.10.56'] cand=['2.10.55', '2.10.56']",
+        "[2] page set wrong: 17 differ, expected 16; missing=[] extra=['blog.html']",
+        "[2] the ?ver= fold changes the answer (16 vs 17) — some token moved that this batch does not declare"
+      ]
+    },
+    {
+      "variant": "asset-file-restored",
+      "caught": true,
+      "gates": [
+        "[4]"
+      ],
+      "detail": [
+        "[4] working tree vs served copy: ['assets/css/configurator.css absent from the manifest']",
+        "[4] still in the tree: ['assets/css/configurator.css']"
+      ]
+    },
+    {
+      "variant": "jsonld-drift",
+      "caught": true,
+      "gates": [
+        "[3]",
+        "[5]"
+      ],
+      "detail": [
+        "[3] the page is not the declared edit: ['products__soft-chews.html']",
+        "[5] JSON-LD drifted: ['products__soft-chews.html']"
+      ]
+    },
+    {
+      "variant": "declared-page-unchanged",
+      "caught": true,
+      "gates": [
+        "[1]",
+        "[2]",
+        "[3]"
+      ],
+      "detail": [
+        "[1] asset inventory: ['products__soft-chews.html (1, 1)->(1, 1)', 'products__soft-chews.html still mentions sinofresh-configurator']",
+        "[2] page set wrong: 15 differ, expected 16; missing=['products__soft-chews.html'] extra=[]",
+        "[3] the page is not the declared edit: ['products__soft-chews.html']"
+      ]
+    },
+    {
+      "variant": "detail-cta-reverted",
+      "caught": true,
+      "gates": [
+        "[2]",
+        "[3]"
+      ],
+      "detail": [
+        "[2] page set wrong: 17 differ, expected 16; missing=[] extra=['formulas__calming-soft-chews.html']",
+        "[3] the 59 non-dosage pages are not untouched: ['formulas__calming-soft-chews.html']"
+      ]
+    }
+  ],
+  "missed": []
+}

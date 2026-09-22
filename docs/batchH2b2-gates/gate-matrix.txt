@@ -1,0 +1,13 @@
+=== sabotage matrix — every variant must be caught ===
+  link-restored                CAUGHT   [1] [3]
+  script-restored              CAUGHT   [1] [3]
+  third-line-removed           CAUGHT   [3] [6]
+  band-chip-missing            CAUGHT   [3]
+  stable-page-touched          CAUGHT   [2] [3]
+  style-token-moved            CAUGHT   [1] [2] [3]
+  asset-file-restored          CAUGHT   [4]
+  jsonld-drift                 CAUGHT   [3] [5]
+  declared-page-unchanged      CAUGHT   [1] [2] [3]
+  detail-cta-reverted          CAUGHT   [2] [3]
+------------------------------------------------------------------------
+  10/10 variants caught

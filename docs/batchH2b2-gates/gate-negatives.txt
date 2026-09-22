@@ -1,0 +1,6 @@
+=== negative controls — each precondition break must FAIL ===
+  served-manifest-missing      FAIL (as required)  served manifest points at a nonexistent path
+  baseline-empty               FAIL (as required)  baseline directory is empty
+  candidate-equals-baseline    FAIL (as required)  candidate is a copy of the baseline
+------------------------------------------------------------------------
+  3/3 controls failed as required

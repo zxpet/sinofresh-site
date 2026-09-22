@@ -1,0 +1,794 @@
+{
+  "fails": [],
+  "notes": [
+    "E1 all 16 dosage pages serve 200 with zero references to sinofresh-configurator (en + zh)",
+    "E1 the dosage page in a real browser: no configurator element, no configurator request, no console error, and the H2b1 page order is intact",
+    "E2 both deleted URLs 404 while a sibling asset in the same directory still serves 200 — the 404s are the deletion, not a broken copy",
+    "E3 the baseline configurator.js, injected and executed on the candidate page, changes nothing: the sessionStorage keys are unchanged (['wpEmojiSettingsSupports']), the body outline count is identical (455 nodes), the band/card-wall geometry is identical, and clicking the wall button and a chip changes nothing",
+    "E3 no sinofresh_config_* / sinofresh_formula_* key exists in sessionStorage, before or after the injection (['wpEmojiSettingsSupports']) — those keys have had no writer since H2b1",
+    "E3 zero configurator requests in both states — the inline injection cannot fetch a file that no longer exists, and the served page never asked for one",
+    "E4 the legacy-engine delta is zero: with html.no-has forced on, both fixed layers compute exactly what the modern engine gives — the two unconditional replicas at the old configurator.css:700/705 are gone (H2b1 measured 132/68 on live and 100/24/268/16 + lang 0 on the candidate)",
+    "E5 210 measured fields are identical to the H2b1 candidate at all six widths — deleting the assets changed no geometry",
+    "E6 six real screenshots (37-54 KB), the band framed clear of the sticky chrome, from the candidate bytes"
+  ],
+  "rows": {
+    "e1": [
+      {
+        "path": "/products/soft-chews/",
+        "code": "200",
+        "refs": 0
+      },
+      {
+        "path": "/products/tablets/",
+        "code": "200",
+        "refs": 0
+      },
+      {
+        "path": "/products/powders/",
+        "code": "200",
+        "refs": 0
+      },
+      {
+        "path": "/products/pastes/",
+        "code": "200",
+        "refs": 0
+      },
+      {
+        "path": "/products/drops/",
+        "code": "200",
+        "refs": 0
+      },
+      {
+        "path": "/products/liquids/",
+        "code": "200",
+        "refs": 0
+      },
+      {
+        "path": "/products/fish-oil/",
+        "code": "200",
+        "refs": 0
+      },
+      {
+        "path": "/products/dental-chews/",
+        "code": "200",
+        "refs": 0
+      },
+      {
+        "path": "/zh/products/soft-chews/",
+        "code": "200",
+        "refs": 0
+      },
+      {
+        "path": "/zh/products/tablets/",
+        "code": "200",
+        "refs": 0
+      },
+      {
+        "path": "/zh/products/powders/",
+        "code": "200",
+        "refs": 0
+      },
+      {
+        "path": "/zh/products/pastes/",
+        "code": "200",
+        "refs": 0
+      },
+      {
+        "path": "/zh/products/drops/",
+        "code": "200",
+        "refs": 0
+      },
+      {
+        "path": "/zh/products/liquids/",
+        "code": "200",
+        "refs": 0
+      },
+      {
+        "path": "/zh/products/fish-oil/",
+        "code": "200",
+        "refs": 0
+      },
+      {
+        "path": "/zh/products/dental-chews/",
+        "code": "200",
+        "refs": 0
+      }
+    ],
+    "e2": [
+      {
+        "asset": "/assets/css/configurator.css",
+        "preflight": "404"
+      },
+      {
+        "asset": "/assets/js/configurator.js",
+        "preflight": "404"
+      },
+      {
+        "asset": "/assets/js/formulas.js (control)",
+        "preflight": "200"
+      }
+    ],
+    "e3": {
+      "injected": 1,
+      "clicks": {
+        "clicks": 2,
+        "url": "/products/soft-chews/"
+      },
+      "cfgRan": 1,
+      "ssA": 1,
+      "ssB": 1,
+      "ssKeysA": [
+        "wpEmojiSettingsSupports"
+      ],
+      "ssKeysB": [
+        "wpEmojiSettingsSupports"
+      ],
+      "outlineA": 455,
+      "outlineB": 455,
+      "cfgRequestsA": 0,
+      "cfgRequestsB": 0,
+      "before": {
+        "ssLen": 1,
+        "ssKeys": [
+          "wpEmojiSettingsSupports"
+        ],
+        "outline": 455,
+        "band": {
+          "x": 0,
+          "w": 1280,
+          "h": 259
+        },
+        "wall": {
+          "x": 0,
+          "w": 1280,
+          "h": 736
+        },
+        "explore": {
+          "x": 8,
+          "w": 1264,
+          "h": 211
+        },
+        "wallH2": {
+          "x": 40,
+          "w": 1200,
+          "h": 55
+        },
+        "chipCount": 8,
+        "chipsScroll": 0,
+        "cfgLinks": 0,
+        "cfgTargets": 0,
+        "configuratorLeft": 0,
+        "buildH2": 0
+      },
+      "after": {
+        "ssLen": 1,
+        "ssKeys": [
+          "wpEmojiSettingsSupports"
+        ],
+        "outline": 455,
+        "band": {
+          "x": 0,
+          "w": 1280,
+          "h": 259
+        },
+        "wall": {
+          "x": 0,
+          "w": 1280,
+          "h": 736
+        },
+        "explore": {
+          "x": 8,
+          "w": 1264,
+          "h": 211
+        },
+        "wallH2": {
+          "x": 40,
+          "w": 1200,
+          "h": 55
+        },
+        "chipCount": 8,
+        "chipsScroll": 0,
+        "cfgLinks": 0,
+        "cfgTargets": 0,
+        "configuratorLeft": 0,
+        "buildH2": 0
+      }
+    },
+    "e4": {
+      "480": {
+        "noStub": {
+          "float": "268px",
+          "lang": "0px",
+          "noHas": false,
+          "stubRan": 0
+        },
+        "stub": {
+          "float": "268px",
+          "lang": "0px",
+          "noHas": true,
+          "stubRan": 1
+        }
+      },
+      "1440": {
+        "noStub": {
+          "float": "100px",
+          "lang": "0px",
+          "noHas": false,
+          "stubRan": 0
+        },
+        "stub": {
+          "float": "100px",
+          "lang": "0px",
+          "noHas": true,
+          "stubRan": 1
+        }
+      }
+    },
+    "e5": {
+      "widths": [
+        {
+          "overflowX": 0,
+          "band": {
+            "x": 0,
+            "y": 3132,
+            "w": 480,
+            "h": 243,
+            "top": 3132,
+            "bottom": 3374
+          },
+          "explore": {
+            "x": 38,
+            "y": 3132,
+            "w": 404,
+            "h": 195,
+            "top": 3132,
+            "bottom": 3326
+          },
+          "wall": {
+            "x": 0,
+            "y": 867,
+            "w": 480,
+            "h": 2241,
+            "top": 867,
+            "bottom": 3108
+          },
+          "wallH2": {
+            "x": 38,
+            "y": 915,
+            "w": 404,
+            "h": 44,
+            "top": 915,
+            "bottom": 959
+          },
+          "bandSections": 1,
+          "bandPad": {
+            "l": "38px",
+            "r": "38px",
+            "t": "0px",
+            "b": "48px"
+          },
+          "explorePadL": "24px",
+          "exploreMarginL": "0px",
+          "exploreBoxSizing": "content-box",
+          "exploreMaxW": "1200px",
+          "gutterL": 38,
+          "gutterR": 38,
+          "exploreContentX": 62,
+          "wallContentX": 38,
+          "wallPadBottom": 48,
+          "wallContentBottom": 3060,
+          "gapWallContentToBand": 72,
+          "gapWallEdgeToBand": 24,
+          "chipCount": 8,
+          "chipCurrent": [
+            "Soft Chews"
+          ],
+          "chipFont": "14px",
+          "chipPad": "10px 16px",
+          "chipRadius": "6px",
+          "chipsGap": "8px",
+          "chipsScroll": 426,
+          "chipsNowrap": "nowrap",
+          "bandBtn": {
+            "border": "2px solid rgb(27, 77, 62)",
+            "color": "rgb(27, 77, 62)",
+            "padding": "12px 18px",
+            "radius": "6px",
+            "minHeight": "44px",
+            "display": "block",
+            "w": 404
+          },
+          "heroBtnHref": "/contact/#quote",
+          "heroBtnClass": "wp-block-button__link has-card-white-color has-text-color wp-element-button sf-quote-cta",
+          "tocPresent": true,
+          "tocDisplay": "none",
+          "tocLinks": [
+            "Standard Formulas",
+            "How We Work",
+            "Frequently Asked Questions",
+            "Related Dosage Forms",
+            "Request a Soft Chews Quote"
+          ],
+          "configuratorLeft": 0,
+          "buildH2": 0
+        },
+        {
+          "overflowX": 0,
+          "band": {
+            "x": 0,
+            "y": 3673,
+            "w": 768,
+            "h": 243,
+            "top": 3673,
+            "bottom": 3916
+          },
+          "explore": {
+            "x": 38,
+            "y": 3673,
+            "w": 692,
+            "h": 195,
+            "top": 3673,
+            "bottom": 3868
+          },
+          "wall": {
+            "x": 0,
+            "y": 568,
+            "w": 768,
+            "h": 3081,
+            "top": 568,
+            "bottom": 3649
+          },
+          "wallH2": {
+            "x": 38,
+            "y": 616,
+            "w": 692,
+            "h": 44,
+            "top": 616,
+            "bottom": 660
+          },
+          "bandSections": 1,
+          "bandPad": {
+            "l": "38px",
+            "r": "38px",
+            "t": "0px",
+            "b": "48px"
+          },
+          "explorePadL": "24px",
+          "exploreMarginL": "0px",
+          "exploreBoxSizing": "content-box",
+          "exploreMaxW": "1200px",
+          "gutterL": 38,
+          "gutterR": 38,
+          "exploreContentX": 62,
+          "wallContentX": 38,
+          "wallPadBottom": 48,
+          "wallContentBottom": 3601,
+          "gapWallContentToBand": 72,
+          "gapWallEdgeToBand": 24,
+          "chipCount": 8,
+          "chipCurrent": [
+            "Soft Chews"
+          ],
+          "chipFont": "14px",
+          "chipPad": "10px 16px",
+          "chipRadius": "6px",
+          "chipsGap": "8px",
+          "chipsScroll": 138,
+          "chipsNowrap": "nowrap",
+          "bandBtn": {
+            "border": "2px solid rgb(27, 77, 62)",
+            "color": "rgb(27, 77, 62)",
+            "padding": "12px 18px",
+            "radius": "6px",
+            "minHeight": "44px",
+            "display": "block",
+            "w": 692
+          },
+          "heroBtnHref": "/contact/#quote",
+          "heroBtnClass": "wp-block-button__link has-card-white-color has-text-color wp-element-button sf-quote-cta",
+          "tocPresent": true,
+          "tocDisplay": "none",
+          "tocLinks": [
+            "Standard Formulas",
+            "How We Work",
+            "Frequently Asked Questions",
+            "Related Dosage Forms",
+            "Request a Soft Chews Quote"
+          ],
+          "configuratorLeft": 0,
+          "buildH2": 0
+        },
+        {
+          "overflowX": 0,
+          "band": {
+            "x": 0,
+            "y": 1319,
+            "w": 1024,
+            "h": 259,
+            "top": 1319,
+            "bottom": 1578
+          },
+          "explore": {
+            "x": 38,
+            "y": 1319,
+            "w": 948,
+            "h": 211,
+            "top": 1319,
+            "bottom": 1530
+          },
+          "wall": {
+            "x": 0,
+            "y": 571,
+            "w": 1024,
+            "h": 724,
+            "top": 571,
+            "bottom": 1295
+          },
+          "wallH2": {
+            "x": 38,
+            "y": 619,
+            "w": 948,
+            "h": 51,
+            "top": 619,
+            "bottom": 670
+          },
+          "bandSections": 1,
+          "bandPad": {
+            "l": "38px",
+            "r": "38px",
+            "t": "0px",
+            "b": "48px"
+          },
+          "explorePadL": "32px",
+          "exploreMarginL": "0px",
+          "exploreBoxSizing": "content-box",
+          "exploreMaxW": "1200px",
+          "gutterL": 38,
+          "gutterR": 38,
+          "exploreContentX": 70,
+          "wallContentX": 38,
+          "wallPadBottom": 48,
+          "wallContentBottom": 1247,
+          "gapWallContentToBand": 72,
+          "gapWallEdgeToBand": 24,
+          "chipCount": 8,
+          "chipCurrent": [
+            "Soft Chews"
+          ],
+          "chipFont": "14px",
+          "chipPad": "10px 16px",
+          "chipRadius": "6px",
+          "chipsGap": "8px",
+          "chipsScroll": 0,
+          "chipsNowrap": "wrap",
+          "bandBtn": {
+            "border": "2px solid rgb(27, 77, 62)",
+            "color": "rgb(27, 77, 62)",
+            "padding": "12px 24px",
+            "radius": "6px",
+            "minHeight": "0px",
+            "display": "inline-block",
+            "w": 217
+          },
+          "heroBtnHref": "/contact/#quote",
+          "heroBtnClass": "wp-block-button__link has-card-white-color has-text-color wp-element-button sf-quote-cta",
+          "tocPresent": true,
+          "tocDisplay": "none",
+          "tocLinks": [
+            "Standard Formulas",
+            "How We Work",
+            "Frequently Asked Questions",
+            "Related Dosage Forms",
+            "Request a Soft Chews Quote"
+          ],
+          "configuratorLeft": 0,
+          "buildH2": 0
+        },
+        {
+          "overflowX": 0,
+          "band": {
+            "x": 0,
+            "y": 1339,
+            "w": 1100,
+            "h": 259,
+            "top": 1339,
+            "bottom": 1598
+          },
+          "explore": {
+            "x": 38,
+            "y": 1339,
+            "w": 1024,
+            "h": 211,
+            "top": 1339,
+            "bottom": 1550
+          },
+          "wall": {
+            "x": 0,
+            "y": 574,
+            "w": 1100,
+            "h": 740,
+            "top": 574,
+            "bottom": 1315
+          },
+          "wallH2": {
+            "x": 38,
+            "y": 622,
+            "w": 1024,
+            "h": 54,
+            "top": 622,
+            "bottom": 676
+          },
+          "bandSections": 1,
+          "bandPad": {
+            "l": "38px",
+            "r": "38px",
+            "t": "0px",
+            "b": "48px"
+          },
+          "explorePadL": "32px",
+          "exploreMarginL": "0px",
+          "exploreBoxSizing": "content-box",
+          "exploreMaxW": "1200px",
+          "gutterL": 38,
+          "gutterR": 38,
+          "exploreContentX": 70,
+          "wallContentX": 38,
+          "wallPadBottom": 48,
+          "wallContentBottom": 1267,
+          "gapWallContentToBand": 72,
+          "gapWallEdgeToBand": 24,
+          "chipCount": 8,
+          "chipCurrent": [
+            "Soft Chews"
+          ],
+          "chipFont": "14px",
+          "chipPad": "10px 16px",
+          "chipRadius": "6px",
+          "chipsGap": "8px",
+          "chipsScroll": 0,
+          "chipsNowrap": "wrap",
+          "bandBtn": {
+            "border": "2px solid rgb(27, 77, 62)",
+            "color": "rgb(27, 77, 62)",
+            "padding": "12px 24px",
+            "radius": "6px",
+            "minHeight": "0px",
+            "display": "inline-block",
+            "w": 217
+          },
+          "heroBtnHref": "/contact/#quote",
+          "heroBtnClass": "wp-block-button__link has-card-white-color has-text-color wp-element-button sf-quote-cta",
+          "tocPresent": true,
+          "tocDisplay": "none",
+          "tocLinks": [
+            "Standard Formulas",
+            "How We Work",
+            "Frequently Asked Questions",
+            "Related Dosage Forms",
+            "Request a Soft Chews Quote"
+          ],
+          "configuratorLeft": 0,
+          "buildH2": 0
+        },
+        {
+          "overflowX": 0,
+          "band": {
+            "x": 0,
+            "y": 1339,
+            "w": 1101,
+            "h": 259,
+            "top": 1339,
+            "bottom": 1598
+          },
+          "explore": {
+            "x": 38,
+            "y": 1339,
+            "w": 1025,
+            "h": 211,
+            "top": 1339,
+            "bottom": 1550
+          },
+          "wall": {
+            "x": 0,
+            "y": 574,
+            "w": 1101,
+            "h": 741,
+            "top": 574,
+            "bottom": 1315
+          },
+          "wallH2": {
+            "x": 38,
+            "y": 622,
+            "w": 1025,
+            "h": 54,
+            "top": 622,
+            "bottom": 676
+          },
+          "bandSections": 1,
+          "bandPad": {
+            "l": "38px",
+            "r": "38px",
+            "t": "0px",
+            "b": "48px"
+          },
+          "explorePadL": "32px",
+          "exploreMarginL": "0px",
+          "exploreBoxSizing": "content-box",
+          "exploreMaxW": "1200px",
+          "gutterL": 38,
+          "gutterR": 38,
+          "exploreContentX": 70,
+          "wallContentX": 38,
+          "wallPadBottom": 48,
+          "wallContentBottom": 1267,
+          "gapWallContentToBand": 72,
+          "gapWallEdgeToBand": 24,
+          "chipCount": 8,
+          "chipCurrent": [
+            "Soft Chews"
+          ],
+          "chipFont": "14px",
+          "chipPad": "10px 16px",
+          "chipRadius": "6px",
+          "chipsGap": "8px",
+          "chipsScroll": 0,
+          "chipsNowrap": "wrap",
+          "bandBtn": {
+            "border": "2px solid rgb(27, 77, 62)",
+            "color": "rgb(27, 77, 62)",
+            "padding": "12px 24px",
+            "radius": "6px",
+            "minHeight": "0px",
+            "display": "inline-block",
+            "w": 217
+          },
+          "heroBtnHref": "/contact/#quote",
+          "heroBtnClass": "wp-block-button__link has-card-white-color has-text-color wp-element-button sf-quote-cta",
+          "tocPresent": true,
+          "tocDisplay": "block",
+          "tocLinks": [
+            "Standard Formulas",
+            "How We Work",
+            "Frequently Asked Questions",
+            "Related Dosage Forms",
+            "Request a Soft Chews Quote"
+          ],
+          "configuratorLeft": 0,
+          "buildH2": 0
+        },
+        {
+          "overflowX": 0,
+          "band": {
+            "x": 0,
+            "y": 1312,
+            "w": 1440,
+            "h": 259,
+            "top": 1312,
+            "bottom": 1571
+          },
+          "explore": {
+            "x": 88,
+            "y": 1312,
+            "w": 1264,
+            "h": 211,
+            "top": 1312,
+            "bottom": 1523
+          },
+          "wall": {
+            "x": 0,
+            "y": 552,
+            "w": 1440,
+            "h": 736,
+            "top": 552,
+            "bottom": 1288
+          },
+          "wallH2": {
+            "x": 120,
+            "y": 600,
+            "w": 1200,
+            "h": 55,
+            "top": 600,
+            "bottom": 655
+          },
+          "bandSections": 1,
+          "bandPad": {
+            "l": "0px",
+            "r": "0px",
+            "t": "0px",
+            "b": "48px"
+          },
+          "explorePadL": "32px",
+          "exploreMarginL": "88px",
+          "exploreBoxSizing": "content-box",
+          "exploreMaxW": "1200px",
+          "gutterL": 88,
+          "gutterR": 88,
+          "exploreContentX": 120,
+          "wallContentX": 120,
+          "wallPadBottom": 48,
+          "wallContentBottom": 1240,
+          "gapWallContentToBand": 72,
+          "gapWallEdgeToBand": 24,
+          "chipCount": 8,
+          "chipCurrent": [
+            "Soft Chews"
+          ],
+          "chipFont": "14px",
+          "chipPad": "10px 16px",
+          "chipRadius": "6px",
+          "chipsGap": "8px",
+          "chipsScroll": 0,
+          "chipsNowrap": "wrap",
+          "bandBtn": {
+            "border": "2px solid rgb(27, 77, 62)",
+            "color": "rgb(27, 77, 62)",
+            "padding": "12px 24px",
+            "radius": "6px",
+            "minHeight": "0px",
+            "display": "inline-block",
+            "w": 217
+          },
+          "heroBtnHref": "/contact/#quote",
+          "heroBtnClass": "wp-block-button__link has-card-white-color has-text-color wp-element-button sf-quote-cta",
+          "tocPresent": true,
+          "tocDisplay": "block",
+          "tocLinks": [
+            "Standard Formulas",
+            "How We Work",
+            "Frequently Asked Questions",
+            "Related Dosage Forms",
+            "Request a Soft Chews Quote"
+          ],
+          "configuratorLeft": 0,
+          "buildH2": 0
+        }
+      ],
+      "diffs": [],
+      "checked": 210
+    },
+    "e6": [
+      {
+        "vw": 480,
+        "chromeBottom": 57,
+        "bandTop": 73,
+        "bandH": 243,
+        "bytes": 38895
+      },
+      {
+        "vw": 768,
+        "chromeBottom": 57,
+        "bandTop": 73,
+        "bandH": 243,
+        "bytes": 43716
+      },
+      {
+        "vw": 1024,
+        "chromeBottom": 61,
+        "bandTop": 77,
+        "bandH": 259,
+        "bytes": 49220
+      },
+      {
+        "vw": 1100,
+        "chromeBottom": 61,
+        "bandTop": 77,
+        "bandH": 259,
+        "bytes": 53291
+      },
+      {
+        "vw": 1101,
+        "chromeBottom": 61,
+        "bandTop": 77,
+        "bandH": 259,
+        "bytes": 54468
+      },
+      {
+        "vw": 1440,
+        "chromeBottom": 61,
+        "bandTop": 77,
+        "bandH": 259,
+        "bytes": 56193
+      }
+    ]
+  }
+}

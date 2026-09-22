@@ -1,0 +1,15 @@
+H2b2 收尾锚点：同一 URL、两种请求头（用户 2026-09-22 明确“不上线”，故 live 应长期停在 pre-H2b1）
+==============================================================================
+live（无 X-SF-Preflight）
+    http=200   style.css?ver={'2.10.55': 1}   主题目录=['sinofresh-theme']
+    configurator 资产行数=2   class="configurator 出现=210 次 / 132 行
+      <link rel='stylesheet' id='sinofresh-configurator-css' href='https://dev.zxpet.com/wp-content/themes/sin
+      <script id="sinofresh-configurator-js" src="https://dev.zxpet.com/wp-content/themes/sinofresh-theme/asse
+preflight 候选（X-SF-Preflight: 1）
+    http=200   style.css?ver={'2.10.56': 1}   主题目录=['sinofresh-theme-preflight']
+    configurator 资产行数=0   class="configurator 出现=0 次 / 0 行
+==============================================================================
+判读：live = H2a 状态（2.10.55 ＋ 配置器 DOM ＋ 2 条资产）；候选 = H2b2（2.10.56 ＋ 0 条资产）。
+“不上线”⇒ live 长期停在此状态是**预期**，不是漏做 pull。
+口径提醒：class="configurator 的“出现次数”与 grep -c 的“行数”不同（此处 210 vs 132），
+         引用数字时必须写明是哪一个，参见 RULES §Q.2。

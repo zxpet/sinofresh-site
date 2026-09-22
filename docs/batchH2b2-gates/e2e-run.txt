@@ -1,0 +1,34 @@
+--- E1  16 dosage pages: no configurator asset, no console errors ---
+   ok   E1 all 16 dosage pages serve 200 with zero references to sinofresh-configurator (en + zh)
+   dose page: cfgLinks=0 cfgInHead=False cfgInBody=False cfgRequests=0 sheet=https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/style.css?ver=2.10.56
+   ok   E1 the dosage page in a real browser: no configurator element, no configurator request, no console error, and the H2b1 page order is intact
+--- E2  the two asset URLs, under the pre-flight copy ---
+   ok   E2 both deleted URLs 404 while a sibling asset in the same directory still serves 200 — the 404s are the deletion, not a broken copy
+--- E3  the enqueued-but-inert script (two-state injection) ---
+   injected cfgRan=1  clicks=2  sessionStorage 1 -> 1 ['wpEmojiSettingsSupports']  outline 455 -> 455  cfgRequests 0 -> 0
+   ok   E3 the baseline configurator.js, injected and executed on the candidate page, changes nothing: the sessionStorage keys are unchanged (['wpEmojiSettingsSupports']), the body outline count is identical (455 nodes), the band/card-wall geometry is identical, and clicking the wall button and a chip changes nothing
+   ok   E3 no sinofresh_config_* / sinofresh_formula_* key exists in sessionStorage, before or after the injection (['wpEmojiSettingsSupports']) — those keys have had no writer since H2b1
+   ok   E3 zero configurator requests in both states — the inline injection cannot fetch a file that no longer exists, and the served page never asked for one
+--- E4  html.no-has four-cell: the two fixed layers ---
+    480px  no-stub float=268px lang=0px no-has=False | stub float=268px lang=0px no-has=True (stubRan=1)
+   1440px  no-stub float=100px lang=0px no-has=False | stub float=100px lang=0px no-has=True (stubRan=1)
+   ok   E4 the legacy-engine delta is zero: with html.no-has forced on, both fixed layers compute exactly what the modern engine gives — the two unconditional replicas at the old configurator.css:700/705 are gone (H2b1 measured 132/68 on live and 100/24/268/16 + lang 0 on the candidate)
+--- E5  geometry vs the H2b1 candidate measurements ---
+    480px  overflow=0 band=480 explore w404 chips=8 font=14px pad=10px 16px gap=8px wallPadB=48 edgeGap=24
+    768px  overflow=0 band=768 explore w692 chips=8 font=14px pad=10px 16px gap=8px wallPadB=48 edgeGap=24
+   1024px  overflow=0 band=1024 explore w948 chips=8 font=14px pad=10px 16px gap=8px wallPadB=48 edgeGap=24
+   1100px  overflow=0 band=1100 explore w1024 chips=8 font=14px pad=10px 16px gap=8px wallPadB=48 edgeGap=24
+   1101px  overflow=0 band=1101 explore w1025 chips=8 font=14px pad=10px 16px gap=8px wallPadB=48 edgeGap=24
+   1440px  overflow=0 band=1440 explore w1264 chips=8 font=14px pad=10px 16px gap=8px wallPadB=48 edgeGap=24
+   ok   E5 210 measured fields are identical to the H2b1 candidate at all six widths — deleting the assets changed no geometry
+--- E6  corroborating screenshots ---
+    480px  chrome 57  band top 73 h 243 -> 38895 bytes
+    768px  chrome 57  band top 73 h 243 -> 43716 bytes
+   1024px  chrome 61  band top 77 h 259 -> 49220 bytes
+   1100px  chrome 61  band top 77 h 259 -> 53291 bytes
+   1101px  chrome 61  band top 77 h 259 -> 54468 bytes
+   1440px  chrome 61  band top 77 h 259 -> 56193 bytes
+   ok   E6 six real screenshots (37-54 KB), the band framed clear of the sticky chrome, from the candidate bytes
+
+========================================================================
+E2E: E1-E6 all pass

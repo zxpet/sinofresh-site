@@ -1,0 +1,67 @@
+{
+  "controls": [
+    {
+      "control": "faithful-copy-passes",
+      "mutation": "no mutation (A/A control)",
+      "rc": 0,
+      "failed_checks": [],
+      "clean_verdict": false,
+      "as_required": true
+    },
+    {
+      "control": "asset-restored",
+      "mutation": "configurator.css restored (21808 B)",
+      "rc": 1,
+      "failed_checks": [
+        "S3",
+        "S4",
+        "S5"
+      ],
+      "clean_verdict": true,
+      "as_required": true
+    },
+    {
+      "control": "functions-php-reverted",
+      "mutation": "functions.php reverted to ebe8f50 (197629 B)",
+      "rc": 1,
+      "failed_checks": [
+        "S1",
+        "S3",
+        "S6"
+      ],
+      "clean_verdict": true,
+      "as_required": true
+    },
+    {
+      "control": "stray-file-added",
+      "mutation": "one stray file added under assets/js/",
+      "rc": 1,
+      "failed_checks": [
+        "S4"
+      ],
+      "clean_verdict": true,
+      "as_required": true
+    },
+    {
+      "control": "migrated-block-stripped",
+      "mutation": ".sf-explore* lines stripped from style.css (%d -> %d lines)",
+      "rc": 1,
+      "failed_checks": [
+        "S8"
+      ],
+      "clean_verdict": true,
+      "as_required": true
+    },
+    {
+      "control": "functions-php-absent",
+      "mutation": "functions.php removed entirely",
+      "rc": 1,
+      "failed_checks": [
+        "S0"
+      ],
+      "clean_verdict": true,
+      "as_required": true
+    }
+  ],
+  "wrong": []
+}
