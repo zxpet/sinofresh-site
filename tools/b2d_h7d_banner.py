@@ -201,6 +201,19 @@ def main():
             runs.append({'from': x['y'], 'to': x['y'], 'n': 1,
                          'cls': x['cls']})
     rec('as contiguous bands', runs)
+    # The frame is the FOOT of the drawer, not its first screen. The browser
+    # pass already photographs the top (h7d-05), and shot from the top this one
+    # came out byte-identical to it -- two files, one piece of evidence. What
+    # the defect was about is the bottom of the viewport, where the banner's
+    # top edge sat and where the exit lives, so the picture is taken with the
+    # drawer's own list scrolled to its end. The overlay's geometry does not
+    # depend on that offset, so the sweep above and this picture describe the
+    # same state.
+    h7b.ev("(()=>{const l=document.querySelector('.sf-fdetail-config__list');"
+           "if(l){l.scrollTop=l.scrollHeight;} return true;})()")
+    time.sleep(0.4)
+    rec('the drawer list scroll offset for the frame',
+        h7b.ev("Math.round(document.querySelector('.sf-fdetail-config__list').scrollTop)"))
     r.shot('h7d-07-phone-layers.png')
 
     # --- is a tap outside the list a way out? --------------------------------

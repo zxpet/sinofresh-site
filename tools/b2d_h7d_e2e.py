@@ -306,6 +306,20 @@ def dismiss_banner():
               "if(b){b.hidden=true;b.style.display='none';} return true;})()")
 
 
+def zint(v):
+    """A z-index as an int, or 0 when it is absent or not a number.
+
+    The layers this pass measures are not all ours, and `z-index: auto` on a
+    plugin's nav is a legal value. Reading one has to make the COMPARISON fail,
+    not the script: a traceback in the middle of a run hides every assertion
+    after it.
+    """
+    try:
+        return int(str(v))
+    except (TypeError, ValueError):
+        return 0
+
+
 def click_opt(r, value, label=None):
     """Click the option whose input carries `value`, by pressing its label.
 
@@ -704,9 +718,9 @@ def mode_full(r, want_ver):
     # drawer's own layer has to outrank every fixed layer this page puts up --
     # including the one the theme does not own, so a plugin that moves its
     # switcher is reported rather than silently obeyed.
-    dz = int(pc.get('listZ') if pc.get('listZ') is not None else (d1.get('listZ') or 0))
+    dz = zint(pc.get('listZ') if pc.get('listZ') is not None else d1.get('listZ'))
     r.ok('the drawer outranks every fixed layer on the page',
-         dz > max(int(hd.get('z') or 0), int(bn.get('z') or 0), int(tp.get('z') or 0)),
+         dz > max(zint(hd.get('z')), zint(bn.get('z')), zint(tp.get('z'))),
          'the drawer is at %s; header %s, banner %s, switcher %s'
          % (dz, hd.get('z'), bn.get('z'), tp.get('z')))
     bands = pc.get('bands') or []
@@ -718,8 +732,12 @@ def mode_full(r, want_ver):
     # earlier step had answered it, the reachability below would prove nothing.
     r.eq('and the cookie banner is still up, underneath it', bn.get('shown'), True)
     dn = pc.get('done') or {}
+    # Two conditions, not one: `covered == 0` is also true of a button that was
+    # never measured, so the sweep has to have actually swept. (The idiom this
+    # replaces, `covered or 1`, inverts on the value it is looking for: 0 is
+    # falsy, so the assertion failed exactly when the exit WAS reachable.)
     r.ok('the drawer\'s only exit is reachable through it',
-         (dn.get('covered') or 0) == 0,
+         dn.get('total', 0) >= 10 and dn.get('covered') == 0,
          'the Done button (%sx%s at y%s) is covered at %s of %s points along its '
          'own centre line'
          % ((dn.get('box') or {}).get('w'), (dn.get('box') or {}).get('h'),
@@ -753,8 +771,9 @@ def mode_full(r, want_ver):
              for b in bands2) or 'nothing'))
     dn2 = pc2.get('done') or {}
     r.ok('and the exit is clear along the whole of its centre line',
-         (dn2.get('covered') or 1) == 0, 'covered at %s of %s points along its '
-         'centre line' % (dn2.get('covered'), dn2.get('total')))
+         dn2.get('total', 0) >= 10 and dn2.get('covered') == 0,
+         'covered at %s of %s points along its centre line' % (dn2.get('covered'),
+                                                               dn2.get('total')))
 
     # the drawer is not inert: an option inside it is still a real control
     box, why = click_opt(r, 'Salmon')
@@ -828,14 +847,14 @@ def mode_full(r, want_ver):
     # A second page, the same stylesheet -- and the banner is back, because it
     # was hidden in the DOM of the page we just left rather than answered. So
     # this is the first-visit state again, read on a different document.
-    zbz = int(zb.get('listZ') or 0)
+    zbz = zint(zb.get('listZ'))
     zhd = zb.get('header') or {}
     zbn = zb.get('banner') or {}
     ztp = zb.get('trp') or {}
     r.ok('and the drawer is the top layer there too, the banner included',
-         zb.get('bands') == [] and zbz > max(int(zhd.get('z') or 0),
-                                             int(zbn.get('z') or 0),
-                                             int(ztp.get('z') or 0)),
+         zb.get('bands') == [] and zbz > max(zint(zhd.get('z')),
+                                             zint(zbn.get('z')),
+                                             zint(ztp.get('z'))),
          'drawer z=%s vs header %s / banner %s / switcher %s; pierced by %s'
          % (zbz, zhd.get('z'), zbn.get('z'), ztp.get('z'),
             '; '.join('%s (z=%s)' % (b['cls'], b['z'])
