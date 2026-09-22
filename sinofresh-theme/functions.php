@@ -1599,7 +1599,15 @@ function sinofresh_formula_gallery_slots($form, $post_id = 0) {
 			'url'    => sinofresh_formula_card_image($form),
 			'width'  => 720,
 			'height' => 720,
-			'alt'    => sprintf('SINO FRESH %s private label pet supplement product', $label),
+			/* The same still is described in three places, and this was the
+			   third: the card markup [sf_formula_grid] prints, the seven
+			   sibling tiles in each dosage template, and this gallery frame.
+			   It used to spell the string out a second time here, so after
+			   batch H5 the frame kept the bare description while the card
+			   gained the visual clause — the same .webp, two different alts,
+			   on the same page. The value also lands in data-label and in the
+			   stage's aria-label, which is the name a screen reader hears. */
+			'alt'    => sinofresh_formula_product_alt($form),
 		),
 		array(
 			'file'   => 'fac-placeholder.webp',
@@ -4798,11 +4806,14 @@ function sinofresh_formula_alt_visuals() {
 /**
  * The alt of a dosage form's product render, with its visual clause.
  *
- * One function rather than two literals because the same still is described in
- * two places: the card markup [sf_formula_grid] prints, and the seven sibling
- * tiles inside each dosage page's template. The templates are static HTML and
- * cannot call this, so they carry the same string verbatim — the gate asserts
- * both carriers agree per form, which is what keeps the pair from drifting.
+ * One function rather than three literals because the same still is described in
+ * three places: the card markup [sf_formula_grid] prints, the seven sibling tiles
+ * inside each dosage page's template, and the first frame of the detail page's
+ * gallery (sinofresh_formula_gallery_slots). The templates are static HTML and
+ * cannot call this, so they carry the same string verbatim — the gate asserts the
+ * carriers agree per form, which is what keeps them from drifting. The gallery
+ * frame was the third carrier and was missed on the first pass; see the note
+ * there.
  */
 function sinofresh_formula_product_alt($form_slug) {
 	$form_slug = sanitize_title($form_slug);
