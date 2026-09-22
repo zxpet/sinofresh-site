@@ -1,6 +1,10 @@
 <!-- wp:template-part {"slug":"header","tagName":"header"} /-->
 
-<!-- Hero: breadcrumb + tag + title + meta + actions. The breadcrumb
+<!-- Hero: breadcrumb + tag + heading + meta + actions. The heading is a div,
+     not an h1: batch H5-0 moved the page's one h1 into the parameters column
+     below, where the brief puts the product name, so the band and the column
+     are the same string rendered twice — the h1 for the outline and the div
+     for the band, which is what keeps the count at one. The breadcrumb
      generator (functions.php) walks this nav: class before href on every
      crumb <a>, exact class order on the current crumb. -->
 <!-- wp:group {"tagName":"section","className":"sf-hero-inner sf-formula-hero","textColor":"card-white","layout":{"type":"constrained"},"style":{"spacing":{"padding":{"top":"var:preset|spacing|80","bottom":"var:preset|spacing|80"}}}} -->
@@ -8,7 +12,7 @@
 <!-- wp:html -->
 <nav class="sf-breadcrumb sf-breadcrumb--d4" aria-label="Breadcrumb"><a class="sf-breadcrumb__crumb sf-breadcrumb__crumb--home" href="/">Home</a><span class="sf-breadcrumb__sep sf-breadcrumb__sep--home" aria-hidden="true">/</span><a class="sf-breadcrumb__crumb sf-breadcrumb__crumb--products" href="/products/">Products</a><span class="sf-breadcrumb__sep sf-breadcrumb__sep--products" aria-hidden="true">/</span><a class="sf-breadcrumb__crumb sf-breadcrumb__crumb--form" href="{{FORM_HREF}}">{{FORM_CRUMB}}</a><span class="sf-breadcrumb__sep" aria-hidden="true">/</span><span class="sf-breadcrumb__crumb sf-breadcrumb__current" aria-current="page">{{TITLE}}</span></nav>
 <span class="sf-fcard__use">{{FORMULA_USE}}</span>
-<h1 class="sf-formula-hero__title">{{TITLE}}</h1>
+<div class="sf-formula-hero__title">{{TITLE}}</div>
 <p class="sf-formula-hero__meta">{{FORMULA_META}}</p>
 <div class="sf-formula-hero__actions"><button type="button" class="sf-formula__cta sf-formula__cta--solid" data-formula="{{TITLE}}" data-form="{{FORM_SLUG}}">Reference this formula →</button><a class="sf-formula-hero__build sf-quote-cta" href="/contact/#quote">Build Custom Formula</a></div>
 <!-- /wp:html -->
@@ -35,14 +39,22 @@
 <!-- /wp:html -->
 </section>
 <!-- /wp:group -->
-<!-- wp:group {"tagName":"aside","className":"sf-fdetail2__side","layout":{"type":"default"}} -->
-<aside class="wp-block-group sf-fdetail2__side">
+<!-- Batch H5-0: the product name opens this column — the brief's "title at the
+     top of the parameters, beside the gallery". That is why the hero's own
+     heading became a div in the same change. The column was an aside element,
+     which HTML reserves for matter marginal to the surrounding content; this
+     is the product's own summary and its specification, so it is a plain group
+     now — a tag change with no stylesheet behind it (nothing in the theme
+     selects aside) and no layout consequence (the grid keys on the class). -->
+<!-- wp:group {"className":"sf-fdetail2__side","layout":{"type":"default"}} -->
+<div class="wp-block-group sf-fdetail2__side">
 <!-- wp:html -->
+<h1 class="sf-fdetail2__title">{{TITLE}}</h1>
 {{FORMULA_INTRO}}
 [sf_formula_params]
 <a class="sf-fdetail2__cta" href="/contact/">Request Sample</a>
 <!-- /wp:html -->
-</aside>
+</div>
 <!-- /wp:group -->
 </div>
 <!-- /wp:group -->

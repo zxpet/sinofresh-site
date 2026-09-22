@@ -28,7 +28,7 @@ add_action('after_setup_theme', function() {
 });
 
 add_action('wp_enqueue_scripts', function() {
-	wp_enqueue_style('sinofresh-style', get_stylesheet_uri(), array(), '2.10.59');
+	wp_enqueue_style('sinofresh-style', get_stylesheet_uri(), array(), '2.10.60');
 	// Sticky nav: every template renders parts/header.html, so this is site-wide.
 	wp_enqueue_script('sinofresh-sticky-header', get_template_directory_uri() . '/assets/js/sticky-header.js', array(), '1.0.0', true);
 	wp_enqueue_script('sinofresh-ui-components', get_template_directory_uri() . '/assets/js/ui-components.js', array(), '1.0.0', true);
@@ -1763,8 +1763,9 @@ function sinofresh_formula_gallery($atts = array()) {
 	}
 
 	/* The heading names the formula, not the dosage form. get_the_title() is
-	   the same call the hero h1 ends up with ({{TITLE}} in
-	   sinofresh_template_placeholders), so the two cannot disagree; before
+	   the same call the detail page's h1 ends up with ({{TITLE}} in
+	   sinofresh_template_placeholders; the h1 is in the parameters column
+	   since batch H5-0, not in the hero), so the two cannot disagree; before
 	   2D-S4 this read "Inside Our {dosage} Production", which on a detail
 	   page named the wrong noun. The shortcode itself stays generic, so a
 	   context that is not a single formula — or an untitled post — falls
@@ -4157,8 +4158,9 @@ add_action('wp_head', function() {
  *                        the two values come from the form's /products/<form>/
  *                        .sf-facts-mini row (sinofresh_formula_spec_cell).
  *                        Falls back to the form label alone, or to ''.
- *   {{FORMULA_INTRO}}    formula detail pages only - the media column's intro
- *                        paragraph, already wrapped in its own <p> (escaped
+ *   {{FORMULA_INTRO}}    formula detail pages only - the parameters column's
+ *                        intro paragraph, already wrapped in its own <p>
+ *                        (escaped
  *                        HTML, not escaped text), resolved by
  *                        sinofresh_formula_intro(); '' when it cannot be
  *                        composed, which writes nothing at all

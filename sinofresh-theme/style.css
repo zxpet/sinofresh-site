@@ -2,7 +2,7 @@
 Theme Name: SINO FRESH
 Author: Shandong SINO FRESH Pet Food Co., Ltd.
 Text Domain: sinofresh
-Version: 2.10.59
+Version: 2.10.60
 Requires at least: 6.0
 Requires PHP: 7.4
 License: GNU General Public License v2 or later
@@ -5747,9 +5747,16 @@ body.page-id-28 .wp-block-columns:has(> .wp-block-column > .wp-block-group.has-c
 	color: var(--wp--preset--color--card-white);
 	opacity: 0.72;
 }
+/* Batch H5-0: this band's heading became a div — the page's one h1 now opens
+   the parameters column — and the 700 it used to inherit from the h1 element
+   rule in theme.json did not come with the tag, so it is declared here. Of the
+   four properties that element rule supplies, size, line-height and tracking
+   were already overridden below and the colour was too; weight was the only
+   one that leaked. Declaring it is the whole of the visual-no-change claim. */
 .sf-formula-hero__title {
 	margin: 14px 0 0;
 	font-size: clamp(30px, 3.4vw, 44px);
+	font-weight: 700;
 	line-height: 1.15;
 	letter-spacing: -0.01em;
 	color: var(--wp--preset--color--card-white);
@@ -8462,8 +8469,8 @@ body.sf-inquiry-lock {
 	align-items: start;
 }
 /* core gives every .is-layout-flow child after the first a 24px block-gap
-   margin, which in a grid row would drop the aside below the media column;
-   the grid gap is what spaces these two. */
+   margin, which in a grid row would drop the parameters column below the
+   media one; the grid gap is what spaces these two. */
 .sf-fdetail2__inner > * {
 	margin-block-start: 0;
 }
@@ -8631,6 +8638,20 @@ body.sf-inquiry-lock {
 }
 
 /* ---- the parameters column ----------------------------------------------- */
+/* Batch H5-0: the product name, and the page's only h1. It used to be the
+   hero's, above the gallery band; the brief puts it here, at the top of the
+   column beside the frames, which is also where it is the first thing read in
+   the right-hand half of the band. 28px/700 ink on Mist — a step below the
+   hero's clamp(30-44px), because the column is narrower and the same string is
+   already set at 44px a screen above it in the hero. */
+.sf-fdetail2__title {
+	margin: 0 0 16px;
+	font-size: 28px;
+	font-weight: 700;
+	line-height: 1.2;
+	letter-spacing: -0.01em;
+	color: var(--wp--preset--color--text-primary);
+}
 .sf-fdetail2__intro {
 	margin: 0 0 24px;
 	font-size: 15px;
