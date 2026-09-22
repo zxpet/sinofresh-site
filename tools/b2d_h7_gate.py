@@ -2441,6 +2441,410 @@ def negctl(decl, base, cand, theme, verbose=True):
     return {'ok': ok, 'rows': rows}
 
 
+# ---------------------------------------------------------- H7g / H7h batches
+
+# Batch H7g adds the second global library. The eight shapes are constants of
+# the code (slugs are permanent: the PDF endpoint validates against them), so
+# the shape group's markup CAN be built from the declaration — this is the
+# `insert` direction, unlike H7c's per-record spec sheet. The one per-record
+# byte, the value-preview line, is derived from the page's own H7c spec sheet
+# row, which is where the record's shape text already renders; the derivation
+# applies the same rule the renderer does (case-insensitive match against the
+# library labels, canonical label wins, no match -> empty).
+H7G_SHAPES = [
+    ('bone', 'Bone'), ('round', 'Round'), ('square', 'Square'), ('heart', 'Heart'),
+    ('star', 'Star'), ('paw', 'Paw'), ('cylinder', 'Cylinder'), ('custom', 'Custom'),
+]
+
+
+def _h7g_shape_group(meta):
+    opts = ''.join(
+        '<label class="sf-fdetail-config__opt">'
+        '<input class="sf-fdetail-config__input" type="radio" name="sf-config-shape"'
+        ' value="%s" data-sf-config-opt="shape">'
+        '<span class="sf-fdetail-config__box" aria-hidden="true"></span>'
+        '<span class="sf-fdetail-config__img sf-fdetail-config__img--empty">'
+        '<span class="sf-fdetail-config__empty-label">%s</span></span></label>'
+        % (slug, label)
+        for slug, label in H7G_SHAPES)
+    return ('<div class="sf-fdetail-config__group" data-sf-config-group="shape">'
+            '<p class="sf-fdetail-config__row">'
+            '<span class="sf-fdetail-config__label">Shape</span>'
+            '<span class="sf-fdetail-config__meta">%s</span>'
+            '<span class="sf-fdetail-config__hint">Choose one</span></p>'
+            '<div class="sf-fdetail-config__options" role="group" aria-label="Shape">%s'
+            '</div></div>' % (meta, opts))
+
+
+H7G_TEL_ANCHOR = ('<a href="tel:+865398669539">+86 539 866 9539</a>'
+                  '<a href="https://wa.me/8613385397805"')
+# The contact PAGE carries the identical anchor (its own card, kept by ruling);
+# only the footer one is followed by the wa.me link, which is what makes the
+# footer occurrence addressable without position arithmetic.
+H7G_TEL_FOOTER = re.compile(
+    r'<a href="tel:\+865398669539">\+86 539 866 9539</a>(?=<a href="https://wa\.me)')
+H7G_SLOT_OLD = re.compile(
+    r'sf-fdetail-config__img--empty" aria-hidden="true"></span>'
+    r'<span class="sf-fdetail-config__text">([^<]+)</span></label>')
+H7G_PREVIEW = re.compile(r'(</figure>)(</div><div class="sf-gallery__tabs")')
+H7G_SHAPE_META = re.compile(
+    r'sf-fdetail-specs__term">Shape</dt><dd class="sf-fdetail-specs__value">([^<]+)</dd>')
+H7G_CONTAINER_ANCHOR = '<div class="sf-fdetail-config__group" data-sf-config-group="container">'
+H7G_LIST_TAIL = '</div><p class="sf-fdetail-config__summary"'
+
+
+def _h7g_transform(text):
+    """H7g's declared edit to one baseline page: the landline anchor leaves the
+    footer contact line, the preview layer joins the stage, the shape group
+    joins the configurator (before the container group where the record has
+    one, at the list's tail everywhere else), and every old empty slot — the
+    container library's, on the two pages that carry it — hands its label
+    inside the dashed box. Tokens are NOT the transform's business: fold()
+    applies the declared token pairs."""
+    n = 0
+    text, k = H7G_TEL_FOOTER.subn('', text)
+    n += k
+    text, k = H7G_PREVIEW.subn(
+        r'\1<div class="sf-gallery__preview" data-sf-gallery-preview hidden></div>\2',
+        text)
+    n += k
+    meta = ''
+    m = H7G_SHAPE_META.search(text)
+    if m:
+        raw = m.group(1).strip()
+        for slug, label in H7G_SHAPES:
+            if raw.lower() == label.lower():
+                meta = label
+                break
+    group = _h7g_shape_group(meta)
+    if H7G_CONTAINER_ANCHOR in text:
+        text = text.replace(H7G_CONTAINER_ANCHOR, group + H7G_CONTAINER_ANCHOR, 1)
+        n += 1
+    elif H7G_LIST_TAIL in text:
+        text = text.replace(H7G_LIST_TAIL, group + H7G_LIST_TAIL, 1)
+        n += 1
+    text, k = H7G_SLOT_OLD.subn(
+        lambda mm: ('sf-fdetail-config__img--empty">'
+                    '<span class="sf-fdetail-config__empty-label">%s</span></span></label>'
+                    % mm.group(1)),
+        text)
+    n += k
+    return text, n
+
+
+def _h7g_partial(shape=False, preview=False, slots=False, tel=False):
+    """Mutants that skip one declared edit; each must break the proof."""
+    def f(text):
+        n = 0
+        text, k = H7G_TEL_FOOTER.subn('', text) if tel else (text, 0)
+        n += k
+        if preview:
+            text, k = H7G_PREVIEW.subn(
+                r'\1<div class="sf-gallery__preview" data-sf-gallery-preview hidden></div>\2',
+                text)
+            n += k
+        if shape:
+            m = H7G_SHAPE_META.search(text)
+            meta = ''
+            if m:
+                raw = m.group(1).strip()
+                for slug, label in H7G_SHAPES:
+                    if raw.lower() == label.lower():
+                        meta = label
+                        break
+            group = _h7g_shape_group(meta)
+            if H7G_CONTAINER_ANCHOR in text:
+                text = text.replace(H7G_CONTAINER_ANCHOR, group + H7G_CONTAINER_ANCHOR, 1)
+                n += 1
+            elif H7G_LIST_TAIL in text:
+                text = text.replace(H7G_LIST_TAIL, group + H7G_LIST_TAIL, 1)
+                n += 1
+        if slots:
+            text, k = H7G_SLOT_OLD.subn(
+                lambda mm: ('sf-fdetail-config__img--empty">'
+                            '<span class="sf-fdetail-config__empty-label">%s</span>'
+                            '</span></label>' % mm.group(1)),
+                text)
+            n += k
+        return text, n
+    return f
+
+
+BATCHES['h7g'] = {
+    'name': "H7g — the shape picker joins, the footer's landline and the second WhatsApp source leave",
+    'mode': 'insert',
+    'tokens': [
+        ('?ver=2.10.67', '?ver=2.10.68'),                      # style.css
+        ('config.js?ver=1.0.0', 'config.js?ver=1.1.0'),
+    ],
+    'transform': _h7g_transform,
+    'applies': 173,        # tel 75 + preview 42 + shape 42 + slots 7x2
+    'coverage': [
+        ('style.css?ver=2.10.67', 0),
+        ('config.js?ver=1.0.0', 0),
+        ('tel:+865398669539">+86 539 866 9539</a><a href="https://wa.me', 0),
+        # The old empty slot: a dashed box and the name OUTSIDE it. The needle
+        # carries the slot class — a bare "box + text" tail is H7d's TEXT-style
+        # option, which survives this batch and must not be counted here.
+        ('sf-fdetail-config__img--empty" aria-hidden="true"></span>'
+         '<span class="sf-fdetail-config__text"', 0),
+    ],
+    'insertions': [
+        ('style.css?ver=2.10.68', 75),
+        ('config.js?ver=1.1.0', 42),
+        ('data-sf-gallery-preview', 42),
+        ('data-sf-config-group="shape"', 42),
+        ('sf-config-shape', 336),                             # 8 radios x 42 pages
+        ('sf-fdetail-config__empty-label', 350),              # 8x42 shapes + 7x2 containers
+    ],
+    'counts': [
+        ('the footer anchor leaves every page',
+         'tel:+865398669539">+86 539 866 9539</a><a href="https://wa.me', 75, 0),
+        # ...but the contact page's own card keeps its phone link (ruling: the
+        # footer one only). 76 = 75 footer + 1 contact.
+        ('the contact card keeps its own phone link', 'tel:+865398669539', 76, 1),
+        ('the preview layer joins every stage', 'data-sf-gallery-preview', 0, 42),
+        ('the shape group joins every configurator', 'data-sf-config-group="shape"', 0, 42),
+        ('the old empty slot form leaves entirely',
+         'sf-fdetail-config__img--empty" aria-hidden="true"></span>'
+         '<span class="sf-fdetail-config__text"', 14, 0),
+        # The float button's href moved to sf_contact_whatsapp; the BUILT url is
+        # the same digits, so the bytes do not move. Both sides, because "no
+        # change" is itself the claim.
+        ('the wa.me number bytes are unchanged', 'wa.me/8613385397805', 269, 269),
+    ],
+    'unmoved': [
+        ('the cookie banner', r'class="sf-cookie-banner"', 75),
+        ('the float stack', r'class="sf-float-stack"', 75),
+        ('the certificate dialog', r'sf-certmodal', 1),
+        ('the navigation', r'wp-block-navigation', None),
+    ],
+    'per_page': [
+        ('h1', r'<h1[ >]', 1),
+        ('the landline anchor', r'tel:\+865398669539">\+86 539 866 9539</a><a href="https://wa\.me', 0),
+        ('the new style token', r'style\.css\?ver=2\.10\.68', 1),
+    ],
+    'scoped': [
+        ('the shape group is on each detail page, once',
+         'data-sf-config-group="shape"', _is_formula_detail, 1),
+        ('so is the preview layer', 'data-sf-gallery-preview', _is_formula_detail, 1),
+        ('and the new config token', r'config\.js\?ver=1\.1\.0', _is_formula_detail, 1),
+    ],
+    'order': [
+        ('the preview layer sits inside the stage, before the tabs',
+         'sf-gallery__stage', 'data-sf-gallery-preview', _is_formula_detail),
+        ('the shape group precedes the container group where the record has one',
+         'data-sf-config-group="shape"', 'data-sf-config-group="container"',
+         lambda n: 'joint-support-soft-chews' in n),
+    ],
+    'h2_delta': None,
+    'sources': {
+        'ftr': 'parts/footer.html',
+        'cfg': 'assets/js/config.js',
+        'adm': 'inc/formula-admin.php',
+    },
+    'reinject': ('an old empty-slot run put back fails coverage',
+                 'formulas__joint-support-soft-chews.html',
+                 'data-sf-config-group="container"',
+                 '<span class="sf-fdetail-config__img sf-fdetail-config__img--empty"'
+                 ' aria-hidden="true"></span><span class="sf-fdetail-config__text">X</span></label>'),
+    'delete': ('one page loses the new style token fails coverage',
+               'about.html', '?ver=2.10.68'),
+    'nc13_mode': 'sighted',
+    'nc13_label': ('NC13 the insert direction SEES a payload edit, and coverage confirms it'),
+    'matrix': [
+        ('the shape group is never inserted',
+         {'transform': _h7g_partial(preview=True, slots=True, tel=True)}, None),
+        ('the preview layer is never inserted',
+         {'transform': _h7g_partial(shape=True, slots=True, tel=True)}, None),
+        ('the empty slots are never rewritten',
+         {'transform': _h7g_partial(shape=True, preview=True, tel=True)}, None),
+        ('the landline anchor is never removed',
+         {'transform': _h7g_partial(shape=True, preview=True, slots=True)}, None),
+        ('the tokens are not folded', {'tokens': []}, None),
+        ('the run count is declared one short', {'applies': 172}, None),
+        ('nothing is applied at all',
+         {'transform': (lambda t: (t, 0)), 'applies': 0}, None),
+    ],
+    'nc_source': [
+        ('NC-src the source pass fails when the renderer stops reading the library',
+         'functions.php',
+         'sf_shape_library()',
+         "get_option('sf_shapes', array())"),
+        ('NC-src the source pass fails when the footer tel token comes back',
+         'parts/footer.html',
+         '{{sf-whatsapp-link}}" target="_blank" rel="noopener noreferrer">{{sf-whatsapp}}</a>',
+         '{{sf-whatsapp-link}}" target="_blank" rel="noopener noreferrer">{{sf-whatsapp}}</a>'
+         '<a href="{{sf-phone-tel}}">{{sf-phone}}</a>'),
+    ],
+    'nc_page': [
+        ('NC-page the scoped count fails when a page loses its shape group',
+         'formulas__calming-soft-chews.html',
+         lambda s: s.replace('data-sf-config-group="shape"', 'data-sf-config-group="shapX"', 1)),
+    ],
+    'nc_blind': ('formulas__joint-support-soft-chews.html',
+                 'data-sf-config-group="shape"',
+                 'data-sf-config-group="shapX"'),
+    'source': [
+        ('style.css declares 2.10.68', 'css', r'(?m)^Version: 2\.10\.68$', True),
+        ('no 2.10.67 header survives', 'css', r'(?m)^Version: 2\.10\.67$', False),
+        ('functions.php enqueues 2.10.68 for style.css', 'php',
+         r"wp_enqueue_style\('sinofresh-style'[^;]*'2\.10\.68'", True),
+        ('functions.php enqueues 1.1.0 for config.js', 'php',
+         r"wp_enqueue_script\('sinofresh-config'[^;]*'1\.1\.0'", True),
+        ('no 1.0.0 config enqueue survives', 'php',
+         r"'sinofresh-config'[^;]*'1\.0\.0'", False),
+        ('the renderer declares the shape group key', 'php', r"'key' => 'shape'", True),
+        ('the shape library is read, not inlined', 'php', r'sf_shape_library\(\)', True),
+        ('the library ships the eight slugs', 'adm', r"function sf_default_shapes", True),
+        ('the admin page is registered', 'adm', r"'sf-shapes'", True),
+        ('the footer contact line has no phone token left', 'ftr',
+         r'\{\{sf-phone', False),
+        ('the float button reads the shared WhatsApp source', 'ftr',
+         r'\{\{sf-whatsapp-link\}\}', True),
+        ('the stylesheet styles the preview layer', 'css', r'\.sf-gallery__preview', True),
+        ('the stylesheet styles the named placeholder', 'css',
+         r'\.sf-fdetail-config__empty-label', True),
+        ('config.js reads the label back out of the box', 'cfg',
+         r'sf-fdetail-config__empty-label', True),
+        ('config.js still paints its --js flag', 'cfg',
+         r'sf-fdetail-config--js', True),
+    ],
+}
+
+
+# Batch H7h is the phone pass: every page-visible change is a version token or
+# an EXTERNAL file (style.css section 62, config.js 1.2.0's fold, gallery 2.2.0's
+# dots — JS-built DOM, invisible to server bytes on purpose). The main proof is
+# therefore a NULL edit on the insert branch, H7e's shape: mask(fold(baseline))
+# == mask(candidate), full-width. What the batch MEANS lives in the external
+# files, and that is what the source pass owns; what it DOES lives in the
+# browser, and that is what the E2E owns. The gate's job here is the discipline
+# one: nothing else on any of the 75 pages moved, and the tokens moved together.
+BATCHES['h7h'] = {
+    'name': 'H7h — the phone pass: type floors, the fold, dots, the bottom bar',
+    'mode': 'insert',
+    'tokens': [
+        ('?ver=2.10.68', '?ver=2.10.69'),                      # style.css
+        ('config.js?ver=1.1.0', 'config.js?ver=1.2.0'),
+        ('formula-gallery.js?ver=2.1.0', 'formula-gallery.js?ver=2.2.0'),
+    ],
+    'transform': lambda text: (text, 0),
+    'applies': 0,
+    'coverage': [
+        ('style.css?ver=2.10.68', 0),
+        ('config.js?ver=1.1.0', 0),
+        ('formula-gallery.js?ver=2.1.0', 0),
+    ],
+    'insertions': [
+        ('style.css?ver=2.10.69', 75),
+        ('config.js?ver=1.2.0', 42),
+        ('formula-gallery.js?ver=2.2.0', 42),
+    ],
+    'counts': [
+        ('the config token moves on the detail pages and nowhere else',
+         'config.js?ver=', 42, 42),
+        ('the gallery token moves on the detail pages and nowhere else',
+         'formula-gallery.js?ver=', 42, 42),
+    ],
+    'unmoved': [
+        ('the cookie banner', r'class="sf-cookie-banner"', 75),
+        ('the float stack', r'class="sf-float-stack"', 75),
+        ('the certificate dialog', r'sf-certmodal', 1),
+        ('the navigation', r'wp-block-navigation', None),
+        ('the shape group', r'data-sf-config-group="shape"', 42),
+    ],
+    'per_page': [
+        ('h1', r'<h1[ >]', 1),
+        ('the new style token', r'style\.css\?ver=2\.10\.69', 1),
+    ],
+    'scoped': [
+        ('the new config token is on each detail page, once',
+         r'config\.js\?ver=1\.2\.0', _is_formula_detail, 1),
+        ('so is the new gallery token', r'formula-gallery\.js\?ver=2\.2\.0',
+         _is_formula_detail, 1),
+    ],
+    'order': [],
+    'h2_delta': None,
+    'sources': {
+        'cfg': 'assets/js/config.js',
+    },
+    'reinject': ('an old style token put back fails coverage',
+                 'about.html', '?ver=2.10.69', '?ver=2.10.68'),
+    'delete': ('one page loses the new style token fails coverage',
+               'about.html', '?ver=2.10.69'),
+    'nc13_mode': 'sighted',
+    'nc13_label': ('NC13 the null edit compares every byte, so a payload edit is seen '
+                   'and coverage confirms it'),
+    'matrix': [
+        ('the tokens are not folded', {'tokens': []}, None),
+        ('one token pair is dropped',
+         {'tokens': [('?ver=2.10.68', '?ver=2.10.69')]}, None),
+        ('the run count is declared non-zero', {'applies': 1}, None),
+        ('a stray character on one page',
+         {}, ('about.html', lambda s: s.replace('</body>', '<!-- stray --></body>', 1))),
+        ('one page keeps its old config token',
+         {}, ('formulas__calming-soft-chews.html',
+              lambda s: s.replace('config.js?ver=1.2.0', 'config.js?ver=1.1.0', 1))),
+    ],
+    'nc_source': [
+        ('NC-src the source pass fails when the fold rule leaves the stylesheet',
+         'style.css',
+         '.sf-fdetail-config--js .sf-fdetail-config__list.sf-config-folded',
+         '.sf-zz-folded-removed'),
+        ('NC-src the source pass fails when the fold state stops persisting',
+         'assets/js/config.js',
+         "sessionStorage.setItem(FOLD_KEY, open ? 'open' : 'folded');",
+         '/* state is not kept */'),
+        ('NC-src the source pass fails when the dots builder leaves the gallery',
+         'assets/js/formula-gallery.js',
+         # A callable on purpose: a first-occurrence replace leaves
+         # 'sf-gallery__dots' as a substring of the mutant, and a check that
+         # cannot notice its own sabotage proves nothing.
+         lambda s: s.replace('sf-gallery__dots', 'sf-zz-dots-removed'),
+         None),
+    ],
+    'nc_page': [
+        ('NC-page the scoped count fails when a page loses its gallery token',
+         'formulas__calming-soft-chews.html',
+         lambda s: s.replace('formula-gallery.js?ver=2.2.0', 'formula-gallery.js?ver=X', 1)),
+    ],
+    'nc_blind': ('formulas__calming-soft-chews.html',
+                 'config.js?ver=1.2.0', 'config.js?ver=1.2.X'),
+    'source': [
+        ('style.css declares 2.10.69', 'css', r'(?m)^Version: 2\.10\.69$', True),
+        ('no 2.10.68 header survives', 'css', r'(?m)^Version: 2\.10\.68$', False),
+        ('functions.php enqueues 2.10.69 for style.css', 'php',
+         r"wp_enqueue_style\('sinofresh-style'[^;]*'2\.10\.69'", True),
+        ('functions.php enqueues 1.2.0 for config.js', 'php',
+         r"wp_enqueue_script\('sinofresh-config'[^;]*'1\.2\.0'", True),
+        ('functions.php enqueues 2.2.0 for formula-gallery.js', 'php',
+         r"wp_enqueue_script\('sinofresh-formula-gallery'[^;]*'2\.2\.0'", True),
+        ('no 2.1.0 gallery enqueue survives', 'php',
+         r"'sinofresh-formula-gallery'[^;]*'2\.1\.0'", False),
+        ('the phone pass lives at the end of the stylesheet', 'css',
+         r'62\. Batch H7h', True),
+        ('the folded rule is scoped to the fold class', 'css',
+         r'sf-config-folded', True),
+        ('the drawer still exists for tablets', 'css',
+         r'sf-fdetail-config--js \.sf-fdetail-config__list \{ display: none; \}', True),
+        ('the dots have their own rules', 'css', r'\.sf-gallery__dot', True),
+        ('the bottom bar rule is in the phone block', 'css',
+         r'sf-float-stack \{\n\t\tleft: 0;', True),
+        ('the hint line is withdrawn at the phone width', 'css',
+         r'__hint \{\n\t\tdisplay: none;', True),
+        ('config.js builds the fold button', 'cfg', r'sf-fdetail-config__fold', True),
+        ('config.js persists the fold state', 'cfg',
+         r"sessionStorage\.setItem\(FOLD_KEY", True),
+        ('config.js derives the label the same way H7g rendered it', 'cfg',
+         r'sf-fdetail-config__empty-label', True),
+        ('gallery builds the dots', 'js', r'sf-gallery__dots', True),
+        ('gallery syncs the dots in paint()', 'js',
+         r"dotBtns.forEach", True),
+    ],
+}
+
+
 # ------------------------------------------------------------------ source side
 
 def _live_of(rel, text, prune):

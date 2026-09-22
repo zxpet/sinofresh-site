@@ -9364,6 +9364,16 @@ body.sf-config-lock { overflow: hidden; }
 	}
 }
 
+
+/* Two children of the phone pass are built by script on EVERY detail page,
+   so they need a rule at every width, not just inside the phone block: the
+   dots and the fold button are styled out of existence off the phone, the
+   same contract the thumbnail strip and the drawer button already keep. */
+.sf-fdetail2__media .sf-gallery__dots,
+.sf-fdetail-config__fold {
+	display: none;
+}
+
 /* ==========================================================================
    62. Batch H7h — the phone pass. Everything in this section is scoped to
    <=480px: tablets (481-768) and desktops keep every rule they had, including
@@ -9500,6 +9510,9 @@ body.sf-config-lock { overflow: hidden; }
 	.sf-fdetail-config__group[data-sf-config-group="container"] .sf-fdetail-config__img {
 		width: 80px;
 		height: 80px;
+		/* 80 is the BOX: the dashed slot's own 1px border would otherwise
+		   make the tile measure 82. */
+		box-sizing: border-box;
 	}
 
 	/* ---- the media area: strip out, dots in ------------------------------ */
@@ -9582,3 +9595,4 @@ body.sf-config-lock { overflow: hidden; }
 		padding-bottom: 78px;
 	}
 }
+
