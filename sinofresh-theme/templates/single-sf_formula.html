@@ -75,6 +75,14 @@
 <!-- wp:html -->
 [sf_formula_detail_composition]
 <!-- /wp:html -->
+<!-- Batch H3: the detailed content area. It sits after the three data bands
+     and before the FAQ so the card-white reading surface runs unbroken from
+     the Specification cards to the end of the FAQ, each band separated by its
+     own heading. The band is a shortcode because it has to vanish completely
+     on a record whose fields are still empty. -->
+<!-- wp:html -->
+[sf_formula_content]
+<!-- /wp:html -->
 <!-- Batch C: the formula FAQ. The accordion is emitted by the FAQ shortcode
      in the core/html block below, so the nine answers can carry this record's
      own values and the FAQPage schema can read the same function instead of
@@ -91,6 +99,14 @@
 <!-- /wp:html -->
 </section>
 <!-- /wp:group -->
+
+<!-- Batch H3: how sampling works. Static copy, so unlike the content band it
+     always renders; it closes the white reading surface after the FAQ, and the
+     bg-light related-formulas grid below it opens the light tail before the
+     green CTA. Same shortcode the HowTo schema reads its steps from. -->
+<!-- wp:html -->
+[sf_formula_sampling]
+<!-- /wp:html -->
 
 <!-- Block 4: related formulas -->
 <!-- wp:group {"tagName":"section","className":"sf-fdetail-more","backgroundColor":"bg-light","layout":{"type":"constrained"},"style":{"spacing":{"padding":{"top":"var:preset|spacing|80","bottom":"var:preset|spacing|80"}}}} -->

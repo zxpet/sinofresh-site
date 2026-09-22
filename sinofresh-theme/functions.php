@@ -28,7 +28,7 @@ add_action('after_setup_theme', function() {
 });
 
 add_action('wp_enqueue_scripts', function() {
-	wp_enqueue_style('sinofresh-style', get_stylesheet_uri(), array(), '2.10.56');
+	wp_enqueue_style('sinofresh-style', get_stylesheet_uri(), array(), '2.10.57');
 	// Sticky nav: every template renders parts/header.html, so this is site-wide.
 	wp_enqueue_script('sinofresh-sticky-header', get_template_directory_uri() . '/assets/js/sticky-header.js', array(), '1.0.0', true);
 	wp_enqueue_script('sinofresh-ui-components', get_template_directory_uri() . '/assets/js/ui-components.js', array(), '1.0.0', true);
@@ -2265,6 +2265,331 @@ function sinofresh_formula_detail_composition() {
 add_shortcode('sf_formula_detail_composition', 'sinofresh_formula_detail_composition');
 
 /**
+ * [sf_formula_content] — the detailed content area (batch H3).
+ *
+ * What it deliberately does NOT print is the point of the batch. The brief
+ * asked for six blocks; three of them would have been a second or a fifth
+ * printing of a field already on the page:
+ *
+ *   sf_formula_ingredients   already printed once by ⑤ Formula & nutrition
+ *   sf_formula_analysis      already printed once by ⑤ Formula & nutrition
+ *   sf_formula_specs         already printed four times (the ④ card plus the
+ *                            three H2a parameter rows parsed out of it)
+ *   sf_formula_shelf_life    the same fact as the H2a "Shelf life" row
+ *
+ * The first two are exactly the duplication a previous batch removed on
+ * purpose — see sinofresh_formula_detail() above, which records that they
+ * "were being rendered twice on every detail page". Printing them again here
+ * would undo that; printing specs would take it to five appearances on one
+ * page. So this band carries only what the page cannot already prove:
+ * Recommended For, Use Cases, Who It's For, and Packaging & Specifications.
+ *
+ * Shelf life is left out of Packaging & Specifications for the third reason
+ * (user ruling, 2026-09-22): sf_formula_shelf_life is 21/21 "18 months" and
+ * has never been read on the front end, while the parameter row above derives
+ * the same fact from sf_formula_specs. Two sources for one fact drift; the
+ * rule here is one source of record per fact, and that source is already
+ * upstream. The key stays registered and the dead end is logged for H6.
+ *
+ * Empty means absent, everywhere: a field with no value contributes zero
+ * bytes, never an empty heading or a hollow box. All seven remaining keys are
+ * 0/21 today (the sales team has not started backfilling), so on the live 21
+ * records this band renders Packaging & Specifications → Storage and nothing
+ * else — which is the approved "ship the renderer before the data" mode from
+ * batch H2a, not a fault.
+ *
+ * Storage is the one input that is not a field, which is why the band itself is
+ * never empty today: the closing guard is reachable only if Storage stops being
+ * static. It is kept for that day — the template relies on this shortcode being
+ * able to emit nothing, and that contract should not rest on a hardcoded string
+ * staying hardcoded.
+ *
+ * Background is card-white, the same as the three bands above it, and the
+ * heading levels stay flat (four sibling h2s) so the document outline matches
+ * the reading order; the group heading takes the smaller 20px class rather
+ * than an h3, which would have nested it under "Who It's For". Alternate
+ * background stripes were considered and rejected: the three bands above are
+ * one continuous "this formula's data" surface by design (style.css 8103).
+ */
+function sinofresh_formula_content() {
+	if (!is_singular('sf_formula')) {
+		return '';
+	}
+	$post_id = (int) get_queried_object_id();
+	if ($post_id <= 0) {
+		return '';
+	}
+
+	$blocks = '';
+
+	$value = trim((string) get_post_meta($post_id, 'sf_formula_recommended_for', true));
+	if ($value !== '') {
+		$blocks .= sinofresh_formula_content_block('Recommended For',
+			'<p class="sf-fdetail-content__prose">' . esc_html($value) . '</p>');
+	}
+
+	/* One line of the field is one use case. A single line reads as a
+	   sentence, not as a bulleted list of one — same text either way. */
+	$items = array();
+	foreach (preg_split('/\R/u', (string) get_post_meta($post_id, 'sf_formula_use_cases', true)) as $line) {
+		$line = trim((string) $line);
+		if ($line !== '') {
+			$items[] = $line;
+		}
+	}
+	if ($items) {
+		if (count($items) === 1) {
+			$blocks .= sinofresh_formula_content_block('Use Cases',
+				'<p class="sf-fdetail-content__prose">' . esc_html($items[0]) . '</p>');
+		} else {
+			$li = '';
+			foreach ($items as $item) {
+				$li .= '<li class="sf-fdetail-content__item">' . esc_html($item) . '</li>';
+			}
+			$blocks .= sinofresh_formula_content_block('Use Cases',
+				'<ul class="sf-fdetail-content__list">' . $li . '</ul>');
+		}
+	}
+
+	$value = trim((string) get_post_meta($post_id, 'sf_formula_who_for', true));
+	if ($value !== '') {
+		$blocks .= sinofresh_formula_content_block("Who It's For",
+			'<p class="sf-fdetail-content__prose">' . esc_html($value) . '</p>');
+	}
+
+	/* Packaging & Specifications. Container Type is a single slug from the
+	   Site Settings library, so it contributes one chip and the library's
+	   label — the same library the publishing form offers, so the page and
+	   the form cannot disagree about what "pouch" is called. */
+	$specs = '';
+	$container = trim((string) get_post_meta($post_id, 'sf_formula_container', true));
+	if ($container !== '') {
+		$specs .= sinofresh_formula_content_spec('Container Options',
+			sinofresh_formula_content_chips(array(sinofresh_container_label($container))));
+	}
+	$specs .= sinofresh_formula_content_spec('Additional Packaging',
+		sinofresh_formula_content_chips(sf_json_array(get_post_meta($post_id, 'sf_formula_packaging_extra', true))));
+	$specs .= sinofresh_formula_content_spec('Color Options',
+		sinofresh_formula_content_chips(sf_json_array(get_post_meta($post_id, 'sf_formula_colors', true))));
+	$specs .= sinofresh_formula_content_spec('Storage',
+		'<p class="sf-fdetail-content__prose">' . esc_html(sinofresh_formula_storage_line()) . '</p>');
+	$specs .= sinofresh_formula_content_cartons(sf_json_rows(get_post_meta($post_id, 'sf_formula_cartons', true)));
+
+	if ($specs !== '') {
+		$blocks .= sinofresh_formula_content_block('Packaging & Specifications',
+			'<div class="sf-fdetail-content__specs">' . $specs . '</div>', true);
+	}
+
+	if ($blocks === '') {
+		return '';
+	}
+	return '<section class="sf-fdetail-content"><div class="sf-fdetail-content__inner">'
+		. $blocks
+		. '</div></section>';
+}
+add_shortcode('sf_formula_content', 'sinofresh_formula_content');
+
+/**
+ * One block of the content area: a heading plus already-escaped inner HTML.
+ *
+ * A formatter with no opinion: every caller decides whether it has content
+ * before it calls. There is deliberately no empty-value guard inside — all four
+ * call sites test their own field first, so a guard here would be unreachable
+ * (and an unreachable guard is one no test can ever fail on). _spec below is
+ * the opposite case and does guard, because its value arrives from a builder
+ * that returns '' for empty input rather than from a field the caller read.
+ *
+ * $subtitle picks the 20px group class for "Packaging & Specifications". The
+ * element stays <h2>: a smaller size is a visual weight, while <h3> would
+ * make the browser (and a crawler) read the packaging group as a child of
+ * "Who It's For".
+ */
+function sinofresh_formula_content_block($label, $inner, $subtitle = false) {
+	$class = $subtitle ? 'sf-fdetail-content__subtitle' : 'sf-fdetail-content__heading';
+	return '<div class="sf-fdetail-content__block">'
+		. '<h2 class="' . $class . '">' . esc_html($label) . '</h2>'
+		. (string) $inner
+		. '</div>';
+}
+
+/**
+ * One sub-block of "Packaging & Specifications": a label plus its value.
+ * Returns '' on an empty value, so a label never outlives its content.
+ */
+function sinofresh_formula_content_spec($label, $inner) {
+	$inner = (string) $inner;
+	if (trim($inner) === '') {
+		return '';
+	}
+	return '<div class="sf-fdetail-content__spec">'
+		. '<p class="sf-fdetail-content__label">' . esc_html($label) . '</p>'
+		. $inner
+		. '</div>';
+}
+
+/** Outline chips, the site's existing pill vocabulary; '' when empty. */
+function sinofresh_formula_content_chips($values) {
+	$chips = '';
+	foreach ((array) $values as $value) {
+		$value = trim((string) $value);
+		if ($value === '') {
+			continue;
+		}
+		$chips .= '<li class="sf-fdetail-content__chip">' . esc_html($value) . '</li>';
+	}
+	if ($chips === '') {
+		return '';
+	}
+	return '<ul class="sf-fdetail-content__chips">' . $chips . '</ul>';
+}
+
+/**
+ * Carton rows as a table. A row is kept when any of the three cells has text,
+ * and fully blank rows are dropped — the same rule sinofresh_formula_tier_table
+ * applies, because both tables are fed by the same admin widget, which always
+ * ships one blank row. The column headers are the publishing form's own
+ * labels so page and form cannot disagree about which column is which.
+ */
+function sinofresh_formula_content_cartons($rows) {
+	$body = '';
+	foreach ((array) $rows as $row) {
+		if (!is_array($row)) {
+			continue;
+		}
+		$cells = array();
+		$any   = false;
+		foreach (array('count', 'boxes', 'size') as $col) {
+			$cell    = trim((string) (isset($row[$col]) ? $row[$col] : ''));
+			$cells[] = $cell;
+			$any     = $any || ($cell !== '');
+		}
+		if (!$any) {
+			continue;
+		}
+		$body .= '<tr><td>' . esc_html($cells[0]) . '</td><td>' . esc_html($cells[1])
+			. '</td><td>' . esc_html($cells[2]) . '</td></tr>';
+	}
+	if ($body === '') {
+		return '';
+	}
+	return sinofresh_formula_content_spec('Carton Dimensions',
+		'<table class="sf-fdetail-content__cartons"><thead><tr>'
+		. '<th scope="col">Pack count</th><th scope="col">Units per carton</th>'
+		. '<th scope="col">Carton size (cm)</th></tr></thead><tbody>'
+		. $body . '</tbody></table>');
+}
+
+/**
+ * The container library's label for a slug, or the raw value when the slug is
+ * not in the library. Falling back to the stored value rather than dropping it
+ * is deliberate: a library that was renamed would otherwise silently delete a
+ * fact from 21 pages, and the raw slug is at least diagnosable.
+ */
+function sinofresh_container_label($slug) {
+	$slug = (string) $slug;
+	foreach (sf_container_library() as $c) {
+		if ($c['slug'] === $slug && trim((string) $c['label']) !== '') {
+			return (string) $c['label'];
+		}
+	}
+	return $slug;
+}
+
+/**
+ * The storage line. Not a meta field: it is the same sentence for every
+ * product, so a field would only add 21 chances to typo it.
+ *
+ * Written as a specification value, not as the FAQ answer. The accordion
+ * already answers "How should the finished product be stored?" at length; a
+ * second full sentence would be the same fact in the same register twice. A
+ * terse value next to "Carton Dimensions" is a different reading and adds the
+ * one clause the spec row can carry without repeating the paragraph.
+ */
+function sinofresh_formula_storage_line() {
+	return 'Cool, dry place out of direct sunlight; keep the container closed after opening.';
+}
+
+/**
+ * The four sampling steps — the single source of this copy.
+ *
+ * Three readers already share this array: the band below ([sf_formula_sampling]),
+ * the HowTo JSON-LD in wp_head, and — from batch H4 — the sampling summary
+ * inside the inquiry modal. The modal must read this function rather than
+ * repeat the strings: the same four steps appear twice on one page's worth of
+ * UI, and two hardcoded copies drift the first time a step is reworded.
+ *
+ * Step 4 deliberately drops the "(typically 3-7 working days)" parenthetical
+ * the brief carried: the closing line under the band states the timeline, and
+ * the same number twice inside one band is the C1 defect this batch exists to
+ * avoid. The HowTo schema carries it as totalTime.
+ */
+function sinofresh_sampling_steps() {
+	return array(
+		array(
+			'title' => 'Submit Inquiry',
+			'text'  => 'Tell us your target formula, flavor, and packaging ideas.',
+		),
+		array(
+			'title' => 'Confirm Details',
+			'text'  => "We'll provide a sample spec sheet and a proforma invoice for the sample fee.",
+		),
+		array(
+			'title' => 'Sampling & Quality Check',
+			'text'  => 'Our lab produces your sample and runs a full quality check.',
+		),
+		array(
+			'title' => 'Ship & Evaluate',
+			'text'  => 'We ship the sample to you. You evaluate it and send us your feedback.',
+		),
+	);
+}
+
+/**
+ * [sf_formula_sampling] — "How Sampling Works" on a formula detail page.
+ *
+ * Static copy, so unlike every other band on this page it cannot collapse:
+ * the four steps are the same for all 21 records, and the page is the same
+ * without it. It still emits its own <section> from here rather than living
+ * in the template, for the reason the whole page is built this way — the
+ * template is a static block file, and a band whose geometry style.css owns
+ * (four columns, the 44px marker, the stack under 769px) belongs with the
+ * other band renderers, not split across two files.
+ *
+ * The marker is a filled primary-green circle with the numeral in card-white.
+ * Not brand-green: #5AB735 carries white text at 2.7:1, which fails AA at
+ * this size (the note at style.css 1892 records the same measurement), while
+ * the Forest token clears it comfortably.
+ *
+ * Background is card-white like the bands above it — the same continuous
+ * reading surface, each band separated by its own H2. The bg-light band
+ * begins after this one, at the related-formulas grid.
+ */
+function sinofresh_formula_sampling() {
+	if (!is_singular('sf_formula')) {
+		return '';
+	}
+	$items = '';
+	$n     = 0;
+	foreach (sinofresh_sampling_steps() as $step) {
+		$n++;
+		$items .= '<li class="sf-sampling__step">'
+			. '<span class="sf-sampling__num">' . (int) $n . '</span>'
+			. '<h3 class="sf-sampling__step-title">' . esc_html($step['title']) . '</h3>'
+			. '<p class="sf-sampling__desc">' . esc_html($step['text']) . '</p>'
+			. '</li>';
+	}
+	if ($items === '') {
+		return '';
+	}
+	return '<section class="sf-sampling"><div class="sf-sampling__inner">'
+		. '<h2 class="sf-sampling__title">' . esc_html('How Sampling Works') . '</h2>'
+		. '<ol class="sf-sampling__steps">' . $items . '</ol>'
+		. '<p class="sf-sampling__note">' . esc_html('Typically 3-7 working days.') . '</p>'
+		. '</div></section>';
+}
+add_shortcode('sf_formula_sampling', 'sinofresh_formula_sampling');
+
+/**
  * Article pattern library (block patterns).
  *
  * Ten standardized article templates for content operations: editors open
@@ -3294,6 +3619,34 @@ add_action('wp_head', function() {
 			);
 			echo "\n" . '<script type="application/ld+json">'
 				. wp_json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE)
+				. "</script>\n";
+		}
+
+		/* Batch H3: the sampling process as HowTo. Emitted here rather than
+		   from a second wp_head callback so it shares this one's stand-down
+		   for an SEO plugin that already emits FAQPage/HowTo, and so the two
+		   schema blocks on a formula page keep a fixed order. The steps come
+		   from sinofresh_sampling_steps() — the same array the visible band
+		   renders from, so the page and the structured data cannot drift. */
+		$howto_steps = array();
+		foreach (sinofresh_sampling_steps() as $i => $step) {
+			$howto_steps[] = array(
+				'@type'    => 'HowToStep',
+				'position' => (int) $i + 1,
+				'name'     => $step['title'],
+				'text'     => $step['text'],
+			);
+		}
+		if (count($howto_steps) >= 2) {
+			$howto = array(
+				'@context'  => 'https://schema.org',
+				'@type'     => 'HowTo',
+				'name'      => 'How Sampling Works',
+				'totalTime' => 'P3D',
+				'step'      => $howto_steps,
+			);
+			echo "\n" . '<script type="application/ld+json">'
+				. wp_json_encode($howto, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE)
 				. "</script>\n";
 		}
 		return;

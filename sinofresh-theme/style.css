@@ -2,7 +2,7 @@
 Theme Name: SINO FRESH
 Author: Shandong SINO FRESH Pet Food Co., Ltd.
 Text Domain: sinofresh
-Version: 2.10.56
+Version: 2.10.57
 Requires at least: 6.0
 Requires PHP: 7.4
 License: GNU General Public License v2 or later
@@ -8894,5 +8894,188 @@ body.sf-certmodal-lock {
 	.sf-explore__btn,
 	.sf-explore__chip {
 		transition: none;
+	}
+}
+
+/* Batch H3 — "Detailed content" and "How Sampling Works", the two bands added
+   to a formula detail page, between the Ingredients & composition band and the
+   related-formulas grid.
+
+   Both are emitted whole by their shortcode and styled here for the reason the
+   two H2a bands above are (see the note above .sf-fdetail-actives): the content
+   band has to be able to return zero bytes when its fields are still empty, so
+   its section, its heading and its background cannot live in the block template.
+
+   Background is card-white on both, continuing the surface that starts at the
+   Specification cards. The brief's white/bg-light stripe was dropped: style.css
+   8103 keeps that run deliberately one colour, and striping it would slice a
+   surface that is drawn as a single piece. The only colour changes on the page
+   stay where they already were — bg-light at the related-formulas grid, green at
+   the closing CTA. ---------------------------------------------------- */
+
+.sf-fdetail-content,
+.sf-sampling {
+	padding: 48px 0;
+	background-color: var(--wp--preset--color--card-white);
+}
+.sf-fdetail-content__inner,
+.sf-sampling__inner {
+	max-width: var(--wp--style--global--content-size, 1200px);
+	margin-inline: auto;
+}
+/* The brief's 48px between blocks. Only between: the first block carries no
+   top margin, so the band's own 48px padding is the whole space above it. */
+.sf-fdetail-content__block + .sf-fdetail-content__block { margin-top: 48px; }
+.sf-fdetail-content__heading { margin: 0 0 14px; }
+/* "Packaging & Specifications" is a sibling of the three prose blocks, so it
+   keeps the h2 element — and its place in the outline — and takes the 20px h3
+   size instead. Smaller by weight, not by level. */
+.sf-fdetail-content__subtitle {
+	margin: 0 0 14px;
+	font-size: 20px;
+	font-weight: 600;
+	line-height: 1.3;
+}
+.sf-fdetail-content__prose {
+	margin: 0;
+	font-size: 16px;
+	line-height: 1.6;
+}
+.sf-fdetail-content__list {
+	margin: 0;
+	padding-left: 20px;
+	font-size: 16px;
+	line-height: 1.6;
+}
+.sf-fdetail-content__item + .sf-fdetail-content__item { margin-top: 6px; }
+
+.sf-fdetail-content__specs { display: grid; gap: 28px; }
+.sf-fdetail-content__label {
+	margin: 0 0 10px;
+	font-size: 11px;
+	font-weight: 600;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: var(--wp--preset--color--text-secondary);
+}
+/* Outline pills, the .sf-actives__pill vocabulary — deliberately NOT
+   .sf-fchip, which is a filter button with a cursor and a hover state, the
+   wrong affordance on a static value. */
+.sf-fdetail-content__chips {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+.sf-fdetail-content__chip {
+	padding: 3px 10px;
+	border: 1px solid var(--wp--preset--color--border-light);
+	border-radius: 999px;
+	font-size: 13px;
+	line-height: 1.5;
+	color: var(--wp--preset--color--text-primary);
+}
+/* Collapsed borders with a hairline under each row — the .sf-facts__table
+   treatment, so a carton row and a fact row read as the same kind of record.
+   A third column is the widest cell, so the trailing right padding is dropped
+   or the table would end short of the text above it. */
+.sf-fdetail-content__cartons {
+	width: 100%;
+	margin: 0;
+	border-collapse: collapse;
+	font-size: 14px;
+	text-align: left;
+}
+.sf-fdetail-content__cartons th {
+	padding: 0 24px 9px 0;
+	border-bottom: 1px solid var(--wp--preset--color--border-medium);
+	font-size: 12px;
+	font-weight: 700;
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+	color: var(--wp--preset--color--text-secondary);
+}
+.sf-fdetail-content__cartons td {
+	padding: 10px 24px 10px 0;
+	border-bottom: 1px solid var(--wp--preset--color--border-light);
+	color: var(--wp--preset--color--text-primary);
+}
+.sf-fdetail-content__cartons th:last-child,
+.sf-fdetail-content__cartons td:last-child { padding-right: 0; }
+
+/* --- How Sampling Works -------------------------------------------------
+   Four steps across one row above 768px, stacked below. The type is
+   .sf-pal__step's (17px title, 14px/1.65 muted copy) so the site's two
+   four-step bands speak with one voice; the marker is deliberately NOT that
+   band's 34px outline dot. The brief asks for a filled 44px one, and a filled
+   marker on a band whose steps are numbered rather than joined by a connector
+   reads as a sequence — .sf-pal draws a flow, with a chevron on the wire.
+
+   Forest, not brand-green: #5AB735 carries white text at 2.7:1 and fails AA at
+   this size (style.css 1892 records the same measurement for the other pairing),
+   while the Forest token clears it with room to spare. The numeral is real text
+   in the DOM, not a CSS counter, so it survives a stylesheet failure and is
+   announced with its step. */
+.sf-sampling__title { margin: 0; }
+.sf-sampling__steps {
+	display: grid;
+	grid-template-columns: repeat(4, minmax(0, 1fr));
+	gap: 32px;
+	margin: 32px 0 0;
+	padding: 0;
+	list-style: none;
+}
+.sf-sampling__num {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	box-sizing: border-box;
+	width: 44px;
+	height: 44px;
+	border-radius: 50%;
+	background-color: var(--wp--preset--color--primary);
+	color: var(--wp--preset--color--card-white);
+	font-size: 16px;
+	font-weight: 700;
+	font-variant-numeric: tabular-nums;
+}
+.sf-sampling__step-title {
+	margin: 16px 0 8px;
+	font-size: 17px;
+}
+.sf-sampling__desc {
+	margin: 0;
+	font-size: 14px;
+	line-height: 1.65;
+	color: var(--wp--preset--color--text-secondary);
+}
+/* The one number the band states about time. Step 4's copy leaves the
+   parenthetical out so this line is the only place it appears. */
+.sf-sampling__note {
+	margin: 32px 0 0;
+	font-size: 14px;
+	font-weight: 700;
+	color: var(--wp--preset--color--primary);
+}
+
+@media (max-width: 1240px) {
+	.sf-fdetail-content,
+	.sf-sampling {
+		padding-left: 38px;
+		padding-right: 38px;
+	}
+}
+@media (max-width: 768px) {
+	.sf-fdetail-content,
+	.sf-sampling {
+		padding-left: 20px;
+		padding-right: 20px;
+	}
+	.sf-fdetail-content__block + .sf-fdetail-content__block { margin-top: 36px; }
+	.sf-sampling__steps {
+		grid-template-columns: minmax(0, 1fr);
+		gap: 24px;
 	}
 }
