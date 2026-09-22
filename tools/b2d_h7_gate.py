@@ -259,16 +259,34 @@ def _h7b_transform(text, replacement=None):
     with scripting and does nothing at all without it, and the no-JS href is
     exactly what this change is for. data-formula/data-form are page-specific,
     hence the two [^"]* holes.
+
+    THE HREF IS NOT HARDCODED, and that is the whole reason for the lookahead.
+    The sibling CTA already carries this destination and TranslatePress rewrites
+    it per language: the same template byte `/contact/#quote` renders as
+    `/contact/#quote` on the 21 English pages and `/zh/contact/#quote` on the 21
+    Chinese ones. A literal would have declared 42 edits and matched 21 — one of
+    those failures that looks like a content problem for an hour. Reading the
+    destination off the sibling also states the invariant that matters: the new
+    CTA goes exactly where "Build Custom Formula" beside it already went.
     """
-    return H7B_HERO.subn(H7B_NEW if replacement is None else replacement, text)
+    if replacement is not None:
+        return H7B_HERO.subn(lambda m: replacement, text)
+
+    def sub(m):
+        return ('<a class="sf-formula__cta sf-formula__cta--solid" href="%s"'
+                ' data-sf-inquiry-open>Send Inquiry</a>' % m.group(1))
+    return H7B_HERO.subn(sub, text)
 
 
 H7B_NEW = ('<a class="sf-formula__cta sf-formula__cta--solid" href="/contact/#quote"'
            ' data-sf-inquiry-open>Send Inquiry</a>')
 
+# The lookahead captures the sibling's href, which is the destination the new
+# CTA must carry.
 H7B_HERO = re.compile(
     r'<button type="button" class="sf-formula__cta sf-formula__cta--solid"'
-    r' data-formula="[^"]*" data-form="[^"]*">Reference this formula →</button>')
+    r' data-formula="[^"]*" data-form="[^"]*">Reference this formula →</button>'
+    r'(?=<a class="sf-formula-hero__build sf-quote-cta" href="([^"]+)")')
 
 
 def _h7b_wrong_shape(text):
@@ -288,6 +306,15 @@ BATCHES['h7b'] = {
     ],
     'transform': _h7b_transform,
     'applies': 42,
+    # A NOTE ON THE TEMPLATE THIS BATCH EDITS, because it cost an hour.
+    # templates/single-sf_formula.html is a BLOCK TEMPLATE, and freeform text
+    # between its block delimiters is shipped: the page carries those HTML
+    # comments verbatim (the baseline already carries H5-0's, B2D-S3's and batch
+    # G's). So a comment added there is a product change on 42 pages, not
+    # documentation — the first cut of this batch added one, found its own prose
+    # in the candidate bytes, and declared the edit as one element instead. Put
+    # the explanation in the PHP/JS/CSS around the template, or in the batch
+    # record; if it must live in the template, declare every byte of it here.
     'coverage': [
         # Absent from the candidate, counted on the raw bytes.
         # The old open tag is the sharp one: it pins the element AND the two
@@ -305,7 +332,7 @@ BATCHES['h7b'] = {
         # be broken — counts cannot see which of the two is bound, so the source
         # pass below owns that claim.
         ('data-sf-inquiry-open', 84),
-        ('sf-formula__cta--solid" href="/contact/#quote" data-sf-inquiry-open', 42),
+        ('data-sf-inquiry-open>Send Inquiry</a>', 42),
         ('?ver=2.10.63', 75),
         ('formulas.js?ver=1.3.0', 60),
         ('inquiry.js?ver=1.1.0', 42),
@@ -313,15 +340,28 @@ BATCHES['h7b'] = {
     'counts': [
         # (label, string, base total, candidate total) — BOTH sides measured.
         # Stronger than `unmoved`, which only compares page counts and would not
-        # notice 160 card buttons becoming 159.
+        # notice 160 card buttons becoming 159, and able to state a string the
+        # batch expects to move DOWN, which `insertions` cannot.
         ('the card grid keeps its class', 'class="sf-formula__cta"', 160, 160),
         ('the card labels keep copying', 'Reference this formula', 202, 160),
-        ('the card buttons keep data-formula', 'data-formula=', 202, 160),
+        ('the card buttons keep data-formula', 'data-form="', 202, 160),
+        ('the hero button loses its payload',
+         'class="sf-formula__cta sf-formula__cta--solid" data-formula=', 42, 0),
+        ('the hero CTA keeps its paint modifier', 'sf-formula__cta--solid', 42, 42),
+        # The two rows that catch a language-blind declaration. TranslatePress
+        # rewrites the destination per language, so a transform that hardcoded
+        # /contact/#quote would leave these at 21 -> 21 on the Chinese half and
+        # the main proof would have reported 21 differing pages.
+        ('the English pages gain one opener',
+         'href="/contact/#quote" data-sf-inquiry-open', 21, 42),
+        ('the Chinese pages gain one opener',
+         'href="/zh/contact/#quote" data-sf-inquiry-open', 21, 42),
         ('the float capsule is untouched', 'sf-float-btn--inquiry', 42, 42),
         ('the column title is untouched', 'sf-fdetail2__title', 42, 42),
         ('the global quote CTA is untouched', 'sf-quote-cta', 208, 208),
         ('the hero action row is untouched', 'sf-formula-hero__actions', 42, 42),
         ('the dialog markup is untouched', 'class="sf-inquiry-modal"', 42, 42),
+        ('the gallery switch is untouched', 'sf-gallery__tabs', 42, 42),
     ],
     'unmoved': [
         # (label, regex, expected page count) — the same on both sides
