@@ -7846,7 +7846,13 @@ body.sf-inquiry-lock {
 		max-height: none;
 		border-radius: 0;
 	}
-	h1, h2, h3, p, li, td, th {
+	h1, h2, h3, p, li, td, th,
+	/* Batch H5-0: the formula hero's heading is a div now, so the element list
+	   above no longer reaches it — and this rule is the only thing that turns
+	   it black for print. Without this line a formula page prints its title
+	   white on white. The class is in the list rather than the tag because the
+	   point of the batch is that the hero's copy no longer carries an h1. */
+	.sf-formula-hero__title {
 		color: #000 !important;
 	}
 	a {
