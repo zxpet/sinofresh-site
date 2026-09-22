@@ -995,7 +995,7 @@ commit message 格式：
 | 批次 | 状态 | commit | 说明 |
 |---|---|---|---|
 | H2b | **Step 0 完成 → 5 项不符已裁决（① 改 D / ②③④⑤ 同意）** | — | `docs/batch2d-stepH2b-scan.md` |
-| **H2b1** | **Step 1–5 全过门 + E2E 全过 → 停等 Step 6** | `ebe8f50`（已 push） | `docs/batch2d-stepH2b1.md` |
+| **H2b1** | **Step 1–5 全过门 + E2E 全过 → 停等 Step 6** | 产品 `ebe8f50` + 证据 `69d4c21`（均已 push） | `docs/batch2d-stepH2b1.md` |
 | H2b2 | 未开工（H2b1 上线后） | — | 停入队 + 删资产；⚠️ `configurator.css:667-707` 要整段删 |
 | H3 | 未开工 | — | — |
 | H4 | 未开工 | — | 前置：邮箱 `info@` → `sales@` |
@@ -1007,5 +1007,9 @@ commit message 格式：
 **可复现性 12/12 逐字节**；E2E **E1–E9 全过**。计划外行为变化（两个固定层落位 132/68 → 现代引擎收敛到
 全站取值）已实测并列出，**待裁决**。详见 `docs/batch2d-stepH2b1.md`。
 
-**服务器状态**：未 pull（`git pull` 属「不执行」）；authority guard 未删；DB 未动；主题仅新增扫描器/文档。
+**服务器状态**：未 pull（`git pull` 属「不执行」）；authority guard 未删；DB 未动。
+**预检副本仍然挂着**：`wp-content/themes/sinofresh-theme-preflight/` ＋ mu-plugin `zz-sf-preflight.php` 都还在，
+Step 6 之前**不能拆**（一拆候选就没了）。收尾时和 H2a 一样：pull 完再拆，拆完 `X-SF-Preflight` 即失效。
+复核锚点（2026-09-22 收尾实测）：live `/products/soft-chews/` = `style.css?ver=2.10.55` ＋ 132 处 `class="configurator`；
+同 URL 带 `X-SF-Preflight: 1` = `?ver=2.10.56` ＋ 0 处，且 `link` 指向 `/themes/sinofresh-theme-preflight/style.css`。
 
