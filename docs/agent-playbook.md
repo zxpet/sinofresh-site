@@ -850,7 +850,7 @@ Sampling 四步是否与 playbook 第十部分【⑥】的文案逐字一致，�
 - DIFF 集合：仅 ver 令牌
 - 全站功能回归
 
-**⛔ H6 待办累计清单（11 项）—— 收尾时逐项裁决，不得遗漏：**
+**⛔ H6 待办累计清单（12 项）—— 收尾时逐项裁决，不得遗漏：**
 
 | # | 待办 | 出处 |
 |---|---|---|
@@ -862,6 +862,7 @@ Sampling 四步是否与 playbook 第十部分【⑥】的文案逐字一致，�
 | 9 | ⛔ **`sf_formula_shelf_life` 无渲染器的死键**（`inc/formula-admin.php:42/106` 注册；H2a 行读的是 `sf_formula_specs`）—— 与 H2a 的 `Shelf life` 行是**一对**，必须同时裁决 | `docs/batch2d-stepH3.md` §8 #1 |
 | 10 | ⛔ **`sales@zxpet.com` 在三处被硬编码**（`functions.php:4925` 收件人、`config-pdf.php` 两条 `Cc:`），而真源是 `sf_contact_email` 选项 —— 本批**没有**顺手重构（会让 diff 超出声明）。应收敛成读选项 | `docs/batch2d-stepH4e.md` §10.3；`docs/batch2d-stepH4-scan.md` §5 C2 |
 | 11 | ⛔ **询盘弹窗提交成功后没有复位路径**：`form.hidden` / `success.hidden` 一旦翻转就不再复原 ⇒ 提交过的访客再点胶囊看到的是确认页而不是空表单。**不是 H4 引入的**（H4 没写复位），需决定：复原、还是把弹窗做成"一次性" | `docs/batch2d-stepH4.md` §11；附录 A.10 #14 |
+| 12 | ⛔ **`sf-facts-mini` 的 4 行与 H3 内容区参数行有 3 项语义重叠**（Certifications / Lead time / Packaging 在两处都渲染）⇒ **双真源漂移风险**。H5 若以 `sf-facts-mini` 供剂型页 `additionalProperty`，会让"同一事实两个来源"从 2 处变 3 处。**与第 4 项「MOQ 三处对账」合并处理**（`functions.php:1994` 已有注释承认这个坑） | `docs/batch2d-stepH5-scan.md` §5 #3 |
 
 ---
 
@@ -1146,8 +1147,8 @@ commit message 格式：
 | **H3** | **Step 1–5 全过门 + E2E 全过（2026-09-22）；Step 6 `git pull` 按规则跳过** | 产品 `4ca3aea`（已 push）；基线 `109be91` | `docs/batch2d-stepH3.md`（内容区 + Sampling，三项裁决见扫描档） |
 | **H4e**〔前置：邮箱变更〕 | **Step 1–5 全过门 + E2E 全过（2026-09-22）；Step 6 `git pull` 按规则跳过**。⚠️ **含 DB 改动，无"候选态"** | 主题 `24da600`（已 push）；DB 10 行（快照可回滚）；基线 `4ca3aea` | `docs/batch2d-stepH4e.md`（四项裁决见 `docs/batch2d-stepH4-scan.md`） |
 | **H4** | **Step 1–5 全过门 + E2E 全过（31 ok / 0 FAIL，连续三遍绿）；Step 6 `git pull` 按规则跳过** | 产品 `92dee47`（含修复 `a75640a`，均已 push）；基线 `24da600` 的预检副本（`2.10.57`） | `docs/batch2d-stepH4.md`（四项裁决 D1–D4 见 `docs/batch2d-stepH4-scan-body.md`） |
-| H5 | 未开工 | — | 基线＝**H4 的预检副本**（`92dee47` 树，`2.10.59`） |
-| H6 | 未开工 | — | 待办已增至 **11 项**（H4 新造 1 项见其 §11；H4e 新造 1 项见其 §10.3；H3 新造 1 项见 `docs/batch2d-stepH3.md` §8；H2b2 新造 4 项见其 §8） |
+| **H5** | 🚧 **Step 0 只读扫描完成，⛔ 停机待裁决（未进 Step 1、未改字节）** | — ；基线已就位＝**H4 的预检副本**（`92dee47` 树，`2.10.59`，仍在位未拆） | `docs/batch2d-stepH5-scan.md`（**A–G 七条裁决**；停机＝③ 需改数据〔`offers` 阶梯价全空〕＋① 手册与实况不符〔ALT「自动生成」前提不成立〕） |
+| H6 | 未开工 | — | 待办已增至 **12 项**（H5 新造 1 项＝`sf-facts-mini` 与 H3 参数行 3 项语义重叠，**并入第 4 项「MOQ 三处对账」**；H4 新造 1 项见其 §11；H4e 新造 1 项见其 §10.3；H3 新造 1 项见 `docs/batch2d-stepH3.md` §8；H2b2 新造 4 项见其 §8） |
 
 **H2b1 门/E2E 摘要**：静态 S1–S8 全过；75 页基线 + 75 页候选；主门 **PASS 21 条 / 0 FAIL**
 （58 页差 / 17 页同，逐字节重建）；破坏矩阵 **10/10**；三条负对照全 FAIL（as required）；
@@ -1181,6 +1182,28 @@ H3 单测复跑 **54/0 + 6/6**；E2E **31 ok / 0 FAIL**、0 console error、**�
 ⚠️ **两个产品缺陷都是字节门看不见、由浏览器门抓到的**（脚本/标记顺序、更宽兄弟挤走既有兄弟），
 ⇒ 见 §2「缺陷一」「缺陷二」与附录 **A.10**。真发邮件 5 封（标记 `H4 E2E`，收件人＝`sf_contact_email`）。
 **Step 6 上线跳过**；预检副本**不拆**（＝H5 基线）。详见 `docs/batch2d-stepH4.md`。
+
+**H5 Step 0 摘要（2026-09-22，只读）**：**未改任何字节、未建新探针**（渲染产物＋源码两层即可判定）。
+基线＝H4 预检副本（`92dee47` 树，`2.10.59`，仍在位）。四项范围实测 ⇒
+① `Product.additionalProperty`：**配方详情页 42/42 已有**（读 post meta）／**剂型页 0/16 全缺** ——
+生成器 `functions.php:4796-4806` 的两条分支（`sf-spec-list`、遗留 `flex-basis:35%` 表）在剂型页**命中均为 0**，
+H2b1/F1 已把它换成 **`sf-facts-mini`**（4 行：MOQ / Lead time / Certifications / **Packaging**，16/16 页齐备）
+⇒ **手册要的「包装」数据一直在，只是没人读**；且 `sinofresh_formula_spec_cell()`（`functions.php:646-690`）
+**已有作用域正确的读取器**，零新代码可复用。② `Product.offers`：**0/58**，`sf_formula_price_tiers` **全空**
+（`Quantity & Pricing` 0/42）⇒ ⛔ **需改数据，停机**。③ `material`/`audience`/`isRelatedTo`：源码 **0 处**
+（后两个可零数据推导）。④ `Organization.knowsAbout`：源码 **0 处**（其余 10 字段已齐、75/75 页）⇒ 纯新增可做。
+⑤ 图片 ALT：**840 个 `<img>`，缺 alt = 0**；174 个空 alt **全为装饰件**（语言国旗 150＋博客头像 24）
+⇒ **手册「自动生成」的前提不成立，正确动词是「规范化」**。⑥ 内容 80/20：**已满足**
+（词数中位 1,934/页、0 页 <300 词、CTA 密度 **3.6/千词＝0.36%**）。
+另：**无 SEO 插件**（活跃仅 GF / TranslatePress×2 / consent-api / mail-logging / statistics）⇒ 主题 schema 具唯一权威性。
+
+⚠️ **两条本批新增的通用教训**（详见附录 A.11）：
+- ⛔ **断面「0 覆盖」先查断面构成**：75 页断面**不含博客单篇**（只有 `blog.html` 列表页）⇒ `Article` 0/75 是
+  **采样假象**，`functions.php:5017-5100` 的 `is_singular('post')` 生成器**是活的**。把"没采到"读成"没有"会得出反向结论。
+- ⛔ **H5 不能沿用字节门**：加 `knowsAbout`＝**75/75 页 DIFF**、剂型页加 `additionalProperty`＝**16 页 DIFF**、
+  logo alt 规范化＝**75 页 DIFF**，**全部合法** ⇒ 门必须＝**JSON-LD 语义门**（`json.loads` 后 deep-equal，
+  **允许新增键、禁止改值/删键**）＋渲染 HTML 的白名单字节门。**先量「合法 DIFF 集」再写门**：
+  沿用字节门＝第一批绿就是假绿；放宽成"能 parse 就过"＝删掉 `brand` 也能过＝另一种假绿。
 
 **⛔ 立项规则变更（用户 2026-09-22 明确）**：① **playbook 不执行上线** ⇒ 各批**不开 Step 6 `git pull`**；
 ② **H2b2 起的基线＝上一批的预检副本，不是 live** ⇒ 预检副本成为"当前最新候选"的唯一载体，
