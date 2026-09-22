@@ -1,0 +1,16 @@
+=== negative controls — each precondition break must FAIL by name ===
+  served-manifest-missing          FAIL (as required)  baseline MANIFEST.tsv is missing
+                                          [0] baseline MANIFEST.tsv is missing
+  baseline-empty                   FAIL (as required)  baseline directory is empty
+                                          [0] baseline directory is empty or missing: /var/folders/zj/1y28wlw93p567b4x4j7116800000gn/T/h4e-negctl-ylald3yy/empty
+  candidate-equals-baseline        FAIL (as required)  candidate is a copy of the baseline
+                                          [1] 6 page(s) are byte-identical, so they did not get the address: ['about.html', 'blog.html', 'contact.html', 'cookie-policy.html', 'cooperation.html', 'factory-tour.html']; [1] about.html: page is byte-identical
+  page-missing-from-candidate      FAIL (as required)  one candidate page is absent
+                                          [0] page sets differ: only-baseline=['about.html'] only-candidate=[]
+  addresses-never-moved            FAIL (as required)  candidate still carries the old address throughout
+                                          [2] about.html: not the declared transformation; first diff at 64191
+        want ...eName":"SINO FRESH","url":"https://dev.zxpet.com/","email":"sales@zxpet.com","telephone":"+86 539 866 9539","address":{"
+        got  ...eName":"SINO FRESH","url":"https://dev.zxpet.com/","email":"info@zxpet.com","telephone":"+86 539 866 9539","address":{"@; [3] about.html: the old address survives in plaintext
+------------------------------------------------------------------------
+  5/5 controls failed as required
+NEGCTL VERDICT: PASS

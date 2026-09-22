@@ -1,0 +1,354 @@
+{
+  "fails": [],
+  "notes": [
+    "EN marketing: 3 mailto link(s), all sales@zxpet.com",
+    "EN formula detail: 3 mailto link(s), all sales@zxpet.com",
+    "EN contact: 4 mailto link(s), all sales@zxpet.com",
+    "EN privacy policy: 3 mailto link(s), all sales@zxpet.com",
+    "EN cookie policy: 3 mailto link(s), all sales@zxpet.com",
+    "EN terms of service: 3 mailto link(s), all sales@zxpet.com",
+    "ZH home: 3 mailto link(s), all sales@zxpet.com",
+    "E2 footer contact line: sales@zxpet.com / sales@zxpet.com",
+    "E2 top bar: sales@zxpet.com / sales@zxpet.com",
+    "E2 floating email button: sales@zxpet.com",
+    "E2 the contact page body shows sales@zxpet.com and no info@zxpet.com",
+    "E3 EN privacy policy: article text 4166 chars, old gone, new present — \"...hdrawal of consent. To exercise these rights, contact us at sales@zxpet.com. We will respond within 30 days. 9. Cookies \"",
+    "E3 EN cookie policy: article text 1894 chars, old gone, new present — \"...pdated” date. 8. Contact Us If you have questions about this Cookie Policy, please contact us at sales@zxpet.com.\"",
+    "E3 EN terms of service: article text 3140 chars, old gone, new present — \"...date. 14. Contact Us If you have questions about these Terms, please contact us at sales@zxpet.com.\"",
+    "E4 EN marketing: 3 buttons, one column at left=1364, tops=[720, 784, 848]",
+    "E4 EN formula detail: 3 buttons, one column at left=1364, tops=[720, 784, 848]",
+    "E5 no console errors on any page visited"
+  ],
+  "rows": {
+    "E1_EN marketing": {
+      "artAround": null,
+      "artHasNew": false,
+      "artHasOld": false,
+      "artLen": 0,
+      "bodyHasNew": true,
+      "bodyHasOld": false,
+      "floatBtns": [
+        {
+          "cls": "sf-float-btn sf-float-btn--whatsapp",
+          "href": "https://wa.me/8613385397805",
+          "left": 1364,
+          "top": 720,
+          "visible": true
+        },
+        {
+          "cls": "sf-float-btn sf-float-btn--email",
+          "href": "mailto:sales@zxpet.com",
+          "left": 1364,
+          "top": 784,
+          "visible": true
+        },
+        {
+          "cls": "sf-float-btn sf-float-btn--top",
+          "href": null,
+          "left": 1364,
+          "top": 848,
+          "visible": true
+        }
+      ],
+      "floatHref": "sales@zxpet.com",
+      "footHref": "sales@zxpet.com",
+      "footText": "sales@zxpet.com",
+      "href": "https://dev.zxpet.com/about/?sfcap=e1113423",
+      "mailtos": [
+        "sales@zxpet.com",
+        "sales@zxpet.com",
+        "sales@zxpet.com"
+      ],
+      "schemaEmail": "sales@zxpet.com",
+      "schemaType": "Organization",
+      "sheet": "https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/style.css?ver=2.10.57",
+      "topHref": "sales@zxpet.com",
+      "topText": "sales@zxpet.com",
+      "undecodedAnchors": 0,
+      "viewportW": 1440
+    },
+    "E1_EN formula detail": {
+      "artAround": null,
+      "artHasNew": false,
+      "artHasOld": false,
+      "artLen": 0,
+      "bodyHasNew": true,
+      "bodyHasOld": false,
+      "floatBtns": [
+        {
+          "cls": "sf-float-btn sf-float-btn--whatsapp",
+          "href": "https://wa.me/8613385397805",
+          "left": 1364,
+          "top": 720,
+          "visible": true
+        },
+        {
+          "cls": "sf-float-btn sf-float-btn--email",
+          "href": "mailto:sales@zxpet.com",
+          "left": 1364,
+          "top": 784,
+          "visible": true
+        },
+        {
+          "cls": "sf-float-btn sf-float-btn--top",
+          "href": null,
+          "left": 1364,
+          "top": 848,
+          "visible": true
+        }
+      ],
+      "floatHref": "sales@zxpet.com",
+      "footHref": "sales@zxpet.com",
+      "footText": "sales@zxpet.com",
+      "href": "https://dev.zxpet.com/formulas/joint-support-soft-chews/?sfcap=e1113426",
+      "mailtos": [
+        "sales@zxpet.com",
+        "sales@zxpet.com",
+        "sales@zxpet.com"
+      ],
+      "schemaEmail": "sales@zxpet.com",
+      "schemaType": "Organization",
+      "sheet": "https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/style.css?ver=2.10.57",
+      "topHref": "sales@zxpet.com",
+      "topText": "sales@zxpet.com",
+      "undecodedAnchors": 0,
+      "viewportW": 1440
+    },
+    "E1_EN contact": {
+      "artAround": null,
+      "artHasNew": false,
+      "artHasOld": false,
+      "artLen": 0,
+      "bodyHasNew": true,
+      "bodyHasOld": false,
+      "floatBtns": [
+        {
+          "cls": "sf-float-btn sf-float-btn--whatsapp",
+          "href": "https://wa.me/8613385397805",
+          "left": 1364,
+          "top": 720,
+          "visible": true
+        },
+        {
+          "cls": "sf-float-btn sf-float-btn--email",
+          "href": "mailto:sales@zxpet.com",
+          "left": 1364,
+          "top": 784,
+          "visible": true
+        },
+        {
+          "cls": "sf-float-btn sf-float-btn--top",
+          "href": null,
+          "left": 1364,
+          "top": 848,
+          "visible": true
+        }
+      ],
+      "floatHref": "sales@zxpet.com",
+      "footHref": "sales@zxpet.com",
+      "footText": "sales@zxpet.com",
+      "href": "https://dev.zxpet.com/contact/?sfcap=e1113430",
+      "mailtos": [
+        "sales@zxpet.com",
+        "sales@zxpet.com",
+        "sales@zxpet.com",
+        "sales@zxpet.com"
+      ],
+      "schemaEmail": "sales@zxpet.com",
+      "schemaType": "Organization",
+      "sheet": "https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/style.css?ver=2.10.57",
+      "topHref": "sales@zxpet.com",
+      "topText": "sales@zxpet.com",
+      "undecodedAnchors": 0,
+      "viewportW": 1440
+    },
+    "E1_EN privacy policy": {
+      "artAround": "ortability, objection, and withdrawal of consent. To exercise these rights, contact us at sales@zxpet.com. We will respond within 30 days. 9. Cookies ",
+      "artHasNew": true,
+      "artHasOld": false,
+      "artLen": 4166,
+      "bodyHasNew": true,
+      "bodyHasOld": false,
+      "floatBtns": [
+        {
+          "cls": "sf-float-btn sf-float-btn--whatsapp",
+          "href": "https://wa.me/8613385397805",
+          "left": 1364,
+          "top": 720,
+          "visible": true
+        },
+        {
+          "cls": "sf-float-btn sf-float-btn--email",
+          "href": "mailto:sales@zxpet.com",
+          "left": 1364,
+          "top": 784,
+          "visible": true
+        },
+        {
+          "cls": "sf-float-btn sf-float-btn--top",
+          "href": null,
+          "left": 1364,
+          "top": 848,
+          "visible": true
+        }
+      ],
+      "floatHref": "sales@zxpet.com",
+      "footHref": "sales@zxpet.com",
+      "footText": "sales@zxpet.com",
+      "href": "https://dev.zxpet.com/privacy-policy/?sfcap=e1113433",
+      "mailtos": [
+        "sales@zxpet.com",
+        "sales@zxpet.com",
+        "sales@zxpet.com"
+      ],
+      "schemaEmail": "sales@zxpet.com",
+      "schemaType": "Organization",
+      "sheet": "https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/style.css?ver=2.10.57",
+      "topHref": "sales@zxpet.com",
+      "topText": "sales@zxpet.com",
+      "undecodedAnchors": 0,
+      "viewportW": 1440
+    },
+    "E1_EN cookie policy": {
+      "artAround": "pdated” date. 8. Contact Us If you have questions about this Cookie Policy, please contact us at sales@zxpet.com.",
+      "artHasNew": true,
+      "artHasOld": false,
+      "artLen": 1894,
+      "bodyHasNew": true,
+      "bodyHasOld": false,
+      "floatBtns": [
+        {
+          "cls": "sf-float-btn sf-float-btn--whatsapp",
+          "href": "https://wa.me/8613385397805",
+          "left": 1364,
+          "top": 720,
+          "visible": true
+        },
+        {
+          "cls": "sf-float-btn sf-float-btn--email",
+          "href": "mailto:sales@zxpet.com",
+          "left": 1364,
+          "top": 784,
+          "visible": true
+        },
+        {
+          "cls": "sf-float-btn sf-float-btn--top",
+          "href": null,
+          "left": 1364,
+          "top": 848,
+          "visible": true
+        }
+      ],
+      "floatHref": "sales@zxpet.com",
+      "footHref": "sales@zxpet.com",
+      "footText": "sales@zxpet.com",
+      "href": "https://dev.zxpet.com/cookie-policy/?sfcap=e1113437",
+      "mailtos": [
+        "sales@zxpet.com",
+        "sales@zxpet.com",
+        "sales@zxpet.com"
+      ],
+      "schemaEmail": "sales@zxpet.com",
+      "schemaType": "Organization",
+      "sheet": "https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/style.css?ver=2.10.57",
+      "topHref": "sales@zxpet.com",
+      "topText": "sales@zxpet.com",
+      "undecodedAnchors": 0,
+      "viewportW": 1440
+    },
+    "E1_EN terms of service": {
+      "artAround": "date. 14. Contact Us If you have questions about these Terms, please contact us at sales@zxpet.com.",
+      "artHasNew": true,
+      "artHasOld": false,
+      "artLen": 3140,
+      "bodyHasNew": true,
+      "bodyHasOld": false,
+      "floatBtns": [
+        {
+          "cls": "sf-float-btn sf-float-btn--whatsapp",
+          "href": "https://wa.me/8613385397805",
+          "left": 1364,
+          "top": 720,
+          "visible": true
+        },
+        {
+          "cls": "sf-float-btn sf-float-btn--email",
+          "href": "mailto:sales@zxpet.com",
+          "left": 1364,
+          "top": 784,
+          "visible": true
+        },
+        {
+          "cls": "sf-float-btn sf-float-btn--top",
+          "href": null,
+          "left": 1364,
+          "top": 848,
+          "visible": true
+        }
+      ],
+      "floatHref": "sales@zxpet.com",
+      "footHref": "sales@zxpet.com",
+      "footText": "sales@zxpet.com",
+      "href": "https://dev.zxpet.com/terms/?sfcap=e1113440",
+      "mailtos": [
+        "sales@zxpet.com",
+        "sales@zxpet.com",
+        "sales@zxpet.com"
+      ],
+      "schemaEmail": "sales@zxpet.com",
+      "schemaType": "Organization",
+      "sheet": "https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/style.css?ver=2.10.57",
+      "topHref": "sales@zxpet.com",
+      "topText": "sales@zxpet.com",
+      "undecodedAnchors": 0,
+      "viewportW": 1440
+    },
+    "E1_ZH home": {
+      "artAround": null,
+      "artHasNew": false,
+      "artHasOld": false,
+      "artLen": 0,
+      "bodyHasNew": true,
+      "bodyHasOld": false,
+      "floatBtns": [
+        {
+          "cls": "sf-float-btn sf-float-btn--whatsapp",
+          "href": "https://wa.me/8613385397805",
+          "left": 1364,
+          "top": 720,
+          "visible": true
+        },
+        {
+          "cls": "sf-float-btn sf-float-btn--email",
+          "href": "mailto:sales@zxpet.com",
+          "left": 1364,
+          "top": 784,
+          "visible": true
+        },
+        {
+          "cls": "sf-float-btn sf-float-btn--top",
+          "href": null,
+          "left": 1364,
+          "top": 848,
+          "visible": true
+        }
+      ],
+      "floatHref": "sales@zxpet.com",
+      "footHref": "sales@zxpet.com",
+      "footText": "sales@zxpet.com",
+      "href": "https://dev.zxpet.com/zh/?sfcap=e1113442",
+      "mailtos": [
+        "sales@zxpet.com",
+        "sales@zxpet.com",
+        "sales@zxpet.com"
+      ],
+      "schemaEmail": "sales@zxpet.com",
+      "schemaType": "Organization",
+      "sheet": "https://dev.zxpet.com/wp-content/themes/sinofresh-theme-preflight/style.css?ver=2.10.57",
+      "topHref": "sales@zxpet.com",
+      "topText": "sales@zxpet.com",
+      "undecodedAnchors": 0,
+      "viewportW": 1440
+    }
+  }
+}

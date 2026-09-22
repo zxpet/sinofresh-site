@@ -1,0 +1,18 @@
+{
+  "fails": [],
+  "notes": [
+    "[0] 75 pages on both sides, all 200; MANIFEST present",
+    "[1] 75 of 75 pages differ",
+    "[8] obfuscated addresses: baseline 155, candidate 155",
+    "[8] every decoded address on the candidate: {'sales@zxpet.com': 155}"
+  ],
+  "changed": 75,
+  "pages": 75,
+  "cf_total": {
+    "baseline": 155,
+    "candidate": 155
+  },
+  "decoded": {
+    "sales@zxpet.com": 155
+  }
+}

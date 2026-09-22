@@ -1,0 +1,9 @@
+=== A/A self-test — _backup/b2d-h4e-candidates-aa against itself ===
+A page that fails [2] here means the mask set let per-response
+noise through, and the tool would report a regression that is not
+there.
+
+  [1] pages that differ from themselves: 75 (expected 75 — the gate asserts a change happened)
+  ok  [2]-[7] no page trips on noise: the decoded comparison is stable across two independent captures
+------------------------------------------------------------------------
+A/A VERDICT: PASS — only the deliberate [1] failures, none spurious

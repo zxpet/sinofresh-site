@@ -1,0 +1,66 @@
+=== 1. the empty record (the live state: every field 0/21) =========
+  ok   the band still renders (Storage is not a field)
+  ok   no heading for an empty field
+  ok   Packaging & Specifications is the only block
+  ok   Storage is the only sub-block
+  ok   Storage label + the exact line are on the page
+  ok   the storage line is one hardcoded sentence
+  ok   no carton table
+  ok   no chips list
+  ok   exactly one h2
+=== 2. the three prose blocks ======================================
+  ok   Recommended For renders as a paragraph
+  ok   the two prose fields render, in order
+  ok   the label escapes to &#039; and decodes back to an apostrophe
+  ok   Use Cases stays absent
+  ok   two prose h2 plus the packaging h2
+=== 3. Use Cases: one line reads as a sentence, more read as a list ==
+  ok   one line -> paragraph, no bullet
+  ok   three non-empty lines -> an unordered list of three
+  ok   blank lines are dropped, not rendered as empty items
+  ok   items keep their order
+  ok   CRLF splits too (two items)
+  ok   a whitespace-only field renders nothing
+=== 4. Packaging: container, extra packaging, colours ===============
+  ok   a known slug resolves to the library label
+  ok   its own label is rendered
+  ok   an unknown slug falls back to the raw value, not to nothing
+  ok   a library row with a blank label falls back to the slug
+  ok   no slug -> no Container Options sub-block
+  ok   extra packaging renders two chips
+  ok   an empty string inside the array is not a chip
+  ok   colours render under their own label
+  ok   an empty array -> the sub-block disappears, not an empty list
+  ok   malformed JSON is treated as absent
+=== 5. Carton dimensions ==========================================
+  ok   a half-filled row is kept
+  ok   a fully blank row is dropped, the other two survive
+  ok   the three admin labels are the column headers
+  ok   scoped column headers
+  ok   all-blank rows -> no table and no label
+=== 6. Escaping ===================================================
+  ok   markup in a prose field is escaped
+  ok   the ampersand is escaped
+  ok   markup in a chip is escaped
+=== 7. Sameness of the two bands' contracts ========================
+  ok   the content band returns nothing outside a formula
+  ok   the sampling band returns nothing outside a formula
+  ok   the content band returns nothing without a queried object
+=== 8. The sampling band ==========================================
+  ok   four steps
+  ok   every step has a title and a text
+  ok   the timeline appears once, in the closing line only
+  ok   it emits its own section
+  ok   the heading is the schema name
+  ok   an ordered list of four steps
+  ok   the numerals are 1,2,3,4 and are real text
+  ok   no aria-hidden on the numeral (it is the only ordering cue)
+  ok   each step title and text is rendered
+  ok   the closing line carries the timeline
+  ok   the api contract the HowTo schema reads is this function
+=== 9. Shortcode registration ======================================
+  ok   sf_formula_content is registered
+  ok   sf_formula_sampling is registered
+------------------------------------------------------------------------
+  54 passed, 0 failed
+UNIT VERDICT: PASS

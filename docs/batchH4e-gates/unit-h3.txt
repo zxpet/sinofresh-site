@@ -1,0 +1,2 @@
+usage: b2d_h3_render_unit.py [-h] [--php PHP] [--keep] [--negctl]
+b2d_h3_render_unit.py: error: unrecognized arguments: --json docs/batchH4e-gates/unit-h3.json

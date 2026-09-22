@@ -1,0 +1,18 @@
+=== sabotage matrix — every variant must be caught ===
+  address-not-changed                              CAUGHT   [1] [2] [3] [5]
+  half-the-pages-changed                           CAUGHT   [1] [2] [3] [5]
+  address-reverted                                 CAUGHT   [2] [3] [5]
+  extra-surface-added                              CAUGHT   [2]
+  surface-removed                                  CAUGHT   [2] [4] [8]
+  schema-email-unchanged                           CAUGHT   [2] [3] [5]
+  ver-token-moved                                  CAUGHT   [2] [7]
+  unrelated-word-changed                           CAUGHT   [2]
+  one-page-left-behind                             CAUGHT   [1] [2] [3] [5]
+  zh-pretty-schema-unchanged                       CAUGHT   [2] [3] [5]
+  h1-duplicated                                    CAUGHT   [2] [6]
+  band-removed                                     CAUGHT   [2] [6]
+  obfuscated-blob-swapped-to-another-address       CAUGHT   [2] [3]
+  mailto-kept-but-text-changed                     CAUGHT   [2] [3] [4]
+------------------------------------------------------------------------
+  14/14 variants caught
+MATRIX VERDICT: PASS

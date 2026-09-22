@@ -664,9 +664,24 @@ admin JS/CSS 改动后，E2E 前必须 `agent-browser close --all` 清缓存。
 
 ## 第九部分：H2b-H6 五批详细范围
 
-### 【前置改动：邮箱变更】
+### 【前置改动：邮箱变更】—— ✅ 已执行（`24da600`，2026-09-22）
 
 在 **H4 之前**自动执行：`info@zxpet.com` → `sales@zxpet.com`
+
+**⚠️ 本节第 5 条（涉及改 DB 时停下汇报）已触发并已裁决。** 实测改动面：
+主题侧 **9 处 / 5 文件**、DB 侧 **10 行 / 3 表**。四项裁决（用户 2026-09-22，全按推荐 A）：
+① **全站统一** `sales@`（含联系页 mailto／PDF 页脚／证书邮件署名／法务页正文）
+② `sf_contact_email` 连 **Organization schema** 一起改（单一真源）
+③ TranslatePress 6 行**走 SQL 同步 `original` 列**（三行 `translated` 全空、status 0 ⇒ 无译文可破坏）
+④ 三张法务页正文**一起改**
+全档 ⇒ `docs/batch2d-stepH4e.md`｜扫描＋停机报告 ⇒ `docs/batch2d-stepH4-scan.md`
+
+⛔ **本节第 3 条「CF email-protection 会自动跟随」是对的，但它带来一个门设计上的硬约束**：
+CF 混淆**每次响应换密钥**，而既有掩码门 `sf_masked_cmp.py` 把 blob 直接抹成 `MASK`
+⇒ **看不见"里面编的是哪个地址"**。本批因此改用**解码式归一化**，
+并新增 **A/A 自检**（同一状态两次抓取，零误报）作为门可信度的前置条件。详见 **附录 A.9**。
+
+原始范围（保留作意图参考）：
 
 1. 扫描全站 `info@zxpet.com` 位置
    - 模板（`parts/footer.html` 等）
@@ -678,7 +693,14 @@ admin JS/CSS 改动后，E2E 前必须 `agent-browser close --all` 清缓存。
 3. CF email-protection 会自动跟随
 4. DIFF 集合：含邮箱的页面
 5. **涉及改 DB 时停下汇报**
-6. H4 新建的询盘表单收件人用新邮箱
+6. H4 新建的询盘表单收件人用新邮箱 —— ⛔ **改为直接读 `sf_contact_email`，不要再硬编码**
+   （本次硬编码三处正是这个前置改动存在的原因；该重构不在本批范围，登记 H6）
+
+**扫描口径补充（实测踩到）**：第一遍扫描的文件清单只到
+`functions.php` / `style.css` / `assets/` / `inc/` / `templates/` / `parts/` / `patterns/`，
+**漏了 `tools/`** ⇒ 差一处客户可见的 COA 生成器页脚。**扫"全站"必须显式包含 `tools/`**。
+另：⛔ **header topbar／footer 联系行／悬浮邮件按钮在源码里搜不到 `info@`**
+（它们走 `{{sf-email}}`，真源是 DB 选项）⇒ **只搜源码会把这三处判成"没问题"**。
 
 ### 【H2b】配置器删除
 
@@ -814,6 +836,7 @@ Sampling 四步是否与 playbook 第十部分【⑥】的文案逐字一致，�
 | 7 | `formulas.js:110` 的 `getElementById('configurator')` 死支（有 `if` 保护，不报错） | `docs/batch2d-stepH2b2.md` §8 #2 |
 | 8 | `style.css:1220` 的 `.configurator__summary-value` 死选择器 | `docs/batch2d-stepH2b2.md` §8 #3 |
 | 9 | ⛔ **`sf_formula_shelf_life` 无渲染器的死键**（`inc/formula-admin.php:42/106` 注册；H2a 行读的是 `sf_formula_specs`）—— 与 H2a 的 `Shelf life` 行是**一对**，必须同时裁决 | `docs/batch2d-stepH3.md` §8 #1 |
+| 10 | ⛔ **`sales@zxpet.com` 在三处被硬编码**（`functions.php:4925` 收件人、`config-pdf.php` 两条 `Cc:`），而真源是 `sf_contact_email` 选项 —— 本批**没有**顺手重构（会让 diff 超出声明）。应收敛成读选项 | `docs/batch2d-stepH4e.md` §10.3；`docs/batch2d-stepH4-scan.md` §5 C2 |
 
 ---
 
@@ -1048,6 +1071,26 @@ commit message 格式：
 | 12 | ✅ **主题树 695 vs 服务/提交 347 的疑团**：347 是**排除嵌套 `sinofresh-theme/_backup/`（348 个文件）**后的比对集；用 `git ls-tree -z` 数树同得 695。⚠️ `git ls-tree --name-only` 给非 ASCII 路径加引号 ⇒ 别拿它跟 `find` 直接比（A.6 #7） | 一切"文件数/文件集"断言 |
 | 13 | **"先发渲染器"不是缺陷，但必须把裁决反写进 playbook 的范围段**：H3 原范围写的 6 块里 3 块与既有两带重复、背景交替与既有连续面色冲突 ⇒ 若只改代码不回写文档，下一批会照着**作废的范围**再犯一次 | 每次裁决后的文档回写（本批 §第九部分【H3】已加"原文/裁决后"对照表） |
 
+## A.9 H4e 执行期实测（2026-09-22，邮箱变更批次）
+
+| # | 结论 | 影响 |
+|---|---|---|
+| 1 | ⛔⛔ **既有掩码门对本批是瞎的**：`sf_masked_cmp.py` 的 `cf_email_link` / `cf_email_attr` 两条规则把 CF blob 直接换成字面 `MASK` —— 把 `info@` 换成 `sales@` 之后，**掩码后的两页完全相同**，门会打出**全绿**。这不是门坏了，是**掩码把要证的那件事一起抹掉了** | 一切改动落在"被掩码的内容"上的批次；判据必须从"打码"反转为"**解码**" |
+| 2 | ⛔ **CF 混淆的密钥逐次随机**（不是固定的）：同一页连抓三次，`data-cfemail` 的 hex 与整页 sha256 **三者全不同**（首字节为密钥，其余异或）。⇒ blob 是逐次噪声**必须去掉**，而 blob 里的地址是信号**必须留下** —— 两个方向相反的要求，**只有解码能同时满足** | 一切涉及 CF 混淆站点的字节级回归；也解释了 H3 基线为何能 75/75 逐字节相同（那里的掩码吃掉了噪声） |
+| 3 | ✅ **归一化写成 `norm(t) = clean(decode_emails(t))`，整批塌缩成一条**：`norm(候选) == norm(基线).replace('info@zxpet.com','sales@zxpet.com')`。⚠️ 绝不能用"原样比对"绕过 | 同类改动的最小判据形状 |
+| 4 | ⛔ **噪声掩码必须"导入"而不是"重打一遍"**：`NOISE = [(p,r,n) for (p,r,n) in sf_masked_cmp.MASKS if n not in {'cf_email_link','cf_email_attr'}]`，并**断言恰好剔掉 2 条**。手抄一份会在两个工具间各自漂移，也没人拦得住"顺手把 CF 规则加回来" | 一切复用既有掩码集的工具 |
+| 5 | ⛔⛔ **A/A 自检应升级为"门可信度的前置条件"**：同一状态的两份独立抓取跑门，**除故意设的 [1] 外任何一条不得触发**。本批首跑**确实报了一屏假 FAIL**（GF 的 `gform_currency` nonce ＋ `gform_phone_dropdown_<microtime-hash>` 逐次变化）—— A/A 是唯一能证明"噪声已清干净"的检查。⚠️ [1] 在 A/A 里**必然**失败（它断言"页面有差"），属设计内 | **所有批次的 Step 3 前置**，不止本批（H2b1/H2b2/H3 都是"直接跑门"，运气好才没踩到） |
+| 6 | ⛔ **扫描口径要含 `tools/`**：第一遍文件清单只到 `functions.php`/`style.css`/`assets/`/`inc/`/`templates/`/`parts/`/`patterns/`，漏掉 `tools/make_coa_sample.php` ⇒ 实际 9 处而非 8 处 | 一切"全站找字符串"的扫描；清单要显式列目录而不是靠印象 |
+| 7 | ⛔⛔ **改 DB 的批次没有"候选态"**：预检副本能隔离主题字节，**隔离不了 DB**。CF/主题两侧都改了而 DB 没改 ⇒ 门会把"DB 还没跟上"判成回归。⇒ 这类批次必须**先把 DB 改到位再抓候选**，并把"DB 状态"写进声明范围 | 一切触及 option/post/meta 的批次；声明范围要含"哪些行、哪些表、快照在哪" |
+| 8 | ⛔ **wp-cli 会抢在脚本之前拒掉未声明的 `--flag`**（加 `--` 也不行）：`--dry-run` 直接报 unknown parameter。改用**环境变量** `SF_H4E_MODE=dry-run\|apply\|revert` | 所有 wp-cli 驱动的补丁器/探针 |
+| 9 | ⛔ **回滚快照不能放 `/tmp`**：它可能是唯一的回滚路径，重启即失。放到 docroot **之外**（`_offroot/b2d-h4e-db-originals.json`），并同时留一份在本地 | 一切 DB 改动的回滚设计 |
+| 10 | ⛔ **`--apply` 必须"快照存在 **且** 与当前 DB 相符"才允许写**：否则会在已漂移的库上覆盖出错误的回滚点。落盘前再断言 Snapshot **不含 `{sha256}` 令牌**（`esc_sql()` 的 `%` 令牌化，`_backup/*.sql` 同忌） | 所有 DB 补丁器；用户级记忆里那条"落盘 SQL 用裸 `mysqli_real_escape_string`" |
+| 11 | ⛔ **E2E 的 JS 里不能写 Python 常量名**（`ReferenceError: OLD is not defined`）：改为 `__OLD__`/`__NEW__` 占位符，由 `measure_js()` 注入 | 一切"把断言值编进 JS 字符串"的 E2E |
+| 12 | ⛔ **取正文要取 `.entry-content`，不是 `document.body`**：`body.innerText` 的第一个 `sales@` 是**页脚**，测出来的是全站件而不是文章。联系人页是模板、**没有** `.entry-content` ⇒ 换成 `.sf-contact-card` | E3 类"页面上读到什么"的断言 |
+| 13 | ⛔ **子串匹配的"删掉"必须真删掉**：`band-removed` 变异第一版把标记改名成 `…contentX` —— **仍以子串形式包含标记**，判据以为还在场，只有 [2] 抓到。真正删除该子串后 [2]+[6] 同时开火 | 一切"标记在场/不在场"的断言 |
+| 14 | ✅ **A.8 #1（JSON-LD 跨语言序列化不稳定）在本批第二次独立复现**：EN 紧凑、zh 精美，仍是 21/21。`schema-email-unchanged` 变异就是为这个坑准备的 —— 只改紧凑形态，若门还用字面匹配就会漏 | 已两次复现 ⇒ 可当定律用 |
+| 15 | **"硬编码 vs 单一真源"的代价是可量化的**：`sales@` 在三处被硬编码（`functions.php:4925` 收件人、`config-pdf.php` 两条 `Cc:`），而真源是 `sf_contact_email` ⇒ **下次换邮箱又要改 DB＋三处硬编码**。本批**没有**顺手重构（会让 diff 超出声明范围），登记 H6 | 见 H6 第 10 项 |
+
 ---
 
 | 批次 | 状态 | commit | 说明 |
@@ -1056,9 +1099,10 @@ commit message 格式：
 | **H2b1** | **Step 1–5 全过门 + E2E 全过 → 用户确认通过；`git pull` 跳过（playbook 明确不执行上线）** | 产品 `ebe8f50` + 证据 `69d4c21`/`d8ffd53`（均已 push） | `docs/batch2d-stepH2b1.md` |
 | **H2b2** | **Step 1–5 全过门 + E2E 全过（2026-09-22）；Step 6 `git pull` 按规则跳过** | 产品 `3b9fc23`（已 push）；基线 `ebe8f50` | `docs/batch2d-stepH2b2.md` |
 | **H3** | **Step 1–5 全过门 + E2E 全过（2026-09-22）；Step 6 `git pull` 按规则跳过** | 产品 `4ca3aea`（已 push）；基线 `109be91` | `docs/batch2d-stepH3.md`（内容区 + Sampling，三项裁决见扫描档） |
-| H4 | 未开工 | — | 前置：邮箱 `info@` → `sales@`；**必须复用 `sinofresh_sampling_steps()`** |
+| **H4e**〔前置：邮箱变更〕 | **Step 1–5 全过门 + E2E 全过（2026-09-22）；Step 6 `git pull` 按规则跳过**。⚠️ **含 DB 改动，无"候选态"** | 主题 `24da600`（已 push）；DB 10 行（快照可回滚）；基线 `4ca3aea` | `docs/batch2d-stepH4e.md`（四项裁决见 `docs/batch2d-stepH4-scan.md`） |
+| H4 | 未开工 | — | **必须复用 `sinofresh_sampling_steps()`**；⛔ **收件人直接读 `sf_contact_email`，别硬编码**；⛔ 回归门用**解码式**（附录 A.9） |
 | H5 | 未开工 | — | — |
-| H6 | 未开工 | — | 待办已增至 **9 项**（H3 新造 1 项见 `docs/batch2d-stepH3.md` §8；H2b2 新造 4 项见其 §8） |
+| H6 | 未开工 | — | 待办已增至 **10 项**（H4e 新造 1 项见其 §10.3；H3 新造 1 项见 `docs/batch2d-stepH3.md` §8；H2b2 新造 4 项见其 §8） |
 
 **H2b1 门/E2E 摘要**：静态 S1–S8 全过；75 页基线 + 75 页候选；主门 **PASS 21 条 / 0 FAIL**
 （58 页差 / 17 页同，逐字节重建）；破坏矩阵 **10/10**；三条负对照全 FAIL（as required）；

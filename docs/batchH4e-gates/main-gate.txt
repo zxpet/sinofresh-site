@@ -1,0 +1,9 @@
+=== batch H4e confined proof — /Users/meng/Workbuddy/sinofresh外贸网站建设/_backup/b2d-h3-candidates vs /Users/meng/Workbuddy/sinofresh外贸网站建设/_backup/b2d-h4e-candidates ===
+declared transformation: info@zxpet.com -> sales@zxpet.com, decoded, everywhere
+
+  ok   [0] 75 pages on both sides, all 200; MANIFEST present
+  ok   [1] 75 of 75 pages differ
+  ok   [8] obfuscated addresses: baseline 155, candidate 155
+  ok   [8] every decoded address on the candidate: {'sales@zxpet.com': 155}
+------------------------------------------------------------------------
+VERDICT: PASS — all eight gates hold
