@@ -2,7 +2,7 @@
 Theme Name: SINO FRESH
 Author: Shandong SINO FRESH Pet Food Co., Ltd.
 Text Domain: sinofresh
-Version: 2.10.58
+Version: 2.10.59
 Requires at least: 6.0
 Requires PHP: 7.4
 License: GNU General Public License v2 or later
@@ -3918,6 +3918,13 @@ body.admin-bar .sf-header.is-sticky {
 	display: flex;
 	flex-direction: column;
 	gap: 12px;
+	/* Every child hugs the right edge. Without it the column's width is set by
+	   its widest child — still 52px until batch H4, when the 150px capsule
+	   joined it — and the circles would then sit at the column's *left* edge,
+	   98px away from the offset appendix A.5 #7 measured. A no-op while all
+	   three children are the same width, and the reason a wider child can be
+	   added later without moving them. */
+	align-items: flex-end;
 }
 
 .sf-float-btn {
@@ -9101,11 +9108,11 @@ body.sf-inquiry-lock {
    definition, three components. */
 
 .sf-float-btn--inquiry {
-	/* The stack's default align-items:stretch would pull the capsule to the
-	   full width of the column, and the column's width is itself set by the
-	   widest child — so the capsule has to measure itself. */
+	/* `.sf-float-stack` owns the alignment (align-items:flex-end at 3913), so
+	   the capsule only has to measure itself: `width:auto` against the stack's
+	   inherited `align-items:stretch` would otherwise pull it to the column's
+	   full width, and the column's width is itself set by its widest child. */
 	width: auto;
-	align-self: flex-end;
 	min-width: 52px;
 	height: 52px;
 	padding: 0 20px 0 18px;
