@@ -2860,7 +2860,14 @@ function sinofresh_inquiry_modal() {
 		. '</div>'
 		. '</div>' . "\n";
 }
-add_action('wp_footer', 'sinofresh_inquiry_modal', 20);
+/* Priority 5, not 20. wp_print_footer_scripts runs on wp_footer at 20, so a
+   dialog echoed at 20 lands *after* its own script tag — and a classic footer
+   script executes at parse time, so inquiry.js found no dialog, returned at
+   its first guard, and the capsule never appeared. Silent: no console error,
+   valid markup, and the byte gate cannot see the ordering at all. The first
+   browser pass did. The script is order-independent now as well, but the
+   markup still belongs before the scripts that read it. */
+add_action('wp_footer', 'sinofresh_inquiry_modal', 5);
 
 /**
  * POST /sinofresh/v1/inquiry — the dialog's endpoint.

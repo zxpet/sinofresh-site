@@ -31,213 +31,226 @@
 (function () {
 	'use strict';
 
-	var btn   = document.querySelector('[data-sf-inquiry-open]');
-	/* One element is both the backdrop and the centring box (see style.css), so
-	   "clicked outside the panel" is "the event target is the backdrop". */
-	var modal = document.querySelector('.sf-inquiry-modal');
-	if (!btn || !modal) {
-		return;
-	}
-
-	var form     = modal.querySelector('.sf-inquiry-form');
-	var status   = modal.querySelector('.sf-inquiry-form__status');
-	var success  = modal.querySelector('.sf-inquiry-modal__success');
-	var closeBtn = modal.querySelector('.sf-inquiry-modal__close');
-	var stamp    = form ? form.querySelector('input[name="ts"]') : null;
-	var opener   = null;
-	var timer    = null;
-
-	var LOCK  = 'sf-inquiry-lock';
-	var SLOPE = 0.5;           /* fraction of the viewport the band must cross  */
-
-	/* ---------------------------------------------------------------- reveal */
-
-	var band    = document.querySelector('.sf-fdetail2__params');
-	var revealed = false;
-	var ticking  = false;
-
-	function reveal() {
-		revealed = true;
-		btn.hidden = false;
-		btn.classList.add('is-visible');
-		window.removeEventListener('scroll', onScroll);
-		window.removeEventListener('resize', onScroll);
-	}
-
-	function onScroll() {
-		if (ticking) {
+	/* The dialog markup is printed on wp_footer, next to this script, and a
+	   classic footer script executes while the parser is still going: whether
+	   the dialog exists yet depends on the two hook priorities, and getting
+	   that wrong is silent — no error, no dialog, a capsule that never shows.
+	   Wait for the parser to finish rather than assume an order. */
+	function init() {
+		var btn   = document.querySelector('[data-sf-inquiry-open]');
+		/* One element is both the backdrop and the centring box (see style.css), so
+		   "clicked outside the panel" is "the event target is the backdrop". */
+		var modal = document.querySelector('.sf-inquiry-modal');
+		if (!btn || !modal) {
 			return;
 		}
-		ticking = true;
-		window.requestAnimationFrame(function () {
-			ticking = false;
-			if (revealed) {
+
+		var form     = modal.querySelector('.sf-inquiry-form');
+		var status   = modal.querySelector('.sf-inquiry-form__status');
+		var success  = modal.querySelector('.sf-inquiry-modal__success');
+		var closeBtn = modal.querySelector('.sf-inquiry-modal__close');
+		var stamp    = form ? form.querySelector('input[name="ts"]') : null;
+		var opener   = null;
+		var timer    = null;
+
+		var LOCK  = 'sf-inquiry-lock';
+		var SLOPE = 0.5;           /* fraction of the viewport the band must cross  */
+
+		/* ---------------------------------------------------------------- reveal */
+
+		var band    = document.querySelector('.sf-fdetail2__params');
+		var revealed = false;
+		var ticking  = false;
+
+		function reveal() {
+			revealed = true;
+			btn.hidden = false;
+			btn.classList.add('is-visible');
+			window.removeEventListener('scroll', onScroll);
+			window.removeEventListener('resize', onScroll);
+		}
+
+		function onScroll() {
+			if (ticking) {
 				return;
 			}
-			if (band.getBoundingClientRect().top <= window.innerHeight * SLOPE) {
-				reveal();
-			}
-		});
-	}
-
-	if (!band) {
-		reveal();
-	} else {
-		window.addEventListener('scroll', onScroll, { passive: true });
-		window.addEventListener('resize', onScroll);
-		onScroll();          /* a deep link that lands past the band on load */
-	}
-
-	/* ----------------------------------------------------------------- dialog */
-
-	function open() {
-		if (!modal.hidden) {
-			return;
-		}
-		opener = btn;
-		modal.hidden = false;
-		document.body.classList.add(LOCK);
-		if (stamp) {
-			stamp.value = String(Date.now());
-		}
-		/* One frame between "displayed" and "is-open" or the transition has
-		   no start value to animate from — the same reason cert-modal.js
-		   splits them. */
-		window.requestAnimationFrame(function () {
-			modal.classList.add('is-open');
-			var first = form && !form.hidden
-				? form.querySelector('input[name="name"]')
-				: closeBtn;
-			if (first) {
-				first.focus({ preventScroll: true });
-			}
-		});
-	}
-
-	function close() {
-		if (modal.hidden) {
-			return;
-		}
-		if (timer) {
-			window.clearTimeout(timer);
-			timer = null;
-		}
-		modal.classList.remove('is-open');
-		modal.hidden = true;
-		document.body.classList.remove(LOCK);
-		if (opener) {
-			opener.focus({ preventScroll: true });
-		}
-	}
-
-	btn.addEventListener('click', function (event) {
-		/* The href is /contact/#quote so the markup works without this file;
-		   with it, the click belongs to the dialog. */
-		event.preventDefault();
-		open();
-	});
-	if (closeBtn) {
-		closeBtn.addEventListener('click', close);
-	}
-	/* The backdrop is the dialog's own outer box: a click that lands on it and
-	   not on the panel closes. On a phone the panel fills it, so this only
-	   ever fires on desktop — no breakpoint test needed. */
-	modal.addEventListener('click', function (event) {
-		if (event.target === modal) {
-			close();
-		}
-	});
-	document.addEventListener('keydown', function (event) {
-		if (!modal.hidden && event.key === 'Escape') {
-			close();
-		}
-	});
-
-	/* ----------------------------------------------------------------- submit */
-
-	if (!form) {
-		return;
-	}
-
-	function say(text) {
-		if (status) {
-			status.textContent = text;
-		}
-	}
-
-	function payload() {
-		var data = new FormData(form);
-		function val(key) {
-			var v = data.get(key);
-			return typeof v === 'string' ? v.trim() : '';
-		}
-		return {
-			name:    val('name'),
-			email:   val('email'),
-			company: val('company'),
-			country: val('country'),
-			message: val('message'),
-			website: val('website'),
-			formula: val('formula'),
-			ts:      val('ts'),
-			source:  window.location.href
-		};
-	}
-
-	form.addEventListener('submit', function (event) {
-		event.preventDefault();
-		var body = payload();
-
-		/* The server validates all of this again; doing it here too is only
-		   so the visitor is not made to wait for a round trip to be told
-		   their name is missing. */
-		if (body.name === '') {
-			say('Please tell us your name.');
-			return;
-		}
-		if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(body.email)) {
-			say('Please enter a valid email address.');
-			return;
-		}
-
-		var submit = form.querySelector('.sf-inquiry-form__submit');
-		if (submit) {
-			submit.disabled = true;
-		}
-		say('Sending…');
-
-		window.fetch('/wp-json/sinofresh/v1/inquiry', {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify(body)
-		}).then(function (response) {
-			return response.json().then(function (json) {
-				return { ok: response.ok, json: json };
+			ticking = true;
+			window.requestAnimationFrame(function () {
+				ticking = false;
+				if (revealed) {
+					return;
+				}
+				if (band.getBoundingClientRect().top <= window.innerHeight * SLOPE) {
+					reveal();
+				}
 			});
-		}).then(function (result) {
-			if (!result.ok) {
-				throw new Error(result.json && result.json.message
-					? result.json.message
-					: 'We could not send that just now.');
+		}
+
+		if (!band) {
+			reveal();
+		} else {
+			window.addEventListener('scroll', onScroll, { passive: true });
+			window.addEventListener('resize', onScroll);
+			onScroll();          /* a deep link that lands past the band on load */
+		}
+
+		/* ----------------------------------------------------------------- dialog */
+
+		function open() {
+			if (!modal.hidden) {
+				return;
 			}
-			form.hidden = true;
-			if (success) {
-				success.hidden = false;
-			}
-			say('');
-			timer = window.setTimeout(close, 3000);
-		}).catch(function (error) {
-			/* Re-stamp: the three-second floor is about how long the form was
-			   on screen, and a failed attempt followed by an immediate retry
-			   must not be mistaken for a machine. */
+			opener = btn;
+			modal.hidden = false;
+			document.body.classList.add(LOCK);
 			if (stamp) {
 				stamp.value = String(Date.now());
 			}
-			say(error && error.message ? error.message : 'We could not send that just now.');
-		}).then(function () {
-			if (submit) {
-				submit.disabled = false;
+			/* One frame between "displayed" and "is-open" or the transition has
+			   no start value to animate from — the same reason cert-modal.js
+			   splits them. */
+			window.requestAnimationFrame(function () {
+				modal.classList.add('is-open');
+				var first = form && !form.hidden
+					? form.querySelector('input[name="name"]')
+					: closeBtn;
+				if (first) {
+					first.focus({ preventScroll: true });
+				}
+			});
+		}
+
+		function close() {
+			if (modal.hidden) {
+				return;
+			}
+			if (timer) {
+				window.clearTimeout(timer);
+				timer = null;
+			}
+			modal.classList.remove('is-open');
+			modal.hidden = true;
+			document.body.classList.remove(LOCK);
+			if (opener) {
+				opener.focus({ preventScroll: true });
+			}
+		}
+
+		btn.addEventListener('click', function (event) {
+			/* The href is /contact/#quote so the markup works without this file;
+			   with it, the click belongs to the dialog. */
+			event.preventDefault();
+			open();
+		});
+		if (closeBtn) {
+			closeBtn.addEventListener('click', close);
+		}
+		/* The backdrop is the dialog's own outer box: a click that lands on it and
+		   not on the panel closes. On a phone the panel fills it, so this only
+		   ever fires on desktop — no breakpoint test needed. */
+		modal.addEventListener('click', function (event) {
+			if (event.target === modal) {
+				close();
 			}
 		});
-	});
+		document.addEventListener('keydown', function (event) {
+			if (!modal.hidden && event.key === 'Escape') {
+				close();
+			}
+		});
+
+		/* ----------------------------------------------------------------- submit */
+
+		if (!form) {
+			return;
+		}
+
+		function say(text) {
+			if (status) {
+				status.textContent = text;
+			}
+		}
+
+		function payload() {
+			var data = new FormData(form);
+			function val(key) {
+				var v = data.get(key);
+				return typeof v === 'string' ? v.trim() : '';
+			}
+			return {
+				name:    val('name'),
+				email:   val('email'),
+				company: val('company'),
+				country: val('country'),
+				message: val('message'),
+				website: val('website'),
+				formula: val('formula'),
+				ts:      val('ts'),
+				source:  window.location.href
+			};
+		}
+
+		form.addEventListener('submit', function (event) {
+			event.preventDefault();
+			var body = payload();
+
+			/* The server validates all of this again; doing it here too is only
+			   so the visitor is not made to wait for a round trip to be told
+			   their name is missing. */
+			if (body.name === '') {
+				say('Please tell us your name.');
+				return;
+			}
+			if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(body.email)) {
+				say('Please enter a valid email address.');
+				return;
+			}
+
+			var submit = form.querySelector('.sf-inquiry-form__submit');
+			if (submit) {
+				submit.disabled = true;
+			}
+			say('Sending…');
+
+			window.fetch('/wp-json/sinofresh/v1/inquiry', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify(body)
+			}).then(function (response) {
+				return response.json().then(function (json) {
+					return { ok: response.ok, json: json };
+				});
+			}).then(function (result) {
+				if (!result.ok) {
+					throw new Error(result.json && result.json.message
+						? result.json.message
+						: 'We could not send that just now.');
+				}
+				form.hidden = true;
+				if (success) {
+					success.hidden = false;
+				}
+				say('');
+				timer = window.setTimeout(close, 3000);
+			}).catch(function (error) {
+				/* Re-stamp: the three-second floor is about how long the form was
+				   on screen, and a failed attempt followed by an immediate retry
+				   must not be mistaken for a machine. */
+				if (stamp) {
+					stamp.value = String(Date.now());
+				}
+				say(error && error.message ? error.message : 'We could not send that just now.');
+			}).then(function () {
+				if (submit) {
+					submit.disabled = false;
+				}
+			});
+		});
+	}
+
+	if (document.readyState === 'loading') {
+		document.addEventListener('DOMContentLoaded', init);
+	} else {
+		init();
+	}
 })();
