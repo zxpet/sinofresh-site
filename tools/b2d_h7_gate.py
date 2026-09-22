@@ -47,7 +47,11 @@ WHAT EACH MODE PROVES
   --aa DIR2   two captures of the SAME state must be byte-identical under the
               same mask set. This is the precondition for believing the main
               proof: a mask set that cannot make A/A clean cannot be trusted to
-              make a real difference mean anything.
+              make a real difference mean anything. DIR2 must be a second
+              capture taken on the same install as --cand: if the two carry
+              different theme version tokens they are captures of different
+              states and the run ABORTS (H7c was first run the other way round,
+              which produced 75 wall-of-red diffs that read like a regression).
   --matrix    sabotage: mutants of the declaration must each FAIL. A mutant that
               changes nothing is reported INVALID rather than counted.
   --negctl    named negative controls, each of which must print its own FAIL.
@@ -480,6 +484,287 @@ BATCHES['h7b'] = {
 }
 
 
+# ------------------------------------------------------------------ H7c -----
+# This batch runs the proof in the OTHER direction, and that is the whole reason
+# `mode` exists.
+#
+# H7a and H7b replaced a string the baseline already carried, so the expected
+# page could be BUILT from the baseline. H7c ADDS markup whose content is
+# per-record — eight rows on one formula, ten on another — so there is no fixed
+# string to splice into the baseline. Two ways out, and only one of them is
+# honest:
+#
+#   * reconstruct the table from the baseline's own copy (the dosage-form crumb,
+#     the parsed spec line, the ingredient pills are all somewhere on the page).
+#     That means teaching the gate to render, and a gate that renders is a gate
+#     that can agree with a broken renderer — the same homeopathy the H6 scan
+#     rejected when it refused to re-derive a value it was supposed to measure.
+#   * REMOVE the declared region from the candidate and require what is left to
+#     equal the baseline. Nothing is re-derived; the payload is simply declared
+#     rather than built.
+#
+# The second one has a price and it is paid in NC13: a region removed whole is
+# not compared internally, so the payload's own bytes are invisible to the main
+# proof. That is not a hole to paper over — it is a division of labour. The
+# payload's CONTENT is owned by the coverage pass (which counts on the raw
+# candidate), its PLACEMENT by the `order` invariant, and its per-page shape by
+# `scoped`. Each of those three is sabotage-tested below.
+H7C_PAYLOAD = re.compile(
+    # The leading \s* is not cosmetic: a block template's blank lines are page
+    # bytes too, so the inserted block brought its own newlines with it. Deleting
+    # the comment and the section but leaving those behind left three extra
+    # newlines on all 42 pages and the proof failed on exactly that — correctly.
+    r'\s*<!-- H7c: the spec sheet\..*?-->\s*'
+    r'<section class="sf-fdetail-specs">.*?</section>',
+    re.S,
+)
+
+
+def _h7c_transform(text):
+    """Delete the declared payload. One section, no nested section inside it,
+    so the non-greedy match ends where the band does."""
+    return H7C_PAYLOAD.subn('', text)
+
+
+def _h7c_dead_phone_step(css):
+    """The batch H7b mistake, re-made on purpose: lift the 768 step out and put
+    it ABOVE the rule it means to override. A media query adds no specificity,
+    so that is the version which is dead at every width, and the source pass has
+    to say so."""
+    i = css.find('@media (max-width: 768px) {\n\t.sf-fdetail-specs {')
+    if i < 0:
+        return css
+    depth, j = 0, i
+    while j < len(css):
+        if css[j] == '{':
+            depth += 1
+        elif css[j] == '}':
+            depth -= 1
+            if depth == 0:
+                break
+        j += 1
+    block = css[i:j + 1] + '\n'
+    rest = css[:i] + css[j + 1:]
+    anchor = '.sf-fdetail-specs {\n\tpadding: 48px 0;'
+    if anchor not in rest:
+        return css
+    return rest.replace(anchor, block + anchor, 1)
+
+
+def _is_formula_detail(name):
+    """The 42 detail pages: /formulas/<slug>/ and /zh/formulas/<slug>/.
+
+    The two archives are stored as `formulas` and `zh__formulas`, so neither
+    prefix catches them — which is exactly the claim: the band is on the detail
+    pages and nowhere else, and `scoped` says so per page rather than in total.
+    """
+    return name.startswith('formulas__') or name.startswith('zh__formulas__')
+
+
+BATCHES['h7c'] = {
+    'name': 'H7c — the spec sheet, twelve rows at the top of the reading area',
+    'mode': 'delete',
+    'tokens': [
+        ('?ver=2.10.63', '?ver=2.10.64'),                        # style.css
+    ],
+    'transform': _h7c_transform,
+    'applies': 42,
+    'coverage': [
+        # Absent from the candidate, counted on the raw bytes. Only one, because
+        # this batch removes nothing: the payload is new markup.
+        ('?ver=2.10.63', 0),
+    ],
+    'insertions': [
+        # Present on the candidate, at a declared total. The first two are
+        # structural — one band and two column groups per detail page — and the
+        # rest are row labels, which is the payload's CONTENT. The main proof
+        # cannot see any of them (mode: delete removes the payload whole), so
+        # these counts are not a second opinion, they are the only opinion.
+        ('?ver=2.10.64', 75),
+        ('class="sf-fdetail-specs"', 42),
+        ('sf-fdetail-specs__group"', 84),
+        ('>Dosage Form<', 42),
+        ('>Unit Weight<', 42),
+        ('>Shelf Life<', 42),
+        ('>Main Ingredients<', 42),
+        ('>Place of Origin<', 42),
+        ('>OEM / ODM<', 42),
+    ],
+    'counts': [
+        # (label, string, base total, candidate total) — BOTH sides measured.
+        # The three rows below already existed elsewhere on the site; each gains
+        # exactly one per detail page, which is what says the new band is the
+        # thing that moved them and not some other edit.
+        ('MOQ gains one row per detail page', '>MOQ<', 18, 60),
+        ('Certifications gains one row per page', '>Certifications<', 58, 100),
+        ('the origin line gains one row per page', 'Linyi, Shandong, China', 154, 196),
+        # And the rows the empty-value rule has to DROP. Zero on both sides, so
+        # they fail the moment the renderer prints an empty row instead of
+        # skipping it — which is the whole contract, and the only way a count
+        # can state a row that must not exist.
+        ('no empty Applicable Pet row is printed', '>Applicable Pet<', 0, 0),
+        ('no empty Life Stage row is printed', '>Life Stage<', 0, 0),
+        # The thirteenth row the brief offered and this batch dropped. It had
+        # two occurrences before and keeps them, which is what "dropped" means
+        # in bytes.
+        ('no Lead Time row is added', '>Lead Time<', 2, 2),
+        # The two data-dependent rows. They move with the DATA, not with the
+        # code: Pack Size exists on ten of the 21 records, Shape on one.
+        ('Pack Size is printed only where the spec line has one', '>Pack Size<', 40, 60),
+        ('Shape is printed only on the record that has it', '>Shape<', 0, 2),
+        # Everything the batch did not touch.
+        ('the media parameter list is untouched', 'sf-fdetail2__params', 42, 42),
+        ('the actives band is untouched', 'sf-fdetail-actives__inner', 42, 42),
+        ('the content band is untouched', 'sf-fdetail-content__inner', 42, 42),
+        ('the parameter rows are untouched', 'sf-fdetail2__term', 234, 234),
+    ],
+    'unmoved': [
+        ('media parameter list', r'sf-fdetail2__params', 42),
+        ('actives band', r'sf-fdetail-actives__inner', 42),
+        ('content band', r'sf-fdetail-content__inner', 42),
+        ('H7b hero openers', r'data-sf-inquiry-open', 42),
+        ('certification badges', r'sf-cert-badge', None),
+    ],
+    'per_page': [
+        ('h1', r'<h1[ >]', 1),
+    ],
+    # Once per detail page, nowhere else. A site total of 42 would also be
+    # produced by one page carrying 42 of them, so the claim is made per page.
+    'scoped': [
+        ('the spec sheet is on each detail page, once',
+         'class="sf-fdetail-specs"', _is_formula_detail, 1),
+        ('each detail page gets two column groups',
+         'sf-fdetail-specs__group"', _is_formula_detail, 2),
+    ],
+    # Where the band SITS. The main proof cannot see this — a payload removed
+    # whole is equally removed wherever it was — so placement is its own claim,
+    # asserted on every detail page with both anchors required to be present.
+    'order': [
+        ('the spec sheet follows the media band', 'sf-fdetail2__params',
+         'class="sf-fdetail-specs"', _is_formula_detail),
+        ('and precedes the Specification band', 'class="sf-fdetail-specs"',
+         'sf-fdetail__grid', _is_formula_detail),
+        ('and precedes the Ingredients band', 'class="sf-fdetail-specs"',
+         'sf-fdetail-actives__inner', _is_formula_detail),
+    ],
+    'h2_delta': None,
+    'sources': {
+        'tpl': 'templates/single-sf_formula.html',
+    },
+    # NC3/NC4 read these. Which string is the sharp one is batch-specific.
+    'reinject': ('an old version token put back fails coverage',
+                 'formulas__joint-support-soft-chews.html', '</head>',
+                 '<link rel="stylesheet" href="style.css?ver=2.10.63">'),
+    'delete': ('one column group deleted fails coverage',
+               'formulas__calming-soft-chews.html', 'sf-fdetail-specs__group"'),
+    'matrix': [
+        # Every mutant must break the proof AND must actually have changed
+        # something (a no-op reports INVALID, not pass).
+        ('the spec sheet is never added',
+         {'transform': (lambda t: (t, 0)), 'applies': 0}, None),
+        ('the style token is not folded',
+         {'tokens': []}, None),
+        ('the payload is added but not declared',
+         {'applies': 0}, None),
+        # Deleting a payload that a page never had is a no-op on that page, so
+        # this mutant leaves the diff EMPTY and is caught by the applied count
+        # alone — which is why the matrix reports both numbers.
+        ('the payload is missing from one page',
+         {}, ('formulas__joint-support-soft-chews.html',
+              lambda s: _h7c_transform(s)[0])),
+        ('a stray character on one page',
+         {}, ('formulas__calming-soft-chews.html',
+              lambda s: s.replace('</body>', '<!-- stray --></body>', 1))),
+    ],
+    'nc_source': [
+        ('NC9 the source pass fails when the phone step moves above its base rule',
+         'style.css', _h7c_dead_phone_step, None),
+        ('NC10 the source pass fails when the ingredient cap is removed',
+         'functions.php', 'array_slice($ingredients, 0, 3)', '$ingredients'),
+    ],
+    'nc_page': [
+        ('NC11 the scoped invariant fails on a spec sheet in the wrong page',
+         'about.html',
+         lambda s: s.replace('</body>', '<section class="sf-fdetail-specs"></section></body>', 1)),
+        ('NC12 the scoped invariant fails when a detail page loses a group',
+         'formulas__joint-support-soft-chews.html',
+         lambda s: s.replace('class="sf-fdetail-specs__group"', 'class="sf-gone"', 1)),
+    ],
+    'nc_blind': ('formulas__joint-support-soft-chews.html',
+                 '>Dosage Form<', '>Dosage Formx<'),
+    'source': [
+        # --- the template: the call site, and where it sits -------------------
+        ('the template calls the spec-sheet shortcode', 'tpl_live',
+         r'\[sf_formula_specs_table\]', True),
+        ('...before the long copy', 'tpl_live',
+         r'\[sf_formula_specs_table\][\s\S]*?\[sf_formula_body\]', True),
+        ('...and before the Specification band', 'tpl_live',
+         r'\[sf_formula_specs_table\][\s\S]*?\[sf_formula_detail\]', True),
+        ('...and before the Ingredients band', 'tpl_live',
+         r'\[sf_formula_specs_table\][\s\S]*?\[sf_formula_detail_actives\]', True),
+        ('...and after the media band', 'tpl_live',
+         r'\[sf_formula_params\][\s\S]*?\[sf_formula_specs_table\]', True),
+        # --- the renderer: the claims a page cannot show ----------------------
+        ('the renderer is registered', 'php_live',
+         r"add_shortcode\('sf_formula_specs_table', 'sinofresh_formula_specs_table'\)", True),
+        ('it guards the post type', 'php_live',
+         r"function sinofresh_formula_specs_table\(\)[\s\S]{0,200}is_singular\('sf_formula'\)", True),
+        ('Dosage Form is the taxonomy term name', 'php_live',
+         r"\$rows\['Dosage Form'\] = esc_html\(\$form_name\)", True),
+        ('Shape is read from the unregistered key', 'php_live',
+         r"get_post_meta\(\$post_id, 'sf_formula_shape', true\)", True),
+        ('Unit Weight is the parsed unit segment', 'php_live',
+         r"\$rows\['Unit Weight'\] = esc_html\(trim\(\(string\) \$parts\['unit'\]\)\)", True),
+        ('Pack Size is the parsed pack segment', 'php_live',
+         r"\$rows\['Pack Size'\] = esc_html\(trim\(\(string\) \$parts\['pack'\]\)\)", True),
+        ('Shelf Life is the parsed shelf segment', 'php_live',
+         r"\$rows\['Shelf Life'\] = esc_html\(trim\(\(string\) \$parts\['shelf'\]\)\)", True),
+        ('Main Ingredients stops at three', 'php_live',
+         r"array_slice\(\$ingredients, 0, 3\)", True),
+        ('MOQ reads the dosage page, not a new source', 'php_live',
+         r"sinofresh_formula_spec_cell\(\$form_slug, 'MOQ'\)", True),
+        ('Certifications reuses the existing reader', 'php_live',
+         r"sf_formula_certifications_value\(\$form_slug\)", True),
+        ('Place of Origin is a constant until H7e', 'php_live',
+         r"\$rows\['Place of Origin'\] = esc_html\('Linyi, Shandong, China'\)", True),
+        ('OEM / ODM is a constant until H7e', 'php_live',
+         r"\$rows\['OEM / ODM'\] = esc_html\('Available'\)", True),
+        ('no Lead Time row is added', 'php_live', r"\$rows\['Lead Time'\]", False),
+        ('the split is over the rows actually rendered', 'php_live',
+         r"\$half = \(int\) ceil\(count\(\$rows\) / 2\)", True),
+        ('the band is emitted whole, zero bytes when empty', 'php_live',
+         r"return '<section class=\"sf-fdetail-specs\"><div class=\"sf-fdetail-specs__inner\">'", True),
+        ('the style token is bumped in the enqueue', 'php',
+         r"wp_enqueue_style\('sinofresh-style', get_stylesheet_uri\(\), array\(\), '2\.10\.64'\)", True),
+        ('no 2.10.63 enqueue survives', 'php_live', r"'2\.10\.63'", False),
+        # --- the stylesheet: the geometry a page links rather than contains ---
+        ('style.css declares 2.10.64', 'css', r'Version: 2\.10\.64', True),
+        ('no 2.10.63 header survives', 'css', r'Version: 2\.10\.63', False),
+        ('the band carries the white surface', 'css_live',
+         r'\.sf-fdetail-specs \{[^}]*background-color: var\(--wp--preset--color--card-white\)', True),
+        ('two columns on a desk', 'css_live',
+         r'\.sf-fdetail-specs__inner \{[^}]*grid-template-columns: repeat\(2, minmax\(0, 1fr\)\)', True),
+        ('a row is a label/value grid', 'css_live',
+         r'\.sf-fdetail-specs__row \{[^}]*grid-template-columns: minmax\(150px, 40%\) minmax\(0, 1fr\)', True),
+        # The ordering claim, as ONE chain. Each link is anchored twice — the
+        # media query AND a marker only this band's rule carries — so the chain
+        # cannot be satisfied by some other component's 1240/900/768 block later
+        # in the file. This is the assertion H7b had to add after shipping a step
+        # that sat above its own base rule and was dead at every width; a check
+        # that only asserted the steps' contents would have passed that build.
+        ('base rule, then 1240, then 900, then 768 — in that order', 'css_live',
+         r'\.sf-fdetail-specs \{[^}]*background-color: var\(--wp--preset--color--card-white\);'
+         r'[\s\S]{0,2200}@media \(max-width: 1240px\) \{[\s\S]{0,160}\.sf-fdetail-specs \{'
+         r'[\s\S]{0,600}@media \(max-width: 900px\) \{[\s\S]{0,160}\.sf-fdetail-specs__inner \{'
+         r'[\s\S]{0,1600}@media \(max-width: 768px\) \{[\s\S]{0,160}\.sf-fdetail-specs \{', True),
+        ('the phone step is one column', 'css_live',
+         r'@media \(max-width: 768px\) \{[\s\S]{0,260}\.sf-fdetail-specs__row \{[^}]*grid-template-columns: minmax\(0, 1fr\)', True),
+        ('the chips are the outline-pill vocabulary', 'css_live',
+         r'\.sf-fdetail-specs__chip \{[^}]*border-radius: 999px', True),
+    ],
+}
+
+
 # ------------------------------------------------------------------- machinery
 
 def fold(text, pairs):
@@ -489,16 +774,37 @@ def fold(text, pairs):
 
 
 def main_proof(decl, base, cand, verbose=True):
+    """mask(transform(baseline)) == mask(candidate) — or, when the declaration
+    says `mode: 'delete'`, mask(transform(candidate)) == mask(fold(baseline)).
+
+    The two directions exist because there are two kinds of batch. H7a and H7b
+    rewrote a string the baseline already carried, so the expected page could be
+    BUILT from the baseline and the transform ran on it. H7c's payload is new
+    markup whose content is per-record, so there is nothing fixed to splice in:
+    the only honest proof is to REMOVE the declared region from the candidate
+    and require the remainder to equal the baseline. Reconstructing that table
+    from the baseline's own copy would have meant teaching the gate to render,
+    and a gate that renders is a gate that can agree with a broken renderer.
+
+    Read the direction off the declaration, never off the batch's name: the
+    assertion is the same either way — everything outside the declared payload
+    is byte-identical, and the payload is exactly as declared.
+    """
     names = sorted(set(pages(base)) & set(pages(cand)))
+    mode = decl.get('mode', 'insert')
     rows, applied, ok = [], 0, True
     for n in names:
         a = read(os.path.join(base, n + '.html'))
         b = read(os.path.join(cand, n + '.html'))
-        exp, cnt = decl['transform'](a)
+        if mode == 'delete':
+            exp = fold(a, decl['tokens'])
+            act, cnt = decl['transform'](b)
+        else:
+            act, cnt = decl['transform'](a)
+            exp = fold(act, decl['tokens'])
         applied += cnt
-        exp = fold(exp, decl['tokens'])
         am, _ = mask(exp)
-        bm, _ = mask(b)
+        bm, _ = mask(act)
         if am == bm:
             continue
         ok = False
@@ -515,9 +821,12 @@ def main_proof(decl, base, cand, verbose=True):
         print('  pages compared          : %d' % len(names))
         print('  differing pages         : %d' % len(rows))
         print('  declared edits applied   : %d (declared %d)' % (applied, decl['applies']))
-        print('  %s  main proof: mask(transform(baseline)) == mask(candidate)' % ('PASS' if ok else 'FAIL'))
+        print('  %s  main proof: mask(transform(%s)) == mask(%s)'
+              % ('PASS' if ok else 'FAIL',
+                 'candidate' if mode == 'delete' else 'baseline',
+                 'fold(baseline)' if mode == 'delete' else 'candidate'))
     return {'ok': ok, 'pages': len(names), 'differing': len(rows), 'applied': applied,
-            'declared': decl['applies'], 'rows': rows[:8]}
+            'declared': decl['applies'], 'mode': mode, 'rows': rows[:8]}
 
 
 def coverage(decl, base, cand, verbose=True):
@@ -598,6 +907,49 @@ def invariants(decl, base, cand, verbose=True):
             print('  %-28s pages whose %s count is not %d = %d  %s'
                   % ('%s per page' % label, label, want, len(bad), 'ok' if good else 'FAIL'))
 
+    # A per-page count over a DECLARED SUBSET of the pages, which neither
+    # `unmoved` (site totals) nor `per_page` (every page) can express. H7c adds
+    # a band to 42 of the 75 pages, so "once per detail page" and "nowhere else"
+    # are two different claims and both have to be made: a site total of 42
+    # would also be produced by one page carrying 42 of them.
+    for label, pat, scope, want in decl.get('scoped', []):
+        bad = []
+        for n in names:
+            got = counts_of(read(os.path.join(cand, n + '.html')), pat)
+            expect = want if scope(n) else 0
+            if got != expect:
+                bad.append((n, got))
+        good = not bad
+        ok &= good
+        rows.append({'label': label, 'bad_pages': len(bad), 'ok': good,
+                     'first': bad[:4]})
+        if verbose:
+            print('  %-28s pages off the declared count = %d %s  %s'
+                  % (label, len(bad), bad[:3] if bad else '', 'ok' if good else 'FAIL'))
+
+    # Where the new bytes SIT, which no other check can see. A page that carries
+    # the band at the wrong address is byte-identical to one that carries it at
+    # the right address as far as the main proof is concerned — with
+    # `mode: delete` the payload is removed whole, so the proof is blind to
+    # where it was. Order is asserted on every page in scope, and the page must
+    # actually carry all three anchors or the check reports it rather than
+    # passing vacuously on a find() that returned -1.
+    for label, first, second, scope in decl.get('order', []):
+        bad = []
+        for n in names:
+            if not scope(n):
+                continue
+            t = read(os.path.join(cand, n + '.html'))
+            i, j = t.find(first), t.find(second)
+            if i < 0 or j < 0 or i > j:
+                bad.append((n, i, j))
+        good = not bad
+        ok &= good
+        rows.append({'label': label, 'bad_pages': len(bad), 'first': bad[:4], 'ok': good})
+        if verbose:
+            print('  %-28s pages out of order = %d %s  %s'
+                  % (label, len(bad), bad[:2] if bad else '', 'ok' if good else 'FAIL'))
+
     # The heading count is the one count a declaration may move, and only on the
     # pages it applied to. A batch that declares no delta — H7b moves no heading
     # — must not move one anywhere, which is the same check read at zero.
@@ -658,7 +1010,33 @@ def jsonld_equal(names, base, cand):
     return bad == 0, len(names)
 
 
-def aa(dir_a, dir_b, verbose=True):
+AA_VER_RE = re.compile(r'\?ver=([0-9][0-9A-Za-z._-]*)')
+
+
+def _ver_profile(d):
+    """Which version tokens a capture directory carries, and on how many pages.
+
+    A/A compares two captures of ONE state. If the two directories carry
+    different tokens, they are captures of two different states -- which is an
+    operator error, not a regression -- and every page would differ. That case
+    is named below and aborts, instead of printing 75 wall-of-red diffs that
+    read exactly like a real breakage. Same discipline as asserting which
+    artifact a request actually fetched: a comparison against the wrong copy
+    must not be able to report anything at all.
+    """
+    prof = {}
+    for n in pages(d):
+        for v in set(AA_VER_RE.findall(read(os.path.join(d, n + '.html')))):
+            prof[v] = prof.get(v, 0) + 1
+    return prof
+
+
+def _page_diffs(dir_a, dir_b):
+    """Per-page first-difference under the mask set. No policy, no guard.
+
+    The primitive NC6 needs: it compares two states that are *supposed* to
+    differ, to prove the comparison is sensitive at all.
+    """
     names = sorted(set(pages(dir_a)) & set(pages(dir_b)))
     rows = []
     for n in names:
@@ -667,6 +1045,47 @@ def aa(dir_a, dir_b, verbose=True):
         if am != bm:
             i = first_diff(am, bm)
             rows.append({'page': n, 'a': ctx(am, i), 'b': ctx(bm, i)})
+    return names, rows
+
+
+def aa(dir_a, dir_b, verbose=True, labels=('--cand', '--aa'), strict=True):
+    """A/A: two captures of ONE state must be identical under this mask set.
+
+    strict=True (the real A/A) additionally refuses the two ways this check can
+    be quietly wrong rather than red:
+
+      * page sets that differ -> FAIL here, instead of silently comparing the
+        intersection (comparing 40 of 75 pages looks exactly like a pass);
+      * directories carrying different version tokens -> abort, because they are
+        captures of two different states. Without this, an operator who points
+        --aa at a baseline-era copy gets 75 wall-of-red diffs, which read like a
+        regression and send you hunting in the wrong place. Same discipline as
+        asserting which artifact a request actually fetched.
+
+    strict=False is for NC6, which must be able to see "different state -> not
+    ok" as a *result*. The guard exists so that that cannot happen by accident.
+    """
+    set_a, set_b = set(pages(dir_a)), set(pages(dir_b))
+    if set_a != set_b:
+        only_a = sorted(set_a - set_b)
+        only_b = sorted(set_b - set_a)
+        if verbose:
+            print('  %-12s pages: %d' % (labels[0], len(set_a)))
+            print('  %-12s pages: %d' % (labels[1], len(set_b)))
+            print('  only in %s: %s' % (labels[0], ', '.join(only_a[:8]) or '-'))
+            print('  only in %s: %s' % (labels[1], ', '.join(only_b[:8]) or '-'))
+            print('  FAIL  A/A: the two captures do not cover the same pages')
+        return {'ok': False, 'pages': 0, 'differing': 0, 'rows': [],
+                'only_a': only_a, 'only_b': only_b}
+    if strict:
+        prof_a, prof_b = _ver_profile(dir_a), _ver_profile(dir_b)
+        if prof_a != prof_b:
+            raise SystemExit(
+                'FATAL A/A: these are captures of two DIFFERENT states, not two '
+                'captures of one.\n  %s tokens: %s\n  %s tokens: %s\n'
+                'Pass a second capture taken on the same install as the first.'
+                % (labels[0], prof_a, labels[1], prof_b))
+    names, rows = _page_diffs(dir_a, dir_b)
     ok = not rows
     if verbose:
         for r in rows[:8]:
@@ -733,7 +1152,11 @@ def matrix(decl, base, cand, verbose=True):
                 rows.append((name, 'PASSED', 'the gate let this through'))
                 ok = False
             else:
-                rows.append((name, 'caught', 'differing pages = %d' % r['differing']))
+                # Both numbers, because the two catch different things: a
+                # mutation inside the payload leaves the diff at 0 and is caught
+                # by the applied count, and a mutation elsewhere is the reverse.
+                rows.append((name, 'caught', 'differing pages = %d, applied = %d/%d'
+                             % (r['differing'], r['applied'], d['applies'])))
         finally:
             shutil.rmtree(work, ignore_errors=True)
     if verbose:
@@ -817,8 +1240,13 @@ def negctl(decl, base, cand, theme, verbose=True):
         r = invariants(decl, base, c, verbose=False)
         report('NC5 the invariants fail on one injected h2', not r['ok'])
 
-        # NC6 — A/A is a real signal: A/A against the baseline must FAIL
-        r = aa(cand, base, verbose=False)
+        # NC6 — A/A is a real signal: A/A against the baseline must FAIL.
+        # strict=False here on purpose: this control asserts the comparison
+        # *notices* a state difference, while the strict guard's job is to make
+        # that same difference impossible to feed in by accident. Running this
+        # with strict=True would abort instead of reporting, and the control
+        # would prove nothing about the comparison itself.
+        r = aa(cand, base, verbose=False, strict=False, labels=('--cand', '--base'))
         report('NC6 A/A against a different state fails', not r['ok'])
 
         # NC7 — the masked-blob read-back is a signal, not a rubber stamp: the
@@ -853,6 +1281,80 @@ def negctl(decl, base, cand, theme, verbose=True):
         else:
             report('NC8 the json-ld data comparison fails on a renamed key', False,
                    'no ld+json block on that page')
+
+        # NC9/NC10 — the source assertions are signals, not decoration. Each
+        # mutant is applied to a COPY of the theme in a temp tree; a source
+        # check that survives its own sabotage is a check that cannot fail, and
+        # the CSS-order claim in particular only exists because H7b shipped the
+        # dead-step version of it.
+        for label, rel, needle, replacement in decl.get('nc_source', []):
+            t = _clone(theme, os.path.join(work, 'theme'))
+            p = os.path.join(t, rel)
+            before = read(p)
+            # A callable is for the mutations a literal replace cannot express —
+            # H7c's is a REORDER, which is the only way to rebuild the dead step.
+            after = needle(before) if callable(needle) else before.replace(needle, replacement, 1)
+            if after == before:
+                report(label, False, 'the mutant needle is not in %s' % rel)
+                continue
+            _write(p, after)
+            r = source_checks(decl, t, verbose=False)
+            report(label, not r['ok'])
+
+        # NC11/NC12 — the page-scoped counts and the order claim are each
+        # breakable by a page edit the MAIN PROOF cannot see, for the same
+        # reason: the payload is removed whole, so nothing about it is compared.
+        for label, page, fn in decl.get('nc_page', []):
+            c = _clone(cand, os.path.join(work, 'ncp'))
+            p = os.path.join(c, page)
+            before = read(p)
+            after = fn(before)
+            if after == before:
+                report(label, False, 'the mutant changed nothing')
+                continue
+            _write(p, after)
+            r = invariants(decl, base, c, verbose=False)
+            report(label, not r['ok'])
+
+        # NC13 — and the hole this batch's direction opens, stated on purpose.
+        # With `mode: delete` the payload is removed whole, so its own bytes are
+        # NOT compared by the main proof: renaming a row label inside it must
+        # leave the main proof GREEN. That is not a bug to hide — it is why the
+        # coverage pass, which counts on the raw candidate, owns the payload's
+        # content. An NC that only showed the failure would leave the blast
+        # radius unmeasured.
+        page, needle, replacement = decl['nc_blind']
+        c = _clone(cand, os.path.join(work, 'ncb'))
+        p = os.path.join(c, page)
+        _write(p, read(p).replace(needle, replacement, 1))
+        blind = main_proof(decl, base, c, verbose=False)['ok']
+        caught = not coverage(decl, base, c, verbose=False)['ok']
+        report('NC13 the main proof is blind to the payload, coverage is not',
+               blind and caught,
+               'page=%s main_green=%s coverage_red=%s' % (page, blind, caught))
+
+        # NC14 — the strict A/A guard is itself a signal. It exists because this
+        # batch was run with --aa pointed at a baseline-era capture, which showed
+        # up as 75 wall-of-red diffs that read exactly like a regression. A guard
+        # nobody has watched fire is a comment, so this one is made to fire.
+        try:
+            aa(cand, base, verbose=False, labels=('--cand', '--base'))
+            report('NC14 strict A/A refuses a capture of another state', False,
+                   'it compared two states instead of aborting')
+        except SystemExit:
+            report('NC14 strict A/A refuses a capture of another state', True)
+
+        # NC15 — and a capture directory that is short of pages must FAIL, not
+        # silently shrink the comparison to the intersection: comparing 74 of 75
+        # pages looks exactly like comparing all of them.
+        c = _clone(cand, os.path.join(work, 'ncaa'))
+        missing = sorted(pages(c))[0]
+        os.remove(os.path.join(c, missing + '.html'))
+        r = aa(cand, c, verbose=False)
+        report('NC15 A/A fails when the two captures cover different pages',
+               (not r['ok']) and r['only_a'] == [missing],
+               'short by %s' % missing)
+
     finally:
         shutil.rmtree(work, ignore_errors=True)
 
@@ -951,7 +1453,8 @@ def parse(argv=None):
     ap.add_argument('--batch', required=True, choices=sorted(BATCHES))
     ap.add_argument('--base')
     ap.add_argument('--cand')
-    ap.add_argument('--aa', metavar='DIR2')
+    ap.add_argument('--aa', metavar='DIR2',
+                    help='second capture taken on the SAME install as --cand')
     ap.add_argument('--matrix', action='store_true')
     ap.add_argument('--negctl', action='store_true')
     ap.add_argument('--source', action='store_true')
