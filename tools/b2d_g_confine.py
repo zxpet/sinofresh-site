@@ -1,5 +1,18 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+# ---------------------------------------------------------------------------
+# ARCHIVED 2026-09-22 (batch H7a) — DO NOT MAINTAIN.
+#
+# This tool requires the gallery band's heading, '<h2 class="sf-gallery__title">',
+# to still be on the page (line ~362). Batch H7a deleted that heading, so this
+# tool now fails on any capture taken from H7a onward. That failure is expected
+# and is not a regression.
+#
+# It is left byte-for-byte as it was, on purpose. A gate edited to agree with
+# the change it was written to validate stops being a gate; the assertion it
+# made at the time is the honest record, and it is the assertion that dates it.
+# Its job belongs to tools/b2d_h7_gate.py from batch H7a on.
+# ---------------------------------------------------------------------------
 """Batch G — the six gates, run against two frozen 75-page captures.
 
 What the batch does, and therefore what the gates have to be able to see:

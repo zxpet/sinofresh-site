@@ -1,5 +1,19 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+# ---------------------------------------------------------------------------
+# ARCHIVED 2026-09-22 (batch H7a) — DO NOT MAINTAIN.
+#
+# This tool reads the live DOM and asserts that '.sf-gallery__title' carries
+# "A Closer Look at " + the page's h1 (lines ~41, ~104 and ~106, plus the
+# scroll target at ~131). Batch H7a deleted that heading, so this tool now
+# fails on any capture taken from H7a onward. That failure is expected and is
+# not a regression.
+#
+# It is left byte-for-byte as it was, on purpose. A gate edited to agree with
+# the change it was written to validate stops being a gate; the assertion it
+# made at the time is the honest record, and it is the assertion that dates it.
+# Its job belongs to tools/b2d_h7_gate.py from batch H7a on.
+# ---------------------------------------------------------------------------
 """Batch 2D Step 4 — evidence for the two edits, as the page renders them.
 
 The gates compare bytes; this reads the live DOM, because three of the claims
