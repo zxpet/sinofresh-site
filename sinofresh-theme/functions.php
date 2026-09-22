@@ -28,7 +28,7 @@ add_action('after_setup_theme', function() {
 });
 
 add_action('wp_enqueue_scripts', function() {
-	wp_enqueue_style('sinofresh-style', get_stylesheet_uri(), array(), '2.10.64');
+	wp_enqueue_style('sinofresh-style', get_stylesheet_uri(), array(), '2.10.65');
 	// Sticky nav: every template renders parts/header.html, so this is site-wide.
 	wp_enqueue_script('sinofresh-sticky-header', get_template_directory_uri() . '/assets/js/sticky-header.js', array(), '1.0.0', true);
 	wp_enqueue_script('sinofresh-ui-components', get_template_directory_uri() . '/assets/js/ui-components.js', array(), '1.0.0', true);
@@ -44,7 +44,12 @@ add_action('wp_enqueue_scripts', function() {
 	   already been deleted for being enqueued where they had nothing to do
 	   (H2b2), and this one has nothing to do on the other 33 pages. */
 	if (is_singular('sf_formula')) {
-		wp_enqueue_script('sinofresh-inquiry', get_template_directory_uri() . '/assets/js/inquiry.js', array(), '1.1.0', true);
+		wp_enqueue_script('sinofresh-inquiry', get_template_directory_uri() . '/assets/js/inquiry.js', array(), '1.2.0', true);
+		/* Batch H7d: the configurator's choices and the dialog's panel are the
+		   same list seen twice, so the two scripts are enqueued together and
+		   conditionally together — on the other 33 pages there is no band to
+		   configure and no dialog to carry a selection into. */
+		wp_enqueue_script('sinofresh-config', get_template_directory_uri() . '/assets/js/config.js', array(), '1.0.0', true);
 	}
 	// On-this-page TOC (dot rail on marketing pages, text list on articles) +
 	// article extras (progress bar, inline CTA, feedback, print URL). The JS
@@ -1876,20 +1881,21 @@ add_shortcode('sf_formula_detail', 'sinofresh_formula_detail');
  * [sf_formula_params] — the detail band's parameter rows (batch H2a).
  *
  * Replaces [sf_formula_factsheet], which had exactly one caller (the detail
- * template) and printed five rows. This one prints up to ten, in the order
- * the brief fixes, and it is the ONLY reader of the publishing form's
- * parameter fields on the front end:
+ * template) and printed five rows. This one printed up to ten until batch H7d
+ * split the band in two along the only line that matters to a reader: rows the
+ * customer can CHOOSE moved to [sf_formula_config], rows that are facts stayed
+ * here. The four that stayed:
  *
- *   Flavor              sf_formula_flavors      (multi, chips)
- *   Piece Weight        sf_formula_specs        (parsed: the unit segment)
- *   Pack Size           sf_formula_specs        (parsed: the "… per …" segment)
- *   Suitable For        sf_formula_species      (multi, chips)
- *   Life Stage          sf_formula_lifestage    (radio value)
- *   Quantity & Pricing  sf_formula_price_tiers  (row list, small table)
  *   Shelf life          sf_formula_specs        (parsed: the "… shelf life" segment)
  *   Packaging           dosage page .sf-facts-mini row
  *   Certifications      Site Settings sf_certifications, via sf_render_cert_badges()
  *   Lead time           sf_formula_lead_time
+ *
+ * The six that left — Flavor, Piece Weight, Pack Size, Suitable For, Life Stage
+ * and Quantity & Pricing — are controls there, and each prints this record's own
+ * value as its meta line. Keeping them here as well would print every one of
+ * those values twice on the same page, which is why this renderer lost rows in a
+ * batch that added a renderer.
  *
  * Empty means absent: a row with no value is not rendered at all, so a
  * record that carries only what batch H1a migrated renders the rows it can
@@ -1925,33 +1931,18 @@ function sinofresh_formula_params() {
 
 	$parts = sinofresh_formula_specs_parts(trim((string) get_post_meta($post_id, 'sf_formula_specs', true)));
 
-	/* Each cell is already escaped HTML: the chips, the tier table and the
-	   badge row each escape their own values, so the loop below must not
-	   escape a second time (a second pass would print &amp;#8211; for "–"). */
+	/* Each cell is already escaped HTML: the badges escape their own values, so
+	   the loop below must not escape a second time (a second pass would print
+	   &amp;#8211; for "–"). */
 	$rows = array();
 
-	$flavors = sf_json_array(get_post_meta($post_id, 'sf_formula_flavors', true));
-	if ($flavors) {
-		$rows['Flavor'] = sinofresh_formula_chip_list($flavors);
-	}
-	if (trim((string) $parts['unit']) !== '') {
-		$rows['Piece Weight'] = esc_html(trim((string) $parts['unit']));
-	}
-	if (trim((string) $parts['pack']) !== '') {
-		$rows['Pack Size'] = esc_html(trim((string) $parts['pack']));
-	}
-	$species = sf_json_array(get_post_meta($post_id, 'sf_formula_species', true));
-	if ($species) {
-		$rows['Suitable For'] = sinofresh_formula_chip_list($species);
-	}
-	$lifestage = trim((string) get_post_meta($post_id, 'sf_formula_lifestage', true));
-	if ($lifestage !== '') {
-		$rows['Life Stage'] = esc_html($lifestage);
-	}
-	$tiers = sinofresh_formula_tier_table(sf_json_rows(get_post_meta($post_id, 'sf_formula_price_tiers', true)));
-	if ($tiers !== '') {
-		$rows['Quantity & Pricing'] = $tiers;
-	}
+	/* Batch H7d moved the six rows that are CHOICES over to
+	   [sf_formula_config]: Flavor, Piece Weight, Pack Size, Suitable For, Life
+	   Stage and Quantity & Pricing are controls now, and each prints the
+	   record's own value as its meta line — so leaving them here as well would
+	   put every one of those values on the page twice. What stays is the four
+	   rows that are not a choice. The split is by "can the customer pick a
+	   different one", not by importance. */
 	if (trim((string) $parts['shelf']) !== '') {
 		$rows['Shelf life'] = esc_html(trim((string) $parts['shelf']));
 	}
@@ -1979,6 +1970,355 @@ function sinofresh_formula_params() {
 	return '<dl class="sf-fdetail2__params">' . $html . '</dl>';
 }
 add_shortcode('sf_formula_params', 'sinofresh_formula_params');
+
+/* --------------------------------------------------------------------------
+ * Batch H7d — the configurator.
+ * ------------------------------------------------------------------------ */
+
+/**
+ * Split a pack-size line into its options and their shared tail.
+ *
+ * "60/90/120 per bottle" is ONE published string describing THREE pack sizes,
+ * and a set of three checkboxes needs three values. The tail ("per bottle")
+ * is returned separately rather than appended to each option: three options
+ * reading "60 per bottle / 90 per bottle / 120 per bottle" is a sentence, and
+ * a pack-size control is a row of numbers.
+ *
+ * A line with no slash is one option and no tail ("1 kg bag"), which is the
+ * honest reading — one pack size is a control with one choice, not a control
+ * that failed to split.
+ *
+ * @return array{0: string[], 1: string} Options, then the shared tail.
+ */
+function sinofresh_formula_pack_parts($pack) {
+	$pack = trim((string) $pack);
+	if ($pack === '') {
+		return array(array(), '');
+	}
+	/* The numeric run must END where the words begin: group 1 is digits and
+	   separators only, group 2 starts with something that is neither. Lazy, so
+	   it stops at the first place both halves can match. */
+	if (!preg_match('#^([0-9][0-9\s/.,\-+x×]*?)\s+([^0-9/\s].*)$#u', $pack, $m)) {
+		return array(array($pack), '');
+	}
+	$nums = array_values(array_filter(array_map('trim', preg_split('#\s*/\s*#', trim($m[1]))),
+		function ($v) {
+			return $v !== '';
+		}));
+	if (count($nums) < 2) {
+		return array(array($pack), '');
+	}
+	return array($nums, trim($m[2]));
+}
+
+/**
+ * The choice groups for one formula, in print order.
+ *
+ * ONE PROVIDER, THREE READERS: this array drives the right-column band, tells
+ * the endpoint which posted values are values the record actually offers, and
+ * tells the dialog which rows a choice replaces. Three readers of one array is
+ * the only arrangement in which they cannot disagree about what "Chicken" is
+ * called or which pack sizes exist.
+ *
+ * A group carries:
+ *   key      the data attribute, the field name and the posted key
+ *   label    the row's name — the same string sinofresh_formula_params() prints
+ *   meta     the PRODUCT'S OWN value, as plain text. Printed whether or not the
+ *            visitor touches a control, and that is deliberate: it is the no-JS
+ *            answer, it is the dialog's fallback, and it is why a group with
+ *            neither meta nor options is not emitted at all.
+ *   type     'multi'  -> checkboxes     'single' -> radios
+ *   style    'chips' | 'image' | 'tiers'
+ *   hint     the one-line instruction, or ''
+ *   options  value / label / image (url or '') / note (the unit price or tail)
+ */
+function sinofresh_formula_config_groups($post_id) {
+	$post_id = (int) $post_id;
+	if ($post_id <= 0) {
+		return array();
+	}
+	$parts  = sinofresh_formula_specs_parts(trim((string) get_post_meta($post_id, 'sf_formula_specs', true)));
+	$groups = array();
+
+	$flavors = sf_json_array(get_post_meta($post_id, 'sf_formula_flavors', true));
+	if ($flavors) {
+		$options = array();
+		foreach ($flavors as $flavor) {
+			$options[] = array('value' => $flavor, 'label' => $flavor, 'image' => '', 'note' => '');
+		}
+		$groups[] = array(
+			'key' => 'flavor', 'label' => 'Flavor', 'meta' => implode(', ', $flavors),
+			'type' => 'multi', 'style' => 'chips',
+			'hint' => 'Choose one or more', 'options' => $options,
+		);
+	}
+
+	$unit = trim((string) $parts['unit']);
+	if ($unit !== '') {
+		/* One published weight. A single-choice control with one choice is not
+		   a degenerate case here — it is how the row reads as a choice the
+		   customer can see, and it is what makes "nothing checked" a state the
+		   dialog has to handle. */
+		$groups[] = array(
+			'key' => 'weight', 'label' => 'Piece Weight', 'meta' => $unit,
+			'type' => 'single', 'style' => 'chips', 'hint' => '',
+			'options' => array(array('value' => $unit, 'label' => $unit, 'image' => '', 'note' => '')),
+		);
+	}
+
+	$pack = trim((string) $parts['pack']);
+	if ($pack !== '') {
+		list($packs, $pack_tail) = sinofresh_formula_pack_parts($pack);
+		if ($packs) {
+			$options = array();
+			foreach ($packs as $p) {
+				$options[] = array('value' => $p, 'label' => $p, 'image' => '', 'note' => '');
+			}
+			$groups[] = array(
+				'key' => 'pack', 'label' => 'Pack Size', 'meta' => $pack,
+				'type' => 'multi', 'style' => 'chips',
+				'hint' => $pack_tail !== '' ? 'Per ' . $pack_tail : 'Choose one or more',
+				'options' => $options,
+			);
+		}
+	}
+
+	$species = sf_json_array(get_post_meta($post_id, 'sf_formula_species', true));
+	if ($species) {
+		$options = array();
+		foreach ($species as $s) {
+			$options[] = array('value' => $s, 'label' => $s, 'image' => '', 'note' => '');
+		}
+		$groups[] = array(
+			'key' => 'species', 'label' => 'Suitable For', 'meta' => implode(', ', $species),
+			'type' => 'multi', 'style' => 'chips',
+			'hint' => 'Choose one or more', 'options' => $options,
+		);
+	}
+
+	$lifestage = trim((string) get_post_meta($post_id, 'sf_formula_lifestage', true));
+	if ($lifestage !== '') {
+		$groups[] = array(
+			'key' => 'stage', 'label' => 'Life Stage', 'meta' => $lifestage,
+			'type' => 'single', 'style' => 'chips', 'hint' => '',
+			'options' => array(array('value' => $lifestage, 'label' => $lifestage, 'image' => '', 'note' => '')),
+		);
+	}
+
+	/* Container Type is the one group whose OPTIONS are not the record's own
+	   values: the seven containers are a global library that Site Settings
+	   owns, because "Pouch" has to mean the same picture on every page. The
+	   record contributes only which one it ships in, which is the meta line
+	   and the initial radio. */
+	$container = trim((string) get_post_meta($post_id, 'sf_formula_container', true));
+	if ($container !== '' && function_exists('sf_container_library')) {
+		$options = array();
+		foreach (sf_container_library() as $c) {
+			$image = '';
+			if (!empty($c['attachment_id'])) {
+				$url = wp_get_attachment_image_url((int) $c['attachment_id'], 'medium');
+				$image = $url ? (string) $url : '';
+			}
+			$options[] = array(
+				'value' => (string) $c['slug'], 'label' => (string) $c['label'],
+				'image' => $image, 'note' => '',
+			);
+		}
+		if ($options) {
+			$own = function_exists('sinofresh_container_label')
+				? sinofresh_container_label($container) : $container;
+			$groups[] = array(
+				'key' => 'container', 'label' => 'Container Type', 'meta' => $own,
+				'type' => 'single', 'style' => 'image', 'hint' => 'Choose one',
+				'options' => $options,
+			);
+		}
+	}
+
+	$tiers = sf_json_rows(get_post_meta($post_id, 'sf_formula_price_tiers', true));
+	if ($tiers) {
+		$options = array();
+		foreach ($tiers as $tier) {
+			if (!is_array($tier)) {
+				continue;
+			}
+			$qty   = trim((string) (isset($tier['qty']) ? $tier['qty'] : ''));
+			$price = trim((string) (isset($tier['price']) ? $tier['price'] : ''));
+			if ($qty === '' && $price === '') {
+				continue;
+			}
+			$options[] = array(
+				'value' => $qty !== '' ? $qty : $price,
+				'label' => $qty !== '' ? $qty : 'Custom quantity',
+				/* The brief's "showing the unit price": the tier's own price, so
+				   the choice reads as a quantity AND what it costs per unit. */
+				'note'  => $price !== '' ? 'USD ' . $price . ' / unit' : '',
+				'image' => '',
+			);
+		}
+		if ($options) {
+			$meta = array();
+			foreach ($options as $o) {
+				$meta[] = $o['label'] . ($o['note'] !== '' ? ' — ' . $o['note'] : '');
+			}
+			$groups[] = array(
+				'key' => 'pricing', 'label' => 'Quantity & Pricing', 'meta' => implode(' · ', $meta),
+				'type' => 'single', 'style' => 'tiers', 'hint' => 'Choose one',
+				'options' => $options,
+			);
+		}
+	}
+
+	return $groups;
+}
+
+/**
+ * The posted selection, reduced to values this record actually offers.
+ *
+ * The endpoint's old rule was "the selection panel is rebuilt from the post id,
+ * never taken from the request body", and the reason was that a client's copy
+ * is a rendering while a posting client could put anything in it. H7d needs the
+ * customer's OWN choice in that panel, so the rule is kept in the form that
+ * still holds: the request says WHICH options, the server says what they are
+ * CALLED. A posted value that is not one of this record's own option values is
+ * dropped, so the worst a hand-crafted request can do is choose among the
+ * options the page already offered.
+ *
+ * @return array Label => plain-text value, in the groups' print order.
+ */
+function sinofresh_formula_config_rows($post_id, $posted) {
+	$posted = is_array($posted) ? $posted : array();
+	$rows   = array();
+	foreach (sinofresh_formula_config_groups($post_id) as $group) {
+		$key     = $group['key'];
+		$allowed = array();
+		$labels  = array();
+		foreach ($group['options'] as $option) {
+			$allowed[] = (string) $option['value'];
+			$labels[(string) $option['value']] = $option['label']
+				. ($option['note'] !== '' ? ' (' . $option['note'] . ')' : '');
+		}
+		$want = isset($posted[$key]) ? $posted[$key] : array();
+		$want = is_array($want) ? $want : array($want);
+		$chosen = array();
+		foreach ($want as $value) {
+			$value = is_string($value) ? trim($value) : '';
+			if ($value === '' || !in_array($value, $allowed, true)) {
+				continue;
+			}
+			if (!in_array($value, $chosen, true)) {
+				$chosen[] = $value;
+			}
+		}
+		if (!$chosen) {
+			continue;
+		}
+		$text = array();
+		foreach ($chosen as $value) {
+			$text[] = $labels[$value];
+		}
+		$rows[$group['label']] = implode(', ', $text);
+		/* The tail the options share is printed with the choice, or "60, 90"
+		   arrives at the sales desk with no unit at all. */
+		if ($group['label'] === 'Pack Size'
+			&& !empty($group['hint']) && strpos($group['hint'], 'Per ') === 0) {
+			$rows[$group['label']] .= ' ' . substr($group['hint'], 4);
+		}
+	}
+	return $rows;
+}
+
+/**
+ * [sf_formula_config] — the right column's choice controls (batch H7d).
+ *
+ * Seven rows that were plain text become controls: Flavor, Piece Weight, Pack
+ * Size, Suitable For, Life Stage, Container Type and Quantity & Pricing. The
+ * rows that are NOT choices — Shelf life, Packaging, Certifications, Lead time
+ * — stay text and stay in [sf_formula_params], which is why the two renderers
+ * exist side by side rather than one replacing the other.
+ *
+ * Every group prints its own value as text (`__meta`) whether or not anything
+ * is checked. That single decision does three jobs: it is the no-JS answer
+ * (nothing is lost when config.js never arrives), it is the dialog's fallback
+ * ("nothing checked" still shows the product's specification), and it means
+ * the controls are read as "change this" rather than "we do not know this".
+ *
+ * Nothing here is pre-checked. A visitor who touches nothing posts nothing, and
+ * the inquiry carries the record's own values — the behaviour the dialog had
+ * before this batch, reached by a different route.
+ */
+function sinofresh_formula_config() {
+	if (!is_singular('sf_formula')) {
+		return '';
+	}
+	$post_id = (int) get_queried_object_id();
+	if ($post_id <= 0) {
+		return '';
+	}
+	$groups = sinofresh_formula_config_groups($post_id);
+	if (!$groups) {
+		return '';
+	}
+
+	$html = '';
+	foreach ($groups as $group) {
+		$key   = (string) $group['key'];
+		$type  = $group['type'] === 'single' ? 'radio' : 'checkbox';
+		$name  = 'sf-config-' . $key;
+		$hint  = trim((string) $group['hint']);
+
+		$opts = '';
+		foreach ($group['options'] as $option) {
+			$value   = (string) $option['value'];
+			$img     = (string) $option['image'];
+			$media   = '';
+			if ($group['style'] === 'image') {
+				/* An empty library slot degrades to the label, never to a broken
+				   image: the Container Library ships with every attachment_id
+				   at 0, and a picker that renders seven broken icons because an
+				   admin has not uploaded anything yet is worse than a picker
+				   that renders seven names. */
+				$media = $img !== ''
+					? '<img class="sf-fdetail-config__img" src="' . esc_url($img) . '" alt="" loading="lazy">'
+					: '<span class="sf-fdetail-config__img sf-fdetail-config__img--empty" aria-hidden="true"></span>';
+			}
+			$note = (string) $option['note'];
+			$opts .= '<label class="sf-fdetail-config__opt">'
+				. '<input class="sf-fdetail-config__input" type="' . esc_attr($type) . '"'
+				. ' name="' . esc_attr($name) . '" value="' . esc_attr($value) . '"'
+				. ' data-sf-config-opt="' . esc_attr($key) . '">'
+				. '<span class="sf-fdetail-config__box" aria-hidden="true"></span>'
+				. $media
+				. '<span class="sf-fdetail-config__text">' . esc_html((string) $option['label']) . '</span>'
+				. ($note !== ''
+					? '<span class="sf-fdetail-config__note">' . esc_html($note) . '</span>' : '')
+				. '</label>';
+		}
+
+		$html .= '<div class="sf-fdetail-config__group" data-sf-config-group="' . esc_attr($key) . '">'
+			. '<p class="sf-fdetail-config__row">'
+			. '<span class="sf-fdetail-config__label">' . esc_html((string) $group['label']) . '</span>'
+			. '<span class="sf-fdetail-config__meta">' . esc_html((string) $group['meta']) . '</span>'
+			. ($hint !== ''
+				? '<span class="sf-fdetail-config__hint">' . esc_html($hint) . '</span>' : '')
+			. '</p>'
+			. '<div class="sf-fdetail-config__options" role="group"'
+			. ' aria-label="' . esc_attr((string) $group['label']) . '">' . $opts . '</div>'
+			. '</div>';
+	}
+
+	/* The live summary is empty in the markup and filled by config.js: an
+	   empty element that says nothing is honest, while a server-rendered
+	   "nothing selected yet" would be a claim the server cannot keep once the
+	   visitor starts ticking. */
+	return '<div class="sf-fdetail-config" data-sf-config>'
+		. '<div class="sf-fdetail-config__list">' . $html . '</div>'
+		. '<p class="sf-fdetail-config__summary" data-sf-config-summary hidden></p>'
+		. '<p class="sf-fdetail-config__note" data-sf-config-note hidden>'
+		. 'Your selection is attached to the inquiry.</p>'
+		. '</div>';
+}
+add_shortcode('sf_formula_config', 'sinofresh_formula_config');
 
 /**
  * [sf_formula_specs_table] — the buyer's spec sheet (batch H7c).
@@ -2888,6 +3228,12 @@ function sinofresh_inquiry_modal() {
 	$form = '<form class="sf-inquiry-form" novalidate>'
 		. '<input type="hidden" name="formula" value="' . (int) $post_id . '">'
 		. '<input type="hidden" name="ts" value="0">'
+		/* H7d: the configurator writes the visitor's own selection here as JSON,
+		   and leaves it empty when nothing was ticked — in which case the
+		   endpoint falls back to the record's own values, exactly as this dialog
+		   behaved before the batch. The panel above is updated to match by
+		   config.js, so the visitor reads the same list the sales desk gets. */
+		. '<input type="hidden" name="config" value="">'
 		/* Honeypot: off-canvas rather than type="hidden" — a field a human
 		   cannot see but a form-filler still fills. aria-hidden plus
 		   tabindex="-1" keeps it out of the accessibility tree and the tab
@@ -3010,16 +3356,27 @@ add_action('rest_api_init', function () {
 				return new WP_Error('sf_inquiry_email', 'Please enter a valid email address.', array('status' => 400));
 			}
 
-			/* 4. The selection panel is rebuilt from the post id, never taken
-			   from the request body: the client's copy is a rendering, and a
-			   posting client could put anything in it. A title that does not
-			   resolve simply prints nothing. */
+			/* 4. The selection panel is rebuilt from the post id, and H7d keeps
+			   that rule in the only form that survives the visitor making a
+			   choice: the request says WHICH options, the server says what they
+			   are CALLED. A posted value that is not one of this record's own
+			   option values is dropped, so a hand-crafted request can choose
+			   among the options the page already offered and add nothing. An
+			   empty selection falls back to the record's own values, which is
+			   the behaviour this endpoint had before the batch. */
 			$post_id = absint($req->get_param('formula'));
 			$product = '';
 			$rows    = array();
+			$chosen  = array();
 			if ($post_id > 0 && 'sf_formula' === get_post_type($post_id) && 'publish' === get_post_status($post_id)) {
 				$product = (string) get_the_title($post_id);
-				$rows    = sinofresh_inquiry_selection_rows($post_id);
+				$posted  = $req->get_param('config');
+				if (is_string($posted) && $posted !== '') {
+					$decoded = json_decode($posted, true);
+					$posted  = is_array($decoded) ? $decoded : array();
+				}
+				$chosen = sinofresh_formula_config_rows($post_id, is_array($posted) ? $posted : array());
+				$rows   = $chosen ? $chosen : sinofresh_inquiry_selection_rows($post_id);
 			} else {
 				$post_id = 0;
 			}
@@ -3035,7 +3392,11 @@ add_action('rest_api_init', function () {
 			}
 			if ($rows) {
 				$lines[] = '';
-				$lines[] = 'Selection:';
+				/* Named for the sales desk: a line the customer picked and a
+				   line the record already said are different kinds of evidence,
+				   and the reply has to differ (one is a request, the other a
+				   restatement of the specification). */
+				$lines[] = $chosen ? 'Selection (chosen by the customer):' : 'Specification:';
 				foreach ($rows as $label => $value) {
 					$lines[] = '  ' . $label . ': ' . $value;
 				}

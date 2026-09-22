@@ -2,7 +2,7 @@
 Theme Name: SINO FRESH
 Author: Shandong SINO FRESH Pet Food Co., Ltd.
 Text Domain: sinofresh
-Version: 2.10.64
+Version: 2.10.65
 Requires at least: 6.0
 Requires PHP: 7.4
 License: GNU General Public License v2 or later
@@ -8212,6 +8212,213 @@ body.sf-inquiry-lock {
 		row-gap: 2px;
 	}
 }
+/* 38a-iii. The configurator — batch H7d. Seven rows of the right column stopped
+   being text and became choices: Flavor, Piece Weight, Pack Size, Suitable For,
+   Life Stage, Container Type and Quantity & Pricing. The four rows that are not
+   choices stayed in .sf-fdetail2__params directly below this band, so the two
+   renderers sit one above the other exactly as they print.
+
+   Every group prints the record's OWN value (`__meta`) above its options. That
+   one line does three jobs: it is the no-JS answer, it is the dialog's fallback
+   when the visitor ticks nothing, and it is why the options read as pills beside
+   an answer rather than as a form that does not know the answer.
+
+   The order of the blocks below is load-bearing the same way 38a-ii's is: base
+   rule first, then the phone drawer. A step written above the rule it means to
+   override is dead at every width — the mistake batch H7b shipped. */
+.sf-fdetail-config {
+	margin: 0 0 16px;
+}
+.sf-fdetail-config__group {
+	padding: 10px 0;
+	border-bottom: 1px solid var(--wp--preset--color--border-light);
+}
+.sf-fdetail-config__group:first-child { padding-top: 0; }
+.sf-fdetail-config__group:last-child { border-bottom: 0; padding-bottom: 0; }
+.sf-fdetail-config__row {
+	display: grid;
+	grid-template-columns: minmax(104px, 38%) minmax(0, 1fr);
+	align-items: baseline;
+	column-gap: 14px;
+	margin: 0 0 7px;
+}
+.sf-fdetail-config__label {
+	font-size: 13px;
+	font-weight: 600;
+	line-height: 1.5;
+	color: var(--wp--preset--color--text-secondary);
+}
+.sf-fdetail-config__meta {
+	font-size: 14px;
+	line-height: 1.5;
+	color: var(--wp--preset--color--text-primary);
+}
+.sf-fdetail-config__hint {
+	grid-column: 2;
+	margin-top: 1px;
+	font-size: 12px;
+	line-height: 1.4;
+	color: var(--wp--preset--color--text-secondary);
+}
+.sf-fdetail-config__options {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px;
+}
+/* The pills. The input is 1px and transparent rather than display:none,
+   because a hidden input cannot take focus and these inputs ARE the widget:
+   the keyboard path is Tab to an input, Space to toggle it, and the ring is
+   drawn on the pill beside it. */
+.sf-fdetail-config__opt {
+	display: inline-flex;
+	align-items: center;
+	gap: 7px;
+	padding: 4px 11px 4px 9px;
+	border: 1px solid var(--wp--preset--color--border-light);
+	border-radius: 999px;
+	font-size: 13px;
+	line-height: 1.6;
+	color: var(--wp--preset--color--text-primary);
+	cursor: pointer;
+	transition: border-color .15s ease, background-color .15s ease;
+}
+.sf-fdetail-config__opt:hover { border-color: var(--wp--preset--color--border-medium); }
+.sf-fdetail-config__input {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	margin: 0;
+	opacity: 0;
+}
+.sf-fdetail-config__box {
+	position: relative;
+	flex: none;
+	width: 13px;
+	height: 13px;
+	border: 1px solid var(--wp--preset--color--border-medium);
+	border-radius: 3px;
+}
+/* Shape by input type. Cosmetic, so it degrades to a square where :has() is
+   not supported — the pill still toggles, because that is the input's job. */
+.sf-fdetail-config__opt:has(.sf-fdetail-config__input[type="radio"]) .sf-fdetail-config__box {
+	border-radius: 999px;
+}
+.sf-fdetail-config__input:checked + .sf-fdetail-config__box {
+	background-color: var(--wp--preset--color--brand-green);
+	border-color: var(--wp--preset--color--brand-green);
+}
+.sf-fdetail-config__input:checked + .sf-fdetail-config__box::after {
+	content: "";
+	position: absolute;
+	left: 3px;
+	top: 4px;
+	width: 5px;
+	height: 2px;
+	border-left: 2px solid #fff;
+	border-bottom: 2px solid #fff;
+	transform: rotate(-45deg);
+}
+.sf-fdetail-config__input:focus-visible + .sf-fdetail-config__box {
+	outline: 2px solid var(--wp--preset--color--brand-green);
+	outline-offset: 2px;
+}
+.sf-fdetail-config__opt.is-on {
+	border-color: var(--wp--preset--color--brand-green);
+	background-color: var(--wp--preset--color--bg-light);
+}
+.sf-fdetail-config__img {
+	flex: none;
+	width: 46px;
+	height: 46px;
+	object-fit: contain;
+	border-radius: 8px;
+	background-color: var(--wp--preset--color--card-white);
+}
+/* A container the library has no picture for yet. Dashed, not broken: every
+   attachment_id in the Container Library ships at 0, so the picker's empty
+   state is the state it will be in on the day this deploys. */
+.sf-fdetail-config__img--empty {
+	border: 1px dashed var(--wp--preset--color--border-medium);
+}
+.sf-fdetail-config__note {
+	font-size: 12px;
+	color: var(--wp--preset--color--text-secondary);
+}
+/* An option that carries a thumbnail is a card, not a pill: a 46px image inside
+   a 999px radius reads as a banner. */
+.sf-fdetail-config__opt:has(.sf-fdetail-config__img) {
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 4px;
+	min-width: 92px;
+	padding: 8px 10px;
+	border-radius: 12px;
+}
+.sf-fdetail-config__summary {
+	margin: 10px 0 0;
+	padding: 8px 12px;
+	border-radius: 8px;
+	background-color: var(--wp--preset--color--bg-light);
+	font-size: 13px;
+	line-height: 1.5;
+	color: var(--wp--preset--color--text-primary);
+}
+.sf-fdetail-config__summary[hidden],
+.sf-fdetail-config__note[hidden] { display: none; }
+/* Both are created by config.js, so a visitor without the script is never shown
+   a button that opens nothing. */
+.sf-fdetail-config__open,
+.sf-fdetail-config__close { display: none; }
+body.sf-config-lock { overflow: hidden; }
+@media (max-width: 768px) {
+	.sf-fdetail-config__open {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 100%;
+		padding: 11px 16px;
+		border: 1px solid var(--wp--preset--color--brand-green);
+		border-radius: 999px;
+		background-color: var(--wp--preset--color--card-white);
+		font-size: 14px;
+		font-weight: 600;
+		color: var(--wp--preset--color--brand-green);
+		cursor: pointer;
+	}
+	/* --js is set by config.js. Without it the list stays inline: the drawer
+	   exists only where something can open and close it. */
+	.sf-fdetail-config--js .sf-fdetail-config__list { display: none; }
+	.sf-fdetail-config--open .sf-fdetail-config__list {
+		display: block;
+		position: fixed;
+		inset: 0;
+		z-index: 96;
+		margin: 0;
+		padding: 20px 20px 96px;
+		overflow-y: auto;
+		background-color: var(--wp--preset--color--card-white);
+		-webkit-overflow-scrolling: touch;
+	}
+	.sf-fdetail-config--open .sf-fdetail-config__close {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		position: fixed;
+		left: 20px;
+		right: 20px;
+		bottom: 20px;
+		z-index: 97;
+		padding: 12px 16px;
+		border: 0;
+		border-radius: 999px;
+		background-color: var(--wp--preset--color--brand-green);
+		font-size: 14px;
+		font-weight: 600;
+		color: #fff;
+		cursor: pointer;
+	}
+}
+
 /* <=767px: the label column cannot hold "Production lead time" next to a
    value, so each field stacks as a labelled row. Same trade .sf-spectable
    makes — display:block drops the table semantics for assistive tech, and

@@ -11,6 +11,13 @@
  * actually clicked. The hero CTA carries href="/contact/#quote" like the
  * capsule, so a visitor without this file is navigated instead of ignored.
  *
+ * 1.2.0 — batch H7d added the configurator above this band. Two consequences
+ * here: the reveal is anchored on whichever band the page actually rendered
+ * (the choice controls come first, the four non-choice rows after them), and
+ * the posted body carries the visitor's selection as one more field. The
+ * field is what config.js filled in; it is empty when nothing was ticked, and
+ * the endpoint then falls back to the record's own values.
+ *
  * Reveal: the capsule is emitted with `hidden` (sinofresh_inquiry_button()
  * sets it in the markup, not in CSS) and this file removes it when the
  * parameter band's top has crossed the middle of the viewport — the brief's
@@ -76,7 +83,11 @@
 
 		/* ---------------------------------------------------------------- reveal */
 
-		var band    = document.querySelector('.sf-fdetail2__params');
+		/* Batch H7d put the choice controls above the parameter rows, so the band
+		   the reveal watches is whichever of the two the page rendered first.
+		   Both are on 42 pages today; a record that renders neither reaches the
+		   no-band branch below, which is unchanged. */
+		var band    = document.querySelector('.sf-fdetail-config, .sf-fdetail2__params');
 		var revealed = false;
 		var ticking  = false;
 
@@ -213,6 +224,10 @@
 				message: val('message'),
 				website: val('website'),
 				formula: val('formula'),
+				/* Batch H7d: the configurator's JSON, as written by config.js.
+				   Empty when the visitor ticked nothing, and the endpoint then
+				   sends the record's own specification. */
+				config:  val('config'),
 				ts:      val('ts'),
 				source:  window.location.href
 			};
