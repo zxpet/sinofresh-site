@@ -28,7 +28,7 @@ add_action('after_setup_theme', function() {
 });
 
 add_action('wp_enqueue_scripts', function() {
-	wp_enqueue_style('sinofresh-style', get_stylesheet_uri(), array(), '2.10.55');
+	wp_enqueue_style('sinofresh-style', get_stylesheet_uri(), array(), '2.10.56');
 	// Sticky nav: every template renders parts/header.html, so this is site-wide.
 	wp_enqueue_script('sinofresh-sticky-header', get_template_directory_uri() . '/assets/js/sticky-header.js', array(), '1.0.0', true);
 	wp_enqueue_script('sinofresh-ui-components', get_template_directory_uri() . '/assets/js/ui-components.js', array(), '1.0.0', true);
@@ -185,7 +185,7 @@ add_action('wp_enqueue_scripts', function() {
 	$dosage_pages = ['soft-chews', 'tablets', 'powders', 'pastes', 'drops', 'liquids', 'fish-oil', 'dental-chews'];
 	$is_dosage_page = is_page($dosage_pages) || is_page_template(array_map(fn($s) => "page-$s", $dosage_pages));
 	if ($is_dosage_page) {
-		wp_enqueue_style('sinofresh-configurator', get_template_directory_uri() . '/assets/css/configurator.css', array(), '2.9');
+		wp_enqueue_style('sinofresh-configurator', get_template_directory_uri() . '/assets/css/configurator.css', array(), '2.10');
 		wp_enqueue_script('sinofresh-configurator', get_template_directory_uri() . '/assets/js/configurator.js', array(), '2.3', true);
 	}
 	// Product gallery: builds the thumbnail strip under the main photo of the

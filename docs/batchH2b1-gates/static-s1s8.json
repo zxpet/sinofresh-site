@@ -1,0 +1,186 @@
+{
+  "checks": {
+    "S1": {
+      "rows": [
+        {
+          "page": "page-soft-chews.html",
+          "opens": 125,
+          "closes": 125,
+          "balance": 0,
+          "stack": true,
+          "lines": 447,
+          "ok": true
+        },
+        {
+          "page": "page-tablets.html",
+          "opens": 127,
+          "closes": 127,
+          "balance": 0,
+          "stack": true,
+          "lines": 444,
+          "ok": true
+        },
+        {
+          "page": "page-dental-chews.html",
+          "opens": 126,
+          "closes": 126,
+          "balance": 0,
+          "stack": true,
+          "lines": 454,
+          "ok": true
+        },
+        {
+          "page": "page-powders.html",
+          "opens": 127,
+          "closes": 127,
+          "balance": 0,
+          "stack": true,
+          "lines": 444,
+          "ok": true
+        },
+        {
+          "page": "page-fish-oil.html",
+          "opens": 126,
+          "closes": 126,
+          "balance": 0,
+          "stack": true,
+          "lines": 454,
+          "ok": true
+        },
+        {
+          "page": "page-pastes.html",
+          "opens": 127,
+          "closes": 127,
+          "balance": 0,
+          "stack": true,
+          "lines": 444,
+          "ok": true
+        },
+        {
+          "page": "page-liquids.html",
+          "opens": 126,
+          "closes": 126,
+          "balance": 0,
+          "stack": true,
+          "lines": 454,
+          "ok": true
+        },
+        {
+          "page": "page-drops.html",
+          "opens": 126,
+          "closes": 126,
+          "balance": 0,
+          "stack": true,
+          "lines": 454,
+          "ok": true
+        }
+      ],
+      "detail": {
+        "balance": 0,
+        "stack": true
+      }
+    },
+    "S2": {
+      "rows": [
+        {
+          "page": "page-soft-chews.html",
+          "sha12": "835c81666e2a",
+          "sections": 1
+        },
+        {
+          "page": "page-tablets.html",
+          "sha12": "835c81666e2a",
+          "sections": 1
+        },
+        {
+          "page": "page-dental-chews.html",
+          "sha12": "835c81666e2a",
+          "sections": 1
+        },
+        {
+          "page": "page-powders.html",
+          "sha12": "835c81666e2a",
+          "sections": 1
+        },
+        {
+          "page": "page-fish-oil.html",
+          "sha12": "835c81666e2a",
+          "sections": 1
+        },
+        {
+          "page": "page-pastes.html",
+          "sha12": "835c81666e2a",
+          "sections": 1
+        },
+        {
+          "page": "page-liquids.html",
+          "sha12": "835c81666e2a",
+          "sections": 1
+        },
+        {
+          "page": "page-drops.html",
+          "sha12": "835c81666e2a",
+          "sections": 1
+        }
+      ]
+    },
+    "S3": {
+      "files": []
+    },
+    "S4": {
+      "cfg_heads": [],
+      "style_heads": [
+        ".sf-explore",
+        ".sf-explore__title",
+        ".sf-explore__chips",
+        ".sf-explore__chip",
+        ".sf-explore__chip:hover",
+        ".sf-explore__chip:focus-visible",
+        ".sf-explore__chip.is-current",
+        ".sf-explore__btn",
+        ".sf-explore__btn:hover",
+        ".sf-explore",
+        ".sf-explore__title",
+        ".sf-explore__chips",
+        ".sf-explore__chips::-webkit-scrollbar",
+        ".sf-explore__btn",
+        ".sf-explore__btn,\n\t.sf-explore__chip"
+      ]
+    },
+    "S5": {
+      "style": 164,
+      "cfg": 7
+    },
+    "S6": {
+      "assets/css/configurator.css": {
+        "before": 958,
+        "after": 832,
+        "want": 832
+      },
+      "style.css": {
+        "before": 8778,
+        "after": 8899,
+        "want": 8899
+      }
+    },
+    "S7": {},
+    "S8": {
+      "changed": [
+        "assets/css/configurator.css",
+        "functions.php",
+        "style.css",
+        "templates/page-dental-chews.html",
+        "templates/page-drops.html",
+        "templates/page-fish-oil.html",
+        "templates/page-liquids.html",
+        "templates/page-pastes.html",
+        "templates/page-powders.html",
+        "templates/page-soft-chews.html",
+        "templates/page-tablets.html",
+        "templates/single-sf_formula.html"
+      ],
+      "contract": []
+    }
+  },
+  "fails": []
+}
