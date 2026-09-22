@@ -334,8 +334,7 @@ def check(base, cand, repo, verbose=True, inject=None, survivors=None,
                          {'removed': [], 'runs': [['.sf-header { color: red; }']],
                           'intervals': []})
     ok('the diff touches only the declared files',
-       set(files) <= declared_files and
-       all(p.startswith(DECLARED_PREFIXES) or p in declared_files for p in files),
+       all(p in declared_files or p.startswith(DECLARED_PREFIXES) for p in files),
        'undeclared=%s' % (sorted(p for p in files
                                  if p not in declared_files and
                                  not p.startswith(DECLARED_PREFIXES)) or 'none'))
