@@ -58,6 +58,7 @@ usage:
     [--json OUT] on any mode
 """
 import argparse
+import base64
 import copy
 import hashlib
 import json
@@ -69,8 +70,10 @@ import tempfile
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
-sys.path.insert(0, HERE)
-from sf_masked_cmp import masked                                     # noqa: E402
+# NB: sf_masked_cmp.masked() is deliberately NOT imported here. A/A must certify
+# that THIS tool's (narrower) mask set is sufficient; running A/A on the broader
+# standard set would let A/A pass while the proof cannot. The standard
+# comparator was still run against both captures and reported 75/75 identical.
 
 # ---------------------------------------------------------------- declarations
 
@@ -85,11 +88,96 @@ NEW_JS_VER = '1.2.0'
 OLD_STYLE_VER = '2.10.60'
 OLD_JS_VER = '1.1.0'
 
+# The noise masks, applied to BOTH sides before the fold. Taken from
+# tools/sf_masked_cmp.py, which is the batch-standard mask set, but deliberately
+# WITHOUT its two catch-all entries (`'[A-Za-z0-9+/=]{16,}'` and
+# `[A-Za-z0-9+/]{40,}`): this batch's proof is a delete-proof, and a mask broad
+# enough to erase a 40-character base64 run is also broad enough to erase a real
+# content change. Batch H5's note on the same mask set says it: a mask that
+# ERASES content makes the gate blind to changes in that content.
+#
+# Every entry kept here is a per-request artefact with no site content in it,
+# and the first byte-proof run of this batch is why the list exists at all:
+# without the Cloudflare pair, all 75 pages differ, at the same byte count, in
+# `/cdn-cgi/l/email-protection#<hex>` — one address, re-encoded per response.
+MASK_SET = [
+    (re.compile(r'sinofresh-theme-preflight'), 'sinofresh-theme', 'preflight_theme_dir'),
+    (re.compile(r'email-protection#[0-9a-f]+'), 'email-protection#MASK', 'cf_email_link'),
+    (re.compile(r'data-cfemail="[0-9a-f]+"'), 'data-cfemail="MASK"', 'cf_email_attr'),
+    (re.compile(r'gform_phone_dropdown_[0-9a-f]+'), 'gform_phone_dropdown_MASK', 'gf_phone_id'),
+    (re.compile(r'"config_nonce":"[0-9a-f]{10}"'), '"config_nonce":"MASK"', 'gf_config_nonce'),
+    (re.compile(r'"[a-z0-9_]*nonce[a-z0-9_]*":"[0-9a-f]{10}"'),
+     '"nonce":"MASK"', 'inline_nonce'),
+    (re.compile(r'nonce=[0-9a-f]{10}\b'), 'nonce=MASK', 'url_nonce'),
+    # Gravity Forms' hidden "random" field value. 108 base64 characters on both
+    # sides, decoding to non-UTF-8 bytes — it is a per-render anti-spam token,
+    # not the currency (data-currency='USD' is the currency).
+    (re.compile(r"(name='gform_currency'[^>]*?value=')[^']*'"),
+     r"\1MASK'", 'gf_currency_value'),
+    (re.compile(r"(name='gform_unique_id'[^>]*?value=')[^']*'"),
+     r"\1MASK'", 'gf_unique_id_value'),
+]
+
+# Gravity Forms inlines a 612-character base64 blob whose DECODED form is
+#     ["{\"gform_submission_method\":[...],\"gform_theme\":\"<hex>\",
+#       \"gform_style_settings\":\"<hex>\",\"form_id\":\"<hex>\",
+#       \"url\":\"<hex>\",\"state_timestamp\":\"<hex>\"}","<hex>",<unix-ts>]
+# i.e. form config hashes and a cache-buster timestamp — no site content. It
+# changes on every response, so it has to be masked; and because the mask ERASES
+# a 612-byte stretch, gf_blob_proof() reads it back on both sides and requires the
+# decoded forms to agree once token classes are masked.
+#
+# The identification is DECODE-BASED, not a base64 substring search: the blob
+# encodes `\"state_timestamp\"` with the escaped quotes, so a byte-aligned run of
+# base64 characters would have to start at the right offset to contain the
+# encoding of the plain word — measured, it does not (the naive hint matched 0 of
+# the runs). A blanket `[A-Za-z0-9+/]{40,}` mask is not the answer either: 8 of
+# the 11 runs of that shape on /contact/ decode to binary and are not base64 at
+# all, they are inline SVG path data — real content.
+GF_STATE_NEEDLE = 'state_timestamp'
+GF_BLOB_MIN = 200
+B64_RUN = re.compile(r'[A-Za-z0-9+/]{40,}={0,2}')
+
+
+def _decode_run(raw):
+    try:
+        return base64.b64decode(raw + '=' * (-len(raw) % 4)).decode('utf-8')
+    except Exception:
+        return None
+
+
+def mask(text):
+    counts = {}
+    for pat, repl, name in MASK_SET:
+        n = len(pat.findall(text))
+        if n:
+            counts[name] = n
+        text = pat.sub(repl, text)
+    # the conditional pass, after the attribute masks have taken their values out
+    out, last, n = [], 0, 0
+    for m in B64_RUN.finditer(text):
+        raw = m.group(0)
+        if len(raw) < GF_BLOB_MIN:
+            continue
+        dec = _decode_run(raw)
+        if dec is None or GF_STATE_NEEDLE not in dec:
+            continue
+        out.append(text[last:m.start()])
+        out.append('GF_STATE_MASK')
+        last = m.end()
+        n += 1
+    if n:
+        counts['gf_state_blob'] = n
+        text = ''.join(out) + text[last:]
+    return text, counts
+
+
 # The deleted element. Anchored on the exact attribute pair the shortcode
 # printed, and non-greedy: the JSON body is escaped (`<\\/script`) by
 # sinofresh_formula_script_json(), so the first </script> really is the end.
 PAYLOAD_RE = re.compile(
     r'<script type="application/json" class="sf-formulas-data">.*?</script>', re.S)
+
 
 # Declared OLD strings that must be gone from the candidate (coverage).
 #
@@ -169,6 +257,7 @@ def main_proof(base, cand, verbose=True):
     pages_with_payload, payload_bytes, payload_elems = 0, 0, 0
     parsed_ok = 0
     ld_before = ld_after = 0
+    mask_totals, mask_pages = {}, {}
 
     names = sorted(set(pages(base)) | set(pages(cand)))
     for n in names:
@@ -177,7 +266,13 @@ def main_proof(base, cand, verbose=True):
             rows.append({'page': n, 'status': 'MISSING'})
             bad += 1
             continue
-        A, B = read(pa), read(pb)
+        A_raw, B_raw = read(pa), read(pb)
+        A, _ = mask(A_raw)
+        B, mask_hits = mask(B_raw)
+        for k, v in mask_hits.items():
+            mask_totals[k] = mask_totals.get(k, 0) + v
+        for k in mask_hits:
+            mask_pages[k] = mask_pages.get(k, 0) + 1
 
         exp = A
         for old, new in FOLD:
@@ -239,13 +334,17 @@ def main_proof(base, cand, verbose=True):
               % (payload_elems, pages_with_payload, payload_bytes))
         print('  payload parsed ok    : %d/%d' % (parsed_ok, payload_elems))
         print('  ld+json blocks       : %d -> %d' % (ld_before, ld_after))
+        print('  masks (count/pages)  : %s'
+              % ', '.join('%s=%d/%d' % (k, mask_totals[k], mask_pages[k])
+                          for k in sorted(mask_totals)))
         print('  %s  confined change: %d/%d pages equal after the declared edit'
               % ('PASS' if ok else 'FAIL', len(rows) - bad, len(rows)))
 
     rep = {'ok': ok, 'rows': rows, 'diff': bad,
            'folded': folds, 'payload_pages': pages_with_payload,
            'payload_elems': payload_elems, 'payload_bytes': payload_bytes,
-           'payload_parsed': parsed_ok, 'ld_json': [ld_before, ld_after]}
+           'payload_parsed': parsed_ok, 'ld_json': [ld_before, ld_after],
+           'masks': mask_totals, 'mask_pages': mask_pages}
     # three side assertions the headline claim depends on
     extra = []
     if folds['style'] != 75:
@@ -338,6 +437,75 @@ def invariants(base, cand, verbose=True):
     return {'ok': ok, 'bad': bad, 'rows': rows, 'logo_total': tot_logo}
 
 
+# --------------------------------------------- the masked blob, read back
+
+TOKEN_MASK = re.compile(r'[0-9a-f]{16,}')
+NUM_MASK = re.compile(r'\d{9,}')
+CURRENCY = re.compile(r"name='gform_currency'[^>]*?value='([^']*)'")
+
+
+def _gf_state_blob(text):
+    """The base64 run that decodes to GF's state/config blob, or (None, None)."""
+    for m in B64_RUN.finditer(text):
+        raw = m.group(0)
+        if len(raw) < GF_BLOB_MIN:
+            continue
+        dec = _decode_run(raw)
+        if dec is not None and GF_STATE_NEEDLE in dec:
+            return raw, dec
+    return None, None
+
+
+def gf_blob_proof(base, cand, verbose=True):
+    """Read back what mask() erased.
+
+    mask() deletes a 612-byte stretch per page so the byte proof can run at all,
+    which is precisely the blindness batch H5 warns about in the mask set's own
+    docstring. So the erased stretch is read back: decode both sides, mask the
+    token classes INSIDE the decoded text, and require equality. In the other
+    direction the masked currency value is asserted to be non-text, which is what
+    justifies masking it: a token does not decode to UTF-8.
+    """
+    rows, bad, seen, binary_ok = [], 0, 0, 0
+    for n in sorted(set(pages(base)) & set(pages(cand))):
+        A = read(os.path.join(base, n + '.html'))
+        B = read(os.path.join(cand, n + '.html'))
+        # the masked currency value must not be text, which is what justifies
+        # masking it — a token does not decode to UTF-8. Checked on every page,
+        # not only on the pages that carry the state blob.
+        for v in CURRENCY.findall(A) + CURRENCY.findall(B):
+            if v and _decode_run(v) is None:
+                binary_ok += 1
+        ra, da = _gf_state_blob(A)
+        rb, db = _gf_state_blob(B)
+        if (ra is None) != (rb is None):
+            bad += 1
+            rows.append({'page': n, 'why': 'blob present on one side only'})
+            continue
+        if ra is None:
+            continue
+        seen += 1
+        ma = NUM_MASK.sub('N', TOKEN_MASK.sub('HEX', da))
+        mb = NUM_MASK.sub('N', TOKEN_MASK.sub('HEX', db))
+        if ma != mb:
+            bad += 1
+            i = first_diff(ma, mb)
+            rows.append({'page': n, 'why': 'decoded blobs differ',
+                         'a': ctx(ma, i), 'b': ctx(mb, i)})
+    ok = bad == 0 and seen > 0 and binary_ok > 0
+    if verbose:
+        for r in rows[:8]:
+            print('  %-42s %s' % (r['page'], r['why']))
+            if 'a' in r:
+                print('      decoded A:', repr(r['a']))
+                print('      decoded B:', repr(r['b']))
+        print('  gf state blobs read back  : %d page(s), %d differ' % (seen, bad))
+        print('  masked currency values that are NOT text : %d' % binary_ok)
+        print('  %s  masked-blob read-back: the erased stretch differs only in '
+              'token classes' % ('PASS' if ok else 'FAIL'))
+    return {'ok': ok, 'pages': seen, 'bad': bad, 'binary_ok': binary_ok, 'rows': rows}
+
+
 # ----------------------------------------------------------- source invariants
 
 def source_checks(theme, verbose=True):
@@ -392,8 +560,8 @@ def aa(dir_a, dir_b, verbose=True):
             rows.append({'page': n, 'status': 'MISSING'})
             bad += 1
             continue
-        ma, _ = masked(read(pa))
-        mb, _ = masked(read(pb))
+        ma, _ = mask(read(pa))
+        mb, _ = mask(read(pb))
         same = ma == mb
         if not same:
             bad += 1
@@ -447,7 +615,31 @@ def sabotage_cases(base, cand):
          lambda D: _clone(base, D)),
         ('M10 one character of visible copy changed',
          lambda D: _copyflip(D, 'faq')),
+        ('M11 content changed INSIDE the masked GF blob',
+         lambda D: _sabotage_blob(D)),
     ]
+
+
+def _sabotage_blob(d):
+    """Rewrite the decoded GF blob with one word changed, and re-encode it.
+
+    The byte proof cannot see this by construction — the whole blob is masked —
+    so gf_blob_proof is the only gate that can catch it. Without M11 the
+    read-back assertion would be untested.
+    """
+    for pg in pages(d):
+        p = os.path.join(d, pg + '.html')
+        t = read(p)
+        raw, dec = _gf_state_blob(t)
+        if raw is None:
+            continue
+        dec2 = dec.replace('gform_theme', 'gform_themX', 1)
+        if dec2 == dec:
+            continue
+        enc = base64.b64encode(dec2.encode('utf-8')).decode('ascii')
+        _write(p, t.replace(raw, enc, 1))
+        return len(enc)
+    return 0
 
 
 def _write(p, t):
@@ -545,28 +737,32 @@ def matrix(base, cand, verbose=True):
             proof = main_proof(base, D, verbose=False)
             cov = coverage(D, verbose=False)
             inv = invariants(base, D, verbose=False)
-            caught = (not proof['ok']) or (not cov['ok']) or (not inv['ok'])
+            blob = gf_blob_proof(base, D, verbose=False)
+            caught = (not proof['ok']) or (not cov['ok']) or (not inv['ok']) \
+                or (not blob['ok'])
             rows.append({'case': name, 'changed': changed, 'caught': caught,
                          'proof_ok': proof['ok'], 'coverage_ok': cov['ok'],
-                         'invariants_ok': inv['ok']})
+                         'invariants_ok': inv['ok'], 'readback_ok': blob['ok']})
             if verbose:
-                print('  %s  %-46s changed=%-6d proof=%s coverage=%s invariants=%s'
+                print('  %s  %-46s changed=%-6d proof=%s coverage=%s invariants=%s readback=%s'
                       % ('ok  ' if caught else 'MISS', name, changed,
                          'PASS' if proof['ok'] else 'FAIL',
                          'PASS' if cov['ok'] else 'FAIL',
-                         'PASS' if inv['ok'] else 'FAIL'))
-    # control: the real candidate must pass all three
+                         'PASS' if inv['ok'] else 'FAIL',
+                         'PASS' if blob['ok'] else 'FAIL'))
+    # control: the real candidate must pass all four
     proof = main_proof(base, cand, verbose=False)
     cov = coverage(cand, verbose=False)
     inv = invariants(base, cand, verbose=False)
-    control = proof['ok'] and cov['ok'] and inv['ok']
+    blob = gf_blob_proof(base, cand, verbose=False)
+    control = proof['ok'] and cov['ok'] and inv['ok'] and blob['ok']
     vacuous = [r['case'] for r in rows if not r['changed']]
     missed = [r['case'] for r in rows if not r['caught']]
     ok = control and not missed and not vacuous
     if verbose:
         for c in vacuous:
             print('  FAIL  sabotage case was a no-op: %s' % c)
-        print('  %s  control: the real candidate passes all three gates'
+        print('  %s  control: the real candidate passes all four gates'
               % ('ok  ' if control else 'FAIL'))
         print('  %s  matrix: %d/%d sabotage cases caught, %d vacuous'
               % ('PASS' if ok else 'FAIL', len(rows) - len(missed), len(rows), len(vacuous)))
@@ -643,6 +839,18 @@ def negctl(base, cand, theme, verbose=True):
         rec('N6 an unapplied style.css version must FAIL the source check',
             not s['ok'], 'source_ok=%s' % s['ok'])
 
+    # N7  the mask is blind by construction, so the read-back must be the thing
+    #     that catches content changed inside the erased stretch.
+    with tempfile.TemporaryDirectory() as td:
+        D = os.path.join(td, 'cand')
+        shutil.copytree(cand, D)
+        changed = _sabotage_blob(D)
+        p = main_proof(base, D, verbose=False)
+        g = gf_blob_proof(base, D, verbose=False)
+        rec('N7 content inside the masked GF blob: byte proof PASSES, read-back FAILS',
+            changed > 0 and p['ok'] and not g['ok'],
+            'changed=%d proof=%s readback=%s' % (changed, p['ok'], g['ok']))
+
     ok = all(r['caught'] for r in rows)
     if verbose:
         for r in rows:
@@ -685,6 +893,8 @@ def main():
         r = coverage(args.cand); out['coverage'] = r; ok &= r['ok']
         print('== invariants: counts that do not depend on the declaration ==')
         r = invariants(args.base, args.cand); out['invariants'] = r; ok &= r['ok']
+        print('== masked-blob read-back: what the mask erased, checked separately ==')
+        r = gf_blob_proof(args.base, args.cand); out['readback'] = r; ok &= r['ok']
         if args.matrix:
             print('== sabotage matrix ==')
             r = matrix(args.base, args.cand); out['matrix'] = r; ok &= r['ok']

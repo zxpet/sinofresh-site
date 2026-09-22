@@ -1,0 +1,27 @@
+== main proof: candidate == fold(baseline) minus the declared payload ==
+  pages                : 75  (0 mismatched/missing)
+  folded style token   : 75 pages
+  folded js token      : 60 pages
+  payload removed      : 60 element(s) on 60 page(s), 71832 JSON bytes
+  payload parsed ok    : 60/60
+  ld+json blocks       : 376 -> 376
+  masks (count/pages)  : cf_email_attr=155/75, cf_email_link=226/75, gf_config_nonce=23/23, gf_currency_value=23/23, gf_phone_id=8/2, gf_state_blob=23/23, gf_unique_id_value=23/23, inline_nonce=54/45, preflight_theme_dir=1225/75, url_nonce=75/75
+  PASS  confined change: 75/75 pages equal after the declared edit
+== coverage: the declared old strings are gone from the candidate ==
+  ok   class="sf-formulas-data"         0 occurrence(s)  
+  ok   style.css?ver=2.10.60            0 occurrence(s)  
+  ok   formulas.js?ver=1.1.0            0 occurrence(s)  
+  new style token 2.10.61 present on : 75 pages (want 75)
+  new js token    1.2.0 present on   : 60 pages (want 60)
+  PASS  coverage: declared old strings are gone
+== invariants: counts that do not depend on the declaration ==
+  pages with a changing count : 0
+  logo alt total on candidate  : 150 (want 150)
+  PASS  invariants
+== masked-blob read-back: what the mask erased, checked separately ==
+  gf state blobs read back  : 23 page(s), 0 differ
+  masked currency values that are NOT text : 46
+  PASS  masked-blob read-back: the erased stretch differs only in token classes
+
+PASS  batch H6 gate
+  json -> _backup/b2d-h6-gates-synth.json
