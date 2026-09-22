@@ -184,10 +184,6 @@ add_action('wp_enqueue_scripts', function() {
 	// does not set the wp_page_template meta — so check the page slug as well.
 	$dosage_pages = ['soft-chews', 'tablets', 'powders', 'pastes', 'drops', 'liquids', 'fish-oil', 'dental-chews'];
 	$is_dosage_page = is_page($dosage_pages) || is_page_template(array_map(fn($s) => "page-$s", $dosage_pages));
-	if ($is_dosage_page) {
-		wp_enqueue_style('sinofresh-configurator', get_template_directory_uri() . '/assets/css/configurator.css', array(), '2.10');
-		wp_enqueue_script('sinofresh-configurator', get_template_directory_uri() . '/assets/js/configurator.js', array(), '2.3', true);
-	}
 	// Product gallery: builds the thumbnail strip under the main photo of the
 	// formula detail band. Step 2 put that band on the eight dosage pages and
 	// hung the script there; Step 3 moved the band to the 21 detail pages, so
