@@ -2,7 +2,7 @@
 Theme Name: SINO FRESH
 Author: Shandong SINO FRESH Pet Food Co., Ltd.
 Text Domain: sinofresh
-Version: 2.10.68
+Version: 2.10.69
 Requires at least: 6.0
 Requires PHP: 7.4
 License: GNU General Public License v2 or later
@@ -9361,5 +9361,224 @@ body.sf-config-lock { overflow: hidden; }
 
 	.sf-float-btn--inquiry.is-visible {
 		animation: none;
+	}
+}
+
+/* ==========================================================================
+   62. Batch H7h — the phone pass. Everything in this section is scoped to
+   <=480px: tablets (481-768) and desktops keep every rule they had, including
+   the H7d drawer, which this batch replaces ONLY at the phone width.
+
+   The type scale follows the platform floors (body text 16px, small text
+   14px, line-height >= 1.5): 13-15px body text triggers iOS Safari's
+   font-boosting and reads as a print catalogue on a phone. Every size here
+   overrides a base rule LATER in the cascade than that base rule, because
+   this section is the last thing in the file — the H7b lesson (.sf-fdetail2__title
+   died silently above its base rule) is why the whole pass lives at the end.
+   ========================================================================== */
+@media (max-width: 480px) {
+	/* ---- the type scale ------------------------------------------------- */
+	/* Parameter labels are small text: 14px is the floor, not 13. */
+	.sf-fdetail-config__label {
+		font-size: 14px;
+	}
+	/* Option text, values, intro, hero subtitle, FAQ answers, buttons: body
+	   text, 16px. The 1.5 line-heights are already in the base rules; the two
+	   that were tighter are restated here. */
+	.sf-fdetail-config__opt {
+		font-size: 16px;
+	}
+	.sf-fdetail-config__meta {
+		font-size: 16px;
+	}
+	.sf-fdetail-config__note {
+		font-size: 14px;
+	}
+	/* The placeholder name inside an 80px dashed slot is small text too. */
+	.sf-fdetail-config__empty-label {
+		font-size: 14px;
+		line-height: 1.2;
+	}
+	.sf-fdetail2__intro {
+		font-size: 16px;
+	}
+	.sf-fdetail2__term {
+		font-size: 14px;
+	}
+	.sf-fdetail2__value {
+		font-size: 16px;
+	}
+	.sf-fdetail2__chip {
+		font-size: 16px;
+	}
+	/* The H7c spec sheet is the parameters table of the reading area. */
+	.sf-fdetail-specs__term {
+		font-size: 14px;
+	}
+	.sf-fdetail-specs__value {
+		font-size: 16px;
+	}
+	.sf-fdetail-specs__chip {
+		font-size: 16px;
+	}
+	/* The hero's subtitle line under the title on the dark band. */
+	.sf-formula-hero__meta {
+		font-size: 16px;
+	}
+	/* FAQ answers were 14px — the one body-text size below the floor. */
+	.sf-faq details p {
+		font-size: 16px;
+	}
+	.sf-fdetail-content__label {
+		font-size: 14px;
+	}
+	.sf-formula__cta {
+		font-size: 16px;
+	}
+
+	/* ---- the redundancies ------------------------------------------------ */
+	/* The value-preview row is already gone under --js (H7g); the hint line
+	   ("Choose one or more") is instruction the radio group carries in its
+	   own semantics, so on a phone it is pure height. */
+	.sf-fdetail-config__hint {
+		display: none;
+	}
+
+	/* ---- the configurator: inline list, the fold replaces the drawer ----- */
+	/* At 481-768 the H7d drawer still runs. At <=480 the list stands inline
+	   and config.js folds it to the first three groups behind one button —
+   the four rulings' "折叠". The drawer button never shows at this width. */
+	.sf-fdetail-config--js .sf-fdetail-config__open {
+		display: none;
+	}
+	.sf-fdetail-config--js .sf-fdetail-config__list {
+		display: block;
+		position: static;
+		inset: auto;
+		z-index: auto;
+		padding: 0;
+		overflow: visible;
+		background: none;
+	}
+	/* The fold button is created by config.js; absent without it. */
+	.sf-fdetail-config--js .sf-fdetail-config__fold {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 100%;
+		margin-top: 12px;
+		padding: 10px 16px;
+		border: 1px solid var(--wp--preset--color--border-medium);
+		border-radius: 999px;
+		background: none;
+		font-size: 14px;
+		font-weight: 600;
+		line-height: 1.5;
+		color: var(--wp--preset--color--brand-green);
+		cursor: pointer;
+	}
+	/* Folded: groups 4+ wait behind the button. Scoped to the folded class so
+	   an expanded list is one class flip, and to <=480 so the desktop list is
+	   never folded even if the class survives a rotation. */
+	.sf-fdetail-config--js .sf-fdetail-config__list.sf-config-folded
+		.sf-fdetail-config__group:nth-child(n + 4) {
+		display: none;
+	}
+
+	/* ---- the image pickers: three columns, 80px tiles -------------------- */
+	.sf-fdetail-config__group[data-sf-config-group="shape"] .sf-fdetail-config__options,
+	.sf-fdetail-config__group[data-sf-config-group="container"] .sf-fdetail-config__options {
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		gap: 8px;
+	}
+	.sf-fdetail-config__group[data-sf-config-group="shape"] .sf-fdetail-config__opt,
+	.sf-fdetail-config__group[data-sf-config-group="container"] .sf-fdetail-config__opt {
+		display: flex;
+	}
+	.sf-fdetail-config__group[data-sf-config-group="shape"] .sf-fdetail-config__img,
+	.sf-fdetail-config__group[data-sf-config-group="container"] .sf-fdetail-config__img {
+		width: 80px;
+		height: 80px;
+	}
+
+	/* ---- the media area: strip out, dots in ------------------------------ */
+	/* The swipe itself already exists (formula-gallery.js 2.1.0 drags the
+	   stage); what a phone needs is the strip gone and the dots visible. */
+	.sf-fdetail2__media .sf-gallery__thumbs {
+		display: none;
+	}
+	.sf-gallery__dots {
+		/* Built by formula-gallery.js; absent without it, like the strip. */
+		display: none;
+	}
+	.sf-fdetail2__media .sf-gallery__dots {
+		display: flex;
+		justify-content: center;
+		gap: 8px;
+		margin-top: 0;
+	}
+	.sf-gallery__dot {
+		width: 10px;
+		height: 10px;
+		padding: 0;
+		border: 0;
+		border-radius: 999px;
+		background-color: var(--wp--preset--color--border-medium);
+		cursor: pointer;
+		transition: background-color 0.15s ease;
+	}
+	.sf-gallery__dot.is-active {
+		background-color: var(--wp--preset--color--accent);
+	}
+
+	/* ---- the bottom bar --------------------------------------------------- */
+	/* The floating circles become a full-width bar: inquiry + WhatsApp, side
+	   by side, never covering content (body gains the bar's height). The
+	   email circle hides — its address is in the footer contact line one
+   scroll away — and the back-to-top circle hides with it: a phone scrolls
+	   with one finger. z-index stays 9998: the bar is part of the float
+	   stack's layer, below the cookie banner's 9999, exactly as before. */
+	.sf-float-stack {
+		left: 0;
+		right: 0;
+		bottom: 0;
+		flex-direction: row;
+		align-items: stretch;
+		gap: 10px;
+		padding: 10px 12px calc(10px + env(safe-area-inset-bottom, 0px));
+		background-color: var(--wp--preset--color--card-white);
+		border-top: 1px solid var(--wp--preset--color--border-light);
+		box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.08);
+	}
+	.sf-float-btn {
+		flex: 1 1 0;
+		width: auto;
+		height: 48px;
+		border-radius: 999px;
+		font-size: 16px;
+	}
+	.sf-float-btn--email,
+	.sf-float-btn--top {
+		display: none;
+	}
+	/* The inquiry capsule ships `hidden` until its script reveals it past the
+	   parameter band; the bar leaves the slot to it. */
+	.sf-float-btn--inquiry {
+		width: auto;
+		min-width: 0;
+		height: 48px;
+		padding: 0 16px;
+		border-radius: 999px;
+		font-size: 16px;
+	}
+	/* The cookie banner overlays the bar from below, as it floated over the
+	   circles; lift the bar by the banner's stacked height. */
+	body.has-cookie-banner .sf-float-stack {
+		bottom: 268px;
+	}
+	/* The bar owns the strip the circles used to share with the page edge. */
+	body {
+		padding-bottom: 78px;
 	}
 }

@@ -28,7 +28,7 @@ add_action('after_setup_theme', function() {
 });
 
 add_action('wp_enqueue_scripts', function() {
-	wp_enqueue_style('sinofresh-style', get_stylesheet_uri(), array(), '2.10.68');
+	wp_enqueue_style('sinofresh-style', get_stylesheet_uri(), array(), '2.10.69');
 	// Sticky nav: every template renders parts/header.html, so this is site-wide.
 	wp_enqueue_script('sinofresh-sticky-header', get_template_directory_uri() . '/assets/js/sticky-header.js', array(), '1.0.0', true);
 	wp_enqueue_script('sinofresh-ui-components', get_template_directory_uri() . '/assets/js/ui-components.js', array(), '1.0.0', true);
@@ -47,7 +47,7 @@ add_action('wp_enqueue_scripts', function() {
 		   same list seen twice, so the two scripts are enqueued together and
 		   conditionally together — on the other 33 pages there is no band to
 		   configure and no dialog to carry a selection into. */
-		wp_enqueue_script('sinofresh-config', get_template_directory_uri() . '/assets/js/config.js', array(), '1.1.0', true);
+		wp_enqueue_script('sinofresh-config', get_template_directory_uri() . '/assets/js/config.js', array(), '1.2.0', true);
 	}
 	// On-this-page TOC (dot rail on marketing pages, text list on articles) +
 	// article extras (progress bar, inline CTA, feedback, print URL). The JS
@@ -138,7 +138,7 @@ add_action('wp_enqueue_scripts', function() {
 	// Absent, the band still shows the main photo — that is the no-JS contract,
 	// not a fallback path; the switch stays hidden with it.
 	if (is_singular('sf_formula')) {
-		wp_enqueue_script('sinofresh-formula-gallery', get_template_directory_uri() . '/assets/js/formula-gallery.js', array(), '2.1.0', true);
+		wp_enqueue_script('sinofresh-formula-gallery', get_template_directory_uri() . '/assets/js/formula-gallery.js', array(), '2.2.0', true);
 	}
 	// Standard Formulas CTAs (K1): the card grid on the eight dosage pages,
 	// the same 21-card grid on the sf_formula archive, and — since batch H7b

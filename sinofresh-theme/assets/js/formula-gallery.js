@@ -1,6 +1,7 @@
 /**
  * SINO FRESH — the product gallery: the [Photos][Video] switch, the thumbnail
- * strip and the video facade. 2.1.0 (batch H7a; 2.0.0 was batch H2a).
+ * strip and the video facade. 2.2.0 (batch H7h: the dot indicators a phone
+ * paginates with once the strip is hidden; 2.1.0 was batch H7a, 2.0.0 H2a).
  *
  * One data source: the <figure> frames the [sf_formula_gallery] shortcode
  * renders into .sf-gallery__stage. The switch's two labels are served by PHP,
@@ -140,6 +141,31 @@
 		});
 		inner.appendChild(tablist);
 
+		/* ---------- the dot indicators (batch H7h) ------------------------ */
+		/* On a phone the strip is display:none and the stage itself is the
+		   pager — the swipe was already here in 2.1.0 — so the position
+		   indicator moves to dots. One per PHOTO (the video frame has its own
+		   tab; dots paginate photos only, and paint() clears them in video
+		   mode). The dots are plain buttons, not a second tablist: the strip
+		   owns that role, and two tablists over one set of panels would make
+		   the tab order a lie on desktop, where the dots do not even show. */
+		var dots = document.createElement("div");
+		dots.className = "sf-gallery__dots";
+		var dotBtns = [];
+		photos.forEach(function (slide, i) {
+			var dot = document.createElement("button");
+			dot.type = "button";
+			dot.className = "sf-gallery__dot";
+			dot.setAttribute("aria-label", "Show photo " + (i + 1) + " of " + photos.length);
+			dot.setAttribute("aria-controls", slide.id);
+			dot.addEventListener("click", function () {
+				selectPhoto(i, false);
+			});
+			dots.appendChild(dot);
+			dotBtns.push(dot);
+		});
+		inner.appendChild(dots);
+
 		/* ---------- painting ---------- */
 		function show(slide, on) {
 			slide.classList.toggle("sf-gallery__slide--off", !on);
@@ -181,6 +207,13 @@
 				   the selection is kept, so [Photos] returns to the same photo
 				   rather than to the first one. */
 				tab.tabIndex = (on && !onVideo) ? 0 : -1;
+			});
+
+			/* The dots mirror the position. Not tabbable: on a phone a page
+			   of dot stops is worse than the swipe that already works, and
+			   keyboard/AT users on a phone have the photo frames themselves. */
+			dotBtns.forEach(function (dot, j) {
+				dot.classList.toggle("is-active", !onVideo && j === current);
 			});
 
 			Object.keys(tabBtns).forEach(function (kind) {

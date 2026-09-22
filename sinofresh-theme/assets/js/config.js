@@ -16,11 +16,13 @@
  *    the same list the sales desk will receive. Nothing picked means the input
  *    stays empty and the panel keeps the server-rendered specification — the
  *    dialog falls back to the product, which is what it did before this batch.
- * 3. On a phone, a full-screen drawer. Seven groups of options inline would
- *    push the price and the CTA off the first two screens, so below the
- *    breakpoint the list becomes a drawer behind one button. The button is
- *    created here, which is also why a visitor without this file is never shown
- *    a button that cannot open anything.
+ * 3. On a phone, the fold (batch H7h). Below 480px the list stands inline and
+ *    groups 4-7 wait behind one "View all specs" button — the first three
+ *    (the ones a buyer asks first) stay on the page. The expanded state is
+ *    kept in sessionStorage, so a visitor who unfolded once stays unfolded.
+ *    The H7d drawer it replaces keeps running at 481-768px, where seven
+ *    inline groups still outrun a tablet's viewport; at the phone width the
+ *    drawer button is never drawn, so the two interactions never coexist.
  *
  * The endpoint does not trust any of this: it validates every posted value
  * against the options it can derive from the post id and prints the labels
@@ -172,6 +174,43 @@
 
 		root.addEventListener('change', refresh);
 		refresh();
+
+		/* -------------------------------------------------- the fold (H7h) */
+
+		/* The button is created here for the reason the drawer's was: a visitor
+		   without this file must never be shown a control that does nothing.
+		   CSS draws it only at <=480px and only under --js, so on a desktop it
+		   is styled out of existence even though the node exists. */
+		var FOLD_KEY = 'sf-config-fold';
+		var fold = document.createElement('button');
+		fold.type = 'button';
+		fold.className = 'sf-fdetail-config__fold';
+		fold.setAttribute('aria-controls', list.id || 'sf-config-list');
+		if (!list.id) {
+			list.id = 'sf-config-list';
+		}
+		list.classList.add('sf-config-folded');
+		list.parentNode.insertBefore(fold, list.nextSibling);
+
+		function setFold(open) {
+			list.classList.toggle('sf-config-folded', !open);
+			fold.setAttribute('aria-expanded', open ? 'true' : 'false');
+			fold.textContent = open ? 'Show fewer specs ▴' : 'View all specs ▾';
+			try {
+				sessionStorage.setItem(FOLD_KEY, open ? 'open' : 'folded');
+			} catch (e) { /* private mode: the state just is not kept */ }
+		}
+		fold.addEventListener('click', function () {
+			setFold(list.classList.contains('sf-config-folded'));
+		});
+		/* A visitor who unfolded earlier in this session stays unfolded — the
+		   brief's "保持展开". Everything else starts folded: the first three
+		   groups are the summary, the button is the rest. */
+		var saved = null;
+		try {
+			saved = sessionStorage.getItem(FOLD_KEY);
+		} catch (e) { /* as above */ }
+		setFold(saved === 'open');
 
 		/* --------------------------------------------- gallery preview (H7g) */
 
