@@ -2,7 +2,7 @@
 Theme Name: SINO FRESH
 Author: Shandong SINO FRESH Pet Food Co., Ltd.
 Text Domain: sinofresh
-Version: 2.10.61
+Version: 2.10.62
 Requires at least: 6.0
 Requires PHP: 7.4
 License: GNU General Public License v2 or later
@@ -7931,8 +7931,11 @@ body.sf-inquiry-lock {
    block and core's own sheet sizes the tiles with
    `width: calc(33.33% - 16px)`. This markup is plain <figure>, so that rule
    cannot match and nothing here has to win a specificity fight. No img rule
-   in this file carries !important; keep it that way. ------------------- */
-.sf-gallery__title { margin: 0; }
+   in this file carries !important; keep it that way.
+
+   Batch H7a deleted the band's heading ("A Closer Look at {name}") and with it
+   the one rule that styled it, .sf-gallery__title { margin: 0; }. The switch
+   that took its place is styled at the end of this section. -------------- */
 .sf-gallery__stage {
 	position: relative;
 	max-width: 680px;
@@ -8030,7 +8033,8 @@ body.sf-inquiry-lock {
 }
 @media (prefers-reduced-motion: reduce) {
 	.sf-gallery__slide,
-	.sf-gallery__thumb {
+	.sf-gallery__thumb,
+	.sf-gallery__tab {
 		transition: none;
 	}
 }
@@ -8220,19 +8224,18 @@ body.sf-inquiry-lock {
 
 /* The gallery's inner wrapper is a grid with named areas, so the strip can
    move to the stage's left at >=1101 without any DOM change and without the
-   script having to know which of the two layouts it is running in. */
+   script having to know which of the two layouts it is running in. The third
+   area is the [Photos][Video] switch (batch H7a), and it holds the row the
+   heading had: the same slot, directly under the main photo. */
 .sf-fdetail2__media .sf-gallery__inner {
 	display: grid;
 	grid-template-columns: minmax(0, 1fr);
 	grid-template-areas:
-		"title"
 		"stage"
+		"tabs"
 		"thumbs";
 	gap: 16px;
 	align-items: start;
-}
-.sf-fdetail2__media .sf-gallery__title {
-	grid-area: title;
 }
 /* .sf-gallery__stage was written for a full-width band: 680px wide and
    auto-centred, which inside a column is a narrow box floating in the middle
@@ -8351,29 +8354,78 @@ body.sf-inquiry-lock {
 	height: 100%;
 	border: 0;
 }
-/* The video tile in the strip carries a scrim and a small triangle so it is
-   not mistaken for a sixth photo. Two pseudo-elements, both above the
-   thumbnail image, which is why the tile needs to be a containing block. */
-.sf-gallery__thumb--video {
+/* ---- the [Photos][Video] switch ------------------------------------------
+   Batch H7a. Three things about it are load-bearing:
+
+   1. It ships hidden. `.sf-gallery--js` is put on the band by
+      formula-gallery.js, so the bar has no styling at all until a script is
+      there to drive it — a no-JS visitor sees the photo area and no dead
+      controls, the same contract the strip already kept. The class is added
+      before the strip is built, so the two appear together.
+   2. The underline is a pseudo-element on the active tab rather than a
+      border, because a border cannot be transitioned without moving the text
+      it belongs to. It sits at the bottom of 10px of padding, which is the
+      room it needs and is the same on both labels.
+   3. `--accent` (#1B4D3E), not `--brand-green` (#5AB735): the accent token is
+      what the strip's selected tile is drawn with, so the switch and the
+      strip read as one control. The brand green is the logo's; putting it
+      here would give the band two greens.
+
+   The strip is hidden in video mode as well (.sf-gallery--video): a photo
+   picker with no photo on screen is an offer the visitor cannot act on. */
+.sf-gallery__tabs {
+	display: none;
+	justify-content: center;
+	gap: 28px;
+}
+.sf-fdetail2__media .sf-gallery__tabs {
+	grid-area: tabs;
+}
+.sf-gallery--js .sf-gallery__tabs {
+	display: flex;
+}
+.sf-gallery--video .sf-gallery__thumbs {
+	display: none;
+}
+.sf-gallery__tab {
 	position: relative;
+	margin: 0;
+	padding: 4px 2px 10px;
+	border: 0;
+	background: none;
+	-webkit-appearance: none;
+	appearance: none;
+	font-family: inherit;
+	font-size: 14px;
+	font-weight: 600;
+	line-height: 1.4;
+	color: var(--wp--preset--color--text-secondary);
+	cursor: pointer;
+	transition: color 0.15s ease;
 }
-.sf-gallery__thumb--video::before {
+.sf-gallery__tab::after {
 	content: "";
 	position: absolute;
-	inset: 0;
-	z-index: 1;
-	background: rgba(0, 0, 0, 0.3);
+	left: 0;
+	right: 0;
+	bottom: 0;
+	height: 2px;
+	background-color: var(--wp--preset--color--accent);
+	opacity: 0;
+	transition: opacity 0.15s ease;
 }
-.sf-gallery__thumb--video::after {
-	content: "";
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	z-index: 2;
-	margin: -6px 0 0 -4px;
-	border-style: solid;
-	border-width: 6px 0 6px 10px;
-	border-color: transparent transparent transparent var(--wp--preset--color--card-white);
+.sf-gallery__tab:hover {
+	color: var(--wp--preset--color--accent);
+}
+.sf-gallery__tab:focus-visible {
+	outline: 2px solid var(--wp--preset--color--accent);
+	outline-offset: 2px;
+}
+.sf-gallery__tab.is-active {
+	color: var(--wp--preset--color--accent);
+}
+.sf-gallery__tab.is-active::after {
+	opacity: 1;
 }
 
 /* ---- the parameters column ----------------------------------------------- */
@@ -8521,9 +8573,12 @@ body.sf-inquiry-lock {
 	}
 	.sf-fdetail2__media .sf-gallery__inner {
 		grid-template-columns: 72px minmax(0, 1fr);
+		/* The switch takes the stage's own column, so "centred" means centred
+		   under the main photo — not centred on the band, which would land it
+		   half a rail to the left of the frame it labels. */
 		grid-template-areas:
-			"title title"
-			"thumbs stage";
+			"thumbs stage"
+			".      tabs";
 		gap: 16px 12px;
 	}
 	/* Column, not row: and the scroll box goes away with it, because a rail

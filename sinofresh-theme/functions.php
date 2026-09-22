@@ -28,7 +28,7 @@ add_action('after_setup_theme', function() {
 });
 
 add_action('wp_enqueue_scripts', function() {
-	wp_enqueue_style('sinofresh-style', get_stylesheet_uri(), array(), '2.10.61');
+	wp_enqueue_style('sinofresh-style', get_stylesheet_uri(), array(), '2.10.62');
 	// Sticky nav: every template renders parts/header.html, so this is site-wide.
 	wp_enqueue_script('sinofresh-sticky-header', get_template_directory_uri() . '/assets/js/sticky-header.js', array(), '1.0.0', true);
 	wp_enqueue_script('sinofresh-ui-components', get_template_directory_uri() . '/assets/js/ui-components.js', array(), '1.0.0', true);
@@ -193,12 +193,13 @@ add_action('wp_enqueue_scripts', function() {
 	$dosage_pages = ['soft-chews', 'tablets', 'powders', 'pastes', 'drops', 'liquids', 'fish-oil', 'dental-chews'];
 	$is_dosage_page = is_page($dosage_pages) || is_page_template(array_map(fn($s) => "page-$s", $dosage_pages));
 	// Product gallery: builds the thumbnail strip under the main photo of the
-	// formula detail band. Step 2 put that band on the eight dosage pages and
-	// hung the script there; Step 3 moved the band to the 21 detail pages, so
-	// the script follows it. Absent, the band still shows the main photo and
-	// its heading — that is the no-JS contract, not a fallback path.
+	// formula detail band and drives the [Photos][Video] switch beside it.
+	// Step 2 put that band on the eight dosage pages and hung the script there;
+	// Step 3 moved the band to the 21 detail pages, so the script follows it.
+	// Absent, the band still shows the main photo — that is the no-JS contract,
+	// not a fallback path; the switch stays hidden with it.
 	if (is_singular('sf_formula')) {
-		wp_enqueue_script('sinofresh-formula-gallery', get_template_directory_uri() . '/assets/js/formula-gallery.js', array(), '2.0.0', true);
+		wp_enqueue_script('sinofresh-formula-gallery', get_template_directory_uri() . '/assets/js/formula-gallery.js', array(), '2.1.0', true);
 	}
 	// Standard Formulas CTAs (K1): the card grid on the eight dosage pages,
 	// the hero button on a formula detail page, and — since 2C Step2 — the
@@ -1419,8 +1420,8 @@ function sinofresh_formula_gallery_file_url($filename) {
  * watch?v=, youtu.be/, /embed/, /shorts/ — and a bare id, because the id is
  * what a person copies when they mean "this video". Anything else (Vimeo, a
  * playlist, a channel) is not a video this band can play, so it is refused
- * rather than half-parsed: no id means no video frame, and the strip simply
- * ends on the photos.
+ * rather than half-parsed: no id means no video frame, and since batch H7a no
+ * [Video] tab either — the band's switch ships as [Photos] alone.
  */
 function sinofresh_formula_video_id($url) {
 	$url = trim((string) $url);
@@ -1598,11 +1599,6 @@ function sinofresh_formula_gallery($atts = array()) {
 		return '';
 	}
 
-	$label = sinofresh_formula_label($form);
-	if ($label === '') {
-		$label = 'dosage';
-	}
-
 	$frames = '';
 	foreach ($slots as $index => $slot) {
 		$n = $index + 1;
@@ -1647,26 +1643,54 @@ function sinofresh_formula_gallery($atts = array()) {
 			. '</figure>';
 	}
 
-	/* The heading names the formula, not the dosage form. get_the_title() is
-	   the same call the detail page's h1 ends up with ({{TITLE}} in
-	   sinofresh_template_placeholders; the h1 is in the parameters column
-	   since batch H5-0, not in the hero), so the two cannot disagree; before
-	   2D-S4 this read "Inside Our {dosage} Production", which on a detail
-	   page named the wrong noun. The shortcode itself stays generic, so a
-	   context that is not a single formula — or an untitled post — falls
-	   back to the dosage label rather than rendering a dangling heading. */
-	$title = is_singular('sf_formula') ? trim((string) get_the_title()) : '';
-	if ($title === '') {
-		$title = $label;
+	/* Batch H7a — the [Photos][Video] switch replaces the heading that used to
+	   open this band.
+
+	   The heading was "A Closer Look at {name}": on all 42 detail pages it
+	   repeated the h1 word for word, differing only by that prefix, and the one
+	   job it was ever given — naming the article outline's dot-rail entry — does
+	   not apply to a detail page, which carries no dot rail at all. So the slot
+	   became the control the media column was missing instead.
+
+	   Why the buttons are serialised here and not built by the script: the two
+	   labels are the only translatable strings in the band, and the language
+	   layer only sees server-rendered text. A button created in JS is invisible
+	   to it — which is the state the strip's own hard-coded "Product photos"
+	   label is still in today.
+
+	   [Video] is emitted only when the record actually has one. All 21 are
+	   without one at the time of writing, so the bar ships as a lone [Photos];
+	   filling sf_formula_video_url in wp-admin makes the second label appear
+	   with no code change and no second deploy.
+
+	   Without scripting the whole bar stays hidden — .sf-gallery--js below is
+	   added by the script and the stylesheet paints nothing until it is there.
+	   A no-JS visitor gets the photo area and no dead controls, the same
+	   contract the strip already kept. */
+	$has_video = false;
+	foreach ($slots as $slot) {
+		if (!empty($slot['video_id'])) {
+			$has_video = true;
+			break;
+		}
 	}
+
+	$tabs = '<div class="sf-gallery__tabs" role="group" aria-label="' . esc_attr('Product media') . '">'
+		. '<button type="button" class="sf-gallery__tab is-active" data-sf-gallery-tab="photos" aria-pressed="true">'
+		. esc_html('Photos') . '</button>';
+	if ($has_video) {
+		$tabs .= '<button type="button" class="sf-gallery__tab" data-sf-gallery-tab="video" aria-pressed="false">'
+			. esc_html('Video') . '</button>';
+	}
+	$tabs .= '</div>';
 
 	/* The stage's aria-label starts as the main photo's alt so the band is
 	   named before any script runs, and formula-gallery.js keeps it in step
 	   with whichever photo is showing. */
 	return '<div class="sf-gallery__inner" data-gallery="' . esc_attr($form) . '">'
-		. '<h2 class="sf-gallery__title">' . esc_html(sprintf('A Closer Look at %s', $title)) . '</h2>'
 		. '<div class="sf-gallery__stage" role="tabpanel" id="sf-gallery-panel-' . esc_attr($form) . '"'
 		. ' aria-label="' . esc_attr($slots[0]['alt']) . '">' . $frames . '</div>'
+		. $tabs
 		. '</div>';
 }
 add_shortcode('sf_formula_gallery', 'sinofresh_formula_gallery');
