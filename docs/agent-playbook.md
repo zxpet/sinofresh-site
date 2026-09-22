@@ -1004,14 +1004,25 @@ commit message 格式：
 
 ---
 
-# 附录 B：进度区
+## A.7 H3 Step 0 扫描实测（2026-09-22，只读，停机）
+
+| # | 结论 | 影响 |
+|---|---|---|
+| 1 | ⛔ **「这一批要新建的块」必须先问「这块的数据今天被谁渲染过」**：H3 的 12 个数据源里，`sf_formula_ingredients`/`sf_formula_analysis` 今天各被 ⑤ `[sf_formula_detail_actives]` 渲染 1 次，`sf_formula_specs` 被渲染 **4 次**（④ 卡片 ＋ H2a 三行解析）。照 playbook 字面新增 6 块 ⇒ `specs` 同一页出现 **5 次**，且前两块的「2 次」**正是上一批专门删掉的状态**（`functions.php:1893-1900` 有明确记载）。扫描必须逐块算**现有出现次数**，不能只看"键有没有值" | H3 裁决 1；任何"内容区/信息块"新增批的开场检查 |
+| 2 | **「背景色交替」不是局部样式，是对相邻带的重新分节**：详情页 ④ Specification / ⑤ Formula & nutrition / ⑥ Ingredients & composition **同色 card-white**，`style.css:8103-8111` 注释写明 *"the three read as one 'this formula's data' surface"*。在两带之间插入逐块交替的 6 块，会把这片连续面从中间切开 | H3 裁决 2 |
+| 3 | **同一个事实存两个来源时，新增块会静默造出重复**：`sf_formula_shelf_life`（21/21 `18 months`）从未被前台读过；H2a 的 `Shelf life` 行是**从 `sf_formula_specs` 解析**那一段得来的。H3 若按 playbook 读键，页面上同一事实出现两次而两处都会漂 | H3 裁决 3 |
+| 4 | **「键已注册但 0/21 有值」不等于缺数据、更不等于要停机**：H3 的 12 源里 7 源为此态。`inc/formula-admin.php:26-115` 已注册全部键（含分组/类型/必填级/选项池），缺的只是运营录入。这与 H2a 已获批准的「先发渲染器、后填数据」（`functions.php:1975-1977`）**同一口径** ⇒ 该状态本身不停机，**重复才是停机理由** | 判断塞停的边界 |
+| 5 | **只读探针要一次把"全库同前缀键清单"打出来**，不要只查预期的那几个键：`WHERE meta_key LIKE 'sf_formula%' GROUP BY meta_key` 一次就证明「21 条记录只有 8 个键 × 21 = 168 行」，比逐个 `get_post_meta` 更能排除"换了个拼写"的假阴性 | `tools/b2d_h3_dataprobe.php` |
+| 6 | **Step 0 的探针必须是零写入**：只用 `get_posts` / `get_post_meta` / `get_option` / `wp_json_encode`，不碰 `update_*`、不建 option、不写 transient。停机报告的说服力来自「**未改任何字节**」这句可被验证的话 | §7 停机声明 |
+
+
 
 | 批次 | 状态 | commit | 说明 |
 |---|---|---|---|
 | H2b | **Step 0 完成 → 5 项不符已裁决（① 改 D / ②③④⑤ 同意）** | — | `docs/batch2d-stepH2b-scan.md` |
 | **H2b1** | **Step 1–5 全过门 + E2E 全过 → 用户确认通过；`git pull` 跳过（playbook 明确不执行上线）** | 产品 `ebe8f50` + 证据 `69d4c21`/`d8ffd53`（均已 push） | `docs/batch2d-stepH2b1.md` |
 | **H2b2** | **Step 1–5 全过门 + E2E 全过（2026-09-22）；Step 6 `git pull` 按规则跳过** | 产品 `3b9fc23`（已 push）；基线 `ebe8f50` | `docs/batch2d-stepH2b2.md` |
-| H3 | **未开工 —— 下一批** | — | 内容区 + FAQ + Sampling |
+| H3 | **Step 0 完成 → 停机待裁决（C1 重复 / C2 背景交替 / C3 Shelf Life 单一真源）** | — | `docs/batch2d-stepH3-scan.md`（内容区 + FAQ + Sampling） |
 | H4 | 未开工 | — | 前置：邮箱 `info@` → `sales@` |
 | H5 | 未开工 | — | — |
 | H6 | 未开工 | — | 待办已增至 **8 项**（H2b2 新造 4 项见 `docs/batch2d-stepH2b2.md` §8） |
