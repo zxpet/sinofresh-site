@@ -1252,14 +1252,17 @@ function sinofresh_formula_grid($atts = array()) {
 		$media = '';
 		$image = sinofresh_formula_card_image($form_slug);
 		if ($image !== '') {
-			/* The alt mirrors the dosage-page tile convention exactly
-			   ("SINO FRESH Soft Chews private label pet supplement
-			   product") so the formula stills are described the same way
-			   as the identical renders in the dosage catalogue. */
+			/* The alt mirrors the dosage-page tile convention exactly so the
+			   formula stills are described the same way as the identical
+			   renders in the dosage catalogue — one function for both, and
+			   batch H5 added the visual clause ("… — golden oval softgel
+			   capsules") to the convention. The seven sibling tiles inside
+			   each dosage template carry the same string verbatim; the gate
+			   asserts the two carriers agree per form. */
 			$media = sprintf(
 				'<figure class="sf-fcard__media"><img src="%s" alt="%s" width="720" height="720" loading="lazy" decoding="async"/></figure>',
 				esc_url($image),
-				esc_attr(sprintf('SINO FRESH %s private label pet supplement product', sinofresh_formula_label($form_slug)))
+				esc_attr(sinofresh_formula_product_alt($form_slug))
 			);
 		}
 
@@ -4735,6 +4738,359 @@ add_filter('render_block', function ($block_content, $parsed_block) {
 	}, $block_content);
 }, 20, 2);
 
+/* ---------------------------------------------------------------------------
+ * Batch H5 — the readers the schema generators share with the templates.
+ *
+ * Adding four schema properties could easily have added four more places
+ * where the same fact is written down. Each reader below therefore has exactly
+ * one source, most of them a source that already existed:
+ *
+ *   sinofresh_formula_facts_props()  the dosage page's four .sf-facts-mini
+ *                                    rows, through sinofresh_formula_spec_cell()
+ *                                    (batch F1's row, so it is the row the page
+ *                                    itself displays)
+ *   sinofresh_formula_audience()     the species: the record's own
+ *                                    sf_formula_species first, the dosage page's
+ *                                    own <h1> sentence second
+ *   sinofresh_formula_related()      the siblings the visible grid already shows
+ *   sinofresh_dosage_related()       the sibling dosage tiles already shown
+ *   sinofresh_formula_offers()       the tier table's prices, read as numbers
+ *   sinofresh_formula_product_alt()  the card alt, with its visual clause
+ *
+ * None of them reads the database except through readers that already existed,
+ * and every one returns an empty answer rather than a guess when the site does
+ * not state the fact — the rule the dosage image resolution already follows
+ * ("prefer no image over a wrong one"). A guessed species or a guessed price is
+ * worse than an absent property: the first is a claim about animal safety and
+ * the second a claim about money.
+ * ------------------------------------------------------------------------ */
+
+/**
+ * The visual half of a dosage form's product-image alt, one clause per form.
+ *
+ * H5 target format is "product + dosage form + selling point + visual feature";
+ * the first three were already in the alt, the visual feature was not. Each
+ * clause below describes the render that actually ships for that form (the
+ * uploads/<yyyy>/<mm>/<form>.webp still), read off the file rather than
+ * inferred from the form's name — "fish oil" is capsules, not a bottle, and
+ * "liquids" is a bottle, not a jar.
+ *
+ * A form with no entry gets the alt it had before this batch rather than an
+ * invented clause.
+ */
+function sinofresh_formula_alt_visuals() {
+	static $map = null;
+	if ($map === null) {
+		$map = array(
+			'soft-chews'   => 'brown star- and bone-shaped chews',
+			'tablets'      => 'tan speckled round tablets',
+			'powders'      => 'green powder with a metal scoop',
+			'pastes'       => 'white squeeze tube with a green cap',
+			'drops'        => 'amber glass dropper bottle',
+			'liquids'      => 'white bottle with a flip-top cap and measuring cup',
+			'fish-oil'     => 'golden oval softgel capsules',
+			'dental-chews' => 'dark ridged stick chews',
+		);
+	}
+	return $map;
+}
+
+/**
+ * The alt of a dosage form's product render, with its visual clause.
+ *
+ * One function rather than two literals because the same still is described in
+ * two places: the card markup [sf_formula_grid] prints, and the seven sibling
+ * tiles inside each dosage page's template. The templates are static HTML and
+ * cannot call this, so they carry the same string verbatim — the gate asserts
+ * both carriers agree per form, which is what keeps the pair from drifting.
+ */
+function sinofresh_formula_product_alt($form_slug) {
+	$form_slug = sanitize_title($form_slug);
+	$base = sprintf(
+		'SINO FRESH %s private label pet supplement product',
+		sinofresh_formula_label($form_slug)
+	);
+	$visuals = sinofresh_formula_alt_visuals();
+	return isset($visuals[$form_slug]) ? $base . ' — ' . $visuals[$form_slug] : $base;
+}
+
+/**
+ * The dosage page's four .sf-facts-mini core-facts rows as PropertyValue rows.
+ *
+ * The generator used to look for .sf-spec-list markup here, which batch H2b1
+ * replaced with the .sf-facts-mini row; the regex matched nothing on any of the
+ * sixteen dosage pages, so additionalProperty was silently absent on all of
+ * them while the formula detail pages (which read post meta) had it. The rows
+ * were never missing — only unread. Reading them through
+ * sinofresh_formula_spec_cell() keeps the scope to the row itself and keeps the
+ * schema, the hero meta and the H3 parameter rows on one source.
+ *
+ * `name` is the visible label, not the data-label: data-label="Packaging
+ * formats" prints as "Packaging", and the schema should say what the page says.
+ */
+function sinofresh_formula_facts_props($form_slug) {
+	$props = array();
+	foreach (array(
+		'MOQ'            => 'MOQ',
+		'Lead time'      => 'Lead time',
+		'Certifications' => 'Certifications',
+		'Packaging'      => 'Packaging formats',
+	) as $name => $data_label) {
+		$value = sinofresh_formula_spec_cell($form_slug, $data_label);
+		if ($value === '') {
+			continue;
+		}
+		$props[] = array('@type' => 'PropertyValue', 'name' => $name, 'value' => $value);
+	}
+	return $props;
+}
+
+/**
+ * Who a product is for, as schema.org Audience entries; empty when unstated.
+ *
+ * Two sources, in this order:
+ *
+ *   1. the formula record's own sf_formula_species (a declared multi field
+ *      whose pool is Dog / Cat) — the record wins because a formula is what
+ *      carries a species claim;
+ *   2. the sentence after " for " in the dosage page's own <h1> — "Private
+ *      Label Soft Chews for Dogs & Cats" — for the records that have no
+ *      species filled in, and for the dosage page itself.
+ *
+ * Measured at gate time: sf_formula_species is empty on all 21 formulas, and
+ * only four of the eight dosage headlines state a species (soft chews, tablets
+ * and fish oil say Dogs & Cats; dental chews says Dogs). The four that say
+ * nothing therefore get no `audience` — the earlier assumption that all eight
+ * forms had a fixed species mapping was not true of this site, and inventing
+ * one would put a species claim on a product nobody made it for.
+ *
+ * "Dog" is normalised to "Dogs" so the two sources cannot produce two spellings
+ * of one audience.
+ */
+function sinofresh_formula_audience($form_slug, $post_id = 0) {
+	static $cache = array();
+	$form_slug = sanitize_title($form_slug);
+	$key = $form_slug . '|' . (int) $post_id;
+	if (array_key_exists($key, $cache)) {
+		return $cache[$key];
+	}
+	$cache[$key] = array();
+
+	$types = array();
+	if ($post_id) {
+		foreach (sf_json_array(get_post_meta($post_id, 'sf_formula_species', true)) as $value) {
+			$value = trim((string) $value);
+			if ($value !== '') {
+				$types[] = $value;
+			}
+		}
+	}
+	if (!$types && $form_slug !== '') {
+		$file = get_stylesheet_directory() . '/templates/page-' . $form_slug . '.html';
+		if (file_exists($file)
+			&& preg_match('/<h1[^>]*>(.*?)<\/h1>/s', (string) file_get_contents($file), $m)) {
+			$headline = html_entity_decode(trim(wp_strip_all_tags($m[1])), ENT_QUOTES, 'UTF-8');
+			/* Only the clause after " for ": the words before it are the
+			   product line ("Pet Tablets"), and scanning the whole headline
+			   would read a species out of a product name one day. */
+			if (preg_match('/\bfor\s+(.+)$/i', $headline, $clause)) {
+				if (preg_match_all('/\b(dogs?|cats?|puppies|kittens)\b/i', $clause[1], $words)) {
+					foreach ($words[1] as $word) {
+						$word = ucfirst(strtolower($word));
+						if ($word === 'Dog') {
+							$word = 'Dogs';
+						} elseif ($word === 'Cat') {
+							$word = 'Cats';
+						} elseif ($word === 'Puppy') {
+							$word = 'Puppies';
+						} elseif ($word === 'Kitten') {
+							$word = 'Kittens';
+						}
+						if (!in_array($word, $types, true)) {
+							$types[] = $word;
+						}
+					}
+				}
+			}
+		}
+	}
+
+	foreach ($types as $type) {
+		$cache[$key][] = array('@type' => 'Audience', 'audienceType' => $type);
+	}
+	return $cache[$key];
+}
+
+/**
+ * The sibling formulas of one dosage form, as Product references.
+ *
+ * The arguments mirror [sf_formula_grid limit="4"] exactly — same taxonomy,
+ * same order, same exclusion of the formula being read — because the visible
+ * "More {form} Formulas" grid is the related set the visitor can check, and a
+ * schema that lists a different four would be a second answer to a question
+ * the page already answers. The gate compares the emitted URLs with the URLs of
+ * the rendered cards, so a future change to either side fails rather than drifts.
+ *
+ * Returns Product entries rather than bare URLs: schema.org accepts either, and
+ * the name is what a consumer needs to tell two formulas apart.
+ */
+function sinofresh_formula_related($form_slug, $exclude_id = 0, $limit = 4) {
+	$form_slug = sanitize_title($form_slug);
+	if ($form_slug === '') {
+		return array();
+	}
+	$args = array(
+		'post_type'           => 'sf_formula',
+		'post_status'         => 'publish',
+		'posts_per_page'      => max(1, (int) $limit),
+		'orderby'             => array('menu_order' => 'ASC', 'title' => 'ASC'),
+		'ignore_sticky_posts' => true,
+		'no_found_rows'       => true,
+		'tax_query'           => array(array(
+			'taxonomy' => 'sf_formula_form',
+			'field'    => 'slug',
+			'terms'    => $form_slug,
+		)),
+	);
+	if ($exclude_id) {
+		$args['post__not_in'] = array((int) $exclude_id);
+	}
+	$out = array();
+	foreach (get_posts($args) as $formula) {
+		$name = html_entity_decode(get_the_title($formula), ENT_QUOTES, 'UTF-8');
+		if ($name === '') {
+			continue;
+		}
+		$out[] = array('@type' => 'Product', 'name' => $name, 'url' => get_permalink($formula));
+	}
+	return $out;
+}
+
+/**
+ * The seven sibling dosage forms a dosage page's tile grid already links to.
+ *
+ * The tile order is read out of the template rather than reconstructed from
+ * the eight-slug list, so the schema follows the page if the grid is ever
+ * reordered. A template with no tile grid yields an empty list.
+ */
+function sinofresh_dosage_related($form_slug) {
+	$form_slug = sanitize_title($form_slug);
+	$file = get_stylesheet_directory() . '/templates/page-' . $form_slug . '.html';
+	if ($form_slug === '' || !file_exists($file)) {
+		return array();
+	}
+	if (!preg_match_all('#sf-tile__media"><a href="/products/([a-z0-9-]+)/"#', (string) file_get_contents($file), $m)) {
+		return array();
+	}
+	$out = array();
+	foreach (array_unique($m[1]) as $sibling) {
+		if ($sibling === $form_slug) {
+			continue;
+		}
+		$page = get_page_by_path('products/' . $sibling);
+		if (!($page instanceof WP_Post)) {
+			continue;
+		}
+		$name = html_entity_decode(get_the_title($page), ENT_QUOTES, 'UTF-8');
+		if ($name === '') {
+			continue;
+		}
+		$out[] = array('@type' => 'Product', 'name' => $name, 'url' => get_permalink($page));
+	}
+	return $out;
+}
+
+/**
+ * The tier rows as an AggregateOffer, or null when no row states a number.
+ *
+ * Renderer first, data later (decision B): sf_formula_price_tiers is empty on
+ * all 21 formulas, so this returns null on every page today and the emitted
+ * schema is unchanged. It is written now so that filling the tier table in
+ * wp-admin is the only step left when operations supply real prices.
+ *
+ * A price is taken only when the whole cell is a plain decimal, optionally
+ * behind a currency symbol ("1.20", "$1.20", "USD 1.20"). Anything else — a
+ * range, a bare word, "1,200" — is skipped rather than guessed: parsing
+ * "1,200" as 1.2 would publish a price twelve hundred times too low, and a
+ * skipped row costs one priceSpecification instead.
+ *
+ * USD is the currency the tier table's own header declares ("Unit price
+ * (USD)"), so the schema states what the page states.
+ */
+function sinofresh_formula_offers($rows) {
+	$prices = array();
+	$specs  = array();
+	foreach ((array) $rows as $row) {
+		if (!is_array($row)) {
+			continue;
+		}
+		$price = trim((string) (isset($row['price']) ? $row['price'] : ''));
+		if (!preg_match('/^(?:USD\s*|\$\s*)?([0-9]+(?:\.[0-9]+)?)\s*(?:USD)?$/i', $price, $m)) {
+			continue;
+		}
+		$value = (float) $m[1];
+		if ($value <= 0) {
+			continue;
+		}
+		$spec = array(
+			'@type'         => 'UnitPriceSpecification',
+			'price'         => $value,
+			'priceCurrency' => 'USD',
+		);
+		$qty = trim((string) (isset($row['qty']) ? $row['qty'] : ''));
+		if ($qty !== '' && preg_match('/([0-9][0-9,]*)/', $qty, $q)) {
+			$spec['minQuantity'] = array(
+				'@type'    => 'QuantitativeValue',
+				'value'    => (int) str_replace(',', '', $q[1]),
+				'unitText' => 'units',
+			);
+		}
+		$prices[] = $value;
+		$specs[]  = $spec;
+	}
+	if (!$specs) {
+		return null;
+	}
+	return array(
+		'@type'              => 'AggregateOffer',
+		'priceCurrency'      => 'USD',
+		'lowPrice'           => min($prices),
+		'highPrice'          => max($prices),
+		'offerCount'         => count($specs),
+		'priceSpecification' => $specs,
+	);
+}
+
+
+/**
+ * The ten topics the Organization schema claims expertise in.
+ *
+ * Eight of them are the dosage forms, read from the same page titles the
+ * navigation and the catalogue use — so renaming a dosage page renames the
+ * claim, and the claim can never list a form the site does not offer. The last
+ * two are the two service lines the rest of the site already sells ("OEM/ODM
+ * manufacturing" and "private label"), stated once here as a fixed pair.
+ *
+ * Memoised: sinofresh_formula_label() resolves a page by path, and the
+ * Organization block runs on every page of the site.
+ */
+function sinofresh_knows_about() {
+	static $list = null;
+	if ($list !== null) {
+		return $list;
+	}
+	$list = array();
+	foreach (array('soft-chews', 'tablets', 'powders', 'pastes', 'drops', 'liquids', 'fish-oil', 'dental-chews') as $slug) {
+		$label = sinofresh_formula_label($slug);
+		if ($label !== '') {
+			$list[] = $label;
+		}
+	}
+	$list[] = 'Pet Supplement OEM/ODM Manufacturing';
+	$list[] = 'Private Label Pet Supplements';
+	return $list;
+}
+
 
 /**
  * Product JSON-LD (schema.org) for the eight dosage-form landing pages.
@@ -4742,9 +5098,16 @@ add_filter('render_block', function ($block_content, $parsed_block) {
  * source of truth, same pattern as the FAQPage schema): name = hero <h1>,
  * description = the hero's `<!-- sf-schema-desc -->` carrier, image = this
  * form's own upload (resolved by file name, so it can never latch onto a
- * Related tile of a sibling product), additionalProperty = the Specifications
- * rows (sf-spec-list, with a fallback parser for the legacy key-facts table).
- * description / image are dropped when nothing resolves — never emitted empty.
+ * Related tile of a sibling product).
+ *
+ * Batch H5 added three properties, each on a source the page already has:
+ * additionalProperty = the four .sf-facts-mini core-facts rows the band
+ * displays (the .sf-spec-list reader that used to be here had been dead since
+ * H2b1), audience = the species the <h1> names, isRelatedTo = the seven
+ * sibling dosage tiles the page links to. description / image / audience /
+ * isRelatedTo are each dropped when nothing resolves — never emitted empty,
+ * and never guessed.
+ *
  * Pages outside the dosage list output nothing; coexists with FAQPage /
  * BreadcrumbList as separate <script> tags.
  */
@@ -4795,15 +5158,26 @@ add_action('wp_head', function () {
 		$image = esc_url_raw(home_url($im[1]));
 	}
 
-	// additionalProperty: spec rows — sf-spec-list first, legacy table fallback
-	$props = array();
-	if (preg_match_all('/<span class="sf-spec-term">([^<]+)<\/span><span class="sf-spec-value">([^<]+)<\/span>/', $html, $rows, PREG_SET_ORDER)) {
-		foreach ($rows as $r) {
-			$props[] = array('@type' => 'PropertyValue', 'name' => html_entity_decode(trim($r[1]), ENT_QUOTES, 'UTF-8'), 'value' => html_entity_decode(trim($r[2]), ENT_QUOTES, 'UTF-8'));
-		}
-	} elseif (preg_match_all('/flex-basis:35%">\s*<!-- wp:paragraph[^>]*-->\s*<p[^>]*>([^<]+)<\/p>.*?<p class="has-primary-color has-text-color"[^>]*>([^<]+)<\/p>/s', $html, $rows, PREG_SET_ORDER)) {
-		foreach ($rows as $r) {
-			$props[] = array('@type' => 'PropertyValue', 'name' => html_entity_decode(trim($r[1]), ENT_QUOTES, 'UTF-8'), 'value' => html_entity_decode(trim($r[2]), ENT_QUOTES, 'UTF-8'));
+	// additionalProperty: the page's own .sf-facts-mini core-facts rows (the
+	// four visible facts — MOQ, lead time, certifications, packaging formats).
+	//
+	// Batch H5 replaced the .sf-spec-list reader that used to be here. That
+	// reader, and the legacy flex-basis:35% table parser behind it, were dead
+	// code: batch H2b1 swapped the dosage pages' spec band for .sf-facts-mini
+	// and neither branch matched anything afterwards, so additionalProperty
+	// was absent on all sixteen dosage pages without a single error. The two
+	// dead parsers are kept below only as a fallback for markup this theme no
+	// longer ships; on the current eight templates they cannot match.
+	$props = sinofresh_formula_facts_props($slug);
+	if (!$props) {
+		if (preg_match_all('/<span class="sf-spec-term">([^<]+)<\/span><span class="sf-spec-value">([^<]+)<\/span>/', $html, $rows, PREG_SET_ORDER)) {
+			foreach ($rows as $r) {
+				$props[] = array('@type' => 'PropertyValue', 'name' => html_entity_decode(trim($r[1]), ENT_QUOTES, 'UTF-8'), 'value' => html_entity_decode(trim($r[2]), ENT_QUOTES, 'UTF-8'));
+			}
+		} elseif (preg_match_all('/flex-basis:35%">\s*<!-- wp:paragraph[^>]*-->\s*<p[^>]*>([^<]+)<\/p>.*?<p class="has-primary-color has-text-color"[^>]*>([^<]+)<\/p>/s', $html, $rows, PREG_SET_ORDER)) {
+			foreach ($rows as $r) {
+				$props[] = array('@type' => 'PropertyValue', 'name' => html_entity_decode(trim($r[1]), ENT_QUOTES, 'UTF-8'), 'value' => html_entity_decode(trim($r[2]), ENT_QUOTES, 'UTF-8'));
+			}
 		}
 	}
 
@@ -4826,6 +5200,19 @@ add_action('wp_head', function () {
 	if ($props) {
 		$schema['additionalProperty'] = $props;
 	}
+	/* audience: the species the page's own headline names ("… for Dogs & Cats").
+	   Four of the eight headlines name one; the other four get no audience
+	   rather than a species nobody stated. */
+	$audience = sinofresh_formula_audience($slug);
+	if ($audience) {
+		$schema['audience'] = $audience;
+	}
+	/* isRelatedTo: the seven sibling dosage forms the tile grid on this very
+	   page links to, read out of the template in grid order. */
+	$related = sinofresh_dosage_related($slug);
+	if ($related) {
+		$schema['isRelatedTo'] = $related;
+	}
 	echo "\n" . '<script type="application/ld+json">'
 		. wp_json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE)
 		. "</script>\n";
@@ -4845,8 +5232,17 @@ add_action('wp_head', function () {
  * post_content, so the sentence is generated from the dosage form plus the
  * three spec values, dropping any clause whose field is empty.
  *
- * No offers / price: a standard formula is an OEM reference, not a priced
- * SKU, and inventing a price would be worse than omitting the property.
+ * Batch H5 changed the offers position rather than the price position: the
+ * property is now rendered whenever the tier table carries numbers, and the
+ * tier table is empty on all 21 formulas, so nothing was emitted by this batch
+ * either. The earlier wording ("no offers, a standard formula is not a priced
+ * SKU") described a decision about this data; the code now implements a rule
+ * about any data — a price is published when operations publish one, and never
+ * invented when they have not. Two further properties came from sources the
+ * record already has: audience from sf_formula_species (empty today, so the
+ * four dosage forms whose headline names a species supply it instead) and
+ * isRelatedTo from the siblings the page's own "More … Formulas" grid lists.
+ *
  * brand/manufacturer/category stay on the eight dosage-page schemas where
  * they describe the product line; here the subject is one recipe.
  */
@@ -4913,6 +5309,25 @@ add_action('wp_head', function () {
 	if ($props) {
 		$schema['additionalProperty'] = $props;
 	}
+	/* offers: rendered only when the tier table carries numbers (decision B —
+	   renderer first, data later). Null on all 21 records today. */
+	$offers = sinofresh_formula_offers(sf_json_rows(get_post_meta($post_id, 'sf_formula_price_tiers', true)));
+	if ($offers) {
+		$schema['offers'] = $offers;
+	}
+	/* audience: the record's own sf_formula_species first, the dosage page's
+	   headline second — same reader the dosage pages use. */
+	$audience = sinofresh_formula_audience($form_slug, $post_id);
+	if ($audience) {
+		$schema['audience'] = $audience;
+	}
+	/* isRelatedTo: the same four siblings the "More … Formulas" grid below the
+	   page lists (same taxonomy, order and exclusion), so the schema and the
+	   visible cards cannot disagree. */
+	$related = sinofresh_formula_related($form_slug, $post_id, 4);
+	if ($related) {
+		$schema['isRelatedTo'] = $related;
+	}
 
 	echo "\n" . '<script type="application/ld+json">'
 		. wp_json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE)
@@ -4923,7 +5338,9 @@ add_action('wp_head', function () {
  * Organization JSON-LD (schema.org) — once, site-wide. sameAs is built from
  * the Social Links settings (only real http(s) URLs; "#" placeholders are
  * skipped), and the logo points at the configured Site Logo attachment, so
- * both follow whatever operations configure in wp-admin.
+ * both follow whatever operations configure in wp-admin. Batch H5 added
+ * knowsAbout (sinofresh_knows_about): the ten topics, the eight dosage forms
+ * read from their own page titles plus the two service lines.
  */
 add_action('wp_head', function () {
 	if (is_admin() || defined('REST_REQUEST') || is_404()) {
@@ -4986,6 +5403,9 @@ add_action('wp_head', function () {
 	   names and order this array shipped with, so the default option set
 	   renders byte-identically). */
 	$schema['hasCredential'] = sf_cert_schema_credentials();
+	/* Batch H5: the ten expertise topics — the eight dosage forms (from the
+	   same page titles the catalogue uses) plus the two service lines. */
+	$schema['knowsAbout'] = sinofresh_knows_about();
 	if ($logo) {
 		$schema['logo'] = $logo;
 	}
