@@ -2,7 +2,7 @@
 Theme Name: SINO FRESH
 Author: Shandong SINO FRESH Pet Food Co., Ltd.
 Text Domain: sinofresh
-Version: 2.10.57
+Version: 2.10.58
 Requires at least: 6.0
 Requires PHP: 7.4
 License: GNU General Public License v2 or later
@@ -6060,10 +6060,12 @@ html:not(.sf-js) .sf-fchips-wrap {
 }
 
 /* --- Overlay + drawer ----------------------------------------------------- */
-/* Shared by the inquiry basket and the certificate dialog (section 50): one
-   backdrop, one fade, one z-index stack — the two components cannot drift. */
+/* Shared by the inquiry basket, the certificate dialog (section 50) and the
+   inquiry dialog (batch H4): one backdrop, one fade, one z-index stack — the
+   three components cannot drift. */
 .sf-basket-overlay,
-.sf-certmodal {
+.sf-certmodal,
+.sf-inquiry-modal {
 	position: fixed;
 	inset: 0;
 	z-index: 10000;
@@ -6073,12 +6075,14 @@ html:not(.sf-js) .sf-fchips-wrap {
 }
 
 .sf-basket-overlay.is-open,
-.sf-certmodal.is-open {
+.sf-certmodal.is-open,
+.sf-inquiry-modal.is-open {
 	opacity: 1;
 }
 
 .sf-basket-overlay[hidden],
-.sf-certmodal[hidden] {
+.sf-certmodal[hidden],
+.sf-inquiry-modal[hidden] {
 	display: none;
 }
 
@@ -6335,7 +6339,8 @@ html:not(.sf-js) .sf-fchips-wrap {
 
 /* Scroll lock while the drawer is open. */
 body.sf-basket-lock,
-body.sf-certmodal-lock {
+body.sf-certmodal-lock,
+body.sf-inquiry-lock {
 	overflow: hidden;
 }
 
@@ -9077,5 +9082,425 @@ body.sf-certmodal-lock {
 	.sf-sampling__steps {
 		grid-template-columns: minmax(0, 1fr);
 		gap: 24px;
+	}
+}
+
+/* ==========================================================================
+   Batch H4 — Send Inquiry: the capsule and the dialog.
+   ==========================================================================
+   The capsule is the first child of .sf-float-stack (parts/footer.html), which
+   is bottom-anchored at 3913, so the first child is the top one and the three
+   buttons below it keep the offsets appendix A.5 #7 measured (100 / 24 / 268
+   / 16). The shortcode that emits it returns nothing off a detail page, so
+   this whole section only has a subject on the 42 pages that carry the
+   parameter band.
+
+   The dialog follows the certificate dialog's shape rather than the basket
+   drawer's: the outer element is the backdrop AND the centring box (flex,
+   inset 0), the panel inside it is what fades and rises. One backdrop
+   definition, three components. */
+
+.sf-float-btn--inquiry {
+	/* The stack's default align-items:stretch would pull the capsule to the
+	   full width of the column, and the column's width is itself set by the
+	   widest child — so the capsule has to measure itself. */
+	width: auto;
+	align-self: flex-end;
+	min-width: 52px;
+	height: 52px;
+	padding: 0 20px 0 18px;
+	border-radius: 26px;
+	gap: 8px;
+	background-color: var(--wp--preset--color--cta);
+	font-size: 14px;
+	font-weight: 600;
+	line-height: 1;
+	white-space: nowrap;
+	text-decoration: none;
+}
+
+.sf-float-btn--inquiry:hover {
+	background-color: var(--wp--preset--color--cta-hover);
+}
+
+/* The capsule ships with `hidden` on it (sinofresh_inquiry_button() sets the
+   attribute, the script removes it) — an author display value would otherwise
+   beat the UA sheet's [hidden] rule. */
+.sf-float-btn--inquiry[hidden] {
+	display: none;
+}
+
+.sf-float-btn__icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	flex: 0 0 auto;
+}
+
+/* The brief's "slides in from the bottom, 300ms". No fill-mode on purpose:
+   `forwards` would keep the final keyframe's transform applied and the
+   .sf-float-btn hover scale would stop working. */
+.sf-float-btn--inquiry.is-visible {
+	animation: sf-inquiry-in 300ms ease-out;
+}
+
+@keyframes sf-inquiry-in {
+	from {
+		opacity: 0;
+		transform: translateY(12px);
+	}
+}
+
+/* --- The dialog ----------------------------------------------------------- */
+.sf-inquiry-modal {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	box-sizing: border-box;
+	/* A top-level block would otherwise pick up .wp-site-blocks' 24px gap,
+	   which on an inset:0 fixed box does not push it down so much as shrink
+	   it — the backdrop stopped short of the top and the header stayed
+	   clickable above it (the same defect section 50 records). */
+	margin: 0;
+	padding: 24px;
+	overflow-y: auto;
+	-webkit-overflow-scrolling: touch;
+	/* One generous step above the basket stack (10000/10001): the dialog is
+	   the active layer whenever it is up. */
+	z-index: 10010;
+}
+
+.sf-inquiry-modal__panel {
+	position: relative;
+	box-sizing: border-box;
+	width: 100%;
+	max-width: 560px;
+	max-height: calc(100vh - 48px);
+	max-height: calc(100dvh - 48px);
+	display: flex;
+	flex-direction: column;
+	background-color: var(--wp--preset--color--card-white);
+	border-radius: 8px;
+	box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+	transform: translateY(12px);
+	transition: transform 0.3s ease;
+}
+
+.sf-inquiry-modal.is-open .sf-inquiry-modal__panel {
+	transform: translateY(0);
+}
+
+.sf-inquiry-modal__head {
+	position: relative;
+	flex: 0 0 auto;
+	padding: 24px 64px 0 24px;
+}
+
+.sf-inquiry-modal__title {
+	margin: 0;
+	font-size: 20px;
+	font-weight: 700;
+	line-height: 1.25;
+	color: var(--wp--preset--color--text-primary);
+}
+
+.sf-inquiry-modal__lead {
+	margin: 4px 0 0;
+	font-size: 13px;
+	line-height: 1.4;
+	color: var(--wp--preset--color--text-secondary);
+}
+
+/* 40px target inset from the corner, matching the certificate dialog's close
+   control rather than padding a box around a 20px glyph. */
+.sf-inquiry-modal__close {
+	position: absolute;
+	top: 16px;
+	right: 16px;
+	width: 40px;
+	height: 40px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 0;
+	border: none;
+	border-radius: 6px;
+	background-color: transparent;
+	color: var(--wp--preset--color--text-secondary);
+	font-size: 24px;
+	line-height: 1;
+	cursor: pointer;
+}
+
+.sf-inquiry-modal__close:hover {
+	background-color: var(--wp--preset--color--bg-light);
+	color: var(--wp--preset--color--text-primary);
+}
+
+.sf-inquiry-modal__body {
+	flex: 1 1 auto;
+	overflow-y: auto;
+	-webkit-overflow-scrolling: touch;
+	padding: 20px 24px 24px;
+}
+
+/* The two summary panels are the same surface: Mist, hairline, 6px. They are
+   the "what we are talking about" pair and read as one block, which is why
+   neither is given a band of its own. */
+.sf-inquiry-modal__card {
+	margin: 0 0 16px;
+	padding: 14px 16px;
+	background-color: var(--wp--preset--color--bg-light);
+	border: 1px solid var(--wp--preset--color--border-light);
+	border-radius: 6px;
+}
+
+.sf-inquiry-modal__sub {
+	margin: 0 0 10px;
+	font-size: 12px;
+	font-weight: 700;
+	line-height: 1.2;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+	color: var(--wp--preset--color--text-secondary);
+}
+
+.sf-inquiry-modal__rows {
+	display: grid;
+	grid-template-columns: auto minmax(0, 1fr);
+	gap: 6px 16px;
+	margin: 0;
+}
+
+.sf-inquiry-modal__term {
+	font-size: 13px;
+	line-height: 1.5;
+	color: var(--wp--preset--color--text-secondary);
+}
+
+.sf-inquiry-modal__value {
+	margin: 0;
+	font-size: 14px;
+	font-weight: 600;
+	line-height: 1.5;
+	color: var(--wp--preset--color--text-primary);
+}
+
+.sf-inquiry-modal__steps {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 8px 16px;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	counter-reset: sf-inquiry;
+}
+
+.sf-inquiry-modal__step {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	font-size: 13px;
+	line-height: 1.4;
+	color: var(--wp--preset--color--text-primary);
+}
+
+/* Forest, not brand-green: #5AB735 carries white text at 2.7:1 and fails AA
+   at this size — the same measurement the sampling band's marker records. */
+.sf-inquiry-modal__num {
+	flex: 0 0 auto;
+	width: 22px;
+	height: 22px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 50%;
+	background-color: var(--wp--preset--color--primary);
+	color: var(--wp--preset--color--card-white);
+	font-size: 12px;
+	font-weight: 700;
+	line-height: 1;
+}
+
+.sf-inquiry-modal__note {
+	margin: 10px 0 0;
+	font-size: 12px;
+	line-height: 1.4;
+	color: var(--wp--preset--color--text-secondary);
+}
+
+/* --- The form ------------------------------------------------------------- */
+.sf-inquiry-form__trap {
+	position: absolute;
+	left: -9999px;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+}
+
+.sf-inquiry-form__grid {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 12px 16px;
+}
+
+.sf-inquiry-form__field {
+	margin: 0;
+}
+
+.sf-inquiry-form__field--wide {
+	grid-column: 1 / -1;
+}
+
+.sf-inquiry-form__field label {
+	display: block;
+	margin-bottom: 4px;
+	font-size: 13px;
+	font-weight: 600;
+	line-height: 1.4;
+	color: var(--wp--preset--color--text-primary);
+}
+
+.sf-inquiry-form__req {
+	color: var(--wp--preset--color--cta);
+}
+
+.sf-inquiry-form__field input,
+.sf-inquiry-form__field textarea {
+	display: block;
+	width: 100%;
+	box-sizing: border-box;
+	padding: 10px 12px;
+	border: 1px solid var(--wp--preset--color--border-medium);
+	border-radius: 6px;
+	background-color: var(--wp--preset--color--card-white);
+	color: var(--wp--preset--color--text-primary);
+	font-family: inherit;
+	font-size: 15px;
+	line-height: 1.4;
+}
+
+.sf-inquiry-form__field textarea {
+	resize: vertical;
+	min-height: 76px;
+}
+
+.sf-inquiry-form__field input:focus,
+.sf-inquiry-form__field textarea:focus {
+	outline: 2px solid var(--wp--preset--color--cta);
+	outline-offset: 1px;
+	border-color: var(--wp--preset--color--cta);
+}
+
+.sf-inquiry-form__submit {
+	display: block;
+	width: 100%;
+	margin-top: 16px;
+	padding: 13px 20px;
+	border: none;
+	border-radius: 6px;
+	background-color: var(--wp--preset--color--cta);
+	color: var(--wp--preset--color--card-white);
+	font-family: inherit;
+	font-size: 15px;
+	font-weight: 600;
+	line-height: 1.2;
+	cursor: pointer;
+}
+
+.sf-inquiry-form__submit:hover {
+	background-color: var(--wp--preset--color--cta-hover);
+}
+
+.sf-inquiry-form__submit:disabled {
+	opacity: 0.6;
+	cursor: default;
+}
+
+.sf-inquiry-form__status {
+	margin: 10px 0 0;
+	min-height: 1.2em;
+	font-size: 13px;
+	line-height: 1.4;
+	color: var(--wp--preset--color--cta);
+}
+
+.sf-inquiry-form[hidden],
+.sf-inquiry-modal__success[hidden] {
+	display: none;
+}
+
+.sf-inquiry-modal__success {
+	padding: 8px 0 4px;
+	text-align: center;
+}
+
+.sf-inquiry-modal__success-title {
+	margin: 0;
+	font-size: 17px;
+	font-weight: 700;
+	line-height: 1.35;
+	color: var(--wp--preset--color--text-primary);
+}
+
+.sf-inquiry-modal__success-note {
+	margin: 6px 0 0;
+	font-size: 14px;
+	line-height: 1.5;
+	color: var(--wp--preset--color--text-secondary);
+}
+
+/* --- Phones: the dialog becomes the full-height sheet the brief asks for -- */
+@media (max-width: 767px) {
+	.sf-inquiry-modal {
+		padding: 0;
+		align-items: flex-end;
+	}
+
+	.sf-inquiry-modal__panel {
+		max-width: none;
+		max-height: 100%;
+		height: 100%;
+		border-radius: 0;
+		transform: translateY(100%);
+	}
+
+	.sf-inquiry-modal.is-open .sf-inquiry-modal__panel {
+		transform: translateY(0);
+	}
+
+	.sf-inquiry-modal__head,
+	.sf-inquiry-modal__body {
+		padding-left: 20px;
+		padding-right: 20px;
+	}
+
+	.sf-inquiry-form__grid,
+	.sf-inquiry-modal__steps {
+		grid-template-columns: minmax(0, 1fr);
+	}
+
+	.sf-inquiry-modal__rows {
+		grid-template-columns: minmax(0, 1fr);
+		gap: 2px;
+	}
+
+	.sf-float-btn--inquiry {
+		height: 44px;
+		min-width: 44px;
+		padding: 0 16px 0 14px;
+		border-radius: 22px;
+		font-size: 13px;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.sf-inquiry-modal,
+	.sf-inquiry-modal__panel {
+		transition: none;
+	}
+
+	.sf-float-btn--inquiry.is-visible {
+		animation: none;
 	}
 }

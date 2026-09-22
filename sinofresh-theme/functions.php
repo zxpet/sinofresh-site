@@ -28,7 +28,7 @@ add_action('after_setup_theme', function() {
 });
 
 add_action('wp_enqueue_scripts', function() {
-	wp_enqueue_style('sinofresh-style', get_stylesheet_uri(), array(), '2.10.57');
+	wp_enqueue_style('sinofresh-style', get_stylesheet_uri(), array(), '2.10.58');
 	// Sticky nav: every template renders parts/header.html, so this is site-wide.
 	wp_enqueue_script('sinofresh-sticky-header', get_template_directory_uri() . '/assets/js/sticky-header.js', array(), '1.0.0', true);
 	wp_enqueue_script('sinofresh-ui-components', get_template_directory_uri() . '/assets/js/ui-components.js', array(), '1.0.0', true);
@@ -38,6 +38,14 @@ add_action('wp_enqueue_scripts', function() {
 	wp_enqueue_script('sinofresh-basket', get_template_directory_uri() . '/assets/js/basket.js', array(), '1.3.0', true);
 	// Quote CTA smart scroll: in-page form -> smooth scroll, else native /contact/#quote.
 	wp_enqueue_script('sinofresh-quote-cta', get_template_directory_uri() . '/assets/js/quote-cta.js', array(), '1.0.0', true);
+	/* Inquiry dialog (batch H4): the capsule is rendered by [sf_inquiry_button]
+	   and the markup by sinofresh_inquiry_modal(), both only on a formula
+	   detail page, so the script follows the same condition. Two scripts have
+	   already been deleted for being enqueued where they had nothing to do
+	   (H2b2), and this one has nothing to do on the other 33 pages. */
+	if (is_singular('sf_formula')) {
+		wp_enqueue_script('sinofresh-inquiry', get_template_directory_uri() . '/assets/js/inquiry.js', array(), '1.0.0', true);
+	}
 	// On-this-page TOC (dot rail on marketing pages, text list on articles) +
 	// article extras (progress bar, inline CTA, feedback, print URL). The JS
 	// self-selects its mode: body.single-post gets the article feature set,
@@ -2588,6 +2596,389 @@ function sinofresh_formula_sampling() {
 		. '</div></section>';
 }
 add_shortcode('sf_formula_sampling', 'sinofresh_formula_sampling');
+
+/* --------------------------------------------------------------------------
+ * Batch H4 — the inquiry path on a formula detail page.
+ *
+ * A detail page carries NO form. The #inquiry-form anchor lives on the front
+ * page, the contact page and the eight dosage pages, each of which embeds
+ * Gravity Forms form 2 ("Get a Quote", twelve fields); the detail page's only
+ * id is "gallery". Before this batch the ways off a detail page were the two
+ * hero buttons — "Reference this formula" (copies the name, formulas.js) and
+ * "Build Custom Formula" (/contact/#quote) — plus the float stack's mailto.
+ * This batch adds the low-friction path: a capsule at the top of the existing
+ * float stack, revealed once the visitor has reached the parameter band, and
+ * a dialog holding a five-field form that posts to the endpoint below.
+ *
+ * Four decisions (user, 2026-09-22) shape it. All four exist because batch
+ * H2b2 deleted the configurator:
+ *
+ *   1. "Your Selection" is the record being read, not a basket. Nothing calls
+ *      SFBasket.add() any more — its only caller was configurator.js — and a
+ *      detail page has no control to tick, so the dialog renders this
+ *      record's own Flavor / Piece Weight / Pack Size / Suitable For /
+ *      Life Stage / Quantity & Pricing from the SAME meta the parameter band
+ *      reads. One source, two renderings; no second source to drift.
+ *      ⚠️ Measured at gate time on the 42 detail pages: Flavor, Suitable For,
+ *      Life Stage and the tiers are filled on 0 of them, so the block shows
+ *      one row (Piece Weight) today and two on the 20 records that also carry
+ *      Pack Size. Same "renderer first, data later" state as the parameter
+ *      band (H2a) and the content band (H3), and it fills in without a
+ *      deploy.
+ *   2. The capsule is the FIRST child of .sf-float-stack. The stack is
+ *      bottom-anchored (style.css 3913), so its first child is the top one
+ *      and the three buttons already there do not move — the geometry H2b1
+ *      measured (100 / 24 / 268 / 16) and H4e re-measured stays put.
+ *   3. Mobile keeps the capsule instead of becoming a full-width bottom bar:
+ *      that bar would have to be reconciled with the stack, the banner offset
+ *      (268px) and the iOS safe area — four more readings — for pages that
+ *      already carry a hero CTA on phones.
+ *   4. Delivery is one plain-text mail to the address in the sf_contact_email
+ *      option. Not a literal (H4e found three hardcoded copies and registered
+ *      them as H6 item 10), and not a Gravity Forms entry, which would need a
+ *      new form and therefore a database change.
+ *
+ * Where the markup lives: the dialog is emitted from wp_footer, not from a
+ * template, so single-sf_formula.html stays a static block file and the
+ * markup that depends on record data sits with the other renderers. What the
+ * template does carry is [sf_inquiry_button] inside the float stack — a
+ * shortcode rather than a block because a block template cannot be gated by
+ * a value (placeholders are substituted after the block tree is decided,
+ * whereas do_shortcode runs over the finished output). The shortcode returns
+ * '' off a detail page, so although parts/footer.html is on all 75 pages the
+ * substantive change lands on exactly the 42 the brief names.
+ * ------------------------------------------------------------------------ */
+
+/**
+ * The rows the inquiry dialog's "Your Selection" panel shows.
+ *
+ * Reads the same meta the parameter band reads, in the brief's order, and
+ * returns plain text values: the band prints chips and a pricing table, but
+ * the dialog is a summary read at a glance, so a chip list becomes one
+ * comma-joined line and the tier rows become one line of "qty — price"
+ * pairs. Empty means absent — a record that proves nothing renders nothing,
+ * the same rule sinofresh_formula_params() follows.
+ *
+ * @param int $post_id Formula post id.
+ * @return array Label => plain text value, in print order.
+ */
+function sinofresh_inquiry_selection_rows($post_id) {
+	$post_id = (int) $post_id;
+	if ($post_id <= 0) {
+		return array();
+	}
+	$rows  = array();
+	$parts = sinofresh_formula_specs_parts(trim((string) get_post_meta($post_id, 'sf_formula_specs', true)));
+
+	$flavors = sf_json_array(get_post_meta($post_id, 'sf_formula_flavors', true));
+	if ($flavors) {
+		$rows['Flavor'] = implode(', ', $flavors);
+	}
+	if (trim((string) $parts['unit']) !== '') {
+		$rows['Piece Weight'] = trim((string) $parts['unit']);
+	}
+	if (trim((string) $parts['pack']) !== '') {
+		$rows['Pack Size'] = trim((string) $parts['pack']);
+	}
+	$species = sf_json_array(get_post_meta($post_id, 'sf_formula_species', true));
+	if ($species) {
+		$rows['Suitable For'] = implode(', ', $species);
+	}
+	$lifestage = trim((string) get_post_meta($post_id, 'sf_formula_lifestage', true));
+	if ($lifestage !== '') {
+		$rows['Life Stage'] = $lifestage;
+	}
+
+	$tiers = array();
+	foreach (sf_json_rows(get_post_meta($post_id, 'sf_formula_price_tiers', true)) as $tier) {
+		if (!is_array($tier)) {
+			continue;
+		}
+		$qty   = trim((string) (isset($tier['qty']) ? $tier['qty'] : ''));
+		$price = trim((string) (isset($tier['price']) ? $tier['price'] : ''));
+		if ($qty !== '' && $price !== '') {
+			$tiers[] = $qty . ' — ' . $price;
+		} elseif ($qty !== '') {
+			$tiers[] = $qty;
+		} elseif ($price !== '') {
+			$tiers[] = $price;
+		}
+	}
+	if ($tiers) {
+		$rows['Quantity & Pricing'] = implode(' · ', $tiers);
+	}
+
+	return $rows;
+}
+
+/**
+ * [sf_inquiry_button] — the capsule at the top of the float stack.
+ *
+ * Emits nothing off a formula detail page. The element is an <a>, not a
+ * <button>: the click is upgraded to "open the dialog" by inquiry.js, but the
+ * href is the same destination the hero's "Build Custom Formula" uses, so the
+ * markup degrades to a working link if the script never arrives (in which
+ * case the reveal never happens either, and the page falls back to the two
+ * hero CTAs it has always had).
+ *
+ * `hidden` is set here rather than in CSS so that the no-JS state is
+ * "not shown" without a stylesheet having to guess; inquiry.js removes the
+ * attribute once the parameter band is reached.
+ */
+function sinofresh_inquiry_button() {
+	if (!is_singular('sf_formula')) {
+		return '';
+	}
+	return '<a class="sf-float-btn sf-float-btn--inquiry" href="/contact/#quote" data-sf-inquiry-open hidden>'
+		. '<span class="sf-float-btn__icon" aria-hidden="true">'
+		. '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5Z"/></svg>'
+		. '</span>'
+		. '<span class="sf-float-btn__label">Send Inquiry</span></a>';
+}
+add_shortcode('sf_inquiry_button', 'sinofresh_inquiry_button');
+
+/**
+ * The inquiry dialog, emitted on a formula detail page.
+ *
+ * Hooked to wp_footer at priority 20 so it lands after the float stack that
+ * the capsule sits in — the two are the same widget, and reading the markup
+ * in source order should read the trigger before the thing it triggers.
+ *
+ * The form requests nothing it cannot prove: the four anti-spam measures are
+ * a honeypot input, a timestamp the script stamps when the dialog opens (a
+ * submission inside three seconds is a machine), server-side re-derivation of
+ * the selection panel from the post id rather than trusting the posted text,
+ * and the endpoint's own validation of every field.
+ *
+ * The dialog repeats the four sampling steps without restating them: the
+ * titles come from sinofresh_sampling_steps(), the same array the visible
+ * band and the HowTo schema read, so rewording a step moves all three. Only
+ * the titles are printed — the band below already carries the sentences, and
+ * the dialog is the three-second read.
+ */
+function sinofresh_inquiry_modal() {
+	if (!is_singular('sf_formula')) {
+		return;
+	}
+	$post_id = (int) get_queried_object_id();
+	if ($post_id <= 0) {
+		return;
+	}
+	$selection = sinofresh_inquiry_selection_rows($post_id);
+
+	$panel = '';
+	if ($selection) {
+		$panel = '<div class="sf-inquiry-modal__card">'
+			. '<h3 class="sf-inquiry-modal__sub" id="sf-inquiry-selection">Your Selection</h3>'
+			. '<dl class="sf-inquiry-modal__rows">';
+		foreach ($selection as $label => $value) {
+			$panel .= '<dt class="sf-inquiry-modal__term">' . esc_html($label) . '</dt>'
+				. '<dd class="sf-inquiry-modal__value">' . esc_html($value) . '</dd>';
+		}
+		$panel .= '</dl></div>';
+	}
+
+	$steps = '';
+	$n     = 0;
+	foreach (sinofresh_sampling_steps() as $step) {
+		$n++;
+		$steps .= '<li class="sf-inquiry-modal__step">'
+			. '<span class="sf-inquiry-modal__num" aria-hidden="true">' . (int) $n . '</span>'
+			. '<span class="sf-inquiry-modal__step-title">' . esc_html($step['title']) . '</span>'
+			. '</li>';
+	}
+	if ($steps !== '') {
+		$steps = '<div class="sf-inquiry-modal__card">'
+			. '<h3 class="sf-inquiry-modal__sub" id="sf-inquiry-sampling">How Sampling Works</h3>'
+			. '<ol class="sf-inquiry-modal__steps">' . $steps . '</ol>'
+			. '<p class="sf-inquiry-modal__note">Typically 3-7 working days.</p>'
+			. '</div>';
+	}
+
+	$form = '<form class="sf-inquiry-form" novalidate>'
+		. '<input type="hidden" name="formula" value="' . (int) $post_id . '">'
+		. '<input type="hidden" name="ts" value="0">'
+		/* Honeypot: off-canvas rather than type="hidden" — a field a human
+		   cannot see but a form-filler still fills. aria-hidden plus
+		   tabindex="-1" keeps it out of the accessibility tree and the tab
+		   order, so it is invisible to assistive tech too. */
+		. '<div class="sf-inquiry-form__trap" aria-hidden="true">'
+		. '<label for="sf-inquiry-website">Website</label>'
+		. '<input type="text" id="sf-inquiry-website" name="website" tabindex="-1" autocomplete="off">'
+		. '</div>'
+		. '<div class="sf-inquiry-form__grid">'
+		. '<p class="sf-inquiry-form__field">'
+		. '<label for="sf-inquiry-name">Name <span class="sf-inquiry-form__req" aria-hidden="true">*</span></label>'
+		. '<input type="text" id="sf-inquiry-name" name="name" required autocomplete="name">'
+		. '</p>'
+		. '<p class="sf-inquiry-form__field">'
+		. '<label for="sf-inquiry-email">Email <span class="sf-inquiry-form__req" aria-hidden="true">*</span></label>'
+		. '<input type="email" id="sf-inquiry-email" name="email" required autocomplete="email">'
+		. '</p>'
+		. '<p class="sf-inquiry-form__field">'
+		. '<label for="sf-inquiry-company">Company</label>'
+		. '<input type="text" id="sf-inquiry-company" name="company" autocomplete="organization">'
+		. '</p>'
+		. '<p class="sf-inquiry-form__field">'
+		. '<label for="sf-inquiry-country">Country</label>'
+		. '<input type="text" id="sf-inquiry-country" name="country" autocomplete="country-name">'
+		. '</p>'
+		. '<p class="sf-inquiry-form__field sf-inquiry-form__field--wide">'
+		. '<label for="sf-inquiry-message">Message</label>'
+		. '<textarea id="sf-inquiry-message" name="message" rows="3"></textarea>'
+		. '</p>'
+		. '</div>'
+		. '<button type="submit" class="sf-inquiry-form__submit">Submit Inquiry</button>'
+		. '<p class="sf-inquiry-form__status" role="status" aria-live="polite"></p>'
+		. '</form>';
+
+	$title = get_the_title($post_id);
+
+	/* The outer element is the backdrop and the centring box, the panel inside
+	   it is the dialog — the shape section 50 gave the certificate dialog, so
+	   one backdrop definition serves all three components. role="dialog" sits
+	   on the panel rather than the backdrop: the backdrop is not part of the
+	   dialog, and a click on it closes rather than interacts. */
+	echo "\n" . '<div class="sf-inquiry-modal" hidden>'
+		. '<div class="sf-inquiry-modal__panel" role="dialog" aria-modal="true" aria-labelledby="sf-inquiry-title">'
+		. '<div class="sf-inquiry-modal__head">'
+		. '<h2 class="sf-inquiry-modal__title" id="sf-inquiry-title">Send Inquiry</h2>'
+		. '<p class="sf-inquiry-modal__lead">'
+		. esc_html($title !== '' ? $title : 'SINO FRESH')
+		. '</p>'
+		. '<button type="button" class="sf-inquiry-modal__close" aria-label="Close inquiry form">&times;</button>'
+		. '</div>'
+		. '<div class="sf-inquiry-modal__body">'
+		. $panel
+		. $steps
+		. $form
+		. '<div class="sf-inquiry-modal__success" hidden>'
+		. '<p class="sf-inquiry-modal__success-title">Thank you — your inquiry is on its way.</p>'
+		. '<p class="sf-inquiry-modal__success-note">A member of our sales team will reply within 24 hours.</p>'
+		. '</div>'
+		. '</div>'
+		. '</div>'
+		. '</div>' . "\n";
+}
+add_action('wp_footer', 'sinofresh_inquiry_modal', 20);
+
+/**
+ * POST /sinofresh/v1/inquiry — the dialog's endpoint.
+ *
+ * Public by design, like /article-feedback: the visitor is not logged in and
+ * the only thing it can do is send one mail to the site's own address. There
+ * is no nonce — a cached page would serve a stale one and reject a legitimate
+ * submission — so the four server-side checks below are what stands between
+ * the endpoint and a spammer, and every one of them is enforced here rather
+ * than in the script.
+ *
+ * The mail is plain text and single-recipient: the address is the
+ * sf_contact_email option, so the site owner changes it in Site Settings and
+ * this path follows. The customer is not copied on it — an auto-reply is a
+ * separate decision and not part of this batch.
+ */
+add_action('rest_api_init', function () {
+	register_rest_route('sinofresh/v1', '/inquiry', array(
+		'methods'             => 'POST',
+		'permission_callback' => '__return_true',
+		'callback'            => function (WP_REST_Request $req) {
+			/* 1. Honeypot. A field a human never sees; anything in it is a
+			   form-filler. Rejected loudly rather than answered with a fake
+			   success, so the browser pass can prove this check runs. */
+			if (trim((string) $req->get_param('website')) !== '') {
+				return new WP_Error('sf_inquiry_spam', 'Submission rejected.', array('status' => 400));
+			}
+
+			/* 2. Time on form. The script stamps the moment the dialog opened;
+			   a machine posts back in well under three seconds. A timestamp in
+			   the future is a forged one and counts as too fast. */
+			$stamp_ms = (float) $req->get_param('ts');
+			$now_ms   = (int) round(microtime(true) * 1000);
+			if ($stamp_ms <= 0 || ($now_ms - $stamp_ms) < 3000 || $stamp_ms > $now_ms + 5000) {
+				return new WP_Error('sf_inquiry_fast', 'Please take a moment to complete the form.', array('status' => 400));
+			}
+
+			/* 3. Fields. */
+			$name    = trim((string) sanitize_text_field((string) $req->get_param('name')));
+			$email   = trim((string) sanitize_email((string) $req->get_param('email')));
+			$company = trim((string) sanitize_text_field((string) $req->get_param('company')));
+			$country = trim((string) sanitize_text_field((string) $req->get_param('country')));
+			$message = trim((string) sanitize_textarea_field((string) $req->get_param('message')));
+			$source  = esc_url_raw((string) $req->get_param('source'));
+
+			if ($name === '') {
+				return new WP_Error('sf_inquiry_name', 'Please tell us your name.', array('status' => 400));
+			}
+			if ($email === '' || !is_email($email)) {
+				return new WP_Error('sf_inquiry_email', 'Please enter a valid email address.', array('status' => 400));
+			}
+
+			/* 4. The selection panel is rebuilt from the post id, never taken
+			   from the request body: the client's copy is a rendering, and a
+			   posting client could put anything in it. A title that does not
+			   resolve simply prints nothing. */
+			$post_id = absint($req->get_param('formula'));
+			$product = '';
+			$rows    = array();
+			if ($post_id > 0 && 'sf_formula' === get_post_type($post_id) && 'publish' === get_post_status($post_id)) {
+				$product = (string) get_the_title($post_id);
+				$rows    = sinofresh_inquiry_selection_rows($post_id);
+			} else {
+				$post_id = 0;
+			}
+
+			$to = trim((string) get_option('sf_contact_email', ''));
+			if ($to === '' || !is_email($to)) {
+				$to = 'sales@zxpet.com';
+			}
+
+			$lines = array('New inquiry from the website.', '');
+			if ($product !== '') {
+				$lines[] = 'Formula: ' . $product;
+			}
+			if ($rows) {
+				$lines[] = '';
+				$lines[] = 'Selection:';
+				foreach ($rows as $label => $value) {
+					$lines[] = '  ' . $label . ': ' . $value;
+				}
+			}
+			$lines[] = '';
+			$lines[] = 'Contact:';
+			$lines[] = '  Name: ' . $name;
+			$lines[] = '  Email: ' . $email;
+			if ($company !== '') {
+				$lines[] = '  Company: ' . $company;
+			}
+			if ($country !== '') {
+				$lines[] = '  Country: ' . $country;
+			}
+			if ($message !== '') {
+				$lines[] = '';
+				$lines[] = 'Message:';
+				$lines[] = $message;
+			}
+			if ($source !== '') {
+				$lines[] = '';
+				$lines[] = 'Source: ' . $source;
+			}
+
+			$subject = '[Inquiry] '
+				. ($product !== '' ? $product : 'Website') . ' — ' . $name;
+
+			$sent = wp_mail($to, $subject, implode("\n", $lines));
+			if (!$sent) {
+				/* Left in the log rather than swallowed: a failed send is the
+				   one outcome where a lead is lost, and the visitor is told to
+				   try again instead of being shown a false confirmation. */
+				error_log('[sf-inquiry] wp_mail() returned false for ' . $to . ' (formula ' . $post_id . ')');
+				return new WP_Error('sf_inquiry_mail', 'We could not send that just now. Please try again.', array('status' => 500));
+			}
+
+			return array('ok' => true);
+		},
+	));
+});
 
 /**
  * Article pattern library (block patterns).
