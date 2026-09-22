@@ -1432,6 +1432,316 @@ BATCHES['h7e'] = {
 }
 
 
+# ---------------------------------------------------------------------------
+# Batch H7f — the inquiry basket leaves.
+#
+# DIRECTION. This batch deletes, and the direction is still the DEFAULT branch:
+# the expected page is the BASELINE with the declared runs removed, compared
+# against the untouched candidate. The mode names are about which side can be
+# BUILT, and here that side is the baseline — `exp = fold(transform(baseline))`.
+# `delete` mode would ask the CANDIDATE to be transformed, and applying a
+# deletion to a page that no longer carries the thing is a no-op that never
+# reads the baseline. So `applies` counts what the transform found on the
+# BASELINE side: 225, i.e. three runs on each of 75 pages.
+#
+# WHAT THIS DIRECTION CANNOT SEE, and who owns it instead:
+#   * the three runs are removed from the baseline WHOLE, so the gate cannot say
+#     what was in them. `counts` measures each of them on both sides — the
+#     before column is the only statement that there was something to delete —
+#     and the source pass owns the theme-side bytes.
+#   * style.css is an external file the page only links. That the deleted lines
+#     are exactly the declared ones, and that the four rule HEADERS the basket
+#     shared with the two dialogs kept their other selectors, is
+#     tools/b2d_h7f_confine.py.
+#   * assets/js/basket.js is a FILE, and a deleted file has no bytes to grep for
+#     absence. The confine tool compares the file set; the source pass can only
+#     speak about files that still exist.
+#
+# TWO SEAM CLAIMS, because a deletion's sharpest witness is the join it leaves
+# behind: the header's button slot and the footer's drawer slot must be gone, and
+# the neighbours must now touch. Measured 0 -> 75 on both.
+
+H7F_BUTTON = re.compile(r'<button type="button" class="sf-basket-btn".*?</button>\n\n\n',
+                        re.S)
+H7F_DRAWER = re.compile(r'<div class="sf-basket-overlay" hidden></div>\n'
+                        r'<aside class="sf-basket-drawer".*?</aside>\n', re.S)
+H7F_SCRIPT = re.compile(r'<script id="sinofresh-basket-js"[^>]*></script>\n')
+
+H7F_SEAM_HEAD = ('class="wp-block-buttons sf-header__cta is-layout-flex '
+                 'wp-block-buttons-is-layout-flex">\n\n<div class="wp-block-button">')
+H7F_SEAM_FOOT = '</footer>\n\n\n\n<div class="sf-cookie-banner"'
+
+
+def _h7f_transform(text):
+    """Delete the three declared runs and report how many were found.
+
+    13 newlines hang off these three patterns and every one of them is page
+    bytes: the WordPress block parser drops the `<!-- wp:html -->` markers and
+    leaves their lines behind, so the baseline carries `\\n\\n` before the button
+    and `\\n\\n\\n` after it. H7c lost a run to exactly this. Deleting the markup
+    but leaving its whitespace produced three extra newlines on 42 pages and the
+    proof failed on precisely that — correctly.
+    """
+    n = 0
+    text, k = H7F_BUTTON.subn('', text)
+    n += k
+    text, k = H7F_DRAWER.subn('', text)
+    n += k
+    text, k = H7F_SCRIPT.subn('', text)
+    n += k
+    return text, n
+
+
+def _h7f_partial(**leave):
+    """Mutants that keep one of the three runs. Each must break the proof, and
+    each must actually have changed something."""
+    def f(text):
+        n = 0
+        if not leave.get('button'):
+            text, k = H7F_BUTTON.subn('', text)
+            n += k
+        if not leave.get('drawer'):
+            text, k = H7F_DRAWER.subn('', text)
+            n += k
+        if not leave.get('script'):
+            text, k = H7F_SCRIPT.subn('', text)
+            n += k
+        return text, n
+    return f
+
+
+BATCHES['h7f'] = {
+    'name': 'H7f — the inquiry basket leaves: icon, drawer, script, CSS, endpoint mode',
+    'mode': 'insert',          # see the direction note above
+    'tokens': [
+        ('?ver=2.10.66', '?ver=2.10.67'),                       # style.css
+    ],
+    'transform': _h7f_transform,
+    'applies': 225,
+    'coverage': [
+        # Absent from the candidate, counted on the RAW bytes: the mask is the
+        # thing that could hide a survivor.
+        ('sf-basket', 0),
+        ('sinofresh-basket-js', 0),
+        ('assets/js/basket.js', 0),
+        ('?ver=2.10.66', 0),
+    ],
+    'insertions': [
+        ('?ver=2.10.67', 75),
+        # Not a basket claim: the container the button used to sit in has to
+        # still be there, or the batch removed the Get a Quote button with it.
+        ('class="wp-block-buttons sf-header__cta', 75),
+    ],
+    'counts': [
+        # BOTH sides measured. The before column is the content claim the main
+        # proof cannot make: it removes these runs without looking inside.
+        ('the header bag button is gone from every page',
+         'class="sf-basket-btn"', 75, 0),
+        ('the drawer overlay is gone from every page',
+         'class="sf-basket-overlay"', 75, 0),
+        ('the drawer is gone from every page',
+         'class="sf-basket-drawer"', 75, 0),
+        ('the script tag is gone from every page',
+         'sinofresh-basket-js', 75, 0),
+        ('every basket byte on every page is gone',
+         'sf-basket', 1125, 0),
+        ('the drawer\'s own heading is gone',
+         '<h3>Your Inquiry Basket</h3>', 75, 0),
+        # The two seams: where the removals joined the neighbours back up. This
+        # is the deletion's sharpest witness and no other pass can state it — a
+        # run removed whole leaves no trace of where it was.
+        ('the header seam closes where the bag button was',
+         H7F_SEAM_HEAD, 0, 75),
+        ('the footer seam closes where the drawer was',
+         H7F_SEAM_FOOT, 0, 75),
+        # ...and everything that must NOT have moved with the basket.
+        ('the header CTA container survives on every page',
+         'sf-header__cta', 75, 75),
+        ('the cookie banner is untouched',
+         'class="sf-cookie-banner"', 75, 75),
+        ('the float stack is untouched',
+         'class="sf-float-stack"', 75, 75),
+        ('the Get a Quote button is untouched',
+         'sf-quote-cta', 208, 208),
+        ('the certificate dialog is untouched', 'sf-certmodal', 9, 9),
+        ('the inquiry dialog is untouched', 'sf-inquiry-modal', 1350, 1350),
+        ('the navigation is untouched', 'wp-block-navigation', 23061, 23061),
+        # The drawer's h3 is the only heading that leaves; the h2 count does not
+        # move, which is what `h2_delta: None` asserts page by page.
+        ('one heading leaves per page, and it is the drawer\'s',
+         '<h3', 1430, 1355),
+    ],
+    'unmoved': [
+        ('the header CTA container', r'class="wp-block-buttons sf-header__cta', 75),
+        ('the cookie banner', r'class="sf-cookie-banner"', 75),
+        ('the float stack', r'class="sf-float-stack"', 75),
+        ('the certificate dialog', r'sf-certmodal', 1),
+        ('the navigation', r'wp-block-navigation', None),
+    ],
+    'per_page': [
+        ('h1', r'<h1[ >]', 1),
+        # The removal, page by page. A site total of 0 would also be produced by
+        # 74 clean pages and one page carrying nothing — these say each page is
+        # clean on its own.
+        ('the basket button', r'class="sf-basket-btn"', 0),
+        ('the basket overlay', r'class="sf-basket-overlay"', 0),
+        ('the basket drawer', r'class="sf-basket-drawer"', 0),
+        ('the basket script', r'sinofresh-basket-js', 0),
+        ('the basket PDF button', r'Download Basket PDF', 0),
+        ('the header CTA container', r'class="wp-block-buttons sf-header__cta', 1),
+    ],
+    'h2_delta': None,
+    'sources': {
+        'hdr': 'parts/header.html',
+        'ftr': 'parts/footer.html',
+        'pdf': 'inc/config-pdf.php',
+    },
+    # NC3/NC4 read these. Which string is the sharp one is batch-specific.
+    'reinject': ('a basket run put back fails coverage',
+                 'about.html', '<div class="sf-cookie-banner"',
+                 '<button type="button" class="sf-basket-btn" aria-label="put back"></button>'),
+    'delete': ('one page loses the new version token fails coverage',
+               'about.html', '?ver=2.10.67'),
+    'nc13_mode': 'sighted',
+    'nc13_label': ('NC13 the default direction compares the whole candidate, so a basket '
+                   'run put back is caught twice'),
+    'matrix': [
+        # Every mutant must break the proof AND must actually have changed
+        # something (a no-op reports INVALID, not pass).
+        ('the header button is never removed',
+         {'transform': _h7f_partial(button=True)}, None),
+        ('the drawer is never removed',
+         {'transform': _h7f_partial(drawer=True)}, None),
+        ('the script tag is never removed',
+         {'transform': _h7f_partial(script=True)}, None),
+        ('the style token is not folded', {'tokens': []}, None),
+        ('the run count is declared one short', {'applies': 224}, None),
+        ('nothing is removed at all',
+         {'transform': (lambda t: (t, 0)), 'applies': 0}, None),
+        ('one page keeps its drawer',
+         {}, ('root.html', lambda s: s.replace(
+             '<div class="sf-cookie-banner"',
+             '<div class="sf-basket-overlay" hidden></div>'
+             '<div class="sf-cookie-banner"', 1))),
+        ('the batch over-reaches and takes the cookie banner with the drawer',
+         {}, ('contact.html', lambda s: s.replace(
+             '<div class="sf-cookie-banner"', '', 1))),
+        ('a stray character on one page',
+         {}, ('about.html', lambda s: s.replace('</body>', '<!-- stray --></body>', 1))),
+    ],
+    'nc_source': [
+        ('NC17 the source pass fails when the bag button comes back to the header',
+         'parts/header.html',
+         '<div class="wp-block-buttons sf-header__cta">',
+         '<div class="wp-block-buttons sf-header__cta"><button class="sf-basket-btn"></button>'),
+        ('NC18 the source pass fails when the endpoint reads a basket key again',
+         'inc/config-pdf.php',
+         "$slug = isset($data['slug'])",
+         "$data['basket'] = array();\n\t$slug = isset($data['slug'])"),
+        ('NC19 the source pass fails when a basket selector comes back to style.css',
+         'style.css',
+         '.sf-header .sf-header__cta {\n\talign-items: center;\n}',
+         '.sf-basket-btn,\n.sf-header .sf-header__cta {\n\talign-items: center;\n}'),
+    ],
+    'nc_page': [
+        ('NC20 the per-page invariant fails on a basket button in the wrong page',
+         'about.html',
+         lambda s: s.replace('<div class="sf-cookie-banner"',
+                             '<button type="button" class="sf-basket-btn"></button>'
+                             '<div class="sf-cookie-banner"', 1)),
+        ('NC21 the per-page invariant fails when one page loses its header CTA',
+         'about.html',
+         lambda s: s.replace('class="wp-block-buttons sf-header__cta', 'class="sf-gone', 1)),
+    ],
+    'nc_blind': ('root.html', '<div class="sf-cookie-banner"',
+                 '<button type="button" class="sf-basket-btn" aria-label="put back"></button>'
+                 '\n<div class="sf-cookie-banner"'),
+    'source': [
+        # --- the header template: the button is gone, its container is not ----
+        ('the header template no longer renders the basket button', 'hdr_live',
+         r'sf-basket', False),
+        ('...and still renders the CTA container', 'hdr_live',
+         r'sf-header__cta', True),
+        ('...and the Get a Quote button inside it', 'hdr_live',
+         r'sf-quote-cta', True),
+        # On the RAW file, both of these: `hdr_live` has its comment bodies
+        # blanked (that is what makes it the right target for "no basket string
+        # survives"), so a claim ABOUT the block comments cannot be made there —
+        # it would pass vacuously.
+        ('...which is now the buttons block\'s only child', 'hdr',
+         r'<div class="wp-block-buttons sf-header__cta">\s*<!-- wp:button -->', True),
+        ('no wp:html block is left inside the CTA container', 'hdr',
+         r'sf-header__cta">[\s\S]{0,80}?wp:html', False),
+        # --- the footer template: the drawer is gone, its block-mates are not --
+        ('the footer template no longer renders the overlay', 'ftr_live',
+         r'sf-basket-overlay', False),
+        ('...nor the drawer', 'ftr_live',
+         r'sf-basket-drawer', False),
+        ('...nor any basket string at all', 'ftr_live',
+         r'sf-basket', False),
+        ('...and the cookie banner that shared its block is still there', 'ftr_live',
+         r'sf-cookie-banner', True),
+        ('...and so is the float stack', 'ftr_live',
+         r'sf-float-stack', True),
+        ('...and the inquiry button shortcode', 'ftr_live',
+         r'\[sf_inquiry_button\]', True),
+        # --- functions.php: the enqueue goes, the token moves ----------------
+        ('functions.php no longer enqueues the basket script', 'php_live',
+         r'sinofresh-basket', False),
+        ('the style token is bumped in the enqueue', 'php_live',
+         r"wp_enqueue_style\('sinofresh-style', get_stylesheet_uri\(\), array\(\), '2\.10\.67'\)",
+         True),
+        ('no 2.10.66 enqueue survives', 'php_live', r"'2\.10\.66'", False),
+        # --- style.css: the rules go, the shared headers keep their selectors --
+        ('style.css declares 2.10.67', 'css', r'Version: 2\.10\.67', True),
+        ('no 2.10.66 header survives', 'css', r'Version: 2\.10\.66', False),
+        ('no basket selector survives in the stylesheet', 'css_live',
+         r'sf-basket', False),
+        ('the section 45 banner names what survived', 'css',
+         r'=== 45\. Header CTA alignment', True),
+        ('the section 46 banner is gone', 'css',
+         r'=== 46\. Basket pre-fill', False),
+        ('the shared backdrop rule still names the certificate dialog', 'css',
+         r'\.sf-certmodal,\n\.sf-inquiry-modal \{', True),
+        ('no basket selector survives in the raw stylesheet either', 'css',
+         r'\.sf-basket', False),
+        ('the shared scroll lock keeps both dialogs', 'css',
+         r'body\.sf-certmodal-lock,\nbody\.sf-inquiry-lock \{', True),
+        ('the header CTA alignment rule survives', 'css',
+         r'\.sf-header \.sf-header__cta \{\n\talign-items: center;\n\}', True),
+        ('the toast is untouched (formulas.js and toc-nav.js share it)', 'css',
+         r'\.sf-toast \{', True),
+        ('the certificate modal section is untouched', 'css',
+         r'=== 50\. Certificate request modal', True),
+        # --- the endpoint: the route stays, the basket mode does not ----------
+        ('the endpoint still registers its route', 'pdf_live',
+         r"register_rest_route\('sinofresh/v1', '/config-pdf'", True),
+        ('...with a public permission callback', 'pdf_live',
+         r"'permission_callback'\s*=>\s*'__return_true'", True),
+        ('the endpoint body no longer reads a basket key', 'pdf_live',
+         r"\['basket'\]", False),
+        ('the basket renderer is gone', 'pdf_live',
+         r'sinofresh_basket_pdf_render', False),
+        ('the basket summary parser is gone', 'pdf_live',
+         r'sinofresh_config_pdf_parse_summary', False),
+        ('...and the endpoint is no longer its caller', 'pdf_live',
+         r'parse_summary\(', False),
+        ('the shared reference generator survives', 'pdf_live',
+         r'function sinofresh_config_pdf_ref\(', True),
+        ('the shared stylesheet survives', 'pdf_live',
+         r'function sinofresh_config_pdf_css\(', True),
+        ('the shared Dompdf wrapper survives', 'pdf_live',
+         r'function sinofresh_config_pdf_dompdf\(', True),
+        ('the shared escaper survives', 'pdf_live',
+         r'function sinofresh_config_pdf_esc\(', True),
+        ('the single-configuration renderer survives', 'pdf_live',
+         r'function sinofresh_config_pdf_render\(', True),
+        ('...and still prints the whole single-configuration page set', 'pdf_live',
+         r'function sinofresh_config_pdf_render\([\s\S]*?NEXT STEPS', True),
+    ],
+}
+
+
 # ------------------------------------------------------------------- machinery
 
 def fold(text, pairs):
@@ -2050,11 +2360,13 @@ def negctl(decl, base, cand, theme, verbose=True):
         main = main_proof(decl, base, c, verbose=False)['ok']
         caught = not coverage(decl, base, c, verbose=False)['ok']
         if decl.get('nc13_mode', 'blind') == 'sighted':
-            report('NC13 the null edit SEES the payload, and coverage confirms it',
+            report(decl.get('nc13_label')
+                   or 'NC13 the null edit SEES the payload, and coverage confirms it',
                    (not main) and caught,
                    'page=%s main_red=%s coverage_red=%s' % (page, not main, caught))
         else:
-            report('NC13 the main proof is blind to the payload, coverage is not',
+            report(decl.get('nc13_label')
+                   or 'NC13 the main proof is blind to the payload, coverage is not',
                    main and caught,
                    'page=%s main_green=%s coverage_red=%s' % (page, main, caught))
 
