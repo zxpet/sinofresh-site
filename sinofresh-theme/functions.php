@@ -2077,7 +2077,16 @@ function sinofresh_formula_config_groups($post_id) {
 			$groups[] = array(
 				'key' => 'pack', 'label' => 'Pack Size', 'meta' => $pack,
 				'type' => 'multi', 'style' => 'chips',
-				'hint' => $pack_tail !== '' ? 'Per ' . $pack_tail : 'Choose one or more',
+				/* TWO STRINGS, because one cannot do both jobs. The hint is
+				   what a reader sees beside "60 / 90 / 120"; the unit phrase is
+				   what the chosen number has to carry into the inquiry, or the
+				   sales desk receives "60, 90" with no unit at all. The first
+				   cut printed ONE string to both readers and the page read
+				   "Per per bottle" on all 20 pack pages: the splitter's tail
+				   already begins with the preposition, because it starts at the
+				   first character that is not a digit. */
+				'hint' => $pack_tail !== '' ? ucfirst($pack_tail) : 'Choose one or more',
+				'unit_phrase' => $pack_tail,
 				'options' => $options,
 			);
 		}
@@ -2218,11 +2227,13 @@ function sinofresh_formula_config_rows($post_id, $posted) {
 			$text[] = $labels[$value];
 		}
 		$rows[$group['label']] = implode(', ', $text);
-		/* The tail the options share is printed with the choice, or "60, 90"
-		   arrives at the sales desk with no unit at all. */
-		if ($group['label'] === 'Pack Size'
-			&& !empty($group['hint']) && strpos($group['hint'], 'Per ') === 0) {
-			$rows[$group['label']] .= ' ' . substr($group['hint'], 4);
+		/* The unit the options share is printed with the choice, or "60, 90"
+		   arrives at the sales desk with no unit at all. Read from the group's
+		   own unit phrase, NOT sliced out of the hint: the hint is display
+		   text and is capitalised for the reader, and the two stopped being
+		   the same string the day the page read "Per per bottle". */
+		if ($group['label'] === 'Pack Size' && !empty($group['unit_phrase'])) {
+			$rows[$group['label']] .= ' ' . $group['unit_phrase'];
 		}
 	}
 	return $rows;
