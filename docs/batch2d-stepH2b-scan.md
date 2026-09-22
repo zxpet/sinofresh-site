@@ -192,7 +192,7 @@ L273+     How We Work → FAQ → Related Dosage Forms → Request a Quote
 | 批 | 内容 | DIFF 集合 | 门方向 |
 |---|---|---|---|
 | **H2b1** | chips 外迁（band + nav 整体搬）→ 删块 → CTA 改向 → `.sf-explore*` 迁入 `style.css` → 偿还补偿（`5919/5920`）→ 移动端节奏重定 | **16 页必差**（8 en + 8 zh），其余 59 页只许 ver 令牌移动 | 纯删除：基线上删块 = 候选；逆操作还原 |
-| **H2b2** | `functions.php` 停入队（先注释后删两行）→ 资产删（`configurator.css` 残部 + `configurator.js`） | 16 页 ver 令牌 + 资产 URL 消失 | 纯删除 |
+| **H2b2** | `functions.php` 停入队（删 **187–190 共 4 行**：两条 enqueue ＋ 空壳 `if`；⚠️ 185–186 的 `$dosage_pages`/`$is_dosage_page` 必须保留，205 行 `formulas.js` 仍在用）→ 资产删（`configurator.css` **整文件** ＋ `configurator.js`） | 16 页各少 2 行资源引用（`<link>` L119 ＋ `<script>`），其余 59 页逐字节不动 | 纯删除 |
 
 理由：H2b1 是**结构与几何**改动（要跑视觉/几何 E2E），H2b2 是**资产下线**（要跑「资源不再被请求」断言）。
 混在一起会让「DIFF 16 页」这个硬指标同时被两种原因触发，失败时无法归因。

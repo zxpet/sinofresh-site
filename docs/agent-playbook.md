@@ -985,7 +985,7 @@ commit message 格式：
 | 4 | ⛔ **不要用固定 sleep 等平滑滚动**：约 1.2s 才落定，固定 1.2s 采样会抓到中途值（E4 误报 177px）。改法＝轮询 `scrollY` 至"连续两次相同"，并**断言落定在 `scroll-margin-top` 上**（实测 96 vs 96.0）而非一个拍出来的容差 | E4；任何锚点/滚动测试 |
 | 5 | ⛔ **断言先在候选文本上跑、再落盘**：`apply_detail` 第一版先写后断言且期望值写错（`{{FORM_HREF}}` 2→1，不是 2→2），一次**正确**的编辑被报成失败、文件却已改写。改法＝pure 校验（写前后各一次）＋同进程回读 | 一切写文件的补丁器 |
 | 6 | ✅ **可复现性可以做成一条门**：`tools/b2d_h2b1_repro.py` 用 `git archive <batch>~1` 搭沙盒、重跑补丁器、与提交比对 ⇒ H2b1 **12/12 逐字节相同**。这同时补上"首次运行时断言还不对"造成的证据洞（`_backup/b2d-h2b1-apply.json` 里的 `ok:false` 是假警报） | 「不是零差异批」的收尾 |
-| 7 | **删掉 `body:has(.configurator__bar)` 之后，两个固定层落回 `style.css` 取值**：live（有条）恒为 float `132px` / lang `68px`；候选（无条）现代引擎 = 横幅在场 1440 `100px`、480 `268px`，无横幅 24/16px，lang `0px` —— 与**非剂型页**（`/about/`）完全一致 ⇒ 是向全站一致性收敛。旧引擎因 `:700-707` 的无条件复刻仍是 132/68 | H2b2 必须把 `:667-707` **整段**删掉，删后旧引擎应与现代引擎差值归零 |
+| 7 | **删掉 `body:has(.configurator__bar)` 之后，两个固定层落回 `style.css` 取值**：live（有条）恒为 float `132px` / lang `68px`；候选（无条）现代引擎 = 横幅在场 1440 `100px`、480 `268px`，无横幅 24/16px，lang `0px` —— 与**非剂型页**（`/about/`）完全一致 ⇒ 是向全站一致性收敛。旧引擎因 **`:700` / `:705`** 的无条件复刻仍是 132/68 | H2b2 直接把 `configurator.css` **整个文件**删掉（原先写的「`:667-707` 整段」行号不成立：`:667` 只是注释首行、`:707` 不是块边界；容器是 L642 的媒体查询、直开到 L831），删后旧引擎应与现代引擎差值归零 |
 | 8 | `--wp--preset--spacing--80` 实测 **48px**；`.sf-explore` 是 `content-box` ⇒ 其边框盒 = `1200px 内容列 + 2×32px padding` = 1264px；面板**居中**（gutter 左右相等），且 1440 时其**内容列**正好压在卡墙内容列（x120）上 | 判断"通栏"要看 `section` 而不是面板 |
 
 ---
@@ -995,8 +995,8 @@ commit message 格式：
 | 批次 | 状态 | commit | 说明 |
 |---|---|---|---|
 | H2b | **Step 0 完成 → 5 项不符已裁决（① 改 D / ②③④⑤ 同意）** | — | `docs/batch2d-stepH2b-scan.md` |
-| **H2b1** | **Step 1–5 全过门 + E2E 全过 → 停等 Step 6** | 产品 `ebe8f50` + 证据 `69d4c21`（均已 push） | `docs/batch2d-stepH2b1.md` |
-| H2b2 | 未开工（H2b1 上线后） | — | 停入队 + 删资产；⚠️ `configurator.css:667-707` 要整段删 |
+| **H2b1** | **Step 1–5 全过门 + E2E 全过 → 用户确认通过；`git pull` 跳过（playbook 明确不执行上线）** | 产品 `ebe8f50` + 证据 `69d4c21`/`d8ffd53`（均已 push） | `docs/batch2d-stepH2b1.md` |
+| H2b2 | **Step 0 扫描完成（2026-09-22）**，无裁决项 | — | 停入队 + 删资产；`configurator.css` / `configurator.js` **整文件删除**；⚠️ 删 `functions.php` **187–190 共 4 行**（185–186 必须保留，205 行仍在用）；基线＝H2b1 预检副本 |
 | H3 | 未开工 | — | — |
 | H4 | 未开工 | — | 前置：邮箱 `info@` → `sales@` |
 | H5 | 未开工 | — | — |
@@ -1005,11 +1005,15 @@ commit message 格式：
 **H2b1 门/E2E 摘要**：静态 S1–S8 全过；75 页基线 + 75 页候选；主门 **PASS 21 条 / 0 FAIL**
 （58 页差 / 17 页同，逐字节重建）；破坏矩阵 **10/10**；三条负对照全 FAIL（as required）；
 **可复现性 12/12 逐字节**；E2E **E1–E9 全过**。计划外行为变化（两个固定层落位 132/68 → 现代引擎收敛到
-全站取值）已实测并列出，**待裁决**。详见 `docs/batch2d-stepH2b1.md`。
+全站取值）已实测，**用户判定为收敛而非回归**。详见 `docs/batch2d-stepH2b1.md`。
 
-**服务器状态**：未 pull（`git pull` 属「不执行」）；authority guard 未删；DB 未动。
-**预检副本仍然挂着**：`wp-content/themes/sinofresh-theme-preflight/` ＋ mu-plugin `zz-sf-preflight.php` 都还在，
-Step 6 之前**不能拆**（一拆候选就没了）。收尾时和 H2a 一样：pull 完再拆，拆完 `X-SF-Preflight` 即失效。
-复核锚点（2026-09-22 收尾实测）：live `/products/soft-chews/` = `style.css?ver=2.10.55` ＋ 132 处 `class="configurator`；
-同 URL 带 `X-SF-Preflight: 1` = `?ver=2.10.56` ＋ 0 处，且 `link` 指向 `/themes/sinofresh-theme-preflight/style.css`。
+**⛔ 立项规则变更（用户 2026-09-22 明确）**：① **playbook 不执行上线** ⇒ 各批**不开 Step 6 `git pull`**；
+② **H2b2 起的基线＝上一批的预检副本，不是 live** ⇒ 预检副本成为"当前最新候选"的唯一载体，
+**在下一批用完之前禁拆**（H2a 的"pull 完再拆"顺序作废）。因此 dev 站 live 主题会长期停在 pre-H2b1（`2.10.55`＋配置器），
+那是预期状态，不是漏做 pull。
+
+**服务器状态**：未 pull；authority guard 未删；DB 未动。
+**预检副本仍然挂着且必须保留**：`wp-content/themes/sinofresh-theme-preflight/`（＝`ebe8f50` 树，349/349 逐字节）
+＋ mu-plugin `zz-sf-preflight.php`。H2b2 的基线就是它，**拆掉等于自毁基线**。
+复核锚点（2026-09-22）：无头命中 `2.10.55` ＋ 132 处 `class="configurator`；带头命中 `2.10.56` ＋ 0 处。
 

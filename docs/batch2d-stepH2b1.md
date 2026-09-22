@@ -127,11 +127,12 @@ B 缺 served-hash 参照 ⇒ FAIL 而**非 skip**；C 候选＝基线 ⇒ 9 行 
 | `wallContentBottom` | 六档相同 | 六档相同 | 未触碰 |
 | `tocDisplay` | ≤1100 none / ≥1101 block | 相同 | 未触碰 |
 
-## 计划外但已实测的行为变化：两个固定层落位（**需确认**）
+## 计划外但已实测的行为变化：两个固定层落位（**已判定为收敛，非回归**）
 
 删掉配置器条之后，`configurator.css:675-684` 的 `body:has(.configurator__bar)` 叠层规则
 **永不匹配**，于是两个固定层（`.sf-float-stack`、TranslatePress 切换器）落回 `style.css` 自身取值；
-而 `:700-707` 那两条 `html.no-has` **无条件复刻**（不受 `.configurator` 限定）仍然生效。
+而 **`:700` / `:705`** 那两条 `html.no-has` **无条件复刻**（不受 `.configurator` 限定）仍然生效。
+（行号勘误：两条分别为 `html.no-has .trp-language-switcher` 与 `html.no-has .sf-float-stack`，见 H2b2 扫描 §7。）
 480px 四格取证（`tools/b2d_h2b1_geom.py`，「有/无 stub」两态）：
 
 | | 无 stub（现代引擎） | 有 stub（旧引擎） |
@@ -144,8 +145,9 @@ B 缺 served-hash 参照 ⇒ FAIL 而**非 skip**；C 候选＝基线 ⇒ 9 行 
 —— **与候选剂型页完全一致**。
 
 ⇒ 结论：H2b1 让 8 个剂型页的固定层**收敛到全站其余页面的取值**（live 上它们被条顶到 132/68 属历史特例），
-这是删条的自然结果，**不是回归**；但它**不在方案声明的变更清单里**，所以在此显式列出，请裁决：
-接受收敛（推荐，全站一致），还是要求剂型页保持 132/68（需额外补一条规则，与「删条」的意图相悖）。
+这是删条的自然结果，**不是回归**。用户已确认通过（2026-09-22）。
+**用户同时更正两处**：① playbook 明确不执行上线 ⇒ 本批 **Step 6 `git pull` 跳过**；
+② **H2b2 的基线是 H2b1 后的预检副本，不是 live**，且预检副本**保留不拆**。
 
 ## 六条自我修正（记功）
 
@@ -177,8 +179,11 @@ B 缺 served-hash 参照 ⇒ FAIL 而**非 skip**；C 候选＝基线 ⇒ 9 行 
 
 ## H2b2 交接不变量
 
-1. **要一起删的整段**：`configurator.css:667-707`（`:has(.configurator__bar)` 叠层 + `html.no-has` 复刻）。
-   只删前者会留下旧引擎独有的 132/68，与「删条」自相矛盾；删后旧引擎应与现代引擎**差值归零**。
+1. **整文件删除**（行号勘误，见 `docs/batch2d-stepH2b2-scan.md` §1/§7）：原先写的「`configurator.css:667-707` 整段」**行号不成立** ——
+   `:667` 只是块内注释首行、**`:707` 不是任何块的边界**；真正的容器是 `@media (max-width: 767px) {`（**L642**），
+   它一直开到**文件末尾 L831**。`html.no-has` 两条复刻在 **L700 / L705**，`:has(.configurator__bar)` 叠层在 L643/675/682/689/690。
+   H2b2 删整个文件即覆盖全部；只删 `:has()` 那几条、留下 L700/L705，会让旧引擎保留独有的 132/68，与「删条」自相矛盾。
+   全站 `:has(` 由 **171 → 164**（口径＝出现次数；其中 configurator.css 的 7 次有 2 次在注释里）。
 2. **判据可复用四格法**：480px × 有/无 stub × live/候选，比 `.sf-float-stack` 与 `.trp-language-switcher` 的 `bottom`。
 3. **`.sf-explore*` 已不在 `configurator.css`**（残留 0 条，门 [4] 守着）；H2b2 删文件时应复核这一条不变量。
 4. `html.no-has` 探针本身**保留**（`style.css` §30 有消费者）。
