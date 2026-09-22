@@ -574,7 +574,7 @@ HowTo Schema：
 
 ---
 
-## 第六部分：工作铁律（10 条）
+## 第六部分：工作铁律（11 条）
 
 **【铁律1】报告与实际文件可能不一致**
 编辑回执 ≠ 落盘成功。每次声明"已删除/已修改"，必须用 `grep -cE` 或 `cmp` 复核文件实际字节。
@@ -602,9 +602,29 @@ admin JS/CSS 改动后，E2E 前必须 `agent-browser close --all` 清缓存。
 
 **【铁律9】同文件禁并行 Edit**
 串行编辑，一次一处。
+⛔ **并行 Edit 是静默丢改动，不是报错**（2026-09-22 实测）：同一条消息里对同一文件发两个 Edit，
+两个回执都写「Successfully edited」，**后写的那次把先写的整个覆盖掉** —— 因为两次都基于同一份
+快照、各自整文件落盘。丢的那一处**不报错、不留痕**，只能在事后 grep/read 时表现为「这次编辑
+像是没生效」。判据：改完立刻用 `grep -c` 回读**每一处**断言（不为「有没有改」而读，是为
+「几处改动都还在」而读）。多文件并行没问题，同一文件必须串行。
 
 **【铁律10】先过门再上线**
 线上从不服务未过门的字节。
+
+**【铁律11】门的判据形状决定它的盲区**
+2026-09-22 H5 实测，一次同族事故的第三次复现（H4e「掩码抹掉内容」→ H5-0「类没变≠视觉没变」→ H5「三个载体只改两个」）。
+**一个门只能回答它那句话所问的问题**，而人读到的永远是「门全绿」。所以：
+① **声明粒度必须与承载粒度一致**。同一串落在 `alt` / `data-label` / `aria-label` 三个属性上，
+就必须声明**裸串**；声明成 `alt="串"` 形状，另外两个属性**天然在判据之外**。
+② **白名单门必须带第三判据：覆盖断言**（批次跑完，声明的旧串出现次数 **= 0**）。
+缺它则「没改 = 没变 = 与基线逐字节相同 = 相等 = 全绿」——
+**反演式门对「漏改」结构性失明**，它只证「改了的都改对了」，不证「该改的都改了」。
+③ 覆盖断言要用**负向前瞻**（`old(?!\s*—\s)`），因为**新串以旧串为前缀**，
+朴素的 `old in text` 在正确候选上也不为 0，断言写不下去。
+④ 同一事实还要**以不变式形式再声明一次**（本次：*同一页内，同一张图只有一个 alt*），
+这样即使声明表本身过期，不变式仍然会响。
+⑤ 判据修好后**必须用真实的坏样本验它响**（本次：先在**未修态**捕获页上跑，看它 FAIL；
+再在补正态上跑，看它 PASS。两侧都要有）。
 
 ---
 
@@ -815,23 +835,44 @@ Sampling 四步是否与 playbook 第十部分【⑥】的文案逐字一致，�
 - 表单提交实测（真发邮件到 sales@）—— **实测，共 5 封**
 - 反垃圾验证 —— **实测：蜜罐最先被拒；1117ms/1628ms 提交被拒且断言时钟确实重打**
 
-### 【H5】SEO/GEO 优化
+### 【H5】SEO/GEO 优化 —— ✅ 已执行（产品 `1eafe62` ＋ 修复 `2017dbe`，2026-09-22）
 
-**范围：**
+**范围（原计划 → 七条裁决后的实际）**
 
 1. Product Schema 强化
-   - additionalProperty（口味/克重/包装等）
-   - offers（阶梯价格）
-   - material / audience / isRelatedTo
-2. Organization Schema 补 knowsAbout
-3. 图片 ALT 自动生成
-   - 格式：产品名 + 剂型 + 卖点 + 视觉特征
-   - 例：`Joint Support Soft Chews - Soft Chew - Chicken Flavor - 60 Count Bottle`
-4. 内容 80/20 原则审计
+   - additionalProperty：**剂型页 0/16 → 16/16**（复用 `sinofresh_formula_spec_cell()` 读 `sf-facts-mini` 四行；
+     死锚点 `sf-spec-list` 与遗留表在剂型页命中 0）。`name` 用**可见标签**（`Packaging formats` 印作 `Packaging`）
+   - offers：**渲染器优先，有数据才输出**。`sf_formula_price_tiers` 全空 ⇒ 今日 0/58 页输出，代码已就位。
+     只认**整格纯小数**（`1.20` / `$1.20` / `USD 1.20` / `1.20 USD`）；**`1,200` 与区间跳过不解析**（否则发出去的价格差三个数量级）
+   - isRelatedTo：58/58（读页面上**可见的** tile / card 链接，按序）；audience：**页头写明物种的才有**（`sf_formula_species` 全空 ⇒ 8 剂型里只有 4 个标题写了物种，其余 4 个**不给**）
+   - material：**登记 H6**（本批不做）
+2. Organization Schema 补 `knowsAbout`：**10 条**（8 个剂型标签 ＋ 2 条服务线），75/75
+3. 图片 ALT 规范化：**只做规范化**——logo `alt="sinofresh"` → `"SINO FRESH logo"`（150＝75 页头＋75 页脚，
+   真源是**媒体库 96 号附件**的 `_wp_attachment_image_alt`，不是模板）＋ 8 个剂型商品图各加视觉短语（314 处属性值 → 见下）
+4. WebSite schema：**登记 H6**
+5. 内容 80/20 审计：**只出报告**（`docs/batch2d-stepH5-audit-8020.md`），不改页面
 
-**回归：**
-- JSON-LD deep-equal（除新增字段）
-- Rich Results Test 验证
+**回归（H5 不能用字节门，见铁律11）**
+- **JSON-LD 语义门**：每块 parse 后 deep-equal，允许**新增键**、禁改值/删键；且**新增键路径集合 = 声明的集合**
+  （未声明的新增也 FAIL）
+- **渲染 HTML 白名单字节门**：把 ld+json 挖掉、把声明的新串反演回旧串，然后要求逐字节相等
+- **覆盖断言（第三判据，缺它则上述两门都能在漏改 126 处的构建上全绿）**：
+  声明的**旧裸串**在候选上出现次数 **= 0**；负向前瞻 `old(?!\s*—\s)`，因为**新串以旧串为前缀**
+- **不变式**：*同一页内，同一张图只有一个 alt*（同一张图有三个载体：模板缩略图 / 卡片 / 图集首帧+舞台）
+- **两门必须同时成立**，另加 A/A 自检、破坏矩阵、具名负对照
+
+⚠️ 本批**不改 CSS** ⇒ 版本令牌不动（**仍是 `2.10.60`**）⇒ 两态 provenance 只能**按内容**证
+（基线 `alt="sinofresh"`×150 且 `knowsAbout`×0；候选 `alt="SINO FRESH logo"`×150 且 `knowsAbout` 满）
+
+**结果（2026-09-22 完成，产品 `1eafe62` ＋ 修复 `2017dbe`；9 文件 +508/−77，零 CSS）：**
+主门 **79 断言 / 0 FAIL**（`alt_totals` 398→398、旧串 **0**；logo 150→150、left 0；`isRelatedTo` 58、
+`audience` 32＝12 formula_EN＋12 formula_ZH＋4 product_EN＋4 product_ZH、剂型页 `additionalProperty` 16/16、
+`knowsAbout` 75/75、`offers` 0/58）／**A/A 3/0**／**破坏矩阵 17/17**／**具名负对照 7/7**／
+**E2E 20 passed / 0 failed**（75 页、0 console error）／**截图 11/11**。
+本批**唯一的 DB 写**＝媒体库 **96 号附件**的 `_wp_attachment_image_alt` → `SINO FRESH logo`（回滚＝改回 `sinofresh`）。
+⛔ **产品图的同一个串有四个载体**，第四个（`button.sf-gallery__thumb`，**运行时由 `formula-gallery.js` 构建**）
+**不在任何一份捕获 HTML 里，任何基于捕获的门永远看不见它** ⇒ 必须写成不变式「页内一图一 alt」＋
+"缩略图保持装饰性"的**显式断言**。详见 `docs/batch2d-stepH5.md` §5。
 
 ### 【H6】数据迁移 + 清理
 
@@ -850,7 +891,7 @@ Sampling 四步是否与 playbook 第十部分【⑥】的文案逐字一致，�
 - DIFF 集合：仅 ver 令牌
 - 全站功能回归
 
-**⛔ H6 待办累计清单（13 项）—— 收尾时逐项裁决，不得遗漏：**
+**⛔ H6 待办累计清单（15 项）—— 收尾时逐项裁决，不得遗漏：**
 
 | # | 待办 | 出处 |
 |---|---|---|
@@ -864,6 +905,8 @@ Sampling 四步是否与 playbook 第十部分【⑥】的文案逐字一致，�
 | 11 | ⛔ **询盘弹窗提交成功后没有复位路径**：`form.hidden` / `success.hidden` 一旦翻转就不再复原 ⇒ 提交过的访客再点胶囊看到的是确认页而不是空表单。**不是 H4 引入的**（H4 没写复位），需决定：复原、还是把弹窗做成"一次性" | `docs/batch2d-stepH4.md` §11；附录 A.10 #14 |
 | 12 | ⛔ **`sf-facts-mini` 的 4 行与 H3 内容区参数行有 3 项语义重叠**（Certifications / Lead time / Packaging 在两处都渲染）⇒ **双真源漂移风险**。H5 若以 `sf-facts-mini` 供剂型页 `additionalProperty`，会让"同一事实两个来源"从 2 处变 3 处。**与第 4 项「MOQ 三处对账」合并处理**（`functions.php:1994` 已有注释承认这个坑） | `docs/batch2d-stepH5-scan.md` §5 #3 |
 | 13 | ⛔ **`theme.json` 的 `styles.elements.<tag>` 是"类未声明就掉"的隐式来源**：`styles.elements.h1.typography.fontWeight = 700` 只在元素名上，`.sf-formula-hero__title` 从未声明 `font-weight` ⇒ h1→div 时字重从 700 静默掉到 400（主门 0 FAIL）。**全站其它"由 h1 改来"或"将被改名"的元素需按三处枚举复查**（主题 CSS 元素选择器 / `theme.json` `styles.elements.<tag>` / 渲染页内联 global styles） | `docs/batch2d-stepH5-0.md` §2；附录 A.12 #1–#3 |
+| 14 | ⛔ **Product 的 `material` 未声明**（H5 裁决 C：本批只做 `isRelatedTo` + `audience`）。源码 0 处；`sf_formula_*` 无材质字段 ⇒ 要么补一个真源（`sf-facts-mini` 的第 5 行？），要么明确不做并记档 | H5 裁决 C；`docs/batch2d-stepH5-scan.md` §3 |
+| 15 | ⛔ **`WebSite` schema 全站缺**（H5 裁决 G：登记本批）。缺 `WebSite` + `SearchAction` ⇒ 站内搜索不被识别；需决定是否上线（影响 SERP 的 sitelinks searchbox） | H5 裁决 G |
 
 ---
 
@@ -882,6 +925,12 @@ Sampling 四步是否与 playbook 第十部分【⑥】的文案逐字一致，�
 **Step N+1：预检 + 六门 + 负对照 + 矩阵**
 → 全绿：继续
 → 产品 bug：停下
+
+⛔ **门要按批次形状选，不能沿用上一批的**（铁律11）。判据清单至少三条，缺一条就是全绿假象：
+① **位移/字节**（改了的都改对了）② **语义**（结构化数据 parse 后 deep-equal，允许新增键、禁改值/删键）
+③ **覆盖**（该改的都改了：声明的旧串在候选上出现次数 **= 0**，裸串粒度 + 负向前瞻）
+外加 ④ 把同一事实写成**不变式**再断言一次（本次 H5：*同一页内同一张图只有一个 alt*）。
+判据改完必须**两侧验响**：未修态要 FAIL、修好态要 PASS；再进矩阵与具名负对照。
 
 **Step N+2：浏览器 E2E**
 → 全绿：继续
@@ -967,7 +1016,7 @@ commit message 格式：
 
 ## 约束
 
-- 遵守工作铁律 10 条
+- 遵守工作铁律 11 条
 - 遵守默认决策值
 - 遵守停靠点规则
 - 不引入 ACF、不引入 JS 库、不引入 CSS 框架
@@ -1183,8 +1232,8 @@ commit message 格式：
 | **H4e**〔前置：邮箱变更〕 | **Step 1–5 全过门 + E2E 全过（2026-09-22）；Step 6 `git pull` 按规则跳过**。⚠️ **含 DB 改动，无"候选态"** | 主题 `24da600`（已 push）；DB 10 行（快照可回滚）；基线 `4ca3aea` | `docs/batch2d-stepH4e.md`（四项裁决见 `docs/batch2d-stepH4-scan.md`） |
 | **H4** | **Step 1–5 全过门 + E2E 全过（31 ok / 0 FAIL，连续三遍绿）；Step 6 `git pull` 按规则跳过** | 产品 `92dee47`（含修复 `a75640a`，均已 push）；基线 `24da600` 的预检副本（`2.10.57`） | `docs/batch2d-stepH4.md`（四项裁决 D1–D4 见 `docs/batch2d-stepH4-scan-body.md`） |
 | **H5-0**〔H1 扫描的两项裁决〕 | **Step 1–5 全过门 ＋ 行为门全过（2026-09-22）；`git pull` 按规则跳过**。**两处产品缺陷在字节门上都是 0 FAIL** | 产品 `c9884ed` ＋ 修复 `084b246`（均已 push）；基线 `92dee47` 的预检副本（`2.10.59`） | `docs/batch2d-stepH5-0.md`（方案 D ＋ `aside`→`div`；来源 `docs/scan-formula-detail-h1.md`） |
-| **H5** | 🚧 **Step 0 只读扫描完成，⛔ 停机待裁决（未进 Step 1、未改字节）** | — ；基线已就位＝**H5-0 的预检副本**（`084b246` 树，`2.10.60`，仍在位未拆） | `docs/batch2d-stepH5-scan.md`（**A–G 七条裁决**；停机＝③ 需改数据〔`offers` 阶梯价全空〕＋① 手册与实况不符〔ALT「自动生成」前提不成立〕） |
-| H6 | 未开工 | — | 待办已增至 **13 项**（H5-0 新造 1 项＝`theme.json` `styles.elements.<tag>` 的隐式字重泄漏，见其 §2；H5 新造 1 项＝`sf-facts-mini` 与 H3 参数行 3 项语义重叠，**并入第 4 项「MOQ 三处对账」**；H4 新造 1 项见其 §11；H4e 新造 1 项见其 §10.3；H3 新造 1 项见 `docs/batch2d-stepH3.md` §8；H2b2 新造 4 项见其 §8） |
+| **H5** | **Step 1–5 全过门 ＋ E2E 20/0 ＋ 截图 11/11；Step 6 `git pull` 按规则跳过**。⛔ **两个门在「漏改 126 处」的构建上都是 0 FAIL**（反演式门对「该改的没改」结构性失明） | 产品 `1eafe62` ＋ 修复 `2017dbe`（均已 push）；基线＝**H5-0 的预检副本**（`084b246` 树，`2.10.60`，仍在位未拆） | `docs/batch2d-stepH5.md`（七条裁决 A–G 落地 ＋ 四条判据的门 ＋ 四个新发现）／`docs/batch2d-stepH5-scan.md`（A–G 七条）／`docs/batch2d-stepH5-audit-8020.md`（裁决 E：80/20 已满足，余量 45 倍，不动） |
+| H6 | 未开工 | — | 待办已增至 **15 项**（H5 新造 2 项＝Product `material` 未声明、`WebSite` schema 未声明；H5-0 新造 1 项＝`theme.json` `styles.elements.<tag>` 的隐式字重泄漏，见其 §2；H5 另新造 1 项＝`sf-facts-mini` 与 H3 参数行 3 项语义重叠，**并入第 4 项「MOQ 三处对账」**；H4 新造 1 项见其 §11；H4e 新造 1 项见其 §10.3；H3 新造 1 项见 `docs/batch2d-stepH3.md` §8；H2b2 新造 4 项见其 §8） |
 
 **H2b1 门/E2E 摘要**：静态 S1–S8 全过；75 页基线 + 75 页候选；主门 **PASS 21 条 / 0 FAIL**
 （58 页差 / 17 页同，逐字节重建）；破坏矩阵 **10/10**；三条负对照全 FAIL（as required）；
