@@ -9783,6 +9783,18 @@ body.sf-config-lock { overflow: hidden; }
    pages. The active value is also what Active+Hover shows: hover already has
    the visitor's attention, and inventing a seventh colour for a state the
    brief did not name is how a palette drifts.
+
+   63c. The same marks on a phone, and the three defects this batch's own
+   measurement turned up. Four of the six marks were invisible inside the phone
+   drawer, because every rule in 63b is three or four classes deep and the
+   drawer's row rule is five; and `underline` and `thick-line` — the two that
+   necessarily reserve a bottom border and then hide it — were hiding the
+   drawer's own row separator with it. Both are repaired in 63c. The third,
+   `left-line` painting a 3px rule of nothing at every width and in both
+   builds, was a specificity conflict inside 63b and is repaired there, on the
+   section it belongs to. Each repair is written at the depth the rule it has to
+   beat is written at, and each one is named by an assertion in
+   tools/b2d_h7j_e2e.py so it cannot come back unseen.
    ========================================================================== */
 
 /* --- 63a. The core-facts band joins the content gutter ------------------- */
@@ -9887,7 +9899,15 @@ body.sf-config-lock { overflow: hidden; }
 }
 
 /* 5. left-line — a 3px rule at the left of the item, the label 8px clear of
-   it. The rule and the 8px are reserved on every top-level link. */
+   it. The rule and the 8px are reserved on every top-level link.
+   The active rules below are written at the SAME depth as the base rule above
+   them, on purpose. Written the short way — `.sf-header--nav-left-line
+   .sf-nav__link.is-active` — they are (0,3,0) against the base rule's (0,4,0),
+   so the base rule's `border-left: 3px solid transparent` won and the mark
+   painted a 3px rule of nothing: measured at 1440px, `border-left-width: 3px`
+   with `border-left-color: rgba(0, 0, 0, 0)`, at every width and in both
+   builds. The only state that ever showed the rule was :hover, because that
+   rule happens to be (0,4,0) and comes later in the sheet. */
 .sf-header--nav-left-line .wp-block-navigation__container > .wp-block-navigation-item > .sf-nav__link {
 	border-bottom-color: transparent;
 	border-left: 3px solid transparent;
@@ -9900,11 +9920,11 @@ body.sf-config-lock { overflow: hidden; }
 	color: var(--wp--preset--color--card-white);
 	border-left-color: rgba(255, 255, 255, 0.45);
 }
-.sf-header--nav-left-line .sf-nav__link.is-active {
+.sf-header--nav-left-line .wp-block-navigation__container > .wp-block-navigation-item > .sf-nav__link.is-active {
 	color: var(--wp--preset--color--card-white);
 	border-left-color: var(--wp--preset--color--card-white);
 }
-.sf-header--nav-left-line .sf-nav__link.is-active:hover {
+.sf-header--nav-left-line .wp-block-navigation__container > .wp-block-navigation-item > .sf-nav__link.is-active:hover {
 	color: var(--wp--preset--color--card-white);
 	border-left-color: var(--wp--preset--color--card-white);
 }
@@ -9929,4 +9949,63 @@ body.sf-config-lock { overflow: hidden; }
 .sf-header--nav-pill .sf-nav__link.is-active:hover {
 	color: var(--wp--preset--color--card-white);
 	background-color: rgba(90, 183, 53, 0.9);
+}
+
+/* --- 63c. ...and the same marks inside the phone drawer -------------------- */
+
+/* The drawer draws its own rows, and it draws them deeper than the marks do.
+   Three things measured on the preflight copy at 375px with the drawer open,
+   the first two of which are repairs and the third a repair of this batch's own
+   collateral damage:
+
+   1. TWO MARKS ERASED BY DEPTH. The drawer's row rule
+        .wp-block-navigation__responsive-container.is-menu-open
+          .wp-block-navigation__container > .wp-block-navigation-item
+          > .wp-block-navigation-item__content { min-height: 48px;
+          font-size: 16px; font-weight: 600; border-bottom: 1px solid
+          rgba(255, 255, 255, 0.14); }                  [max-width: 768px]
+      is (0,5,0), and the ≤781px modal rule
+        .wp-block-navigation .wp-block-navigation__responsive-container
+          .has-modal-open .wp-block-navigation-item__content { color: <white> }
+      is (0,4,0). Every mark in 63b is (0,3,0) or (0,4,0), so inside the drawer
+      `underline` painted a 1px 0.14-white hairline instead of its declared 2px
+      white, `thick-line` 1px instead of 4px, and `color` white instead of the
+      brand green. Measured: the current row was INDISTINGUISHABLE from an
+      unmarked row for four of the six marks — including `underline`, which is
+      the shipped default — so the mark was simply absent on a phone. The three
+      below restate those marks at (0,7,0) with the property and the colour
+      already recorded in 63b, so the drawer says what the bar says. `bg` and
+      `pill` are deliberately absent: they draw with background-color, which the
+      drawer rule does not touch, and both were measured still doing their job.
+      `left-line` is absent too, but for a different reason — its repair was a
+      specificity conflict inside 63b itself (see the note on mark 5), which is
+      why it was fixed there and not here.
+
+   2. THE ROW SEPARATOR WIPED BY THIS BATCH. `underline` and `thick-line` are
+      the two marks that draw with the bottom border, so both necessarily carry
+      a `:not(.is-active) { border-bottom-color: transparent }` to hide the
+      2px/4px they reserve on the other links. That rule is (0,5,0) — the same
+      as the drawer's row rule above — and it comes later in the sheet, so it
+      won on order and took the drawer's hairline off every row that was not
+      current. Measured: `rgba(0, 0, 0, 0)` under `underline` and `thick-line`,
+      the drawer's own `rgba(255, 255, 255, 0.14)` under the other four. One
+      rule, `:where()` over the six marks so it is (0,7,0) without naming them
+      six times, and the drawer's furniture comes back. */
+@media (max-width: 768px) {
+	.sf-header--nav-underline .wp-block-navigation__responsive-container.is-menu-open .wp-block-navigation__container > .wp-block-navigation-item > .sf-nav__link.is-active {
+		border-bottom-width: 2px;
+		border-bottom-color: var(--wp--preset--color--card-white);
+	}
+	.sf-header--nav-thick-line .wp-block-navigation__responsive-container.is-menu-open .wp-block-navigation__container > .wp-block-navigation-item > .sf-nav__link.is-active {
+		border-bottom-width: 4px;
+		border-bottom-color: var(--wp--preset--color--card-white);
+	}
+	.sf-header--nav-color .wp-block-navigation__responsive-container.is-menu-open .wp-block-navigation__container > .wp-block-navigation-item > .sf-nav__link.is-active {
+		color: var(--wp--preset--color--brand-green);
+	}
+	.sf-header:where(.sf-header--nav-underline, .sf-header--nav-bg, .sf-header--nav-thick-line,
+		.sf-header--nav-color, .sf-header--nav-left-line, .sf-header--nav-pill)
+		.wp-block-navigation__responsive-container.is-menu-open .wp-block-navigation__container > .wp-block-navigation-item > .sf-nav__link:not(.is-active) {
+		border-bottom-color: rgba(255, 255, 255, 0.14);
+	}
 }
