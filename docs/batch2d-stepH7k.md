@@ -139,3 +139,66 @@ Key Facts 修后实测：表格 `max-width: 1200px`、盒 `120→1320`，标题 
 | 08 / 09 / 10 / 11 | 认证带 1440 / 768 / 375 / zh 孪生页 |
 | 12 / 13 | Factory Tour 清单 1440（一行两列）/ 375（堆叠） |
 | 14 / 15 | Key Facts 与标题两端对齐 1440 / 375 |
+
+## 十、上线 dev（2026-09-23，用户授权 pull）＋ 上线后验收
+
+**授权**：用户「授权 pull 到 dev 站 ＋ 补推证据提交」，**生产站不动**。
+
+### 10.1 执行与结果
+
+| 步 | 命令 | 结果 |
+|---|---|---|
+| 1 | `git push origin main` | `450ba65..a12c4ee` —— 批 D 证据提交补推成功；`origin/main` = `a12c4ee` |
+| 2 | `ssh root@65.49.215.152` → `cd /var/www/dev.zxpet.com/site-repo` | 分支 `main`，上游 `origin/main`，工作树干净 |
+| 3 | `git fetch --prune origin` → `git pull --ff-only` | 快进 `5db481d → a12c4ee`，无冲突 |
+| 4 | `git rev-parse HEAD origin/main` | 两者同为 `a12c4ee29f421763998049b88f199909ffcf4894` |
+| 5 | live 主题（symlink → `site-repo/sinofresh-theme`） | `style.css` `Version: 2.10.72`；`functions.php` `wp_enqueue_style(..., '2.10.72')`；`front-page.html` `sf-certstrip` **22**、`sf-certgrid`/`sf-certcard` **0** |
+| 6 | 权限 | 文件 `644 root:root`、目录 `755` ⇒ apache 可读，无需改属主 |
+
+**未做任何 dev 封锁变更**；`zz-sf-dev-lockdown.php` 与 Basic Auth 原样保留。**生产站零改动。**
+
+### 10.2 上线后验收（`tools/b2d_h7k_live_accept.py --frames`，**不带 `X-SF-Preflight`**）
+
+**31/31 PASS，exit 0**；帧 6 张、0 平帧 → `docs/batchH7k-live-shots/`。
+
+⚠️ 这个脚本的 `served()` 门是**反的**：它必须证明答话的是
+`themes/sinofresh-theme/style.css?ver=2.10.72`，并且**不是** `-preflight` 副本。
+上线**前**把同一个 URL 抓下来，答的是 `ver=2.10.69` ＋ 6 张 `article.sf-certcard` ——
+所以这条门正是区分「pull 生效」和「还在读旧字节」的那一条，其余断言都挂在它后面。
+
+| 用户要求验证 | 实测 |
+|---|---|
+| `style.css?ver=2.10.72` | 首页与详情页均 `themes/sinofresh-theme/style.css?ver=2.10.72` |
+| 首页认证区 = 新版横向 | `.sf-certstrip`；6 枚 `li.sf-certstrip__badge`，名字与顺序＝brief；图标全 **32×32**；**1440 两行三列**（tops `[2860,2902]`、lefts `[120,527,933]`）、**375 三行两列**；带高 **155.39px**（旧六卡 607.3px）；lede ＋ `<p class="sf-certstrip__more"><a href="/quality/#certifications">`；`sf-certgrid`/`article.sf-certcard` **0** |
+| 详情页价格位置已上移 | `/formulas/joint-support-soft-chews/` 3 张 `label.sf-tier`，每张卡内 `price.top 1701.59 < range.top 1723.84 < unit.top 1740.44` ⇒ **单价在第一行**；对照 `2.10.69` 的 pill 是 `200` 在前、`USD 2.5 / unit` 在后。样品行 `Sample price US$50.00` ＋ `Get Sample` |
+| 底部按钮 = Send Inquiry | 文字 `Send Inquiry`、`href="/contact/#quote"`、带 `data-sf-inquiry-open`、盒 **139.77×48** 可见；`sf-formula-hero__actions` **0** |
+| 导航当前项高亮 | `/about/` → 标记 `/about/`；`/formulas/ear-care-drops/` → 标记 `/products/`（层级决定）；两页各**恰好 1 项**被标记（首页 **0** 项——首页不在导航里，这是「不是恒亮」的对照）。颜料读该变体真正画的那条通道：`border-bottom-color` ＝ `rgb(255,255,255)`／`2px`，而 idle 项全为 `rgba(0, 0, 0, 0)`；active `font-weight 600` |
+
+**「其余大区块仍 48px」的正确写法**：唯一不在 48px 的是 `Insights`，由既有
+`.sf-section:has(.sf-slot--cover) { padding-top: 32px }`（`min-width: 769px`）覆盖，
+在本批之前就存在。断言写成「**唯一**偏离 48px 的就是那条既有规则已覆盖的那一个」，
+而不是「其余全都是 48px」——后者从来不是真的。
+
+**广度核对**：75 条路径（`_backup/b2d-h7k-candidates/MANIFEST.tsv`）全部 **HTTP 200**、
+主题路由 **0** 处异常、`ver` 全部 `2.10.72`、旧认证标记 **0** 处残留。
+代表页逐页表 → `_backup/b2d-h7k-live-breadth.txt`。
+
+**缓存**：无需清。Cloudflare `cf-cache-status: DYNAMIC`（HTML 不入 CF 缓存）；
+样式表虽然 `immutable`，但 URL 里的 `?ver=` 变了 ⇒ 就是新资源。
+
+### 10.3 工具链踩坑（本次实测）
+
+- ⛔ **验收脚本里两条断言是我写错的**（已重构，未放宽）：
+  ① 把 `<p class="sf-certstrip__more">` 当链接读 ⇒ `href` 为 `null`，真链接在它**内部**；
+  ② 「其余大区块都 48px」——见上。
+  **两条都在批 D 自己的 E2E 里犯过同一个错**，说明这类「包装层当本体」「把例外当全体」的写法极易复发。
+- ⛔ **连抓约 85 次后 Cloudflare 开始 403 拦 `urllib` 的用户代理**（同一时刻 `curl` 仍 200）。
+  ⇒ 广度核对一律 `curl` ＋ **≥1.2s 间隔**；被 403 打出来的**空体不能当证据**——
+  它会打出一张全 0 的表，读起来像「什么都没渲染」。
+
+### 10.4 后继待裁决
+
+- **预检副本 `450ba65` 现在与 live 逐字节相同**（`a12c4ee` 只动 `tools/`＋`docs/`，未动主题），
+  已是一份冗余副本；更旧的 `0e5b5e4`／`967d252`／`8a613bd`／`0b015e1` 更是过时。
+  **删/留未获授权**，登记待裁决（下一批开工时应以 live 自身为新基线）。
+- 生产上线（含 `dev-lockdown.md` 的 10 项移除，最易漏 `blog_public` 0→1）**不在本回合范围**。
