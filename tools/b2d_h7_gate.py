@@ -1992,15 +1992,24 @@ def invariants(decl, base, cand, verbose=True):
 
     # JSON-LD is compared as DATA, not as bytes: TranslatePress re-serialises the
     # block per language, so a byte comparison would call 21 zh pages a regression
-    # every time (batch H3's lesson).
+    # every time (batch H3's lesson). A batch that legitimately rewrites one key
+    # on named pages says so in `jsonld_delta`; the check then narrows rather
+    # than loosens — see jsonld_with_exception.
     try:
-        ld_ok, ld_pages = jsonld_equal(names, base, cand)
+        spec = decl.get('jsonld_delta')
+        if spec:
+            ld_ok, ld_pages, ld_bad = jsonld_with_exception(names, base, cand, spec)
+        else:
+            ld_ok, ld_pages = jsonld_equal(names, base, cand)
+            ld_bad = []
     except Exception as exc:                                    # pragma: no cover
-        ld_ok, ld_pages = False, 'error: %s' % exc
+        ld_ok, ld_pages, ld_bad = False, 'error: %s' % exc, []
     ok &= ld_ok
-    rows.append({'label': 'json-ld deep equal', 'ok': ld_ok})
+    rows.append({'label': 'json-ld deep equal', 'ok': ld_ok, 'bad': ld_bad})
     if verbose:
-        print('  %-28s pages parsed = %s  %s' % ('json-ld deep equal', ld_pages, 'ok' if ld_ok else 'FAIL'))
+        print('  %-28s pages parsed = %s%s  %s'
+              % ('json-ld deep equal', ld_pages,
+                 '' if not ld_bad else '  %s' % (ld_bad,), 'ok' if ld_ok else 'FAIL'))
 
     if verbose:
         print('  %s  invariants: the counts the batch did not claim to move did not move'
@@ -2025,6 +2034,107 @@ def jsonld_equal(names, base, cand):
                 bad += 1
                 break
     return bad == 0, len(names)
+
+
+def _offers_out(node, key):
+    """Every value filed under `key`, wherever it sits, and the tree without
+    them. Mutates `node` on purpose: the caller wants both halves of the same
+    walk, not two traversals that could disagree."""
+    got = []
+    if isinstance(node, dict):
+        for k in list(node):
+            if k == key:
+                got.append(node.pop(k))
+            else:
+                got += _offers_out(node[k], key)
+    elif isinstance(node, list):
+        for v in node:
+            got += _offers_out(v, key)
+    return got
+
+
+def jsonld_with_exception(names, base, cand, spec):
+    """JSON-LD as data, with ONE named exception instead of a loosened rule.
+
+    Batch H7i rewrites the record's offer block — one tier becomes three — so
+    the offers on that record MUST move, and a blanket deep-equal would call
+    the batch a regression. The wrong fix is to stop comparing the block: that
+    would hide a broken aggregate price on every other record too. So the
+    exception is stated three ways at once, none of which can widen silently:
+
+      * the pages it applies to are named, and every other page must still be
+        deep-equal INCLUDING its own offer block, which is collected and
+        compared rather than skipped;
+      * on the named pages everything except the declared key must still be
+        deep-equal — the Product node's name, image, properties and the other
+        five blocks are all still compared;
+      * and the key itself must equal the declared numbers, tier by tier.
+
+    A declaration that named the wrong pages, or declared the wrong prices,
+    fails on the second and third clauses.
+
+    The page-set clause is also what the boundary is measured BY, and that is
+    deliberate: on this site no other record is priced, so `offers` exists on the
+    declared pages and nowhere else, and "and nowhere else" is a claim that can
+    fail today. The `fb != fc` branch below would fire if some other record
+    gained a price and the block moved on it — kept because it is the clause
+    that keeps a pruned key from hiding a second copy, but noted as unreachable
+    at the data this batch runs on, so that a reader does not mistake it for
+    coverage it is not.
+    """
+    key = spec['key']
+    exc = set(spec['pages'])
+    want = spec['offers']
+    bad, seen = [], set()
+    for n in names:
+        ab = json_blocks(read(os.path.join(base, n + '.html')))
+        ac = json_blocks(read(os.path.join(cand, n + '.html')))
+        if len(ab) != len(ac):
+            bad.append((n, 'block count %d -> %d' % (len(ab), len(ac))))
+            continue
+        for x, y in zip(ab, ac):
+            ob, oc = json.loads(x), json.loads(y)
+            fb, fc = _offers_out(ob, key), _offers_out(oc, key)
+            if ob != oc:
+                bad.append((n, 'a field other than %s moved' % key))
+                break
+            # Most blocks on the site carry no offer key at all — the FAQ, the
+            # HowTo, the breadcrumb. They are already compared above; running
+            # the declared-shape clause on them asks an empty list to look like
+            # an AggregateOffer, which is how the first version of this helper
+            # reported a perfectly correct page as two failures.
+            if not fb and not fc:
+                continue
+            if n in exc:
+                seen.add(n)
+                got = fc[0] if fc else {}
+                good = (isinstance(got, dict)
+                        and got.get('@type') == want['@type']
+                        and got.get('priceCurrency') == want['priceCurrency']
+                        and got.get('lowPrice') == want['lowPrice']
+                        and got.get('highPrice') == want['highPrice']
+                        and got.get('offerCount') == want['offerCount']
+                        # The key has to have been found in the same number of
+                        # places on both sides: a declaration that pruned one
+                        # copy away would otherwise pass on a page that carries
+                        # two. NOT `fb == fc` -- on the exception page the two
+                        # are required to differ, and asserting equality there
+                        # made every run red.
+                        and len(fb) == len(fc))
+                tiers = [(s.get('price'),
+                          (s.get('minQuantity') or {}).get('value'),
+                          (s.get('maxQuantity') or {}).get('value'))
+                         for s in got.get('priceSpecification', [])] if good else []
+                if not good or tiers != [tuple(t) for t in want['tiers']]:
+                    bad.append((n, '%s is %r / tiers %r' % (key, got, tiers)))
+                    break
+            elif fb != fc:
+                bad.append((n, 'the %s block moved off the declared record' % key))
+                break
+    if seen != exc:
+        bad.append(('exception set', 'declared %r, hit %r'
+                    % (sorted(exc), sorted(seen))))
+    return (not bad), len(names), bad[:4]
 
 
 AA_VER_RE = re.compile(r'\?ver=([0-9][0-9A-Za-z._-]*)')
@@ -2323,6 +2433,24 @@ def negctl(decl, base, cand, theme, verbose=True):
         # reason: the payload is removed whole, so nothing about it is compared.
         for label, page, fn in decl.get('nc_page', []):
             c = _clone(cand, os.path.join(work, 'ncp'))
+            p = os.path.join(c, page)
+            before = read(p)
+            after = fn(before)
+            if after == before:
+                report(label, False, 'the mutant changed nothing')
+                continue
+            _write(p, after)
+            r = invariants(decl, base, c, verbose=False)
+            report(label, not r['ok'])
+
+        # ...and the same treatment for the one place where a pass is allowed to
+        # NOT be deep-equal: `jsonld_delta`. It is a newer mechanism than the
+        # rest of this pass and it narrows rather than loosens, so each of its
+        # three clauses gets a mutant that makes it fire. A declarable exception
+        # with no control is the cheapest way to hide a real regression: it
+        # would go on passing after the declared numbers stopped being printed.
+        for label, page, fn in decl.get('nc_jsonld', []):
+            c = _clone(cand, os.path.join(work, 'ncld'))
             p = os.path.join(c, page)
             before = read(p)
             after = fn(before)
@@ -2841,6 +2969,533 @@ BATCHES['h7h'] = {
         ('gallery builds the dots', 'js', r'sf-gallery__dots', True),
         ('gallery syncs the dots in paint()', 'js',
          r"dotBtns.forEach", True),
+    ],
+}
+
+
+# ---------------------------------------------------------- H7i batch
+# Batch H7i is the first batch that carries a DATA write and a CODE write in one
+# commit, so its gate covers both. The baseline is therefore the previous commit
+# (5db481d) with post 158's three metas as they stood BEFORE the write — video
+# url empty, the legacy single-tier `qty`/`price` pair, no sample fee — and the
+# candidate is 967d252 with the batch's own values. The video frame, the price
+# ladder and the three-offer aggregate exist on the candidate side only because
+# of that write, so the three per-record literal pairs below are the write's
+# rendering as much as the theme's.
+#
+# That makes this declaration NON-RE-RUNNABLE by design: re-capturing the
+# baseline now would find post 158 already carrying the new data, none of the
+# literals would match, `applies` would come out short and the gate would go
+# RED. It fails closed, which is the direction a pinned declaration should fail
+# in. Re-running it needs the pre-write data back — the snapshot is
+# _backup/b2d-h7i-post158/before.json.
+
+H7I_HERO = re.compile(r'<div class="sf-formula-hero__actions">.*?</div>')
+# The hero's own two buttons go; the brief's hero is the identity of the record
+# and nothing else. The comment that replaces them is byte-identical on both
+# languages — the hero's hrefs were language-prefixed, and removing it must not
+# depend on which prefix was there.
+H7I_HERO_COMMENT = (
+    "<!-- Batch H7i: the hero's two buttons (Send Inquiry / Build Custom Formula)\n     are gone. The brief's hero is the identity of the record and nothing else:\n     breadcrumb, name, one meta line. The inquiry path moved to the foot of the\n     parameters column, where the visitor has just read the specification —\n     and to the float capsule, which already carried the same destination. -->"
+)
+
+# The right column's foot: a plain "Request Sample" link to /contact/ becomes
+# the page's own inquiry button, carrying the dialog hook and the no-JS
+# destination. The prefix is the one byte that differs between the languages, so
+# the pattern captures it instead of naming either.
+H7I_CTA = re.compile(
+    r'<a class="sf-fdetail2__cta" href="((?:/zh)?/contact/)">Request Sample</a>')
+H7I_CTA_COMMENT = (
+    "<!-- Batch H7i: this used to be a plain \"Request Sample\" link to /contact/.\n     It is now the page's own inquiry button: the same Send Inquiry the float\n     capsule carries, at the foot of the specification the visitor just read,\n     with data-sf-inquiry-open driving the dialog and /contact/#quote the\n     no-JS destination. The paint is 38a's own CTA rule, not a second style. -->\n"
+)
+
+# The record's own payload, part one: the gallery. It is the record's FAMILY
+# gallery — the four soft-chew pages carry it byte for byte — which is why the
+# transform scopes these edits on the canonical link rather than trusting the
+# literal to be unique. The renderer puts the video frame at slot 2, so the
+# three frames after it are renumbered and the tab group gains its Video button;
+# both languages of the record carry the same bytes.
+H7I_GALLERY_OLD = (
+    '<div class="sf-gallery__inner" data-gallery="soft-chews"><div class="sf-gallery__stage" role="tabpanel" id="sf-gallery-panel-soft-chews" aria-label="SINO FRESH Soft Chews private label pet supplement product — brown star- and bone-shaped chews">'
+    '<figure class="sf-gallery__slide" id="sf-gallery-slide-soft-chews-1" data-slot="1" data-label="SINO FRESH Soft Chews private label pet supplement product — brown star- and bone-shaped chews">'
+    '<img src="https://dev.zxpet.com/wp-content/uploads/2026/09/soft-chews.webp" alt="SINO FRESH Soft Chews private label pet supplement product — brown star- and bone-shaped chews" width="720" height="720" loading="eager" decoding="async">'
+    '</figure><figure class="sf-gallery__slide" id="sf-gallery-slide-soft-chews-2" data-slot="2" data-label="Soft Chews production line at the SINO FRESH GMP facility in Linyi, China" hidden>'
+    '<img src="https://dev.zxpet.com/wp-content/uploads/2026/09/fac-placeholder.webp" alt="Soft Chews production line at the SINO FRESH GMP facility in Linyi, China" width="1100" height="733" loading="lazy" decoding="async">'
+    '</figure><figure class="sf-gallery__slide" id="sf-gallery-slide-soft-chews-3" data-slot="3" data-label="Soft Chews packaging line at the SINO FRESH GMP facility in Linyi, China" hidden>'
+    '<img src="https://dev.zxpet.com/wp-content/uploads/2026/09/fac-packaging.webp" alt="Soft Chews packaging line at the SINO FRESH GMP facility in Linyi, China" width="800" height="600" loading="lazy" decoding="async">'
+    '</figure><figure class="sf-gallery__slide" id="sf-gallery-slide-soft-chews-4" data-slot="4" data-label="Soft Chews moving along the tray line inside the SINO FRESH GMP facility" hidden>'
+    '<img src="https://dev.zxpet.com/wp-content/uploads/2026/09/fac-line.webp" alt="Soft Chews moving along the tray line inside the SINO FRESH GMP facility" width="800" height="600" loading="lazy" decoding="async">'
+    '</figure><div class="sf-gallery__preview" data-sf-gallery-preview hidden></div></div><div class="sf-gallery__tabs" role="group" aria-label="Product media">'
+    '<button type="button" class="sf-gallery__tab is-active" data-sf-gallery-tab="photos" aria-pressed="true">Photos</button>'
+    '</div></div>'
+)
+H7I_GALLERY_NEW = (
+    '<div class="sf-gallery__inner" data-gallery="soft-chews"><div class="sf-gallery__stage" role="tabpanel" id="sf-gallery-panel-soft-chews" aria-label="SINO FRESH Soft Chews private label pet supplement product — brown star- and bone-shaped chews">'
+    '<figure class="sf-gallery__slide" id="sf-gallery-slide-soft-chews-1" data-slot="1" data-label="SINO FRESH Soft Chews private label pet supplement product — brown star- and bone-shaped chews">'
+    '<img src="https://dev.zxpet.com/wp-content/uploads/2026/09/soft-chews.webp" alt="SINO FRESH Soft Chews private label pet supplement product — brown star- and bone-shaped chews" width="720" height="720" loading="eager" decoding="async">'
+    '</figure><figure class="sf-gallery__slide sf-gallery__slide--video" id="sf-gallery-slide-soft-chews-2" data-slot="2" data-video-id="jNQXAC9IVRw" data-label="Soft Chews product video" hidden>'
+    '<button type="button" class="sf-gallery__play"><img src="https://i.ytimg.com/vi/jNQXAC9IVRw/hqdefault.jpg" alt="Soft Chews product video" width="480" height="360" loading="lazy" decoding="async">'
+    '<span class="sf-gallery__play-icon" aria-hidden="true"></span><span class="sf-gallery__play-text">Play video</span>'
+    '</button></figure><figure class="sf-gallery__slide" id="sf-gallery-slide-soft-chews-3" data-slot="3" data-label="Soft Chews production line at the SINO FRESH GMP facility in Linyi, China" hidden>'
+    '<img src="https://dev.zxpet.com/wp-content/uploads/2026/09/fac-placeholder.webp" alt="Soft Chews production line at the SINO FRESH GMP facility in Linyi, China" width="1100" height="733" loading="lazy" decoding="async">'
+    '</figure><figure class="sf-gallery__slide" id="sf-gallery-slide-soft-chews-4" data-slot="4" data-label="Soft Chews packaging line at the SINO FRESH GMP facility in Linyi, China" hidden>'
+    '<img src="https://dev.zxpet.com/wp-content/uploads/2026/09/fac-packaging.webp" alt="Soft Chews packaging line at the SINO FRESH GMP facility in Linyi, China" width="800" height="600" loading="lazy" decoding="async">'
+    '</figure><figure class="sf-gallery__slide" id="sf-gallery-slide-soft-chews-5" data-slot="5" data-label="Soft Chews moving along the tray line inside the SINO FRESH GMP facility" hidden>'
+    '<img src="https://dev.zxpet.com/wp-content/uploads/2026/09/fac-line.webp" alt="Soft Chews moving along the tray line inside the SINO FRESH GMP facility" width="800" height="600" loading="lazy" decoding="async">'
+    '</figure><div class="sf-gallery__preview" data-sf-gallery-preview hidden></div></div><div class="sf-gallery__tabs" role="group" aria-label="Product media">'
+    '<button type="button" class="sf-gallery__tab is-active" data-sf-gallery-tab="photos" aria-pressed="true">Photos</button>'
+    '<button type="button" class="sf-gallery__tab" data-sf-gallery-tab="video" aria-pressed="false">Video</button></div>'
+    '</div>'
+)
+
+# Part two: Quantity & Pricing. One legacy pill — "200 — USD 2.5 / unit", the
+# shape of the single tier the record carried before the write — becomes the
+# three-card ladder plus the sample row. The languages differ by the sample
+# button's href and by TranslatePress's lowercasing of the SVG's viewBox; both
+# are asserted when this block is generated.
+H7I_PRICING_OLD = (
+    '<div class="sf-fdetail-config__group" data-sf-config-group="pricing"><p class="sf-fdetail-config__row"><span class="sf-fdetail-config__label">Quantity &amp; Pricing</span>'
+    '<span class="sf-fdetail-config__meta">200 — USD 2.5 / unit</span><span class="sf-fdetail-config__hint">Choose one</span>'
+    '</p><div class="sf-fdetail-config__options" role="group" aria-label="Quantity &amp; Pricing"><label class="sf-fdetail-config__opt">'
+    '<input class="sf-fdetail-config__input" type="radio" name="sf-config-pricing" value="200" data-sf-config-opt="pricing">'
+    '<span class="sf-fdetail-config__box" aria-hidden="true"></span><span class="sf-fdetail-config__text">200</span>'
+    '<span class="sf-fdetail-config__note">USD 2.5 / unit</span></label></div></div>'
+)
+H7I_PRICING_NEW_EN = (
+    '<div class="sf-fdetail-config__group" data-sf-config-group="pricing"><p class="sf-fdetail-config__row"><span class="sf-fdetail-config__label">Quantity &amp; Pricing</span>'
+    '<span class="sf-fdetail-config__meta">10-99 — US$3.88 / unit · 100-999 — US$3.58 / unit · ≥1,000 — US$3.28 / unit</span>'
+    '<span class="sf-fdetail-config__hint">Choose one</span></p><div class="sf-fdetail-config__options sf-fdetail-config__tiers" role="group" aria-label="Quantity &amp; Pricing">'
+    '<label class="sf-fdetail-config__opt sf-tier"><input class="sf-fdetail-config__input" type="radio" name="sf-config-pricing" value="10-99" data-sf-config-opt="pricing">'
+    '<span class="sf-tier__price">US$3.88</span><span class="sf-tier__range">10-99</span><span class="sf-tier__unit">pieces</span>'
+    '<span class="sf-tier__dot" aria-hidden="true"></span></label><label class="sf-fdetail-config__opt sf-tier"><input class="sf-fdetail-config__input" type="radio" name="sf-config-pricing" value="100-999" data-sf-config-opt="pricing">'
+    '<span class="sf-tier__price">US$3.58</span><span class="sf-tier__range">100-999</span><span class="sf-tier__unit">pieces</span>'
+    '<span class="sf-tier__dot" aria-hidden="true"></span></label><label class="sf-fdetail-config__opt sf-tier"><input class="sf-fdetail-config__input" type="radio" name="sf-config-pricing" value="≥1,000" data-sf-config-opt="pricing">'
+    '<span class="sf-tier__price">US$3.28</span><span class="sf-tier__range">≥1,000</span><span class="sf-tier__unit">pieces</span>'
+    '<span class="sf-tier__dot" aria-hidden="true"></span></label></div><div class="sf-fdetail-config__sample"><span class="sf-fdetail-config__sample-icon" aria-hidden="true">'
+    '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" focusable="false">'
+    '<path d="M21 8 12 3 3 8v8l9 5 9-5V8Z"/><path d="m3 8 9 5 9-5"/><path d="M12 13v8"/></svg></span><span class="sf-fdetail-config__sample-label">Sample price</span>'
+    '<span class="sf-fdetail-config__sample-price">US$50.00</span><a class="sf-fdetail-config__sample-cta" href="/contact/#quote" data-sf-inquiry-open data-sf-inquiry-sample="US$50.00">Get Sample</a>'
+    '</div></div>'
+)
+H7I_PRICING_NEW_ZH = (
+    '<div class="sf-fdetail-config__group" data-sf-config-group="pricing"><p class="sf-fdetail-config__row"><span class="sf-fdetail-config__label">Quantity &amp; Pricing</span>'
+    '<span class="sf-fdetail-config__meta">10-99 — US$3.88 / unit · 100-999 — US$3.58 / unit · ≥1,000 — US$3.28 / unit</span>'
+    '<span class="sf-fdetail-config__hint">Choose one</span></p><div class="sf-fdetail-config__options sf-fdetail-config__tiers" role="group" aria-label="Quantity &amp; Pricing">'
+    '<label class="sf-fdetail-config__opt sf-tier"><input class="sf-fdetail-config__input" type="radio" name="sf-config-pricing" value="10-99" data-sf-config-opt="pricing">'
+    '<span class="sf-tier__price">US$3.88</span><span class="sf-tier__range">10-99</span><span class="sf-tier__unit">pieces</span>'
+    '<span class="sf-tier__dot" aria-hidden="true"></span></label><label class="sf-fdetail-config__opt sf-tier"><input class="sf-fdetail-config__input" type="radio" name="sf-config-pricing" value="100-999" data-sf-config-opt="pricing">'
+    '<span class="sf-tier__price">US$3.58</span><span class="sf-tier__range">100-999</span><span class="sf-tier__unit">pieces</span>'
+    '<span class="sf-tier__dot" aria-hidden="true"></span></label><label class="sf-fdetail-config__opt sf-tier"><input class="sf-fdetail-config__input" type="radio" name="sf-config-pricing" value="≥1,000" data-sf-config-opt="pricing">'
+    '<span class="sf-tier__price">US$3.28</span><span class="sf-tier__range">≥1,000</span><span class="sf-tier__unit">pieces</span>'
+    '<span class="sf-tier__dot" aria-hidden="true"></span></label></div><div class="sf-fdetail-config__sample"><span class="sf-fdetail-config__sample-icon" aria-hidden="true">'
+    '<svg width="16" height="16" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" focusable="false">'
+    '<path d="M21 8 12 3 3 8v8l9 5 9-5V8Z"/><path d="m3 8 9 5 9-5"/><path d="M12 13v8"/></svg></span><span class="sf-fdetail-config__sample-label">Sample price</span>'
+    '<span class="sf-fdetail-config__sample-price">US$50.00</span><a class="sf-fdetail-config__sample-cta" href="/zh/contact/#quote" data-sf-inquiry-open data-sf-inquiry-sample="US$50.00">Get Sample</a>'
+    '</div></div>'
+)
+
+# Part three: the offers, as the crawler reads them. The ladder turns one tier
+# into three, so the aggregate price, the offer count and the specification list
+# all move — and they move IN THE PAGE BYTES, which is why the main proof has to
+# declare them and not only the JSON-LD invariant. The en page carries the block
+# compact; TranslatePress re-serialises the zh page with its own indentation, so
+# there are two literal pairs. Each occurs exactly once on the whole site.
+H7I_LD_OLD_EN = (
+    '{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":2.5,"highPrice":2.5,"offerCount":1,"priceSpecification":[{"@type":"UnitPriceSpecification","price":2.5,"priceCurrency":"USD","minQuantity":{"@type":"QuantitativeValue","value":200,"unitText":"units"}}]}'
+)
+H7I_LD_NEW_EN = (
+    '{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":3.28,"highPrice":3.88,"offerCount":3,"priceSpecification":[{"@type":"UnitPriceSpecification","price":3.88,"priceCurrency":"USD","minQuantity":{"@type":"QuantitativeValue","value":10,"unitText":"units"},"maxQuantity":{"@type":"QuantitativeValue","value":99,"unitText":"units"}},{"@type":"UnitPriceSpecification","price":3.58,"priceCurrency":"USD","minQuantity":{"@type":"QuantitativeValue","value":100,"unitText":"units"},"maxQuantity":{"@type":"QuantitativeValue","value":999,"unitText":"units"}},{"@type":"UnitPriceSpecification","price":3.28,"priceCurrency":"USD","minQuantity":{"@type":"QuantitativeValue","value":1000,"unitText":"units"}}]}'
+)
+H7I_LD_OLD_ZH = (
+    '{\n        "@type": "AggregateOffer",\n        "priceCurrency": "USD",\n        "lowPrice": 2.5,\n        "highPrice": 2.5,\n        "offerCount": 1,\n        "priceSpecification": [\n            {\n                "@type": "UnitPriceSpecification",\n                "price": 2.5,\n                "priceCurrency": "USD",\n                "minQuantity": {\n                    "@type": "QuantitativeValue",\n                    "value": 200,\n                    "unitText": "units"\n                }\n            }\n        ]\n    }'
+)
+H7I_LD_NEW_ZH = (
+    '{\n        "@type": "AggregateOffer",\n        "priceCurrency": "USD",\n        "lowPrice": 3.28,\n        "highPrice": 3.88,\n        "offerCount": 3,\n        "priceSpecification": [\n            {\n                "@type": "UnitPriceSpecification",\n                "price": 3.88,\n                "priceCurrency": "USD",\n                "minQuantity": {\n                    "@type": "QuantitativeValue",\n                    "value": 10,\n                    "unitText": "units"\n                },\n                "maxQuantity": {\n                    "@type": "QuantitativeValue",\n                    "value": 99,\n                    "unitText": "units"\n                }\n            },\n            {\n                "@type": "UnitPriceSpecification",\n                "price": 3.58,\n                "priceCurrency": "USD",\n                "minQuantity": {\n                    "@type": "QuantitativeValue",\n                    "value": 100,\n                    "unitText": "units"\n                },\n                "maxQuantity": {\n                    "@type": "QuantitativeValue",\n                    "value": 999,\n                    "unitText": "units"\n                }\n            },\n            {\n                "@type": "UnitPriceSpecification",\n                "price": 3.28,\n                "priceCurrency": "USD",\n                "minQuantity": {\n                    "@type": "QuantitativeValue",\n                    "value": 1000,\n                    "unitText": "units"\n                }\n            }\n        ]\n    }'
+)
+
+# Part four: the dialog carrier, which reprints the pricing group's own summary
+# line. The ladder therefore shows up a fourth time, and here in identical bytes
+# on both languages — the carrier is one component, not two.
+H7I_MODAL_OLD = (
+    '<dt class="sf-inquiry-modal__term">Quantity &amp; Pricing</dt><dd class="sf-inquiry-modal__value">200 — 2.5</dd>'
+)
+H7I_MODAL_NEW = (
+    '<dt class="sf-inquiry-modal__term">Quantity &amp; Pricing</dt><dd class="sf-inquiry-modal__value">10-99 — US$3.88 · 100-999 — US$3.58 · ≥1,000 — US$3.28</dd>'
+)
+
+# The record the batch wrote data for. Anchored on the canonical link, which is
+# the page's own statement of which record it is and which survives the excerpt,
+# the hero and every other region the transform touches.
+H7I_RECORD = re.compile(
+    r'<link rel="canonical" href="https?://[^"]*/(?:zh/)?formulas/joint-support-soft-chews/"')
+H7I_ZH = re.compile(r'<html lang="zh-CN"')
+
+
+def _h7i_cta(prefix):
+    return (H7I_CTA_COMMENT + '<a class="sf-fdetail2__cta" href="' + prefix
+            + '#quote" data-sf-inquiry-open>Send Inquiry</a>')
+
+
+def _h7i_record_payload(text, gallery=True, pricing=True, jsonld=True, modal=True):
+    """The record's four payloads, each one literal pair: the gallery, the price
+    ladder, the offer block and the dialog carrier's reprint of the ladder. Only
+    the gallery is not the record's own data — it is its family's — so all four
+    sit behind the same canonical-link scope, which is what keeps the family
+    gallery from being patched onto the three sibling records."""
+    n = 0
+    if not H7I_RECORD.search(text):
+        return text, n
+    zh = bool(H7I_ZH.search(text))
+    if gallery and H7I_GALLERY_OLD in text:
+        text = text.replace(H7I_GALLERY_OLD, H7I_GALLERY_NEW, 1)
+        n += 1
+    if pricing and H7I_PRICING_OLD in text:
+        text = text.replace(H7I_PRICING_OLD,
+                            H7I_PRICING_NEW_ZH if zh else H7I_PRICING_NEW_EN, 1)
+        n += 1
+    ld_old = H7I_LD_OLD_ZH if zh else H7I_LD_OLD_EN
+    if jsonld and ld_old in text:
+        text = text.replace(ld_old, H7I_LD_NEW_ZH if zh else H7I_LD_NEW_EN, 1)
+        n += 1
+    if modal and H7I_MODAL_OLD in text:
+        text = text.replace(H7I_MODAL_OLD, H7I_MODAL_NEW, 1)
+        n += 1
+    return text, n
+
+
+def _h7i_transform(text):
+    """H7i's declared edit to one baseline page: the hero's two buttons leave,
+    the right column's foot becomes the inquiry button, and the one record the
+    batch wrote data for swaps in the video frame, the price ladder, the
+    three-offer aggregate and the dialog's reprint of it. Tokens are NOT the
+    transform's business — fold()
+    applies the declared token pairs."""
+    n = 0
+    text, k = H7I_HERO.subn(lambda m: H7I_HERO_COMMENT, text)
+    n += k
+    text, k = H7I_CTA.subn(lambda m: _h7i_cta(m.group(1)), text)
+    n += k
+    text, k = _h7i_record_payload(text)
+    return text, n + k
+
+
+def _h7i_partial(hero=False, cta=False, gallery=False, pricing=False,
+                 jsonld=False, modal=False):
+    """Mutants that skip one declared edit; each must break the proof."""
+    def f(text):
+        n = 0
+        if hero:
+            text, k = H7I_HERO.subn(lambda m: H7I_HERO_COMMENT, text)
+            n += k
+        if cta:
+            text, k = H7I_CTA.subn(lambda m: _h7i_cta(m.group(1)), text)
+            n += k
+        text, k = _h7i_record_payload(text, gallery, pricing, jsonld, modal)
+        return text, n + k
+    return f
+
+
+def _h7i_480_out_of_order(css):
+    """Move the ladder's phone step IN FRONT of the rule it overrides — the dead
+    step batch H7b shipped, rebuilt on this batch's own section. Without it the
+    ordering claim is a claim nobody has watched fail."""
+    i = css.find('.sf-fdetail-config__opt.sf-tier {')
+    j = css.find('@media (max-width: 480px) {', i)
+    if i < 0 or j < 0:
+        return css
+    k = css.find('\n}', j)
+    if k < 0:
+        return css
+    return css[:i] + css[j:k + 2] + css[i:j] + css[k + 2:]
+
+
+def _h7i_drop_every(text, needle, repl):
+    """A mutant that takes ALL occurrences, for a needle the file legitimately
+    uses twice: replacing only the first leaves the second one holding the claim
+    up, and a control that cannot break its claim proves nothing."""
+    return text.replace(needle, repl)
+
+
+BATCHES['h7i'] = {
+    'name': 'H7i — the price ladder, the sample row, the inquiry button, the hero goes quiet',
+    'mode': 'insert',
+    'tokens': [
+        ('?ver=2.10.69', '?ver=2.10.70'),                      # style.css
+        ('config.js?ver=1.2.0', 'config.js?ver=1.3.0'),
+    ],
+    'transform': _h7i_transform,
+    'applies': 92,          # hero 42 + cta 42 + gallery 2 + pricing 2 + offers 2 + modal 2
+    'coverage': [
+        ('?ver=2.10.69', 0),
+        ('config.js?ver=1.2.0', 0),
+        ('sf-formula-hero__actions', 0),
+        ('sf-formula__cta--solid', 0),
+        ('sf-formula-hero__build', 0),
+        ('sf-fdetail2__cta" href="/contact/">Request Sample</a>', 0),
+        ('sf-fdetail2__cta" href="/zh/contact/">Request Sample</a>', 0),
+        # The legacy pill's own note: the form the ladder replaced, and the only
+        # place "USD" (rather than "US$") was spelled that way.
+        ('sf-fdetail-config__note">USD 2.5 / unit', 0),
+        # The dialog carrier's copy of the same old price, which the ladder
+        # replaced along with the pill.
+        ('sf-inquiry-modal__value">200 — 2.5</dd>', 0),
+    ],
+    'insertions': [
+        ('?ver=2.10.70', 75),
+        ('config.js?ver=1.3.0', 42),
+        ('sf-fdetail2__cta" href="/contact/#quote" data-sf-inquiry-open>Send Inquiry</a>', 21),
+        ('sf-fdetail2__cta" href="/zh/contact/#quote" data-sf-inquiry-open>Send Inquiry</a>', 21),
+        ('Batch H7i', 84),                                    # 42 hero + 42 cta comments
+        ('sf-fdetail-config__tiers', 2),
+        ('sf-tier__price', 6),                                # 3 cards x 2 pages
+        ('sf-tier__range', 6),
+        ('sf-tier__dot', 6),
+        ('sf-fdetail-config__sample-cta', 2),
+        ('data-sf-inquiry-sample', 2),
+        ('sf-gallery__slide--video', 2),
+        ('data-sf-gallery-tab="video"', 2),
+        ('data-video-id="jNQXAC9IVRw"', 2),
+        ('"highPrice":3.88', 1),
+        ('"highPrice": 3.88', 1),
+        ('sf-inquiry-modal__value">10-99 — US$3.88 · 100-999 — US$3.58 · ≥1,000 — US$3.28</dd>', 2),
+    ],
+    'counts': [
+        # The pill that carried the old price list: its box, its text and its
+        # note each lose exactly the one the record had.
+        ('the old pill loses its note', 'sf-fdetail-config__note', 44, 42),
+        ('the old pill loses its box', 'sf-fdetail-config__box', 468, 466),
+        ('the old pill loses its text span', 'sf-fdetail-config__text', 118, 116),
+        # One radio per pill becomes three per ladder, on the two pages.
+        ('the pricing group goes from one choice to three',
+         'data-sf-config-opt="pricing"', 2, 6),
+        # ...but the group itself stays on the same two pages as before.
+        ('the pricing group stays where it was',
+         'data-sf-config-group="pricing"', 2, 2),
+        # Task 11 is a CSS rule and nothing else: the value-preview line and the
+        # hint are still in the bytes on every page, both sides. These two lines
+        # are the claim that says so — if a later batch deletes them
+        # server-side, this is where it shows up.
+        ('the echo line is still server-rendered everywhere',
+         'sf-fdetail-config__meta', 110, 110),
+        ('so is the hint', 'sf-fdetail-config__hint', 68, 68),
+        ('the right column keeps one cta per detail page', 'sf-fdetail2__cta', 42, 42),
+        ('the hero keeps its meta line', 'sf-formula-hero__meta', 42, 42),
+        ('the dialog carries two more openers', 'data-sf-inquiry-open', 84, 128),
+    ],
+    'unmoved': [
+        ('the cookie banner', r'class="sf-cookie-banner"', 75),
+        ('the float stack', r'class="sf-float-stack"', 75),
+        ('the certificate dialog', r'sf-certmodal', 1),
+        ('the navigation', r'wp-block-navigation', 75),
+        ('the configurator', r'sf-fdetail-config__group', 42),
+        ('the shape group', r'data-sf-config-group="shape"', 42),
+        ('the gallery tabs', r'sf-gallery__tabs', 42),
+        ('the side column', r'sf-fdetail2__side', 42),
+    ],
+    'per_page': [
+        ('h1', r'<h1[ >]', 1),
+        ('the new style token', r'style\.css\?ver=2\.10\.70', 1),
+    ],
+    'scoped': [
+        ('the new right cta is on each detail page, once',
+         r'sf-fdetail2__cta" href="(?:/zh)?/contact/#quote" data-sf-inquiry-open>Send Inquiry</a>',
+         _is_formula_detail, 1),
+        ('only the record the batch wrote has a ladder', 'sf-fdetail-config__tiers',
+         lambda n: 'joint-support-soft-chews' in n, 1),
+        ('and three tier cards in it', 'sf-tier__dot',
+         lambda n: 'joint-support-soft-chews' in n, 3),
+        ('its radio group names the three breaks',
+         r'sf-fdetail-config__input" type="radio" name="sf-config-pricing"',
+         lambda n: 'joint-support-soft-chews' in n, 3),
+        ('only that record has a sample row', 'data-sf-inquiry-sample',
+         lambda n: 'joint-support-soft-chews' in n, 1),
+        ('only that record has a video frame', 'sf-gallery__slide--video',
+         lambda n: 'joint-support-soft-chews' in n, 1),
+        ('the dialog reprints the ladder, once', r'sf-inquiry-modal__value">10-99 — US\$3\.88',
+         lambda n: 'joint-support-soft-chews' in n, 1),
+    ],
+    'order': [
+        ('the inquiry button sits at the foot of the specification, after the badges',
+         'sf-cert-badge', 'sf-fdetail2__cta" href=', _is_formula_detail),
+        ('the ladder comes before the sample row, which is a different question',
+         'sf-fdetail-config__tiers', 'sf-fdetail-config__sample"',
+         lambda n: 'joint-support-soft-chews' in n),
+        ('the video frame sits inside the stage, before the tab group',
+         'sf-gallery__slide--video', 'sf-gallery__tabs',
+         lambda n: 'joint-support-soft-chews' in n),
+        ('and after the first photo, which is the frame it follows',
+         'id="sf-gallery-slide-soft-chews-1"', 'sf-gallery__slide--video',
+         lambda n: 'joint-support-soft-chews' in n),
+    ],
+    'h2_delta': None,
+    # One named exception, three clauses — see jsonld_with_exception. The record
+    # the batch wrote now offers three tiers where it offered one; every other
+    # page's offer block is still collected and compared. The same rewrite is
+    # declared as bytes in the transform, so the two passes agree about it from
+    # both sides: one by how it reads, one by which bytes moved.
+    'jsonld_delta': {
+        'key': 'offers',
+        'pages': ['formulas__joint-support-soft-chews',
+                  'zh__formulas__joint-support-soft-chews'],
+        'offers': {
+            '@type': 'AggregateOffer',
+            'priceCurrency': 'USD',
+            'lowPrice': 3.28,
+            'highPrice': 3.88,
+            'offerCount': 3,
+            # (price, minQuantity, maxQuantity); the last tier is open-ended.
+            'tiers': [(3.88, 10, 99), (3.58, 100, 999), (3.28, 1000, None)],
+        },
+    },
+    'sources': {
+        'cfg': 'assets/js/config.js',
+        'adm': 'inc/formula-admin.php',
+        'tpl': 'templates/single-sf_formula.html',
+    },
+    'reinject': ('an old "Request Sample" link put back fails coverage',
+                 'formulas__calming-soft-chews.html',
+                 '<a class="sf-fdetail2__cta" href="/contact/#quote" data-sf-inquiry-open>Send Inquiry</a>',
+                 '<a class="sf-fdetail2__cta" href="/contact/">Request Sample</a>'),
+    'delete': ('one page loses the new style token fails coverage',
+               'about.html', '?ver=2.10.70'),
+    'nc13_mode': 'sighted',
+    'nc13_label': ('NC13 the insert direction SEES a payload edit, and coverage confirms it'),
+    'matrix': [
+        ('the hero buttons are never removed',
+         {'transform': _h7i_partial(cta=True, gallery=True, pricing=True, jsonld=True,
+                                    modal=True)}, None),
+        ('the right cta is never rewritten',
+         {'transform': _h7i_partial(hero=True, gallery=True, pricing=True, jsonld=True,
+                                    modal=True)}, None),
+        ('the video frame is never patched in',
+         {'transform': _h7i_partial(hero=True, cta=True, pricing=True, jsonld=True,
+                                    modal=True)}, None),
+        ('the price ladder is never patched in',
+         {'transform': _h7i_partial(hero=True, cta=True, gallery=True, jsonld=True,
+                                    modal=True)}, None),
+        ('the offers are never rewritten',
+         {'transform': _h7i_partial(hero=True, cta=True, gallery=True, pricing=True,
+                                    modal=True)}, None),
+        ('the dialog keeps the old price',
+         {'transform': _h7i_partial(hero=True, cta=True, gallery=True, pricing=True,
+                                    jsonld=True)}, None),
+        ('the tokens are not folded', {'tokens': []}, None),
+        ('the run count is declared one short', {'applies': 91}, None),
+        ('nothing is applied at all',
+         {'transform': (lambda t: (t, 0)), 'applies': 0}, None),
+    ],
+    'nc_source': [
+        ('NC-src the source pass fails when the ladder stops being a grid',
+         'style.css', '.sf-fdetail-config__tiers {\n\tdisplay: grid;',
+         '.sf-zz-tiers-removed {\n\tdisplay: grid;'),
+        ('NC-src the source pass fails when the phone step moves before the rule it overrides',
+         'style.css', _h7i_480_out_of_order, None),
+        ('NC-src the source pass fails when the option stops carrying the derived range',
+         'functions.php', "'range_text' => $range,", "'range_text' => $min,"),
+        ('NC-src the source pass fails when the admin loses the sample-price field',
+         'inc/formula-admin.php', "'sf_formula_sample_price'", "'sf-zz-sample-price'"),
+        ('NC-src the source pass fails when the template regains the hero action row',
+         'templates/single-sf_formula.html',
+         "<!-- Batch H7i: the hero's two buttons (Send Inquiry / Build Custom Formula)",
+         '<div class="sf-formula-hero__actions">'),
+        ('NC-src the source pass fails when the summary line drops the price',
+         'functions.php',
+         "$tier_meta[] = $range . ($note !== '' ? ' — ' . $note : '');",
+         '$tier_meta[] = $range;'),
+        ('NC-src the source pass fails when the sample button loses its hook',
+         'assets/js/config.js',
+         lambda s: _h7i_drop_every(s, 'data-sf-inquiry-sample', 'data-sf-zz-inquiry-sample'),
+         None),
+    ],
+    # The three clauses of the json-ld exception, each made to fire. The third
+    # is the one that carries the boundary today: no other record on this site
+    # is priced, so an offer block appearing anywhere else is the failure that
+    # can actually happen, and it is the page-set clause that names it.
+    'nc_jsonld': [
+        ('NC-jsonld the exception fires when a declared number moves',
+         'formulas__joint-support-soft-chews.html',
+         lambda s: s.replace('"offerCount":3', '"offerCount":4', 1)),
+        ('NC-jsonld the exception fires when the declared record loses the key',
+         'zh__formulas__joint-support-soft-chews.html',
+         lambda s: s.replace('"offers":', '"offersX":', 1)),
+        ('NC-jsonld the pass fires when an offer block appears off the record',
+         'formulas__calming-soft-chews.html',
+         lambda s: s.replace(
+             '"@type":"Product","name":"Calming Soft Chews"',
+             '"@type":"Product","offers":{"@type":"AggregateOffer",'
+             '"priceCurrency":"USD","lowPrice":2.5,"highPrice":2.5,'
+             '"offerCount":1,"priceSpecification":[]},"name":"Calming Soft Chews"', 1)),
+    ],
+    'nc_page': [
+        ('NC-page the scoped dot count fails when the record loses a tier card',
+         'formulas__joint-support-soft-chews.html',
+         lambda s: s.replace('sf-tier__dot', 'sf-zz-dot', 1)),
+        ('NC-page the scoped video count fails when the frame leaves the record',
+         'formulas__joint-support-soft-chews.html',
+         lambda s: s.replace('sf-gallery__slide--video', 'sf-zz-video', 1)),
+    ],
+    'nc_blind': ('formulas__calming-soft-chews.html',
+                 'data-sf-inquiry-open>Send Inquiry</a>',
+                 'data-sf-inquiry-open>Send InquiryX</a>'),
+    'source': [
+        ('style.css declares 2.10.70', 'css', r'(?m)^Version: 2\.10\.70$', True),
+        ('no 2.10.69 header survives', 'css', r'(?m)^Version: 2\.10\.69$', False),
+        ('functions.php enqueues 2.10.70 for style.css', 'php',
+         r"wp_enqueue_style\('sinofresh-style'[^;]*'2\.10\.70'", True),
+        ('functions.php enqueues 1.3.0 for config.js', 'php',
+         r"wp_enqueue_script\('sinofresh-config'[^;]*'1\.3\.0'", True),
+        ('no 1.2.0 config enqueue survives', 'php',
+         r"'sinofresh-config'[^;]*'1\.2\.0'", False),
+        ('the ladder section names the batch', 'css',
+         r'63\. Quantity & Pricing, the ladder', True),
+        ('the ladder is laid out as a grid', 'css_live',
+         r'\.sf-fdetail-config__tiers \{[^}]*display: grid;', True),
+        ('the unit price is the headline of each card', 'css_live',
+         r'\.sf-tier__price \{', True),
+        ('the dot follows the input, not its neighbour', 'css_live',
+         r'\.sf-fdetail-config__input:checked ~ \.sf-tier__dot \{', True),
+        ('the hint is withdrawn only while the script is running', 'css_live',
+         r'\.sf-fdetail-config--js \.sf-fdetail-config__hint \{ display: none; \}', True),
+        # The ordering claim as ONE chain with a measured budget: the base card
+        # rule and its phone step are 3227 comment-stripped characters apart. A
+        # budget that could leap to some other 480 block would not be a claim;
+        # NC-src reverses this and watches it fail.
+        ('the phone step comes after the rule it overrides', 'css_live',
+         r'\.sf-fdetail-config__opt\.sf-tier \{[^}]*padding: 11px 8px 27px'
+         r'[\s\S]{0,3600}@media \(max-width: 480px\) \{[\s\S]{0,300}'
+         r'\.sf-fdetail-config__opt\.sf-tier \{', True),
+        ('the renderer derives the range label from both ends', 'php',
+         r'sf_tier_range_label\(\$min, \$max\)', True),
+        ('the option carries the derived range', 'php',
+         r"'range_text' => \$range,", True),
+        ('the renderer formats money through one helper', 'php',
+         r'sf_tier_price_label\(', True),
+        ('the ladder reads the sample fee off the record', 'php',
+         r'sf_formula_sample_price', True),
+        ('the ladder names its unit', 'php', r"'unit' => 'pieces'", True),
+        ('the offer carries both ends of every range', 'php',
+         r"'maxQuantity'", True),
+        ('the summary line is the range and the price, joined', 'php',
+         r"\$tier_meta\[\] = \$range \. \(\$note !== ''", True),
+        # The dialog carrier prints the group's own summary, which is why the
+        # ladder reaches it without the carrier knowing the ladder exists.
+        ('the group publishes the joined ladder as its summary', 'php',
+         r"'key' => 'pricing', 'label' => 'Quantity & Pricing', 'meta' => implode\(' · ', \$tier_meta\),",
+         True),
+        ('the admin table asks for min, max and price', 'adm',
+         r"'min' => 'Min quantity', 'max' => 'Max quantity', 'price' => 'Unit price \(USD\)'",
+         True),
+        ('the admin has a sample-price field', 'adm',
+         r"sf_formula_sample_price", True),
+        ('the template carries the inquiry button, not a sample link', 'tpl',
+         r'<a class="sf-fdetail2__cta" href="/contact/#quote" data-sf-inquiry-open>Send Inquiry</a>',
+         True),
+        ('the template no longer carries the hero action row', 'tpl_live',
+         r'sf-formula-hero__actions', False),
+        ('config.js fills the message from the sample button', 'cfg',
+         r'data-sf-inquiry-sample', True),
+        ('config.js writes the request into the dialog', 'cfg',
+         r'I would like to request a sample', True),
     ],
 }
 
