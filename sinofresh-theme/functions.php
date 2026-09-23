@@ -28,7 +28,7 @@ add_action('after_setup_theme', function() {
 });
 
 add_action('wp_enqueue_scripts', function() {
-	wp_enqueue_style('sinofresh-style', get_stylesheet_uri(), array(), '2.10.71');
+	wp_enqueue_style('sinofresh-style', get_stylesheet_uri(), array(), '2.10.72');
 	// Sticky nav: every template renders parts/header.html, so this is site-wide.
 	wp_enqueue_script('sinofresh-sticky-header', get_template_directory_uri() . '/assets/js/sticky-header.js', array(), '1.0.0', true);
 	wp_enqueue_script('sinofresh-ui-components', get_template_directory_uri() . '/assets/js/ui-components.js', array(), '1.0.0', true);
@@ -586,6 +586,66 @@ function sinofresh_formula_card_image($form) {
 }
 
 /**
+ * 待办17 — the card badge vocabulary. One map, three values, and it is the
+ * only place the wording lives: the admin dropdown is built from its keys and
+ * the front-end modifier class from its values, so a badge can never be
+ * selectable in the editor and unstyled on the card, or vice versa.
+ *
+ * The stored meta value is the LABEL ("Best Seller"), matching how every other
+ * single-choice field in this theme stores its answer (sf_formula_shape,
+ * sf_formula_lifestage, … store the term the editor clicked). The class suffix
+ * is separate because "Best Seller" is not a class name. An unset, unknown or
+ * hand-edited value resolves to NO badge rather than to a badge with an
+ * unstyleable class — see sinofresh_formula_card_badge().
+ */
+function sinofresh_formula_card_badges() {
+	return array(
+		'Best Seller' => 'best-seller',
+		'Hot'         => 'hot',
+		'New'         => 'new',
+	);
+}
+
+/**
+ * The badge of one formula, as array('label' => …, 'slug' => …) or array().
+ *
+ * Whitelist, not passthrough: the meta is editable through the REST API and the
+ * custom-fields panel, so a value this theme does not know is dropped here
+ * rather than printed as `sf-fcard__badge--<whatever>` in the class attribute.
+ * A discarded value is also the reason the caller must treat array() and a
+ * missing key identically — the card renders without an overlay, which is the
+ * same thing it does for the empty answer "none".
+ */
+function sinofresh_formula_card_badge($post_id) {
+	$map = sinofresh_formula_card_badges();
+	$raw = trim((string) get_post_meta($post_id, 'sf_formula_card_badge', true));
+	if ($raw === '' || !isset($map[$raw])) {
+		return array();
+	}
+	return array('label' => $raw, 'slug' => $map[$raw]);
+}
+
+/**
+ * The badge element, or '' when the record has none.
+ *
+ * $inline is the card-without-a-still placement: the badge sits at the head of
+ * __body instead of on an image that does not exist. It is a modifier class
+ * rather than a second element so both placements share one colour rule and the
+ * E2E can assert "a badge is present" without caring which one it is.
+ */
+function sinofresh_formula_badge_markup($badge, $inline = false) {
+	if (!$badge) {
+		return '';
+	}
+	return sprintf(
+		'<span class="sf-fcard__badge sf-fcard__badge--%s%s">%s</span>',
+		esc_attr($badge['slug']),
+		$inline ? ' sf-fcard__badge--inline' : '',
+		esc_html($badge['label'])
+	);
+}
+
+/**
  * One value of a dosage page's .sf-facts-mini core-facts row, by data-label.
  *
  * The formula detail hero needs the MOQ and the lead time of the dosage form
@@ -1050,6 +1110,13 @@ function sinofresh_formula_script_json($data) {
  *       The media block is omitted (not emitted empty) when no still exists;
  *       the copy lives in __body so the image can bleed to the card border
  *       while a text-only card stays visually identical to the 2B one.
+ *       H7k refines the media block without moving any of that: the still is
+ *       wrapped in a.sf-fcard__imagelink (待办14) and the badge — when the
+ *       record has one — is the figure's second child (待办17). The badge is a
+ *       SIBLING of the link, never inside it, so "Best Seller" cannot leak into
+ *       the link's accessible name. On the no-still branch the badge becomes
+ *       the first child of __body with the --inline modifier, because a record
+ *       without a still must not lose its badge.
  *
  * Attributes:
  *   form     dosage form slug. Default: resolved from the queried object.
@@ -1061,8 +1128,9 @@ function sinofresh_formula_script_json($data) {
  *   columns  grid tracks, clamped to 1–6. Default: 4.
  *   cta      'reference' (default) renders the K1 button; 'none' omits it.
  *            Any other value falls back to 'reference'.
- *   links    'true' (default) links the title and adds "View formula →";
- *            'false'/'0'/'no' render the name as plain text.
+ *   links    'true' (default) links the title and the still (待办14) and adds
+ *            "View formula →"; 'false'/'0'/'no' render the name as plain text
+ *            and leave the still unlinked.
  *   empty    only 'hide' is implemented; any other value behaves as 'hide'.
  *
  * Why the current formula is excluded in PHP rather than passed by the
@@ -1179,6 +1247,17 @@ function sinofresh_formula_grid($atts = array()) {
 			);
 		}
 
+		$badge = sinofresh_formula_card_badge($formula->ID);
+
+		/* 待办14 — the still is a link now, like the dosage tiles on
+		   /products/ have always been. The card used to carry THREE routes to
+		   its own page (title, "View formula →") and the image was the one part
+		   that looked clickable and was not. The <a> wraps the <img> only: the
+		   badge below it is a separate sibling so its label can never become
+		   part of the link's accessible name. aria-label rather than a bare
+		   alt: the img already describes the STILL ("… — golden oval softgel
+		   capsules"), which is the wrong sentence for a navigation link, so the
+		   link says where it goes and the img keeps describing what it shows. */
 		$media = '';
 		$image = sinofresh_formula_card_image($form_slug);
 		if ($image !== '') {
@@ -1189,20 +1268,42 @@ function sinofresh_formula_grid($atts = array()) {
 			   capsules") to the convention. The seven sibling tiles inside
 			   each dosage template carry the same string verbatim; the gate
 			   asserts the two carriers agree per form. */
-			$media = sprintf(
-				'<figure class="sf-fcard__media"><img src="%s" alt="%s" width="720" height="720" loading="lazy" decoding="async"/></figure>',
+			$still = sprintf(
+				'<img src="%s" alt="%s" width="720" height="720" loading="lazy" decoding="async"/>',
 				esc_url($image),
 				esc_attr(sinofresh_formula_product_alt($form_slug))
+			);
+			/* `links="false"` means "the card is not a route anywhere", so the
+			   still has to obey it too — an image link on a card whose title
+			   was deliberately left as plain text would be the one link the
+			   attribute failed to switch off. */
+			if ($links) {
+				$still = sprintf(
+					'<a class="sf-fcard__imagelink" href="%s" aria-label="%s">%s</a>',
+					esc_url($url),
+					esc_attr(sprintf('View the %s formula', $name)),
+					$still
+				);
+			}
+			$media = sprintf(
+				'<figure class="sf-fcard__media">%s%s</figure>',
+				$still,
+				sinofresh_formula_badge_markup($badge)
 			);
 		}
 
 		$cards .= sprintf(
 			/* data-sf-form is what formula-filter.js reads on /formulas/.
 			   K7's element/class order is untouched — the attribute is
-			   additive, so every existing .sf-fcard consumer is unaffected. */
-			'<article class="sf-fcard" data-sf-form="%s">%s<div class="sf-fcard__body"><span class="sf-fcard__use">%s</span><h3 class="sf-fcard__name">%s</h3><p class="sf-fcard__spec">%s</p>%s</div></article>',
+			   additive, so every existing .sf-fcard consumer is unaffected.
+			   K7 also fixes the media block, so the badge has one home when
+			   there IS one (the overlay) and one when there is not (inline at
+			   the head of __body, 待办17): a record whose still is missing must
+			   not lose its badge silently. */
+			'<article class="sf-fcard" data-sf-form="%s">%s<div class="sf-fcard__body">%s<span class="sf-fcard__use">%s</span><h3 class="sf-fcard__name">%s</h3><p class="sf-fcard__spec">%s</p>%s</div></article>',
 			esc_attr($form_slug),
 			$media,
+			$image === '' ? sinofresh_formula_badge_markup($badge, true) : '',
 			/* 2B Stage1 pit #2: term names are entity-encoded in wp_terms
 			   ("Skin &amp; coat") — output verbatim so the browser shows
 			   "Skin & coat". esc_html() here would double-escape. */

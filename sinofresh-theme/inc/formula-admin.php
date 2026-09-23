@@ -27,6 +27,7 @@ add_action('init', function () {
 		'sf_formula_intro'            => 'Short introduction shown under the title.',
 		'sf_formula_gallery_ids'      => 'JSON array of attachment IDs for the gallery.',
 		'sf_formula_video_url'        => 'YouTube URL for the product video.',
+		'sf_formula_card_badge'       => 'Card badge overlay: one of sinofresh_formula_card_badges(), or empty for none.',
 		'sf_formula_flavors'          => 'JSON array of flavour options.',
 		'sf_formula_weight'           => 'Weight per piece (single choice).',
 		'sf_formula_counts'           => 'JSON array of pack counts.',
@@ -82,6 +83,14 @@ function sf_formula_mb_fields() {
 		array('key' => 'sf_formula_gallery_ids', 'label' => 'Gallery images', 'group' => 'media', 'type' => 'gallery', 'req' => 1,
 			'hint' => 'Optional. The main photo is the Featured Image panel in the editor.'),
 		array('key' => 'sf_formula_video_url', 'label' => 'YouTube URL', 'group' => 'media', 'type' => 'url', 'req' => 1),
+		/* 待办17 — a dropdown, not radios: four answers including "none", and
+		   the options come from the same map the card reads (see
+		   sinofresh_formula_card_badges()), so the editor can only pick a badge
+		   the front end can actually draw. req 1 = optional: most formulas will
+		   never carry one, and a banner that asks for a decoration is noise. */
+		array('key' => 'sf_formula_card_badge', 'label' => 'Card badge', 'group' => 'media', 'type' => 'select', 'req' => 1,
+			'pool' => array_keys(sinofresh_formula_card_badges()), 'empty_label' => '— None —',
+			'hint' => 'Optional overlay on the card image: Best Seller (gold), Hot (red), New (blue). Leave as "None" for no badge.'),
 		// params — pools resolve per dosage form at render time
 		array('key' => 'sf_formula_flavors', 'label' => 'Flavors', 'group' => 'params', 'type' => 'multi', 'req' => 2, 'pool' => 'flavors'),
 		array('key' => 'sf_formula_weight', 'label' => 'Weight per piece', 'group' => 'params', 'type' => 'radio', 'req' => 2, 'pool' => 'weights'),
@@ -205,6 +214,20 @@ function sf_formula_render_field($spec, $post_id) {
 					esc_attr($spec['key']), esc_attr($o), checked($raw, $o, false), esc_html($o));
 			}
 			break;
+		case 'select':
+			/* The empty option is a stored answer, not a placeholder: it is how
+			   a record goes back to having no badge after having had one. Its
+			   wording comes from the spec so the type stays reusable. */
+			printf('<select class="sf-mb__select" name="%s"><option value=""%s>%s</option>',
+				esc_attr($spec['key']),
+				selected($raw, '', false),
+				esc_html(isset($spec['empty_label']) ? $spec['empty_label'] : 'None'));
+			foreach ($opts as $o) {
+				printf('<option value="%s"%s>%s</option>',
+					esc_attr($o), selected($raw, $o, false), esc_html($o));
+			}
+			echo '</select>';
+			break;
 		case 'gallery':
 			$ids = array_filter(array_map('absint', explode(',', (string) $raw)));
 			echo '<input type="hidden" class="sf-mb__gallery-ids" name="' . esc_attr($spec['key']) . '" value="' . esc_attr(implode(',', $ids)) . '"/>';
@@ -324,6 +347,7 @@ add_action('save_post_sf_formula', function ($post_id) {
 				sf_mb_store($post_id, $key, wp_json_encode(array_values(array_intersect($opts, $in))));
 				break;
 			case 'radio':
+			case 'select':
 				$in   = sanitize_text_field(wp_unslash($_POST[$key] ?? ''));
 				$opts = sf_formula_mb_options($spec, $post_id);
 				sf_mb_store($post_id, $key, in_array($in, $opts, true) ? $in : '');

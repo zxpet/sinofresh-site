@@ -2,7 +2,7 @@
 Theme Name: SINO FRESH
 Author: Shandong SINO FRESH Pet Food Co., Ltd.
 Text Domain: sinofresh
-Version: 2.10.71
+Version: 2.10.72
 Requires at least: 6.0
 Requires PHP: 7.4
 License: GNU General Public License v2 or later
@@ -2425,44 +2425,72 @@ body.admin-bar .sf-header.is-sticky {
 	}
 }
 
-/* --- 27g. Certifications: home grid + quality detail rows -----------------
-   Home: a static 3x2 grid of six seal cards (icon badge, H3 name, issuer
-   line). Static markup keeps all six credentials readable by crawlers and
-   screen readers; no animation is used, so prefers-reduced-motion needs no
-   special casing. Quality: one row per credential with the certificate scan
-   on the left and details/links on the right, separated by 1px rules. Rows
-   without a scan yet (HACCP, BRC) show a neutral placeholder. */
-.sf-certgrid {
-	display: grid;
-	grid-template-columns: repeat(3, minmax(0, 1fr));
-	gap: 20px;
-	margin-top: var(--wp--preset--spacing--60, 40px);
-}
-.sf-certcard {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	margin: 0;
-	padding: 24px 18px 20px;
-	background: var(--wp--preset--color--card-white);
-	border: 1px solid var(--wp--preset--color--border-light);
-	border-radius: 8px;
-	text-align: center;
-}
-.sf-certcard__seal {
-	color: var(--wp--preset--color--primary);
-	margin-bottom: 18px;
-}
-.sf-certcard__name {
-	margin: 0;
+/* --- 27g. Certifications: the home band (compact) + quality detail rows ----
+   Home (待办18): was a static 3x2 grid of six seal cards — an 88px seal over an
+   H3 name over an issuer line, ~205px per card, ~430px for the grid, ~700px
+   for the section. It now states the same six credentials as one line of six
+   32px chips under a single lede, with the link to the full page at the
+   bottom, which is what the band actually needs to say; the long form lives on
+   /quality/ where the certificate scans are. The six names survive verbatim as
+   TEXT (crawlers and screen readers read them exactly as before); it is the
+   88px seals and the per-card chrome that go. The seals are decorative next to
+   their own label, so the SVGs lost role="img"/aria-label and became
+   aria-hidden — before this change each chip announced "FDA certification
+   seal" and then "FDA Registered".
+
+   The six cards' rules (.sf-certgrid / .sf-certcard*) were DELETED with them,
+   not left behind: front-page.html was their only consumer. Nothing else in
+   the theme referenced them (batch H7k checked; the three _certbar_*.js probes
+   under sinofresh-theme/tools/ still name .sf-certgrid and are stale — they
+   were already unshipped scratch probes).
+
+   Quality: one row per credential with the certificate scan on the left and
+   details/links on the right, separated by 1px rules. Rows without a scan yet
+   (HACCP, BRC) show a neutral placeholder. Unchanged by this batch. */
+.sf-certstrip__lede {
+	margin: 0 0 16px;
 	font-size: 17px;
 	font-weight: 600;
+	line-height: 1.4;
+	text-align: center;
+	color: var(--wp--preset--color--primary);
+}
+.sf-certstrip__row {
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: 10px 20px;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+.sf-certstrip__badge {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	min-width: 0;
+}
+.sf-certstrip__icon {
+	flex: 0 0 auto;
+	color: var(--wp--preset--color--primary);
+}
+.sf-certstrip__name {
+	font-size: 14px;
+	font-weight: 600;
+	line-height: 1.35;
 	color: var(--wp--preset--color--heading, inherit);
 }
-.sf-certcard__issuer {
-	margin: 10px 0 0;
-	font-size: 13px;
-	color: var(--wp--preset--color--text-secondary);
+.sf-certstrip__more {
+	margin: 16px 0 0;
+	text-align: center;
+}
+.sf-certstrip__more a {
+	font-size: 14px;
+	font-weight: 600;
+	color: var(--wp--preset--color--brand-green);
+	text-decoration: none;
+}
+.sf-certstrip__more a:hover {
+	text-decoration: underline;
 }
 .sf-certdetail {
 	margin-top: var(--wp--preset--spacing--60, 40px);
@@ -2545,28 +2573,22 @@ body.admin-bar .sf-header.is-sticky {
 	}
 }
 @media (max-width: 768px) {
-	.sf-certgrid {
+	/* 待办18: two columns of three on the phone. The retired card grid went to
+	   ONE column at ≤420px, which is exactly what a six-chip strip must not do
+	   — six stacked rows would be taller than the band it replaces. */
+	.sf-certstrip__row {
 		grid-template-columns: repeat(2, minmax(0, 1fr));
-		gap: 12px;
 	}
-	.sf-certcard {
-		padding: 18px 12px 16px;
+	.sf-certstrip__lede {
+		font-size: 16px;
 	}
-	.sf-certcard__seal {
-		width: 64px;
-		height: 64px;
-		margin-bottom: 12px;
-	}
-	.sf-certcard__name {
-		font-size: 15px;
-	}
-	.sf-certcard__issuer {
-		font-size: 12px;
+	.sf-certstrip__name {
+		font-size: 13px;
 	}
 }
 @media (max-width: 420px) {
-	.sf-certgrid {
-		grid-template-columns: minmax(0, 1fr);
+	.sf-certstrip__row {
+		gap: 8px 12px;
 	}
 }
 
@@ -5549,6 +5571,12 @@ body.page-id-28 .wp-block-columns:has(> .wp-block-column > .wp-block-group.has-c
 	border-radius: 10px 10px 0 0;
 	overflow: hidden;
 	background: var(--wp--preset--color--bg-light);
+	/* 待办17: the badge is positioned against the still's frame. relative is
+	   deliberately on the figure and not on .sf-fcard — the badge belongs to
+	   the image, and this is also the box that carries the radius, so the
+	   frame clips it. Neither the img's aspect-ratio box nor the flex basis
+	   is touched (that WebKit note above is why the ratio lives on the IMG). */
+	position: relative;
 }
 .sf-fcard__media img {
 	display: block;
@@ -5556,6 +5584,56 @@ body.page-id-28 .wp-block-columns:has(> .wp-block-column > .wp-block-group.has-c
 	height: auto;
 	aspect-ratio: 4 / 3;
 	object-fit: cover;
+}
+/* The still is a link (待办14). display:block kills the inline-gap line box
+   the anchor would otherwise add under the image. */
+.sf-fcard__imagelink {
+	display: block;
+}
+.sf-fcard__imagelink:focus-visible {
+	outline: 3px solid var(--wp--preset--color--brand-green);
+	outline-offset: -3px;
+}
+/* 待办17 — the card badge. Three values, one palette entry each; the hexes are
+   theme colours that are not in theme.json (gold/red/blue are badge-only, and
+   the palette deliberately holds no generic red or blue), so the ratio each
+   one holds against its white label is recorded here: #8A6D1F 4.90:1,
+   #B3261E 6.54:1, #1F5C99 6.89:1 — all above the 4.5:1 AA floor for text this
+   size, measured 2026-09-23, not eyeballed. The unmodified base rule carries
+   the Forest fallback so a badge whose modifier is somehow missing still
+   paints readably instead of vanishing into the still. */
+.sf-fcard__badge {
+	position: absolute;
+	top: 12px;
+	right: 12px;
+	z-index: 2;
+	display: inline-block;
+	padding: 4px 10px;
+	border-radius: 4px;
+	background: var(--wp--preset--color--primary);
+	color: var(--wp--preset--color--card-white);
+	font-size: 11px;
+	font-weight: 700;
+	letter-spacing: 0.06em;
+	line-height: 1.4;
+	text-transform: uppercase;
+	white-space: nowrap;
+}
+.sf-fcard__badge--best-seller {
+	background: #8A6D1F;
+}
+.sf-fcard__badge--hot {
+	background: #B3261E;
+}
+.sf-fcard__badge--new {
+	background: #1F5C99;
+}
+/* The no-still placement: static at the head of __body, shrink-wrapped rather
+   than stretched (__body is a column flex container). */
+.sf-fcard__badge--inline {
+	position: static;
+	align-self: flex-start;
+	margin-bottom: 8px;
 }
 /* the still bleeds, so the copy block carries the padding */
 .sf-fcard__body {
@@ -6130,8 +6208,14 @@ body.sf-inquiry-lock {
    commercial terms render as real data (SEO/GEO), not bullet prose. */
 .sf-keyfacts {
 	width: 100%;
-	max-width: 720px;
-	margin: 24px auto 0;
+	/* 待办22 — the table capped itself at 720px and auto-centred inside a
+	   1200px content box, so its two ends sat 240px inside the heading's. It
+	   spans the content box exactly now, and `margin: … 0 …` states that the
+	   left edge is flush with it rather than auto-centred. The 140px on the
+	   first column below stays a hint, not a cap: at 1200px the Detail column
+	   simply takes what is left. */
+	max-width: none;
+	margin: 24px 0 0;
 	border-collapse: collapse;
 	font-size: 16px;
 	background: var(--wp--preset--color--card-white);
