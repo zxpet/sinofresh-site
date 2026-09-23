@@ -40,7 +40,7 @@ add_action('init', function () {
 		'sf_formula_who_for'          => "Who It's For copy.",
 		'sf_formula_packaging_extra'  => 'JSON array of extra packaging options.',
 		'sf_formula_colors'           => 'JSON array of colour options.',
-		'sf_formula_shelf_life'       => 'Shelf life text.',
+		'sf_formula_shelf_life'       => 'Shelf life: one value from the fixed pool.',
 		'sf_formula_cartons'          => 'JSON array of {count, boxes, size} carton rows.',
 		'sf_formula_lead_time'        => 'Lead time text.',
 		'sf_formula_container'        => 'Container slug from the global container library.',
@@ -104,6 +104,22 @@ function sf_formula_mb_fields() {
 			'hint' => 'Leave Max empty on the top tier: the ladder prints it as "1,000 and up".'),
 		array('key' => 'sf_formula_sample_price', 'label' => 'Sample price (USD)', 'group' => 'params', 'type' => 'text', 'req' => 1,
 			'hint' => 'e.g. 50 — printed beside "Get Sample" under the price ladder. Leave empty to hide the row.'),
+		/* Batch H8a — a fixed pool, not free text. The field was free text and
+		   the front end never read it (it parsed the spec sheet instead), so
+		   the two could — and did — disagree: post 158 says 24 months here and
+		   18 months in sf_formula_specs. The record now declares one of four
+		   answers and the page prints THAT, which is why this moved from the
+		   Packaging box to the right-column box: it is now a value the visitor
+		   reads, like every other field in this group.
+		   `keep_unknown` is the migration seam. post 158 was saved as
+		   "24months" (no space) before the pool existed, and a fixed list that
+		   is the only source of truth would clear it on the next save — a
+		   silent edit of a field nobody touched. The flag keeps whatever the
+		   record already holds selectable and saveable, so the editor sees the
+		   real value and chooses when to canonicalise it. */
+		array('key' => 'sf_formula_shelf_life', 'label' => 'Shelf life', 'group' => 'params', 'type' => 'select', 'req' => 2,
+			'pool' => sf_formula_shelf_life_pool(), 'empty_label' => '— None —', 'keep_unknown' => true,
+			'hint' => 'Printed read-only under the parameters: the customer cannot pick a different one.'),
 		// detail
 		array('key' => 'sf_formula_ingredients', 'label' => 'Ingredients', 'group' => 'detail', 'type' => 'textarea', 'req' => 2, 'rows' => 3),
 		array('key' => 'sf_formula_analysis', 'label' => 'Guaranteed Analysis', 'group' => 'detail', 'type' => 'textarea', 'req' => 2, 'rows' => 3),
@@ -115,8 +131,6 @@ function sf_formula_mb_fields() {
 		array('key' => 'sf_formula_packaging_extra', 'label' => 'Extra packaging', 'group' => 'packaging', 'type' => 'multi', 'req' => 1, 'pool' => 'packaging'),
 		array('key' => 'sf_formula_colors', 'label' => 'Colors', 'group' => 'packaging', 'type' => 'multi', 'req' => 1, 'pool' => 'colors',
 			'hint' => 'Not available for this dosage form when no options appear.'),
-		array('key' => 'sf_formula_shelf_life', 'label' => 'Shelf life', 'group' => 'packaging', 'type' => 'text', 'req' => 2,
-			'hint' => 'e.g. 18 months'),
 		array('key' => 'sf_formula_cartons', 'label' => 'Carton dimensions', 'group' => 'packaging', 'type' => 'table', 'req' => 1,
 			'cols' => array('count' => 'Pack count', 'boxes' => 'Units per carton', 'size' => 'Carton size (cm)')),
 		// faq
@@ -218,11 +232,19 @@ function sf_formula_render_field($spec, $post_id) {
 			/* The empty option is a stored answer, not a placeholder: it is how
 			   a record goes back to having no badge after having had one. Its
 			   wording comes from the spec so the type stays reusable. */
+			$list = $opts;
+			/* `keep_unknown` (batch H8a): show the record's own value even when
+			   the pool no longer offers it, so the editor reads what is stored
+			   and the form cannot post a value back that the save handler would
+			   then drop. See the shelf-life spec for why one field needs this. */
+			if (!empty($spec['keep_unknown']) && '' !== (string) $raw && !in_array($raw, $list, true)) {
+				array_unshift($list, $raw);
+			}
 			printf('<select class="sf-mb__select" name="%s"><option value=""%s>%s</option>',
 				esc_attr($spec['key']),
 				selected($raw, '', false),
 				esc_html(isset($spec['empty_label']) ? $spec['empty_label'] : 'None'));
-			foreach ($opts as $o) {
+			foreach ($list as $o) {
 				printf('<option value="%s"%s>%s</option>',
 					esc_attr($o), selected($raw, $o, false), esc_html($o));
 			}
@@ -350,6 +372,17 @@ add_action('save_post_sf_formula', function ($post_id) {
 			case 'select':
 				$in   = sanitize_text_field(wp_unslash($_POST[$key] ?? ''));
 				$opts = sf_formula_mb_options($spec, $post_id);
+				/* Batch H8a — a spec may ask to keep a value its pool no longer
+				   offers. Without this a fixed list silently clears a field the
+				   editor never touched (post 158's shelf life was "24months"
+				   before the pool existed), which is a data edit nobody asked
+				   for. The value stays selectable until the editor changes it. */
+				if (!empty($spec['keep_unknown'])) {
+					$prev = trim((string) get_post_meta($post_id, $key, true));
+					if ($prev !== '' && !in_array($prev, $opts, true)) {
+						$opts[] = $prev;
+					}
+				}
 				sf_mb_store($post_id, $key, in_array($in, $opts, true) ? $in : '');
 				break;
 			case 'gallery':

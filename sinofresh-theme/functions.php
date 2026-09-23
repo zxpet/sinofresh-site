@@ -28,7 +28,7 @@ add_action('after_setup_theme', function() {
 });
 
 add_action('wp_enqueue_scripts', function() {
-	wp_enqueue_style('sinofresh-style', get_stylesheet_uri(), array(), '2.10.73');
+	wp_enqueue_style('sinofresh-style', get_stylesheet_uri(), array(), '2.10.74');
 	// Sticky nav: every template renders parts/header.html, so this is site-wide.
 	wp_enqueue_script('sinofresh-sticky-header', get_template_directory_uri() . '/assets/js/sticky-header.js', array(), '1.0.0', true);
 	wp_enqueue_script('sinofresh-ui-components', get_template_directory_uri() . '/assets/js/ui-components.js', array(), '1.0.0', true);
@@ -47,7 +47,7 @@ add_action('wp_enqueue_scripts', function() {
 		   same list seen twice, so the two scripts are enqueued together and
 		   conditionally together — on the other 33 pages there is no band to
 		   configure and no dialog to carry a selection into. */
-		wp_enqueue_script('sinofresh-config', get_template_directory_uri() . '/assets/js/config.js', array(), '1.3.0', true);
+		wp_enqueue_script('sinofresh-config', get_template_directory_uri() . '/assets/js/config.js', array(), '1.4.0', true);
 	}
 	// On-this-page TOC (dot rail on marketing pages, text list on articles) +
 	// article extras (progress bar, inline CTA, feedback, print URL). The JS
@@ -1926,12 +1926,26 @@ add_shortcode('sf_formula_detail', 'sinofresh_formula_detail');
  * template) and printed five rows. This one printed up to ten until batch H7d
  * split the band in two along the only line that matters to a reader: rows the
  * customer can CHOOSE moved to [sf_formula_config], rows that are facts stayed
- * here. The four that stayed:
+ * here. Batch H8a took one more off. The three that stayed:
  *
- *   Shelf life          sf_formula_specs        (parsed: the "… shelf life" segment)
- *   Packaging           dosage page .sf-facts-mini row
+ *   Shelf life          sf_formula_shelf_life   (the fixed pool, batch H8a)
  *   Certifications      Site Settings sf_certifications, via sf_render_cert_badges()
  *   Lead time           sf_formula_lead_time
+ *
+ * Shelf life read sf_formula_specs and now reads the record's own field. The
+ * two disagreed on post 158 (24 months stored, 18 months in the spec sheet),
+ * and a page that states one fact twice with two answers is worse than a page
+ * that states it once. sf_formula_shelf_life_line() keeps the spec sheet as
+ * the fallback for a record the sales team has not re-saved yet, so no page
+ * loses the row while the pool fills up.
+ *
+ * Packaging left in H8a on the user's instruction: the right column already
+ * carries Container Type, and the row restated the dosage form's packaging
+ * formats beside it. Nothing was lost from the page — the value comes from the
+ * dosage page's own .sf-facts-mini row, which is still there and still what
+ * the Product JSON-LD reads (sinofresh_formula_facts_props()), and the
+ * record's own sf_formula_packaging_extra list still prints in the body under
+ * "Packaging & Specifications → Additional Packaging".
  *
  * The six that left — Flavor, Piece Weight, Pack Size, Suitable For, Life Stage
  * and Quantity & Pricing — are controls there, and each prints this record's own
@@ -1965,12 +1979,6 @@ function sinofresh_formula_params() {
 	if ($post_id <= 0) {
 		return '';
 	}
-	$form_slug = '';
-	$form_terms = wp_get_post_terms($post_id, 'sf_formula_form');
-	if (!is_wp_error($form_terms) && $form_terms) {
-		$form_slug = (string) $form_terms[0]->slug;
-	}
-
 	$parts = sinofresh_formula_specs_parts(trim((string) get_post_meta($post_id, 'sf_formula_specs', true)));
 
 	/* Each cell is already escaped HTML: the badges escape their own values, so
@@ -1985,12 +1993,9 @@ function sinofresh_formula_params() {
 	   put every one of those values on the page twice. What stays is the four
 	   rows that are not a choice. The split is by "can the customer pick a
 	   different one", not by importance. */
-	if (trim((string) $parts['shelf']) !== '') {
-		$rows['Shelf life'] = esc_html(trim((string) $parts['shelf']));
-	}
-	$packaging = $form_slug !== '' ? sinofresh_formula_spec_cell($form_slug, 'Packaging formats') : '';
-	if (trim($packaging) !== '') {
-		$rows['Packaging'] = esc_html(trim($packaging));
+	$shelf = sf_formula_shelf_life_line($post_id, $parts);
+	if ($shelf !== '') {
+		$rows['Shelf life'] = esc_html($shelf);
 	}
 	$certs = sf_render_cert_badges();
 	if (trim($certs) !== '') {
@@ -2133,6 +2138,76 @@ function sf_tier_price_label($price) {
 	return 'US$' . $bare;
 }
 
+/**
+ * The "Custom" option a choice group may end with (batch H8a).
+ *
+ * One constructor, because the flag is load-bearing in three places: the
+ * renderer draws a text box beside a group that carries one, the endpoint
+ * accepts a free-text answer only from a group that carries one, and the two
+ * image libraries mark their own Custom row the same way so the shape and
+ * container pickers behave exactly like the chips.
+ *
+ * The option's VALUE stays "Custom". A visitor who picks it and types nothing
+ * posts that word and the sales desk reads "Flavor: Custom", which is the
+ * honest answer; a visitor who types posts "{text} (custom)" instead — see
+ * sinofresh_formula_custom_text().
+ */
+function sf_formula_custom_option($image = '') {
+	return array(
+		'value' => 'Custom', 'label' => 'Custom', 'image' => (string) $image, 'note' => '',
+		'custom' => true,
+	);
+}
+
+/**
+ * The text box a group's Custom option reveals (batch H8a).
+ *
+ * Rendered by the server and `hidden`, then revealed by config.js when the
+ * Custom pick is made. Server-rendered for three reasons: the gate can see it
+ * in the markup, it is in the tab order without the script having to build it,
+ * and with no script at all the group degrades to exactly what it was before
+ * the batch — a Custom pick that posts the word "Custom" — rather than to a
+ * pick that opens nothing.
+ *
+ * It is a SIBLING of the option list, not a child of the Custom label. A text
+ * input nested in a <label> fights the label's own activation behaviour, so a
+ * click on the box would also toggle the radio beside it; outside, the two
+ * never touch.
+ */
+function sf_formula_custom_field($key, $label) {
+	return '<div class="sf-fdetail-config__custom" data-sf-config-custom-for="' . esc_attr($key) . '" hidden>'
+		. '<input type="text" class="sf-fdetail-config__custom-input"'
+		. ' data-sf-config-custom-input="' . esc_attr($key) . '"'
+		. ' maxlength="60" autocomplete="off" spellcheck="false"'
+		. ' aria-label="' . esc_attr(sprintf('Your own %s', $label)) . '"'
+		. ' placeholder="Type your own">'
+		. '</div>';
+}
+
+/**
+ * The visitor's own text, out of the value the page posted (batch H8a).
+ *
+ * The contract is the page's: a custom answer is posted as "{text} (custom)" —
+ * the same string the inquiry is meant to read — so the suffix is both the
+ * marker and the check. A value without it is not a custom answer and returns
+ * '', and is then dropped exactly as any other unknown value is.
+ *
+ * The text is sanitised like every other field on the form and capped at 60,
+ * because it travels into an email the sales desk reads and into the modal's
+ * own summary line.
+ */
+function sinofresh_formula_custom_text($value) {
+	$value = trim((string) $value);
+	if (!preg_match('/^(.*?)\s*\(custom\)$/i', $value, $m)) {
+		return '';
+	}
+	$text = trim(sanitize_text_field($m[1]));
+	if ($text === '') {
+		return '';
+	}
+	return function_exists('mb_substr') ? mb_substr($text, 0, 60) : substr($text, 0, 60);
+}
+
 function sinofresh_formula_config_groups($post_id) {
 	$post_id = (int) $post_id;
 	if ($post_id <= 0) {
@@ -2147,10 +2222,15 @@ function sinofresh_formula_config_groups($post_id) {
 		foreach ($flavors as $flavor) {
 			$options[] = array('value' => $flavor, 'label' => $flavor, 'image' => '', 'note' => '');
 		}
+		$options[] = sf_formula_custom_option();
+		/* H8a — `multi` became `single`, and the hint says so. A flavour is one
+		   answer: "Chicken, Beef" is not a product, it is a range, and the
+		   sales desk cannot quote from it. Suitable For below stays multi
+		   because a formula genuinely is for dogs AND cats. */
 		$groups[] = array(
 			'key' => 'flavor', 'label' => 'Flavor', 'meta' => implode(', ', $flavors),
-			'type' => 'multi', 'style' => 'chips',
-			'hint' => 'Choose one or more', 'options' => $options,
+			'type' => 'single', 'style' => 'chips',
+			'hint' => 'Choose one', 'options' => $options,
 		);
 	}
 
@@ -2163,7 +2243,10 @@ function sinofresh_formula_config_groups($post_id) {
 		$groups[] = array(
 			'key' => 'weight', 'label' => 'Piece Weight', 'meta' => $unit,
 			'type' => 'single', 'style' => 'chips', 'hint' => '',
-			'options' => array(array('value' => $unit, 'label' => $unit, 'image' => '', 'note' => '')),
+			'options' => array(
+				array('value' => $unit, 'label' => $unit, 'image' => '', 'note' => ''),
+				sf_formula_custom_option(),
+			),
 		);
 	}
 
@@ -2175,9 +2258,10 @@ function sinofresh_formula_config_groups($post_id) {
 			foreach ($packs as $p) {
 				$options[] = array('value' => $p, 'label' => $p, 'image' => '', 'note' => '');
 			}
+			$options[] = sf_formula_custom_option();
 			$groups[] = array(
 				'key' => 'pack', 'label' => 'Pack Size', 'meta' => $pack,
-				'type' => 'multi', 'style' => 'chips',
+				'type' => 'single', 'style' => 'chips',
 				/* TWO STRINGS, because one cannot do both jobs. The hint is
 				   what a reader sees beside "60 / 90 / 120"; the unit phrase is
 				   what the chosen number has to carry into the inquiry, or the
@@ -2186,7 +2270,7 @@ function sinofresh_formula_config_groups($post_id) {
 				   "Per per bottle" on all 20 pack pages: the splitter's tail
 				   already begins with the preposition, because it starts at the
 				   first character that is not a digit. */
-				'hint' => $pack_tail !== '' ? ucfirst($pack_tail) : 'Choose one or more',
+				'hint' => $pack_tail !== '' ? ucfirst($pack_tail) : 'Choose one',
 				'unit_phrase' => $pack_tail,
 				'options' => $options,
 			);
@@ -2199,19 +2283,22 @@ function sinofresh_formula_config_groups($post_id) {
 		foreach ($species as $s) {
 			$options[] = array('value' => $s, 'label' => $s, 'image' => '', 'note' => '');
 		}
+		$options[] = sf_formula_custom_option();
 		$groups[] = array(
 			'key' => 'species', 'label' => 'Suitable For', 'meta' => implode(', ', $species),
 			'type' => 'multi', 'style' => 'chips',
 			'hint' => 'Choose one or more', 'options' => $options,
 		);
 	}
-
 	$lifestage = trim((string) get_post_meta($post_id, 'sf_formula_lifestage', true));
 	if ($lifestage !== '') {
 		$groups[] = array(
 			'key' => 'stage', 'label' => 'Life Stage', 'meta' => $lifestage,
 			'type' => 'single', 'style' => 'chips', 'hint' => '',
-			'options' => array(array('value' => $lifestage, 'label' => $lifestage, 'image' => '', 'note' => '')),
+			'options' => array(
+				array('value' => $lifestage, 'label' => $lifestage, 'image' => '', 'note' => ''),
+				sf_formula_custom_option(),
+			),
 		);
 	}
 
@@ -2237,10 +2324,18 @@ function sinofresh_formula_config_groups($post_id) {
 		if ($shape_meta !== '' && strcasecmp($shape_meta, (string) $s['label']) === 0) {
 			$shape_own = (string) $s['label'];
 		}
-		$shape_opts[] = array(
+		$shape_opt = array(
 			'value' => (string) $s['slug'], 'label' => (string) $s['label'],
 			'image' => $image, 'note' => '',
 		);
+		/* H8a — the library keeps its own "Custom" row (slug `custom`, permanent
+		   because the front end validates against slugs). Marking it is what
+		   makes it open the same text box the chips groups get, instead of
+		   being a word a visitor can pick but not qualify. */
+		if ('custom' === (string) $s['slug']) {
+			$shape_opt['custom'] = true;
+		}
+		$shape_opts[] = $shape_opt;
 	}
 	if ($shape_opts) {
 		$groups[] = array(
@@ -2264,10 +2359,14 @@ function sinofresh_formula_config_groups($post_id) {
 				$url = wp_get_attachment_image_url((int) $c['attachment_id'], 'medium');
 				$image = $url ? (string) $url : '';
 			}
-			$options[] = array(
+			$container_opt = array(
 				'value' => (string) $c['slug'], 'label' => (string) $c['label'],
 				'image' => $image, 'note' => '',
 			);
+			if ('custom' === (string) $c['slug']) {
+				$container_opt['custom'] = true;
+			}
+			$options[] = $container_opt;
 		}
 		if ($options) {
 			$own = function_exists('sinofresh_container_label')
@@ -2351,6 +2450,14 @@ function sinofresh_formula_config_groups($post_id) {
  * dropped, so the worst a hand-crafted request can do is choose among the
  * options the page already offered.
  *
+ * Batch H8a adds the one exception, and it is bounded so the rule survives it:
+ * a group that OFFERS a Custom option accepts a free-text answer as well. The
+ * request still cannot name the group's own options, because the custom branch
+ * only runs for values the option list rejected, and it only runs at all for a
+ * group whose page drew a Custom box. The text is sanitised and capped, and it
+ * is stamped "(custom)" so the sales desk can tell a typed answer from a
+ * catalogued one.
+ *
  * @return array Label => plain-text value, in the groups' print order.
  */
 function sinofresh_formula_config_rows($post_id, $posted) {
@@ -2360,29 +2467,46 @@ function sinofresh_formula_config_rows($post_id, $posted) {
 		$key     = $group['key'];
 		$allowed = array();
 		$labels  = array();
+		$custom  = false;
 		foreach ($group['options'] as $option) {
 			$allowed[] = (string) $option['value'];
 			$labels[(string) $option['value']] = $option['label']
 				. ($option['note'] !== '' ? ' (' . $option['note'] . ')' : '');
+			if (!empty($option['custom'])) {
+				$custom = true;
+			}
 		}
 		$want = isset($posted[$key]) ? $posted[$key] : array();
 		$want = is_array($want) ? $want : array($want);
 		$chosen = array();
+		$typed  = array();
 		foreach ($want as $value) {
 			$value = is_string($value) ? trim($value) : '';
-			if ($value === '' || !in_array($value, $allowed, true)) {
+			if ($value === '') {
 				continue;
 			}
-			if (!in_array($value, $chosen, true)) {
-				$chosen[] = $value;
+			if (in_array($value, $allowed, true)) {
+				if (!in_array($value, $chosen, true)) {
+					$chosen[] = $value;
+				}
+				continue;
+			}
+			if ($custom) {
+				$text = sinofresh_formula_custom_text($value);
+				if ($text !== '' && !in_array($text, $typed, true)) {
+					$typed[] = $text;
+				}
 			}
 		}
-		if (!$chosen) {
+		if (!$chosen && !$typed) {
 			continue;
 		}
 		$text = array();
 		foreach ($chosen as $value) {
 			$text[] = $labels[$value];
+		}
+		foreach ($typed as $own) {
+			$text[] = $own . ' (custom)';
 		}
 		$rows[$group['label']] = implode(', ', $text);
 		/* The unit the options share is printed with the choice, or "60, 90"
@@ -2402,9 +2526,16 @@ function sinofresh_formula_config_rows($post_id, $posted) {
  *
  * Seven rows that were plain text become controls: Flavor, Piece Weight, Pack
  * Size, Suitable For, Life Stage, Container Type and Quantity & Pricing. The
- * rows that are NOT choices — Shelf life, Packaging, Certifications, Lead time
- * — stay text and stay in [sf_formula_params], which is why the two renderers
- * exist side by side rather than one replacing the other.
+ * rows that are NOT choices — Shelf life, Certifications, Lead time — stay
+ * text and stay in [sf_formula_params], which is why the two renderers exist
+ * side by side rather than one replacing the other.
+ *
+ * Batch H8a: Flavor and Pack Size became single-choice (one flavour is one
+ * answer), and every choice group may now end in a Custom pick that reveals a
+ * text box. The box is server-rendered and hidden — see
+ * sf_formula_custom_field() — and the answer it collects is the one thing on
+ * this form a visitor writes themselves, so the endpoint validates it rather
+ * than merely forwarding it (sinofresh_formula_custom_text()).
  *
  * Every group prints its own value as text (`__meta`) whether or not anything
  * is checked. That single decision does three jobs: it is the no-JS answer
@@ -2497,11 +2628,16 @@ function sinofresh_formula_config() {
 		}
 
 		$opts = '';
+		$has_custom = false;
 		foreach ($group['options'] as $option) {
 			$value   = (string) $option['value'];
 			$img     = (string) $option['image'];
 			$media   = '';
 			$in_slot = false;
+			$is_custom = !empty($option['custom']);
+			if ($is_custom) {
+				$has_custom = true;
+			}
 			if ($group['style'] === 'image') {
 				/* An empty library slot degrades to the label, never to a broken
 				   image: the Container Library ships with every attachment_id
@@ -2522,7 +2658,8 @@ function sinofresh_formula_config() {
 				}
 			}
 			$note = (string) $option['note'];
-			$opts .= '<label class="sf-fdetail-config__opt">'
+			$opts .= '<label class="sf-fdetail-config__opt"'
+				. ($is_custom ? ' data-sf-config-custom="1"' : '') . '>'
 				. '<input class="sf-fdetail-config__input" type="' . esc_attr($type) . '"'
 				. ' name="' . esc_attr($name) . '" value="' . esc_attr($value) . '"'
 				. ' data-sf-config-opt="' . esc_attr($key) . '">'
@@ -2545,6 +2682,7 @@ function sinofresh_formula_config() {
 			. '</p>'
 			. '<div class="sf-fdetail-config__options" role="group"'
 			. ' aria-label="' . esc_attr((string) $group['label']) . '">' . $opts . '</div>'
+			. ($has_custom ? sf_formula_custom_field($key, (string) $group['label']) : '')
 			. '</div>';
 	}
 
@@ -2587,7 +2725,9 @@ add_shortcode('sf_formula_config', 'sinofresh_formula_config');
  *   Shape              sf_formula_shape                  (text)
  *   Unit Weight        sf_formula_specs                  (parsed: unit segment)
  *   Pack Size          sf_formula_specs                  (parsed: "… per …")
- *   Shelf Life         sf_formula_specs                  (parsed: "… shelf life")
+ *   Shelf Life         sf_formula_shelf_life            (the fixed pool, H8a;
+ *                      the spec sheet's "… shelf life" segment is the
+ *                      fallback — see sinofresh_formula_shelf_life_line())
  *   Main Ingredients   sf_formula_ingredients            (the first three)
  *   MOQ                dosage page .sf-facts-mini row    (via spec_cell)
  *   Certifications     Site Settings sf_certifications   (the same reader the
@@ -2668,8 +2808,9 @@ function sinofresh_formula_specs_table() {
 	if (trim((string) $parts['pack']) !== '') {
 		$rows['Pack Size'] = esc_html(trim((string) $parts['pack']));
 	}
-	if (trim((string) $parts['shelf']) !== '') {
-		$rows['Shelf Life'] = esc_html(trim((string) $parts['shelf']));
+	$shelf = sf_formula_shelf_life_line($post_id, $parts);
+	if ($shelf !== '') {
+		$rows['Shelf Life'] = esc_html($shelf);
 	}
 	/* The comma is the separator every sf_formula_ingredients value uses. */
 	$ingredients = array();

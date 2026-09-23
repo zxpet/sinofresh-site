@@ -2,7 +2,7 @@
 Theme Name: SINO FRESH
 Author: Shandong SINO FRESH Pet Food Co., Ltd.
 Text Domain: sinofresh
-Version: 2.10.73
+Version: 2.10.74
 Requires at least: 6.0
 Requires PHP: 7.4
 License: GNU General Public License v2 or later
@@ -8112,6 +8112,100 @@ body.sf-inquiry-lock {
 	padding: 8px 10px;
 	border-radius: 12px;
 }
+
+/* Batch H8a — the two image pickers slide sideways instead of wrapping.
+   Eight shapes in a 472px column is two wrapped rows, and a second row is a
+   shape a buyer has to go looking for; one row that slides keeps every shape
+   the same distance from the finger, and the half-tile at the edge is what
+   says the row continues. Nothing is hidden by it: this is a real scroll
+   container, so a visitor without the script still swipes it (touch) or
+   drags its track (pointer) — the arrows on a pointer device are an
+   improvement on that, not the only way through. */
+.sf-fdetail-config__group[data-sf-config-group="shape"] .sf-fdetail-config__options,
+.sf-fdetail-config__group[data-sf-config-group="container"] .sf-fdetail-config__options {
+	flex-wrap: nowrap;
+	overflow-x: auto;
+	scroll-snap-type: x proximity;
+	-webkit-overflow-scrolling: touch;
+}
+.sf-fdetail-config__group[data-sf-config-group="shape"] .sf-fdetail-config__opt,
+.sf-fdetail-config__group[data-sf-config-group="container"] .sf-fdetail-config__opt {
+	scroll-snap-align: start;
+}
+/* Built by config.js, so a page with no script has no arrows to press and no
+   wrapper either. --scrolls is set only when the row actually overflows. */
+.sf-fdetail-config__rail {
+	position: relative;
+}
+.sf-fdetail-config__arrow {
+	display: none;
+	position: absolute;
+	top: 50%;
+	z-index: 1;
+	width: 28px;
+	height: 28px;
+	margin-top: -14px;
+	padding: 0;
+	align-items: center;
+	justify-content: center;
+	border: 1px solid var(--wp--preset--color--border-light);
+	border-radius: 999px;
+	background-color: var(--wp--preset--color--card-white);
+	color: var(--wp--preset--color--text-primary);
+	font-size: 13px;
+	line-height: 1;
+	cursor: pointer;
+	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+/* Outside the column, in the band's own gap: an arrow sitting ON the row
+   covers the first shape's picture, which is the one thing the row is for. */
+.sf-fdetail-config__arrow--prev { left: -22px; }
+.sf-fdetail-config__arrow--next { right: -22px; }
+.sf-fdetail-config__arrow[disabled] {
+	opacity: 0.35;
+	cursor: default;
+}
+@media (min-width: 769px) {
+	.sf-fdetail-config__rail--scrolls .sf-fdetail-config__arrow {
+		display: inline-flex;
+	}
+	/* A pointer device has the arrows, so the track is redundant; a touch
+	   device keeps it. Same container either way. */
+	.sf-fdetail-config__rail--scrolls .sf-fdetail-config__options {
+		scrollbar-width: none;
+	}
+	.sf-fdetail-config__rail--scrolls .sf-fdetail-config__options::-webkit-scrollbar {
+		display: none;
+	}
+}
+
+/* Batch H8a — the box a Custom pick reveals. It is a SIBLING of the option
+   list and ships `hidden`, so it takes no space until the pick is made:
+   config.js flips the attribute and moves the focus. A visitor without the
+   script never sees it, and the Custom pick then means what it says — the
+   word "Custom", which is what the record's own options would have posted. */
+.sf-fdetail-config__custom {
+	margin-top: 8px;
+}
+.sf-fdetail-config__custom[hidden] {
+	display: none;
+}
+.sf-fdetail-config__custom-input {
+	width: 100%;
+	max-width: 320px;
+	padding: 8px 12px;
+	border: 1px solid var(--wp--preset--color--border-medium);
+	border-radius: 8px;
+	background-color: var(--wp--preset--color--card-white);
+	font-family: inherit;
+	font-size: 14px;
+	line-height: 1.4;
+	color: var(--wp--preset--color--text-primary);
+}
+.sf-fdetail-config__custom-input:focus-visible {
+	outline: 2px solid var(--wp--preset--color--brand-green);
+	outline-offset: 1px;
+}
 .sf-fdetail-config__summary {
 	margin: 10px 0 0;
 	padding: 8px 12px;
@@ -8716,6 +8810,21 @@ body.sf-config-lock { overflow: hidden; }
 	.sf-fdetail2__inner {
 		grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
 		gap: 32px;
+	}
+	/* Batch H8a — the main image keeps the reader's place while the parameters
+	   column scrolls past it. The two conditions were already met, which is why
+	   this is four lines and not a restructure: the band's grid is
+	   `align-items: start` (so the media column is content-height rather than
+	   stretched to the row) and nothing between here and the root clips — the
+	   horizontal overflow guard at the top of this file uses `overflow-x: clip`
+	   and says in its own comment that it stays out of position:sticky's way.
+	   100px clears the 61px bar the header becomes past scrollY 100.
+	   Desktop only: below this width the columns are a single stack, nothing
+	   scrolls past anything, and a stuck image would only eat the screen. */
+	.sf-fdetail2__media {
+		position: sticky;
+		top: 100px;
+		align-self: start;
 	}
 }
 /* From 1101px there is room for the rail: the strip turns into a 72px column
@@ -9604,31 +9713,43 @@ body.sf-config-lock { overflow: hidden; }
 		color: var(--wp--preset--color--brand-green);
 		cursor: pointer;
 	}
-	/* Folded: groups 4+ wait behind the button. Scoped to the folded class so
+	/* Folded: groups 5+ wait behind the button. Batch H8a moved the cut from 4
+	   to 5 — the ladder was moved to the head of the column (H7l) and the user
+	   ruled that a price is the one line a buyer scans for, so the fold now
+	   keeps the ladder AND the three groups the brief names (Flavor, Piece
+	   Weight, Pack Size) and hides from Shape on. Scoped to the folded class so
 	   an expanded list is one class flip, and to <=480 so the desktop list is
 	   never folded even if the class survives a rotation. */
 	.sf-fdetail-config--js .sf-fdetail-config__list.sf-config-folded
-		.sf-fdetail-config__group:nth-child(n + 4) {
+		.sf-fdetail-config__group:nth-child(n + 5) {
 		display: none;
 	}
 
-	/* ---- the image pickers: three columns, 80px tiles -------------------- */
-	.sf-fdetail-config__group[data-sf-config-group="shape"] .sf-fdetail-config__options,
-	.sf-fdetail-config__group[data-sf-config-group="container"] .sf-fdetail-config__options {
-		display: grid;
-		grid-template-columns: repeat(3, minmax(0, 1fr));
-		gap: 8px;
-	}
+	/* ---- the image pickers: one row that slides, 1.5 tiles in view --------- */
+	/* Batch H8a. Three columns of 80px was two rows of shapes behind a fold;
+	   the row now slides instead, on the same rule the base width uses (the
+	   containment is declared once, in 38a) — what changes here is only the
+	   tile. `calc((100% - 6px) / 1.5)` puts one full tile and half of the next
+	   in view at every phone width: a row that shows all of itself reads as a
+	   finished list, and only the cut tile says there is more.
+	   The card turns on its side for this width alone: a 219px tile with a
+	   60px picture over it would be mostly empty, while picture-beside-name is
+	   how a wide, short card is normally read. */
 	.sf-fdetail-config__group[data-sf-config-group="shape"] .sf-fdetail-config__opt,
 	.sf-fdetail-config__group[data-sf-config-group="container"] .sf-fdetail-config__opt {
-		display: flex;
+		flex: 0 0 calc((100% - 6px) / 1.5);
+		flex-direction: row;
+		align-items: center;
+		min-width: 0;
+		gap: 10px;
+		padding: 10px;
 	}
 	.sf-fdetail-config__group[data-sf-config-group="shape"] .sf-fdetail-config__img,
 	.sf-fdetail-config__group[data-sf-config-group="container"] .sf-fdetail-config__img {
-		width: 80px;
-		height: 80px;
-		/* 80 is the BOX: the dashed slot's own 1px border would otherwise
-		   make the tile measure 82. */
+		width: 56px;
+		height: 56px;
+		/* 56 is the BOX: the dashed slot's own 1px border would otherwise
+		   make the tile measure 58. */
 		box-sizing: border-box;
 	}
 

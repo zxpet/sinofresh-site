@@ -17,9 +17,18 @@
  *    stays empty and the panel keeps the server-rendered specification — the
  *    dialog falls back to the product, which is what it did before this batch.
  * 3. On a phone, the fold (batch H7h). Below 480px the list stands inline and
- *    groups 4-7 wait behind one "View all specs" button — the first three
- *    (the ones a buyer asks first) stay on the page. The expanded state is
- *    kept in sessionStorage, so a visitor who unfolded once stays unfolded.
+ *    the groups past the fourth wait behind one "View all specs" button — the
+ *    ladder and the three groups a buyer asks first stay on the page (batch
+ *    H8a moved the cut from the fourth group to the fifth, because H7l had
+ *    moved the price to the head of the column and the price is not something
+ *    to fold away). The expanded state is kept in sessionStorage, so a visitor
+ *    who unfolded once stays unfolded.
+ * 4. The Custom box (batch H8a). A group may end in a Custom pick; the text
+ *    box under the group ships hidden and is revealed by that pick, and what
+ *    it holds is what the inquiry posts — "{text} (custom)".
+ * 5. The sliding rows (batch H8a). Shape and Container are one row that
+ *    scrolls instead of two that wrap; on a pointer device the rail gets a
+ *    pair of arrows, because a scrollbar with no thumb is not an affordance.
  *    The H7d drawer it replaces keeps running at 481-768px, where seven
  *    inline groups still outrun a tablet's viewport; at the phone width the
  *    drawer button is never drawn, so the two interactions never coexist.
@@ -84,6 +93,11 @@
 
 		/* ------------------------------------------------------------- state */
 
+		function customText(key) {
+			var box = root.querySelector('[data-sf-config-custom-input="' + key + '"]');
+			return box ? box.value.trim() : '';
+		}
+
 		/* Read the ticked inputs back out of the DOM, in group order. The DOM is
 		   the state: a parallel object would be a second copy to keep in step,
 		   and the first thing to go wrong after a back-navigation. */
@@ -108,14 +122,17 @@
 					   inside the dashed placeholder box instead of a text span,
 					   so the label is read from there when the span is absent. */
 					var emptyLabel = opt.querySelector('.sf-fdetail-config__empty-label');
+					/* H8a — a Custom pick with text in its box answers with that
+					   text, not with the word Custom. Read here rather than in the
+					   carrier so the summary line, the dialog's panel and the
+					   posted value all say the same thing by construction. */
+					var own = opt.hasAttribute('data-sf-config-custom') ? customText(key) : '';
+					var note = opt.querySelector('.sf-fdetail-config__note');
 					picked.push({
-						value: input.value,
-						label: text ? text.textContent.trim()
-							: (emptyLabel ? emptyLabel.textContent.trim() : input.value),
-						note: (function () {
-							var n = opt.querySelector('.sf-fdetail-config__note');
-							return n ? n.textContent.trim() : '';
-						})()
+						value: own !== '' ? own + ' (custom)' : input.value,
+						label: own !== '' ? own + ' (custom)' : (text ? text.textContent.trim()
+							: (emptyLabel ? emptyLabel.textContent.trim() : input.value)),
+						note: own !== '' ? '' : (note ? note.textContent.trim() : '')
 					});
 				});
 				if (picked.length) {
@@ -230,13 +247,93 @@
 			setFold(list.classList.contains('sf-config-folded'));
 		});
 		/* A visitor who unfolded earlier in this session stays unfolded — the
-		   brief's "保持展开". Everything else starts folded: the first three
+		   brief's "保持展开". Everything else starts folded: the first four
 		   groups are the summary, the button is the rest. */
 		var saved = null;
 		try {
 			saved = sessionStorage.getItem(FOLD_KEY);
 		} catch (e) { /* as above */ }
 		setFold(saved === 'open');
+
+		/* ------------------------------------------------- the Custom box (H8a) */
+
+		/* The box ships `hidden` in the markup and is revealed by the pick that
+		   owns it. Visibility is derived from the DOM like everything else
+		   here, so a back-navigation that restores a tick also restores the
+		   box. Focus moves only when that pick is the thing that changed: the
+		   change listener below runs on every tick, and grabbing focus on each
+		   one would pull the keyboard into a text field the visitor never
+		   asked for. */
+		function syncCustom(focus) {
+			groups.forEach(function (group) {
+				var key = group.getAttribute('data-sf-config-group');
+				var box = root.querySelector('[data-sf-config-custom-for="' + key + '"]');
+				if (!box) {
+					return;
+				}
+				var pick = group.querySelector('.sf-fdetail-config__opt[data-sf-config-custom] .sf-fdetail-config__input');
+				var on = !!(pick && pick.checked);
+				box.hidden = !on;
+				if (on && focus) {
+					var input = box.querySelector('[data-sf-config-custom-input]');
+					if (input && input.value === '') {
+						input.focus();
+					}
+				}
+			});
+		}
+		root.addEventListener('change', function (e) {
+			var t = e.target;
+			syncCustom(!!(t && t.closest && t.closest('[data-sf-config-custom]')));
+		});
+		syncCustom(false);
+
+		/* ------------------------------------------------- the rails (H8a) */
+
+		/* Shape and Container are one scrolling row rather than two wrapped
+		   ones. On a pointer device that is a hidden affordance — a track with
+		   no thumb is a scrollbar nobody notices — so the rail gets a pair of
+		   arrows. They are built only when the row actually overflows, and only
+		   here: without this file the row is still a plain scroll container
+		   (swipe on touch, drag the track with a pointer), which is why the
+		   markup carries the containment and this file only carries the
+		   convenience. */
+		function railArrow(rail, row, dir, glyph, label) {
+			var b = document.createElement('button');
+			b.type = 'button';
+			b.className = 'sf-fdetail-config__arrow sf-fdetail-config__arrow--' + dir;
+			b.textContent = glyph;
+			b.setAttribute('aria-label', label);
+			b.addEventListener('click', function () {
+				row.scrollLeft += (dir === 'next' ? 1 : -1) * row.clientWidth * 0.8;
+			});
+			rail.appendChild(b);
+			return b;
+		}
+		['shape', 'container'].forEach(function (key) {
+			var group = root.querySelector('[data-sf-config-group="' + key + '"]');
+			var row = group ? group.querySelector('.sf-fdetail-config__options') : null;
+			if (!row) {
+				return;
+			}
+			var rail = document.createElement('div');
+			rail.className = 'sf-fdetail-config__rail';
+			row.parentNode.insertBefore(rail, row);
+			rail.appendChild(row);
+
+			var prev = railArrow(rail, row, 'prev', '\u2039', 'Previous options');
+			var next = railArrow(rail, row, 'next', '\u203a', 'More options');
+
+			function sync() {
+				var room = row.scrollWidth - row.clientWidth;
+				rail.classList.toggle('sf-fdetail-config__rail--scrolls', room > 4);
+				prev.disabled = row.scrollLeft <= 1;
+				next.disabled = row.scrollLeft >= room - 1;
+			}
+			row.addEventListener('scroll', sync, { passive: true });
+			window.addEventListener('resize', sync);
+			sync();
+		});
 
 		/* --------------------------------------------- gallery preview (H7g) */
 

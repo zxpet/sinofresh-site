@@ -111,6 +111,67 @@ function sf_formula_pools() {
 	return $pools;
 }
 
+/* --------------------------------------------------------------------------
+ * Batch H8a — shelf life becomes a fixed pool.
+ *
+ * It was a free-text field ("e.g. 18 months") whose value the front end never
+ * read: the two rows that print a shelf life parsed it out of sf_formula_specs
+ * instead. The batch closes that gap from the field's side — the record now
+ * declares one of four answers and the page prints THAT — which is why the
+ * pool lives here rather than as a list literal in the admin file: the admin
+ * form and the front end have to agree on it, and two literals drift.
+ *
+ * The strings stored are the strings printed ("18 months"), so the renderer
+ * has nothing to compose and the value in the database is the value on the
+ * page. Nothing else is accepted: the select cannot produce a fifth answer,
+ * and the sanitiser keeps a stale one out.
+ * ------------------------------------------------------------------------ */
+function sf_formula_shelf_life_pool() {
+	return array('12 months', '18 months', '24 months', '36 months');
+}
+
+/**
+ * A stored shelf-life value as the page prints it. '' when there is none.
+ *
+ * One repair and no invention: post 158 was saved as "24months" (batch H8a's
+ * own survey found 18 records at "24 months", 2 at "18 months" and this one
+ * without the space). The missing space is a typo in a free-text field that
+ * the pool retires, so the reader normalises it rather than leaving one page
+ * in 21 printing a value the admin screen cannot produce. Anything that is
+ * not a month count is returned as stored — a reader that rewrote arbitrary
+ * text would be a second place that decides what the field means.
+ */
+function sf_formula_shelf_life_label($raw) {
+	$raw = trim(preg_replace('/\s+/', ' ', (string) $raw));
+	if ($raw === '') {
+		return '';
+	}
+	if (preg_match('/^(\d+)\s*months?$/i', $raw, $m)) {
+		return $m[1] . ' months';
+	}
+	return $raw;
+}
+
+/**
+ * The shelf-life line the two front-end rows print, from the record's own
+ * fixed pool, falling back to the specs segment while a record has not been
+ * re-saved since the pool shipped.
+ *
+ * The fallback is where batch H8a's "value de-duplication" lives: the segment
+ * the specs parser returns is the whole clause ("18 months shelf life"), and
+ * both rows already carry the label, so the trailing words are dropped rather
+ * than printed twice. It runs only on the fallback because the pool's own
+ * strings never contained them.
+ */
+function sf_formula_shelf_life_line($post_id, $parts = array()) {
+	$pool = sf_formula_shelf_life_label(get_post_meta((int) $post_id, 'sf_formula_shelf_life', true));
+	if ($pool !== '') {
+		return $pool;
+	}
+	$raw = isset($parts['shelf']) ? trim((string) $parts['shelf']) : '';
+	return trim((string) preg_replace('/[\s,–-]*shelf\s*life\.?$/i', '', $raw));
+}
+
 /**
  * One dimension's options for one dosage form. Empty array = the form has no
  * such dimension (the field is skipped rather than rendered empty).
