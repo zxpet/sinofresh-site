@@ -56,3 +56,21 @@
 1. **两张图库都待传图**：Shape Library（8 项）与 Container Library（7 项）现全空（attachment_id=0）——上传前前台显示虚线占位框，主图切换对空槽**不生效**（设计如此）。
 2. **post 158 测试值 5 处仍由用户后台自清**（GO 批遗留）。
 3. 预检副本 `0b015e1` 已过时（相对 live 多 guard、相对本批少全部改动）——删/重装待裁决。
+
+---
+
+## 上线（2026-09-23 09:5x，批 A＝用户 pull 授权）
+
+- **pull**：`/var/www/dev.zxpet.com/site-repo` `git fetch --prune` → `git pull --ff-only origin main`；`77a81b9 → 5db481d`，四条入站提交 `e8f0172`(H7g) / `65f8d56` / `8a613bd` / `5db481d`(H7h＋档)。主题目录是 symlink ⇒ 即时生效。
+- ⚠️ **live 版本＝`2.10.69`，不是订单里写的 `2.10.68`**：H7h 已在其上（`65f8d56`＋`8a613bd`），pull 一次把两批一起带上。属派生数字偏差，方向一致，未停机。
+- **H7g 门重跑（全绿）**：主证 75/0、A/A 75/0、矩阵 **7/7**（含「一组都不插」131/173、「令牌不折」75 页、「run count 少一」172/172）、负对照 **16/16**、源码 **15/15**（对 `git archive e8f0172` 检出）、掩码回读 23 页＋46 二进制 0 差异。
+- **H7g E2E（`tools/b2d_h7g_e2e.py`，对 live，22/22）**：
+  - 四剂型各一页（soft-chews／liquids／tablets／dental）先断言「被服务的是 live 主题」＝`link` 含 `/sinofresh-theme/`**且不含** `-preflight`＋`ver=2.10.69`＋config 1.2.0＋gallery 2.2.0＋h1=1；
+  - **Shape 常显**：四页各 8 个选项、`type=radio`、value 互不相同、label＝`Shape`；
+  - **Container 随记录**（双向断言）：soft-chews 有 `sf_formula_container`=Round ⇒ 组在、7 项、meta 读回 `Round`、且 Shape 在 Container **之前**（idx 3 < 4）；liquids／tablets／dental 无该 meta ⇒ 组**缺席**（idx −1）。
+    ⛔ 首跑 3 处 FAIL 是**断言写错**（把 Container 当成常显），不是产品缺陷 —— 证据＝源码注释「Container waits for the record's own meta before it renders」＋DB 只有 post 158 有该 meta。修法是**重构断言**（拆成双向两半），不是改松。
+  - **交互（空图库态）**：点第 1 项只勾它、点第 2 项只勾它（单选）；空槽**不夺主图**（src 不变）且预览层始终 `hidden`；点舞台也保持隐藏。
+  - **H7g 后半**：详情页全页 `tel:` 链接 **0**；悬浮 WhatsApp href＝`https://wa.me/8613385397805` 与页脚 WhatsApp **同串**（三处页脚链接全同）；悬浮询盘钮 `/contact/#quote` ＋ `data-sf-inquiry-open` 仍在。
+  - 375 视口下 Shape 组仍在 DOM（8 项）；**0 页面错误**。
+- **服务侧站点级验收**：`/`、`/formulas/`、`/products/soft-chews/`、`/quality/`、`/contact/`、`/blog/` 全 200 且 `style.css?ver=2.10.69`、每页 h1=1；`/no-such-page-zzz` = 404；**匿名 401**；`x-robots-tag: noindex, nofollow, noarchive` 封锁仍在。
+- **未修**：Shape/Container 两库仍空（占位框态即本批 E2E 的状态）；post 158 五处测试值未动。
