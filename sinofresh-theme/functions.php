@@ -28,7 +28,7 @@ add_action('after_setup_theme', function() {
 });
 
 add_action('wp_enqueue_scripts', function() {
-	wp_enqueue_style('sinofresh-style', get_stylesheet_uri(), array(), '2.10.72');
+	wp_enqueue_style('sinofresh-style', get_stylesheet_uri(), array(), '2.10.73');
 	// Sticky nav: every template renders parts/header.html, so this is site-wide.
 	wp_enqueue_script('sinofresh-sticky-header', get_template_directory_uri() . '/assets/js/sticky-header.js', array(), '1.0.0', true);
 	wp_enqueue_script('sinofresh-ui-components', get_template_directory_uri() . '/assets/js/ui-components.js', array(), '1.0.0', true);
@@ -2318,7 +2318,13 @@ function sinofresh_formula_config_groups($post_id) {
 		$tier_meta[] = $range . ($note !== '' ? ' — ' . $note : '');
 	}
 	if ($tier_opts) {
-		$groups[] = array(
+		/* 待办25 — the ladder heads the column, it does not close it. The brief
+		   puts the price directly under the intro and above Flavor: it is the
+		   one line a buyer scans for, and at the foot of the list it sat under
+		   four choices none of which prices anything. `unshift`, not a second
+		   renderer — it is the same group, moved, so the dialog's reprint, the
+		   summary line and the no-JS fallback all read it unchanged. */
+		array_unshift($groups, array(
 			'key' => 'pricing', 'label' => 'Quantity & Pricing', 'meta' => implode(' · ', $tier_meta),
 			'type' => 'single', 'style' => 'tiers', 'hint' => 'Choose one',
 			'options' => $tier_opts,
@@ -2327,7 +2333,7 @@ function sinofresh_formula_config_groups($post_id) {
 			   break, and a "sample" row inside a price ladder would price one
 			   unit of a sample as if it were the product. */
 			'sample_price' => sf_tier_price_label(get_post_meta($post_id, 'sf_formula_sample_price', true)),
-		);
+		));
 	}
 
 	return $groups;

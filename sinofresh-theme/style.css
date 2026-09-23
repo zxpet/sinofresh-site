@@ -2,7 +2,7 @@
 Theme Name: SINO FRESH
 Author: Shandong SINO FRESH Pet Food Co., Ltd.
 Text Domain: sinofresh
-Version: 2.10.72
+Version: 2.10.73
 Requires at least: 6.0
 Requires PHP: 7.4
 License: GNU General Public License v2 or later
@@ -2458,19 +2458,33 @@ body.admin-bar .sf-header.is-sticky {
 .sf-certstrip__row {
 	display: grid;
 	grid-template-columns: repeat(3, minmax(0, 1fr));
-	gap: 10px 20px;
+	gap: 16px;
 	margin: 0;
 	padding: 0;
 	list-style: none;
 }
+/* 待办4 (H7l) — the strip becomes six cards. As a bare row the band read as a
+   footnote: a 32px glyph inline with 14px text, in a grid whose three columns
+   made the second row look like the continuation of the first. As cards it is
+   a grid of equals and the icon has a surface to sit on.
+   Mist and Line are the theme's own tokens (theme.json bg-light / border-light)
+   spelled as tokens rather than hex, so a palette edit still reaches this band;
+   the radius is the brief's 8px, not the visual system's 6px — deliberate, one
+   step rounder so six small surfaces read as cards and not as table cells. */
 .sf-certstrip__badge {
 	display: flex;
 	align-items: center;
-	gap: 8px;
+	gap: 12px;
 	min-width: 0;
+	padding: 16px;
+	background: var(--wp--preset--color--bg-light);
+	border: 1px solid var(--wp--preset--color--border-light);
+	border-radius: 8px;
 }
 .sf-certstrip__icon {
 	flex: 0 0 auto;
+	width: 40px;
+	height: 40px;
 	color: var(--wp--preset--color--primary);
 }
 .sf-certstrip__name {
@@ -2572,10 +2586,10 @@ body.admin-bar .sf-header.is-sticky {
 		max-height: 260px;
 	}
 }
-@media (max-width: 768px) {
-	/* 待办18: two columns of three on the phone. The retired card grid went to
-	   ONE column at ≤420px, which is exactly what a six-chip strip must not do
-	   — six stacked rows would be taller than the band it replaces. */
+@media (max-width: 1024px) {
+	/* 待办4 (H7l): two columns from the tablet down. The retired ≤768px step is
+	   gone with the row it served — these are cards now, and the tablet boundary
+	   is the one the rest of the theme already uses (120/38/20 gutter). */
 	.sf-certstrip__row {
 		grid-template-columns: repeat(2, minmax(0, 1fr));
 	}
@@ -2587,8 +2601,21 @@ body.admin-bar .sf-header.is-sticky {
 	}
 }
 @media (max-width: 420px) {
+	/* The phone keeps TWO columns — six stacked cards were exactly the height
+	   problem 待办18 named when it took the retired card grid back to one. Two
+	   columns at 375px leave ~96px of text width, so the icon and the padding
+	   step down with them; at 40px/16px the same card gives the text 77px and
+	   every credential wraps to three lines. Measured, not guessed. */
 	.sf-certstrip__row {
-		gap: 8px 12px;
+		gap: 12px;
+	}
+	.sf-certstrip__badge {
+		gap: 10px;
+		padding: 12px;
+	}
+	.sf-certstrip__icon {
+		width: 32px;
+		height: 32px;
 	}
 }
 

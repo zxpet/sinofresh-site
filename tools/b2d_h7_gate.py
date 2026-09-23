@@ -4983,6 +4983,345 @@ BATCHES['h7k'] = {
     ],
 }
 
+# ------------------------------------------------- 待办25/待办4/待办2/待办1 (H7l)
+#
+# The batch that closes the first tranche. TWO edits, and two claims that were
+# already true when it opened and must still be true when it closes:
+#
+#   待办25  the price ladder moves from the foot of the parameter column to its
+#           head — under the intro, above Flavor.
+#   待办4   the certification band's six chips become six cards. CSS ONLY: not
+#           one page carries this change in its bytes, which is why every
+#           sf-certstrip count below is declared with the same number on both
+#           sides rather than omitted.
+#   待办2   the column's foot is still `Send Inquiry`, still carries
+#           data-sf-inquiry-open, and still degrades to /contact/#quote.
+#   待办1   the ladder still prints 10-99 / 100-999 / ≥1,000 — the text the user
+#           reported as "Custom quantity". It was neither a data problem nor a
+#           code problem: dev was serving the 2.10.69 renderer, which read the
+#           LEGACY `qty` key, against meta that batch H7i had already rewritten
+#           to {min,max,price}. Every row therefore fell through to the
+#           'Custom quantity' default and printed the old "USD n / unit" note.
+#           The pull to 2.10.72 made reader and data agree; these claims are what
+#           stops a later edit from putting them back out of step.
+#
+# WHY THE TRANSFORM IS A MOVE AND NOT A REWRITE
+#
+# The group is not rebuilt, only relocated: the same bytes in a different order.
+# The pure-move form is what lets the proof say exactly that, and it is also why
+# the declaration can be so short — a transform that rendered the group would be
+# free to agree with a broken renderer, the mistake H7c's docblock already names.
+H7L_LIST = '<div class="sf-fdetail-config__list">'
+H7L_PRICING = '<div class="sf-fdetail-config__group" data-sf-config-group="pricing">'
+H7L_GROUPS = re.compile(
+    r'<div class="sf-fdetail-config__group" data-sf-config-group="([a-z]+)">')
+H7L_TAIL = '</div></div></div><p class="sf-fdetail-config__summary"'
+H7L_GROUP_END = '</div></div>'
+# The one record that has a ladder, in both languages. Every claim that is about
+# the ladder rather than about the site is scoped to it, so a second record
+# growing one is reported instead of absorbed.
+H7L_RECORD = lambda n: 'joint-support-soft-chews' in n
+H7L_HOME = H7K_HOME
+H7L_CTA = ('sf-fdetail2__cta" href="/contact/#quote" '
+           'data-sf-inquiry-open>Send Inquiry</a>')
+
+
+def _h7l_move(text, place='head', drop=False, copy=False):
+    """待办25's declared edit to one page: the ladder group leaves the end of the
+    list and re-opens at its head.
+
+    `place` and `drop`/`copy` are the sabotage knobs, kept here rather than in
+    the mutants because a mutant that re-implements the batch is a second
+    implementation of it — the thing this gate exists to not have.
+
+      place='second'  the plausible wrong address: the ladder read as a quantity
+                      row and filed behind Flavor, where the brief says it is not.
+      place='tail'    the identity — the group put back where the batch found it.
+      drop=True       a move implemented as a delete, which the main proof alone
+                      would accept: the group is not where the transform says,
+                      so it would report the page as wrong, but only coverage
+                      says the group was LOST.
+      copy=True       a move implemented as a copy, the other half of that pair.
+    """
+    i = text.find(H7L_LIST)
+    if i < 0:
+        return text, 0
+    tail = text.find(H7L_TAIL, i)
+    if tail < 0:
+        return text, 0
+    groups = [(m.start(), m.group(1)) for m in H7L_GROUPS.finditer(text[i:tail])]
+    names = [g[1] for g in groups]
+    if 'pricing' not in names:
+        return text, 0
+    if place == 'head' and names[0] == 'pricing' and not copy:
+        return text, 0                      # already where the batch puts it
+    s = i + [g for g in groups if g[1] == 'pricing'][0][0]
+    e = text.find(H7L_GROUP_END, s)
+    if e < 0:
+        return text, 0
+    e += len(H7L_GROUP_END)
+    group = text[s:e]
+    rest = text[:s] + text[e:]
+    if drop:
+        return rest, 1
+    j = rest.find(H7L_LIST) + len(H7L_LIST)
+    if copy:
+        return rest[:j] + group + rest[j:], 1
+    if place == 'second':
+        m = H7L_GROUPS.search(rest, j)
+        if not m:
+            return rest, 1
+        e2 = rest.find(H7L_GROUP_END, m.start())
+        if e2 < 0:
+            return rest, 1
+        e2 += len(H7L_GROUP_END)
+        return rest[:e2] + group + rest[e2:], 1
+    if place == 'tail':
+        e3 = rest.find(H7L_TAIL)
+        if e3 < 0:
+            return rest, 1
+        return rest[:e3] + group + rest[e3:], 1
+    return rest[:j] + group + rest[j:], 1
+
+
+def _h7l_transform(text):
+    return _h7l_move(text)
+
+
+def _h7l_partial(place='head', drop=False, copy=False, off=False):
+    """Mutants that skip or misplace the one declared edit; each must break the
+    proof."""
+    def f(text):
+        if off:
+            return text, 0
+        return _h7l_move(text, place=place, drop=drop, copy=copy)
+    return f
+
+
+BATCHES['h7l'] = {
+    'name': "H7l — the ladder heads the parameter column, and the certification "
+            "band's six chips become six cards",
+    'mode': 'insert',
+    'tokens': [
+        ('?ver=2.10.72', '?ver=2.10.73'),                      # style.css
+    ],
+    'transform': _h7l_transform,
+    'applies': 2,          # the one record that has a ladder, in both languages
+    'coverage': [
+        ('?ver=2.10.72', 0),
+        # The group's OLD ADDRESS, expressed as the bytes that said it: the close
+        # of the container group immediately followed by the ladder's open. A
+        # declaration that only said "the ladder is now first" would pass on a
+        # page that grew a second copy at the head and kept this one — which is
+        # why the old adjacency is a claim and not an assumption.
+        ('</div></div>' + H7L_PRICING, 0),
+    ],
+    'insertions': [
+        ('?ver=2.10.73', 75),
+        (H7L_LIST + H7L_PRICING, 2),
+    ],
+    'counts': [
+        # Moved, not created and not lost: the same count on both sides, on the
+        # same two pages.
+        ('the ladder group moves without being copied or dropped',
+         'data-sf-config-group="pricing"', 2, 2),
+        ('the parameter column keeps all its groups', 'sf-fdetail-config__group', 110, 110),
+        ('each detail page still opens exactly one list', 'sf-fdetail-config__list', 42, 42),
+        # 待办1 — the ladder's three breaks. Counted rather than trusted, because
+        # "Custom quantity" was precisely a case of these strings not being there;
+        # zero is a claim here, not an omission.
+        ('no row falls back to the placeholder', 'Custom quantity', 0, 0),
+        ('...because all three breaks are printed', '>10-99<', 2, 2),
+        ('...the middle one', '>100-999<', 2, 2),
+        ('...and the open-ended top one', '>≥1,000<', 2, 2),
+        # 待办4 is CSS only: every band count below is identical on both sides,
+        # which is the claim that the DOM did not move with the paint.
+        ('the card band keeps its six chips', 'sf-certstrip__badge', 12, 12),
+        ('...their icons', 'sf-certstrip__icon', 12, 12),
+        ('...their names', 'sf-certstrip__name', 12, 12),
+        ('...and it is still one row under one lede', 'sf-certstrip__row', 2, 2),
+        # 待办2 — the column's foot. Unchanged by this batch, and from here on
+        # not allowed to drift.
+        ('the column still closes on its own inquiry button', H7L_CTA, 21, 21),
+    ],
+    'unmoved': [
+        ('the cookie banner', r'class="sf-cookie-banner"', 75),
+        ('the float stack', r'class="sf-float-stack"', 75),
+        ('the certificate dialog', r'sf-certmodal', 1),
+        ('the navigation', r'wp-block-navigation', 75),
+        ('the parameter column', r'sf-fdetail-config__group', 42),
+        # The group the ladder was filed behind, and the one above it: the move
+        # must not be paid for by another group leaving.
+        ('the flavor group', r'data-sf-config-group="flavor"', 42),
+        ('the shape group', r'data-sf-config-group="shape"', 42),
+        ('the container group', r'data-sf-config-group="container"', 42),
+        ('the gallery tabs', r'sf-gallery__tabs', 42),
+        ('the side column', r'sf-fdetail2__side', 42),
+    ],
+    'per_page': [
+        ('h1', r'<h1[ >]', 1),
+        ('the new style token', r'style\.css\?ver=2\.10\.73', 1),
+    ],
+    'scoped': [
+        ('the ladder is still on the one record that has one',
+         'sf-fdetail-config__tiers', H7L_RECORD, 1),
+        ('...and still holds exactly three breaks', 'sf-tier__dot', H7L_RECORD, 3),
+        ('...and that record keeps its sample row',
+         'data-sf-inquiry-sample', H7L_RECORD, 1),
+        ('the six cards are on the two home pages and nowhere else',
+         'sf-certstrip__badge', lambda n: n in H7L_HOME, 6),
+    ],
+    'order': [
+        # Where the batch put it, which no count can say. Read on the record, so
+        # a page that carries the group at the wrong address is reported.
+        ('the ladder sits under the intro it belongs to',
+         'sf-fdetail2__intro', H7L_PRICING, H7L_RECORD),
+        ('...and above the flavor group it used to be filed behind',
+         H7L_PRICING, 'data-sf-config-group="flavor"', H7L_RECORD),
+        # Both halves of the old order, so a "move" that only re-ordered the
+        # group's own insides is caught.
+        ('the ladder stays ahead of the sample row it carries',
+         'sf-fdetail-config__tiers', 'sf-fdetail-config__sample"', H7L_RECORD),
+        ('the column still ends on its inquiry button, after the spec list',
+         'sf-fdetail2__params', H7L_CTA, H7L_RECORD),
+        ('the strip is still a lede, then a row, then the link',
+         'sf-certstrip__lede', 'sf-certstrip__more', lambda n: n in H7L_HOME),
+    ],
+    'h2_delta': None,
+    'jsonld_delta': None,
+    'sources': {
+        'tpl': 'templates/single-sf_formula.html',
+    },
+    'reinject': ('an old address for the ladder fails coverage',
+                 'formulas__joint-support-soft-chews.html', H7L_PRICING,
+                 '</div></div>'),
+    'delete': ('one page loses the ladder\'s new address fails coverage',
+               'formulas__joint-support-soft-chews.html', H7L_LIST + H7L_PRICING),
+    'nc13_mode': 'sighted',
+    'nc13_label': ('NC13 the insert direction SEES a break renamed, and coverage confirms it'),
+    'matrix': [
+        ('the tokens are not folded', {'tokens': []}, None),
+        ('the ladder is left where the batch found it',
+         {'transform': _h7l_partial(off=True), 'applies': 0}, None),
+        ('the ladder is filed behind Flavor instead of above it',
+         {'transform': _h7l_partial(place='second')}, None),
+        ('...and here is the identity, to prove "second" is not the batch',
+         {'transform': _h7l_partial(place='tail')}, None),
+        ('the ladder is copied to the head and left at the foot as well',
+         {'transform': _h7l_partial(copy=True)}, None),
+        ('the ladder is deleted instead of moved',
+         {'transform': _h7l_partial(drop=True)}, None),
+        ('the run count is declared one short', {'applies': 1}, None),
+        ('nothing is applied at all',
+         {'transform': (lambda t: (t, 0)), 'applies': 0}, None),
+    ],
+    'nc_source': [
+        ('NC-src the source pass fails when the stylesheet keeps its old version',
+         'style.css', 'Version: 2.10.73', 'Version: 2.10.72'),
+        ('NC-src the source pass fails when the enqueue keeps its old version',
+         'functions.php', "array(), '2.10.73');", "array(), '2.10.72');"),
+        # 待办25 — the move undone at the source. The rendered proof cannot see
+        # this: the transform would move the group either way, and the candidate
+        # captured from a theme that appends it would differ from such a
+        # transform's output — so this control is what says the SOURCE claim is
+        # load-bearing rather than a comment about the code.
+        ('NC-src the source pass fails when the ladder is appended, not unshifted',
+         'functions.php',
+         "array_unshift($groups, array(\n\t\t\t'key' => 'pricing'",
+         "$groups[] = array(\n\t\t\t'key' => 'pricing'"),
+        # 待办4 — the card surface and the icon size, each dropped on its own.
+        ('NC-src the source pass fails when the card stops being a card',
+         'style.css',
+         "\tpadding: 16px;\n\tbackground: var(--wp--preset--color--bg-light);\n"
+         "\tborder: 1px solid var(--wp--preset--color--border-light);\n"
+         "\tborder-radius: 8px;\n",
+         "\tpadding: 16px;\n"),
+        ('NC-src the source pass fails when the icon goes back to 32',
+         'style.css',
+         "\twidth: 40px;\n\theight: 40px;\n\tcolor: var(--wp--preset--color--primary);\n}",
+         "\tcolor: var(--wp--preset--color--primary);\n}"),
+        ('NC-src the source pass fails when the phone step stacks the cards',
+         'style.css',
+         '@media (max-width: 420px) {\n\t.sf-certstrip__row {\n\t\tgap: 12px;',
+         '@media (max-width: 420px) {\n\t.sf-certstrip__row {\n\t\tgrid-template-columns: minmax(0, 1fr);'),
+    ],
+    'nc_page': [
+        # 待办25 — the two claims a page edit can break that the MAIN PROOF
+        # cannot see, because the payload is removed whole: the address, and the
+        # three breaks.
+        ('NC-page the invariants fail when the ladder is pushed back to the foot',
+         'formulas__joint-support-soft-chews.html',
+         lambda t: _h7l_move(t, place='tail')[0]),
+        ('NC-page the invariants fail when a break stops being a break',
+         'formulas__joint-support-soft-chews.html',
+         lambda t: t.replace('sf-tier__dot', 'sf-tier__dots', 3)),
+    ],
+    'nc_blind': ('formulas__joint-support-soft-chews.html',
+                 '>≥1,000<', '>≥1000<'),
+    'source': [
+        ('style.css declares 2.10.73', 'css', r'(?m)^Version: 2\.10\.73$', True),
+        ('no 2.10.72 header survives', 'css_live', r'(?m)^Version: 2\.10\.72$', False),
+        ('functions.php enqueues 2.10.73 for style.css', 'php',
+         r"wp_enqueue_style\('sinofresh-style'[^;]*'2\.10\.73'", True),
+        # --- 待办25 -------------------------------------------------------
+        ('the ladder group is unshifted onto the head of the list', 'php',
+         r"array_unshift\(\$groups, array\(\n\t+'key' => 'pricing'", True),
+        ('...and the append form it replaced is gone', 'php_live',
+         r"\$groups\[\] = array\(\n\t+'key' => 'pricing'", False),
+        ('...while the group itself is unchanged, so the dialog reads it as before',
+         'php', r"'key' => 'pricing', 'label' => 'Quantity & Pricing'", True),
+        ('the ladder keeps its own card layout', 'php',
+         r"'type' => 'single', 'style' => 'tiers', 'hint' => 'Choose one',", True),
+        # --- 待办1: the three breaks, which is the claim the user's report made --
+        ('a legacy qty still reads as the range start', 'php',
+         r"isset\(\$tier\['min'\]\) \? \$tier\['min'\] : \(isset\(\$tier\['qty'\]\)",
+         True),
+        ('a closed tier still prints "min-max"', 'php', r"return \$min \. '-' \. \$max;", True),
+        ('...an open-ended one still prints the ≥ form', 'php', r"return '≥' \. \$min;", True),
+        ('...and its number still groups its thousands', 'php',
+         r"number_format\(\(float\) str_replace\(',', '', \$value\)\)", True),
+        # --- 待办2 -------------------------------------------------------
+        ('the column cta still opens the dialog', 'tpl',
+         r'<a class="sf-fdetail2__cta" href="/contact/#quote" '
+         r'data-sf-inquiry-open>Send Inquiry</a>', True),
+        ('...and no Request Sample link survives to be served', 'tpl_live',
+         r'Request Sample', False),
+        ('the no-js destination is still the quote anchor', 'tpl',
+         r'sf-fdetail2__cta" href="/contact/#quote"', True),
+        ('the float capsule is still the same opener', 'php',
+         r'sf-float-btn--inquiry" href="/contact/#quote" data-sf-inquiry-open', True),
+        # --- 待办4 -------------------------------------------------------
+        ('the chips are a three-column grid with a 16px gutter', 'css',
+         r'\.sf-certstrip__row \{\n\tdisplay: grid;\n\tgrid-template-columns: '
+         r'repeat\(3, minmax\(0, 1fr\)\);\n\tgap: 16px;', True),
+        ('the chips are cards: Mist surface, Line hairline, 8px radius', 'css',
+         r'\.sf-certstrip__badge \{\n\tdisplay: flex;\n\talign-items: center;\n\tgap: 12px;\n'
+         r'\tmin-width: 0;\n\tpadding: 16px;\n'
+         r'\tbackground: var\(--wp--preset--color--bg-light\);\n'
+         r'\tborder: 1px solid var\(--wp--preset--color--border-light\);\n'
+         r'\tborder-radius: 8px;\n\}', True),
+        ('the icon is 40px, not the 32 it was', 'css',
+         r'\.sf-certstrip__icon \{\n\tflex: 0 0 auto;\n\twidth: 40px;\n\theight: 40px;\n'
+         r'\tcolor: var\(--wp--preset--color--primary\);\n\}', True),
+        ('the tablet step is two columns', 'css',
+         r'@media \(max-width: 1024px\) \{[\s\S]{0,320}\.sf-certstrip__row \{\n'
+         r'\t\tgrid-template-columns: repeat\(2, minmax\(0, 1fr\)\);\n\t\}', True),
+        ('...and the phone keeps two instead of stacking', 'css',
+         r'@media \(max-width: 420px\) \{[\s\S]{0,520}\.sf-certstrip__row \{\n'
+         r'\t\tgap: 12px;\n\t\}', True),
+        ('...stepping the icon and the padding down with them', 'css',
+         r'\.sf-certstrip__badge \{\n\t\tgap: 10px;\n\t\tpadding: 12px;\n\t\}', True),
+        # The retired literals, claimed gone rather than assumed gone: a rename
+        # that leaves the old rule behind is the classic way a batch "changes" a
+        # rule while both of them still apply.
+        ('the old 10/20 gutter is gone', 'css_live', r'gap: 10px 20px;', False),
+        ('...and so is the phone step that stacked them', 'css_live',
+         r'\.sf-certstrip__row \{\n\t\tgap: 8px 12px;\n\t\}', False),
+        ('...and the ≤768px cert step with it', 'css_live',
+         r'@media \(max-width: 768px\) \{\n\t/\* 待办18: two columns of three', False),
+    ],
+}
+
 
 # ------------------------------------------------------------------ source side
 
