@@ -28,7 +28,7 @@ add_action('after_setup_theme', function() {
 });
 
 add_action('wp_enqueue_scripts', function() {
-	wp_enqueue_style('sinofresh-style', get_stylesheet_uri(), array(), '2.10.70');
+	wp_enqueue_style('sinofresh-style', get_stylesheet_uri(), array(), '2.10.71');
 	// Sticky nav: every template renders parts/header.html, so this is site-wide.
 	wp_enqueue_script('sinofresh-sticky-header', get_template_directory_uri() . '/assets/js/sticky-header.js', array(), '1.0.0', true);
 	wp_enqueue_script('sinofresh-ui-components', get_template_directory_uri() . '/assets/js/ui-components.js', array(), '1.0.0', true);
@@ -5059,6 +5059,13 @@ function sf_site_settings_defaults() {
 		   character — including the comma and the space around the slash. */
 		'sf_factory_origin'   => 'Linyi, Shandong, China',
 		'sf_factory_oem'      => 'Available',
+		/* Batch H7j. Not a contact detail and not printed on any page: the
+		   slug of the mark the main menu draws on the current item. It lives
+		   here for the same reason the two above do — this array is the one
+		   place a Site Settings default is written, so the radio group that
+		   edits it, the validator that guards it and the reader that turns it
+		   into a header class cannot drift apart. */
+		'sf_nav_active_style' => 'underline',
 	);
 }
 
@@ -5106,6 +5113,18 @@ add_action('admin_init', function () {
 		'sanitize_callback' => function ($v) {
 			$v = sanitize_email($v);
 			return ($v !== '') ? $v : 'sales@zxpet.com';
+		},
+	));
+	/* Batch H7j. The one value on this page that is neither contact nor copy:
+	   the mark the main menu draws on the current item. The six slugs are
+	   sf_nav_active_styles()' keys — anything else falls back to the default,
+	   so a stale option can never emit a header class no rule defines. */
+	register_setting('sf_site_settings', 'sf_nav_active_style', array(
+		'type'              => 'string',
+		'sanitize_callback' => function ($v) use ($d) {
+			$all = sf_nav_active_styles();
+			$v   = sanitize_key($v);
+			return isset($all[$v]) ? $v : $d['sf_nav_active_style'];
 		},
 	));
 	register_setting('sf_site_settings', 'sf_certifications', array(
@@ -5209,6 +5228,26 @@ function sf_render_site_settings_page() {
 					<p class="description">The text after the company name, e.g. “All rights reserved.”</p></td>
 				</tr>
 			</table>
+			<h2 class="title">Appearance</h2>
+			<p>Navigation — how the main menu marks the page you are on. The mark is server-rendered, so it is in the page's own HTML before any script runs, and the link also carries aria-current for screen readers.</p>
+			<table class="form-table" role="presentation">
+				<tr>
+					<th scope="row">Current item mark</th>
+					<td>
+					<?php $nav_style = sf_nav_active_style(); ?>
+					<fieldset>
+						<legend class="screen-reader-text">Navigation current-item mark</legend>
+						<?php foreach (sf_nav_active_styles() as $nav_slug => $nav_label) : ?>
+						<label style="display:block;margin:0 0 6px">
+							<input type="radio" name="sf_nav_active_style" value="<?php echo esc_attr($nav_slug); ?>" <?php checked($nav_style, $nav_slug); ?>>
+							<?php echo esc_html($nav_label); ?>
+						</label>
+						<?php endforeach; ?>
+					</fieldset>
+					<p class="description">Drawn on the current page's own item in the top bar, in all four states (normal, hover, current, current + hover). Pages the menu does not contain — the legal pages, the FAQ, the feedback form — get no mark.</p>
+					</td>
+				</tr>
+			</table>
 			<?php submit_button(); ?>
 		</form>
 	</div>
@@ -5265,6 +5304,206 @@ add_filter('render_block', function ($block_content, $parsed_block) {
 	}
 	return $block_content;
 }, 20, 2);
+
+/* === Navigation: which item is current, and the six ways to mark it ========
+   Batch H7j (task 20). The main menu — wp:navigation {"ref":16} in
+   parts/header.html — carried NO current-state markup at all: measured across
+   all 75 captured paths, not one of its sixteen links carried
+   current-menu-item, current_page_item or aria-current, on any page. The
+   reason is the block. A navigation block whose `ref` points at a wp_navigation
+   post renders that post's own core/navigation-link blocks directly, so
+   wp_nav_menu()'s _wp_menu_item_classes_by_context() never runs and nothing
+   ever compares a link's URL with the request.
+
+   So the comparison is made here, and what it emits is the class pair the CSS
+   in section 63 keys on: sf-nav__link on every link, sf-nav__link.is-active on
+   the current one, and the variant class sf-header--nav-<slug> on the header.
+
+   WHICH item is current — the site's own hierarchy decides, not the URL alone.
+   The breadcrumb on /formulas/joint-support-soft-chews/ reads
+   Home / Products / Soft Chews / Joint Support Soft Chews, so this site places
+   the twenty-two formula pages under Products, and the nine links inside the
+   Products dropdown (All Formulas plus the eight dosage forms) belong to the
+   Products item. The current item is therefore the one TOP-LEVEL item whose
+   subtree contains the page: /products/soft-chews/ marks Products, and so does
+   /formulas/joint-support-soft-chews/. Measured over the 75 captured paths
+   that marks exactly one item on 67 of them, and none on the eight the menu
+   genuinely does not contain (/, /privacy-policy/, /terms/, /cookie-policy/,
+   /faq/, /feedback/, /cooperation/, /zh/).
+
+   A link INSIDE the dropdown is never marked. The dropdown is a light popup
+   (#F3F6F4) and all six marks are drawn white or brand-green for the dark
+   Forest bar — the white label alone would be invisible there. So the child
+   that legitimately matches the request is pruned back out of the submenu's
+   own markup, and that same match is what lights the Products item up.
+
+   The language prefix is not hardcoded anywhere. TranslatePress filters
+   home_url() to prepend the active language, so the prefix to strip is
+   whatever home_url('/')'s path has beyond "/": "/zh/" under the Chinese tree,
+   "" under the English one. The urls being compared are the blocks' own `url`
+   attributes, which a probe against the live menu showed are untranslated
+   paths (/products/, /formulas/), never absolute URLs.
+   ------------------------------------------------------------------------- */
+
+/** The six marks, slug => label. ONE source: the Site Settings radios, the
+    validator that guards the option and the header class are all built from
+    this array, so a seventh mark is a one-line change here plus its rules. */
+function sf_nav_active_styles() {
+	return array(
+		'underline'  => 'Underline',
+		'bg'         => 'Translucent block',
+		'thick-line' => 'Thick bottom line (4px)',
+		'color'      => 'Brand-green text',
+		'left-line'  => 'Left rule',
+		'pill'       => 'Green pill',
+	);
+}
+
+/** The mark the header draws. An option holding anything else — a stale slug,
+    a hand-edited value — falls back to the shipped default rather than
+    emitting a class no rule defines. */
+function sf_nav_active_style() {
+	$d   = sf_site_settings_defaults();
+	$all = sf_nav_active_styles();
+	$v   = (string) get_option('sf_nav_active_style', $d['sf_nav_active_style']);
+	return isset($all[$v]) ? $v : $d['sf_nav_active_style'];
+}
+
+/** The request path with the active language prefix removed, so it can be
+    compared with a link's own `url` attribute. Static: it cannot change inside
+    a request, and it is read once per navigation link. */
+function sf_nav_request_path() {
+	static $path = null;
+	if (null !== $path) {
+		return $path;
+	}
+	$uri  = isset($_SERVER['REQUEST_URI']) ? (string) wp_unslash($_SERVER['REQUEST_URI']) : '/';
+	$path = (string) wp_parse_url($uri, PHP_URL_PATH);
+	$home = (string) wp_parse_url(home_url('/'), PHP_URL_PATH);
+	if ('' !== $home && '/' !== $home) {
+		$home = '/' . trim($home, '/') . '/';
+		if (0 === strpos($path, $home)) {
+			$path = '/' . ltrim(substr($path, strlen($home)), '/');
+		}
+	}
+	if ('' === $path) {
+		$path = '/';
+	}
+	return $path;
+}
+
+/** Does the request path fall under this menu url? Both sides end in "/" (every
+    permalink on this site does), so a plain prefix test is already
+    segment-safe. */
+function sf_nav_path_under($path, $url) {
+	$url = '/' . trim((string) $url, '/') . '/';
+	return ($path === $url) || (0 === strpos($path, $url));
+}
+
+/** Is the request path this menu url exactly? The difference from the test
+    above is what aria-current turns on: a link that points AT the page is
+    "page", a link whose section merely CONTAINS the page is "true". The
+    first version of this used the prefix test for both and announced
+    /products/soft-chews/ as the page Products links to, which it is not —
+    that link points at /products/. */
+function sf_nav_path_is($path, $url) {
+	return ($path === '/' . trim((string) $url, '/') . '/');
+}
+
+/** Put sf-nav__link on a link, and — when $active — the is-active class and
+    aria-current. Only the FIRST anchor of the fragment is touched: for a
+    submenu that is the item's own link, and the links inside its dropdown
+    (separate blocks, already rendered into this fragment) must not pick up a
+    second mark.
+
+    aria-current is "page" when the item's own url IS the request, and "true"
+    when the page merely sits inside the item's subtree — the Products item on
+    a dosage page. That is the distinction the ARIA spec draws. */
+function sf_nav_mark_link($html, $active, $is_page) {
+	if (false === strpos($html, 'class="wp-block-navigation-item__content"')) {
+		return $html;
+	}
+	$cls = 'wp-block-navigation-item__content sf-nav__link';
+	$att = '';
+	if ($active) {
+		$cls .= ' is-active';
+		$att = ' aria-current="' . ($is_page ? 'page' : 'true') . '"';
+	}
+	return preg_replace(
+		'/class="wp-block-navigation-item__content"/',
+		'class="' . $cls . '"' . $att,
+		$html,
+		1
+	);
+}
+
+add_filter('render_block', function ($block_content, $block) {
+	if (!is_string($block_content) || !isset($block['blockName'])) {
+		return $block_content;
+	}
+	$name = $block['blockName'];
+	if ('core/navigation-link' !== $name && 'core/navigation-submenu' !== $name) {
+		return $block_content;
+	}
+	$url = isset($block['attrs']['url']) ? (string) $block['attrs']['url'] : '';
+	if ('' === $url || false === strpos($block_content, 'wp-block-navigation-item__content')) {
+		return $block_content;
+	}
+	$path  = sf_nav_request_path();
+	$self  = sf_nav_path_under($path, $url);
+	$exact = sf_nav_path_is($path, $url);
+
+	if ('core/navigation-link' === $name) {
+		return sf_nav_mark_link($block_content, $self, $exact);
+	}
+
+	/* The submenu. Everything after its own </a> is the dropdown; a child that
+	   matched the request has already marked itself in there, and that mark is
+	   both the signal that this item OWNS the current page and the thing that
+	   has to come back out. Split on the first </a>, decide on the head, prune
+	   the tail. */
+	$cut = strpos($block_content, '</a>');
+	if (false === $cut) {
+		return sf_nav_mark_link($block_content, $self, $exact);
+	}
+	$head = substr($block_content, 0, $cut + 4);
+	$tail = substr($block_content, $cut + 4);
+	$owns = (false !== strpos($tail, ' is-active'));
+	$head = sf_nav_mark_link($head, $self || $owns, $exact);
+	$tail = str_replace(
+		array(
+			' sf-nav__link is-active" aria-current="page"',
+			' sf-nav__link is-active" aria-current="true"',
+			' is-active',
+		),
+		array(' sf-nav__link"', ' sf-nav__link"', ''),
+		$tail
+	);
+	return $head . $tail;
+}, 10, 2);
+
+/* The variant class goes on the header element — the core/group that
+   parts/header.html marks with className "sf-header". It is applied as a
+   string pass over the rendered fragment rather than through
+   render_block_data/className on purpose: the layout support hashes a block's
+   attributes into its wp-container-* class, so editing the attribute would
+   renumber a container class on all 75 pages for a purely presentational
+   change. The anchor requires "wp-block-group sf-header" followed by a quote
+   or a space, so a sibling block whose className merely STARTS with those
+   characters — the CTA row's is sf-header__cta — can never match. */
+add_filter('render_block', function ($block_content, $block) {
+	if (!is_string($block_content) || !isset($block['blockName'])
+		|| 'core/group' !== $block['blockName']
+		|| false === strpos($block_content, 'class="wp-block-group sf-header')) {
+		return $block_content;
+	}
+	return preg_replace(
+		'/(<[a-z][a-z0-9]* class="wp-block-group sf-header)(?=[ "])/',
+		'$1 sf-header--nav-' . sf_nav_active_style(),
+		$block_content,
+		1
+	);
+}, 10, 2);
 
 add_action('admin_menu', function () {
 	add_menu_page(

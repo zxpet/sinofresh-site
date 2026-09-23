@@ -2,7 +2,7 @@
 Theme Name: SINO FRESH
 Author: Shandong SINO FRESH Pet Food Co., Ltd.
 Text Domain: sinofresh
-Version: 2.10.70
+Version: 2.10.71
 Requires at least: 6.0
 Requires PHP: 7.4
 License: GNU General Public License v2 or later
@@ -9729,4 +9729,204 @@ body.sf-config-lock { overflow: hidden; }
 	.sf-tier__price { font-size: 16px; }
 	.sf-fdetail-config__sample { flex-wrap: wrap; row-gap: 8px; }
 	.sf-fdetail-config__sample-cta { margin-left: 0; padding: 8px 16px; font-size: 14px; min-height: 36px; }
+}
+
+/* ==========================================================================
+   63. Batch H7j — the core-facts band joins the content gutter, and the main
+   menu finally says where you are.
+
+   63a. .sf-facts-mini was the one band on a dosage page sitting on the
+   viewport edge. Measured at 1440px on /products/soft-chews/: its first item
+   began at x = 0 and the first line's last item ended at x = 1440, so the band
+   hugged BOTH edges, while every neighbouring band's content sat at x = 120 —
+   the constrained layout's own auto-margin around the 1200px measure. The
+   band's BOX has to stay full width: it draws the two hairlines that separate
+   the hero from the page, and those are meant to run edge to edge. Only its
+   content moves in.
+
+   The inset is the expression rule 25c already puts on the header bar and
+   rule 32 puts on the bare section groups: max(38px, (100% - 1200px)/2)
+   resolves to the content column's left edge at every width above the measure
+   and to 38px below it — with one deliberate exception at <=1024px, where it
+   drops to 20px to match the hero directly above it. (The other body bands
+   stay at 38px there; the ladder from the brief is 120 / 38 / 20 and 20 is the
+   step the hero and the phone pass take.)
+
+   justify-content: space-between stays — the four facts are meant to spread
+   across the row rather than stack at the left. A narrower line wraps sooner,
+   so between 1025px and 1215px the four facts go from two lines to three.
+   That is the measured cost of the inset, and it is the only width band whose
+   row count moves.
+
+   63b. The six ways to mark the current menu item (task 20). The class
+   contract is fixed: the header carries sf-header--nav-<slug>, the current
+   link carries .sf-nav__link.is-active. WHICH link that is, is decided in
+   functions.php — never one of the nine links inside the Products dropdown,
+   which sit on the light popup while every mark below is drawn white or
+   brand-green for the dark Forest bar.
+
+   Four states per variant, in this order, because Normal/Hover and
+   Active/Active+Hover overlap:
+     Normal        .sf-nav__link:not(.is-active)
+     Hover         .sf-nav__link:not(.is-active):hover
+     Active        .sf-nav__link.is-active
+     Active+Hover  .sf-nav__link.is-active:hover
+
+   The Normal/Hover pair is scoped with a child combinator
+   (.wp-block-navigation__container > .wp-block-navigation-item > ...) rather
+   than with a marker class, so a dropdown link can never match it and the
+   active pair keeps the exact selector the brief names.
+
+   Every mark that occupies space — the thicker line, the wash, the left rule,
+   the pill — reserves that space on ALL seven top-level links, not only the
+   active one, or the bar would reflow each time the visitor moved between
+   pages. The active value is also what Active+Hover shows: hover already has
+   the visitor's attention, and inventing a seventh colour for a state the
+   brief did not name is how a palette drifts.
+   ========================================================================== */
+
+/* --- 63a. The core-facts band joins the content gutter ------------------- */
+.sf-facts-mini {
+	padding-left: max(38px, calc((100% - var(--wp--style--global--content-size, 1200px)) / 2));
+	padding-right: max(38px, calc((100% - var(--wp--style--global--content-size, 1200px)) / 2));
+}
+@media (max-width: 1024px) {
+	.sf-facts-mini {
+		padding-left: 20px;
+		padding-right: 20px;
+	}
+}
+
+/* --- 63b. Navigation: the current item, six ways ------------------------- */
+
+/* 1. underline — the shipped default. The line is drawn with the bottom
+   border 21c already reserves (1px solid transparent, padding-bottom 2px) so
+   nothing shifts: only the width and the colour move. */
+.sf-header--nav-underline .wp-block-navigation__container > .wp-block-navigation-item > .sf-nav__link {
+	border-bottom-width: 2px;
+}
+.sf-header--nav-underline .wp-block-navigation__container > .wp-block-navigation-item > .sf-nav__link:not(.is-active) {
+	border-bottom-color: transparent;
+}
+.sf-header--nav-underline .wp-block-navigation__container > .wp-block-navigation-item > .sf-nav__link:not(.is-active):hover {
+	color: var(--wp--preset--color--card-white);
+	border-bottom-color: rgba(255, 255, 255, 0.45);
+}
+.sf-header--nav-underline .sf-nav__link.is-active {
+	color: var(--wp--preset--color--card-white);
+	font-weight: 600;
+	border-bottom-color: var(--wp--preset--color--card-white);
+}
+.sf-header--nav-underline .sf-nav__link.is-active:hover {
+	color: var(--wp--preset--color--card-white);
+	border-bottom-color: var(--wp--preset--color--card-white);
+}
+
+/* 2. bg — a translucent block behind the label. */
+.sf-header--nav-bg .wp-block-navigation__container > .wp-block-navigation-item > .sf-nav__link {
+	border-bottom-color: transparent;
+	padding: 6px 10px;
+	border-radius: 4px;
+}
+.sf-header--nav-bg .wp-block-navigation__container > .wp-block-navigation-item > .sf-nav__link:not(.is-active) {
+	background-color: transparent;
+}
+.sf-header--nav-bg .wp-block-navigation__container > .wp-block-navigation-item > .sf-nav__link:not(.is-active):hover {
+	color: var(--wp--preset--color--card-white);
+	background-color: rgba(255, 255, 255, 0.1);
+}
+.sf-header--nav-bg .sf-nav__link.is-active {
+	color: var(--wp--preset--color--card-white);
+	background-color: rgba(255, 255, 255, 0.15);
+}
+.sf-header--nav-bg .sf-nav__link.is-active:hover {
+	color: var(--wp--preset--color--card-white);
+	background-color: rgba(255, 255, 255, 0.15);
+}
+
+/* 3. thick-line — the same border, 4px, so the bar reads as a ruled strip. */
+.sf-header--nav-thick-line .wp-block-navigation__container > .wp-block-navigation-item > .sf-nav__link {
+	border-bottom-width: 4px;
+}
+.sf-header--nav-thick-line .wp-block-navigation__container > .wp-block-navigation-item > .sf-nav__link:not(.is-active) {
+	border-bottom-color: transparent;
+}
+.sf-header--nav-thick-line .wp-block-navigation__container > .wp-block-navigation-item > .sf-nav__link:not(.is-active):hover {
+	color: var(--wp--preset--color--card-white);
+	border-bottom-color: rgba(255, 255, 255, 0.45);
+}
+.sf-header--nav-thick-line .sf-nav__link.is-active {
+	color: var(--wp--preset--color--card-white);
+	border-bottom-color: var(--wp--preset--color--card-white);
+}
+.sf-header--nav-thick-line .sf-nav__link.is-active:hover {
+	color: var(--wp--preset--color--card-white);
+	border-bottom-color: var(--wp--preset--color--card-white);
+}
+
+/* 4. color — the brand green in the label, no rule and no block. Contrast of
+   #5AB735 on the Forest bar (#1B4D3E) is 3.79:1, which is under the 4.5:1
+   WCAG AA floor for 15px text; it clears the 3:1 floor for large text only.
+   The brief names the colour, so it ships as named — recorded here rather
+   than silently darkened. */
+.sf-header--nav-color .wp-block-navigation__container > .wp-block-navigation-item > .sf-nav__link {
+	border-bottom-color: transparent;
+}
+.sf-header--nav-color .wp-block-navigation__container > .wp-block-navigation-item > .sf-nav__link:not(.is-active) {
+	color: var(--wp--preset--color--card-white);
+}
+.sf-header--nav-color .wp-block-navigation__container > .wp-block-navigation-item > .sf-nav__link:not(.is-active):hover {
+	color: var(--wp--preset--color--brand-green);
+}
+.sf-header--nav-color .sf-nav__link.is-active {
+	color: var(--wp--preset--color--brand-green);
+	font-weight: 600;
+}
+.sf-header--nav-color .sf-nav__link.is-active:hover {
+	color: var(--wp--preset--color--brand-green);
+}
+
+/* 5. left-line — a 3px rule at the left of the item, the label 8px clear of
+   it. The rule and the 8px are reserved on every top-level link. */
+.sf-header--nav-left-line .wp-block-navigation__container > .wp-block-navigation-item > .sf-nav__link {
+	border-bottom-color: transparent;
+	border-left: 3px solid transparent;
+	padding-left: 8px;
+}
+.sf-header--nav-left-line .wp-block-navigation__container > .wp-block-navigation-item > .sf-nav__link:not(.is-active) {
+	border-left-color: transparent;
+}
+.sf-header--nav-left-line .wp-block-navigation__container > .wp-block-navigation-item > .sf-nav__link:not(.is-active):hover {
+	color: var(--wp--preset--color--card-white);
+	border-left-color: rgba(255, 255, 255, 0.45);
+}
+.sf-header--nav-left-line .sf-nav__link.is-active {
+	color: var(--wp--preset--color--card-white);
+	border-left-color: var(--wp--preset--color--card-white);
+}
+.sf-header--nav-left-line .sf-nav__link.is-active:hover {
+	color: var(--wp--preset--color--card-white);
+	border-left-color: var(--wp--preset--color--card-white);
+}
+
+/* 6. pill — the brand green as a capsule, white label. */
+.sf-header--nav-pill .wp-block-navigation__container > .wp-block-navigation-item > .sf-nav__link {
+	border-bottom-color: transparent;
+	padding: 6px 14px;
+	border-radius: 999px;
+}
+.sf-header--nav-pill .wp-block-navigation__container > .wp-block-navigation-item > .sf-nav__link:not(.is-active) {
+	background-color: transparent;
+}
+.sf-header--nav-pill .wp-block-navigation__container > .wp-block-navigation-item > .sf-nav__link:not(.is-active):hover {
+	color: var(--wp--preset--color--card-white);
+	background-color: rgba(90, 183, 53, 0.7);
+}
+.sf-header--nav-pill .sf-nav__link.is-active {
+	color: var(--wp--preset--color--card-white);
+	background-color: rgba(90, 183, 53, 0.9);
+}
+.sf-header--nav-pill .sf-nav__link.is-active:hover {
+	color: var(--wp--preset--color--card-white);
+	background-color: rgba(90, 183, 53, 0.9);
 }
