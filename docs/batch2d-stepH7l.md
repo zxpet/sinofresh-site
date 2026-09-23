@@ -238,6 +238,11 @@ live HTML 实测：`<a class="sf-fdetail2__cta" href="/contact/#quote" data-sf-i
 | 4 | live 主题（symlink → `site-repo/sinofresh-theme`） | `style.css` `Version: 2.10.73`；`functions.php` enqueue `'2.10.73'`；`array_unshift($groups, …)` 在 **2327** 行；`.sf-certstrip__badge` 卡片规则在 **2474** 行 |
 | 5 | 权限 | `style.css` / `functions.php` 均 `644 root:root` ⇒ apache 可读，**无需改属主** |
 
+**本批其后还有一个只动 `docs/`＋`tools/` 的记录提交**（`0b30d21`，即本档与 live 帧的那一次），
+也已拉齐到 dev：`git diff --stat 4dc3da4 HEAD -- sinofresh-theme` **零输出**。
+⇒ **dev 上正在运行的主题字节自 `4dc3da4` 起没有变过**，下文所有验收都是对着这同一份字节做的；
+本档若再有文档提交，同理不影响主题。
+
 **未做任何 dev 封锁变更**；`zz-sf-dev-lockdown.php` 与 Basic Auth 原样保留。**生产站零改动。**
 
 ### 9.2 上线后验收（`tools/b2d_h7l_live_accept.py --frames`，**不带 `X-SF-Preflight`**）
