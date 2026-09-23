@@ -135,7 +135,8 @@ function sf_formula_mb_fields() {
 			'cols' => array('count' => 'Pack count', 'boxes' => 'Units per carton', 'size' => 'Carton size (cm)')),
 		// faq
 		array('key' => 'sf_formula_lead_time', 'label' => 'Lead time', 'group' => 'faq', 'type' => 'text', 'req' => 1),
-		array('key' => 'sf_formula_container', 'label' => 'Container Type', 'group' => 'faq', 'type' => 'radio', 'req' => 2, 'pool' => '_containers'),
+		array('key' => 'sf_formula_container', 'label' => 'Container Type', 'group' => 'faq', 'type' => 'radio', 'req' => 2,
+			'pool' => 'packaging', 'keep_unknown' => true),
 		array('key' => 'sf_formula_faq_data', 'label' => 'Product FAQ', 'group' => 'faq', 'type' => 'faqtable', 'req' => 1,
 			'hint' => 'Questions ship prefilled; fill the answers. Site-wide questions are appended from the Global FAQ.'),
 	);
@@ -147,27 +148,22 @@ function sf_formula_record_form($post_id) {
 	return (!is_wp_error($terms) && $terms) ? (string) $terms[0] : '';
 }
 
-/** Container options come from the global library, not a dosage pool. */
-function sf_formula_container_options() {
-	$out  = array();
-	foreach (sf_container_library() as $c) {
-		if (trim((string) $c['label']) !== '') {
-			$out[$c['slug']] = $c['label'];
-		}
-	}
-	return $out;
-}
-
-/** Resolve a spec's option list: fixed array, dosage pool, or the library. */
+/** Resolve a spec's option list: fixed array or dosage pool.
+ *
+ * Batch H8b retired the third source. Until this batch Container Type was
+ * `'pool' => '_containers'` — the seven-row Site Settings library, whose rows
+ * are Round / Square / Oval / Jar / Pouch / Tube / Custom, i.e. bottle SHAPES
+ * rather than packaging formats. The detail page drew the same seven, so the
+ * two agreed with each other and disagreed with the question; the pool that
+ * answers it has been in formula-pools.php since batch H1 and is per dosage
+ * form. The library keeps its other job — being a picture an option can be
+ * matched to by label (see sf_formula_pool_option_image()). */
 function sf_formula_mb_options($spec, $post_id) {
 	if (!isset($spec['pool'])) {
 		return array();
 	}
 	if (is_array($spec['pool'])) {
 		return $spec['pool'];
-	}
-	if ($spec['pool'] === '_containers') {
-		return sf_formula_container_options();
 	}
 	return sf_formula_field_pool(sf_formula_record_form($post_id), $spec['pool']);
 }
@@ -223,6 +219,18 @@ function sf_formula_render_field($spec, $post_id) {
 			}
 			break;
 		case 'radio':
+			/* `keep_unknown` (batch H8b) does for a radio what batch H8a made it
+			   do for the select: show the record's own value even when the pool
+			   no longer offers it. Container Type needs it because its
+			   vocabulary changed, not because it is optional — post 158 still
+			   stores the retired library's "Round", which no dosage pool
+			   contains, and without this the editor would open the record, see
+			   nothing ticked, and the next save would clear a value nobody
+			   touched (the save handler accepts an out-of-pool value only for a
+			   spec carrying this flag). */
+			if (!empty($spec['keep_unknown']) && '' !== (string) $raw && !in_array($raw, $opts, true)) {
+				array_unshift($opts, $raw);
+			}
 			foreach ($opts as $o) {
 				printf('<label class="sf-mb__opt"><input type="radio" name="%s" value="%s" %s/> %s</label>',
 					esc_attr($spec['key']), esc_attr($o), checked($raw, $o, false), esc_html($o));

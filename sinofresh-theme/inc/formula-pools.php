@@ -189,6 +189,95 @@ function sf_formula_field_pool_label($form, $dim) {
 	return (isset($pools[$form]['label'][$dim])) ? $pools[$form]['label'][$dim] : '';
 }
 
+/* --------------------------------------------------------------------------
+ * Batch H8b — the per-dosage pool, with the Site Settings library serving as
+ * the picture.
+ *
+ * Until this batch the detail page's Shape and Container Type groups took
+ * their OPTIONS from the global sf_shapes / sf_containers libraries, while the
+ * publishing form's Shape field already asked sf_formula_field_pool() for the
+ * dosage form's own list. The two ends therefore disagreed in both
+ * directions: a powder page offered "Bone" and "Paw", and the answer the
+ * editor had picked there ("Microencapsulated") was not on the page at all.
+ *
+ * The libraries are not retired — they stay the IMAGE carrier, matched by the
+ * label both sides spell. A label the library also carries (Bone, Round,
+ * Square … on soft chews; Jar on every form that ships in one) picks up that
+ * row's picture; a label only the pool carries (Fine Powder, Thick Paste,
+ * Softgel …) returns '' and the picker draws the dashed empty slot it already
+ * draws for a slot with no attachment. Matching on the label rather than on a
+ * slug is what lets one library serve eight option lists without a second
+ * mapping table — and it keeps the "upload the shape images later" path the
+ * Site Settings pages promise.
+ * ------------------------------------------------------------------------ */
+
+/**
+ * The image URL a library row carries for a pool label, or '' when no row
+ * spells it (case-insensitively, because the pool and the library are two
+ * hand-maintained lists and "Round" vs "round" is not a difference a visitor
+ * should ever be able to see).
+ *
+ * Every attachment_id in both libraries is 0 today, so on the current data
+ * this returns '' for every option — the path is here for the pictures the
+ * Site Settings pages are still waiting for, not for one the site already has.
+ */
+function sf_formula_pool_option_image($library, $label) {
+	$label = strtolower(trim((string) $label));
+	if ($label === '' || !is_array($library)) {
+		return '';
+	}
+	foreach ($library as $row) {
+		$row   = (array) $row;
+		$spelt = isset($row['label']) ? strtolower(trim((string) $row['label'])) : '';
+		if ($spelt !== $label) {
+			continue;
+		}
+		$id = !empty($row['attachment_id']) ? (int) $row['attachment_id'] : 0;
+		if ($id <= 0) {
+			return '';
+		}
+		$url = wp_get_attachment_image_url($id, 'medium');
+		return $url ? (string) $url : '';
+	}
+	return '';
+}
+
+/**
+ * One dosage pool rendered as configurator options.
+ *
+ * The option's VALUE is the LABEL, and that is the point of the batch: the
+ * label is what the publishing form's radio posts (sf_formula_mb_options
+ * returns the pool verbatim), what sf_formula_shape stores, and what
+ * sinofresh_formula_config_rows() whitelists against. One vocabulary, three
+ * readers — so the page cannot offer an answer the editor could not have
+ * chosen, or refuse one it could.
+ *
+ * "Custom" is MARKED rather than appended: every pool already ends in it
+ * (batch H1 froze them that way, and the H1 note says a change there is a data
+ * decision), and the marker is what turns the entry into the pick that opens
+ * batch H8a's text box. Appending a second one would print the word twice.
+ */
+function sf_formula_library_options($pool, $library) {
+	$out = array();
+	foreach ((array) $pool as $label) {
+		$label = trim((string) $label);
+		if ($label === '') {
+			continue;
+		}
+		$option = array(
+			'value' => $label,
+			'label' => $label,
+			'image' => sf_formula_pool_option_image($library, $label),
+			'note'  => '',
+		);
+		if (0 === strcasecmp($label, 'Custom')) {
+			$option['custom'] = true;
+		}
+		$out[] = $option;
+	}
+	return $out;
+}
+
 /**
  * The certification names behind batch H1b's four touch points — one source,
  * three renderers.

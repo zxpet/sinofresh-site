@@ -28,7 +28,7 @@ add_action('after_setup_theme', function() {
 });
 
 add_action('wp_enqueue_scripts', function() {
-	wp_enqueue_style('sinofresh-style', get_stylesheet_uri(), array(), '2.10.74');
+	wp_enqueue_style('sinofresh-style', get_stylesheet_uri(), array(), '2.10.75');
 	// Sticky nav: every template renders parts/header.html, so this is site-wide.
 	wp_enqueue_script('sinofresh-sticky-header', get_template_directory_uri() . '/assets/js/sticky-header.js', array(), '1.0.0', true);
 	wp_enqueue_script('sinofresh-ui-components', get_template_directory_uri() . '/assets/js/ui-components.js', array(), '1.0.0', true);
@@ -2214,6 +2214,11 @@ function sinofresh_formula_config_groups($post_id) {
 		return array();
 	}
 	$parts  = sinofresh_formula_specs_parts(trim((string) get_post_meta($post_id, 'sf_formula_specs', true)));
+	/* Batch H8b — the dosage form, for the two groups whose options come from
+	   a pool rather than from the record. sf_formula_record_form() is the same
+	   reader the publishing form uses to resolve those pools, so the page and
+	   the editor cannot resolve them differently. */
+	$form_slug = function_exists('sf_formula_record_form') ? sf_formula_record_form($post_id) : '';
 	$groups = array();
 
 	$flavors = sf_json_array(get_post_meta($post_id, 'sf_formula_flavors', true));
@@ -2302,81 +2307,76 @@ function sinofresh_formula_config_groups($post_id) {
 		);
 	}
 
-	/* Batch H7g — Shape, the second global library and the first group whose
-	   OPTIONS are constant on every detail page. Container waits for the
-	   record's own meta before it renders (which is why only pages with a
-	   sf_formula_container value show it); Shape does not wait, because the
-	   eight shapes are a catalog-level choice a buyer makes regardless of
-	   what the record says (user ruling, 2026-09-23). The record still gets
-	   a word in: when its specs-sheet sf_formula_shape text matches a
-	   library label, that label is the meta line — the value preview, and
-	   the same no-JS answer every other group gives. It never pre-checks
-	   the radio: nothing here is checked until the visitor checks it. */
-	$shape_meta = trim((string) get_post_meta($post_id, 'sf_formula_shape', true));
-	$shape_own  = '';
-	$shape_opts = array();
-	foreach (sf_shape_library() as $s) {
-		$image = '';
-		if (!empty($s['attachment_id'])) {
-			$url = wp_get_attachment_image_url((int) $s['attachment_id'], 'medium');
-			$image = $url ? (string) $url : '';
-		}
-		if ($shape_meta !== '' && strcasecmp($shape_meta, (string) $s['label']) === 0) {
-			$shape_own = (string) $s['label'];
-		}
-		$shape_opt = array(
-			'value' => (string) $s['slug'], 'label' => (string) $s['label'],
-			'image' => $image, 'note' => '',
-		);
-		/* H8a — the library keeps its own "Custom" row (slug `custom`, permanent
-		   because the front end validates against slugs). Marking it is what
-		   makes it open the same text box the chips groups get, instead of
-		   being a word a visitor can pick but not qualify. */
-		if ('custom' === (string) $s['slug']) {
-			$shape_opt['custom'] = true;
-		}
-		$shape_opts[] = $shape_opt;
+	/* Batch H8b — Shape reads the SAME per-dosage pool the publishing form
+	   does, and that is the whole of it.
+
+	   inc/formula-admin.php declares this field as `'pool' => 'shape'`, so a
+	   powder's editor can only pick Fine Powder / Granules /
+	   Microencapsulated / Custom. This renderer drew sf_shape_library()'s
+	   eight soft-chew shapes on all 42 pages regardless — the powder page
+	   offered "Bone" and "Paw", and the answer the editor had actually chosen
+	   was nowhere on the page. One pool, two readers, and they now agree.
+
+	   The library is not retired: sf_formula_library_options() takes the
+	   OPTIONS from the pool and the PICTURES from it, matched by label. Every
+	   attachment_id is 0 today, so this changes no pixels — it keeps the
+	   "upload the shape images later" path the Site Settings page promises.
+
+	   The group's NAME follows the pool too ("Appearance" on powders and
+	   drops and liquids, "Texture" on pastes, "Form" on fish oil), because
+	   the pool has always said so and "Shape: Clear" is not a sentence.
+
+	   The record's own sf_formula_shape still gets its word in, verbatim: it
+	   is the meta line beside the picker, and it is the same string the spec
+	   sheet prints. It never pre-checks the radio — nothing here is checked
+	   until the visitor checks it. */
+	$shape_label = function_exists('sf_formula_field_pool_label')
+		? (string) sf_formula_field_pool_label($form_slug, 'shape') : '';
+	if ($shape_label === '') {
+		$shape_label = 'Shape';
 	}
+	$shape_opts = function_exists('sf_formula_library_options')
+		? sf_formula_library_options(sf_formula_field_pool($form_slug, 'shape'), sf_shape_library())
+		: array();
 	if ($shape_opts) {
 		$groups[] = array(
-			'key' => 'shape', 'label' => 'Shape', 'meta' => $shape_own,
+			'key' => 'shape', 'label' => $shape_label,
+			'meta' => trim((string) get_post_meta($post_id, 'sf_formula_shape', true)),
 			'type' => 'single', 'style' => 'image', 'hint' => 'Choose one',
 			'options' => $shape_opts,
 		);
 	}
 
-	/* Container Type is the one group whose OPTIONS are not the record's own
-	   values: the seven containers are a global library that Site Settings
-	   owns, because "Pouch" has to mean the same picture on every page. The
-	   record contributes only which one it ships in, which is the meta line
-	   and the initial radio. */
-	$container = trim((string) get_post_meta($post_id, 'sf_formula_container', true));
-	if ($container !== '' && function_exists('sf_container_library')) {
-		$options = array();
-		foreach (sf_container_library() as $c) {
-			$image = '';
-			if (!empty($c['attachment_id'])) {
-				$url = wp_get_attachment_image_url((int) $c['attachment_id'], 'medium');
-				$image = $url ? (string) $url : '';
-			}
-			$container_opt = array(
-				'value' => (string) $c['slug'], 'label' => (string) $c['label'],
-				'image' => $image, 'note' => '',
-			);
-			if ('custom' === (string) $c['slug']) {
-				$container_opt['custom'] = true;
-			}
-			$options[] = $container_opt;
-		}
-		if ($options) {
-			$own = function_exists('sinofresh_container_label')
-				? sinofresh_container_label($container) : $container;
-			$groups[] = array(
-				'key' => 'container', 'label' => 'Container Type', 'meta' => $own,
-				'type' => 'single', 'style' => 'image', 'hint' => 'Choose one',
-				'options' => $options,
-			);
-		}
+	/* Batch H8b — Container Type reads the dosage pool too, and renders on
+	   every page.
+
+	   Its options were the Site Settings container library, whose rows are
+	   "Round / Square / Oval / Jar / Pouch / Tube / Custom" — bottle SHAPES,
+	   not containers; "Round" is not a packaging format. The pool that answers
+	   this question has existed since batch H1 and is per dosage form
+	   (powders: Jar / Foil Pouch / Stand-up Pouch; drops: Dropper Bottle /
+	   Glass Bottle / Plastic Bottle; pastes: Plastic Tube / Metal Tube /
+	   Aluminum Tube), so the group now says what the buyer is choosing.
+
+	   The old gate went with it: this group used to wait for the record's own
+	   sf_formula_container before it rendered, which is why one page in 21
+	   drew it. The options no longer depend on the record, so it follows the
+	   same rule Shape does. post 158's stored slug "Round" is in no packaging
+	   pool; sinofresh_container_label() falls back to the raw value, so the
+	   meta line still prints the record's own word rather than dropping a
+	   fact, and re-saving that record lands it in the new vocabulary. */
+	$container  = trim((string) get_post_meta($post_id, 'sf_formula_container', true));
+	$cont_opts  = function_exists('sf_formula_library_options')
+		? sf_formula_library_options(sf_formula_field_pool($form_slug, 'packaging'), sf_container_library())
+		: array();
+	if ($cont_opts) {
+		$own = ($container !== '' && function_exists('sinofresh_container_label'))
+			? sinofresh_container_label($container) : $container;
+		$groups[] = array(
+			'key' => 'container', 'label' => 'Container Type', 'meta' => $own,
+			'type' => 'single', 'style' => 'image', 'hint' => 'Choose one',
+			'options' => $cont_opts,
+		);
 	}
 
 	/* Batch H7i — the ladder. The admin's row is {min, max, price} (the order's
@@ -2800,7 +2800,16 @@ function sinofresh_formula_specs_table() {
 	}
 	$value = trim((string) get_post_meta($post_id, 'sf_formula_shape', true));
 	if ($value !== '') {
-		$rows['Shape'] = esc_html($value);
+		/* Batch H8b — the row is named whatever the dosage form calls this
+		   question, because the picker one screen up is. A powder sheet that
+		   said "Shape: Fine Powder" under a picker headed "Appearance" would
+		   be this batch contradicting itself. On today's data the label only
+		   ever resolves to "Shape" (the one record carrying a value is a soft
+		   chew), so this is a no-op in bytes and a correctness fix for the
+		   first powder the sales desk fills in. */
+		$shape_row = function_exists('sf_formula_field_pool_label')
+			? (string) sf_formula_field_pool_label($form_slug, 'shape') : '';
+		$rows[($shape_row !== '' ? $shape_row : 'Shape')] = esc_html($value);
 	}
 	if (trim((string) $parts['unit']) !== '') {
 		$rows['Unit Weight'] = esc_html(trim((string) $parts['unit']));
@@ -3188,10 +3197,13 @@ function sinofresh_formula_content() {
 			'<p class="sf-fdetail-content__prose">' . esc_html($value) . '</p>');
 	}
 
-	/* Packaging & Specifications. Container Type is a single slug from the
-	   Site Settings library, so it contributes one chip and the library's
-	   label — the same library the publishing form offers, so the page and
-	   the form cannot disagree about what "pouch" is called. */
+	/* Packaging & Specifications. Container Type contributes one chip: the
+	   record's own value, read through sinofresh_container_label() so a value
+	   that is a Site Settings library slug prints as its label. Batch H8b made
+	   the picker's vocabulary the dosage pool's (labels such as "Pump Bottle")
+	   and left this reader alone on purpose — the label it returns for a pool
+	   label is the label itself, and for the one legacy slug on record
+	   ("Round") it returns the raw word rather than dropping the fact. */
 	$specs = '';
 	$container = trim((string) get_post_meta($post_id, 'sf_formula_container', true));
 	if ($container !== '') {
