@@ -5756,7 +5756,11 @@ BATCHES['h8a'] = {
                  'data-sf-config-custom="1"', 'data-sf-config-custom="X1"'),
     'source': [
         ('style.css declares 2.10.74', 'css', r'(?m)^Version: 2\.10\.74$', True),
-        ('no 2.10.73 header survives', 'css_live', r'(?m)^Version: 2\.10\.73$', False),
+        # Read on the RAW bytes, not on the comment-blanked twin: the theme
+        # header is itself inside a `/* */` block, so the blanked twin has that
+        # line erased and this claim could never have fired. Corrected in batch
+        # H8b, which carries the same claim and the control that proves it lives.
+        ('no 2.10.73 header survives', 'css', r'(?m)^Version: 2\.10\.73$', False),
         ('functions.php enqueues 2.10.74 for style.css', 'php',
          r"wp_enqueue_style\('sinofresh-style'[^;]*'2\.10\.74'", True),
         ('...and 1.4.0 for config.js', 'php',
@@ -5853,6 +5857,583 @@ BATCHES['h8a'] = {
          r"'group' => 'params', 'type' => 'select'", True),
         ('no free-text shelf-life line survives in the packaging group',
          'admin_live', r"'sf_formula_shelf_life'[^\n]*'group' => 'packaging'", False),
+    ],
+}
+
+
+# ------------------------------------------------------------------ batch H8b
+# Shape and Container Type follow the dosage form.
+#
+# The whole delta lives inside two groups of one renderer, and every value it
+# writes comes from inc/formula-pools.php's per-dosage pools — which the
+# PUBLISHING FORM has been reading since batch H1. The tables below are therefore
+# a second, independent transcription of those pools, and that is deliberate: a
+# gate that reads its payload out of the product's PHP would agree with any
+# mistake the product made. The `source` section is where the two are required to
+# match, line by line.
+#
+# What the transform may NOT do is read the candidate. It reads the BASELINE and
+# asks it two questions — which dosage form is this page for (the spec sheet's own
+# "Dosage Form" row) and does it already draw the container group (post 158 is the
+# one record that does) — and builds the expected bytes from those two facts plus
+# the tables.
+
+H8B_POOLS = {
+    'soft-chews': {
+        'label': 'Shape',
+        'shape': ['Bone', 'Round', 'Square', 'Heart', 'Star', 'Paw', 'Cylinder', 'Custom'],
+        'packaging': ['Aluminum Stand-up Pouch', 'Aluminum Foil Pouch with Zipper',
+                      'Plastic Bottle', 'Jar', 'Blister Pack', 'Box + Foil', 'Custom'],
+    },
+    'tablets': {
+        'label': 'Shape',
+        'shape': ['Round', 'Oval', 'Square', 'Bone', 'Custom'],
+        'packaging': ['Plastic Bottle', 'Jar', 'Blister Pack', 'Foil Pouch', 'Custom'],
+    },
+    'dental-chews': {
+        'label': 'Shape',
+        'shape': ['Bone', 'Stick', 'Round', 'Spiral', 'Toothbrush', 'Custom'],
+        'packaging': ['Foil Pouch', 'Stand-up Pouch', 'Box', 'Custom'],
+    },
+    'pastes': {
+        'label': 'Texture',
+        'shape': ['Smooth Paste', 'Thick Paste', 'Squeezable Gel', 'Custom'],
+        'packaging': ['Plastic Tube', 'Metal Tube', 'Aluminum Tube', 'Custom'],
+    },
+    'powders': {
+        'label': 'Appearance',
+        'shape': ['Fine Powder', 'Granules', 'Microencapsulated', 'Custom'],
+        'packaging': ['Jar', 'Foil Pouch', 'Stand-up Pouch', 'Custom'],
+    },
+    'drops': {
+        'label': 'Appearance',
+        'shape': ['Clear', 'Light Yellow', 'Amber', 'Custom'],
+        'packaging': ['Dropper Bottle', 'Glass Bottle', 'Plastic Bottle', 'Custom'],
+    },
+    'liquids': {
+        'label': 'Appearance',
+        'shape': ['Clear', 'Light Color', 'Suspension', 'Custom'],
+        'packaging': ['Plastic Bottle', 'Glass Bottle', 'Bottle with Cup', 'Custom'],
+    },
+    'fish-oil': {
+        'label': 'Form',
+        'shape': ['Softgel', 'Liquid Oil', 'Pump Bottle', 'Custom'],
+        'packaging': ['Plastic Bottle', 'Glass Bottle', 'Pump Bottle', 'Custom'],
+    },
+}
+
+# The page states the dosage form by NAME ("Fish Oil"); the pools are keyed by
+# slug. The two are one sanitize_title() apart, and transcribing the pairs rather
+# than slugifying at run time is what keeps "Dental Chews" from silently
+# becoming "dental-chews" in one place and meaning something else in another.
+H8B_FORM_NAME = {
+    'Soft Chews': 'soft-chews', 'Tablets': 'tablets', 'Dental Chews': 'dental-chews',
+    'Pastes': 'pastes', 'Powders': 'powders', 'Drops': 'drops',
+    'Liquids': 'liquids', 'Fish Oil': 'fish-oil',
+}
+
+H8B_ROW = re.compile(
+    r'<dt class="sf-fdetail-specs__term">Dosage Form</dt>'
+    r'<dd class="sf-fdetail-specs__value">([^<]*)</dd>')
+
+# The shape group's own three carriers of its name, and its option list.
+H8B_ROW_LABEL = '<span class="sf-fdetail-config__label">Shape</span>'
+H8B_BOX_LABEL = 'aria-label="Your own Shape"'
+
+# One option list. Non-greedy to the FIRST </div>: an option is a <label> of
+# spans and carries no div of its own, so the first close is the container's.
+H8B_OPTS = re.compile(
+    r'<div class="sf-fdetail-config__options" role="group" aria-label="[^"]*">.*?</div>',
+    re.S)
+
+# Where the container group goes when the record does not have one: between the
+# shape group's closing div and the one that closes the list they live in. The
+# shape group is last on all forty of those pages (measured), which is why this
+# anchor is unique there — and why a page without a configurator at all (the
+# other thirty-three) is not touched: the anchor cannot match what is not there.
+H8B_LIST_TAIL = '</div></div><p class="sf-fdetail-config__'
+
+
+def _h8b_form(text):
+    """The dosage form this page is about, from the page itself.
+
+    The spec sheet's Dosage Form row is the page's own statement of identity and
+    is present on all 42 detail pages. Reading it here — rather than keying the
+    expected bytes on the file's name — is what makes the case where the
+    renderer and the taxonomy disagree a RED page instead of a silently skipped
+    one.
+    """
+    m = H8B_ROW.search(text)
+    return H8B_FORM_NAME.get(m.group(1)) if m else None
+
+
+def _h8b_options(key, labels):
+    """One group's option list, byte for byte as the renderer writes it.
+
+    The value IS the label — that is the batch's central claim, and the reason
+    the option list cannot be produced by renaming the old one. The label the
+    pool spells "Custom" carries the flag that opens batch H8a's text box; the
+    pool already ends in one, so nothing is appended.
+    """
+    out = []
+    for label in labels:
+        flag = ' data-sf-config-custom="1"' if label == 'Custom' else ''
+        out.append(
+            '<label class="sf-fdetail-config__opt"%s>'
+            '<input class="sf-fdetail-config__input" type="radio" name="sf-config-%s"'
+            ' value="%s" data-sf-config-opt="%s">'
+            '<span class="sf-fdetail-config__box" aria-hidden="true"></span>'
+            '<span class="sf-fdetail-config__img sf-fdetail-config__img--empty">'
+            '<span class="sf-fdetail-config__empty-label">%s</span></span></label>'
+            % (flag, key, label, key, label))
+    return ''.join(out)
+
+
+def _h8b_opts_in(seg, key, labels, name):
+    """Replace the first option list in `seg` with the pool's own."""
+    exp = ('<div class="sf-fdetail-config__options" role="group" aria-label="%s">'
+           % name) + _h8b_options(key, labels) + '</div>'
+    new = H8B_OPTS.sub(lambda m: exp, seg, count=1)
+    return new, (1 if new != seg else 0)
+
+
+def _h8b_container_group(labels, meta=''):
+    """The whole container group, for the forty pages that do not have one."""
+    return (
+        '<div class="sf-fdetail-config__group" data-sf-config-group="container">'
+        '<p class="sf-fdetail-config__row">'
+        '<span class="sf-fdetail-config__label">Container Type</span>'
+        '<span class="sf-fdetail-config__meta">%s</span>'
+        '<span class="sf-fdetail-config__hint">Choose one</span></p>'
+        '<div class="sf-fdetail-config__options" role="group" aria-label="Container Type">%s</div>'
+        '<div class="sf-fdetail-config__custom" data-sf-config-custom-for="container" hidden>'
+        '<input type="text" class="sf-fdetail-config__custom-input" '
+        'data-sf-config-custom-input="container" maxlength="60" autocomplete="off" '
+        'spellcheck="false" aria-label="Your own Container Type" placeholder="Type your own">'
+        '</div></div>' % (meta, _h8b_options('container', labels)))
+
+
+def _h8b_rub(text, old, new):
+    """One declared replacement. (text, 1) when it moved bytes, (text, 0) when
+    the baseline already said it.
+
+    The zero matters: the pool calls this question "Shape" on soft chews, tablets
+    and dental chews, so on 20 of the 42 pages the group's NAME is not an edit at
+    all. Counting those as edits would let a page whose name is wrong hide inside
+    the run total, which is the one number the main proof checks.
+    """
+    if old == new or old not in text:
+        return text, 0
+    return text.replace(old, new, 1), 1
+
+
+def _h8b_move(text, label=True, shape=True, container=True):
+    form = _h8b_form(text)
+    if not form:
+        return text, 0
+    pool = H8B_POOLS[form]
+    n = 0
+
+    i = text.find('data-sf-config-group="shape"')
+    if i < 0:
+        return text, 0
+    j = text.find('data-sf-config-group="container"', i)
+    has_container = j >= 0
+    if not has_container:
+        j = text.find('data-sf-config-summary', i)
+    head, seg, rest = text[:i], text[i:j], text[j:]
+
+    if label:
+        seg, k = _h8b_rub(seg, H8B_ROW_LABEL,
+                          '<span class="sf-fdetail-config__label">%s</span>' % pool['label'])
+        n += k
+        seg, k = _h8b_rub(seg, H8B_BOX_LABEL, 'aria-label="Your own %s"' % pool['label'])
+        n += k
+    if shape:
+        seg, k = _h8b_opts_in(seg, 'shape', pool['shape'], pool['label'])
+        n += k
+
+    if container:
+        if has_container:
+            k = rest.find('data-sf-config-summary')
+            cont, rest = rest[:k], rest[k:]
+            cont, k2 = _h8b_opts_in(cont, 'container', pool['packaging'], 'Container Type')
+            n += k2
+            rest = cont + rest
+        else:
+            at = seg.rfind(H8B_LIST_TAIL)
+            if at >= 0:
+                seg = (seg[:at] + '</div>' + _h8b_container_group(pool['packaging'])
+                       + '</div><p class="sf-fdetail-config__'
+                       + seg[at + len(H8B_LIST_TAIL):])
+                n += 1
+    return head + seg + rest, n
+
+
+def _h8b_transform(text):
+    return _h8b_move(text)
+
+
+def _h8b_partial(**flags):
+    def f(text):
+        return _h8b_move(text, **flags)
+    return f
+
+
+H8B_DETAIL = H8A_DETAIL      # a detail page: 21 in English, 21 in Chinese
+H8B_RECORD = H8A_RECORD      # post 158 — the one record that stored a container
+
+
+def _h8b_opts_expected(base, n, key):
+    """How many options of one pool each page must end up with, read off the
+    BASELINE's own dosage form rather than off the candidate.
+
+    The numbers in this batch that cannot be fixed counts: soft chews keep eight
+    shapes, tablets drop to five and five of the eight forms drop to four; and
+    the packaging pool is seven on soft chews, six nowhere, five on tablets and
+    four on the rest. A single expected total would be satisfied by the eight
+    soft-chew shapes on a powder as long as something else was short by the same
+    amount — which is exactly what the batch exists to stop being possible.
+    """
+    text = read(os.path.join(base, n + '.html'))
+    form = _h8b_form(text)
+    return len(H8B_POOLS[form][key]) if form else 0
+
+
+def _h8b_shape_opts_expected(base, n):
+    return _h8b_opts_expected(base, n, 'shape')
+
+
+def _h8b_cont_opts_expected(base, n):
+    return _h8b_opts_expected(base, n, 'packaging')
+
+
+def _h8b_hoist_container(t):
+    """Draw the container group BEFORE the shape group, which no count can see."""
+    i = t.find('data-sf-config-group="shape"')
+    j = t.find('data-sf-config-group="container"')
+    k = t.find('data-sf-config-summary')
+    if not (0 <= i < j < k):
+        return t
+    return t[:i] + t[j:k] + t[i:j] + t[k:]
+
+
+BATCHES['h8b'] = {
+    'name': "H8b — Shape and Container Type answer with the dosage form's own "
+            "vocabulary, and the container group renders on every detail page",
+    'mode': 'insert',
+    'tokens': [
+        ('?ver=2.10.74', '?ver=2.10.75'),                      # style.css
+    ],
+    # 128 edits: on the 22 pages whose dosage form calls this question something
+    # other than "Shape", the group's own name and the box label go with it (22
+    # + 22); every one of the 42 shape groups takes the pool's own options (42);
+    # and the container group is rewritten on the one record that had one (1 x 2)
+    # and inserted on the other forty (40).
+    'applies': 128,
+    'transform': _h8b_transform,
+    'coverage': [
+        ('?ver=2.10.74', 0),
+        # The whole of the vocabulary this batch retires: the eight slugs of
+        # sf_shape_library() and the seven of sf_container_library(), which were
+        # the same eight and the same seven on all 42 detail pages. Each is a
+        # lowercase library slug — the pool's spelling is the label, so the two
+        # vocabularies are distinguishable by case alone and neither half of
+        # that is an accident.
+        ('value="bone"', 0),
+        ('value="round"', 0),
+        ('value="square"', 0),
+        ('value="heart"', 0),
+        ('value="star"', 0),
+        ('value="paw"', 0),
+        ('value="cylinder"', 0),
+        ('value="oval"', 0),
+        ('value="jar"', 0),
+        ('value="pouch"', 0),
+        ('value="tube"', 0),
+        ('value="custom"', 0),
+    ],
+    'insertions': [
+        ('?ver=2.10.75', 75),
+        # One option per dosage form that no other form carries, so the eight
+        # pools cannot have been collapsed back into one list: Oval is tablets,
+        # Spiral is dental chews, Squeezable Gel is pastes, Microencapsulated is
+        # powders, Amber is drops, Suspension is liquids, Softgel is fish oil —
+        # and Bone, on twenty pages, is the one three forms share.
+        ('name="sf-config-shape" value="Bone"', 20),
+        ('name="sf-config-shape" value="Oval"', 6),
+        ('name="sf-config-shape" value="Spiral"', 6),
+        ('name="sf-config-shape" value="Squeezable Gel"', 4),
+        ('name="sf-config-shape" value="Microencapsulated"', 6),
+        ('name="sf-config-shape" value="Amber"', 4),
+        ('name="sf-config-shape" value="Suspension"', 4),
+        ('name="sf-config-shape" value="Softgel"', 4),
+        # ...and the same for the packaging pool, form by form.
+        ('name="sf-config-container" value="Aluminum Foil Pouch with Zipper"', 8),
+        ('name="sf-config-container" value="Plastic Tube"', 4),
+        ('name="sf-config-container" value="Stand-up Pouch"', 12),
+        ('name="sf-config-container" value="Dropper Bottle"', 4),
+        ('name="sf-config-container" value="Bottle with Cup"', 4),
+        ('name="sf-config-container" value="Pump Bottle"', 4),
+        ('name="sf-config-container" value="Custom"', 42),
+    ],
+    'counts': [
+        # The reach, which is the half of the defect a per-form option list on
+        # its own would not fix: 336 = 8 options x 42 pages.
+        ('the shape group takes the dosage pool, not the global library',
+         'name="sf-config-shape"', 336, 218),
+        # ...and the group that used to wait for the record.
+        ('the container group was on one record and is now on every detail page',
+         'data-sf-config-group="container"', 2, 42),
+        ('...its options being the dosage form\'s packaging pool',
+         'name="sf-config-container"', 14, 198),
+        # The name, on both of the carriers that spell it.
+        ('the group name stops being the word Shape',
+         'sf-fdetail-config__label">Shape<', 42, 20),
+        ('...and becomes the pool\'s own word',
+         'sf-fdetail-config__label">Appearance<', 0, 14),
+        ('...which on pastes is Texture',
+         'sf-fdetail-config__label">Texture<', 0, 4),
+        ('...and on fish oil is Form',
+         'sf-fdetail-config__label">Form<', 0, 4),
+        ('the option list is announced with the same name as its group',
+         'role="group" aria-label="Shape"', 42, 20),
+        ('...and the container list says Container Type on every page',
+         'role="group" aria-label="Container Type"', 2, 42),
+        # 66 = (218 + 198) - (336 + 14): the two vocabularies differ by exactly
+        # this much and the parameter column's option count moved by exactly it.
+        ('every option the batch writes is a radio',
+         'type="radio"', 536, 602),
+        ('...inside a group', 'sf-fdetail-config__group', 110, 150),
+        ('...and every one of them is a pick in an option list',
+         'sf-fdetail-config__opt"', 530, 596),
+        # The pool's own Custom row arrives already marked, so batch H8a\'s text
+        # box opens on it without a second one being appended.
+        ('the pools bring the Custom pick with them', 'value="Custom"', 64, 148),
+        ('...and the box beside it',
+         'data-sf-config-custom-input="', 108, 148),
+        ('...carrying the marker the script reads',
+         'data-sf-config-custom="1"', 108, 148),
+        # Every attachment_id in both libraries is 0, so an option keeps a
+        # picture only when the library spells its label — which is the route
+        # the Site Settings pages promise, and the reason this count grows.
+        ('an option with no picture yet is the dashed slot',
+         'sf-fdetail-config__img--empty', 350, 416),
+        ('the shape group stops asking for a box of its own',
+         'aria-label="Your own Shape"', 42, 20),
+        ('...and the container group starts', 
+         'aria-label="Your own Container Type"', 2, 42),
+        # 待办23/H8a's ladder is a price list and stays one — the batch's own
+        # group is the one it republishes, and this says the neighbouring group
+        # on the same two pages was not swept up with it.
+        ('the ladder keeps its three breaks', 'sf-tier__dot', 6, 6),
+    ],
+    'unmoved': [
+        ('the cookie banner', r'class="sf-cookie-banner"', 75),
+        ('the float stack', r'class="sf-float-stack"', 75),
+        ('the certificate dialog', r'sf-certmodal', 1),
+        ('the navigation', r'wp-block-navigation', 75),
+        # Which groups a record HAS comes from its own meta, and this batch
+        # changed none of them: five pages carry a flavor picker, twenty a pack
+        # size, all forty-two a unit weight, two a price ladder, and the
+        # container group the batch republished was already on one of them.
+        ('the flavor group', r'data-sf-config-group="flavor"', 2),
+        ('the unit weight group', r'data-sf-config-group="weight"', 42),
+        ('the pack size group', r'data-sf-config-group="pack"', 20),
+        ('...and the ladder is still on the two pages that had one',
+         r'data-sf-config-group="pricing"', 2),
+        ('the gallery tabs', r'sf-gallery__tabs', 42),
+        ('the side column', r'sf-fdetail2__side', 42),
+        ('the spec sheet', r'sf-fdetail-specs__term', 42),
+        ('the parameter list still ends on its summary',
+         r'data-sf-config-summary', 42),
+        ('the Send Inquiry button', r'data-sf-inquiry-open>Send Inquiry</a>', 42),
+        ('the configurator itself', r'class="sf-fdetail-config"', 42),
+    ],
+    'per_page': [
+        ('h1', r'<h1[ >]', 1),
+        ('the new style token', r'style\.css\?ver=2\.10\.75', 1),
+    ],
+    'scoped': [
+        # The group the batch republished is on every detail page and on no
+        # other. `unmoved` cannot say this — 42 is also the count a single page
+        # carrying all forty-two would produce.
+        ('the container group is on every detail page and on no other',
+         'data-sf-config-group="container"', H8B_DETAIL, 1),
+        ('the picker the batch rewrote is on every detail page and on no other',
+         'class="sf-fdetail-config"', H8B_DETAIL, 1),
+    ],
+    'corroborated': [
+        # Read off the BASELINE's own dosage form, so neither number is taken
+        # from the side being checked. A pool that quietly lost an option on one
+        # page moves that page by one and no site total would notice.
+        ('a shape option for every entry in the page\'s own pool',
+         r'name="sf-config-shape" value="', _h8b_shape_opts_expected),
+        ('...and a container option for every entry in its packaging pool',
+         r'name="sf-config-container" value="', _h8b_cont_opts_expected),
+    ],
+    'order': [
+        # Where the new group sits, which the main proof cannot see: with
+        # `insert` the payload IS compared, but a page carrying the same two
+        # groups in the other order is the same set of options under a title
+        # that reads "Container Type" above "Shape".
+        ('the container group follows the shape group on every detail page',
+         'data-sf-config-group="shape"', 'data-sf-config-group="container"',
+         H8B_DETAIL),
+        ('...and both come before the summary that closes the column',
+         'data-sf-config-group="container"', 'data-sf-config-summary', H8B_DETAIL),
+    ],
+    'h2_delta': None,
+    'jsonld_delta': None,
+    'sources': {
+        'pools': 'inc/formula-pools.php',
+        'admin': 'inc/formula-admin.php',
+    },
+    'reinject': ('an old library slug on the shape group fails coverage',
+                 'formulas__calming-soft-chews.html',
+                 '<div class="sf-fdetail-config__options" role="group" aria-label="Shape">',
+                 '<label class="sf-fdetail-config__opt"><input class="sf-fdetail-config__input"'
+                 ' type="radio" name="sf-config-shape" value="bone"></label>'),
+    'delete': ("one page loses the container answer's Custom pick fails coverage",
+               'formulas__calming-soft-chews.html',
+               ' name="sf-config-container" value="Custom"'),
+    'nc13_mode': 'sighted',
+    'nc13_label': ('NC13 the insert direction SEES a container option renamed, '
+                   'and coverage confirms it'),
+    'matrix': [
+        ('the tokens are not folded', {'tokens': []}, None),
+        ('the group name is left as the word Shape',
+         {'transform': _h8b_partial(label=False)}, None),
+        ('the shape group keeps the library\'s eight soft-chew names',
+         {'transform': _h8b_partial(shape=False)}, None),
+        ('the container group is left exactly as it was',
+         {'transform': _h8b_partial(container=False)}, None),
+        ('the run count is declared one short', {'applies': 127}, None),
+        ('nothing is applied at all',
+         {'transform': (lambda t: (t, 0)), 'applies': 0}, None),
+    ],
+    'nc_source': [
+        ('NC-src the source pass fails when the stylesheet keeps its old version',
+         'style.css', 'Version: 2.10.75', 'Version: 2.10.74'),
+        ('NC-src ...and when the enqueue keeps its own',
+         'functions.php', "array(), '2.10.75');", "array(), '2.10.74');"),
+        # The page went back to drawing the library instead of the pool.
+        ('NC-src the source pass fails when the shape group reads the library again',
+         'functions.php',
+         "sf_formula_library_options(sf_formula_field_pool($form_slug, 'shape'), sf_shape_library())",
+         'sf_shape_library()'),
+        ('NC-src ...and when the container group reads it too',
+         'functions.php',
+         "sf_formula_library_options(sf_formula_field_pool($form_slug, 'packaging'), sf_container_library())",
+         'sf_container_library()'),
+        # The gate that kept the group off forty pages came back.
+        ('NC-src ...and when the container group waits for the record again',
+         'functions.php', 'if ($cont_opts) {', "if ($cont_opts && $container !== '') {"),
+        # The spec sheet went back to naming its row by a literal.
+        ('NC-src ...and when the spec sheet names its row by hand',
+         'functions.php',
+         "$rows[($shape_row !== '' ? $shape_row : 'Shape')] = esc_html($value);",
+         "$rows['Shape'] = esc_html($value);"),
+        # The pool renderer lost the two things it is for.
+        ('NC-src ...and when the option stops asking the library for a picture',
+         'inc/formula-pools.php',
+         "'image' => sf_formula_pool_option_image($library, $label),", "'image' => '',"),
+        ('NC-src ...and when the label is no longer matched case-insensitively',
+         'inc/formula-pools.php', 'if ($spelt !== $label) {', 'if (false) {'),
+        ('NC-src ...and when the pool\'s Custom row stops being marked',
+         'inc/formula-pools.php',
+         "if (0 === strcasecmp($label, 'Custom')) {", 'if (false) {'),
+        # The publishing form, which owns the other end of the same vocabulary.
+        ('NC-src the source pass fails when the form goes back to the library pool',
+         'inc/formula-admin.php',
+         "'pool' => 'packaging', 'keep_unknown' => true),",
+         "'pool' => '_containers', 'keep_unknown' => true),"),
+        ('NC-src ...and when a radio stops honouring keep_unknown',
+         'inc/formula-admin.php',
+         "if (!empty($spec['keep_unknown']) && '' !== (string) $raw && !in_array($raw, $opts, true)) {",
+         'if (false) {'),
+        ('NC-src ...and when the retired library resolver comes back',
+         'inc/formula-admin.php',
+         "/** Resolve a spec's option list: fixed array or dosage pool.",
+         "function sf_formula_container_options() { return array(); }\n\n"
+         "/** Resolve a spec's option list: fixed array or dosage pool."),
+    ],
+    'nc_page': [
+        # Three claims the MAIN PROOF cannot see, all three owned by clauses
+        # that live in `invariants`: the group that has to be on every detail
+        # page, the order the two groups stand in, and the option count each
+        # page's own pool dictates.
+        ('NC-page the invariants fail when a detail page loses its container group',
+         'formulas__calming-soft-chews.html',
+         lambda t: t.replace('data-sf-config-group="container"',
+                             'data-sf-config-group="containr"', 1)),
+        ('NC-page ...and when the container group is drawn above the shape group',
+         'formulas__calming-soft-chews.html', _h8b_hoist_container),
+        ('NC-page ...and when a page is one shape option short of its pool',
+         'formulas__calming-soft-chews.html',
+         lambda t: t.replace('name="sf-config-shape" value="Paw"',
+                             'nameX="sf-config-shape" value="Paw"', 1)),
+    ],
+    'nc_blind': ('formulas__calming-soft-chews.html', 'value="Custom"', 'value="Cust0m"'),
+    'source': [
+        ('style.css declares 2.10.75', 'css', r'(?m)^Version: 2\.10\.75$', True),
+        # Read on the RAW bytes, not on the comment-blanked twin. The theme
+        # header is itself inside a `/* */` block, so the blanked twin has it
+        # erased and this claim could never fire — batch H8a shipped it that way
+        # and it is corrected here, with the last NC-src below as its control.
+        ('no 2.10.74 header survives', 'css', r'(?m)^Version: 2\.10\.74$', False),
+        ('functions.php enqueues 2.10.75 for style.css', 'php',
+         r"wp_enqueue_style\('sinofresh-style'[^;]*'2\.10\.75'", True),
+        # --- the renderer reads the pool, not the library ---------------
+        ('both groups resolve the record\'s dosage form the way the form does',
+         'php',
+         r"\$form_slug = function_exists\('sf_formula_record_form'\) \? "
+         r"sf_formula_record_form\(\$post_id\) : '';", True),
+        ('the shape group takes its name from the pool', 'php',
+         r"\$shape_label = function_exists\('sf_formula_field_pool_label'\)", True),
+        ('...and its options from the pool, with the library as the picture',
+         'php',
+         r"sf_formula_library_options\(sf_formula_field_pool\(\$form_slug, 'shape'\), "
+         r"sf_shape_library\(\)\)", True),
+        ('the container group reads the packaging pool', 'php',
+         r"sf_formula_library_options\(sf_formula_field_pool\(\$form_slug, 'packaging'\), "
+         r"sf_container_library\(\)\)", True),
+        ('...and no longer waits for the record to own a value', 'php_live',
+         r"if \(\$container !== '' && function_exists\('sf_container_library'\)\)",
+         False),
+        ('...which is what makes it render wherever the pool does', 'php',
+         r"if \(\$cont_opts\) \{", True),
+        ('the spec sheet\'s Shape row takes the same name', 'php',
+         r"\$rows\[\(\$shape_row !== '' \? \$shape_row : 'Shape'\)\] = esc_html\(\$value\);",
+         True),
+        ('...so that row is named by no literal any more', 'php_live',
+         r"\$rows\['Shape'\] = esc_html\(\$value\);", False),
+        # --- the pool renderer ------------------------------------------
+        ('the theme can match a pool label to a library picture', 'pools',
+         r'function sf_formula_pool_option_image\(\$library, \$label\)', True),
+        ('...case-insensitively, because both lists are hand-maintained', 'pools',
+         r"\$spelt !== \$label", True),
+        ('a pool renders as options whose VALUE is the LABEL', 'pools',
+         r'function sf_formula_library_options\(\$pool, \$library\) \{', True),
+        ('...which is what the publishing form posts', 'pools',
+         r"'value' => \$label,\n\t\t\t'label' => \$label,", True),
+        ('...each option asking the library for a picture', 'pools',
+         r"'image' => sf_formula_pool_option_image\(\$library, \$label\),", True),
+        ('...and the pool\'s own Custom row marked rather than appended', 'pools',
+         r"if \(0 === strcasecmp\(\$label, 'Custom'\)\) \{", True),
+        # --- the publishing form, the other reader of the same pools -----
+        ('the publishing form reads the packaging pool for Container Type',
+         'admin', r"'pool' => 'packaging', 'keep_unknown' => true\),", True),
+        ('...and the retired library resolver is gone', 'admin_live',
+         r'function sf_formula_container_options\(\)', False),
+        ('...along with the branch that reached for it', 'admin_live',
+         r"if \(\$spec\['pool'\] === '_containers'\) \{", False),
+        ('a radio shows a stored value its pool no longer offers', 'admin',
+         r"if \(!empty\(\$spec\['keep_unknown'\]\) && '' !== \(string\) \$raw && "
+         r"!in_array\(\$raw, \$opts, true\)\) \{", True),
+        ('...which is the value the record prints until it is re-saved', 'php',
+         r"\$own = \(\$container !== '' && function_exists\('sinofresh_container_label'\)\)",
+         True),
     ],
 }
 
