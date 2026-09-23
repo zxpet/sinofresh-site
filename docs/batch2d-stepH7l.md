@@ -3,7 +3,9 @@
 > 版本 **2.10.73**。产品提交 `79ec18e`（本批唯一一次代码改动）。
 > 门：`tools/b2d_h7_gate.py --batch h7l` → `_backup/b2d-h7l-gate.{json,log}` 与 `…-gate-source.{json,log}`。
 > E2E：`tools/b2d_h7l_e2e.py` → `_backup/b2d-h7l-e2e-{pre,live}.json`。
-> 帧：`tools/b2d_h7l_shots.py` → `docs/batchH7l-shots/`（**12 张，含 2 张 before**）。
+> 上线后验收：`tools/b2d_h7l_live_accept.py --frames` → `_backup/b2d-h7l-live-accept.{json,log}`。
+> 帧：`tools/b2d_h7l_shots.py` → `docs/batchH7l-shots/`（**12 张，含 2 张 before**）
+> ＋ `docs/batchH7l-live-shots/`（**8 张 live 帧**）。
 
 ## 〇、本批最重要的事：四项报障里只有两项是真缺陷
 
@@ -137,7 +139,7 @@ live HTML 实测：`<a class="sf-fdetail2__cta" href="/contact/#quote" data-sf-i
 
 **待办1 与待办2 的 24 条在 live 上全绿** —— 这就是 §〇.1／§〇.2 的报告证据：它们**在 live 上已经是达标的**，红的只有这次要动的两项。
 
-### 四·一、一条**指错了元素**的断言（本批第二次犯，已重构）
+### 四·一、一条**指错了元素**的断言（同类错第三次，已重构）
 
 门与 E2E 首次全跑后，唯一一条红是
 `待办25 ...and its 32px bold price | {'size': '17px', 'weight': '700'}`。
@@ -164,7 +166,9 @@ live HTML 实测：`<a class="sf-fdetail2__cta" href="/contact/#quote" data-sf-i
 
 这四条在 **live 跑里也全绿**（同一组数字）—— 于是「移动没有顺手动样式」这件事是由**两份独立测量给出同一个值**来证的，而不是靠一个硬编码数字。
 
-> ⛔ 这是本项目**第二次**出现同类错（H7k 的 `secBox`／`paint-not-class` 是同族）。登记为复发项：**凡判据里出现某个尺寸，先问「这个元素是不是那个尺寸的载体」，不要从名字猜。**
+> ⛔ 这是「断言指错了对象／范围」这一族错在本项目**第三次**出现。登记为复发项：
+> **凡判据里出现某个尺寸，先问「这个元素是不是那个尺寸的载体」，不要从名字猜。**
+> 族谱：① H7k `secBox`（量的是「改动过的东西恰好住着的容器」）；② H7k「其余大区块都 48px」（把例外当全体）；③ 本条。
 
 ## 五、几何实测
 
@@ -205,6 +209,8 @@ live HTML 实测：`<a class="sf-fdetail2__cta" href="/contact/#quote" data-sf-i
 | 09 | after：zh 孪生页认证卡片 —— **与 05 逐字节相同**（`md5 b263b021…`）：这条带是**语种无关**的，lede 与六个名字在 zh 页上也是英文，所以它不是一份独立佐证，而是「没被翻译」这件事的证据 |
 | 10 | after：zh 孪生页右栏（阶梯同样在简介下） |
 
+上线后同一套画面在 live 路由上又拍了一遍（`docs/batchH7l-live-shots/`，8 张，与上表有对应关系的 8 张**逐字节相同**），见 §九.3。
+
 ## 七、工具链踩坑（本批实测）
 
 - ⛔ **拍帧脚本必须用带 Pillow 的解释器**：`/Users/meng/.workbuddy/binaries/python/versions/3.13.12/bin/python3` **没有 PIL**，会 `ModuleNotFoundError`（在 `import` 那一行就死，看起来像脚本没写完）。用 `~/.workbuddy/binaries/python/envs/default/bin/python`（Pillow 12.2.0）。跑 E2E 用前者、拍帧用后者，本批就是这么分工的。
@@ -213,9 +219,71 @@ live HTML 实测：`<a class="sf-fdetail2__cta" href="/contact/#quote" data-sf-i
 
 ## 八、仍需用户处理／待裁决
 
-1. **是否把 2.10.73 pull 到 dev**：本批按用户给的执行顺序止于「commit + push」，上 dev 在批 B/C/D 的先例里都是**每次单独授权**，因此这里**不动**，等一句话。
-2. **认证带高度 245.4px vs brief 的「约 200px」**（§五）：要压缩需破 brief 自己给的一条字面值，等裁决。
-3. **预检副本** `79ec18e1…`（2.10.73）在 pull 之后就是 live 的冗余副本；更旧的四份更加过时。**删/留仍未获授权**，登记。
+1. **是否把 2.10.73 pull 到 dev** —— **已由用户裁决「现在 pull」并执行完毕，见 §九**。
+2. **认证带高度 245.4px vs brief 的「约 200px」** —— **已由用户裁决「保持现在的 245.4px」**，不再改。
+3. **预检副本 `79ec18e1…`（2.10.73）在 pull 之后就是 live 的冗余副本**：`diff -rq live主题 preflight主题` **零输出**（逐字节相同），且有对应关系的 **8 张 live 帧也与预检帧逐字节相同**（见 §九.3）。更旧的四份更加过时。**删/留仍未获授权**，登记。
 4. **post 158 三处演示值**（`sf_formula_video_url` / `sf_formula_sample_price` / `sf_formula_price_tiers`）仍待销售填真数据，回滚档 `_backup/b2d-h7i-post158/before.json`；本批**不碰 post meta**。
 5. **HTML 的 1 天浏览器缓存**（Apache `ExpiresDefault "access plus 1 day"` ⇒ `Cache-Control: max-age=86400`）用户选择**先不动服务器**；所以在浏览器里验收时需 `Cmd+Shift+R`（样式表 URL 带 `?ver=2.10.73` 已是新资源，不受影响）。
 6. 长期未变：生产上线（`docs/dev-lockdown.md` 的 10 项移除，最易漏 `blog_public` 0→1）与 Shape(8)/Container(7) 图库待传图。
+
+## 九、上线 dev（2026-09-23，用户授权）＋ 上线后验收
+
+### 9.1 执行与结果
+
+| 步 | 命令 | 结果 |
+|---|---|---|
+| 1 | `git push origin main` | `79ec18e..4dc3da4`；`origin/main` = `4dc3da4` |
+| 2 | `ssh root@65.49.215.152` → `cd /var/www/dev.zxpet.com/site-repo` | `git fetch --prune origin` → `79ec18e..4dc3da4`；`git pull --ff-only` 快进 `63a7f1d → 4dc3da4`，无冲突 |
+| 3 | `git rev-parse HEAD origin/main` | 两者同为 `4dc3da40f6bc68888b5895879060f7604fd7b56e` |
+| 4 | live 主题（symlink → `site-repo/sinofresh-theme`） | `style.css` `Version: 2.10.73`；`functions.php` enqueue `'2.10.73'`；`array_unshift($groups, …)` 在 **2327** 行；`.sf-certstrip__badge` 卡片规则在 **2474** 行 |
+| 5 | 权限 | `style.css` / `functions.php` 均 `644 root:root` ⇒ apache 可读，**无需改属主** |
+
+**未做任何 dev 封锁变更**；`zz-sf-dev-lockdown.php` 与 Basic Auth 原样保留。**生产站零改动。**
+
+### 9.2 上线后验收（`tools/b2d_h7l_live_accept.py --frames`，**不带 `X-SF-Preflight`**）
+
+**64/64 PASS，exit 0**；帧 8 张、0 平帧 → `docs/batchH7l-live-shots/`（`_backup/b2d-h7l-live-accept.{json,log}`）。
+
+⚠️ 这个脚本的 `served()` 门是**反的**：它必须证明答话的是
+`themes/sinofresh-theme/style.css?ver=2.10.73`，并且**不是** `-preflight` 副本。
+上线**前**把同一个 URL 抓下来，答的是 `themes/sinofresh-theme/style.css?ver=2.10.72`
+＋ 阶梯在列底（`pricing 350 > flavor 202`）—— 所以这条门正是区分「pull 生效」与
+「还在读旧字节」的那一条，其余断言都挂在它后面，且这条**失败即中止**（不记成一条红）：
+一份关于错字节的报告比没有报告更糟。
+
+| 用户要求验证 | 实测 |
+|---|---|
+| `themes/sinofresh-theme/style.css?ver=2.10.73` | 详情页／首页／`/zh/`／`/zh/formulas/…` 四处门全 OK（`pre: False`） |
+| 待办25 价格在简介下 | DOM `intro 198 < pricing 202 < flavor 235`；屏幕 `510.4 < 678.4 < 862.2`；zh 孪生页 `200/204/237` |
+| 待办25 手机折叠摘要含价格 | `/formulas/…` @375 `folded: True`、`pricing: block`、`flavor/weight: block`、`pack/shape/container: none` |
+| 待办25 样式未被顺手改动 | 栏标题 `32px/700`、阶梯价 `17px/700`（↔ live 上线前**同一组数字**）；三列卡 `148.266px ×3` |
+| 待办1 三档文字 | `10-99` / `100-999` / `≥1,000`；价格 `US$3.88/3.58/3.28`；`Custom quantity` **0 次**；回显行 `10-99 — US$3.88 / unit · …` |
+| 待办2 Send Inquiry ＋ 弹窗 | `a.sf-fdetail2__cta`／`Send Inquiry`／`href=/contact/#quote`／`data-sf-inquiry-open`；**真点击**后弹窗 `hidden: False`、`isOpen: True`，**0.8s 后读第二遍**仍是 `isOpen: True`（同 tick 那一次读的是 `requestAnimationFrame` 之前的态，两次都记在 JSON 里）；弹窗重印三档 |
+| 待办4 认证卡片 | 1440 三列两行 / 768 两列三行 / 375 **两列**三行；卡片 `Mist rgb(243,246,244)` ＋ `1px rgb(220,226,223)` ＋ `8px`；图标 `40×40`（375 步到 `32×32`）；内边距 `16px`（375 `12px`）；间距 `16px`（375 `12px`）；图标中线偏差 **0.0px / 0.05px** |
+| 待办4 带高 | **245.4px**（1440）／331.6（768）／324.9（375）—— 与上线前的预检实测**逐位相同** |
+| 广度 | **75 条路径全部有响应**、主题锚全部 `themes/sinofresh-theme/…?ver=2.10.73`、旧认证标记（`sf-certgrid`／`article.sf-certcard`）**0 处残留** |
+
+**缓存无需清**：CF `cf-cache-status: DYNAMIC`（HTML 不入 CF 缓存）；样式表 URL 带 `?ver=2.10.73` 已是新资源。
+
+### 9.3 两条路由现在渲染同一份像素
+
+- 服务器上 `diff -rq …/themes/sinofresh-theme …/themes/sinofresh-theme-preflight` → **零输出**（逐字节相同）。
+- 本地 **8/8 live 帧与预检帧 md5 相同**（`b6a6d7c2…`、`6090402f…`、`9684b9ef…`、`b263b021…`、`2075ebf7…`、`d80a11c8…`、`b263b021…`、`3a9945ad…`）。
+
+⇒ **「pull 生效」与「预检副本已冗余」这两件事，各由一份独立证据给出**；`79ec18e1…` 现在可以删（未获授权）。
+
+### 9.4 验收脚本里三条断言是我写错的（已重构，未放宽）
+
+首次运行 **65 项 / 3 红**，三条全在 375 上：`待办4 the card surface … 16px`、`the icon is 40x40 …`、`the chips sit on a 16px gutter`。
+实测 `cardPad 12px`／`iconW 32px`／`rowGap 12px` —— **产品的手机步是对的**。
+
+根因：我把 E2E 的 `strip_checks` 抄进验收脚本时，**丢掉了它的按宽度作用域** ——
+E2E 只对 1440 与 768 调用这套桌面令牌，375 另有一套；抄过来变成对三个宽度都调用，
+于是拿桌面令牌去量一个**明写在 brief 里会变**的断点。改成把期望的 `icon/pad/gap`
+**作为参数按宽度传入**（`(375, 2, 3, "32px", "12px", "12px")`）：
+既是修错，也是更严的写法 —— 它要求那个步长是**具体那一个**，而不只是「不等于桌面值」。
+
+> ⛔ **这是「断言指错了对象／范围」这一族的第四次复发。** 这回的形态是
+> **「抄一套断言时丢掉它的作用域」**。登记：**凡带断点的组件，判据必须与断点一一对应，
+> 不能有一套「通用值」跨宽度复用。**
+
