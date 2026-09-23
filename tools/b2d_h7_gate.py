@@ -5061,12 +5061,18 @@ def _h7l_move(text, place='head', drop=False, copy=False):
         return text, 0
     e += len(H7L_GROUP_END)
     group = text[s:e]
+    if copy:
+        # The other half of the drop/move pair, and it has to be written before
+        # the removal: a "move" implemented by writing a SECOND copy at the head
+        # and leaving the first one where it was. Removing first and re-inserting
+        # the same string is this batch, not a mutant of it — which is how this
+        # control reported "the gate let this through" on its first run.
+        j0 = i + len(H7L_LIST)
+        return text[:j0] + group + text[j0:], 1
     rest = text[:s] + text[e:]
     if drop:
         return rest, 1
     j = rest.find(H7L_LIST) + len(H7L_LIST)
-    if copy:
-        return rest[:j] + group + rest[j:], 1
     if place == 'second':
         m = H7L_GROUPS.search(rest, j)
         if not m:
@@ -5150,11 +5156,19 @@ BATCHES['h7l'] = {
         ('the certificate dialog', r'sf-certmodal', 1),
         ('the navigation', r'wp-block-navigation', 75),
         ('the parameter column', r'sf-fdetail-config__group', 42),
-        # The group the ladder was filed behind, and the one above it: the move
-        # must not be paid for by another group leaving.
-        ('the flavor group', r'data-sf-config-group="flavor"', 42),
-        ('the shape group', r'data-sf-config-group="shape"', 42),
-        ('the container group', r'data-sf-config-group="container"', 42),
+        # Every group the ladder was filed among, claimed per page but — except
+        # for the ladder itself — NOT with an absolute number. Which groups a
+        # record has comes from its own meta, and the sales team fills that in
+        # (measured on this baseline: weight 42 pages, shape 42, pack 20, the
+        # ladder 2, container 2, flavor 2). The claim is the one that matters
+        # here: the move added a group to no page and took one from no page.
+        ('the flavor group', r'data-sf-config-group="flavor"', None),
+        ('the unit weight group', r'data-sf-config-group="weight"', None),
+        ('the pack size group', r'data-sf-config-group="pack"', None),
+        ('the shape group', r'data-sf-config-group="shape"', None),
+        ('the container group', r'data-sf-config-group="container"', None),
+        ('...and the ladder is still on no page it was not on',
+         r'data-sf-config-group="pricing"', 2),
         ('the gallery tabs', r'sf-gallery__tabs', 42),
         ('the side column', r'sf-fdetail2__side', 42),
     ],
@@ -5183,7 +5197,7 @@ BATCHES['h7l'] = {
         ('the ladder stays ahead of the sample row it carries',
          'sf-fdetail-config__tiers', 'sf-fdetail-config__sample"', H7L_RECORD),
         ('the column still ends on its inquiry button, after the spec list',
-         'sf-fdetail2__params', H7L_CTA, H7L_RECORD),
+         'sf-fdetail2__params', 'data-sf-inquiry-open>Send Inquiry</a>', H7L_RECORD),
         ('the strip is still a lede, then a row, then the link',
          'sf-certstrip__lede', 'sf-certstrip__more', lambda n: n in H7L_HOME),
     ],
@@ -5242,19 +5256,25 @@ BATCHES['h7l'] = {
          "\tcolor: var(--wp--preset--color--primary);\n}"),
         ('NC-src the source pass fails when the phone step stacks the cards',
          'style.css',
-         '@media (max-width: 420px) {\n\t.sf-certstrip__row {\n\t\tgap: 12px;',
-         '@media (max-width: 420px) {\n\t.sf-certstrip__row {\n\t\tgrid-template-columns: minmax(0, 1fr);'),
+         "\t.sf-certstrip__row {\n\t\tgap: 12px;\n\t}",
+         "\t.sf-certstrip__row {\n\t\tgrid-template-columns: repeat(2, minmax(0, 1fr));\n\t}"),
     ],
     'nc_page': [
-        # 待办25 — the two claims a page edit can break that the MAIN PROOF
-        # cannot see, because the payload is removed whole: the address, and the
-        # three breaks.
+        # 待办25/待办4 — the claims a page edit can break that the MAIN PROOF
+        # cannot see, because the payload is removed whole from the comparison:
+        # the address, the card count, and a group that quietly leaves.
         ('NC-page the invariants fail when the ladder is pushed back to the foot',
          'formulas__joint-support-soft-chews.html',
          lambda t: _h7l_move(t, place='tail')[0]),
-        ('NC-page the invariants fail when a break stops being a break',
+        ('NC-page the invariants fail on a seventh card in the band',
+         'root.html',
+         lambda t: t.replace('<ul class="sf-certstrip__row" role="list">',
+                             '<ul class="sf-certstrip__row" role="list">'
+                             '<li class="sf-certstrip__badge"></li>', 1)),
+        ('NC-page the invariants fail when a record loses a parameter group',
          'formulas__joint-support-soft-chews.html',
-         lambda t: t.replace('sf-tier__dot', 'sf-tier__dots', 3)),
+         lambda t: t.replace('data-sf-config-group="shape"',
+                             'data-sf-config-group="shapX"', 1)),
     ],
     'nc_blind': ('formulas__joint-support-soft-chews.html',
                  '>≥1,000<', '>≥1000<'),
