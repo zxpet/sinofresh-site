@@ -6209,12 +6209,18 @@ body.sf-inquiry-lock {
 .sf-keyfacts {
 	width: 100%;
 	/* 待办22 — the table capped itself at 720px and auto-centred inside a
-	   1200px content box, so its two ends sat 240px inside the heading's. It
-	   spans the content box exactly now, and `margin: … 0 …` states that the
-	   left edge is flush with it rather than auto-centred. The 140px on the
-	   first column below stays a hint, not a cap: at 1200px the Detail column
-	   simply takes what is left. */
-	max-width: none;
+	   1200px content box, so its two ends sat 240px inside the heading's.
+	   The cap is now the SAME one the heading is held to rather than `none`:
+	   the section is an `is-layout-constrained` group, so core already caps
+	   its block children at `--wp--style--global--content-size` and centres
+	   them — the heading measures 1200px inside a 1364px content box. Writing
+	   `none` there took the table OUT of that rule and let it fill all
+	   1364px, which put its ends 82px outside the heading's on each side. The
+	   measured fix needs both halves: this cap, and the `auto` side margins
+	   core applies with `!important`, so the table centres into the same
+	   1200px the heading occupies. The 140px on the first column below stays a
+	   hint, not a cap: at 1200px the Detail column simply takes what is left. */
+	max-width: var(--wp--style--global--content-size);
 	margin: 24px 0 0;
 	border-collapse: collapse;
 	font-size: 16px;

@@ -1945,6 +1945,29 @@ def invariants(decl, base, cand, verbose=True):
             print('  %-28s pages off the declared count = %d %s  %s'
                   % (label, len(bad), bad[:3] if bad else '', 'ok' if good else 'FAIL'))
 
+    # A count that has a SECOND carrier on the page, read from the BASELINE, so
+    # the claim is not "the candidate agrees with itself" one carrier over. H7k
+    # is why this exists: its transform WALKS the card wall, so a wall that
+    # renders twenty tiles while its own ItemList publishes `numberOfItems: 21`
+    # is exactly what the transform mirrors — `mask(transform(baseline)) ==
+    # mask(candidate)` is green, and the disagreement between the two carriers
+    # of that one number is invisible. The counter takes (base, page) and must
+    # read the baseline; reading the candidate would be the circularity this
+    # clause is here to avoid.
+    for label, pat, count_fn in decl.get('corroborated', []):
+        bad = []
+        for n in names:
+            got = counts_of(read(os.path.join(cand, n + '.html')), pat)
+            expect = count_fn(base, n)
+            if got != expect:
+                bad.append((n, got, expect))
+        good = not bad
+        ok &= good
+        rows.append({'label': label, 'bad_pages': len(bad), 'first': bad[:4], 'ok': good})
+        if verbose:
+            print('  %-28s pages off their second carrier = %d %s  %s'
+                  % (label, len(bad), bad[:3] if bad else '', 'ok' if good else 'FAIL'))
+
     # Where the new bytes SIT, which no other check can see. A page that carries
     # the band at the wrong address is byte-identical to one that carries it at
     # the right address as far as the main proof is concerned — with
@@ -1981,6 +2004,23 @@ def invariants(decl, base, cand, verbose=True):
     if delta is None:
         good = not moved
         verdict = 'pages with a moved h2 = %d (declared: none)' % len(moved)
+    elif isinstance(delta, dict):
+        # H7k. The scalar form below keys the clause to `decl['applies']`, which
+        # counts the batch's EDITS — 1500 for H7j, 163 for H7k. That makes the
+        # scalar form able to say only "every declared edit moved a heading",
+        # and H7k removes ONE heading from TWO of the 75 pages while making 163
+        # edits elsewhere. The honest claim is therefore a page SET and a
+        # per-page delta, and it is narrower than the scalar form rather than
+        # looser: an h2 that moves on any other page fails, and one that moves
+        # on a declared page by any other amount fails. Both halves are made to
+        # fire by named controls (NC-page, --negctl): one injects an h2 on a
+        # page outside the set, one strips a second h2 from a page inside it.
+        want_pages = sorted(delta['pages'])
+        step = delta['delta']
+        good = ([n for n, _, _ in moved] == want_pages
+                and all(hc - hb == step for _, hb, hc in moved))
+        verdict = ('pages with a moved h2 = %d (declared %d: %s), each %+d'
+                   % (len(moved), len(want_pages), ','.join(want_pages), step))
     else:
         good = (len(moved) == decl['applies']
                 and all(hc - hb == delta for _, hb, hc in moved))
@@ -2230,9 +2270,37 @@ def aa(dir_a, dir_b, verbose=True, labels=('--cand', '--aa'), strict=True):
 # --------------------------------------------------------------- sabotage set
 
 def _clone(src, dst):
+    """Clone a tree for a mutant to be applied to.
+
+    `dirs_exist_ok=True` is load-bearing on this host, not a convenience. The
+    sandbox's file broker creates the destination's directory skeleton itself
+    before the real `copytree` walks the source, so the real one meets its own
+    directories already built and raises a `shutil.Error` whose list contains
+    DIRECTORIES ONLY — never files. Measured on the 745-file theme tree into a
+    fresh `mkdtemp`: the failing names were exactly the theme's nine depth-1
+    directories (`_backup`, `_backup_x`, `assets`, `docs`, `inc`, `parts`,
+    `screenshots`, `templates`, `tools`) plus a varying handful of deeper
+    `_backup/*` ones, and the count differed run to run (58, 60, 71) — which is
+    how we know it is a race and not a rule. Tolerating the pre-existing
+    directories is the right reading of it: the copy the broker made is the copy
+    we want. Verified by sha256 manifest — `dirs_exist_ok=True` and `cp -a` both
+    produced all 745 files with 0 missing, 0 extra and 0 differing bytes, three
+    runs each, measured the instant the call returned.
+
+    That last measurement is the reason for the count check below rather than a
+    comment alone: if the broker's copy ever WERE still in flight when the
+    original returned, every source claim downstream would silently read a
+    half-cloned theme, and the controls that exist to fail loudly would instead
+    pass quietly. A file count is 745 `stat`s — cheap next to that.
+    """
     if os.path.exists(dst):
         shutil.rmtree(dst)
-    shutil.copytree(src, dst)
+    shutil.copytree(src, dst, dirs_exist_ok=True)
+    want = sum(len(f) for _, _, f in os.walk(src))
+    got = sum(len(f) for _, _, f in os.walk(dst))
+    if got != want:
+        raise RuntimeError('_clone: %s got %d files, %s has %d — the copy is '
+                           'not complete' % (dst, got, src, want))
     return dst
 
 
@@ -4192,6 +4260,726 @@ BATCHES['h7j'] = {
          r"foreach \(sf_nav_active_styles\(\) as \$nav_slug => \$nav_label\)", True),
         ('and the switch sits under its own heading', 'php',
          r'<h2 class="title">Appearance</h2>', True),
+    ],
+}
+
+
+# ---------------------------------------------------------------------- H7k
+#
+# 待办14 (the card still becomes a link), 待办17 (the card badge), 待办18 (the
+# compliance band becomes a strip), 待办19 (the tour checklist becomes two
+# columns), 待办22 (the Key Facts table spans the content box).
+#
+# ONE of the five lives entirely in the stylesheet — 待办22 never touches a page
+# — and one of them renders NOTHING on this data set (待办17: no record carries a
+# badge value yet). The remaining three are per-record or per-page markup, and
+# none of them is a whole-region splice of fixed text, so this batch runs on the
+# `insert` branch: the expected page is built from the baseline by
+# RE-IMPLEMENTING the three declared rules.
+#
+# That is only honest if every byte the transform adds is DERIVED from the page
+# it is added to, which is how H7g and H7i were built too. Here:
+#
+#   * the image link's href is the record's own URL and its label interpolates
+#     the record's own title — both read off the card's title anchor, which is
+#     the same `$url` and the same `$name` the renderer used to build the link,
+#     because the renderer computes each once and uses it for the still, the
+#     title and the "View formula" button;
+#   * each chip's drawing is the seal's own `<g>` body, copied verbatim, and its
+#     text is the seal's own `<h3>` — the batch replaced six card frames with six
+#     chips and was never licensed to redraw or relabel anything;
+#   * the two tour columns are built from the page's own five paragraphs.
+#
+# A table of 163 literal strings would have been shorter to write and would have
+# drifted from the renderer the first time a formula was added — which is the
+# same reason H7g rejected the table.
+
+H7K_FIG = '<figure class="sf-fcard__media">'
+H7K_FIG_TAIL = '</figure>'
+
+# The card, from the media block through the title anchor. Every step is a
+# bounded class rather than `.*?`, so the match cannot walk out of one card and
+# into the next if a card ever loses a part: an unmatched card is left alone and
+# then caught by the count guard below, instead of being silently re-cut.
+H7K_CARD = re.compile(
+    r'<figure class="sf-fcard__media">(?P<img><img [^>]*/>)' + re.escape(H7K_FIG_TAIL) +
+    r'<div class="sf-fcard__body"><span class="sf-fcard__use">(?P<use>[^<]*)</span>'
+    r'<h3 class="sf-fcard__name"><a href="(?P<url>[^"]+)">(?P<name>[^<]*)</a></h3>')
+
+# The label is sprintf('View the %s formula', $name) through esc_attr(); the
+# name is esc_html() of the SAME post title two elements later. In WordPress
+# both escapers are one function (_wp_specialchars with ENT_QUOTES) and escape
+# the same five characters to the same entities, so the title anchor's own text
+# can be interpolated verbatim — which is what makes this a rule and not a
+# lookup. If a future title ever makes the two disagree, the derivation guard
+# does not fire (it cannot see the difference) and the MAIN PROOF does: the
+# label would then differ from the renderer's bytes.
+H7K_LINK = '<a class="sf-fcard__imagelink" href="%s" aria-label="View the %s formula">%s</a>'
+H7K_LABEL_ALT = '<a class="sf-fcard__imagelink" href="%s" aria-label="%s">%s</a>'
+
+# The two elements the band carried and no longer does. Named once, because
+# the coverage claim and the transform must agree on the bytes to the last
+# character — a needle that spelled them out again would be a second copy free
+# to drift. Both carry the WHOLE tag: /quality/ writes the same words with the
+# same two classes in the other order, so a needle stopping at the words would
+# find a survivor.
+H7K_EYEBROW_BAND = ('<p class="has-text-align-center sf-eyebrow wp-block-paragraph">'
+                    'Compliance</p>')
+H7K_H2_BAND = ('<h2 class="wp-block-heading has-text-align-center">'
+               'Certifications &amp; Registrations</h2>')
+
+# 待办18, the old head: the 48px padding, the eyebrow, the h2, the lede
+# paragraph and the card grid's opening tag, all contiguous on both home pages.
+# Anchored on the whole run rather than on the eyebrow comment, because the home
+# page writes an `align:center` eyebrow comment TEN times — anchoring there
+# despatched 310 lines of the page the first time this edit was scripted, which
+# is why the uniqueness guard in _h7k_band() is not decoration.
+H7K_BAND_OLD = (
+    'style="padding-top:48px;padding-bottom:48px">\n\n' + H7K_EYEBROW_BAND + '\n\n\n' +
+    H7K_H2_BAND + '\n\n\n'
+    '<p class="has-text-align-center has-text-secondary-color has-text-color wp-block-paragraph">'
+    'Registered and audited production — full documentation available on request.</p>\n\n\n'
+    '<div class="sf-certgrid" role="list">')
+H7K_BAND_NEW = (
+    'style="padding-top:32px;padding-bottom:32px">\n\n'
+    '<div class="sf-certstrip">\n'
+    '<p class="sf-certstrip__lede">Certified to the standards global pet brands trust</p>\n'
+    '<ul class="sf-certstrip__row" role="list">')
+
+# One seal card. `pre` and `post` are captured because the "compact" mutant
+# keeps the 88px frame, its role="img" and its decorative label — the wrong
+# answer that a strip with the old seals would produce. The case of the viewBox
+# attribute is captured rather than assumed: the zh twin renders through
+# render_block() and writes `viewbox`, the raw template writes `viewBox`, and
+# the chip must keep whichever one ITS page used.
+H7K_SEAL = re.compile(
+    r'\t\t\t\t<article class="sf-certcard">\n'
+    r'\t\t\t<svg (?P<pre>[^>]*?)(?P<case>viewBox|viewbox)="0 0 96 96"(?P<post>[^>]*)>'
+    r'(?P<body><g [^>]*>.*?</g>)'
+    r'(?P<texts>(?:<text [^>]*>[^<]*</text>)*)</svg>\n'
+    r'\t\t\t\t\t<h3 class="sf-certcard__name">(?P<name>[^<]*)</h3>\n'
+    r'\t\t\t\t\t<p class="sf-certcard__issuer">[^<]*</p>\n'
+    r'\t\t\t\t</article>')
+
+H7K_CHIP = ('<li class="sf-certstrip__badge"><svg class="sf-certstrip__icon" '
+            'width="32" height="32" %s="0 0 96 96" aria-hidden="true" focusable="false">'
+            '%s</svg><span class="sf-certstrip__name">%s</span></li>')
+H7K_CHIP_BIG = ('<li class="sf-certstrip__badge"><svg %s%s="0 0 96 96"%s>%s%s</svg>'
+                '<span class="sf-certstrip__name">%s</span></li>')
+H7K_BAND_TAIL = ('\n</ul>\n<p class="sf-certstrip__more"><a href="%s">'
+                 'View all certifications &rarr;</a></p>\n</div>')
+
+# --- 待办19: two columns ---------------------------------------------------
+H7K_PREP_H2 = '<h2 class="has-text-align-center wp-block-heading">What to Prepare</h2>'
+H7K_PREP_COLS = ('<div class="wp-block-columns sf-prepare is-layout-flex '
+                 'wp-container-core-columns-is-layout-7387b849 '
+                 'wp-block-columns-is-layout-flex">\n\n')
+H7K_PREP_COL = '<div class="wp-block-column is-layout-flow wp-block-column-is-layout-flow">\n\n'
+H7K_PREP_P = re.compile(r'<p class="wp-block-paragraph" style="font-size:16px">.*?</p>')
+
+
+def _h7k_figure(img, url, name, outside=False, alt_label=False):
+    """The media block after 待办14: the still inside a link, inside the figure.
+
+    The link is INSIDE the figure and the body follows it, which is the
+    renderer's own order — the badge is appended to the figure as a SIBLING of
+    the still (K7), so a link around the FIGURE rather than around the image
+    would swallow the badge's label into the link's accessible name. `outside`
+    is that wrong answer; `alt_label` is the other one, a link named after what
+    the still depicts instead of where it goes."""
+    if alt_label:
+        alt = re.search(r'alt="([^"]*)"', img)
+        link = H7K_LABEL_ALT % (url, alt.group(1) if alt else '', img)
+    else:
+        link = H7K_LINK % (url, name, img)
+    if outside:
+        return H7K_LINK % (url, name, H7K_FIG + img + H7K_FIG_TAIL)
+    return H7K_FIG + link + H7K_FIG_TAIL
+
+
+def _h7k_body(m):
+    return ('<div class="sf-fcard__body"><span class="sf-fcard__use">' + m.group('use') +
+            '</span><h3 class="sf-fcard__name"><a href="' + m.group('url') + '">' +
+            m.group('name') + '</a></h3>')
+
+
+def _h7k_cards(text, outside=False, alt_label=False):
+    n = 0
+
+    def one(m):
+        nonlocal n
+        n += 1
+        return (_h7k_figure(m.group('img'), m.group('url'), m.group('name'),
+                            outside=outside, alt_label=alt_label) + _h7k_body(m))
+
+    out = H7K_CARD.sub(one, text)
+    figs = text.count(H7K_FIG)
+    if n != figs:
+        # A card the rule cannot read is NOT left half-linked: the batch claims
+        # "every still on this page becomes a link", so a card that does not
+        # match means the rule has stopped describing the renderer and the run
+        # must stop rather than report a partial pass.
+        raise AssertionError('H7k: %d of the %d stills did not carry the card shape'
+                             % (figs - n, figs))
+    return out, n
+
+
+def _h7k_band(text, big_seals=False):
+    """待办18 — six cards become one strip of six chips, and two elements go.
+
+    `big_seals` is the wrong answer this batch is most likely to attract: the
+    band is rebuilt, the chips are built, but the drawing is carried over whole
+    — the 88px frame, its role="img", its decorative aria-label and the two
+    <text> elements that letter it. It is the 'compact' band that is not
+    compact, and it is why the seal regex captures the parts the good path
+    throws away."""
+    if H7K_BAND_OLD not in text:
+        return text, 0
+    if text.count(H7K_BAND_OLD) != 1:
+        raise AssertionError('H7k: the compliance band run is not unique')
+    text = text.replace(H7K_BAND_OLD, H7K_BAND_NEW)
+    k = text.index(H7K_BAND_NEW) + len(H7K_BAND_NEW)
+    j = text.index('\n</div>', k)
+    old = text[k:j + len('\n</div>')]
+    run = old[:-len('\n</div>')]
+    if not old.endswith('\n</div>'):
+        raise AssertionError('H7k: the chip run does not end where the grid does')
+    ms = list(H7K_SEAL.finditer(run))
+    if not ms or '\n'.join(m.group(0) for m in ms) != run.lstrip('\n'):
+        raise AssertionError('H7k: the seal run did not parse whole')
+    if big_seals:
+        chips = '\n'.join('\t\t\t' + H7K_CHIP_BIG % (m.group('pre'), m.group('case'),
+                                                     m.group('post'), m.group('body'),
+                                                     m.group('texts'), m.group('name'))
+                          for m in ms)
+    else:
+        chips = '\n'.join('\t\t\t' + H7K_CHIP % (m.group('case'), m.group('body'),
+                                                 m.group('name'))
+                          for m in ms)
+    # The link's language prefix is the one TranslatePress would write, and it
+    # is read off the page rather than assumed: the "View Full Certifications"
+    # button eight lines below already carries it, on both home pages.
+    href = ('/zh/quality/#certifications' if '<html lang="zh-CN"' in text
+            else '/quality/#certifications')
+    # Cut at `k + len(old)` and NOT at `j + len(old)`: `old` starts at `k`, not
+    # at `j`, and the first version of this line resumed `len(run)` bytes too
+    # far — it ate the opening tag of the next section and left its own tail
+    # welded to the previous `</div>`, one mangled line and no other symptom.
+    return text[:k] + '\n' + chips + H7K_BAND_TAIL % href + text[k + len(old):], 1
+
+
+def _h7k_prepare(text, split_at=3):
+    """待办19 — the five checklist paragraphs become two columns of 3 and 2.
+
+    The paragraphs themselves are reused byte-for-byte; only the wrappers are
+    new. Below 782px core's own `.wp-block-columns` media query stacks them, so
+    this costs the theme no CSS at all — which is why the batch adds none.
+
+    The blank runs are the block editor's, and they are NOT symmetric: the run
+    before the first item is three newlines, the runs between items are three,
+    a column closes on two, and the two columns close on two each. Measured off
+    the rendered page rather than assumed — the first version of this function
+    assumed a two-newline lead and the derivation guard stopped the run, which
+    is what the guard is for."""
+    if H7K_PREP_H2 not in text:
+        return text, 0
+    if text.count(H7K_PREP_H2) != 1:
+        raise AssertionError('H7k: the What to Prepare heading is not unique')
+    i = text.index(H7K_PREP_H2) + len(H7K_PREP_H2)
+    j = text.index('\n\n</section>', i)
+    block = text[i:j]
+    sep = '\n\n\n'
+    parts = block.split(sep)
+    paras = H7K_PREP_P.findall(block)
+    if len(parts) != 6 or len(paras) != 5 or parts[0] != '':
+        raise AssertionError('H7k: the checklist is %d runs / %d items'
+                             % (len(parts), len(paras)))
+    if parts[1:] != paras:
+        raise AssertionError('H7k: the checklist is not five plain paragraphs')
+    left, right = split_at, 5 - split_at
+    new = (sep + H7K_PREP_COLS + H7K_PREP_COL + sep.join(paras[:left]) +
+           '\n\n</div>\n\n\n' + H7K_PREP_COL + sep.join(paras[left:left + right]) +
+           '\n\n</div>\n\n</div>')
+    return text[:i] + new + text[j:], 1
+
+
+def _h7k_transform(text, cards=True, band=True, prepare=True, outside=False,
+                   alt_label=False, split_at=3, big_seals=False):
+    n = 0
+    if cards:
+        text, k = _h7k_cards(text, outside=outside, alt_label=alt_label)
+        n += k
+    if band:
+        text, k = _h7k_band(text, big_seals=big_seals)
+        n += k
+    if prepare:
+        text, k = _h7k_prepare(text, split_at=split_at)
+        n += k
+    return text, n
+
+
+def _h7k_partial(**kw):
+    """A mutant that answers one of the five declared questions differently."""
+    def f(text):
+        return _h7k_transform(text, **kw)
+    return f
+
+
+def _h7k_grid_page(name):
+    """The pages `<code>sf_formula_grid</code>` is placed on, by NAME: the eight
+    dosage pages, the archive and its twenty-one detail pages, and their zh twins
+    — 60 of the 75.
+
+    Transcribed from where the shortcode sits in the templates, which is the way
+    H7j transcribed the menu, and not read off the page: an `order` claim whose
+    scope came from the candidate would be asserting the candidate against
+    itself. The two counts that pin 60 are in `unmoved`."""
+    base = name[4:] if name.startswith('zh__') else name
+    return (base.startswith('products__') or base == 'formulas'
+            or base.startswith('formulas__'))
+
+
+def _h7k_items(base, page):
+    """How many cards the page's OWN ItemList says it has — the second carrier.
+
+    Read from the BASELINE capture on purpose: the clause this feeds exists to
+    catch the card wall and its ItemList drifting apart, and reading the number
+    off the candidate would let both move together and still agree."""
+    t = read(os.path.join(base, page + '.html'))
+    return sum(int(x) for x in re.findall(r'"numberOfItems":\s*(\d+)', t))
+
+
+# The same two facts as ONE regex: the link points at the record its own title
+# link points at (`\1`), and the still sits inside that link, inside the figure,
+# with the body following. A page whose count of these equals its ItemList total
+# has both the shape and the target right, which is the claim `scoped` could not
+# make — `scoped` demands zero OFF its scope, and 60 of these 75 pages carry one.
+#
+# The `aria-label` between the href and the `>` is why the first version of this
+# pattern matched nothing at all: the link's href is not its last attribute.
+H7K_IMAGELINK_EXACT = (
+    r'<a class="sf-fcard__imagelink" href="([^"]+)" aria-label="[^"]*"><img [^>]*/></a>' +
+    re.escape(H7K_FIG_TAIL) +
+    r'<div class="sf-fcard__body"><span class="sf-fcard__use">[^<]*</span>'
+    r'<h3 class="sf-fcard__name"><a href="\1">')
+
+H7K_HOME = ('root', 'zh')
+
+
+BATCHES['h7k'] = {
+    'name': "H7k — the still links, the badge is addable, the cert band is a strip, "
+            "the checklist is two columns, the Key Facts table fills the column",
+    'mode': 'insert',
+    'tokens': [
+        ('?ver=2.10.71', '?ver=2.10.72'),                      # style.css
+    ],
+    'transform': _h7k_transform,
+    'applies': 163,        # 160 card stills + 2 compliance bands + 1 checklist
+    'coverage': [
+        ('?ver=2.10.71', 0),
+        ('sf-certgrid', 0),
+        ('sf-certcard', 0),
+        # The band's OWN two strings, which is why they carry the class order
+        # the band wrote. /quality/ carries a heading with the same words and
+        # the same two classes in the other order (`has-text-align-center`
+        # first), so a needle that stopped at the words would claim 1 remains
+        # where 0 must — measured, and the reason this is the whole tag.
+        (H7K_H2_BAND, 0),
+        (H7K_EYEBROW_BAND, 0),
+        ('Registered and audited production', 0),        # The two <text> elements of every seal: 6 seals x 2 pages. The seal's
+        # drawing stays (it is the chip's icon now); its lettering goes, because
+        # the chip's own <span> carries the name.
+        ('font-size="12.5"', 0),
+        ('letter-spacing="1.6"', 0),
+    ],
+    'insertions': [
+        ('?ver=2.10.72', 75),
+        ('sf-fcard__imagelink', 160),
+        ('sf-certstrip__lede', 2),
+        ('sf-certstrip__row', 2),
+        ('sf-certstrip__badge', 12),
+        ('sf-certstrip__icon', 12),
+        ('sf-certstrip__name', 12),
+        ('sf-certstrip__more', 2),
+        ('Certified to the standards global pet brands trust', 2),
+        ('View all certifications', 2),
+        ('class="wp-block-columns sf-prepare', 1),
+        # 待办17 ships in this batch and renders NOWHERE, because no record
+        # carries the value — the user fills it in wp-admin, and the batch is
+        # forbidden from touching post meta. Zero is the claim, not an omission:
+        # a badge here would mean either the meta had been populated behind our
+        # back or the accessor had stopped treating "unset" as "no badge". The
+        # three colours are a SOURCE claim; that each one actually paints is the
+        # render harness's, which builds a record with every value in turn.
+        ('sf-fcard__badge', 0),
+    ],
+    'counts': [
+        # 待办18 — the band, four strings that only it carried, each with BOTH
+        # numbers: a total alone would let the band keep its cards while some
+        # other page grew six.
+        ('the six cards leave the two home pages', 'sf-certcard', 48, 0),
+        ('the page that carried the grid no longer does', 'sf-certgrid', 2, 0),
+        ('the compliance heading leaves the two home pages', H7K_H2_BAND, 2, 0),
+        ('and the eyebrow above it goes with it', H7K_EYEBROW_BAND, 2, 0),
+        # The band was 1 of the 22 sections asking for 48px. The other 21 are
+        # the ones that must NOT have moved — this pair is what says the edit
+        # was aimed at one section rather than at every 48px in the site.
+        ('the other twenty-one sections keep their 48px padding',
+         'padding-top:48px;padding-bottom:48px', 22, 20),
+        ('the seals stop lettering themselves', 'font-size="12.5"', 12, 0),
+        # The chip is the seal's drawing in a 32px frame, and its attribute case
+        # is the PAGE's: the template writes viewBox, the zh twin re-serialises
+        # through render_block() and writes viewbox. Six of each before and six
+        # of each after is what "the body survived, the frame was rebuilt" says
+        # in bytes — and it fails if the icon is redrawn rather than copied.
+        ('the drawing survives with its own case, six times over',
+         'viewBox="0 0 96 96"', 6, 6),
+        ('...and the lowercase form the zh renderer emits, six times',
+         'viewbox="0 0 96 96"', 6, 6),
+        # 待办14 — the still gains a link; the figure and the body around it do
+        # not move. The card is inside a <figure>, which is why wrapping the
+        # image cannot reorder anything.
+        ('every card still keeps its figure', H7K_FIG, 160, 160),
+        ('...and every card still keeps its body',
+         '<div class="sf-fcard__body">', 160, 160),
+        # The band kept its outline button and the testing bar under it.
+        ('the band keeps the button it already had', 'View Full Certifications', 2, 2),
+        ('and the testing bar under it is untouched', 'sf-certbar__item', 10, 10),
+        # 待办19 — the five items are the page's own paragraphs, reused whole.
+        ('the checklist still has the five items it had',
+         '<p class="wp-block-paragraph" style="font-size:16px">', 5, 5),
+    ],
+    'unmoved': [
+        ('the cookie banner', r'class="sf-cookie-banner"', 75),
+        ('the float stack', r'class="sf-float-stack"', 75),
+        ('the certificate dialog', r'sf-certmodal', 1),
+        ('the primary cta', r'sf-quote-cta', None),
+        ('the gallery tabs', r'sf-gallery__tabs', 42),
+        ('the configurator', r'sf-fdetail-config__group', 42),
+        ('the side column', r'sf-fdetail2__side', 42),
+        ('the card walls', r'<article class="sf-fcard"', 60),
+        ('the stills', H7K_FIG, 60),
+        # 待办17's zero, carried a second time as a PAGE count rather than an
+        # occurrence count. The two are not redundant: `insertions` counts the
+        # string across the site (and so cannot tell one page carrying three from
+        # three pages carrying one), while this counts the pages that carry it —
+        # and this is the only form the NC-page control can break, because that
+        # control runs `invariants` and `insertions` lives in `coverage`. Without
+        # it the control aimed at "a badge appears unasked" reported FAIL: it
+        # injected the badge correctly and no clause it could reach counted it.
+        ('no page carries a badge until a record asks for one',
+         r'sf-fcard__badge', 0),
+        # 待办22 is stylesheet-only, so the table's own markup must not move: a
+        # batch that reached its width by editing the table would be a different
+        # batch, and this is the line that says so.
+        ('the key facts table', r'<table class="sf-keyfacts"', 1),
+        ('the strip is not the only band on the two home pages',
+         r'class="sf-certbar"', 2),
+    ],
+    'per_page': [
+        ('h1', r'<h1[ >]', 1),
+        ('the new style token', r'style\.css\?ver=2\.10\.72', 1),
+    ],
+    'corroborated': [
+        # The card wall and its own ItemList are two carriers of one number, and
+        # the main proof cannot tell them apart: the transform walks the wall, so
+        # a wall showing twenty tiles while the JSON-LD above it says 21 is
+        # mirrored exactly and goes green. This reads the number from the
+        # baseline's ItemList and requires the candidate's links to match it —
+        # and because the pattern closes with a backreference, it also requires
+        # each link to point at the record its own title link points at.
+        ('the cards agree with the number the page publishes',
+         H7K_IMAGELINK_EXACT, _h7k_items),
+    ],
+    'order': [
+        ('the strip is a lede, then a row, then the link',
+         'sf-certstrip__lede', 'sf-certstrip__more', lambda n: n in H7K_HOME),
+        # The link is inside the figure, so the card's own title anchor comes
+        # after it. A link placed around the figure would invert this.
+        ('the still is linked ahead of the title it belongs to',
+         '<a class="sf-fcard__imagelink"', '<h3 class="sf-fcard__name">', _h7k_grid_page),
+        ('the tour columns open after the heading they belong to',
+         H7K_PREP_H2, H7K_PREP_COLS, lambda n: n == 'factory-tour'),
+    ],
+    # Two pages lose one heading each, and 528 headings across the site become
+    # 526. The scalar form of this clause keys itself to `applies` (163 edits),
+    # so it can only say "every edit moved a heading" — see invariants().
+    'h2_delta': {'delta': -1, 'pages': list(H7K_HOME)},
+    'jsonld_delta': None,
+    'sources': {
+        'fp': 'templates/front-page.html',
+        'fac': 'templates/page-factory-tour.html',
+        'adm': 'inc/formula-admin.php',
+    },
+    'reinject': ('an old card grid put back fails coverage',
+                 'root.html', '<div class="sf-certstrip">',
+                 '<div class="sf-certgrid" role="list">'),
+    'delete': ('one page loses an image link fails coverage',
+               'formulas.html', '<a class="sf-fcard__imagelink"'),
+    'nc13_mode': 'sighted',
+    'nc13_label': ('NC13 the insert direction SEES a payload edit, and coverage confirms it'),
+    'matrix': [
+        ('the tokens are not folded', {'tokens': []}, None),
+        ('the still is left unlinked',
+         {'transform': _h7k_partial(cards=False)}, None),
+        ('the link goes around the figure instead of around the still',
+         {'transform': _h7k_partial(outside=True)}, None),
+        ('the link describes the photograph instead of where it goes',
+         {'transform': _h7k_partial(alt_label=True)}, None),
+        ('the band keeps its six cards',
+         {'transform': _h7k_partial(band=False)}, None),
+        ('the band is rebuilt but the seals come along unshrunk',
+         {'transform': _h7k_partial(big_seals=True)}, None),
+        ('the checklist stays one column',
+         {'transform': _h7k_partial(prepare=False)}, None),
+        ('the checklist is cut four-and-one',
+         {'transform': _h7k_partial(split_at=4)}, None),
+        ('the run count is declared one short', {'applies': 162}, None),
+        ('nothing is applied at all',
+         {'transform': (lambda t: (t, 0)), 'applies': 0}, None),
+    ],
+    'nc_source': [
+        ('NC-src the source pass fails when the stylesheet keeps its old version',
+         'style.css', 'Version: 2.10.72', 'Version: 2.10.71'),
+        # 待办14
+        ('NC-src the source pass fails when the renderer stops linking the still',
+         'functions.php', "if ($links) {\n\t\t\t\t$still = sprintf(",
+         "if (false) {\n\t\t\t\t$still = sprintf("),
+        ('NC-src the source pass fails when the label stops saying where it goes',
+         'functions.php', "esc_attr(sprintf('View the %s formula', $name))",
+         "esc_attr(sprintf('View the %s picture', $name))"),
+        ('NC-src the source pass fails when the badge moves inside the link',
+         'functions.php', "'<figure class=\"sf-fcard__media\">%s%s</figure>',",
+         "'<figure class=\"sf-fcard__media\">%s</figure>%s',"),
+        # 待办17
+        ('NC-src the source pass fails when a badge label leaves the vocabulary',
+         'functions.php', "\t\t'Hot'         => 'hot',\n", ''),
+        ('NC-src the source pass fails when the whitelist stops dropping unknowns',
+         'functions.php', "if ($raw === '' || !isset($map[$raw])) {",
+         "if ($raw === '') {"),
+        ('NC-src the source pass fails when a record with no still loses its badge',
+         'functions.php', 'sinofresh_formula_badge_markup($badge, true)',
+         "''"),
+        ('NC-src the source pass fails when the badge stops being a select',
+         'inc/formula-admin.php', "'type' => 'select', 'req' => 1,", "'type' => 'text', 'req' => 1,"),
+        ('NC-src the source pass fails when the select loses its empty option',
+         'inc/formula-admin.php',
+         "esc_html(isset($spec['empty_label']) ? $spec['empty_label'] : 'None')",
+         "esc_html('None')"),
+        ('NC-src the source pass fails when the select stops being saved at all',
+         'inc/formula-admin.php', "case 'radio':\n\t\t\tcase 'select':", "case 'radio':"),
+        ('NC-src the source pass fails when the field leaves the media box',
+         'inc/formula-admin.php', "'key' => 'sf_formula_card_badge', 'label' => 'Card badge', 'group' => 'media'",
+         "'key' => 'sf_formula_card_badge', 'label' => 'Card badge', 'group' => 'zzz'"),
+        # 待办18
+        ('NC-src the source pass fails when the chips stop being list items',
+         'templates/front-page.html', '<ul class="sf-certstrip__row" role="list">',
+         '<div class="sf-certstrip__row" role="list">'),
+        ('NC-src the source pass fails when the seals keep their role and label',
+         'templates/front-page.html',
+         '<svg class="sf-certstrip__icon" width="32" height="32" viewBox="0 0 96 96" '
+         'aria-hidden="true" focusable="false">',
+         '<svg class="sf-certcard__seal" width="88" height="88" viewBox="0 0 96 96" '
+         'role="img" aria-label="FDA certification seal" focusable="false">'),
+        ('NC-src the source pass fails when the band goes back to 48px',
+         'templates/front-page.html',
+         '"padding":{"top":"32px","bottom":"32px"}}},"className":"sf-section sf-section--large"}',
+         '"padding":{"top":"48px","bottom":"48px"}}},"className":"sf-section sf-section--large"}'),
+        ('NC-src the source pass fails when a dead card rule comes back',
+         'style.css', '.sf-certstrip__lede {', '.sf-certgrid {\n\tcolor: red;\n}\n.sf-certstrip__lede {'),
+        ('NC-src the source pass fails when the phone breakpoint stops halving',
+         'style.css', '.sf-certstrip__row {\n\t\tgrid-template-columns: repeat(2, minmax(0, 1fr));',
+         '.sf-zz-certstrip__row {\n\t\tgrid-template-columns: repeat(2, minmax(0, 1fr));'),
+        ('NC-src the source pass fails when the strip goes to one column at 420px',
+         'style.css', '@media (max-width: 420px) {\n\t.sf-certstrip__row {\n\t\tgap: 8px 12px;\n\t}\n}',
+         '@media (max-width: 420px) {\n\t.sf-certstrip__row {\n\t\tgrid-template-columns: 1fr;\n\t}\n}'),
+        # 待办17 css
+        ('NC-src the source pass fails when the badge stops being an overlay',
+         'style.css', '.sf-fcard__badge {\n\tposition: absolute;\n\ttop: 12px;\n\tright: 12px;',
+         '.sf-fcard__badge {\n\tposition: static;\n\ttop: 12px;\n\tright: 12px;'),
+        ('NC-src the source pass fails when the media block stops being its context',
+         'style.css',
+         # A literal cannot express this mutant: `position: relative;` is the LAST
+         # declaration of seven in its block, after a nested comment, so
+         # `.sf-fcard__media {\n\tposition: relative;` is not in style.css at all.
+         # The first version of this control said exactly that — "the mutant
+         # needle is not in style.css" — which is a control that cannot fire, not
+         # a claim that cannot fail, and the difference matters: the claim it
+         # guards (`\.sf-fcard__media \{[^}]*position: relative;`) matches the
+         # block's real 539 bytes, so the product was right and the control was
+         # wrong. The mutant reaches into the block instead of guessing its shape.
+         (lambda s: re.sub(r'(\.sf-fcard__media \{[^}]*?)position: relative;',
+                           r'\1position: static;', s, count=1)), None),
+        ('NC-src the source pass fails when a badge colour leaves the palette',
+         'style.css', '.sf-fcard__badge--hot {\n\tbackground: #B3261E;\n}',
+         '.sf-zz-badge--hot {\n\tbackground: #B3261E;\n}'),
+        ('NC-src the source pass fails when the no-still placement loses its rule',
+         'style.css', '.sf-fcard__badge--inline {\n\tposition: static;',
+         '.sf-zz-badge--inline {\n\tposition: static;'),
+        ('NC-src the source pass fails when the still stops being a block',
+         'style.css', '.sf-fcard__imagelink {\n\tdisplay: block;\n}',
+         '.sf-fcard__imagelink {\n\tdisplay: inline;\n}'),
+        # 待办19
+        ('NC-src the source pass fails when the checklist stops being columns',
+         'templates/page-factory-tour.html',
+         '<!-- wp:columns {"className":"sf-prepare"} -->', '<!-- wp:group -->'),
+        # 待办22
+        ('NC-src the source pass fails when the table caps itself again',
+         'style.css',
+         'max-width: var(--wp--style--global--content-size);\n\tmargin: 24px 0 0;',
+         'max-width: 720px;\n\tmargin: 24px auto 0;'),
+    ],
+    'nc_page': [
+        # The one claim on this batch the MAIN PROOF cannot make, because the
+        # transform walks the card wall: a link that points somewhere else is
+        # still a link in the right place, so the proof is green while the card's
+        # picture and its title lead to different formulas. The claim that
+        # catches it is the `corroborated` one, and this is its control.
+        ('NC-page the corroborated count fails when a link points at another record',
+         'formulas.html',
+         lambda s: s.replace(
+             '<a class="sf-fcard__imagelink" href="https://dev.zxpet.com/formulas/ear-care-drops/"',
+             '<a class="sf-fcard__imagelink" '
+             'href="https://dev.zxpet.com/formulas/hairball-remedy-paste/"', 1)),
+        ('NC-page the corroborated count fails when a page loses one of its links',
+         'formulas.html',
+         lambda s: s.replace('<a class="sf-fcard__imagelink"', '', 1)),
+        ('NC-page the card count fails when a badge appears unasked',
+         'products__drops.html',
+         lambda s: s.replace('<figure class="sf-fcard__media">',
+                             '<figure class="sf-fcard__media">'
+                             '<span class="sf-fcard__badge sf-fcard__badge--hot">Hot</span>', 1)),
+        ('NC-page the h2 clause fails when a heading moves on a page outside the set',
+         'about.html',
+         lambda s: s.replace('</body>', '<h2>extra</h2></body>', 1)),
+        ('NC-page the h2 clause fails when a declared page moves by a second heading',
+         'root.html',
+         lambda s: s.replace('<h2 class="wp-block-heading', '<p class="wp-block-heading', 1)),
+    ],
+    # NC13's mutant has to be a string COVERAGE itself counts. The first version
+    # appended an `X` (`...certificationsX`), which left the coverage claim's own
+    # substring `View all certifications` intact — so the main proof saw the edit
+    # (this mode is `sighted`) while coverage stayed green, and the control
+    # reported `main_red=True coverage_red=False`: the half of its own label it
+    # could not do. Changing the WORD keeps the main proof's verdict and moves the
+    # declared insertion count from 2 to 1, which is the half the label promises.
+    'nc_blind': ('root.html',
+                 'View all certifications &rarr;',
+                 'View every certification &rarr;'),
+    'source': [
+        ('style.css declares 2.10.72', 'css', r'(?m)^Version: 2\.10\.72$', True),
+        ('no 2.10.71 header survives', 'css', r'(?m)^Version: 2\.10\.71$', False),
+        ('functions.php enqueues 2.10.72 for style.css', 'php',
+         r"wp_enqueue_style\('sinofresh-style'[^;]*'2\.10\.72'", True),
+        # --- 待办14 -------------------------------------------------------
+        ('the renderer wraps the still in a link carrying the record\'s url', 'php',
+         r"'<a class=\"sf-fcard__imagelink\" href=\"%s\" aria-label=\"%s\">%s</a>',", True),
+        ('...and the label says where the link goes, not what the still shows', 'php',
+         r"esc_attr\(sprintf\('View the %s formula', \$name\)\)", True),
+        ('...and only when the card is a route at all', 'php',
+         r"if \(\$links\) \{\n\t\t\t\t\$still = sprintf\(", True),
+        ('the badge stays a SIBLING of the still, never inside the link', 'php',
+         r"'<figure class=\"sf-fcard__media\">%s%s</figure>',", True),
+        # --- 待办17 -------------------------------------------------------
+        ('the three labels and their class suffixes live in one map', 'php',
+         r"'Best Seller' => 'best-seller',[\s\S]{0,90}'Hot'         => 'hot',"
+         r"[\s\S]{0,90}'New'         => 'new',", True),
+        ('an unset or unknown value resolves to NO badge, not a dead class', 'php',
+         r"if \(\$raw === '' \|\| !isset\(\$map\[\$raw\]\)\) \{", True),
+        ('a record with no still is not a record without a badge', 'php',
+         r"sinofresh_formula_badge_markup\(\$badge, true\)", True),
+        ('the badge carries its label as text, not as a class name', 'php',
+         r"'<span class=\"sf-fcard__badge sf-fcard__badge--%s%s\">%s</span>',", True),
+        ('the field is a real <select>, not a text box', 'adm',
+         r"'type' => 'select', 'req' => 1,", True),
+        ('...offered by the same map the renderer reads', 'adm',
+         r"'pool' => array_keys\(sinofresh_formula_card_badges\(\)\)", True),
+        ('...whose empty option is the word the field itself declares', 'adm',
+         r"esc_html\(isset\(\$spec\['empty_label'\]\) \? \$spec\['empty_label'\] : 'None'\)",
+         True),
+        ('...rendered by a select case and not by the text branch', 'adm',
+         r"case 'select':[\s\S]{0,400}sf-mb__select", True),
+        ('...and saved through the same whitelist the select was built from', 'adm',
+         r"case 'radio':\n\t\t\tcase 'select':", True),
+        ('the field belongs to the media group and is optional', 'adm',
+         r"'key' => 'sf_formula_card_badge', 'label' => 'Card badge', 'group' => 'media', "
+         r"'type' => 'select', 'req' => 1,", True),
+        # --- 待办18 -------------------------------------------------------
+        ('the band is a lede, a row and a link', 'fp',
+         r'<p class="sf-certstrip__lede">Certified to the standards global pet brands '
+         r'trust</p>', True),
+        ('the six chips are list items under one list', 'fp',
+         r'<ul class="sf-certstrip__row" role="list">', True),
+        ('the six names survive verbatim', 'fp',
+         r'<span class="sf-certstrip__name">FDA Registered</span>', True),
+        ('the seals lose their role and their label', 'fp',
+         r'<svg class="sf-certstrip__icon" width="32" height="32" viewBox="0 0 96 96" '
+         r'aria-hidden="true" focusable="false">', True),
+        ('...and the two <text> elements that lettered them', 'fp', r'<text ', False),
+        ('...and the six cards with them', 'fp', r'sf-certcard', False),
+        ('...and the heading the band used to carry', 'fp',
+         r'Certifications &amp; Registrations', False),
+        ('the band asks for 32px, and one band only', 'fp',
+         r'"padding":\{"top":"32px","bottom":"32px"\}\}\},'
+         r'"className":"sf-section sf-section--large"\}', True),
+        ('the dead card grid is out of the stylesheet', 'css', r'\.sf-certgrid\s*\{', False),
+        ('...and so are the seals it drew', 'css', r'\.sf-certcard__seal', False),
+        ('the strip draws a three-column row', 'css',
+         r'\.sf-certstrip__row \{\n\tdisplay: grid;\n\tgrid-template-columns: '
+         r'repeat\(3, minmax\(0, 1fr\)\);\n\tgap: 10px 20px;', True),
+        ('a phone shows two columns of three', 'css',
+         r'@media \(max-width: 768px\) \{[\s\S]{0,320}\.sf-certstrip__row \{\n'
+         r'\t\tgrid-template-columns: repeat\(2, minmax\(0, 1fr\)\);\n\t\}\n'
+         r'\t\.sf-certstrip__lede \{', True),
+        # The 420px breakpoint narrows the gaps and deliberately does NOT stack:
+        # the retired card grid went to one column there, which is exactly what a
+        # six-chip strip must not do — six rows would out-tall the band it
+        # replaced. The claim is the rule, and its absence is claimed above by
+        # the source list rather than by a mutant.
+        ('...and the phone breakpoint narrows the gaps instead of stacking', 'css',
+         r'@media \(max-width: 420px\) \{\n\t\.sf-certstrip__row \{\n\t\tgap: 8px 12px;\n\t\}\n\}',
+         True),
+        ('the link is painted in the brand green', 'css',
+         r'\.sf-certstrip__more a \{\n\tfont-size: 14px;\n\tfont-weight: 600;\n\tcolor: '
+         r'var\(--wp--preset--color--brand-green\);', True),
+        # --- 待办17 css ---------------------------------------------------
+        ('the badge is an overlay pinned to the still', 'css',
+         r'\.sf-fcard__badge \{\n\tposition: absolute;\n\ttop: 12px;\n\tright: 12px;\n\tz-index: 2;',
+         True),
+        ('the media block is its positioning context', 'css',
+         r'\.sf-fcard__media \{[^}]*position: relative;', True),
+        ('the gold badge', 'css',
+         r'\.sf-fcard__badge--best-seller \{\n\tbackground: #8A6D1F;\n\}', True),
+        ('the red badge', 'css',
+         r'\.sf-fcard__badge--hot \{\n\tbackground: #B3261E;\n\}', True),
+        ('the blue badge', 'css',
+         r'\.sf-fcard__badge--new \{\n\tbackground: #1F5C99;\n\}', True),
+        ('the no-still placement is static at the head of the body', 'css',
+         r'\.sf-fcard__badge--inline \{\n\tposition: static;\n\talign-self: flex-start;', True),
+        ('the still is a block so its link adds no line box', 'css',
+         r'\.sf-fcard__imagelink \{\n\tdisplay: block;\n\}', True),
+        ('and it shows a focus ring', 'css',
+         r'\.sf-fcard__imagelink:focus-visible \{\n\toutline: 3px solid', True),
+        # --- 待办19 -------------------------------------------------------
+        ('the checklist is a columns block, classed for itself', 'fac',
+         r'<!-- wp:columns \{"className":"sf-prepare"\} -->', True),
+        # --- 待办22 -------------------------------------------------------
+        # The claim is the CAP, not the removal of a cap. `max-width: none` was
+        # the first answer and it was wrong in a way only geometry showed: the
+        # section is an `is-layout-constrained` group, so its block children are
+        # already capped at `--wp--style--global--content-size` and centred —
+        # the heading measured 1200px inside a 1364px content box. `none` took
+        # the table out of that rule and let it fill 1364px, putting its ends
+        # 82px outside the heading's on each side, which is the opposite of what
+        # the brief asked for. The claim now names the cap the heading is under.
+        ('the key facts table takes the same cap as its heading', 'css',
+         r'\.sf-keyfacts \{\n\twidth: 100%;[\s\S]{0,1200}?'
+         r'max-width: var\(--wp--style--global--content-size\);\n\tmargin: 24px 0 0;',
+         True),
+        ('...and no 720px cap survives in its rule', 'css',
+         r'\.sf-keyfacts \{[^}]*max-width: 720px', False),
+        ('...and the table is never let out of that cap again', 'css',
+         r'\.sf-keyfacts \{[^}]*max-width: none', False),
     ],
 }
 
