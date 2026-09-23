@@ -75,6 +75,7 @@ import re
 import shutil
 import sys
 import tempfile
+from urllib.parse import urlsplit
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
@@ -3496,6 +3497,701 @@ BATCHES['h7i'] = {
          r'data-sf-inquiry-sample', True),
         ('config.js writes the request into the dialog', 'cfg',
          r'I would like to request a sample', True),
+    ],
+}
+
+
+# ---------------------------------------------------------- H7j batch
+# Batch H7j is three edits that share one cause: the header bar and the band
+# under the hero were the only two things on a dosage page that did not line up
+# with the page around them.
+#
+#   10  the seven top-level menu items sat 10px apart; the brief's floor is 20.
+#       The gap lives in the navigation block's own
+#       `style.spacing.blockGap`, and WordPress hashes a block's attributes
+#       into its wp-container-* class — so raising the gap renumbers the
+#       container class (2cc8d8df -> 0c89a756) and rewrites the one inline
+#       `gap:` rule the head prints, on all 75 pages. That coupling was
+#       predicted before the candidate was captured, and it is why this
+#       declaration has TWO entries for one attribute.
+#   15  .sf-facts-mini ran edge to edge while every neighbouring band's content
+#       sat on the content column. A style.css rule, so no page byte moves —
+#       only the version token.
+#   20  the navigation never said where the visitor was. Measured before the
+#       batch: zero current-menu-item and zero aria-current on all 75 pages,
+#       because a wp:navigation block carrying a `ref` renders the
+#       wp_navigation post's own core/navigation-link blocks, so
+#       wp_nav_menu()'s _wp_menu_item_classes_by_context() never runs.
+#
+# Item 20 is markup and it is the only one that moves the page bytes, so the
+# transform below has to reproduce the marking itself — in Python, from the same
+# three facts the PHP reads: the request path, the menu, and the item's own url.
+
+# The menu, transcribed from the wp_navigation post that parts/header.html
+# points at (`{"ref":16}`). Deliberately NOT read out of the capture: a model
+# derived from the candidate's own markup would agree with the candidate by
+# construction, and the one thing worth pinning here is WHICH item lights up on
+# which page — a claim about the menu, not about the bytes that render it.
+#
+# Seven top-level items. The Products dropdown holds eight dosage links and,
+# ninth and last, "All Formulas" — which is the only route to /formulas/ this
+# menu offers, and therefore the reason a formula page lights up Products. That
+# is the rule the batch shipped, not an accident of the render: the PRUNE below
+# is what turns it into "the item that owns the dropdown is current" instead of
+# "the ninth dropdown link is current".
+H7J_MENU = (
+    ('/products/', ('/products/soft-chews/', '/products/tablets/',
+                    '/products/powders/', '/products/pastes/',
+                    '/products/drops/', '/products/liquids/',
+                    '/products/fish-oil/', '/products/dental-chews/',
+                    '/formulas/')),
+    ('/services/', ()),
+    ('/quality/', ()),
+    ('/about/', ()),
+    ('/factory-tour/', ()),
+    ('/blog/', ()),
+    ('/contact/', ()),
+)
+
+
+def _h7j_under(path, url):
+    """sf_nav_path_under(), transcribed: both sides end in "/" because every
+    permalink on this site does, so the prefix test is already segment-safe."""
+    url = '/' + url.strip('/') + '/'
+    return path == url or path.startswith(url)
+
+
+def _h7j_is_page(path, url):
+    """sf_nav_path_is(). The difference from the test above is what aria-current
+    turns on: a link that points AT the page is "page", a link whose section
+    merely CONTAINS it is "true"."""
+    return path == '/' + url.strip('/') + '/'
+
+
+def _h7j_page_path(name):
+    """Capture file name -> request path. The inverse of the fetch tool's own
+    slug rule, which is the site's permalink shape and not the candidate's."""
+    return '/' if name == 'root' else '/' + name.replace('__', '/') + '/'
+
+
+def _h7j_expect(name):
+    """(href, aria) the menu should carry on this page, or None. Computed from
+    the request path and the menu — never from the candidate.
+
+    This is its own implementation of the rule, which is the point: the scoped
+    counts below say "the mark is HERE on these pages" and that claim is worth
+    nothing if it is read back out of the thing it is meant to test."""
+    full = _h7j_page_path(name)
+    zh = full.startswith('/zh/')
+    rel = ('/' + full[4:]) if zh else full      # what sf_nav_request_path() yields
+    for href, kids in H7J_MENU:
+        if not (_h7j_under(rel, href) or any(_h7j_under(rel, k) for k in kids)):
+            continue
+        return (('/zh' + href) if zh else href,
+                'page' if _h7j_is_page(rel, href) else 'true')
+    return None
+
+
+def _h7j_in_menu(name):
+    return _h7j_expect(name) is not None
+
+
+def _h7j_mark_is(href, aria=None):
+    """Scope: the pages whose menu should mark this href."""
+    return lambda n: (lambda e: bool(e) and e[0] == href and (aria is None or e[1] == aria))(_h7j_expect(n))
+
+
+def _h7j_aria_is(aria):
+    """Scope: the pages whose menu should announce this aria-current value."""
+    return lambda n: (lambda e: bool(e) and e[1] == aria)(_h7j_expect(n))
+
+
+H7J_HREFLANG = re.compile(r'<link rel="alternate" hreflang="%s" href="([^"]+)"')
+
+
+def _h7j_request_path(text):
+    """The request path, read off the page's own language-announcement pair.
+
+    sf_nav_request_path() reads $_SERVER['REQUEST_URI']; a capture has no
+    request, so the same fact comes from the two hreflang links every page
+    carries, and the language is the one the page itself declares so the pair
+    cannot be crossed.
+
+    NOT the canonical link: three of the 75 pages — the blog index, the formulas
+    archive and its zh twin — carry no canonical at all, and two of those three
+    are pages this batch has to mark. A reader that gave up on them would have
+    put the batch's own coverage claim out of its own reach."""
+    zh = '<html lang="zh-CN"' in text
+    m = re.search(H7J_HREFLANG.pattern % ('zh-CN' if zh else 'en-US'), text)
+    if not m:
+        return None
+    path = urlsplit(m.group(1)).path or '/'
+    home = '/zh/' if zh else '/'
+    if home != '/' and path.startswith(home):
+        path = '/' + path[len(home):].lstrip('/')
+    return path or '/'
+
+
+H7J_NAV_UL = re.compile(r'<ul[^>]*class="wp-block-navigation__container[^"]*"[^>]*>')
+H7J_NAV_TOKEN = re.compile(
+    r'</?ul\b|<a class="wp-block-navigation-item__content"([^>]*)>')
+H7J_BARE = 'class="wp-block-navigation-item__content"'
+H7J_MARKED = 'class="wp-block-navigation-item__content sf-nav__link"'
+H7J_MARKED_ON = ('class="wp-block-navigation-item__content sf-nav__link'
+                 ' is-active" aria-current="%s"')
+H7J_CONTAINER_TOKEN = '2cc8d8df'
+H7J_CONTAINER_RENAMED = '0c89a756'
+H7J_GAP_OLD = 'gap:10px'
+H7J_GAP_NEW = 'gap:20px'
+H7J_HEADER_OLD = 'class="wp-block-group sf-header '
+H7J_HEADER_NEW = 'class="wp-block-group sf-header sf-header--nav-underline '
+
+
+def _h7j_swap(text, old, new):
+    """Every occurrence, and how many moved. `replace(old, new, 1)` would be
+    wrong for the container token, which is legitimately on the page twice (the
+    inline rule and the element that matches it), and a control that fixes only
+    the first leaves the second holding the claim up."""
+    k = text.count(old)
+    return text.replace(old, new), k
+
+
+def _h7j_nav_span(text):
+    """(start, end) of the navigation list, by matching ul depth — the outer
+    `<ul>` from its open tag to its own close, not the first `</ul>`, which
+    closes the dropdown."""
+    m = H7J_NAV_UL.search(text)
+    if not m:
+        return None
+    i, depth = m.start(), 0
+    for mo in re.finditer(r'</?ul\b', text[i:]):
+        depth += 1 if mo.group(0) == '<ul' else -1
+        if depth == 0:
+            return i, text.index('>', i + mo.end()) + 1
+    return None
+
+
+def _h7j_nav_links(nav):
+    """(offset of the class attribute, depth, href) for every link in one
+    navigation list.
+
+    depth 1 is a top-level item, depth 2 a link inside a dropdown, and that
+    distinction IS the submenu rule: the item that owns a dropdown gets the
+    mark, and the child that matched gives it up."""
+    out, depth = [], 0
+    for mo in H7J_NAV_TOKEN.finditer(nav):
+        tok = mo.group(0)
+        if tok.startswith('<ul'):
+            depth += 1
+        elif tok.startswith('</ul'):
+            depth -= 1
+        else:
+            h = re.search(r'href="([^"]+)"', mo.group(1) or '')
+            out.append((mo.start() + 3, depth, h.group(1) if h else ''))
+    return out
+
+
+def _h7j_mark_nav(nav, path, zh=False, owns=True, prune=True, aria=True):
+    """The links of one navigation list, marked the way the two render_block
+    filters mark them.
+
+    The hrefs are read off the RENDERED anchors, which on a zh page carry the
+    language prefix, while `path` has already had it stripped — so the prefix
+    comes off the href too. That is not a convenience: the PHP compares
+    sf_nav_request_path()'s stripped path against the block's own `url`
+    attribute, which TranslatePress never rewrites. Both sides are language-less
+    there, and both have to be here.
+
+    A dropdown link that matches is marked by its own filter and then PRUNED by
+    the item that owns the dropdown — so no dropdown link ever keeps a mark, and
+    the owner inherits one instead. `prune=False` is the mutant that leaves the
+    child's mark in place; `owns=False` is the one where the owner never hears
+    about it. Both are plausible wrong answers and both are in the matrix."""
+    links = _h7j_nav_links(nav)
+    if zh:
+        links = [(off, d, ('/' + h[4:].lstrip('/')) if h.startswith('/zh/') else h)
+                 for off, d, h in links]
+    tops = [k for k, (_, d, _) in enumerate(links) if d == 1]
+    owns_at = {}
+    for pos, k in enumerate(tops):
+        end = tops[pos + 1] if pos + 1 < len(tops) else len(links)
+        owns_at[k] = any(_h7j_under(path, links[j][2])
+                         for j in range(k + 1, end) if links[j][1] > 1)
+
+    edits = []
+    for k, (off, depth, href) in enumerate(links):
+        self_ = _h7j_under(path, href)
+        page = _h7j_is_page(path, href)
+        if depth == 1:
+            active = self_ or (owns and owns_at.get(k, False))
+        else:
+            active = self_ and not prune
+        if active:
+            new = H7J_MARKED_ON % ('page' if (aria and page) else 'true')
+        else:
+            new = H7J_MARKED
+        edits.append((off, H7J_BARE, new))
+    for off, old, new in reversed(edits):
+        if nav[off:off + len(old)] != old:
+            continue
+        nav = nav[:off] + new + nav[off + len(old):]
+    return nav, len(edits)
+
+
+def _h7j_transform(text, container=True, gap=True, header=True, marks=True,
+                   owns=True, prune=True, aria=True):
+    """H7j's declared edit to one baseline page: the container renumbered, the
+    gap raised, the header's variant class, and the current item marked. The
+    version token is NOT this function's business — fold() applies the declared
+    token pairs."""
+    n = 0
+    if container:
+        text, k = _h7j_swap(text, H7J_CONTAINER_TOKEN, H7J_CONTAINER_RENAMED)
+        n += k
+    if gap:
+        text, k = _h7j_swap(text, H7J_GAP_OLD, H7J_GAP_NEW)
+        n += k
+    if header:
+        text, k = _h7j_swap(text, H7J_HEADER_OLD, H7J_HEADER_NEW)
+        n += k
+    if marks:
+        span = _h7j_nav_span(text)
+        path = _h7j_request_path(text)
+        if span and path:
+            i, j = span
+            nav, k = _h7j_mark_nav(text[i:j], path,
+                                   zh='<html lang="zh-CN"' in text,
+                                   owns=owns, prune=prune, aria=aria)
+            text = text[:i] + nav + text[j:]
+            n += k
+    return text, n
+
+
+def _h7j_partial(container=True, gap=True, header=True, marks=True,
+                 owns=True, prune=True, aria=True):
+    """Mutants that skip one declared edit, or keep one declared rule wrong;
+    each must break the proof."""
+    def f(text):
+        return _h7j_transform(text, container=container, gap=gap, header=header,
+                              marks=marks, owns=owns, prune=prune, aria=aria)
+    return f
+
+
+def _h7j_header_10px(text):
+    """Put the old gap back in the block template. The block attributes live in
+    an HTML comment, so the live twin of that file has them stripped — this is
+    the mutant that keeps the raw-only claim honest."""
+    return text.replace('"blockGap":"20px"', '"blockGap":"10px"')
+
+
+H7J_MARK_PAT = r'class="wp-block-navigation-item__content sf-nav__link is-active"'
+
+
+BATCHES['h7j'] = {
+    'name': "H7j — the nav gap, the facts band's gutter, and the current item marked",
+    'mode': 'insert',
+    'tokens': [
+        ('?ver=2.10.70', '?ver=2.10.71'),                      # style.css
+    ],
+    'transform': _h7j_transform,
+    'applies': 1500,        # 75 x (container 2 + gap 1 + header 1 + marks 16)
+    'coverage': [
+        ('?ver=2.10.70', 0),
+        ('2cc8d8df', 0),
+        ('gap:10px', 0),
+        ('class="wp-block-group sf-header has-card-white-color', 0),
+        ('class="wp-block-navigation-item__content"', 0),
+    ],
+    'insertions': [
+        ('?ver=2.10.71', 75),
+        ('0c89a756', 150),
+        ('gap:20px', 75),
+        ('class="wp-block-group sf-header sf-header--nav-underline', 75),
+        # Each claim below is a strict refinement of the one above it, so the
+        # three together pin the shape rather than three separate totals: the
+        # marker reaches all 1200 links, 67 of them say they are current, and
+        # the 67 split 7 / 60 between the two aria-current values.
+        (' sf-nav__link', 1200),
+        (' sf-nav__link is-active" aria-current="page"', 7),
+        (' sf-nav__link is-active" aria-current="true"', 60),
+    ],
+    'counts': [
+        # The mark is ADDED to every link; the class WordPress already put there
+        # stays, which is why the bare form goes to zero and the substring count
+        # does not move.
+        ('the wrapper class stays on all sixteen links',
+         'wp-block-navigation-item__content', 2280, 2280),
+        ('the bare form every link carried is gone',
+         'class="wp-block-navigation-item__content"', 1200, 0),
+        # One mark per page the menu covers — 67 of 75 — and none elsewhere.
+        ('the menu gains one current item per page it covers',
+         'sf-nav__link is-active"', 0, 67),
+        ('the page-identity value is the batch\'s 7 links',
+         'aria-current="page"', 94, 101),
+        ('and the section value appears for the first time, 60 times',
+         'aria-current="true"', 0, 60),
+        # The two is-active sets the ladder already carried must not move: the
+        # gallery tab and the blog chip. 44 before, 44 after.
+        ('the gallery tab keeps its own is-active', 'sf-gallery__tab is-active', 42, 42),
+        ('so does the blog chip', 'sf-fchip is-active', 2, 2),
+        # The gap moves in two places at once, which is the coupling this
+        # declaration exists to state.
+        ('the container is renumbered in both of its two places',
+         '2cc8d8df', 150, 0),
+        ('the element keeps exactly one header class',
+         'class="wp-block-group sf-header ', 75, 75),
+    ],
+    'unmoved': [
+        ('the cookie banner', r'class="sf-cookie-banner"', 75),
+        ('the float stack', r'class="sf-float-stack"', 75),
+        ('the certificate dialog', r'sf-certmodal', 1),
+        ('the primary cta', r'sf-quote-cta', None),
+        ('the gallery tabs', r'sf-gallery__tabs', 42),
+        ('the configurator', r'sf-fdetail-config__group', 42),
+        ('the side column', r'sf-fdetail2__side', 42),
+        ('the core-facts band itself', r'class="sf-facts-mini"', None),
+    ],
+    'per_page': [
+        ('h1', r'<h1[ >]', 1),
+        ('the new style token', r'style\.css\?ver=2\.10\.71', 1),
+        ('the gap rule', r'\.wp-container-core-navigation-is-layout-0c89a756\{gap:20px;\}', 1),
+        ('the header variant class', r'sf-header--nav-underline', 1),
+    ],
+    'scoped': [
+        # The two structural counts, on every page. The first pattern carries
+        # no closing quote on purpose: the marked link's class attribute
+        # continues with " is-active", so a pattern that closed the quote would
+        # count 15 and quietly exclude the one link the batch is about.
+        ('the nav list carries sixteen marked links',
+         r'class="wp-block-navigation-item__content sf-nav__link', lambda n: True, 16),
+        # ONE entry, both directions. `scoped` expects `want` on the pages the
+        # scope admits and ZERO on the rest, so naming the scope is naming the
+        # negative too — a mark on /faq/ fails this line as surely as a missing
+        # mark on /about/. Splitting it into two entries would have made the
+        # "and none elsewhere" half expect zero on the pages that carry one.
+        ('exactly one of them is current on every page the menu covers — and none '
+         'on the eight it does not',
+         r'class="wp-block-navigation-item__content sf-nav__link is-active"',
+         _h7j_in_menu, 1),
+        # WHERE it lands, page by page, from the independent model. Four clauses
+        # because there are three answers, and the first two are also the claim
+        # the probe is here for: a link that points AT the page announces
+        # "page", a link whose section merely CONTAINS it announces "true".
+        # Read together they say no page carries the wrong one of the two,
+        # because each entry demands zero of its own value everywhere else.
+        ('a link that points AT the page is the one marked',
+         H7J_MARK_PAT + r' aria-current="page"', _h7j_aria_is('page'), 1),
+        ('a link whose section only CONTAINS the page is the one marked',
+         H7J_MARK_PAT + r' aria-current="true"',
+         _h7j_aria_is('true'), 1),
+        # ...and the sense test alone does not say WHICH link. The mark is one
+        # href per page and the href differs page by page, so this half is a
+        # table rather than a pattern: seven clauses for the seven links that
+        # point AT a page, one for the Products branch on the pages it owns, one
+        # for its zh twin. Each carries its own href and the aria value that
+        # href must have, so a mark that moved to a DIFFERENT one of the seven
+        # leaves its own clause one short even though the item it moved to is
+        # itself legitimate — which is exactly the mutant NC-page builds.
+        ('the Products branch owns the formula and dosage pages',
+         H7J_MARK_PAT + r' aria-current="true"[^>]*?href="/products/"',
+         _h7j_mark_is('/products/', 'true'), 1),
+        ('and on the zh twins it is the zh Products link',
+         H7J_MARK_PAT + r' aria-current="true"[^>]*?href="/zh/products/"',
+         _h7j_mark_is('/zh/products/', 'true'), 1),
+    ] + [
+        ('the mark on %s is the link that points at it' % href,
+         H7J_MARK_PAT + ' aria-current="page"[^>]*?href="%s"' % re.escape(href),
+         _h7j_mark_is(href, 'page'), 1)
+        for href, _kids in H7J_MENU
+    ],
+    'order': [
+        ('the mark sits inside the navigation list',
+         'wp-block-navigation__container', 'sf-nav__link is-active"', _h7j_in_menu),
+        # `wp-block-navigation is-layout-flex` and not the bare class name: the
+        # head's inline stylesheet mentions every block class long before the
+        # markup does, and a claim that compared against the stylesheet would
+        # have been red on all 75 pages while the markup was in perfect order.
+        # The same trap took the dropdown claim below once already — both
+        # needles are now the two-class form that only the markup carries.
+        ('the header variant class precedes the bar it paints',
+         'sf-header--nav-underline', 'wp-block-navigation is-layout-flex',
+         lambda n: True),
+        ('the container rule is declared before the element that matches it',
+         '.wp-container-core-navigation-is-layout-0c89a756{gap:20px;}',
+         'is-layout-flex wp-container-core-navigation-is-layout-0c89a756',
+         lambda n: True),
+        ('the dropdown links come after the item that owns them',
+         'has-child open-on-hover-click wp-block-navigation-submenu',
+         'wp-block-navigation__submenu-container wp-block-navigation-submenu',
+         lambda n: True),
+    ],
+    'h2_delta': None,
+    'jsonld_delta': None,
+    'sources': {
+        'hdr': 'parts/header.html',
+    },
+    'reinject': ('an old 10px container put back fails coverage',
+                 'about.html', '0c89a756', '2cc8d8df'),
+    'delete': ('one page loses the header variant class fails coverage',
+               'about.html', 'sf-header--nav-underline'),
+    'nc13_mode': 'sighted',
+    'nc13_label': ('NC13 the insert direction SEES a payload edit, and coverage confirms it'),
+    'matrix': [
+        ('the tokens are not folded', {'tokens': []}, None),
+        ('the container keeps its old name',
+         {'transform': _h7j_partial(container=False)}, None),
+        ('the gap is renamed but never raised',
+         {'transform': _h7j_partial(gap=False)}, None),
+        ('the header keeps one class',
+         {'transform': _h7j_partial(header=False)}, None),
+        ('no link is marked',
+         {'transform': _h7j_partial(marks=False)}, None),
+        ('the dropdown\'s own link keeps the mark',
+         {'transform': _h7j_partial(prune=False)}, None),
+        ('the owner never hears that a child matched',
+         {'transform': _h7j_partial(owns=False)}, None),
+        ('every mark announces "true"',
+         {'transform': _h7j_partial(aria=False)}, None),
+        ('the run count is declared one short', {'applies': 1499}, None),
+        ('nothing is applied at all',
+         {'transform': (lambda t: (t, 0)), 'applies': 0}, None),
+    ],
+    'nc_source': [
+        ('NC-src the source pass fails when the default mark loses its rules',
+         'style.css', '.sf-header--nav-underline .sf-nav__link.is-active {',
+         '.sf-zz-nav-underline .sf-nav__link.is-active {'),
+        ('NC-src the source pass fails when the facts band loses its gutter',
+         'style.css',
+         '.sf-facts-mini {\n\tpadding-left: max(38px, calc((100% - '
+         'var(--wp--style--global--content-size, 1200px)) / 2));',
+         '.sf-zz-facts {'),
+        ('NC-src the source pass fails when one of the six marks loses its style',
+         'style.css', '.sf-header--nav-pill .sf-nav__link.is-active {',
+         '.sf-header--nav-pill .sf-nav__link.is-activeX {'),
+        ('NC-src the source pass fails when a slug leaves the array',
+         # A literal rename of `sf_nav_active_styles` cannot work here, and the
+         # reason is worth keeping: the FIRST occurrence of that name in
+         # functions.php is a doc comment (line 5120, "sf_nav_active_styles()'
+         # keys — anything else falls back..."), not the definition on line 5351.
+         # A first-occurrence replace therefore edits a comment, the file stays
+         # functionally identical, and the control goes green while proving
+         # nothing. So the mutant removes a real entry instead: the array stops
+         # offering six marks, which is the regression the slug set can suffer.
+         'functions.php', "\t\t'pill'       => 'Green pill',\n", ''),
+        ('NC-src the source pass fails when the whitelist stops falling back',
+         # Replaces EVERY copy on purpose. The guard is written twice — once in
+         # the option's sanitiser (5127) and once in the reader (5369) — and the
+         # claim searches the file, so a first-occurrence replace leaves the
+         # second copy to satisfy it and the control never fires.
+         'functions.php',
+         lambda s: s.replace(
+             "return isset($all[$v]) ? $v : $d['sf_nav_active_style'];", 'return $v;'),
+         None),
+        ('NC-src the source pass fails when a submenu stops inheriting',
+         'functions.php',
+         "$owns = (false !== strpos($tail, ' is-active'));",
+         '$owns = false;'),
+        ('NC-src the source pass fails when a matched child stops being pruned',
+         'functions.php',
+         "' sf-nav__link is-active\" aria-current=\"page\"',",
+         "' sf-zz-nav__link is-active\" aria-current=\"page\"',"),
+        ('NC-src the source pass fails when aria-current stops distinguishing',
+         'functions.php', "$is_page ? 'page' : 'true'", "'page'"),
+        ('NC-src the source pass fails when the language prefix stops being stripped',
+         'functions.php', 'substr($path, strlen($home))', '$path'),
+        ('NC-src the source pass fails when the header class moves off the element',
+         'functions.php',
+         "(<[a-z][a-z0-9]* class=\"wp-block-group sf-header)(?=[ \"])",
+         "(<[a-z][a-z0-9]* class=\"wp-block-group sf-zz-header)(?=[ \"])"),
+        ('NC-src the source pass fails when the gap goes back to 10px',
+         'parts/header.html', _h7j_header_10px, None),
+        # --- 63c, and the 63b repair behind it -----------------------------
+        ('NC-src the source pass fails when the left rule goes back to the shallow '
+         'selector its own base rule outranks',
+         'style.css',
+         '.sf-header--nav-left-line .wp-block-navigation__container > '
+         '.wp-block-navigation-item > .sf-nav__link.is-active {',
+         '.sf-header--nav-left-line .sf-nav__link.is-active {'),
+        ('NC-src the source pass fails when the drawer loses the underline restatement',
+         'style.css',
+         '.sf-header--nav-underline .wp-block-navigation__responsive-container'
+         '.is-menu-open',
+         '.sf-zz-header--nav-underline .wp-block-navigation__responsive-container'
+         '.is-menu-open'),
+        ('NC-src the source pass fails when the drawer loses the thick-line restatement',
+         'style.css',
+         '.sf-header--nav-thick-line .wp-block-navigation__responsive-container'
+         '.is-menu-open',
+         '.sf-zz-header--nav-thick-line .wp-block-navigation__responsive-container'
+         '.is-menu-open'),
+        ('NC-src the source pass fails when the drawer loses the colour restatement',
+         'style.css',
+         '.sf-header--nav-color .wp-block-navigation__responsive-container'
+         '.is-menu-open',
+         '.sf-zz-header--nav-color .wp-block-navigation__responsive-container'
+         '.is-menu-open'),
+        ('NC-src the source pass fails when the separator restore is dropped',
+         'style.css', '.sf-header:where(.sf-header--nav-underline,',
+         '.sf-zz-header:where(.sf-header--nav-underline,'),
+        ('NC-src the source pass fails when the drawer section re-states the left rule',
+         # An INSERTION, appended inside the same media query and after the
+         # separator rule's own last property, so it breaks the absence claim and
+         # nothing else: the separator claim's regex has already finished by the
+         # time the inserted selector starts.
+         'style.css',
+         "\t\tborder-bottom-color: rgba(255, 255, 255, 0.14);\n\t}\n}",
+         "\t\tborder-bottom-color: rgba(255, 255, 255, 0.14);\n\t}\n"
+         "\t.sf-header--nav-left-line .wp-block-navigation__responsive-container"
+         ".is-menu-open .sf-nav__link { color: red; }\n}"),
+    ],
+    'nc_page': [
+        ('NC-page the scoped count fails when a page loses its mark',
+         'about.html',
+         lambda s: s.replace(' sf-nav__link is-active" aria-current="page"',
+                             ' sf-nav__link"', 1)),
+        ('NC-page the scoped count fails when a page gains a second mark',
+         'blog.html',
+         lambda s: s.replace(
+             '<a class="wp-block-navigation-item__content sf-nav__link"  href="/services/">',
+             '<a class="wp-block-navigation-item__content sf-nav__link is-active"'
+             ' aria-current="page"  href="/services/">', 1)),
+        ('NC-page the scoped href claim fails when the mark moves to another item',
+         'about.html',
+         lambda s: s.replace('aria-current="page"  href="/about/"',
+                             'aria-current="page"  href="/quality/"', 1)),
+        ('NC-page the aria claim fails when the value is swapped',
+         'about.html',
+         lambda s: s.replace('aria-current="page"  href="/about/"',
+                             'aria-current="true"  href="/about/"', 1)),
+    ],
+    'nc_blind': ('about.html',
+                 ' sf-nav__link is-active" aria-current="page"',
+                 ' sf-nav__link is-active" aria-current="pageX"'),
+    'source': [
+        ('style.css declares 2.10.71', 'css', r'(?m)^Version: 2\.10\.71$', True),
+        ('no 2.10.70 header survives', 'css', r'(?m)^Version: 2\.10\.70$', False),
+        ('functions.php enqueues 2.10.71 for style.css', 'php',
+         r"wp_enqueue_style\('sinofresh-style'[^;]*'2\.10\.71'", True),
+        ('the header asks the navigation for a 20px gap', 'hdr',
+         r'"blockGap":"20px"', True),
+        ('and not for the 10px it had', 'hdr', r'"blockGap":"10px"', False),
+        # 63a — the facts band. The box stays full width on purpose; only the
+        # content moves in, because the band draws the two hairlines.
+        ('the core-facts band takes the content gutter', 'css_live',
+         r'\.sf-facts-mini \{\n\tpadding-left: max\(38px, calc\(\(100% - '
+         r'var\(--wp--style--global--content-size, 1200px\)\) / 2\)\);\n'
+         r'\tpadding-right: max\(38px, calc\(\(100% - '
+         r'var\(--wp--style--global--content-size, 1200px\)\) / 2\)\);\n\}', True),
+        ('and drops to 20px at the phone breakpoint the hero uses', 'css_live',
+         r'@media \(max-width: 1024px\) \{\n\t\.sf-facts-mini \{\n'
+         r'\t\tpadding-left: 20px;\n\t\tpadding-right: 20px;\n\t\}\n\}', True),
+        ('the band keeps its space-between', 'css_live',
+         r'\.sf-facts-mini \{[^}]*padding-left', True),
+        # 63b — the six marks, one claim each, so a variant cannot silently
+        # lose its rules while the other five keep the section honest.
+        ('the default mark is the underline', 'css_live',
+         r'\.sf-header--nav-underline \.sf-nav__link\.is-active \{', True),
+        ('the block mark is defined', 'css_live',
+         r'\.sf-header--nav-bg \.sf-nav__link\.is-active \{', True),
+        ('the thick-line mark is defined', 'css_live',
+         r'\.sf-header--nav-thick-line \.sf-nav__link\.is-active \{', True),
+        ('the colour mark is defined', 'css_live',
+         r'\.sf-header--nav-color \.sf-nav__link\.is-active \{', True),
+        # `left-line` is the one mark whose active rule is NOT written in the
+        # short form. It has to be written at the depth of the base rule above it
+        # — the one that reserves the 3px with `border-left: 3px solid
+        # transparent` — or that base rule, being one class deeper, wins and the
+        # mark paints a 3px rule of nothing. Measured at 1440px before the fix:
+        # `border-left-width: 3px`, `border-left-color: rgba(0, 0, 0, 0)`, at
+        # every width. So this claim is deliberately the long selector, and the
+        # short one is claimed ABSENT right after it: the pair is what makes the
+        # depth a recorded fact rather than a style choice.
+        ('the left-rule mark is defined at the depth its base rule is', 'css_live',
+         r'\.sf-header--nav-left-line \.wp-block-navigation__container > '
+         r'\.wp-block-navigation-item > \.sf-nav__link\.is-active \{', True),
+        ('...and not in the short form its base rule would outrank', 'css_live',
+         r'\.sf-header--nav-left-line \.sf-nav__link\.is-active \{', False),
+        ('the pill mark is defined', 'css_live',
+         r'\.sf-header--nav-pill \.sf-nav__link\.is-active \{', True),
+        ('every mark reserves its space on all seven top-level links', 'css_live',
+         r'\.sf-header--nav-pill \.wp-block-navigation__container > '
+         r'\.wp-block-navigation-item > \.sf-nav__link \{', True),
+        ('and no mark reaches the links inside the dropdown', 'css_live',
+         r'submenu-container[^}]*\.sf-nav__link', False),
+        # 63c — the same marks in the phone drawer, and the drawer's own
+        # furniture. The drawer's row rule is five classes deep and its modal
+        # colour rule four; every mark is three or four, so inside the drawer
+        # four of the six marks were invisible. Measured at 375px with the drawer
+        # open, on the shipped default: the current row was indistinguishable
+        # from an unmarked one. One claim per repair, and one absence claim for
+        # the repair that deliberately lives elsewhere.
+        ('the drawer re-states the underline mark at the depth it needs', 'css_live',
+         r'\.sf-header--nav-underline \.wp-block-navigation__responsive-container'
+         r'\.is-menu-open \.wp-block-navigation__container > '
+         r'\.wp-block-navigation-item > \.sf-nav__link\.is-active \{\n'
+         r'\t\tborder-bottom-width: 2px;', True),
+        ('...and the thick line at four pixels', 'css_live',
+         r'\.sf-header--nav-thick-line \.wp-block-navigation__responsive-container'
+         r'\.is-menu-open \.wp-block-navigation__container > '
+         r'\.wp-block-navigation-item > \.sf-nav__link\.is-active \{\n'
+         r'\t\tborder-bottom-width: 4px;', True),
+        ('...and the brand green the colour mark draws with', 'css_live',
+         r'\.sf-header--nav-color \.wp-block-navigation__responsive-container'
+         r'\.is-menu-open \.wp-block-navigation__container > '
+         r'\.wp-block-navigation-item > \.sf-nav__link\.is-active \{\n'
+         r'\t\tcolor: var\(--wp--preset--color--brand-green\);', True),
+        ('and the drawer keeps its own row separator under every mark', 'css_live',
+         r'\.sf-header:where\(\.sf-header--nav-underline, \.sf-header--nav-bg, '
+         r'\.sf-header--nav-thick-line,\n\t\t\.sf-header--nav-color, '
+         r'\.sf-header--nav-left-line, \.sf-header--nav-pill\)[\s\S]{0,240}'
+         r'\.sf-nav__link:not\(\.is-active\) \{\n\t\tborder-bottom-color: '
+         r'rgba\(255, 255, 255, 0\.14\);', True),
+        # ...and `left-line` is NOT restated in 63c, on purpose: its repair was a
+        # conflict between two rules inside 63b, so it was fixed in 63b. Claiming
+        # the absence keeps a later edit from "helpfully" duplicating it here.
+        ('the left rule is not re-stated in the drawer section', 'css_live',
+         r'\.sf-header--nav-left-line \.wp-block-navigation__responsive-container'
+         r'\.is-menu-open', False),
+        # functions.php — the rule and its switches.
+        ('the six slugs live in one array', 'php',
+         r"function sf_nav_active_styles\(\) \{", True),
+        ('all six slugs are in it', 'php',
+         r"'underline'  => 'Underline',[\s\S]{0,240}'pill'       => 'Green pill',", True),
+        ('the shipped default is the underline', 'php',
+         r"'sf_nav_active_style' => 'underline',", True),
+        ('the option is registered with a sanitiser', 'php',
+         r"register_setting\('sf_site_settings', 'sf_nav_active_style'", True),
+        ('and it falls back to the default rather than emit a dead class', 'php',
+         r"return isset\(\$all\[\$v\]\) \? \$v : \$d\['sf_nav_active_style'\];", True),
+        ('the request path loses the language prefix before it is compared', 'php',
+         r"substr\(\$path, strlen\(\$home\)\)", True),
+        ('a path under a link counts, a path equal to it is "page"', 'php',
+         r"function sf_nav_path_is\(\$path, \$url\) \{", True),
+        ('the mark goes on the link, once, and only on its first anchor', 'php',
+         r"if \(false === strpos\(\$html, 'class=\"wp-block-navigation-item__content\"'\)\) \{", True),
+        ('a submenu head inherits the mark from a child that matched', 'php',
+         r"\$owns = \(false !== strpos\(\$tail, ' is-active'\)\);", True),
+        ('and that child gives its own mark back up', 'php',
+         r"' sf-nav__link is-active\" aria-current=\"page\"',", True),
+        ('aria-current distinguishes the page from its section', 'php',
+         r"\$is_page \? 'page' : 'true'", True),
+        ('the variant class is applied as one string pass over the header', 'php',
+         r"\(\?=\[ \"\]\)", True),
+        # ...and the pass is anchored to the header GROUP by name. Without this
+        # claim the element half of the anchor was unwitnessed: the source list
+        # asserted only the trailing lookahead, so a mutant that renamed the
+        # element inside the pattern still satisfied every clause. Measured --
+        # that is exactly how this control failed before the claim was added.
+        ('...anchored to the header group by name, not to any group', 'php',
+         r'\(<\[a-z\]\[a-z0-9\]\* class="wp-block-group sf-header\)', True),
+        ('the header anchor cannot match the cta row that starts the same way', 'php',
+         r"false === strpos\(\$block_content, 'class=\"wp-block-group sf-header'\)", True),
+        ('both filters are registered on render_block', 'php',
+         r"add_filter\('render_block'", True),
+        ('the admin offers one radio per mark, built from the same array', 'php',
+         r"foreach \(sf_nav_active_styles\(\) as \$nav_slug => \$nav_label\)", True),
+        ('and the switch sits under its own heading', 'php',
+         r'<h2 class="title">Appearance</h2>', True),
     ],
 }
 
