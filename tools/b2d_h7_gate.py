@@ -5343,6 +5343,520 @@ BATCHES['h7l'] = {
 }
 
 
+# ------------------------------------------------------------- H8a batch
+
+# Batch H8a is six edits to the right column, four of them inside markup whose
+# content is per-record. It takes the `insert` direction — the DEFAULTS are
+# constants of the code (the four fixed shelf lives, the word "Custom", the
+# Custom pick's own markup, the retirement of one row), so the expected page can
+# be built from the baseline, and the one per-record byte it also carries — the
+# printed shelf life — is derived by the same rule the renderer uses (strip the
+# value's own repeat of its name; on the record that holds a pool value, print
+# the pool value instead).
+#
+# What the direction costs is stated in NC13: with `insert` the payload IS
+# compared, so an edit inside it turns the main proof red — that is why this
+# declaration sets `nc13_mode: 'sighted'` and not the default.
+H8A_RECORD = lambda n: 'joint-support-soft-chews' in n
+H8A_DETAIL = lambda n: 'formulas__' in n
+
+# The groups a visitor may type their own answer into. `pricing` is deliberately
+# absent: a price list has nothing to type, and a Custom break would be a number
+# the sales desk cannot quote against.
+H8A_BOXED = ('flavor', 'weight', 'pack', 'species', 'stage', 'shape', 'container')
+
+def _h8a_label(key, kind):
+    """The Custom pick. Its input type follows the group's OWN inputs, read off
+    the bytes rather than assumed: seven dimensions are consistent about having
+    a Custom answer, and they are not consistent about being single-select —
+    Suitable For stays a multi-select that now also offers Custom, so its pick
+    is a checkbox. Hard-coding `radio` here would have been a claim the theme
+    does not make, and it would only have shown up the day a record carried a
+    species value."""
+    return ('<label class="sf-fdetail-config__opt" data-sf-config-custom="1">'
+            '<input class="sf-fdetail-config__input" type="%s" name="sf-config-%s" '
+            'value="Custom" data-sf-config-opt="%s">'
+            '<span class="sf-fdetail-config__box" aria-hidden="true"></span>'
+            '<span class="sf-fdetail-config__text">Custom</span></label>'
+            % (kind, key, key))
+
+
+H8A_BOX = (
+    '<div class="sf-fdetail-config__custom" data-sf-config-custom-for="%(key)s" hidden>'
+    '<input type="text" class="sf-fdetail-config__custom-input" '
+    'data-sf-config-custom-input="%(key)s" maxlength="60" autocomplete="off" '
+    'spellcheck="false" aria-label="Your own %(label)s" '
+    'placeholder="Type your own"></div>')
+
+# flavor and pack stop being multi-select. Scoped to the two groups BY NAME: a
+# bare `type="checkbox"` replacement would also rewrite the Custom pick's own
+# input if the order of the passes ever changed.
+H8A_CHECKBOX = re.compile(
+    r'(<input class="sf-fdetail-config__input" )type="checkbox"'
+    r'( name="sf-config-(?:flavor|pack)")')
+
+# The hint that used to promise more than the control now allows.
+H8A_HINT_OLD = re.compile(
+    r'<span class="sf-fdetail-config__hint">Choose one or more</span>')
+H8A_HINT_NEW = '<span class="sf-fdetail-config__hint">Choose one</span>'
+
+# One group at a time, up to and including the close of its option row. The
+# alternation on the key is what keeps `pricing` out of the run: the group it
+# needs left alone must not be matched at all, or the count of edits would
+# include a pass that changed nothing.
+H8A_GROUP = re.compile(
+    r'(<div class="sf-fdetail-config__group" data-sf-config-group="('
+    + '|'.join(H8A_BOXED) + r')">'
+    r'[\s\S]*?<div class="sf-fdetail-config__options[^"]*" role="group" aria-label="([^"]*)">)'
+    r'([\s\S]*?)'
+    r'(</div>)')
+
+# 待办26 — the row leaves the parameter list. Its value came from the form
+# page's own `.sf-facts-mini` cell, which still prints it; JSON-LD never read
+# this row. The field itself stays in the admin (see the source claims).
+H8A_PACKAGING = re.compile(
+    r'<dt class="sf-fdetail2__term">Packaging</dt>'
+    r'<dd class="sf-fdetail2__value">[\s\S]*?</dd>')
+
+# 待办29 — both carriers stop repeating the row's own label. Anchored on the
+# term/value pair, because the same string appears six more times on a detail
+# page (JSON-LD twice, the Standard Specs card, and three related-card specs)
+# and only these two are the carriers.
+H8A_SHELF_PARAMS = re.compile(
+    r'(<dt class="sf-fdetail2__term">Shelf life</dt>'
+    r'<dd class="sf-fdetail2__value">)(\d+) months shelf life(</dd>)')
+H8A_SHELF_SPECS = re.compile(
+    r'(<dt class="sf-fdetail-specs__term">Shelf Life</dt>'
+    r'<dd class="sf-fdetail-specs__value">)(\d+) months shelf life(</dd>)')
+
+# ...and the one record whose pool value says something the spec string does
+# not. It is a second pass on purpose: the first strips the name, this one says
+# what the pool holds, and the two are counted separately so a run that did the
+# first and skipped the second cannot report the same total.
+#
+# This is the batch's only per-record byte beyond the shelf-life rule itself, so
+# the page's identity has to be read out of the page (`_h8a_page`). Its control
+# is the matrix mutant `pool=False` — `invariants` owns no clause for it, and
+# giving it one would mean deriving the expected value from the baseline, which
+# is the transform itself.
+H8A_POOL_PARAMS = re.compile(
+    r'(<dt class="sf-fdetail2__term">Shelf life</dt>'
+    r'<dd class="sf-fdetail2__value">)\d+ months(</dd>)')
+H8A_POOL_SPECS = re.compile(
+    r'(<dt class="sf-fdetail-specs__term">Shelf Life</dt>'
+    r'<dd class="sf-fdetail-specs__value">)\d+ months(</dd>)')
+
+
+def _h8a_group(m, custom=True, box=True):
+    head, key, label, body, close = m.groups()
+    kind = 'checkbox' if 'type="checkbox"' in body else 'radio'
+    if custom:
+        if 'value="custom"' in body:
+            # A library row already ends the group in Custom (shape, container).
+            # It is marked, not re-added: the slug is validated by the PDF
+            # endpoint, so the option stays exactly what the library publishes.
+            body = body.replace(
+                '<label class="sf-fdetail-config__opt"><input class="sf-fdetail-config__input" '
+                'type="radio" name="sf-config-%s" value="custom"' % key,
+                '<label class="sf-fdetail-config__opt" data-sf-config-custom="1">'
+                '<input class="sf-fdetail-config__input" type="radio" '
+                'name="sf-config-%s" value="custom"' % key, 1)
+        else:
+            body = body + _h8a_label(key, kind)
+    return head + body + close + (H8A_BOX % {'key': key, 'label': label} if box else '')
+
+
+def _h8a_move(text, page, check=True, hint=True, custom=True, box=True,
+              packaging=True, shelf=True, pool=True):
+    n = 0
+    if check:
+        text, k = H8A_CHECKBOX.subn(r'\1type="radio"\2', text)
+        n += k
+    if hint:
+        text, k = H8A_HINT_OLD.subn(H8A_HINT_NEW, text)
+        n += k
+    if custom or box:
+        text, k = H8A_GROUP.subn(
+            lambda m: _h8a_group(m, custom=custom, box=box), text)
+        n += k
+    if packaging:
+        text, k = H8A_PACKAGING.subn('', text)
+        n += k
+    if shelf:
+        text, k = H8A_SHELF_PARAMS.subn(r'\g<1>\g<2> months\g<3>', text)
+        n += k
+        text, k = H8A_SHELF_SPECS.subn(r'\g<1>\g<2> months\g<3>', text)
+        n += k
+    if pool and H8A_RECORD(page):
+        text, k = H8A_POOL_PARAMS.subn(r'\g<1>24 months\g<2>', text)
+        n += k
+        text, k = H8A_POOL_SPECS.subn(r'\g<1>24 months\g<2>', text)
+        n += k
+    return text, n
+    if packaging:
+        text, k = H8A_PACKAGING.subn('', text)
+        n += k
+    if shelf:
+        text, k = H8A_SHELF_PARAMS.subn(r'\g<1>\g<2> months\g<3>', text)
+        n += k
+        text, k = H8A_SHELF_SPECS.subn(r'\g<1>\g<2> months\g<3>', text)
+        n += k
+    if pool and H8A_RECORD(page):
+        text, k = H8A_POOL_PARAMS.subn(r'\g<1>24 months\g<2>', text)
+        n += k
+        text, k = H8A_POOL_SPECS.subn(r'\g<1>24 months\g<2>', text)
+        n += k
+    return text, n
+
+
+def _h8a_page(text):
+    """The transform needs the page's name for one clause — which record holds
+    a pool value. The gate calls `transform(text)`, so the name arrives through
+    the text, and the page's own canonical link is where it is stated (measured:
+    on both copies of the record it is also the FIRST `/formulas/<slug>/` in the
+    document, in both languages, so the fallback is the reading this actually
+    takes; the canonical is preferred because it is the statement of identity
+    rather than a coincidence of order)."""
+    m = (re.search(r'<link rel="canonical" href="[^"]*?/formulas/([a-z0-9-]+)/"', text)
+         or re.search(r'/formulas/([a-z0-9-]+)/', text))
+    return H8A_RECORD(m.group(1)) if m else False
+
+
+def _h8a_transform(text):
+    return _h8a_move(text, 'joint-support-soft-chews' if _h8a_page(text) else '')
+
+
+def _h8a_partial(**flags):
+    def f(text):
+        return _h8a_move(text, 'joint-support-soft-chews' if _h8a_page(text) else '',
+                         **flags)
+    return f
+
+
+def _h8a_boxes(base, n):
+    """How many Custom boxes the candidate must carry on this page: one per
+    group that can be typed in, read off the BASELINE's own group inventory.
+    Derived from the other side on purpose — counting the candidate's boxes
+    against the candidate's boxes would be the circularity this clause exists
+    to avoid, and so would counting them against a constant, because which
+    groups a record has comes from its own meta and the sales team fills it."""
+    t = read(os.path.join(base, n + '.html'))
+    return sum(1 for g in H8A_BOXED if ('data-sf-config-group="%s"' % g) in t)
+
+
+BATCHES['h8a'] = {
+    'name': "H8a — the right column: a sticky gallery, one pick per group with "
+            "a Custom answer, a fixed shelf-life pool, and the Packaging row retires",
+    'mode': 'insert',
+    'tokens': [
+        ('?ver=2.10.73', '?ver=2.10.74'),                      # style.css
+        ('config.js?ver=1.3.0', 'config.js?ver=1.4.0'),        # config.js
+    ],
+    # 314 edits: 74 inputs stop being checkboxes, 2 hints stop promising more
+    # than one, 108 groups gain a Custom pick and its box, 42 Packaging rows
+    # leave, 84 shelf-life carriers stop repeating their own name, and 4 files
+    # on the two copies of the record that hold a pool value.
+    'applies': 314,
+    'transform': _h8a_transform,
+    'coverage': [
+        ('?ver=2.10.73', 0),
+        ('config.js?ver=1.3.0', 0),
+        ('>Choose one or more<', 0),
+        # Both carriers, both numbers, in one claim: the row's own label is no
+        # longer part of the value it prints. `shelf life` also appears inside
+        # JSON-LD and the related-card specs, so the claim is anchored on the
+        # close of a value cell.
+        ('months shelf life</dd>', 0),
+        ('<dt class="sf-fdetail2__term">Packaging</dt>', 0),
+        # pricing is the group the batch must NOT touch, and this is the claim
+        # that says so: a Custom box filed under it would be reachable only from
+        # a price list, which is the one place a typed answer cannot be quoted.
+        ('data-sf-config-custom-for="pricing"', 0),
+    ],
+    'insertions': [
+        ('?ver=2.10.74', 75),
+        ('config.js?ver=1.4.0', 42),
+        ('data-sf-config-custom="1"', 108),
+        ('data-sf-config-custom-input="', 108),
+        ('type="radio"', 536),
+    ],
+    'counts': [
+        # 待办27 — the two multi-select groups become single picks. 74 -> 0 is a
+        # pair rather than a bare absence because the number it replaced (398
+        # radios) is the other half of the same claim.
+        ('the multi-select inputs become single picks', 'type="checkbox"', 74, 0),
+        ('...and the radios they became join the ones already there',
+         'type="radio"', 398, 536),
+        # The theme did not rename the library's own Custom slug.
+        ('the library Custom slugs are untouched', 'value="custom"', 44, 44),
+        ('...and the picks the theme added are its own', 'value="Custom"', 0, 64),
+        ('the parameter column keeps all its groups', 'sf-fdetail-config__group', 110, 110),
+        ('every group that can be typed in gains a pick', 'sf-fdetail-config__opt', 582, 646),
+        ('...and a box beside it', 'class="sf-fdetail-config__custom" data-sf-config-custom-for="', 0, 108),
+        ('the hint stops promising more than one', 'sf-fdetail-config__hint">Choose one</span>', 46, 48),
+        # 待办26 — the row retires on all 42 pages and on no others.
+        ('the Packaging row leaves the parameter list',
+         '<dt class="sf-fdetail2__term">Packaging</dt>', 42, 0),
+        # 待办29 — the value loses its own name on 42 pages and 84 carriers,
+        # split from the one record whose pool value says otherwise.
+        ('the shelf life prints the spec value without its name',
+         'sf-fdetail2__value">18 months</dd>', 0, 14),
+        ('...and prints the pool value where there is one',
+         'sf-fdetail2__value">24 months</dd>', 0, 28),
+        ('...and the spec sheet carries both edits with it',
+         'sf-fdetail-specs__value">18 months</dd>', 0, 14),
+        ('...there too', 'sf-fdetail-specs__value">24 months</dd>', 0, 28),
+        # 待办23's other half: the ladder is a price list and stays one.
+        ('the ladder keeps its three breaks', 'sf-tier__dot', 6, 6),
+    ],
+    'unmoved': [
+        ('the cookie banner', r'class="sf-cookie-banner"', 75),
+        ('the float stack', r'class="sf-float-stack"', 75),
+        ('the certificate dialog', r'sf-certmodal', 1),
+        ('the navigation', r'wp-block-navigation', 75),
+        ('the parameter column', r'sf-fdetail-config__group', 42),
+        ('...and every group it holds', r'sf-fdetail-config__options', 42),
+        # Which groups a record has comes from its own meta. The claim is that
+        # this batch added a group to no page and took one from no page — the
+        # four that changed gained a PICK inside a group they already had.
+        ('the flavor group', r'data-sf-config-group="flavor"', None),
+        ('the unit weight group', r'data-sf-config-group="weight"', None),
+        ('the pack size group', r'data-sf-config-group="pack"', None),
+        ('the shape group', r'data-sf-config-group="shape"', None),
+        ('the container group', r'data-sf-config-group="container"', None),
+        ('...and the ladder is still on no page it was not on',
+         r'data-sf-config-group="pricing"', 2),
+        ('the gallery tabs', r'sf-gallery__tabs', 42),
+        ('the side column', r'sf-fdetail2__side', 42),
+    ],
+    'per_page': [
+        ('h1', r'<h1[ >]', 1),
+        ('the new style token', r'style\.css\?ver=2\.10\.74', 1),
+    ],
+    'scoped': [
+        ('the ladder is still on the one record that has one',
+         'sf-fdetail-config__tiers', H8A_RECORD, 1),
+    ],
+    'corroborated': [
+        # Derived from the baseline, so the number of boxes is not read off the
+        # side being checked. A box that quietly leaves one page is invisible to
+        # every total in `counts` — it only moves that page by one.
+        ('a Custom box for every group that can be typed in',
+         r'data-sf-config-custom-input="', _h8a_boxes),
+    ],
+    'order': [
+        # Where the batch put the pick, which no count can say: the Custom
+        # answer ends the row it belongs to, and its box follows the row.
+        ('the Custom pick ends the row it belongs to, its box after it',
+         'value="custom"', 'data-sf-config-custom-for="shape"', H8A_DETAIL),
+        ('the column still ends on its inquiry button, after the parameter list',
+         'sf-fdetail2__params', 'data-sf-inquiry-open>Send Inquiry</a>', H8A_RECORD),
+    ],
+    'h2_delta': None,
+    'jsonld_delta': None,
+    'sources': {
+        'cfg': 'assets/js/config.js',
+        'pools': 'inc/formula-pools.php',
+        'admin': 'inc/formula-admin.php',
+    },
+    'reinject': ('an old address for the retired row fails coverage',
+                 'formulas__calming-soft-chews.html',
+                 '<dt class="sf-fdetail2__term">Certifications</dt>',
+                 '<dt class="sf-fdetail2__term">Packaging</dt>'
+                 '<dd class="sf-fdetail2__value">Jar</dd>'),
+    'delete': ("one page loses a Custom answer's box fails coverage",
+               'formulas__calming-soft-chews.html',
+               'data-sf-config-custom-input="'),
+    'nc13_mode': 'sighted',
+    'nc13_label': ('NC13 the insert direction SEES a Custom pick renamed, and coverage confirms it'),
+    'matrix': [
+        ('the tokens are not folded', {'tokens': []}, None),
+        ('the pick is left off every group',
+         {'transform': _h8a_partial(custom=False)}, None),
+        ('...and the box is left off with it',
+         {'transform': _h8a_partial(box=False)}, None),
+        ('the group the visitor types into is skipped instead',
+         {'transform': _h8a_partial(custom=False, box=False)}, None),
+        ('pack size keeps its checkboxes',
+         {'transform': _h8a_partial(check=False)}, None),
+        ('the hint goes on promising more than one',
+         {'transform': _h8a_partial(hint=False)}, None),
+        ('the Packaging row is left in the parameter list',
+         {'transform': _h8a_partial(packaging=False)}, None),
+        ('the shelf life goes on repeating its own name',
+         {'transform': _h8a_partial(shelf=False)}, None),
+        ('the record keeps the spec value instead of its pool value',
+         {'transform': _h8a_partial(pool=False)}, None),
+        ('the run count is declared one short', {'applies': 313}, None),
+        ('nothing is applied at all',
+         {'transform': (lambda t: (t, 0)), 'applies': 0}, None),
+    ],
+    'nc_source': [
+        ('NC-src the source pass fails when the stylesheet keeps its old version',
+         'style.css', 'Version: 2.10.74', 'Version: 2.10.73'),
+        ('NC-src the source pass fails when the enqueue keeps its old version',
+         'functions.php', "array(), '2.10.74');", "array(), '2.10.73');"),
+        ('NC-src ...and when config.js keeps its own',
+         'functions.php', "'/assets/js/config.js', array(), '1.4.0'",
+         "'/assets/js/config.js', array(), '1.3.0'"),
+        # 待办23 — the sticky gallery, dropped.
+        ('NC-src the source pass fails when the media column stops sticking',
+         'style.css',
+         "\t.sf-fdetail2__media {\n\t\tposition: sticky;\n\t\ttop: 100px;\n"
+         "\t\talign-self: start;\n\t}\n",
+         ""),
+        # 待办28 — the phone fold, put back where H7l had left it.
+        ('NC-src the source pass fails when the phone fold drops the ladder again',
+         'style.css',
+         ".sf-fdetail-config__group:nth-child(n + 5) {",
+         ".sf-fdetail-config__group:nth-child(n + 4) {"),
+        # 待办29 — the two carriers, reverted one at a time.
+        ('NC-src the source pass fails when the parameter row reads the spec string again',
+         'functions.php',
+         "\t$shelf = sf_formula_shelf_life_line($post_id, $parts);\n",
+         "\t$shelf = isset($parts['shelf']) ? $parts['shelf'] : '';\n"),
+        ('NC-src ...and when the pool keeps no value the fixed list no longer offers',
+         'inc/formula-admin.php', "'keep_unknown' => true,", "'keep_unknown' => false,"),
+        # 待办27 — the Custom answer, disowned at both ends.
+        ('NC-src the source pass fails when the pick stops reading its box',
+         'assets/js/config.js',
+         "opt.hasAttribute('data-sf-config-custom')", 'false'),
+        ('NC-src ...and when the box stops following its pick',
+         'assets/js/config.js', "function syncCustom(focus)", "function syncCustomX(focus)"),
+        # 待办28 — the sliding row, disowned.
+        ('NC-src the source pass fails when the shape row loses its arrows',
+         'assets/js/config.js', "['shape', 'container'].forEach", "['shape'].forEach"),
+    ],
+    'nc_page': [
+        # The two claims the MAIN PROOF cannot see, for the reason it cannot see
+        # them: `invariants` is the pass `nc_page` drives, and both of these are
+        # owned by clauses that live there. The record's PRINTED VALUE is not
+        # one of them — it is owned by the main proof (the declaration builds
+        # `24 months` for exactly that page, and `applies` counts the pass that
+        # did it) and by the coverage pair; its control is the matrix mutant
+        # `pool=False`, which is caught on 2 differing pages. Asserting it here
+        # would have needed an `invariants` clause that re-derives the value
+        # from the baseline, i.e. one that agrees with the transform by
+        # construction — which is the circularity this file refuses.
+        ('NC-page the invariants fail when a page loses a Custom box',
+         'formulas__calming-soft-chews.html',
+         lambda t: re.sub(
+             r'<div class="sf-fdetail-config__custom" data-sf-config-custom-for='
+             r'"[a-z]+" hidden>[\s\S]*?</div>', '', t, count=1)),
+        ('NC-page the invariants fail when the box stops following its pick',
+         'formulas__calming-soft-chews.html',
+         lambda t: t.replace('data-sf-config-custom-for="shape"',
+                             'data-sf-config-custom-for="shapX"', 1)),
+        ('NC-page the invariants fail on a group that quietly leaves',
+         'formulas__calming-soft-chews.html',
+         lambda t: t.replace('data-sf-config-group="shape"',
+                             'data-sf-config-group="shapX"', 1)),
+    ],
+    'nc_blind': ('formulas__calming-soft-chews.html',
+                 'data-sf-config-custom="1"', 'data-sf-config-custom="X1"'),
+    'source': [
+        ('style.css declares 2.10.74', 'css', r'(?m)^Version: 2\.10\.74$', True),
+        ('no 2.10.73 header survives', 'css_live', r'(?m)^Version: 2\.10\.73$', False),
+        ('functions.php enqueues 2.10.74 for style.css', 'php',
+         r"wp_enqueue_style\('sinofresh-style'[^;]*'2\.10\.74'", True),
+        ('...and 1.4.0 for config.js', 'php',
+         r"wp_enqueue_script\('sinofresh-config'[^;]*'1\.4\.0'", True),
+        # --- 待办23: the gallery sticks ----------------------------------
+        ('the media column sticks 100px down, desktop only', 'css_live',
+         r'@media \(min-width: 769px\) \{[\s\S]{0,2000}\.sf-fdetail2__media \{\n'
+         r'\t\tposition: sticky;\n\t\ttop: 100px;\n\t\talign-self: start;\n\t\}', True),
+        ('...because the root guard ends on clip, which never creates a scroll container',
+         'css_live',
+         r'html,\nbody \{\n\toverflow-x: hidden;\n\toverflow-x: clip;\n\}', True),
+        # --- 待办26: the row retires -------------------------------------
+        ('the parameter list no longer files a Packaging row', 'php_live',
+         r"\$rows\['Packaging'\]", False),
+        ('...and it is still the form page that prints packaging formats',
+         'php', r"sinofresh_formula_spec_cell\(\$form_slug, 'Packaging formats'\)", True),
+        # --- 待办27: one pick per group, and a Custom answer --------------
+        ('the theme can publish a Custom pick and its box', 'php',
+         r'function sf_formula_custom_option\(', True),
+        ('...the box is server-rendered, so no-js still has one', 'php',
+         r'function sf_formula_custom_field\(', True),
+        ('...a typed answer is filed with the marker the desk reads', 'php',
+         r"\$text\[\] = \$own \. ' \(custom\)';", True),
+        ('...and it is unwrapped server-side, not trusted as posted', 'php',
+         r'function sinofresh_formula_custom_text\(\$value\)', True),
+        ('the pick keeps the library Custom slug rather than renaming it',
+         'php', r"if \('custom' === \(string\) \$s\[\'slug'\]\)", True),
+        # The seventh dimension, and the one the rendered proof cannot reach:
+        # no record in this capture carries a species value, so the group is on
+        # 0 of 75 pages. The claim is a source claim for that reason, and it is
+        # the pair — Suitable For stays multi AND gets a Custom pick.
+        ('Suitable For stays a multi-select', 'php',
+         r"'key' => 'species', 'label' => 'Suitable For', 'meta' => implode\(', ', \$species\),\n"
+         r"\t\t\t'type' => 'multi', 'style' => 'chips',", True),
+        ('...and still gets a Custom answer of its own', 'php',
+         r"\$options\[\] = sf_formula_custom_option\(\);\n"
+         r"\t\t\$groups\[\] = array\(\n\t\t\t'key' => 'species'", True),
+        ('...and the pick answers with the typed text, not the word',
+         'cfg_live', r"opt\.hasAttribute\('data-sf-config-custom'\)", True),
+        ('...which is what the box appears for', 'cfg_live',
+         r'function syncCustom\(focus\)', True),
+        ('the box ships hidden and the pick reveals it', 'css_live',
+         r'\.sf-fdetail-config__custom\[hidden\] \{\n\tdisplay: none;\n\}', True),
+        # --- 待办28: the sliding row -------------------------------------
+        ('the arrow ships display:none, so a page with no script has none',
+         'css_live', r'\.sf-fdetail-config__arrow \{\n\tdisplay: none;', True),
+        ('...and an overflowing row on a pointer device shows them', 'css_live',
+         r'@media \(min-width: 769px\) \{\n\t\.sf-fdetail-config__rail--scrolls '
+         r'\.sf-fdetail-config__arrow \{\n\t\tdisplay: inline-flex;\n\t\}', True),
+        ('...outside the row, so they cover no picture', 'css_live',
+         r'\.sf-fdetail-config__arrow--prev \{ left: -22px; \}', True),
+        ('...and the row they serve is the one that slides', 'css_live',
+         r'\.sf-fdetail-config__group\[data-sf-config-group="shape"\] '
+         r'\.sf-fdetail-config__options,\n'
+         r'\.sf-fdetail-config__group\[data-sf-config-group="container"\] '
+         r'\.sf-fdetail-config__options \{\n\tflex-wrap: nowrap;\n\toverflow-x: auto;', True),
+        ('...which is the pair of groups the script wires them onto', 'cfg_live',
+         r"\['shape', 'container'\]\.forEach", True),
+        ('...and the rails are built only when the row overflows', 'cfg_live',
+         r'room > 4', True),
+        # The fold: the cut moved from the fourth group to the fifth.
+        ('the phone fold now keeps the ladder and the three named groups',
+         'css_live',
+         r'\.sf-fdetail-config__list\.sf-config-folded\n\t\t'
+         r'\.sf-fdetail-config__group:nth-child\(n \+ 5\) \{', True),
+        ('...and the fourth-group cut it replaced is gone', 'css_live',
+         r'nth-child\(n \+ 4\) \{\n\t\tdisplay: none;', False),
+        ('...while the fold button still says both of its states', 'cfg_live',
+         r"open \? 'Show fewer specs ▴' : 'View all specs ▾'", True),
+        # --- 待办29: the fixed pool -------------------------------------
+        # WHERE THE PRINTED VALUE IS OWNED, stated because the clause that
+        # reads the pool is easy to miss: `sf_formula_shelf_life_line()` on the
+        # two rows below is what decides it, and the NC-src control for the
+        # parameter row is the reason these two claims exist — without them the
+        # control fired and the source pass still said ok, which is a source
+        # pass that cannot see the batch's central edit.
+        ('the parameter row asks the pool what to print', 'php',
+         r"\$shelf = sf_formula_shelf_life_line\(\$post_id, \$parts\);\n"
+         r"\tif \(\$shelf !== ''\) \{\n\t\t\$rows\['Shelf life'\]", True),
+        ('...and the spec sheet asks the same reader', 'php',
+         r"\$shelf = sf_formula_shelf_life_line\(\$post_id, \$parts\);\n"
+         r"\tif \(\$shelf !== ''\) \{\n\t\t\$rows\['Shelf Life'\]", True),
+        ('...so neither row reads the raw spec string any more', 'php_live',
+         r"\$rows\['Shelf life'\] = esc_html\(isset\(\$parts\['shelf'\]\)", False),
+        ('the shelf life is a fixed pool of four', 'pools',
+         r"return array\('12 months', '18 months', '24 months', '36 months'\);", True),
+        ('...a value the pool once held still prints as a pool value', 'pools',
+         r"return \$m\[1\] \. ' months';", True),
+        ('...the pool keeps a value it no longer offers instead of clearing it',
+         'admin', r"'keep_unknown' => true,", True),
+        ('...and the field is a select among the published parameters',
+         'admin',
+         r"'key' => 'sf_formula_shelf_life', 'label' => 'Shelf life', "
+         r"'group' => 'params', 'type' => 'select'", True),
+        ('no free-text shelf-life line survives in the packaging group',
+         'admin_live', r"'sf_formula_shelf_life'[^\n]*'group' => 'packaging'", False),
+    ],
+}
+
+
 # ------------------------------------------------------------------ source side
 
 def _live_of(rel, text, prune):
