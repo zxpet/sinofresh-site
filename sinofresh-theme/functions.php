@@ -28,7 +28,7 @@ add_action('after_setup_theme', function() {
 });
 
 add_action('wp_enqueue_scripts', function() {
-	wp_enqueue_style('sinofresh-style', get_stylesheet_uri(), array(), '2.10.69');
+	wp_enqueue_style('sinofresh-style', get_stylesheet_uri(), array(), '2.10.70');
 	// Sticky nav: every template renders parts/header.html, so this is site-wide.
 	wp_enqueue_script('sinofresh-sticky-header', get_template_directory_uri() . '/assets/js/sticky-header.js', array(), '1.0.0', true);
 	wp_enqueue_script('sinofresh-ui-components', get_template_directory_uri() . '/assets/js/ui-components.js', array(), '1.0.0', true);
@@ -47,7 +47,7 @@ add_action('wp_enqueue_scripts', function() {
 		   same list seen twice, so the two scripts are enqueued together and
 		   conditionally together — on the other 33 pages there is no band to
 		   configure and no dialog to carry a selection into. */
-		wp_enqueue_script('sinofresh-config', get_template_directory_uri() . '/assets/js/config.js', array(), '1.2.0', true);
+		wp_enqueue_script('sinofresh-config', get_template_directory_uri() . '/assets/js/config.js', array(), '1.3.0', true);
 	}
 	// On-this-page TOC (dot rail on marketing pages, text list on articles) +
 	// article extras (progress bar, inline CTA, feedback, print URL). The JS
@@ -1973,6 +1973,65 @@ function sinofresh_formula_pack_parts($pack) {
  *   hint     the one-line instruction, or ''
  *   options  value / label / image (url or '') / note (the unit price or tail)
  */
+/**
+ * The Quantity & Pricing ladder's own formatting (batch H7i).
+ *
+ * The ladder is read as a price list, so the two halves of a tier are shaped
+ * differently: a quantity is a count (thousands separator, no decimals), a
+ * price is money (always two decimals, always the same US$ prefix). The admin
+ * owns the wording — a tier that is not a plain number is printed exactly as
+ * it was typed, so "1000+" or "1,000 (pallet)" survives instead of being
+ * flattened into a float.
+ */
+function sf_tier_number($value) {
+	$value = trim((string) $value);
+	if ($value === '') {
+		return '';
+	}
+	if (!preg_match('/^[0-9][0-9,]*(\.[0-9]+)?$/', $value)) {
+		return $value;
+	}
+	return number_format((float) str_replace(',', '', $value));
+}
+
+/**
+ * "10-99" / "100-999" / "≥1,000". An open-ended top tier is what makes the
+ * ladder read as a ladder: the last row says "from here up", not "from here
+ * to nowhere", which is why the brief's third tier has no max at all.
+ */
+function sf_tier_range_label($min, $max) {
+	$min = sf_tier_number($min);
+	$max = sf_tier_number($max);
+	if ($min !== '' && $max !== '') {
+		return $min . '-' . $max;
+	}
+	if ($min !== '') {
+		return '≥' . $min;
+	}
+	if ($max !== '') {
+		return '≤' . $max;
+	}
+	return '';
+}
+
+/**
+ * "US$3.88". One prefix for the whole site: the tier note used to say
+ * "USD 3.88 / unit" while the JSON-LD said USD and the ladder's own card says
+ * US$, and three spellings of one currency on one page is the kind of drift
+ * a reader notices.
+ */
+function sf_tier_price_label($price) {
+	$price = trim((string) $price);
+	if ($price === '') {
+		return '';
+	}
+	$bare = trim((string) preg_replace('/^(?:US\$|USD|\$)\s*/i', '', $price));
+	if ($bare !== '' && preg_match('/^[0-9][0-9,]*(\.[0-9]+)?$/', $bare)) {
+		return 'US$' . number_format((float) str_replace(',', '', $bare), 2, '.', ',');
+	}
+	return 'US$' . $bare;
+}
+
 function sinofresh_formula_config_groups($post_id) {
 	$post_id = (int) $post_id;
 	if ($post_id <= 0) {
@@ -2120,38 +2179,54 @@ function sinofresh_formula_config_groups($post_id) {
 		}
 	}
 
+	/* Batch H7i — the ladder. The admin's row is {min, max, price} (the order's
+	   own data shape, replacing the {qty, price} pair), and a legacy qty is read
+	   as min so a record that has not been re-saved yet still prints a clean
+	   range instead of an empty card. The option's VALUE stays the human label
+	   ("10-99") because that is the string the inquiry carries and the endpoint
+	   validates against; the price rides along as the option's note, which is
+	   what the dialog and the no-JS line print. */
 	$tiers = sf_json_rows(get_post_meta($post_id, 'sf_formula_price_tiers', true));
-	if ($tiers) {
-		$options = array();
-		foreach ($tiers as $tier) {
-			if (!is_array($tier)) {
-				continue;
-			}
-			$qty   = trim((string) (isset($tier['qty']) ? $tier['qty'] : ''));
-			$price = trim((string) (isset($tier['price']) ? $tier['price'] : ''));
-			if ($qty === '' && $price === '') {
-				continue;
-			}
-			$options[] = array(
-				'value' => $qty !== '' ? $qty : $price,
-				'label' => $qty !== '' ? $qty : 'Custom quantity',
-				/* The brief's "showing the unit price": the tier's own price, so
-				   the choice reads as a quantity AND what it costs per unit. */
-				'note'  => $price !== '' ? 'USD ' . $price . ' / unit' : '',
-				'image' => '',
-			);
+	$tier_opts = array();
+	$tier_meta = array();
+	foreach ($tiers as $tier) {
+		if (!is_array($tier)) {
+			continue;
 		}
-		if ($options) {
-			$meta = array();
-			foreach ($options as $o) {
-				$meta[] = $o['label'] . ($o['note'] !== '' ? ' — ' . $o['note'] : '');
-			}
-			$groups[] = array(
-				'key' => 'pricing', 'label' => 'Quantity & Pricing', 'meta' => implode(' · ', $meta),
-				'type' => 'single', 'style' => 'tiers', 'hint' => 'Choose one',
-				'options' => $options,
-			);
+		$min   = trim((string) (isset($tier['min']) ? $tier['min'] : (isset($tier['qty']) ? $tier['qty'] : '')));
+		$max   = trim((string) (isset($tier['max']) ? $tier['max'] : ''));
+		$price = trim((string) (isset($tier['price']) ? $tier['price'] : ''));
+		if ($min === '' && $max === '' && $price === '') {
+			continue;
 		}
+		$range = sf_tier_range_label($min, $max);
+		if ($range === '') {
+			$range = 'Custom quantity';
+		}
+		$note = sf_tier_price_label($price) !== '' ? sf_tier_price_label($price) . ' / unit' : '';
+		$tier_opts[] = array(
+			'value' => $range,
+			'label' => $range,
+			'note'  => $note,
+			'image' => '',
+			/* The ladder's own card layout: the price is the headline, the
+			   range and the unit are what qualify it. */
+			'price_text' => sf_tier_price_label($price),
+			'range_text' => $range,
+		);
+		$tier_meta[] = $range . ($note !== '' ? ' — ' . $note : '');
+	}
+	if ($tier_opts) {
+		$groups[] = array(
+			'key' => 'pricing', 'label' => 'Quantity & Pricing', 'meta' => implode(' · ', $tier_meta),
+			'type' => 'single', 'style' => 'tiers', 'hint' => 'Choose one',
+			'options' => $tier_opts,
+			'unit' => 'pieces',
+			/* The sample fee is its own meta, not a tier: it is not a quantity
+			   break, and a "sample" row inside a price ladder would price one
+			   unit of a sample as if it were the product. */
+			'sample_price' => sf_tier_price_label(get_post_meta($post_id, 'sf_formula_sample_price', true)),
+		);
 	}
 
 	return $groups;
@@ -2253,6 +2328,66 @@ function sinofresh_formula_config() {
 		$type  = $group['type'] === 'single' ? 'radio' : 'checkbox';
 		$name  = 'sf-config-' . $key;
 		$hint  = trim((string) $group['hint']);
+
+		/* The price ladder is the one group that is not pills (batch H7i). It
+		   keeps every property the other groups have — a real radio per tier,
+		   the same data-sf-config-opt hook, the same is-on class config.js
+		   toggles — and changes only what a tier has to say: a price big
+		   enough to compare down a row, the range under it, and a dot at the
+		   foot so the chosen break is still a visible pick. The option's own
+		   text span is skipped (the price IS the label); config.js falls back
+		   to the input's value, which is the range. */
+		if ($group['style'] === 'tiers') {
+			$unit = trim((string) (isset($group['unit']) ? $group['unit'] : ''));
+			$cards = '';
+			foreach ($group['options'] as $option) {
+				$cards .= '<label class="sf-fdetail-config__opt sf-tier">'
+					. '<input class="sf-fdetail-config__input" type="radio"'
+					. ' name="' . esc_attr($name) . '" value="' . esc_attr((string) $option['value']) . '"'
+					. ' data-sf-config-opt="' . esc_attr($key) . '">'
+					. '<span class="sf-tier__price">' . esc_html((string) $option['price_text']) . '</span>'
+					. '<span class="sf-tier__range">' . esc_html((string) $option['range_text']) . '</span>'
+					. ($unit !== '' ? '<span class="sf-tier__unit">' . esc_html($unit) . '</span>' : '')
+					. '<span class="sf-tier__dot" aria-hidden="true"></span>'
+					. '</label>';
+			}
+
+			/* The sample row. It lives INSIDE the ladder's own block because it
+			   is what the buyer asks after reading the breaks, and it is only
+			   printed when the record carries a sample fee — a "Get Sample"
+			   button with no price beside it is a promise the record has not
+			   made. The button is an <a> carrying data-sf-inquiry-open, the same
+			   contract the hero and the float capsule use: the dialog when the
+			   script is there, /contact/#quote when it is not. */
+			$sample = '';
+			$sample_price = isset($group['sample_price']) ? (string) $group['sample_price'] : '';
+			if ($sample_price !== '') {
+				$sample = '<div class="sf-fdetail-config__sample">'
+					. '<span class="sf-fdetail-config__sample-icon" aria-hidden="true">'
+					. '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"'
+					. ' stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" focusable="false">'
+					. '<path d="M21 8 12 3 3 8v8l9 5 9-5V8Z"/><path d="m3 8 9 5 9-5"/><path d="M12 13v8"/>'
+					. '</svg></span>'
+					. '<span class="sf-fdetail-config__sample-label">Sample price</span>'
+					. '<span class="sf-fdetail-config__sample-price">' . esc_html($sample_price) . '</span>'
+					. '<a class="sf-fdetail-config__sample-cta" href="/contact/#quote" data-sf-inquiry-open'
+					. ' data-sf-inquiry-sample="' . esc_attr($sample_price) . '">Get Sample</a>'
+					. '</div>';
+			}
+
+			$html .= '<div class="sf-fdetail-config__group" data-sf-config-group="' . esc_attr($key) . '">'
+				. '<p class="sf-fdetail-config__row">'
+				. '<span class="sf-fdetail-config__label">' . esc_html((string) $group['label']) . '</span>'
+				. '<span class="sf-fdetail-config__meta">' . esc_html((string) $group['meta']) . '</span>'
+				. ($hint !== ''
+					? '<span class="sf-fdetail-config__hint">' . esc_html($hint) . '</span>' : '')
+				. '</p>'
+				. '<div class="sf-fdetail-config__options sf-fdetail-config__tiers" role="group"'
+				. ' aria-label="' . esc_attr((string) $group['label']) . '">' . $cards . '</div>'
+				. $sample
+				. '</div>';
+			continue;
+		}
 
 		$opts = '';
 		foreach ($group['options'] as $option) {
@@ -3137,14 +3272,19 @@ function sinofresh_inquiry_selection_rows($post_id) {
 		if (!is_array($tier)) {
 			continue;
 		}
-		$qty   = trim((string) (isset($tier['qty']) ? $tier['qty'] : ''));
+		/* H7i: the row is {min, max, price}; a legacy qty reads as min. The
+		   row is written the way the ladder's own card prints it, so the spec
+		   sheet and the price list cannot disagree about one tier. */
+		$min   = trim((string) (isset($tier['min']) ? $tier['min'] : (isset($tier['qty']) ? $tier['qty'] : '')));
+		$max   = trim((string) (isset($tier['max']) ? $tier['max'] : ''));
 		$price = trim((string) (isset($tier['price']) ? $tier['price'] : ''));
-		if ($qty !== '' && $price !== '') {
-			$tiers[] = $qty . ' — ' . $price;
-		} elseif ($qty !== '') {
-			$tiers[] = $qty;
+		$range = sf_tier_range_label($min, $max);
+		if ($range !== '' && $price !== '') {
+			$tiers[] = $range . ' — ' . sf_tier_price_label($price);
+		} elseif ($range !== '') {
+			$tiers[] = $range;
 		} elseif ($price !== '') {
-			$tiers[] = $price;
+			$tiers[] = sf_tier_price_label($price);
 		}
 	}
 	if ($tiers) {
@@ -5512,11 +5652,23 @@ function sinofresh_formula_offers($rows) {
 			'price'         => $value,
 			'priceCurrency' => 'USD',
 		);
-		$qty = trim((string) (isset($row['qty']) ? $row['qty'] : ''));
-		if ($qty !== '' && preg_match('/([0-9][0-9,]*)/', $qty, $q)) {
+		/* H7i: the tier row is {min, max, price}; both ends travel, because
+		   AggregateOffer's priceSpecification can carry the range a buyer
+		   actually sees ("100-999") instead of a bare lower bound. A legacy
+		   qty still reads as the minimum. */
+		$min = trim((string) (isset($row['min']) ? $row['min'] : (isset($row['qty']) ? $row['qty'] : '')));
+		$max = trim((string) (isset($row['max']) ? $row['max'] : ''));
+		if ($min !== '' && preg_match('/([0-9][0-9,]*)/', $min, $q)) {
 			$spec['minQuantity'] = array(
 				'@type'    => 'QuantitativeValue',
 				'value'    => (int) str_replace(',', '', $q[1]),
+				'unitText' => 'units',
+			);
+		}
+		if ($max !== '' && preg_match('/([0-9][0-9,]*)/', $max, $q2)) {
+			$spec['maxQuantity'] = array(
+				'@type'    => 'QuantitativeValue',
+				'value'    => (int) str_replace(',', '', $q2[1]),
 				'unitText' => 'units',
 			);
 		}

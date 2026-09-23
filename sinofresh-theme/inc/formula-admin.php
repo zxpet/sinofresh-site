@@ -91,7 +91,10 @@ function sf_formula_mb_fields() {
 		array('key' => 'sf_formula_lifestage', 'label' => 'Life stage', 'group' => 'params', 'type' => 'radio', 'req' => 2,
 			'pool' => array('Puppy', 'Kitten', 'Adult', 'Senior', 'All Life Stages')),
 		array('key' => 'sf_formula_price_tiers', 'label' => 'Tier pricing', 'group' => 'params', 'type' => 'table', 'req' => 2,
-			'cols' => array('qty' => 'Min quantity', 'price' => 'Unit price (USD)')),
+			'cols' => array('min' => 'Min quantity', 'max' => 'Max quantity', 'price' => 'Unit price (USD)'),
+			'hint' => 'Leave Max empty on the top tier: the ladder prints it as "1,000 and up".'),
+		array('key' => 'sf_formula_sample_price', 'label' => 'Sample price (USD)', 'group' => 'params', 'type' => 'text', 'req' => 1,
+			'hint' => 'e.g. 50 — printed beside "Get Sample" under the price ladder. Leave empty to hide the row.'),
 		// detail
 		array('key' => 'sf_formula_ingredients', 'label' => 'Ingredients', 'group' => 'detail', 'type' => 'textarea', 'req' => 2, 'rows' => 3),
 		array('key' => 'sf_formula_analysis', 'label' => 'Guaranteed Analysis', 'group' => 'detail', 'type' => 'textarea', 'req' => 2, 'rows' => 3),
@@ -438,7 +441,12 @@ function sf_formula_missing_required($post_id) {
 		if ($key === 'sf_formula_price_tiers') {
 			$ok = false;
 			foreach (sf_json_rows($raw) as $r) {
-				if (trim((string) ($r['qty'] ?? '')) !== '' && trim((string) ($r['price'] ?? '')) !== '') {
+				/* H7i: a complete row is a range start plus a price. The max end
+				   is optional by design — the top tier is open-ended — so it is
+				   not part of "complete". A legacy qty still counts as the min. */
+				$min   = trim((string) ($r['min'] ?? ($r['qty'] ?? '')));
+				$price = trim((string) ($r['price'] ?? ''));
+				if ($min !== '' && $price !== '') {
 					$ok = true;
 					break;
 				}

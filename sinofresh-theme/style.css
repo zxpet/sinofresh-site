@@ -2,7 +2,7 @@
 Theme Name: SINO FRESH
 Author: Shandong SINO FRESH Pet Food Co., Ltd.
 Text Domain: sinofresh
-Version: 2.10.69
+Version: 2.10.70
 Requires at least: 6.0
 Requires PHP: 7.4
 License: GNU General Public License v2 or later
@@ -9596,3 +9596,137 @@ body.sf-config-lock { overflow: hidden; }
 	}
 }
 
+
+/* =========================================================================
+   63. Quantity & Pricing, the ladder — batch H7i (the order's task 3), plus
+   the two compacting rules the same order asks for (task 11).
+   -------------------------------------------------------------------------
+   The group stops being a row of pills. A price list is read DOWN a column,
+   not across a sentence, so each tier becomes its own card: the unit price is
+   the headline, the quantity range and the unit qualify it, and the radio at
+   the foot keeps it a real choice. Everything the other groups rely on is
+   untouched — the pill's own class, the input, the is-on toggle config.js
+   writes, the data-sf-config-opt hook — so the summary, the dialog carrier
+   and the no-JS line all keep working without knowing this style exists.
+
+   Written at the end of the file for the reason 38a-iii gives: a rule that
+   overrides the pill base (display, border-radius, padding) has to come after
+   it, or it is dead at every width — the mistake batch H7b shipped. */
+
+.sf-fdetail-config__tiers {
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: 8px;
+}
+/* The card. Grid rather than the pill's inline-flex, so the three lines stack
+   in one column with no wrapper element per line; the dot is absolutely
+   placed, so the price stays the visual centre of the card. */
+.sf-fdetail-config__opt.sf-tier {
+	position: relative;
+	display: grid;
+	justify-items: center;
+	gap: 1px;
+	padding: 11px 8px 27px;
+	border-radius: 10px;
+	text-align: center;
+}
+.sf-tier__price {
+	font-size: 17px;
+	font-weight: 700;
+	line-height: 1.25;
+	color: var(--wp--preset--color--text-primary);
+}
+.sf-tier__range {
+	font-size: 12px;
+	line-height: 1.3;
+	color: var(--wp--preset--color--text-primary);
+}
+.sf-tier__unit {
+	font-size: 11px;
+	line-height: 1.3;
+	color: var(--wp--preset--color--text-secondary);
+}
+.sf-tier__dot {
+	position: absolute;
+	left: 50%;
+	bottom: 9px;
+	width: 14px;
+	height: 14px;
+	margin-left: -7px;
+	border: 1px solid var(--wp--preset--color--border-medium);
+	border-radius: 999px;
+	background-color: var(--wp--preset--color--card-white);
+}
+/* The dot follows the input, and the sibling selector is ~, not +: the dot is
+   the fourth child of the label, and + only reaches the element immediately
+   after the input. */
+.sf-fdetail-config__input:checked ~ .sf-tier__dot {
+	border-color: var(--wp--preset--color--brand-green);
+	background-color: var(--wp--preset--color--brand-green);
+	box-shadow: inset 0 0 0 3px var(--wp--preset--color--card-white);
+}
+.sf-fdetail-config__input:focus-visible ~ .sf-tier__dot {
+	outline: 2px solid var(--wp--preset--color--brand-green);
+	outline-offset: 2px;
+}
+.sf-fdetail-config__opt.sf-tier.is-on {
+	border-color: var(--wp--preset--color--brand-green);
+	background-color: var(--wp--preset--color--bg-light);
+}
+
+/* The sample row, inside the ladder's own block: the divider is what says it
+   is a different question from the three breaks above it. */
+.sf-fdetail-config__sample {
+	display: flex;
+	align-items: center;
+	gap: 7px;
+	margin-top: 10px;
+	padding-top: 10px;
+	border-top: 1px solid var(--wp--preset--color--border-light);
+	font-size: 13px;
+	line-height: 1.4;
+	color: var(--wp--preset--color--text-primary);
+}
+.sf-fdetail-config__sample-icon {
+	display: inline-flex;
+	flex: none;
+	color: var(--wp--preset--color--text-secondary);
+}
+.sf-fdetail-config__sample-price { font-weight: 700; }
+.sf-fdetail-config__sample-cta {
+	flex: none;
+	margin-left: auto;
+	padding: 6px 14px;
+	border: 1px solid var(--wp--preset--color--cta);
+	border-radius: 999px;
+	color: var(--wp--preset--color--cta);
+	font-size: 13px;
+	font-weight: 600;
+	line-height: 1.4;
+	text-decoration: none;
+	transition: background-color .15s ease, color .15s ease;
+}
+.sf-fdetail-config__sample-cta:hover,
+.sf-fdetail-config__sample-cta:focus-visible {
+	background-color: var(--wp--preset--color--cta);
+	color: var(--wp--preset--color--card-white);
+}
+
+/* Task 11, the second half. H7g gated the value-preview line on --js; the
+   hint is the same kind of echo — "Choose one or more" is advice about a
+   control that is already on screen — so it goes the same way. Without the
+   script the hint stays, because it is then the only thing telling the
+   visitor that the pills beside it are pickable. */
+.sf-fdetail-config--js .sf-fdetail-config__hint { display: none; }
+
+/* The ladder at phone width: three columns are kept — the brief reads as a
+   comparison, and stacking three prices would break the comparison it exists
+   for — but the cards tighten and the sample row wraps its button under the
+   price rather than squeezing it. */
+@media (max-width: 480px) {
+	.sf-fdetail-config__tiers { gap: 6px; }
+	.sf-fdetail-config__opt.sf-tier { padding: 9px 5px 25px; border-radius: 8px; }
+	.sf-tier__price { font-size: 16px; }
+	.sf-fdetail-config__sample { flex-wrap: wrap; row-gap: 8px; }
+	.sf-fdetail-config__sample-cta { margin-left: 0; padding: 8px 16px; font-size: 14px; min-height: 36px; }
+}

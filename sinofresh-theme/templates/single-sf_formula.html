@@ -14,7 +14,11 @@
 <span class="sf-fcard__use">{{FORMULA_USE}}</span>
 <div class="sf-formula-hero__title">{{TITLE}}</div>
 <p class="sf-formula-hero__meta">{{FORMULA_META}}</p>
-<div class="sf-formula-hero__actions"><a class="sf-formula__cta sf-formula__cta--solid" href="/contact/#quote" data-sf-inquiry-open>Send Inquiry</a><a class="sf-formula-hero__build sf-quote-cta" href="/contact/#quote">Build Custom Formula</a></div>
+<!-- Batch H7i: the hero's two buttons (Send Inquiry / Build Custom Formula)
+     are gone. The brief's hero is the identity of the record and nothing else:
+     breadcrumb, name, one meta line. The inquiry path moved to the foot of the
+     parameters column, where the visitor has just read the specification —
+     and to the float capsule, which already carried the same destination. -->
 <!-- /wp:html -->
 </section>
 <!-- /wp:group -->
@@ -53,7 +57,12 @@
 {{FORMULA_INTRO}}
 [sf_formula_config]
 [sf_formula_params]
-<a class="sf-fdetail2__cta" href="/contact/">Request Sample</a>
+<!-- Batch H7i: this used to be a plain "Request Sample" link to /contact/.
+     It is now the page's own inquiry button: the same Send Inquiry the float
+     capsule carries, at the foot of the specification the visitor just read,
+     with data-sf-inquiry-open driving the dialog and /contact/#quote the
+     no-JS destination. The paint is 38a's own CTA rule, not a second style. -->
+<a class="sf-fdetail2__cta" href="/contact/#quote" data-sf-inquiry-open>Send Inquiry</a>
 <!-- /wp:html -->
 </div>
 <!-- /wp:group -->

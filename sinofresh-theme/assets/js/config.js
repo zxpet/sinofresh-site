@@ -23,6 +23,11 @@
  *    The H7d drawer it replaces keeps running at 481-768px, where seven
  *    inline groups still outrun a tablet's viewport; at the phone width the
  *    drawer button is never drawn, so the two interactions never coexist.
+ * 4. The sample request (batch H7i, 1.3.0). "Get Sample" under the price
+ *    ladder opens the same dialog the Inquiry buttons do; this file only puts
+ *    the sentence in the Message field, and only into an empty one. A sample
+ *    request is a different errand from a quote, and the sales desk should not
+ *    have to infer it from a product name and a price tier.
  *
  * The endpoint does not trust any of this: it validates every posted value
  * against the options it can derive from the post id and prints the labels
@@ -48,6 +53,27 @@
 		var panelRows = modal ? modal.querySelector('.sf-inquiry-modal__rows') : null;
 
 		root.classList.add('sf-fdetail-config--js');
+
+		/* ------------------------------------------ the sample request (H7i) */
+
+		/* The button already opens the dialog: it carries data-sf-inquiry-open,
+		   which inquiry.js binds by itself. What is added here is the sentence.
+		   Written only into an empty field — a visitor who has typed something
+		   keeps it — and never after the form was already submitted, because
+		   inquiry.js clears the form on success. */
+		var message = form ? form.querySelector('textarea[name="message"]') : null;
+		[].slice.call(document.querySelectorAll('[data-sf-inquiry-sample]')).forEach(function (el) {
+			el.addEventListener('click', function () {
+				if (!message || message.value.trim() !== '') {
+					return;
+				}
+				var title = document.querySelector('.sf-fdetail2__title');
+				var price = el.getAttribute('data-sf-inquiry-sample') || '';
+				message.value = 'I would like to request a sample'
+					+ (title ? ' of ' + title.textContent.trim() : '')
+					+ (price ? ' (' + price + ' per sample)' : '') + '.';
+			});
+		});
 
 		var groups = [].slice.call(root.querySelectorAll('[data-sf-config-group]'));
 		/* Kept once, the first time the dialog's panel is overwritten: re-reading
