@@ -28,7 +28,7 @@ add_action('after_setup_theme', function() {
 });
 
 add_action('wp_enqueue_scripts', function() {
-	wp_enqueue_style('sinofresh-style', get_stylesheet_uri(), array(), '2.10.75');
+	wp_enqueue_style('sinofresh-style', get_stylesheet_uri(), array(), '2.10.76');
 	// Sticky nav: every template renders parts/header.html, so this is site-wide.
 	wp_enqueue_script('sinofresh-sticky-header', get_template_directory_uri() . '/assets/js/sticky-header.js', array(), '1.0.0', true);
 	wp_enqueue_script('sinofresh-ui-components', get_template_directory_uri() . '/assets/js/ui-components.js', array(), '1.0.0', true);
@@ -53,7 +53,7 @@ add_action('wp_enqueue_scripts', function() {
 	// article extras (progress bar, inline CTA, feedback, print URL). The JS
 	// self-selects its mode: body.single-post gets the article feature set,
 	// marketing pages keep the dot rail. JS no-ops with < 3 H2s for the TOC.
-	if (is_front_page() || is_page(array('quality', 'about', 'services', 'factory-tour', 'soft-chews', 'tablets', 'powders', 'pastes', 'drops', 'liquids', 'fish-oil', 'dental-chews')) || is_singular('post')) {
+	if (is_front_page() || is_page(array('quality', 'about', 'services', 'oem', 'odm', 'contract-manufacturing', 'private-label', 'factory-tour', 'soft-chews', 'tablets', 'powders', 'pastes', 'drops', 'liquids', 'fish-oil', 'dental-chews')) || is_singular('post')) {
 		wp_enqueue_script('sinofresh-toc-nav', get_template_directory_uri() . '/assets/js/toc-nav.js', array(), '2.0.0', true);
 	}
 	if (is_front_page()) {
@@ -6721,26 +6721,52 @@ remove_action('wp_head', 'wp_generator');
 add_filter('xmlrpc_enabled', '__return_false');
 
 /**
- * Service JSON-LD (schema.org) — OEM/ODM Services page only.
+ * Service JSON-LD (schema.org) — the OEM/ODM Services page and, since batch
+ * H8c, its four cooperation-model detail pages.
  *
  * The provider references the Organization node via @id (stamped by the
  * Organization hook above), so search engines link both entities into one
- * graph. areaServed lists the core export markets. Fields must stay in sync
- * with the visible page copy (H1/hero) — same source of truth rule as the
- * FAQPage hook.
+ * graph. areaServed lists the core export markets. name/description must stay
+ * in sync with the visible page copy (H1/hero) — same source of truth rule as
+ * the FAQPage hook. The `services` entry is byte-for-byte what this hook has
+ * always emitted; the four children were added with their templates, so every
+ * page in the family carries a Service node that names the page it sits on.
  */
 add_action('wp_head', function () {
-	if (is_admin() || defined('REST_REQUEST')) {
+	if (is_admin() || defined('REST_REQUEST') || !is_page()) {
 		return;
 	}
-	if (!is_page('services')) {
+	$copy = array(
+		'services'               => array(
+			'name'        => 'Pet Supplement OEM/ODM Manufacturing',
+			'description' => 'Contract manufacturing services for pet supplements — OEM, ODM, Contract Manufacturing, and Private Label. 8 dosage forms, flexible MOQ, FDA, cGMP, ISO 9001, FSSC 22000, HACCP, BRC.',
+		),
+		'oem'                    => array(
+			'name'        => 'OEM Manufacturing — You Bring the Formula',
+			'description' => 'Your formula, your specifications. We manufacture on our lines, test every batch, and deliver finished product with the certificates your market asks for.',
+		),
+		'odm'                    => array(
+			'name'        => 'ODM Development — We Develop From Your Idea',
+			'description' => 'You bring a concept, a reference sample or a functional requirement. We take it from concept to finished product.',
+		),
+		'contract-manufacturing' => array(
+			'name'        => 'Contract Manufacturing — You Own the IP',
+			'description' => 'For established brands with full specifications. You own the IP, we run the production line.',
+		),
+		'private-label'          => array(
+			'name'        => 'Private Label — Pick From Our Proven Formulas',
+			'description' => 'Pick from our proven formulas and launch fast under your own brand. Low MOQ for new brands.',
+		),
+	);
+	$slug = (string) get_post_field('post_name', get_queried_object_id());
+	if (!isset($copy[$slug])) {
 		return;
 	}
 	$schema = array(
 		'@context'    => 'https://schema.org',
 		'@type'       => 'Service',
-		'name'        => 'Pet Supplement OEM/ODM Manufacturing',
-		'description' => 'Contract manufacturing services for pet supplements — OEM, ODM, Contract Manufacturing, and Private Label. 8 dosage forms, flexible MOQ, FDA, cGMP, ISO 9001, FSSC 22000, HACCP, BRC.',
+		'name'        => $copy[$slug]['name'],
+		'description' => $copy[$slug]['description'],
 		'serviceType' => 'Pet Supplement Manufacturing',
 		'provider'    => array('@id' => home_url('/#organization')),
 		'areaServed'  => array('US', 'EU', 'JP', 'KR', 'BR', 'MX'),
