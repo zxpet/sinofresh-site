@@ -89,6 +89,11 @@ def first_diff(a, b):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--json', default='/tmp/b3b2-noop.json')
+    # The verdict line names the batch it clears. It was hard-coded to 3b-2 and
+    # then reused for 3b-3, which would have printed the wrong batch over a
+    # correct result — the same "assertion pointing at the wrong object" that
+    # this project keeps having to unpick.
+    ap.add_argument('--label', default='(batch unstated)')
     args = ap.parse_args()
 
     out, ok = [], True
@@ -128,7 +133,8 @@ def main():
             print('     live: %s' % ' '.join(rows['context_live'].split())[:150])
             print('     cand: %s' % ' '.join(rows['context_cand'].split())[:150])
 
-    print('\n%s  batch 3b-2 no-touch check (%d pages)' % ('PASS' if ok else 'FAIL', len(PAGES)))
+    print('\n%s  %s no-touch check (%d pages)'
+          % ('PASS' if ok else 'FAIL', args.label, len(PAGES)))
     json.dump({'ok': ok, 'rows': out}, open(args.json, 'w'), indent=1, ensure_ascii=False)
     print('  json -> %s' % args.json)
     return 0 if ok else 1
