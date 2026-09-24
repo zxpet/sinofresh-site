@@ -76,7 +76,9 @@ CARDS = [('/services/oem/', 'OEM \u2014 You Bring the Formula'),
 OVERVIEW_H2 = ['OEM or ODM \u2014 Choose Your Path',
                'Key Facts: MOQ, Lead Time, Payment & Trade Terms',
                'What We Handle \u2014 R&D, Compliance & Export Documentation',
+               'Custom Formulation Capability',
                'How We Work \u2014 From Inquiry to Delivery in 5 Steps',
+               'Manufacturing Capability',
                'Frequently Asked Questions',
                'Request a Sample']
 
@@ -194,7 +196,7 @@ def main():
     ap.add_argument('--base', default=BASE)
     ap.add_argument('--preflight', action='store_true',
                     help='send X-SF-Preflight: 1 (default: what dev serves)')
-    ap.add_argument('--expect-ver', default='2.10.76')
+    ap.add_argument('--expect-ver', default='2.10.77')
     ap.add_argument('--json', metavar='OUT')
     ap.add_argument('--label', default='')
     args = ap.parse_args()
@@ -341,7 +343,7 @@ def main():
           s_code == 200 and found == CARDS,
           {'http': s_code, 'found': found,
            'anchors carrying that class': svc.count('class="sf-card__title-link"')})
-    check('...and the overview itself is otherwise untouched by the batch',
+    check('...and the overview still carries its own breadcrumb level, terms table and full heading set',
           'sf-breadcrumb--d2' in svc and 'sf-breadcrumb--d3' not in svc
           and '<table class="sf-keyfacts">' in svc
           and texts_of(svc, 'h2') == OVERVIEW_H2,
