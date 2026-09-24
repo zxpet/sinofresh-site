@@ -14,6 +14,13 @@
 # 根目录一次性截图/草稿
 /*.png
 
+# 普查语料的原始字节（docs/site-survey-*/cache/，108 页 HTML 共 15MB）。
+# 不进仓库的理由：它不是不可再生的证据 —— 同一目录下的 crawl.json 已逐 URL 记下
+# status / bytes / sha1 / 响应头（＝可核对的语料清单），分析脚本全部离线读这份清单的
+# 同批语料；且这些字节本就含逐渲染变化的 Gravity Forms nonce，逐字节复现本就不可能。
+# 需要重跑分析时：python3 tools/b3d_crawl.py 重新采集（约 6 分钟，1.3s/请求）。
+**/site-survey-*/cache/
+
 # 系统与临时文件
 .DS_Store
 ._*

@@ -1,0 +1,621 @@
+{
+ "site": {
+  "name": "sinofresh",
+  "home": "https://dev.zxpet.com",
+  "page_on_front": 11,
+  "page_for_posts": 31,
+  "namespaces": [
+   "oembed/1.0",
+   "wp-statistics/v2",
+   "sinofresh/v1",
+   "wp/v2",
+   "wp-site-health/v1",
+   "wp-block-editor/v1",
+   "wp-abilities/v1"
+  ]
+ },
+ "types": {
+  "post": {
+   "description": "",
+   "hierarchical": false,
+   "has_archive": false,
+   "name": "Posts",
+   "slug": "post",
+   "icon": "dashicons-admin-post",
+   "taxonomies": [
+    "category",
+    "post_tag"
+   ],
+   "rest_base": "posts",
+   "rest_namespace": "wp/v2",
+   "template": [],
+   "template_lock": false,
+   "_links": {
+    "collection": [
+     {
+      "href": "https://dev.zxpet.com/wp-json/wp/v2/types"
+     }
+    ],
+    "wp:items": [
+     {
+      "href": "https://dev.zxpet.com/wp-json/wp/v2/posts"
+     }
+    ],
+    "curies": [
+     {
+      "name": "wp",
+      "href": "https://api.w.org/{rel}",
+      "templated": true
+     }
+    ]
+   }
+  },
+  "page": {
+   "description": "",
+   "hierarchical": true,
+   "has_archive": false,
+   "name": "Pages",
+   "slug": "page",
+   "icon": "dashicons-admin-page",
+   "taxonomies": [],
+   "rest_base": "pages",
+   "rest_namespace": "wp/v2",
+   "template": [],
+   "template_lock": false,
+   "_links": {
+    "collection": [
+     {
+      "href": "https://dev.zxpet.com/wp-json/wp/v2/types"
+     }
+    ],
+    "wp:items": [
+     {
+      "href": "https://dev.zxpet.com/wp-json/wp/v2/pages"
+     }
+    ],
+    "curies": [
+     {
+      "name": "wp",
+      "href": "https://api.w.org/{rel}",
+      "templated": true
+     }
+    ]
+   }
+  },
+  "attachment": {
+   "description": "",
+   "hierarchical": false,
+   "has_archive": false,
+   "name": "Media",
+   "slug": "attachment",
+   "icon": "dashicons-admin-media",
+   "taxonomies": [],
+   "rest_base": "media",
+   "rest_namespace": "wp/v2",
+   "template": [],
+   "template_lock": false,
+   "_links": {
+    "collection": [
+     {
+      "href": "https://dev.zxpet.com/wp-json/wp/v2/types"
+     }
+    ],
+    "wp:items": [
+     {
+      "href": "https://dev.zxpet.com/wp-json/wp/v2/media"
+     }
+    ],
+    "curies": [
+     {
+      "name": "wp",
+      "href": "https://api.w.org/{rel}",
+      "templated": true
+     }
+    ]
+   }
+  },
+  "nav_menu_item": {
+   "description": "",
+   "hierarchical": false,
+   "has_archive": false,
+   "name": "Navigation Menu Items",
+   "slug": "nav_menu_item",
+   "icon": null,
+   "taxonomies": [
+    "nav_menu"
+   ],
+   "rest_base": "menu-items",
+   "rest_namespace": "wp/v2",
+   "template": [],
+   "template_lock": false,
+   "_links": {
+    "collection": [
+     {
+      "href": "https://dev.zxpet.com/wp-json/wp/v2/types"
+     }
+    ],
+    "wp:items": [
+     {
+      "href": "https://dev.zxpet.com/wp-json/wp/v2/menu-items"
+     }
+    ],
+    "curies": [
+     {
+      "name": "wp",
+      "href": "https://api.w.org/{rel}",
+      "templated": true
+     }
+    ]
+   }
+  },
+  "sf_formula": {
+   "description": "Standard formulas rendered as cards by [sf_formula_grid].",
+   "hierarchical": false,
+   "has_archive": true,
+   "name": "Formulas",
+   "slug": "sf_formula",
+   "icon": "dashicons-clipboard",
+   "taxonomies": [
+    "sf_formula_form",
+    "sf_formula_use"
+   ],
+   "rest_base": "sf_formula",
+   "rest_namespace": "wp/v2",
+   "template": [],
+   "template_lock": false,
+   "_links": {
+    "collection": [
+     {
+      "href": "https://dev.zxpet.com/wp-json/wp/v2/types"
+     }
+    ],
+    "wp:items": [
+     {
+      "href": "https://dev.zxpet.com/wp-json/wp/v2/sf_formula"
+     }
+    ],
+    "curies": [
+     {
+      "name": "wp",
+      "href": "https://api.w.org/{rel}",
+      "templated": true
+     }
+    ]
+   }
+  }
+ },
+ "items": [
+  {
+   "type": "page",
+   "id": 3,
+   "slug": "privacy-policy",
+   "link": "https://dev.zxpet.com/privacy-policy/",
+   "title": "Privacy Policy",
+   "parent": 0
+  },
+  {
+   "type": "page",
+   "id": 11,
+   "slug": "home",
+   "link": "https://dev.zxpet.com/",
+   "title": "Home",
+   "parent": 0
+  },
+  {
+   "type": "page",
+   "id": 14,
+   "slug": "about",
+   "link": "https://dev.zxpet.com/about/",
+   "title": "About",
+   "parent": 0
+  },
+  {
+   "type": "page",
+   "id": 15,
+   "slug": "quality",
+   "link": "https://dev.zxpet.com/quality/",
+   "title": "Quality &amp; Compliance",
+   "parent": 0
+  },
+  {
+   "type": "page",
+   "id": 17,
+   "slug": "factory-tour",
+   "link": "https://dev.zxpet.com/factory-tour/",
+   "title": "Book a Factory Tour",
+   "parent": 0
+  },
+  {
+   "type": "page",
+   "id": 19,
+   "slug": "products",
+   "link": "https://dev.zxpet.com/products/",
+   "title": "Products",
+   "parent": 0
+  },
+  {
+   "type": "page",
+   "id": 20,
+   "slug": "soft-chews",
+   "link": "https://dev.zxpet.com/products/soft-chews/",
+   "title": "Soft Chews",
+   "parent": 19
+  },
+  {
+   "type": "page",
+   "id": 21,
+   "slug": "tablets",
+   "link": "https://dev.zxpet.com/products/tablets/",
+   "title": "Tablets",
+   "parent": 19
+  },
+  {
+   "type": "page",
+   "id": 22,
+   "slug": "powders",
+   "link": "https://dev.zxpet.com/products/powders/",
+   "title": "Powders",
+   "parent": 19
+  },
+  {
+   "type": "page",
+   "id": 23,
+   "slug": "pastes",
+   "link": "https://dev.zxpet.com/products/pastes/",
+   "title": "Pastes",
+   "parent": 19
+  },
+  {
+   "type": "page",
+   "id": 24,
+   "slug": "drops",
+   "link": "https://dev.zxpet.com/products/drops/",
+   "title": "Drops",
+   "parent": 19
+  },
+  {
+   "type": "page",
+   "id": 25,
+   "slug": "liquids",
+   "link": "https://dev.zxpet.com/products/liquids/",
+   "title": "Liquids",
+   "parent": 19
+  },
+  {
+   "type": "page",
+   "id": 26,
+   "slug": "fish-oil",
+   "link": "https://dev.zxpet.com/products/fish-oil/",
+   "title": "Fish Oil",
+   "parent": 19
+  },
+  {
+   "type": "page",
+   "id": 27,
+   "slug": "dental-chews",
+   "link": "https://dev.zxpet.com/products/dental-chews/",
+   "title": "Dental Chews",
+   "parent": 19
+  },
+  {
+   "type": "page",
+   "id": 28,
+   "slug": "contact",
+   "link": "https://dev.zxpet.com/contact/",
+   "title": "Contact Us",
+   "parent": 0
+  },
+  {
+   "type": "page",
+   "id": 29,
+   "slug": "services",
+   "link": "https://dev.zxpet.com/services/",
+   "title": "Cooperation Mode",
+   "parent": 0
+  },
+  {
+   "type": "page",
+   "id": 30,
+   "slug": "cooperation",
+   "link": "https://dev.zxpet.com/cooperation/",
+   "title": "Cooperation Models",
+   "parent": 0
+  },
+  {
+   "type": "page",
+   "id": 31,
+   "slug": "blog",
+   "link": "https://dev.zxpet.com/blog/",
+   "title": "Blog",
+   "parent": 0
+  },
+  {
+   "type": "page",
+   "id": 37,
+   "slug": "cookie-policy",
+   "link": "https://dev.zxpet.com/cookie-policy/",
+   "title": "Cookie Policy",
+   "parent": 0
+  },
+  {
+   "type": "page",
+   "id": 38,
+   "slug": "terms",
+   "link": "https://dev.zxpet.com/terms/",
+   "title": "Terms of Service",
+   "parent": 0
+  },
+  {
+   "type": "page",
+   "id": 76,
+   "slug": "faq",
+   "link": "https://dev.zxpet.com/faq/",
+   "title": "Frequently Asked Questions",
+   "parent": 0
+  },
+  {
+   "type": "page",
+   "id": 97,
+   "slug": "feedback",
+   "link": "https://dev.zxpet.com/feedback/",
+   "title": "Feedback &amp; Support",
+   "parent": 0
+  },
+  {
+   "type": "page",
+   "id": 217,
+   "slug": "oem",
+   "link": "https://dev.zxpet.com/services/oem/",
+   "title": "OEM Manufacturing",
+   "parent": 29
+  },
+  {
+   "type": "page",
+   "id": 218,
+   "slug": "odm",
+   "link": "https://dev.zxpet.com/services/odm/",
+   "title": "ODM Development",
+   "parent": 29
+  },
+  {
+   "type": "page",
+   "id": 219,
+   "slug": "contract-manufacturing",
+   "link": "https://dev.zxpet.com/services/contract-manufacturing/",
+   "title": "Contract Manufacturing",
+   "parent": 29
+  },
+  {
+   "type": "page",
+   "id": 220,
+   "slug": "private-label",
+   "link": "https://dev.zxpet.com/services/private-label/",
+   "title": "Private Label",
+   "parent": 29
+  },
+  {
+   "type": "post",
+   "id": 32,
+   "slug": "test-article",
+   "link": "https://dev.zxpet.com/test-article/",
+   "title": "Test Article",
+   "parent": null
+  },
+  {
+   "type": "post",
+   "id": 99,
+   "slug": "case-study-us-brand-owner-soft-chews",
+   "link": "https://dev.zxpet.com/case-study-us-brand-owner-soft-chews/",
+   "title": "Case Study: U.S. Brand Owner Launches a Soft Chews Line with SINO FRESH",
+   "parent": null
+  },
+  {
+   "type": "post",
+   "id": 101,
+   "slug": "case-study-germany-ecommerce-powders",
+   "link": "https://dev.zxpet.com/case-study-germany-ecommerce-powders/",
+   "title": "Case Study: German E-Commerce Seller Builds an Amazon-Ready Powder Range",
+   "parent": null
+  },
+  {
+   "type": "post",
+   "id": 103,
+   "slug": "case-study-uk-distributor-tablets",
+   "link": "https://dev.zxpet.com/case-study-uk-distributor-tablets/",
+   "title": "Case Study: UK Distributor Standardizes Tablet Supply with One Facility",
+   "parent": null
+  },
+  {
+   "type": "post",
+   "id": 105,
+   "slug": "case-study-spain-veterinary-drops",
+   "link": "https://dev.zxpet.com/case-study-spain-veterinary-drops/",
+   "title": "Case Study: Spanish Veterinary Clinic Launches Its Own Drops Brand",
+   "parent": null
+  },
+  {
+   "type": "post",
+   "id": 107,
+   "slug": "case-study-australia-fish-oil-trading",
+   "link": "https://dev.zxpet.com/case-study-australia-fish-oil-trading/",
+   "title": "Case Study: Australian Trading Company Sources Fish Oil at Flexible MOQ",
+   "parent": null
+  },
+  {
+   "type": "post",
+   "id": 109,
+   "slug": "case-study-japan-pastes-palatability",
+   "link": "https://dev.zxpet.com/case-study-japan-pastes-palatability/",
+   "title": "Case Study: Japanese Brand Owner Refines a Cat Paste with Palatability Testing",
+   "parent": null
+  },
+  {
+   "type": "sf_formula",
+   "id": 158,
+   "slug": "joint-support-soft-chews",
+   "link": "https://dev.zxpet.com/formulas/joint-support-soft-chews/",
+   "title": "Joint Support Soft Chews",
+   "parent": null
+  },
+  {
+   "type": "sf_formula",
+   "id": 159,
+   "slug": "calming-soft-chews",
+   "link": "https://dev.zxpet.com/formulas/calming-soft-chews/",
+   "title": "Calming Soft Chews",
+   "parent": null
+  },
+  {
+   "type": "sf_formula",
+   "id": 160,
+   "slug": "digestive-soft-chews",
+   "link": "https://dev.zxpet.com/formulas/digestive-soft-chews/",
+   "title": "Digestive Soft Chews",
+   "parent": null
+  },
+  {
+   "type": "sf_formula",
+   "id": 161,
+   "slug": "skin-coat-soft-chews",
+   "link": "https://dev.zxpet.com/formulas/skin-coat-soft-chews/",
+   "title": "Skin &#038; Coat Soft Chews",
+   "parent": null
+  },
+  {
+   "type": "sf_formula",
+   "id": 162,
+   "slug": "joint-support-tablets",
+   "link": "https://dev.zxpet.com/formulas/joint-support-tablets/",
+   "title": "Joint Support Tablets",
+   "parent": null
+  },
+  {
+   "type": "sf_formula",
+   "id": 163,
+   "slug": "multivitamin-tablets",
+   "link": "https://dev.zxpet.com/formulas/multivitamin-tablets/",
+   "title": "Multivitamin Tablets",
+   "parent": null
+  },
+  {
+   "type": "sf_formula",
+   "id": 164,
+   "slug": "calcium-phosphorus-tablets",
+   "link": "https://dev.zxpet.com/formulas/calcium-phosphorus-tablets/",
+   "title": "Calcium &#038; Phosphorus Tablets",
+   "parent": null
+  },
+  {
+   "type": "sf_formula",
+   "id": 165,
+   "slug": "probiotic-powder",
+   "link": "https://dev.zxpet.com/formulas/probiotic-powder/",
+   "title": "Probiotic Powder",
+   "parent": null
+  },
+  {
+   "type": "sf_formula",
+   "id": 166,
+   "slug": "pumpkin-digestive-powder",
+   "link": "https://dev.zxpet.com/formulas/pumpkin-digestive-powder/",
+   "title": "Pumpkin Digestive Powder",
+   "parent": null
+  },
+  {
+   "type": "sf_formula",
+   "id": 167,
+   "slug": "bladder-support-powder",
+   "link": "https://dev.zxpet.com/formulas/bladder-support-powder/",
+   "title": "Bladder Support Powder",
+   "parent": null
+  },
+  {
+   "type": "sf_formula",
+   "id": 168,
+   "slug": "hairball-remedy-paste",
+   "link": "https://dev.zxpet.com/formulas/hairball-remedy-paste/",
+   "title": "Hairball Remedy Paste",
+   "parent": null
+  },
+  {
+   "type": "sf_formula",
+   "id": 169,
+   "slug": "nutrition-paste",
+   "link": "https://dev.zxpet.com/formulas/nutrition-paste/",
+   "title": "Nutrition Paste",
+   "parent": null
+  },
+  {
+   "type": "sf_formula",
+   "id": 170,
+   "slug": "ear-care-drops",
+   "link": "https://dev.zxpet.com/formulas/ear-care-drops/",
+   "title": "Ear Care Drops",
+   "parent": null
+  },
+  {
+   "type": "sf_formula",
+   "id": 171,
+   "slug": "urinary-care-drops",
+   "link": "https://dev.zxpet.com/formulas/urinary-care-drops/",
+   "title": "Urinary Care Drops",
+   "parent": null
+  },
+  {
+   "type": "sf_formula",
+   "id": 172,
+   "slug": "liquid-joint-support",
+   "link": "https://dev.zxpet.com/formulas/liquid-joint-support/",
+   "title": "Liquid Joint Support",
+   "parent": null
+  },
+  {
+   "type": "sf_formula",
+   "id": 173,
+   "slug": "liquid-skin-coat",
+   "link": "https://dev.zxpet.com/formulas/liquid-skin-coat/",
+   "title": "Liquid Skin &#038; Coat",
+   "parent": null
+  },
+  {
+   "type": "sf_formula",
+   "id": 174,
+   "slug": "wild-alaskan-salmon-oil",
+   "link": "https://dev.zxpet.com/formulas/wild-alaskan-salmon-oil/",
+   "title": "Wild Alaskan Salmon Oil",
+   "parent": null
+  },
+  {
+   "type": "sf_formula",
+   "id": 175,
+   "slug": "pure-fish-oil-blend",
+   "link": "https://dev.zxpet.com/formulas/pure-fish-oil-blend/",
+   "title": "Pure Fish Oil Blend",
+   "parent": null
+  },
+  {
+   "type": "sf_formula",
+   "id": 176,
+   "slug": "plaque-control-dental-chews",
+   "link": "https://dev.zxpet.com/formulas/plaque-control-dental-chews/",
+   "title": "Plaque Control Dental Chews",
+   "parent": null
+  },
+  {
+   "type": "sf_formula",
+   "id": 177,
+   "slug": "oral-care-dental-sticks",
+   "link": "https://dev.zxpet.com/formulas/oral-care-dental-sticks/",
+   "title": "Oral Care Dental Sticks",
+   "parent": null
+  },
+  {
+   "type": "sf_formula",
+   "id": 178,
+   "slug": "natural-cleaning-dental-sticks",
+   "link": "https://dev.zxpet.com/formulas/natural-cleaning-dental-sticks/",
+   "title": "Natural Cleaning Dental Sticks",
+   "parent": null
+  }
+ ]
+}

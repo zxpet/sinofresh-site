@@ -1,0 +1,266 @@
+[
+ {
+  "url": "/soft-chews/",
+  "method": "HEAD",
+  "status": 301,
+  "redirect": "https://dev.zxpet.com/products/soft-chews/",
+  "size": 0,
+  "ctype": "text/html; charset=UTF-8"
+ },
+ {
+  "url": "/tablets/",
+  "method": "HEAD",
+  "status": 301,
+  "redirect": "https://dev.zxpet.com/products/tablets/",
+  "size": 0,
+  "ctype": "text/html; charset=UTF-8"
+ },
+ {
+  "url": "/powders/",
+  "method": "HEAD",
+  "status": 301,
+  "redirect": "https://dev.zxpet.com/products/powders/",
+  "size": 0,
+  "ctype": "text/html; charset=UTF-8"
+ },
+ {
+  "url": "/pastes/",
+  "method": "HEAD",
+  "status": 301,
+  "redirect": "https://dev.zxpet.com/products/pastes/",
+  "size": 0,
+  "ctype": "text/html; charset=UTF-8"
+ },
+ {
+  "url": "/drops/",
+  "method": "HEAD",
+  "status": 301,
+  "redirect": "https://dev.zxpet.com/products/drops/",
+  "size": 0,
+  "ctype": "text/html; charset=UTF-8"
+ },
+ {
+  "url": "/liquids/",
+  "method": "HEAD",
+  "status": 301,
+  "redirect": "https://dev.zxpet.com/products/liquids/",
+  "size": 0,
+  "ctype": "text/html; charset=UTF-8"
+ },
+ {
+  "url": "/fish-oil/",
+  "method": "HEAD",
+  "status": 301,
+  "redirect": "https://dev.zxpet.com/products/fish-oil/",
+  "size": 0,
+  "ctype": "text/html; charset=UTF-8"
+ },
+ {
+  "url": "/dental-chews/",
+  "method": "HEAD",
+  "status": 301,
+  "redirect": "https://dev.zxpet.com/products/dental-chews/",
+  "size": 0,
+  "ctype": "text/html; charset=UTF-8"
+ },
+ {
+  "url": "/zh/soft-chews/",
+  "method": "HEAD",
+  "status": 301,
+  "redirect": "https://dev.zxpet.com/zh/products/soft-chews/",
+  "size": 0,
+  "ctype": "text/html; charset=UTF-8"
+ },
+ {
+  "url": "/zh/tablets/",
+  "method": "HEAD",
+  "status": 301,
+  "redirect": "https://dev.zxpet.com/zh/products/tablets/",
+  "size": 0,
+  "ctype": "text/html; charset=UTF-8"
+ },
+ {
+  "url": "/zh/powders/",
+  "method": "HEAD",
+  "status": 301,
+  "redirect": "https://dev.zxpet.com/zh/products/powders/",
+  "size": 0,
+  "ctype": "text/html; charset=UTF-8"
+ },
+ {
+  "url": "/zh/pastes/",
+  "method": "HEAD",
+  "status": 301,
+  "redirect": "https://dev.zxpet.com/zh/products/pastes/",
+  "size": 0,
+  "ctype": "text/html; charset=UTF-8"
+ },
+ {
+  "url": "/zh/drops/",
+  "method": "HEAD",
+  "status": 301,
+  "redirect": "https://dev.zxpet.com/zh/products/drops/",
+  "size": 0,
+  "ctype": "text/html; charset=UTF-8"
+ },
+ {
+  "url": "/zh/liquids/",
+  "method": "HEAD",
+  "status": 301,
+  "redirect": "https://dev.zxpet.com/zh/products/liquids/",
+  "size": 0,
+  "ctype": "text/html; charset=UTF-8"
+ },
+ {
+  "url": "/zh/fish-oil/",
+  "method": "HEAD",
+  "status": 301,
+  "redirect": "https://dev.zxpet.com/zh/products/fish-oil/",
+  "size": 0,
+  "ctype": "text/html; charset=UTF-8"
+ },
+ {
+  "url": "/zh/dental-chews/",
+  "method": "HEAD",
+  "status": 301,
+  "redirect": "https://dev.zxpet.com/zh/products/dental-chews/",
+  "size": 0,
+  "ctype": "text/html; charset=UTF-8"
+ },
+ {
+  "url": "/wp-content/uploads/2026/09/cert-fda-thumb.webp",
+  "method": "HEAD",
+  "status": 200,
+  "redirect": "",
+  "size": 0,
+  "ctype": "image/webp"
+ },
+ {
+  "url": "/wp-content/uploads/2026/09/cert-cgmp-thumb.webp",
+  "method": "HEAD",
+  "status": 200,
+  "redirect": "",
+  "size": 0,
+  "ctype": "image/webp"
+ },
+ {
+  "url": "/wp-content/uploads/2026/09/cert-iso9001-thumb.webp",
+  "method": "HEAD",
+  "status": 200,
+  "redirect": "",
+  "size": 0,
+  "ctype": "image/webp"
+ },
+ {
+  "url": "/wp-content/uploads/2026/09/cert-iso22000-thumb.webp",
+  "method": "HEAD",
+  "status": 200,
+  "redirect": "",
+  "size": 0,
+  "ctype": "image/webp"
+ },
+ {
+  "url": "/wp-content/uploads/2026/09/coa-sample.pdf",
+  "method": "HEAD",
+  "status": 200,
+  "redirect": "",
+  "size": 0,
+  "ctype": "application/pdf"
+ },
+ {
+  "url": "/category/manufacturing/",
+  "method": "HEAD",
+  "status": 200,
+  "redirect": "",
+  "size": 0,
+  "ctype": "text/html; charset=UTF-8"
+ },
+ {
+  "url": "/category/private-label/",
+  "method": "HEAD",
+  "status": 200,
+  "redirect": "",
+  "size": 0,
+  "ctype": "text/html; charset=UTF-8"
+ },
+ {
+  "url": "/category/case-studies/",
+  "method": "HEAD",
+  "status": 200,
+  "redirect": "",
+  "size": 0,
+  "ctype": "text/html; charset=UTF-8"
+ },
+ {
+  "url": "/tag/formulation/",
+  "method": "HEAD",
+  "status": 200,
+  "redirect": "",
+  "size": 0,
+  "ctype": "text/html; charset=UTF-8"
+ },
+ {
+  "url": "https://dev.zxpet.com/category/manufacturing/",
+  "method": "HEAD",
+  "status": 200,
+  "redirect": "",
+  "size": 0,
+  "ctype": "text/html; charset=UTF-8"
+ },
+ {
+  "url": "https://dev.zxpet.com/category/case-studies/",
+  "method": "HEAD",
+  "status": 200,
+  "redirect": "",
+  "size": 0,
+  "ctype": "text/html; charset=UTF-8"
+ },
+ {
+  "url": "/zh/category/manufacturing/",
+  "method": "HEAD",
+  "status": 200,
+  "redirect": "",
+  "size": 0,
+  "ctype": "text/html; charset=UTF-8"
+ },
+ {
+  "url": "/zh/category/private-label/",
+  "method": "HEAD",
+  "status": 200,
+  "redirect": "",
+  "size": 0,
+  "ctype": "text/html; charset=UTF-8"
+ },
+ {
+  "url": "/zh/category/case-studies/",
+  "method": "HEAD",
+  "status": 200,
+  "redirect": "",
+  "size": 0,
+  "ctype": "text/html; charset=UTF-8"
+ },
+ {
+  "url": "/zh/tag/formulation/",
+  "method": "HEAD",
+  "status": 200,
+  "redirect": "",
+  "size": 0,
+  "ctype": "text/html; charset=UTF-8"
+ },
+ {
+  "url": "https://dev.zxpet.com/zh/category/manufacturing/",
+  "method": "HEAD",
+  "status": 200,
+  "redirect": "",
+  "size": 0,
+  "ctype": "text/html; charset=UTF-8"
+ },
+ {
+  "url": "https://dev.zxpet.com/zh/category/case-studies/",
+  "method": "HEAD",
+  "status": 200,
+  "redirect": "",
+  "size": 0,
+  "ctype": "text/html; charset=UTF-8"
+ }
+]

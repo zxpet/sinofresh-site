@@ -1,0 +1,2271 @@
+{
+ "files": [
+  "sinofresh-theme/assets/admin/sf-mb-precheck.js",
+  "sinofresh-theme/assets/admin/sf-mb-tables.js",
+  "sinofresh-theme/assets/admin/sf-site-settings.js",
+  "sinofresh-theme/assets/js/about.js",
+  "sinofresh-theme/assets/js/cert-modal.js",
+  "sinofresh-theme/assets/js/config.js",
+  "sinofresh-theme/assets/js/formula-filter.js",
+  "sinofresh-theme/assets/js/formula-gallery.js",
+  "sinofresh-theme/assets/js/formulas.js",
+  "sinofresh-theme/assets/js/hero-slider.js",
+  "sinofresh-theme/assets/js/inquiry.js",
+  "sinofresh-theme/assets/js/interactions.js",
+  "sinofresh-theme/assets/js/mobile-nav.js",
+  "sinofresh-theme/assets/js/quality.js",
+  "sinofresh-theme/assets/js/quote-cta.js",
+  "sinofresh-theme/assets/js/sticky-header.js",
+  "sinofresh-theme/assets/js/toc-nav.js",
+  "sinofresh-theme/assets/js/ui-components.js",
+  "sinofresh-theme/functions.php",
+  "sinofresh-theme/inc/cert-download.php",
+  "sinofresh-theme/inc/config-pdf.php",
+  "sinofresh-theme/inc/formula-admin.php",
+  "sinofresh-theme/inc/formula-pools.php"
+ ],
+ "rules": {
+  "code-exec | eval()": {
+   "group": "code-exec",
+   "label": "eval()",
+   "note": "arbitrary code execution if any part is user-influenced",
+   "count": 0,
+   "hits": []
+  },
+  "code-exec | create_function()": {
+   "group": "code-exec",
+   "label": "create_function()",
+   "note": "removed in PHP 8; also eval-equivalent",
+   "count": 0,
+   "hits": []
+  },
+  "code-exec | assert() with a string": {
+   "group": "code-exec",
+   "label": "assert() with a string",
+   "note": "string assert is eval in older PHP",
+   "count": 0,
+   "hits": []
+  },
+  "code-exec | extract()": {
+   "group": "code-exec",
+   "label": "extract()",
+   "note": "variable injection into local scope",
+   "count": 0,
+   "hits": []
+  },
+  "shell | exec/system/passthru": {
+   "group": "shell",
+   "label": "exec/system/passthru",
+   "note": "shell execution",
+   "count": 2,
+   "hits": [
+    {
+     "file": "sinofresh-theme/assets/js/interactions.js",
+     "line": 35,
+     "code": "const m = /[0-9][0-9,]*/.exec(el.textContent);"
+    },
+    {
+     "file": "sinofresh-theme/assets/js/toc-nav.js",
+     "line": 232,
+     "code": "var postId = (/(?:^|\\s)postid-(\\d+)(?:\\s|$)/.exec(document.body.className) || [0, 0])[1];"
+    }
+   ]
+  },
+  "shell | backtick shell": {
+   "group": "shell",
+   "label": "backtick shell",
+   "note": "shell execution via backticks",
+   "count": 65,
+   "hits": [
+    {
+     "file": "sinofresh-theme/assets/js/cert-modal.js",
+     "line": 8,
+     "code": "writes that key into Form 5's hidden `certificate` field (id 10) — the same"
+    },
+    {
+     "file": "sinofresh-theme/assets/js/config.js",
+     "line": 11,
+     "code": "*    `hidden`, so the no-JS page makes no claim about a selection that does not"
+    },
+    {
+     "file": "sinofresh-theme/assets/js/config.js",
+     "line": 13,
+     "code": "* 2. The selection's trip into the dialog. `inquiry.js` posts whatever the form"
+    },
+    {
+     "file": "sinofresh-theme/assets/js/config.js",
+     "line": 260,
+     "code": "/* The box ships `hidden` in the markup and is revealed by the pick that"
+    },
+    {
+     "file": "sinofresh-theme/assets/js/formula-gallery.js",
+     "line": 17,
+     "code": "*      it. Every other frame ships with the `hidden` attribute, which is what"
+    },
+    {
+     "file": "sinofresh-theme/assets/js/formula-gallery.js",
+     "line": 19,
+     "code": "*      ships hidden as well, painted only once `.sf-gallery--js` is on the"
+    },
+    {
+     "file": "sinofresh-theme/assets/js/formula-gallery.js",
+     "line": 24,
+     "code": "*      why the strip can be built from a `photos` list while `current` indexes"
+    },
+    {
+     "file": "sinofresh-theme/assets/js/formula-gallery.js",
+     "line": 28,
+     "code": "*      DOM is moved, rebuilt or cloned. `hidden` comes off every photo at init"
+    },
+    {
+     "file": "sinofresh-theme/assets/js/formula-gallery.js",
+     "line": 29,
+     "code": "*      so the cross-fade is possible at all — `display:none` cannot"
+    },
+    {
+     "file": "sinofresh-theme/assets/js/formula-gallery.js",
+     "line": 30,
+     "code": "*      transition — and `.sf-gallery__slide--off` takes over from there. The"
+    },
+    {
+     "file": "sinofresh-theme/assets/js/formula-gallery.js",
+     "line": 31,
+     "code": "*      video frame is the deliberate exception: it keeps `hidden` until the"
+    },
+    {
+     "file": "sinofresh-theme/assets/js/formula-gallery.js",
+     "line": 37,
+     "code": "*      and keeping `pinch-zoom` there is deliberate: dropping it would take"
+    },
+    {
+     "file": "sinofresh-theme/assets/js/formula-gallery.js",
+     "line": 50,
+     "code": "*     marked `.sf-gallery__thumb--video`, which meant a tile whose picture was"
+    },
+    {
+     "file": "sinofresh-theme/assets/js/formula-gallery.js",
+     "line": 254,
+     "code": "video frame is left alone on purpose: paint() keeps it `hidden`"
+    },
+    {
+     "file": "sinofresh-theme/assets/js/formula-gallery.js",
+     "line": 272,
+     "code": "/* Delegated on the strip rather than bound per tile: `mouseover`"
+    },
+    {
+     "file": "sinofresh-theme/assets/js/formula-gallery.js",
+     "line": 273,
+     "code": "reaches this from the thumbnail's own <img> too, and `closest`"
+    },
+    {
+     "file": "sinofresh-theme/assets/js/formula-gallery.js",
+     "line": 275,
+     "code": "whatever its length. `i !== current` is what stops a re-select of"
+    },
+    {
+     "file": "sinofresh-theme/assets/js/formula-gallery.js",
+     "line": 349,
+     "code": "and `touch-action` has already given it the vertical one. */"
+    },
+    {
+     "file": "sinofresh-theme/assets/js/hero-slider.js",
+     "line": 56,
+     "code": "/* freeze in place: snapshot lives in `elapsed`, so any resume continues"
+    },
+    {
+     "file": "sinofresh-theme/assets/js/inquiry.js",
+     "line": 21,
+     "code": "* Reveal: the capsule is emitted with `hidden` (sinofresh_inquiry_button()"
+    },
+    {
+     "file": "sinofresh-theme/assets/js/inquiry.js",
+     "line": 30,
+     "code": "* Dialog: same interaction language as the certificate dialog — `hidden`"
+    },
+    {
+     "file": "sinofresh-theme/assets/js/inquiry.js",
+     "line": 31,
+     "code": "* plus `is-open` with one frame between them so the fade and the rise both"
+    },
+    {
+     "file": "sinofresh-theme/assets/js/inquiry.js",
+     "line": 54,
+     "code": "the only element carrying this attribute, so `querySelector` — singular"
+    },
+    {
+     "file": "sinofresh-theme/assets/js/inquiry.js",
+     "line": 59,
+     "code": "inert: its click unbound, `hidden` never removed, focus never returned."
+    },
+    {
+     "file": "sinofresh-theme/assets/js/mobile-nav.js",
+     "line": 9,
+     "code": "2) Footer nav columns. They ship with `open` so desktop keeps the"
+    },
+    {
+     "file": "sinofresh-theme/assets/js/toc-nav.js",
+     "line": 80,
+     "code": "/* Collect visible, meaningful H2s under `root`. Lightboxes, modals and"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 307,
+     "code": "* Registration runs on `init` at priority 9, so the types exist before"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 614,
+     "code": "* rather than printed as `sf-fcard__badge--<whatever>` in the class attribute."
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 1195,
+     "code": "/* `empty` currently implements only the 'hide' mode. */"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 1276,
+     "code": "/* `links=\"false\"` means \"the card is not a route anywhere\", so the"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 1426,
+     "code": "* frame the server renders visible; slots 2-4 ship `hidden`, and"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 1493,
+     "code": "* `width`/`height` are the photographs' real pixel sizes, read off the"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 1682,
+     "code": "behind `hidden` and a click, so eager-loading them would just"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 2197,
+     "code": "* Rendered by the server and `hidden`, then revealed by config.js when the"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 2263,
+     "code": "/* H8a — `multi` became `single`, and the hint says so. A flavour is one"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 2343,
+     "code": "inc/formula-admin.php declares this field as `'pool' => 'shape'`, so a"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 2453,
+     "code": "four choices none of which prices anything. `unshift`, not a second"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 2570,
+     "code": "* Every group prints its own value as text (`__meta`) whether or not anything"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 3597,
+     "code": "* `hidden` is set here rather than in CSS so that the no-JS state is"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 4714,
+     "code": "* `$block->context['query']['inherit']` check does not match it. Two core"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 4717,
+     "code": "*   1. `core/query` is a static block (supports.html === false), so its"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 4718,
+     "code": "*      className (`sf-related-articles`) is NOT printed on the front end and"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 4720,
+     "code": "*   2. `query_loop_block_query_vars` is only fired from `core/query`'s children"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 4722,
+     "code": "*      `queryId` through block context — not from the query block itself."
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 4827,
+     "code": "* marks `sf-related`; returning an empty string for that group removes the"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 4853,
+     "code": "* `get_adjacent_post_link()` hardcodes rel=\"prev\" / rel=\"next\" on the anchor"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 4854,
+     "code": "* it builds and `core/post-navigation-link` has no attribute to switch it off,"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 5070,
+     "code": "/* sf_formula joins `post` here so {{TITLE}}, {{LAST_UPDATED}} and the"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 5972,
+     "code": "* `name` is the visible label, not the data-label: data-label=\"Packaging"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 6007,
+     "code": "* nothing therefore get no `audience` — the earlier assumption that all eight"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 6255,
+     "code": "* description = the hero's `<!-- sf-schema-desc -->` carrier, image = this"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 6582,
+     "code": "* Site Logo when a post has no featured image, so the required `image`"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 6610,
+     "code": "// when a post has no featured image the article `image` falls back to it."
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 6720,
+     "code": ".gform_footer as a wrapping flex row, so `flex-basis:100%` puts it on its"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 6761,
+     "code": "* the FAQPage hook. The `services` entry is byte-for-byte what this hook has"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 6813,
+     "code": "`certificate` field (id 10) with a document key (fda / cgmp / iso9001 /"
+    },
+    {
+     "file": "sinofresh-theme/inc/cert-download.php",
+     "line": 39,
+     "code": "* Document registry. `file` is relative to SF_CERTS_DIR unless `source` is"
+    },
+    {
+     "file": "sinofresh-theme/inc/cert-download.php",
+     "line": 41,
+     "code": "* media tree). `download` is the filename the visitor actually receives —"
+    },
+    {
+     "file": "sinofresh-theme/inc/cert-download.php",
+     "line": 43,
+     "code": "* `haccp` / `brc` have no file yet: the request is still recorded and"
+    },
+    {
+     "file": "sinofresh-theme/inc/config-pdf.php",
+     "line": 19,
+     "code": "* basket — `basket.js` was its only caller. A POST that still carries a"
+    },
+    {
+     "file": "sinofresh-theme/inc/config-pdf.php",
+     "line": 20,
+     "code": "* `basket` key now falls through to the slug check below and is answered"
+    },
+    {
+     "file": "sinofresh-theme/inc/formula-admin.php",
+     "line": 114,
+     "code": "`keep_unknown` is the migration seam. post 158 was saved as"
+    },
+    {
+     "file": "sinofresh-theme/inc/formula-admin.php",
+     "line": 154,
+     "code": "* `'pool' => '_containers'` — the seven-row Site Settings library, whose rows"
+    },
+    {
+     "file": "sinofresh-theme/inc/formula-admin.php",
+     "line": 222,
+     "code": "/* `keep_unknown` (batch H8b) does for a radio what batch H8a made it"
+    },
+    {
+     "file": "sinofresh-theme/inc/formula-admin.php",
+     "line": 244,
+     "code": "/* `keep_unknown` (batch H8a): show the record's own value even when"
+    }
+   ]
+  },
+  "shell | preg_replace /e modifier": {
+   "group": "shell",
+   "label": "preg_replace /e modifier",
+   "note": "eval via regex modifier",
+   "count": 0,
+   "hits": []
+  },
+  "file | include/require with a variable": {
+   "group": "file",
+   "label": "include/require with a variable",
+   "note": "LFI if the path is user-influenced",
+   "count": 1,
+   "hits": [
+    {
+     "file": "sinofresh-theme/inc/config-pdf.php",
+     "line": 247,
+     "code": "require_once $autoload;"
+    }
+   ]
+  },
+  "file | file read with a variable": {
+   "group": "file",
+   "label": "file read with a variable",
+   "note": "path from a variable",
+   "count": 10,
+   "hits": [
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 687,
+     "code": "$html = (string) file_get_contents($file);"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 4964,
+     "code": "$html = file_get_contents($file);"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 5232,
+     "code": "$html = file_get_contents($part);"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 5249,
+     "code": "$html = file_get_contents($file);"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 6035,
+     "code": "&& preg_match('/<h1[^>]*>(.*?)<\\/h1>/s', (string) file_get_contents($file), $m)) {"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 6126,
+     "code": "if (!preg_match_all('#sf-tile__media\"><a href=\"/products/([a-z0-9-]+)/\"#', (string) file_get_contents($file), $m)) {"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 6283,
+     "code": "$html = file_get_contents($file);"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 6936,
+     "code": "if (wp_mkdir_p($tmp_dir) && @copy($g['path'], $tmp_file)) {"
+    },
+    {
+     "file": "sinofresh-theme/inc/cert-download.php",
+     "line": 177,
+     "code": "readfile($path);"
+    },
+    {
+     "file": "sinofresh-theme/inc/config-pdf.php",
+     "line": 119,
+     "code": "file_put_contents($tmp, $pdf_bytes);"
+    }
+   ]
+  },
+  "file | unserialize()": {
+   "group": "file",
+   "label": "unserialize()",
+   "note": "object injection when the payload is untrusted",
+   "count": 0,
+   "hits": []
+  },
+  "file | move_uploaded_file": {
+   "group": "file",
+   "label": "move_uploaded_file",
+   "note": "unsigned file write",
+   "count": 0,
+   "hits": []
+  },
+  "file | base64_decode": {
+   "group": "file",
+   "label": "base64_decode",
+   "note": "commonly hides a payload",
+   "count": 0,
+   "hits": []
+  },
+  "sql | query built by concatenation": {
+   "group": "sql",
+   "label": "query built by concatenation",
+   "note": "unprepared SQL with a variable inside the string",
+   "count": 0,
+   "hits": []
+  },
+  "sql | query with a bare variable": {
+   "group": "sql",
+   "label": "query with a bare variable",
+   "note": "SQL string assembled before the call -- check for prepare()",
+   "count": 0,
+   "hits": []
+  },
+  "sql | prepare with an interpolated placeholder": {
+   "group": "sql",
+   "label": "prepare with an interpolated placeholder",
+   "note": "placeholders must not be interpolated",
+   "count": 0,
+   "hits": []
+  },
+  "input | superglobal read": {
+   "group": "input",
+   "label": "superglobal read",
+   "note": "input source",
+   "count": 16,
+   "hits": [
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 486,
+     "code": "$uri  = isset($_SERVER['REQUEST_URI']) ? (string) wp_unslash($_SERVER['REQUEST_URI']) : '';"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 1834,
+     "code": "$uri    = isset($_SERVER['REQUEST_URI']) ? (string) wp_unslash($_SERVER['REQUEST_URI']) : '';"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 5670,
+     "code": "$uri  = isset($_SERVER['REQUEST_URI']) ? (string) wp_unslash($_SERVER['REQUEST_URI']) : '/';"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 6694,
+     "code": "'ip'      => isset($_SERVER['REMOTE_ADDR']) ? sanitize_text_field(wp_unslash($_SERVER['REMOTE_ADDR'])) : '',"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 7040,
+     "code": "'form_source_url' => isset($_SERVER['HTTP_REFERER']) ? esc_url_raw(wp_unslash($_SERVER['HTTP_REFERER'])) : '',"
+    },
+    {
+     "file": "sinofresh-theme/inc/formula-admin.php",
+     "line": 356,
+     "code": "if (!isset($_POST['sf_mb_nonce_' . $slug]) || !wp_verify_nonce($_POST['sf_mb_nonce_' . $slug], 'sf_mb_save')) {"
+    },
+    {
+     "file": "sinofresh-theme/inc/formula-admin.php",
+     "line": 366,
+     "code": "sf_mb_store($post_id, $key, sanitize_text_field(wp_unslash($_POST[$key] ?? '')));"
+    },
+    {
+     "file": "sinofresh-theme/inc/formula-admin.php",
+     "line": 369,
+     "code": "sf_mb_store($post_id, $key, esc_url_raw(wp_unslash($_POST[$key] ?? '')));"
+    },
+    {
+     "file": "sinofresh-theme/inc/formula-admin.php",
+     "line": 372,
+     "code": "sf_mb_store($post_id, $key, sanitize_textarea_field(wp_unslash($_POST[$key] ?? '')));"
+    },
+    {
+     "file": "sinofresh-theme/inc/formula-admin.php",
+     "line": 375,
+     "code": "$in   = array_map('sanitize_text_field', (array) wp_unslash($_POST[$key] ?? array()));"
+    },
+    {
+     "file": "sinofresh-theme/inc/formula-admin.php",
+     "line": 381,
+     "code": "$in   = sanitize_text_field(wp_unslash($_POST[$key] ?? ''));"
+    },
+    {
+     "file": "sinofresh-theme/inc/formula-admin.php",
+     "line": 397,
+     "code": "$ids = array_filter(array_map('absint', explode(',', (string) wp_unslash($_POST[$key] ?? ''))));"
+    },
+    {
+     "file": "sinofresh-theme/inc/formula-admin.php",
+     "line": 404,
+     "code": "$posts[$c] = array_map('sanitize_text_field', (array) wp_unslash($_POST[$key][$c] ?? array()));"
+    },
+    {
+     "file": "sinofresh-theme/inc/formula-admin.php",
+     "line": 428,
+     "code": "$qs   = array_map('sanitize_text_field', (array) wp_unslash($_POST[$key]['q'] ?? array()));"
+    },
+    {
+     "file": "sinofresh-theme/inc/formula-admin.php",
+     "line": 429,
+     "code": "$as   = array_map('sf_mb_kses_answer', (array) wp_unslash($_POST[$key]['a'] ?? array()));"
+    },
+    {
+     "file": "sinofresh-theme/inc/formula-admin.php",
+     "line": 533,
+     "code": "$post_id = (int) (isset($_GET['post']) ? $_GET['post'] : 0);"
+    }
+   ]
+  },
+  "input | php://input": {
+   "group": "input",
+   "label": "php://input",
+   "note": "raw input source",
+   "count": 0,
+   "hits": []
+  },
+  "rest | register_rest_route": {
+   "group": "rest",
+   "label": "register_rest_route",
+   "note": "check permission_callback on each",
+   "count": 4,
+   "hits": [
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 3767,
+     "code": "register_rest_route('sinofresh/v1', '/inquiry', array("
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 6669,
+     "code": "register_rest_route('sinofresh/v1', '/article-feedback', array("
+    },
+    {
+     "file": "sinofresh-theme/inc/cert-download.php",
+     "line": 139,
+     "code": "register_rest_route('sinofresh/v1', '/cert-download', array("
+    },
+    {
+     "file": "sinofresh-theme/inc/config-pdf.php",
+     "line": 32,
+     "code": "register_rest_route('sinofresh/v1', '/config-pdf', array("
+    }
+   ]
+  },
+  "rest | permission_callback __return_true": {
+   "group": "rest",
+   "label": "permission_callback __return_true",
+   "note": "publicly callable route",
+   "count": 0,
+   "hits": []
+  },
+  "rest | permission_callback is a variable/late": {
+   "group": "rest",
+   "label": "permission_callback is a variable/late",
+   "note": "presence marker",
+   "count": 4,
+   "hits": [
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 3769,
+     "code": "'permission_callback' => '__return_true',"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 6671,
+     "code": "'permission_callback' => '__return_true',"
+    },
+    {
+     "file": "sinofresh-theme/inc/cert-download.php",
+     "line": 141,
+     "code": "'permission_callback' => '__return_true',"
+    },
+    {
+     "file": "sinofresh-theme/inc/config-pdf.php",
+     "line": 34,
+     "code": "'permission_callback' => '__return_true',"
+    }
+   ]
+  },
+  "ajax | wp_ajax handler": {
+   "group": "ajax",
+   "label": "wp_ajax handler",
+   "note": "check nonce + capability inside",
+   "count": 0,
+   "hits": []
+  },
+  "ajax | admin_post handler": {
+   "group": "ajax",
+   "label": "admin_post handler",
+   "note": "check nonce + capability inside",
+   "count": 0,
+   "hits": []
+  },
+  "nonce | check_admin_referer / wp_verify_nonce": {
+   "group": "nonce",
+   "label": "check_admin_referer / wp_verify_nonce",
+   "note": "presence marker",
+   "count": 1,
+   "hits": [
+    {
+     "file": "sinofresh-theme/inc/formula-admin.php",
+     "line": 356,
+     "code": "if (!isset($_POST['sf_mb_nonce_' . $slug]) || !wp_verify_nonce($_POST['sf_mb_nonce_' . $slug], 'sf_mb_save')) {"
+    }
+   ]
+  },
+  "cap | current_user_can": {
+   "group": "cap",
+   "label": "current_user_can",
+   "note": "presence marker",
+   "count": 9,
+   "hits": [
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 409,
+     "code": "return current_user_can('edit_posts');"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 5445,
+     "code": "if (!current_user_can('manage_options')) {"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 5805,
+     "code": "if (!current_user_can('manage_options')) {"
+    },
+    {
+     "file": "sinofresh-theme/inc/formula-admin.php",
+     "line": 56,
+     "code": "return current_user_can('edit_posts');"
+    },
+    {
+     "file": "sinofresh-theme/inc/formula-admin.php",
+     "line": 352,
+     "code": "if (!current_user_can('edit_post', $post_id)) {"
+    },
+    {
+     "file": "sinofresh-theme/inc/formula-admin.php",
+     "line": 761,
+     "code": "if (!current_user_can('manage_options')) {"
+    },
+    {
+     "file": "sinofresh-theme/inc/formula-admin.php",
+     "line": 802,
+     "code": "if (!current_user_can('manage_options')) {"
+    },
+    {
+     "file": "sinofresh-theme/inc/formula-admin.php",
+     "line": 839,
+     "code": "if (!current_user_can('manage_options')) {"
+    },
+    {
+     "file": "sinofresh-theme/inc/formula-admin.php",
+     "line": 893,
+     "code": "if (!current_user_can('manage_options')) {"
+    }
+   ]
+  },
+  "out | echo of a bare variable": {
+   "group": "out",
+   "label": "echo of a bare variable",
+   "note": "escaping must be applied at the echo",
+   "count": 3,
+   "hits": [
+    {
+     "file": "sinofresh-theme/inc/config-pdf.php",
+     "line": 142,
+     "code": "echo $pdf_bytes;"
+    },
+    {
+     "file": "sinofresh-theme/inc/formula-admin.php",
+     "line": 779,
+     "code": "echo $c['attachment_id'] ? wp_get_attachment_image((int) $c['attachment_id'], array(80, 80)) : '';"
+    },
+    {
+     "file": "sinofresh-theme/inc/formula-admin.php",
+     "line": 820,
+     "code": "echo $s['attachment_id'] ? wp_get_attachment_image((int) $s['attachment_id'], array(80, 80)) : '';"
+    }
+   ]
+  },
+  "out | echo of a function call without esc_": {
+   "group": "out",
+   "label": "echo of a function call without esc_",
+   "note": "check the callee escapes",
+   "count": 24,
+   "hits": [
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 5467,
+     "code": "<td><input name=\"sf_contact_email\" id=\"sf_email\" type=\"email\" class=\"regular-text\" value=\"<?php echo esc_attr($email); ?>\"></td>"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 5471,
+     "code": "<td><input name=\"sf_working_hours\" id=\"sf_hours\" type=\"text\" class=\"regular-text\" value=\"<?php echo esc_attr($hours); ?>\"></td>"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 5475,
+     "code": "<td><input name=\"sf_contact_phone\" id=\"sf_phone\" type=\"text\" class=\"regular-text\" value=\"<?php echo esc_attr($phone); ?>\">"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 5480,
+     "code": "<td><input name=\"sf_contact_whatsapp\" id=\"sf_wa\" type=\"text\" class=\"regular-text\" value=\"<?php echo esc_attr($wa); ?>\">"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 5485,
+     "code": "<td><input name=\"sf_contact_address\" id=\"sf_addr\" type=\"text\" class=\"large-text\" value=\"<?php echo esc_attr($addr); ?>\">"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 5498,
+     "code": "<td><input name=\"sf_certifications[<?php echo (int) $i; ?>][name]\" type=\"text\" class=\"regular-text\" value=\"<?php echo esc_attr($c['name']); ?>\"></td>"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 5499,
+     "code": "<td><input name=\"sf_certifications[<?php echo (int) $i; ?>][url]\" type=\"text\" class=\"regular-text\" value=\"<?php echo esc_attr($c['url']); ?>\"></td>"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 5512,
+     "code": "<td><input name=\"sf_copyright_company\" id=\"sf_copyright_company\" type=\"text\" class=\"large-text\" value=\"<?php echo esc_attr($co_company); ?>\">"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 5517,
+     "code": "<td><input name=\"sf_copyright_suffix\" id=\"sf_copyright_suffix\" type=\"text\" class=\"large-text\" value=\"<?php echo esc_attr($co_suffix); ?>\">"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 5532,
+     "code": "<input type=\"radio\" name=\"sf_nav_active_style\" value=\"<?php echo esc_attr($nav_slug); ?>\" <?php checked($nav_style, $nav_slug); ?>>"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 5533,
+     "code": "<?php echo esc_html($nav_label); ?>"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 5818,
+     "code": "<th scope=\"row\"><label for=\"sf_social_<?php echo esc_attr($key); ?>\"><?php echo esc_html($label); ?></label></th>"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 5820,
+     "code": "<input type=\"text\" class=\"regular-text code\" id=\"sf_social_<?php echo esc_attr($key); ?>\""
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 5821,
+     "code": "name=\"sf_social_links[<?php echo esc_attr($key); ?>]\""
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 5822,
+     "code": "value=\"<?php echo esc_attr(isset($links[$key]) ? $links[$key] : '#'); ?>\""
+    },
+    {
+     "file": "sinofresh-theme/inc/formula-admin.php",
+     "line": 266,
+     "code": "echo wp_get_attachment_image($id, 'thumbnail');"
+    },
+    {
+     "file": "sinofresh-theme/inc/formula-admin.php",
+     "line": 783,
+     "code": "<td><input type=\"text\" class=\"regular-text\" name=\"sf_containers[label][]\" value=\"<?php echo esc_attr($c['label']); ?>\"/></td>"
+    },
+    {
+     "file": "sinofresh-theme/inc/formula-admin.php",
+     "line": 784,
+     "code": "<td><input type=\"text\" class=\"regular-text code\" name=\"sf_containers[slug][]\" value=\"<?php echo esc_attr($c['slug']); ?>\"/></td>"
+    },
+    {
+     "file": "sinofresh-theme/inc/formula-admin.php",
+     "line": 824,
+     "code": "<td><input type=\"text\" class=\"regular-text\" name=\"sf_shapes[label][]\" value=\"<?php echo esc_attr($s['label']); ?>\"/></td>"
+    },
+    {
+     "file": "sinofresh-theme/inc/formula-admin.php",
+     "line": 825,
+     "code": "<td><input type=\"text\" class=\"regular-text code\" name=\"sf_shapes[slug][]\" value=\"<?php echo esc_attr($s['slug']); ?>\"/></td>"
+    },
+    {
+     "file": "sinofresh-theme/inc/formula-admin.php",
+     "line": 863,
+     "code": "<td><input type=\"text\" class=\"widefat\" name=\"sf_global_faq[q][]\" value=\"<?php echo esc_attr($r['q']); ?>\"/></td>"
+    },
+    {
+     "file": "sinofresh-theme/inc/formula-admin.php",
+     "line": 864,
+     "code": "<td><textarea class=\"widefat\" rows=\"3\" name=\"sf_global_faq[a][]\"><?php echo esc_textarea($r['a']); ?></textarea></td>"
+    },
+    {
+     "file": "sinofresh-theme/inc/formula-admin.php",
+     "line": 908,
+     "code": "<td><input name=\"sf_factory_origin\" id=\"sf_factory_origin\" type=\"text\" class=\"large-text\" value=\"<?php echo esc_attr($origin); ?>\">"
+    },
+    {
+     "file": "sinofresh-theme/inc/formula-admin.php",
+     "line": 913,
+     "code": "<td><input name=\"sf_factory_oem\" id=\"sf_factory_oem\" type=\"text\" class=\"large-text\" value=\"<?php echo esc_attr($oem); ?>\">"
+    }
+   ]
+  },
+  "out | printf with a variable": {
+   "group": "out",
+   "label": "printf with a variable",
+   "note": "escaping must be applied to the arguments",
+   "count": 7,
+   "hits": [
+    {
+     "file": "sinofresh-theme/inc/formula-admin.php",
+     "line": 207,
+     "code": "printf('<input type=\"text\" class=\"widefat\" name=\"%s\" value=\"%s\" %s/>',"
+    },
+    {
+     "file": "sinofresh-theme/inc/formula-admin.php",
+     "line": 211,
+     "code": "printf('<textarea class=\"widefat\" rows=\"%d\" name=\"%s\">%s</textarea>',"
+    },
+    {
+     "file": "sinofresh-theme/inc/formula-admin.php",
+     "line": 217,
+     "code": "printf('<label class=\"sf-mb__opt\"><input type=\"checkbox\" name=\"%s[]\" value=\"%s\" %s/> %s</label>',"
+    },
+    {
+     "file": "sinofresh-theme/inc/formula-admin.php",
+     "line": 235,
+     "code": "printf('<label class=\"sf-mb__opt\"><input type=\"radio\" name=\"%s\" value=\"%s\" %s/> %s</label>',"
+    },
+    {
+     "file": "sinofresh-theme/inc/formula-admin.php",
+     "line": 251,
+     "code": "printf('<select class=\"sf-mb__select\" name=\"%s\"><option value=\"\"%s>%s</option>',"
+    },
+    {
+     "file": "sinofresh-theme/inc/formula-admin.php",
+     "line": 256,
+     "code": "printf('<option value=\"%s\"%s>%s</option>',"
+    },
+    {
+     "file": "sinofresh-theme/inc/formula-admin.php",
+     "line": 318,
+     "code": "printf('<td><input type=\"text\" class=\"widefat\" name=\"%s[%s][]\" value=\"%s\"/></td>',"
+    }
+   ]
+  },
+  "out | esc_* usage": {
+   "group": "out",
+   "label": "esc_* usage",
+   "note": "presence marker",
+   "count": 232,
+   "hits": [
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 194,
+     "code": "esc_url(get_permalink($page)),"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 196,
+     "code": "esc_html(get_the_title($page))"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 232,
+     "code": "return esc_html($label);"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 290,
+     "code": "esc_url($chip[1]),"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 292,
+     "code": "esc_html($chip[0])"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 642,
+     "code": "esc_attr($badge['slug']),"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 644,
+     "code": "esc_html($badge['label'])"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 1037,
+     "code": "esc_html($question),"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 1038,
+     "code": "esc_html($answer)"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 1165,
+     "code": "$exclude = array_map('intval', is_array($exclude) ? $exclude : array());"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 1232,
+     "code": "$actions .= sprintf('<a class=\"sf-fcard__more\" href=\"%s\">View formula →</a>', esc_url($url));"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 1245,
+     "code": "esc_attr($name),"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 1246,
+     "code": "esc_attr($form_slug)"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 1273,
+     "code": "esc_url($image),"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 1274,
+     "code": "esc_attr(sinofresh_formula_product_alt($form_slug))"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 1283,
+     "code": "esc_url($url),"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 1284,
+     "code": "esc_attr(sprintf('View the %s formula', $name)),"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 1304,
+     "code": "esc_attr($form_slug),"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 1309,
+     "code": "\"Skin & coat\". esc_html() here would double-escape. */"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 1311,
+     "code": "$links ? '<a href=\"' . esc_url($url) . '\">' . esc_html($name) . '</a>' : esc_html($name),"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 1312,
+     "code": "esc_html($specs),"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 1574,
+     "code": "$id = absint($id);"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 1658,
+     "code": ". ' id=\"sf-gallery-slide-' . esc_attr($form) . '-' . $n . '\"'"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 1660,
+     "code": ". ' data-video-id=\"' . esc_attr($slot['video_id']) . '\"'"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 1661,
+     "code": ". ' data-label=\"' . esc_attr($slot['alt']) . '\"'"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 1664,
+     "code": ". '<img src=\"' . esc_url($slot['url']) . '\"'"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 1665,
+     "code": ". ' alt=\"' . esc_attr($slot['alt']) . '\"'"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 1674,
+     "code": "$frames .= '<figure class=\"sf-gallery__slide\" id=\"sf-gallery-slide-' . esc_attr($form) . '-' . $n . '\"'"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 1676,
+     "code": ". ' data-label=\"' . esc_attr($slot['alt']) . '\"'"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 1678,
+     "code": ". '<img src=\"' . esc_url($slot['url']) . '\"'"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 1679,
+     "code": ". ' alt=\"' . esc_attr($slot['alt']) . '\"'"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 1721,
+     "code": "$tabs = '<div class=\"sf-gallery__tabs\" role=\"group\" aria-label=\"' . esc_attr('Product media') . '\">'"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 1723,
+     "code": ". esc_html('Photos') . '</button>';"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 1726,
+     "code": ". esc_html('Video') . '</button>';"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 1733,
+     "code": "return '<div class=\"sf-gallery__inner\" data-gallery=\"' . esc_attr($form) . '\">'"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 1734,
+     "code": ". '<div class=\"sf-gallery__stage\" role=\"tabpanel\" id=\"sf-gallery-panel-' . esc_attr($form) . '\"'"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 1735,
+     "code": ". ' aria-label=\"' . esc_attr($slots[0]['alt']) . '\">' . $frames"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 1786,
+     "code": ". esc_html('All') . '</button>';"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 1795,
+     "code": "esc_attr($slug),"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 1796,
+     "code": "esc_html(sinofresh_formula_label($slug, $term->name))"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 1804,
+     "code": "esc_html('Showing %1$s of %2$d formulas'),"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 1909,
+     "code": "esc_html($field['label']),"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 1910,
+     "code": "esc_html($value)"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 1998,
+     "code": "$rows['Shelf life'] = esc_html($shelf);"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 2006,
+     "code": "$rows['Lead time'] = esc_html($lead);"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 2011,
+     "code": "$html .= '<dt class=\"sf-fdetail2__term\">' . esc_html($label) . '</dt>'"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 2210,
+     "code": "return '<div class=\"sf-fdetail-config__custom\" data-sf-config-custom-for=\"' . esc_attr($key) . '\" hidden>'"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 2212,
+     "code": ". ' data-sf-config-custom-input=\"' . esc_attr($key) . '\"'"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 2214,
+     "code": ". ' aria-label=\"' . esc_attr(sprintf('Your own %s', $label)) . '\"'"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 2236,
+     "code": "$text = trim(sanitize_text_field($m[1]));"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 2614,
+     "code": ". ' name=\"' . esc_attr($name) . '\" value=\"' . esc_attr((string) $option['value']) . '\"'"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 2615,
+     "code": ". ' data-sf-config-opt=\"' . esc_attr($key) . '\">'"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 2616,
+     "code": ". '<span class=\"sf-tier__price\">' . esc_html((string) $option['price_text']) . '</span>'"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 2617,
+     "code": ". '<span class=\"sf-tier__range\">' . esc_html((string) $option['range_text']) . '</span>'"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 2618,
+     "code": ". ($unit !== '' ? '<span class=\"sf-tier__unit\">' . esc_html($unit) . '</span>' : '')"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 2640,
+     "code": ". '<span class=\"sf-fdetail-config__sample-price\">' . esc_html($sample_price) . '</span>'"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 2642,
+     "code": ". ' data-sf-inquiry-sample=\"' . esc_attr($sample_price) . '\">Get Sample</a>'"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 2646,
+     "code": "$html .= '<div class=\"sf-fdetail-config__group\" data-sf-config-group=\"' . esc_attr($key) . '\">'"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 2648,
+     "code": ". '<span class=\"sf-fdetail-config__label\">' . esc_html((string) $group['label']) . '</span>'"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 2649,
+     "code": ". '<span class=\"sf-fdetail-config__meta\">' . esc_html((string) $group['meta']) . '</span>'"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 2651,
+     "code": "? '<span class=\"sf-fdetail-config__hint\">' . esc_html($hint) . '</span>' : '')"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 2654,
+     "code": ". ' aria-label=\"' . esc_attr((string) $group['label']) . '\">' . $cards . '</div>'"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 2678,
+     "code": "$media = '<img class=\"sf-fdetail-config__img\" src=\"' . esc_url($img) . '\" alt=\"\" loading=\"lazy\">';"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 2686,
+     "code": ". '<span class=\"sf-fdetail-config__empty-label\">' . esc_html((string) $option['label']) . '</span>'"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 2693,
+     "code": ". '<input class=\"sf-fdetail-config__input\" type=\"' . esc_attr($type) . '\"'"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 2694,
+     "code": ". ' name=\"' . esc_attr($name) . '\" value=\"' . esc_attr($value) . '\"'"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 2695,
+     "code": ". ' data-sf-config-opt=\"' . esc_attr($key) . '\">'"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 2700,
+     "code": ": '<span class=\"sf-fdetail-config__text\">' . esc_html((string) $option['label']) . '</span>')"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 2702,
+     "code": "? '<span class=\"sf-fdetail-config__note\">' . esc_html($note) . '</span>' : '')"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 2706,
+     "code": "$html .= '<div class=\"sf-fdetail-config__group\" data-sf-config-group=\"' . esc_attr($key) . '\">'"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 2708,
+     "code": ". '<span class=\"sf-fdetail-config__label\">' . esc_html((string) $group['label']) . '</span>'"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 2709,
+     "code": ". '<span class=\"sf-fdetail-config__meta\">' . esc_html((string) $group['meta']) . '</span>'"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 2711,
+     "code": "? '<span class=\"sf-fdetail-config__hint\">' . esc_html($hint) . '</span>' : '')"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 2714,
+     "code": ". ' aria-label=\"' . esc_attr((string) $group['label']) . '\">' . $opts . '</div>'"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 2821,
+     "code": "$rows['Dosage Form'] = esc_html($form_name);"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 2829,
+     "code": "$rows['Life Stage'] = esc_html($value);"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 2842,
+     "code": "$rows[($shape_row !== '' ? $shape_row : 'Shape')] = esc_html($value);"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 2845,
+     "code": "$rows['Unit Weight'] = esc_html(trim((string) $parts['unit']));"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 2848,
+     "code": "$rows['Pack Size'] = esc_html(trim((string) $parts['pack']));"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 2852,
+     "code": "$rows['Shelf Life'] = esc_html($shelf);"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 2868,
+     "code": "$rows['MOQ'] = esc_html(trim((string) $value));"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 2872,
+     "code": "$rows['Certifications'] = esc_html(trim((string) $value));"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 2884,
+     "code": "$rows['Place of Origin'] = esc_html($value);"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 2888,
+     "code": "$rows['OEM / ODM'] = esc_html($value);"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 2904,
+     "code": ". '<dt class=\"sf-fdetail-specs__term\">' . esc_html($label) . '</dt>'"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 2924,
+     "code": "$out .= '<span class=\"sf-fdetail-specs__chip\">' . esc_html($item) . '</span>';"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 2937,
+     "code": "$out .= '<span class=\"sf-fdetail2__chip\">' . esc_html($item) . '</span>';"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 2964,
+     "code": "$body .= '<tr><td class=\"sf-fdetail2__tier-qty\">' . esc_html($qty) . '</td>'"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 2965,
+     "code": ". '<td class=\"sf-fdetail2__tier-price\">' . esc_html($price) . '</td></tr>';"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 3055,
+     "code": "$pills .= '<li class=\"sf-actives__pill\">' . esc_html($term) . '</li>';"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 3058,
+     "code": "$body .= '<p class=\"sf-actives__label\">' . esc_html('Ingredients') . '</p>'"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 3071,
+     "code": ". '<dt class=\"sf-spec-term\">' . esc_html($pair['term']) . '</dt>'"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 3072,
+     "code": ". '<dd class=\"sf-spec-value\">' . esc_html($pair['value']) . '</dd>'"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 3076,
+     "code": "$body .= '<p class=\"sf-actives__label\">' . esc_html('Guaranteed Analysis') . '</p>'"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 3084,
+     "code": ". '<h2 class=\"sf-fdetail-actives__title\">' . esc_html('Formula & nutrition') . '</h2>'"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 3123,
+     "code": ". '<dt class=\"sf-spec-term\">' . esc_html($label) . '</dt>'"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 3124,
+     "code": ". '<dd class=\"sf-spec-value\">' . esc_html($value) . '</dd>'"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 3131,
+     "code": ". '<h2 class=\"sf-fdetail-composition__title\">' . esc_html('Ingredients & composition') . '</h2>'"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 3198,
+     "code": "'<p class=\"sf-fdetail-content__prose\">' . esc_html($value) . '</p>');"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 3213,
+     "code": "'<p class=\"sf-fdetail-content__prose\">' . esc_html($items[0]) . '</p>');"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 3217,
+     "code": "$li .= '<li class=\"sf-fdetail-content__item\">' . esc_html($item) . '</li>';"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 3227,
+     "code": "'<p class=\"sf-fdetail-content__prose\">' . esc_html($value) . '</p>');"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 3248,
+     "code": "'<p class=\"sf-fdetail-content__prose\">' . esc_html(sinofresh_formula_storage_line()) . '</p>');"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 3283,
+     "code": ". '<h2 class=\"' . $class . '\">' . esc_html($label) . '</h2>'"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 3298,
+     "code": ". '<p class=\"sf-fdetail-content__label\">' . esc_html($label) . '</p>'"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 3311,
+     "code": "$chips .= '<li class=\"sf-fdetail-content__chip\">' . esc_html($value) . '</li>';"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 3342,
+     "code": "$body .= '<tr><td>' . esc_html($cells[0]) . '</td><td>' . esc_html($cells[1])"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 3343,
+     "code": ". '</td><td>' . esc_html($cells[2]) . '</td></tr>';"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 3450,
+     "code": ". '<h3 class=\"sf-sampling__step-title\">' . esc_html($step['title']) . '</h3>'"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 3451,
+     "code": ". '<p class=\"sf-sampling__desc\">' . esc_html($step['text']) . '</p>'"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 3458,
+     "code": ". '<h2 class=\"sf-sampling__title\">' . esc_html('How Sampling Works') . '</h2>'"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 3460,
+     "code": ". '<p class=\"sf-sampling__note\">' . esc_html('Typically 3-7 working days.') . '</p>'"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 3648,
+     "code": "$panel .= '<dt class=\"sf-inquiry-modal__term\">' . esc_html($label) . '</dt>'"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 3649,
+     "code": ". '<dd class=\"sf-inquiry-modal__value\">' . esc_html($value) . '</dd>';"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 3660,
+     "code": ". '<span class=\"sf-inquiry-modal__step-title\">' . esc_html($step['title']) . '</span>'"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 3726,
+     "code": ". esc_html($title !== '' ? $title : 'SINO FRESH')"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 3788,
+     "code": "$name    = trim((string) sanitize_text_field((string) $req->get_param('name')));"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 3790,
+     "code": "$company = trim((string) sanitize_text_field((string) $req->get_param('company')));"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 3791,
+     "code": "$country = trim((string) sanitize_text_field((string) $req->get_param('country')));"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 3810,
+     "code": "$post_id = absint($req->get_param('formula'));"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 4783,
+     "code": "'category__in'        => array_map('intval', $sf_categories),"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 4801,
+     "code": "'tag__in'             => array_map('intval', $sf_tags),"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 4810,
+     "code": "$sf_related = array_slice(array_map('intval', $sf_related), 0, $sf_limit);"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 5045,
+     "code": "*                        stores \"Skin &amp; coat\"; esc_html here would"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 5164,
+     "code": "$formula_intro = '<p class=\"sf-fdetail2__intro\">' . esc_html($intro) . '</p>';"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 5168,
+     "code": "'{{TITLE}}'           => esc_html($title),"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 5169,
+     "code": "'{{ARCHIVE_TITLE}}'   => esc_html($archive_title),"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 5172,
+     "code": "'{{FORM_CRUMB}}'      => esc_html($form_crumb),"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 5173,
+     "code": "'{{FORM_HREF}}'       => esc_url($form_href),"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 5174,
+     "code": "'{{FORM_SLUG}}'       => esc_attr($form_slug),"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 5175,
+     "code": "/* Verbatim, not esc_html: see the docblock and the 2B Stage1 pit. */"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 5177,
+     "code": "'{{FORMULA_META}}'    => esc_html($formula_meta),"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 5179,
+     "code": "'{{LAST_UPDATED}}'    => esc_html($last),"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 5180,
+     "code": "'{{SHARE_URL}}'       => esc_url($permalink),"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 5297,
+     "code": "echo '<link rel=\"icon\" type=\"image/png\" sizes=\"32x32\" href=\"' . esc_url($uri . '/favicon-32.png') . '\">' . \"\\n\";"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 5298,
+     "code": "echo '<link rel=\"icon\" type=\"image/png\" sizes=\"512x512\" href=\"' . esc_url($uri . '/favicon.png') . '\">' . \"\\n\";"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 5299,
+     "code": "echo '<link rel=\"apple-touch-icon\" href=\"' . esc_url($uri . '/favicon.png') . '\">' . \"\\n\";"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 5396,
+     "code": "$v = sanitize_text_field($v);"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 5429,
+     "code": "$name = isset($row['name']) ? sanitize_text_field($row['name']) : '';"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 5467,
+     "code": "<td><input name=\"sf_contact_email\" id=\"sf_email\" type=\"email\" class=\"regular-text\" value=\"<?php echo esc_attr($email); ?>\"></td>"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 5471,
+     "code": "<td><input name=\"sf_working_hours\" id=\"sf_hours\" type=\"text\" class=\"regular-text\" value=\"<?php echo esc_attr($hours); ?>\"></td>"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 5475,
+     "code": "<td><input name=\"sf_contact_phone\" id=\"sf_phone\" type=\"text\" class=\"regular-text\" value=\"<?php echo esc_attr($phone); ?>\">"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 5480,
+     "code": "<td><input name=\"sf_contact_whatsapp\" id=\"sf_wa\" type=\"text\" class=\"regular-text\" value=\"<?php echo esc_attr($wa); ?>\">"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 5485,
+     "code": "<td><input name=\"sf_contact_address\" id=\"sf_addr\" type=\"text\" class=\"large-text\" value=\"<?php echo esc_attr($addr); ?>\">"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 5498,
+     "code": "<td><input name=\"sf_certifications[<?php echo (int) $i; ?>][name]\" type=\"text\" class=\"regular-text\" value=\"<?php echo esc_attr($c['name']); ?>\"></td>"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 5499,
+     "code": "<td><input name=\"sf_certifications[<?php echo (int) $i; ?>][url]\" type=\"text\" class=\"regular-text\" value=\"<?php echo esc_attr($c['url']); ?>\"></td>"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 5512,
+     "code": "<td><input name=\"sf_copyright_company\" id=\"sf_copyright_company\" type=\"text\" class=\"large-text\" value=\"<?php echo esc_attr($co_company); ?>\">"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 5517,
+     "code": "<td><input name=\"sf_copyright_suffix\" id=\"sf_copyright_suffix\" type=\"text\" class=\"large-text\" value=\"<?php echo esc_attr($co_suffix); ?>\">"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 5532,
+     "code": "<input type=\"radio\" name=\"sf_nav_active_style\" value=\"<?php echo esc_attr($nav_slug); ?>\" <?php checked($nav_style, $nav_slug); ?>>"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 5533,
+     "code": "<?php echo esc_html($nav_label); ?>"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 5558,
+     "code": "$name = esc_html($c['name']);"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 5559,
+     "code": "$url  = esc_url((string) $c['url']);"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 5579,
+     "code": "'{{sf-email}}'         => esc_attr(get_option('sf_contact_email', $d['sf_contact_email'])),"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 5580,
+     "code": "'{{sf-hours}}'         => esc_html(get_option('sf_working_hours', $d['sf_working_hours'])),"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 5581,
+     "code": "'{{sf-phone}}'         => esc_html($phone),"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 5582,
+     "code": "'{{sf-phone-tel}}'     => esc_attr('tel:' . preg_replace('/[^+0-9]/', '', $phone)),"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 5583,
+     "code": "'{{sf-address}}'       => esc_html(get_option('sf_contact_address', $d['sf_contact_address'])),"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 5584,
+     "code": "'{{sf-whatsapp}}'      => esc_html($wa),"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 5585,
+     "code": "'{{sf-whatsapp-link}}' => esc_url('https://wa.me/' . preg_replace('/[^0-9]/', '', $wa)),"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 5586,
+     "code": "'{{sf-copyright-year}}'   => esc_html(date('Y')),"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 5587,
+     "code": "'{{sf-copyright-company}}' => esc_html(get_option('sf_copyright_company', $d['sf_copyright_company'])),"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 5588,
+     "code": "'{{sf-copyright-suffix}}' => esc_html(get_option('sf_copyright_suffix', $d['sf_copyright_suffix'])),"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 5589,
+     "code": "'{{sf-certifications-line}}' => esc_html(sf_certifications_line()),"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 5818,
+     "code": "<th scope=\"row\"><label for=\"sf_social_<?php echo esc_attr($key); ?>\"><?php echo esc_html($label); ?></label></th>"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 5820,
+     "code": "<input type=\"text\" class=\"regular-text code\" id=\"sf_social_<?php echo esc_attr($key); ?>\""
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 5821,
+     "code": "name=\"sf_social_links[<?php echo esc_attr($key); ?>]\""
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 5822,
+     "code": "value=\"<?php echo esc_attr(isset($links[$key]) ? $links[$key] : '#'); ?>\""
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 5872,
+     "code": "// esc_url FIRST: a stored value with a bad scheme must fall back to"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 5874,
+     "code": "$url = esc_url(trim((string) (isset($links[$m[1]]) ? $links[$m[1]] : '')));"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 6680,
+     "code": "$post_id = absint($req->get_param('post'));"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 6694,
+     "code": "'ip'      => isset($_SERVER['REMOTE_ADDR']) ? sanitize_text_field(wp_unslash($_SERVER['REMOTE_ADDR'])) : '',"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 6879,
+     "code": "$card = '<div class=\"sf-cert-result\" data-payload=\"' . esc_attr(wp_json_encode($payload)) . '\"'"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 6880,
+     "code": ". ' data-download-url=\"' . esc_attr($payload['download_url']) . '\"'"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 6881,
+     "code": ". ' data-email-sent-to=\"' . esc_attr($g['email']) . '\">'"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 6885,
+     "code": "$card .= '<p class=\"sf-cert-result__note\">' . esc_html($g['label'])"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 6886,
+     "code": ". ' is attached to the email we just sent to <strong>' . esc_html($g['email']) . '</strong>.</p>'"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 6887,
+     "code": ". '<p class=\"sf-cert-result__cta\"><a class=\"sf-cert-result__btn\" href=\"' . esc_url($g['url']) . '\">Download now</a></p>'"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 6890,
+     "code": "$card .= '<p class=\"sf-cert-result__note\">' . esc_html($g['label'])"
+    },
+    {
+     "file": "sinofresh-theme/functions.php",
+     "line": 6891,
+     "code": ". ' is not published on the website — our team will email it to <strong>' . esc_html($g['email'])"
+    },
+    {
+     "file": "sinofresh-theme/inc/config-pdf.php",
+     "line": 72,
+     "code": "'label' => mb_substr(sanitize_text_field(sinofresh_config_pdf_raw($label)), 0, 40),"
+    },
+    {
+     "file": "sinofresh-theme/inc/config-pdf.php",
+     "line": 73,
+     "code": "'value' => mb_substr(sanitize_text_field(sinofresh_config_pdf_raw($value)), 0, 120),"
+    },
+    {
+     "file": "sinofresh-theme/inc/config-pdf.php",
+     "line": 83,
+     "code": "$name = isset($data['formula']['name']) ? sanitize_text_field(sinofresh_config_pdf_raw($data['formula']['name'])) : '';"
+    },
+    {
+     "file": "sinofresh-theme/inc/config-pdf.php",
+     "line": 93,
+     "code": "'label' => mb_substr(sanitize_text_field(sinofresh_config_pdf_raw($sec['label'])), 0, 60),"
+    },
+    {
+     "file": "sinofresh-theme/inc/config-pdf.php",
+     "line": 94,
+     "code": "'value' => mb_substr(sanitize_text_field(sinofresh_config_pdf_raw($sec['value'])), 0, 400),"
+    },
+    {
+     "file": "sinofresh-theme/inc/config-pdf.php",
+     "line": 197,
+     "code": "return esc_html(sinofresh_config_pdf_raw($text));"
+    },
+    {
+     "file": "sinofresh-theme/inc/formula-admin.php",
+     "line": 184,
+     "code": "echo '<div class=\"sf-mb\" data-sf-group=\"' . esc_attr($group) . '\">';"
+    },
+    {
+     "file": "sinofresh-theme/inc/formula-admin.php",
+     "line": 199,
+     "code": "echo '<div class=\"sf-mb__field sf-mb__field--' . esc_attr($spec['type']) . '\" data-sf-key=\"' . esc_attr($spec['key']) . '\"' . ($hid ? ' hidden' : '') . '>';"
+    },
+    {
+     "file": "sinofresh-theme/inc/formula-admin.php",
+     "line": 200,
+     "code": "echo '<span class=\"sf-mb__label\">' . esc_html($spec['label']) . $req . '</span>';"
+    },
+    {
+     "file": "sinofresh-theme/inc/formula-admin.php",
+     "line": 202,
+     "code": "echo '<p class=\"sf-mb__hint\">' . esc_html($spec['hint']) . '</p>';"
+    },
+    {
+     "file": "sinofresh-theme/inc/formula-admin.php",
+     "line": 208,
+     "code": "esc_attr($spec['key']), esc_attr($raw), 'url' === $spec['type'] ? 'placeholder=\"https://www.youtube.com/watch?v=…\"' : '');"
+    },
+    {
+     "file": "sinofresh-theme/inc/formula-admin.php",
+     "line": 212,
+     "code": "(int) $spec['rows'], esc_attr($spec['key']), esc_textarea($raw));"
+    },
+    {
+     "file": "sinofresh-theme/inc/formula-admin.php",
+     "line": 218,
+     "code": "esc_attr($spec['key']), esc_attr($o), checked(in_array($o, $sel, true), true, false), esc_html($o));"
+    },
+    {
+     "file": "sinofresh-theme/inc/formula-admin.php",
+     "line": 236,
+     "code": "esc_attr($spec['key']), esc_attr($o), checked($raw, $o, false), esc_html($o));"
+    },
+    {
+     "file": "sinofresh-theme/inc/formula-admin.php",
+     "line": 252,
+     "code": "esc_attr($spec['key']),"
+    },
+    {
+     "file": "sinofresh-theme/inc/formula-admin.php",
+     "line": 254,
+     "code": "esc_html(isset($spec['empty_label']) ? $spec['empty_label'] : 'None'));"
+    },
+    {
+     "file": "sinofresh-theme/inc/formula-admin.php",
+     "line": 257,
+     "code": "esc_attr($o), selected($raw, $o, false), esc_html($o));"
+    },
+    {
+     "file": "sinofresh-theme/inc/formula-admin.php",
+     "line": 262,
+     "code": "$ids = array_filter(array_map('absint', explode(',', (string) $raw)));"
+    },
+    {
+     "file": "sinofresh-theme/inc/formula-admin.php",
+     "line": 263,
+     "code": "echo '<input type=\"hidden\" class=\"sf-mb__gallery-ids\" name=\"' . esc_attr($spec['key']) . '\" value=\"' . esc_attr(implode(',', $ids)) . '\"/>';"
+    },
+    {
+     "file": "sinofresh-theme/inc/formula-admin.php",
+     "line": 282,
+     "code": "echo '<table class=\"sf-reptable widefat\" data-sf-name=\"' . esc_attr($spec['key']) . '\"><thead><tr>';"
+    },
+    {
+     "file": "sinofresh-theme/inc/formula-admin.php",
+     "line": 284,
+     "code": "echo '<th>' . esc_html($c) . '</th>';"
+    },
+    {
+     "file": "sinofresh-theme/inc/formula-admin.php",
+     "line": 291,
+     "code": "echo '<p><button type=\"button\" class=\"button sf-reptable__add\" data-sf-name=\"' . esc_attr($spec['key']) . '\">+ Add row</button></p>';"
+    },
+    {
+     "file": "sinofresh-theme/inc/formula-admin.php",
+     "line": 298,
+     "code": "echo '<table class=\"sf-reptable sf-reptable--faq widefat\" data-sf-name=\"' . esc_attr($spec['key']) . '\"><thead><tr><th>Question</th><th>Answer</th><th></th></tr></thead><tbody>';"
+    },
+    {
+     "file": "sinofresh-theme/inc/formula-admin.php",
+     "line": 301,
+     "code": "echo '<tr><td><input type=\"text\" class=\"widefat\" name=\"' . esc_attr($spec['key']) . '[q][]\" value=\"' . esc_attr($r['q']) . '\"/></td>';"
+    },
+    {
+     "file": "sinofresh-theme/inc/formula-admin.php",
+     "line": 302,
+     "code": "echo '<td><textarea class=\"widefat\" rows=\"3\" name=\"' . esc_attr($spec['key']) . '[a][]\">' . esc_textarea($r['a']) . '</textarea>';"
+    },
+    {
+     "file": "sinofresh-theme/inc/formula-admin.php",
+     "line": 307,
+     "code": "echo '<p><button type=\"button\" class=\"button sf-reptable__add sf-reptable__add--empty\" data-sf-name=\"' . esc_attr($spec['key']) . '\">+ Add row</button></p>';"
+    },
+    {
+     "file": "sinofresh-theme/inc/formula-admin.php",
+     "line": 319,
+     "code": "esc_attr($key), esc_attr($c), esc_attr(isset($row[$c]) ? $row[$c] : ''));"
+    },
+    {
+     "file": "sinofresh-theme/inc/formula-admin.php",
+     "line": 366,
+     "code": "sf_mb_store($post_id, $key, sanitize_text_field(wp_unslash($_POST[$key] ?? '')));"
+    },
+    {
+     "file": "sinofresh-theme/inc/formula-admin.php",
+     "line": 375,
+     "code": "$in   = array_map('sanitize_text_field', (array) wp_unslash($_POST[$key] ?? array()));"
+    },
+    {
+     "file": "sinofresh-theme/inc/formula-admin.php",
+     "line": 381,
+     "code": "$in   = sanitize_text_field(wp_unslash($_POST[$key] ?? ''));"
+    },
+    {
+     "file": "sinofresh-theme/inc/formula-admin.php",
+     "line": 397,
+     "code": "$ids = array_filter(array_map('absint', explode(',', (string) wp_unslash($_POST[$key] ?? ''))));"
+    },
+    {
+     "file": "sinofresh-theme/inc/formula-admin.php",
+     "line": 404,
+     "code": "$posts[$c] = array_map('sanitize_text_field', (array) wp_unslash($_POST[$key][$c] ?? array()));"
+    },
+    {
+     "file": "sinofresh-theme/inc/formula-admin.php",
+     "line": 428,
+     "code": "$qs   = array_map('sanitize_text_field', (array) wp_unslash($_POST[$key]['q'] ?? array()));"
+    },
+    {
+     "file": "sinofresh-theme/inc/formula-admin.php",
+     "line": 447,
+     "code": "return wp_kses((string) $v, array('a' => array('href' => array(), 'title' => array(), 'target' => array())));"
+    },
+    {
+     "file": "sinofresh-theme/inc/formula-admin.php",
+     "line": 540,
+     "code": ". esc_html(implode(', ', $missing)) . '</p></div>';"
+    },
+    {
+     "file": "sinofresh-theme/inc/formula-admin.php",
+     "line": 615,
+     "code": "'label'         => sanitize_text_field(isset($row['label']) ? $row['label'] : ''),"
+    },
+    {
+     "file": "sinofresh-theme/inc/formula-admin.php",
+     "line": 616,
+     "code": "'attachment_id' => absint(isset($row['attachment_id']) ? $row['attachment_id'] : 0),"
+    },
+    {
+     "file": "sinofresh-theme/inc/formula-admin.php",
+     "line": 652,
+     "code": "'label'         => sanitize_text_field(isset($row['label']) ? $row['label'] : ''),"
+    },
+    {
+     "file": "sinofresh-theme/inc/formula-admin.php",
+     "line": 653,
+     "code": "'attachment_id' => absint(isset($row['attachment_id']) ? $row['attachment_id'] : 0),"
+    },
+    {
+     "file": "sinofresh-theme/inc/formula-admin.php",
+     "line": 677,
+     "code": "'label'         => sanitize_text_field(isset($row['label']) ? $row['label'] : ''),"
+    },
+    {
+     "file": "sinofresh-theme/inc/formula-admin.php",
+     "line": 678,
+     "code": "'attachment_id' => absint(isset($row['attachment_id']) ? $row['attachment_id'] : 0),"
+    },
+    {
+     "file": "sinofresh-theme/inc/formula-admin.php",
+     "line": 699,
+     "code": "'label'         => sanitize_text_field(isset($row['label']) ? $row['label'] : ''),"
+    },
+    {
+     "file": "sinofresh-theme/inc/formula-admin.php",
+     "line": 700,
+     "code": "'attachment_id' => absint(isset($row['attachment_id']) ? $row['attachment_id'] : 0),"
+    },
+    {
+     "file": "sinofresh-theme/inc/formula-admin.php",
+     "line": 714,
+     "code": "$q = sanitize_text_field(isset($qs[$i]) ? $qs[$i] : '');"
+    },
+    {
+     "file": "sinofresh-theme/inc/formula-admin.php",
+     "line": 732,
+     "code": "$v = sanitize_text_field($v);"
+    },
+    {
+     "file": "sinofresh-theme/inc/formula-admin.php",
+     "line": 783,
+     "code": "<td><input type=\"text\" class=\"regular-text\" name=\"sf_containers[label][]\" value=\"<?php echo esc_attr($c['label']); ?>\"/></td>"
+    },
+    {
+     "file": "sinofresh-theme/inc/formula-admin.php",
+     "line": 784,
+     "code": "<td><input type=\"text\" class=\"regular-text code\" name=\"sf_containers[slug][]\" value=\"<?php echo esc_attr($c['slug']); ?>\"/></td>"
+    },
+    {
+     "file": "sinofresh-theme/inc/formula-admin.php",
+     "line": 824,
+     "code": "<td><input type=\"text\" class=\"regular-text\" name=\"sf_shapes[label][]\" value=\"<?php echo esc_attr($s['label']); ?>\"/></td>"
+    },
+    {
+     "file": "sinofresh-theme/inc/formula-admin.php",
+     "line": 825,
+     "code": "<td><input type=\"text\" class=\"regular-text code\" name=\"sf_shapes[slug][]\" value=\"<?php echo esc_attr($s['slug']); ?>\"/></td>"
+    },
+    {
+     "file": "sinofresh-theme/inc/formula-admin.php",
+     "line": 863,
+     "code": "<td><input type=\"text\" class=\"widefat\" name=\"sf_global_faq[q][]\" value=\"<?php echo esc_attr($r['q']); ?>\"/></td>"
+    },
+    {
+     "file": "sinofresh-theme/inc/formula-admin.php",
+     "line": 864,
+     "code": "<td><textarea class=\"widefat\" rows=\"3\" name=\"sf_global_faq[a][]\"><?php echo esc_textarea($r['a']); ?></textarea></td>"
+    },
+    {
+     "file": "sinofresh-theme/inc/formula-admin.php",
+     "line": 908,
+     "code": "<td><input name=\"sf_factory_origin\" id=\"sf_factory_origin\" type=\"text\" class=\"large-text\" value=\"<?php echo esc_attr($origin); ?>\">"
+    },
+    {
+     "file": "sinofresh-theme/inc/formula-admin.php",
+     "line": 913,
+     "code": "<td><input name=\"sf_factory_oem\" id=\"sf_factory_oem\" type=\"text\" class=\"large-text\" value=\"<?php echo esc_attr($oem); ?>\">"
+    }
+   ]
+  },
+  "secret | credential-shaped literal": {
+   "group": "secret",
+   "label": "credential-shaped literal",
+   "note": "hardcoded secret",
+   "count": 0,
+   "hits": []
+  },
+  "secret | long base64/hex literal": {
+   "group": "secret",
+   "label": "long base64/hex literal",
+   "note": "possible embedded key",
+   "count": 0,
+   "hits": []
+  },
+  "secret | private IPv4 / localhost": {
+   "group": "secret",
+   "label": "private IPv4 / localhost",
+   "note": "environment leakage",
+   "count": 0,
+   "hits": []
+  },
+  "js | innerHTML assignment": {
+   "group": "js",
+   "label": "innerHTML assignment",
+   "note": "DOM injection if the value is not trusted",
+   "count": 13,
+   "hits": [
+    {
+     "file": "sinofresh-theme/assets/admin/sf-mb-precheck.js",
+     "line": 52,
+     "code": "div.innerHTML = '<strong>Phase 1 — publishing is not blocked yet.</strong> Still missing: '"
+    },
+    {
+     "file": "sinofresh-theme/assets/admin/sf-mb-tables.js",
+     "line": 26,
+     "code": "tr.querySelectorAll('.sf-containers__preview').forEach(function (p) { p.innerHTML = ''; });"
+    },
+    {
+     "file": "sinofresh-theme/assets/admin/sf-mb-tables.js",
+     "line": 84,
+     "code": "preview.innerHTML = items.map(function (i) {"
+    },
+    {
+     "file": "sinofresh-theme/assets/admin/sf-mb-tables.js",
+     "line": 98,
+     "code": "field.querySelector('.sf-mb__gallery-preview').innerHTML = '';"
+    },
+    {
+     "file": "sinofresh-theme/assets/admin/sf-site-settings.js",
+     "line": 80,
+     "code": "if (prev) { prev.innerHTML = ''; }"
+    },
+    {
+     "file": "sinofresh-theme/assets/admin/sf-site-settings.js",
+     "line": 109,
+     "code": "previewEl.innerHTML = '<img src=\"' + thumb + '\" alt=\"\" width=\"80\" height=\"80\"/>';"
+    },
+    {
+     "file": "sinofresh-theme/assets/js/about.js",
+     "line": 112,
+     "code": "box.innerHTML ="
+    },
+    {
+     "file": "sinofresh-theme/assets/js/cert-modal.js",
+     "line": 126,
+     "code": "icon.innerHTML = payload.download_url ? ICON_CHECK : ICON_MAIL;"
+    },
+    {
+     "file": "sinofresh-theme/assets/js/cert-modal.js",
+     "line": 236,
+     "code": "holder.innerHTML = pristineForm;"
+    },
+    {
+     "file": "sinofresh-theme/assets/js/quality.js",
+     "line": 71,
+     "code": "box.innerHTML ="
+    },
+    {
+     "file": "sinofresh-theme/assets/js/toc-nav.js",
+     "line": 381,
+     "code": "copy.innerHTML = '<svg width=\"12\" height=\"12\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><rect x=\"9\" y=\"9\""
+    },
+    {
+     "file": "sinofresh-theme/assets/js/toc-nav.js",
+     "line": 408,
+     "code": "toggle.innerHTML = '<span>On this page</span><svg class=\"sf-mobile-toc__chev\" width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.4\" stroke-linecap=\"round\" str"
+    },
+    {
+     "file": "sinofresh-theme/assets/js/toc-nav.js",
+     "line": 462,
+     "code": "cta.innerHTML = '<p class=\"sf-inline-cta__title\">Launching a supplement line?</p>' +"
+    }
+   ]
+  },
+  "js | document.write": {
+   "group": "js",
+   "label": "document.write",
+   "note": "DOM injection",
+   "count": 0,
+   "hits": []
+  },
+  "js | insertAdjacentHTML": {
+   "group": "js",
+   "label": "insertAdjacentHTML",
+   "note": "DOM injection",
+   "count": 0,
+   "hits": []
+  },
+  "js | new Function / eval": {
+   "group": "js",
+   "label": "new Function / eval",
+   "note": "dynamic code",
+   "count": 0,
+   "hits": []
+  },
+  "js | fetch/XHR with a variable URL": {
+   "group": "js",
+   "label": "fetch/XHR with a variable URL",
+   "note": "untrusted target",
+   "count": 0,
+   "hits": []
+  },
+  "js | postMessage without origin check": {
+   "group": "js",
+   "label": "postMessage without origin check",
+   "note": "check event.origin on the receiver",
+   "count": 0,
+   "hits": []
+  }
+ },
+ "totals": {
+  "code-exec": 0,
+  "shell": 67,
+  "file": 11,
+  "sql": 0,
+  "input": 16,
+  "rest": 8,
+  "ajax": 0,
+  "nonce": 1,
+  "cap": 9,
+  "out": 266,
+  "secret": 0,
+  "js": 13
+ }
+}

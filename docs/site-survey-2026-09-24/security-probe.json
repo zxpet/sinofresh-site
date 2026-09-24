@@ -1,0 +1,840 @@
+[
+ {
+  "path": "/",
+  "status": 200,
+  "size": 228706,
+  "redirect": "",
+  "headers": {
+   "server": [
+    "cloudflare"
+   ],
+   "x-powered-by": [
+    "PHP/8.3.33"
+   ],
+   "x-robots-tag": [
+    "noindex, nofollow, noarchive"
+   ],
+   "content-type": [
+    "text/html; charset=UTF-8"
+   ]
+  },
+  "status_lines": [
+   "HTTP/2 200"
+  ],
+  "expect": [
+   "200"
+  ],
+  "why": "baseline",
+  "verdict": "ok"
+ },
+ {
+  "path": "/wp-login.php",
+  "status": 200,
+  "size": 7451,
+  "redirect": "",
+  "headers": {
+   "content-security-policy": [
+    "frame-ancestors 'self';"
+   ],
+   "x-frame-options": [
+    "SAMEORIGIN"
+   ],
+   "referrer-policy": [
+    "strict-origin-when-cross-origin"
+   ],
+   "server": [
+    "cloudflare"
+   ],
+   "x-powered-by": [
+    "PHP/8.3.33"
+   ],
+   "x-robots-tag": [
+    "noindex, nofollow, noarchive"
+   ],
+   "content-type": [
+    "text/html; charset=UTF-8"
+   ],
+   "set-cookie": [
+    "wordpress_test_cookie=WP%20Cookie%20check; path=/; secure; HttpOnly"
+   ]
+  },
+  "status_lines": [
+   "HTTP/2 200"
+  ],
+  "expect": [
+   "200",
+   "302"
+  ],
+  "why": "login page must exist and must not leak",
+  "verdict": "ok"
+ },
+ {
+  "path": "/wp-admin/",
+  "status": 302,
+  "size": 0,
+  "redirect": "https://dev.zxpet.com/wp-login.php?redirect_to=https%3A%2F%2Fdev.zxpet.com%2Fwp-admin%2F&reauth=1",
+  "headers": {
+   "server": [
+    "cloudflare"
+   ],
+   "x-powered-by": [
+    "PHP/8.3.33"
+   ],
+   "x-robots-tag": [
+    "noindex, nofollow, noarchive"
+   ],
+   "content-type": [
+    "text/html; charset=UTF-8"
+   ]
+  },
+  "status_lines": [
+   "HTTP/2 302"
+  ],
+  "expect": [
+   "302",
+   "200"
+  ],
+  "why": "admin entry redirects to login when logged out",
+  "verdict": "ok"
+ },
+ {
+  "path": "/xmlrpc.php",
+  "status": 405,
+  "size": 42,
+  "redirect": "",
+  "headers": {
+   "server": [
+    "cloudflare"
+   ],
+   "x-powered-by": [
+    "PHP/8.3.33"
+   ],
+   "x-robots-tag": [
+    "noindex, nofollow, noarchive"
+   ],
+   "content-type": [
+    "text/plain;charset=UTF-8"
+   ]
+  },
+  "status_lines": [
+   "HTTP/2 405"
+  ],
+  "expect": [
+   "403",
+   "404",
+   "405"
+  ],
+  "why": "XML-RPC is a brute-force amplifier",
+  "verdict": "ok"
+ },
+ {
+  "path": "/wp-json/wp/v2/users",
+  "status": 404,
+  "size": 114,
+  "redirect": "",
+  "headers": {
+   "x-content-type-options": [
+    "nosniff"
+   ],
+   "server": [
+    "cloudflare"
+   ],
+   "x-powered-by": [
+    "PHP/8.3.33"
+   ],
+   "x-robots-tag": [
+    "noindex, nofollow, noarchive"
+   ],
+   "content-type": [
+    "application/json; charset=UTF-8"
+   ]
+  },
+  "status_lines": [
+   "HTTP/2 404"
+  ],
+  "expect": [
+   "401",
+   "403",
+   "404"
+  ],
+  "why": "user enumeration -- the theme blocks this for logged-out requests",
+  "verdict": "ok"
+ },
+ {
+  "path": "/wp-json/wp/v2/users/1",
+  "status": 404,
+  "size": 114,
+  "redirect": "",
+  "headers": {
+   "x-content-type-options": [
+    "nosniff"
+   ],
+   "server": [
+    "cloudflare"
+   ],
+   "x-powered-by": [
+    "PHP/8.3.33"
+   ],
+   "x-robots-tag": [
+    "noindex, nofollow, noarchive"
+   ],
+   "content-type": [
+    "application/json; charset=UTF-8"
+   ]
+  },
+  "status_lines": [
+   "HTTP/2 404"
+  ],
+  "expect": [
+   "401",
+   "403",
+   "404"
+  ],
+  "why": "single-user enumeration",
+  "verdict": "ok"
+ },
+ {
+  "path": "/?author=1",
+  "status": 301,
+  "size": 0,
+  "redirect": "https://dev.zxpet.com/author/admin/",
+  "headers": {
+   "server": [
+    "cloudflare"
+   ],
+   "x-powered-by": [
+    "PHP/8.3.33"
+   ],
+   "x-robots-tag": [
+    "noindex, nofollow, noarchive"
+   ],
+   "content-type": [
+    "text/html; charset=UTF-8"
+   ]
+  },
+  "status_lines": [
+   "HTTP/2 301"
+  ],
+  "expect": [
+   "301",
+   "302",
+   "404"
+  ],
+  "why": "author archive is the classic enumeration",
+  "verdict": "ok"
+ },
+ {
+  "path": "/wp-json/sinofresh/v1/",
+  "status": 200,
+  "size": 1265,
+  "redirect": "",
+  "headers": {
+   "x-content-type-options": [
+    "nosniff"
+   ],
+   "server": [
+    "cloudflare"
+   ],
+   "x-powered-by": [
+    "PHP/8.3.33"
+   ],
+   "x-robots-tag": [
+    "noindex, nofollow, noarchive"
+   ],
+   "content-type": [
+    "application/json; charset=UTF-8"
+   ]
+  },
+  "status_lines": [
+   "HTTP/2 200"
+  ],
+  "expect": [
+   "404",
+   "200"
+  ],
+  "why": "our own namespace index",
+  "verdict": "ok"
+ },
+ {
+  "path": "/readme.html",
+  "status": 200,
+  "size": 7407,
+  "redirect": "",
+  "headers": {
+   "server": [
+    "cloudflare"
+   ],
+   "x-robots-tag": [
+    "noindex, nofollow, noarchive"
+   ],
+   "content-type": [
+    "text/html; charset=UTF-8"
+   ]
+  },
+  "status_lines": [
+   "HTTP/2 200"
+  ],
+  "expect": [
+   "403",
+   "404"
+  ],
+  "why": "version disclosure",
+  "verdict": "REVIEW"
+ },
+ {
+  "path": "/license.txt",
+  "status": 200,
+  "size": 19903,
+  "redirect": "",
+  "headers": {
+   "server": [
+    "cloudflare"
+   ],
+   "x-robots-tag": [
+    "noindex, nofollow, noarchive"
+   ],
+   "content-type": [
+    "text/plain; charset=UTF-8"
+   ]
+  },
+  "status_lines": [
+   "HTTP/2 200"
+  ],
+  "expect": [
+   "403",
+   "404"
+  ],
+  "why": "version disclosure",
+  "verdict": "REVIEW"
+ },
+ {
+  "path": "/wp-config.php",
+  "status": 403,
+  "size": 4570,
+  "redirect": "",
+  "headers": {
+   "x-frame-options": [
+    "SAMEORIGIN"
+   ],
+   "referrer-policy": [
+    "same-origin"
+   ],
+   "server": [
+    "cloudflare"
+   ],
+   "content-type": [
+    "text/html; charset=UTF-8"
+   ]
+  },
+  "status_lines": [
+   "HTTP/2 403"
+  ],
+  "expect": [
+   "403",
+   "404"
+  ],
+  "why": "must never be served",
+  "verdict": "ok"
+ },
+ {
+  "path": "/wp-config.php.bak",
+  "status": 403,
+  "size": 4570,
+  "redirect": "",
+  "headers": {
+   "x-frame-options": [
+    "SAMEORIGIN"
+   ],
+   "referrer-policy": [
+    "same-origin"
+   ],
+   "server": [
+    "cloudflare"
+   ],
+   "content-type": [
+    "text/html; charset=UTF-8"
+   ]
+  },
+  "status_lines": [
+   "HTTP/2 403"
+  ],
+  "expect": [
+   "403",
+   "404"
+  ],
+  "why": "must never be served",
+  "verdict": "ok"
+ },
+ {
+  "path": "/wp-config.php~",
+  "status": 403,
+  "size": 4570,
+  "redirect": "",
+  "headers": {
+   "x-frame-options": [
+    "SAMEORIGIN"
+   ],
+   "referrer-policy": [
+    "same-origin"
+   ],
+   "server": [
+    "cloudflare"
+   ],
+   "content-type": [
+    "text/html; charset=UTF-8"
+   ]
+  },
+  "status_lines": [
+   "HTTP/2 403"
+  ],
+  "expect": [
+   "403",
+   "404"
+  ],
+  "why": "editor backup must never be served",
+  "verdict": "ok"
+ },
+ {
+  "path": "/.env",
+  "err": "curl: (7) Failed to connect to dev.zxpet.com port 443 after 11396 ms: Couldn't connect to server",
+  "expect": [
+   "403",
+   "404"
+  ],
+  "why": "must never be served",
+  "verdict": "REVIEW"
+ },
+ {
+  "path": "/.git/config",
+  "err": "curl: (6) Could not resolve host: dev.zxpet.com",
+  "expect": [
+   "403",
+   "404"
+  ],
+  "why": "repository must not be web-reachable",
+  "verdict": "REVIEW"
+ },
+ {
+  "path": "/.git/HEAD",
+  "status": 404,
+  "size": 90876,
+  "redirect": "",
+  "headers": {
+   "server": [
+    "cloudflare"
+   ],
+   "x-powered-by": [
+    "PHP/8.3.33"
+   ],
+   "x-robots-tag": [
+    "noindex, nofollow, noarchive"
+   ],
+   "content-type": [
+    "text/html; charset=UTF-8"
+   ]
+  },
+  "status_lines": [
+   "HTTP/2 404"
+  ],
+  "expect": [
+   "403",
+   "404"
+  ],
+  "why": "repository must not be web-reachable",
+  "verdict": "ok"
+ },
+ {
+  "path": "/wp-content/debug.log",
+  "status": 404,
+  "size": 90931,
+  "redirect": "",
+  "headers": {
+   "server": [
+    "cloudflare"
+   ],
+   "x-powered-by": [
+    "PHP/8.3.33"
+   ],
+   "x-robots-tag": [
+    "noindex, nofollow, noarchive"
+   ],
+   "content-type": [
+    "text/html; charset=UTF-8"
+   ]
+  },
+  "status_lines": [
+   "HTTP/2 404"
+  ],
+  "expect": [
+   "403",
+   "404"
+  ],
+  "why": "log leakage",
+  "verdict": "ok"
+ },
+ {
+  "path": "/wp-content/uploads/",
+  "status": 403,
+  "size": 199,
+  "redirect": "",
+  "headers": {
+   "server": [
+    "cloudflare"
+   ],
+   "x-robots-tag": [
+    "noindex, nofollow, noarchive"
+   ],
+   "content-type": [
+    "text/html; charset=iso-8859-1"
+   ]
+  },
+  "status_lines": [
+   "HTTP/2 403"
+  ],
+  "expect": [
+   "403",
+   "404"
+  ],
+  "why": "directory listing",
+  "verdict": "ok"
+ },
+ {
+  "path": "/wp-includes/",
+  "status": 403,
+  "size": 199,
+  "redirect": "",
+  "headers": {
+   "server": [
+    "cloudflare"
+   ],
+   "x-robots-tag": [
+    "noindex, nofollow, noarchive"
+   ],
+   "content-type": [
+    "text/html; charset=iso-8859-1"
+   ]
+  },
+  "status_lines": [
+   "HTTP/2 403"
+  ],
+  "expect": [
+   "403",
+   "404"
+  ],
+  "why": "directory listing",
+  "verdict": "ok"
+ },
+ {
+  "path": "/wp-content/plugins/",
+  "status": 200,
+  "size": 0,
+  "redirect": "",
+  "headers": {
+   "server": [
+    "cloudflare"
+   ],
+   "x-powered-by": [
+    "PHP/8.3.33"
+   ],
+   "x-robots-tag": [
+    "noindex, nofollow, noarchive"
+   ],
+   "content-type": [
+    "text/html; charset=UTF-8"
+   ]
+  },
+  "status_lines": [
+   "HTTP/2 200"
+  ],
+  "expect": [
+   "403",
+   "404"
+  ],
+  "why": "directory listing",
+  "verdict": "REVIEW"
+ },
+ {
+  "path": "/wp-content/vendor/autoload.php",
+  "status": 200,
+  "size": 0,
+  "redirect": "",
+  "headers": {
+   "server": [
+    "cloudflare"
+   ],
+   "x-powered-by": [
+    "PHP/8.3.33"
+   ],
+   "x-robots-tag": [
+    "noindex, nofollow, noarchive"
+   ],
+   "content-type": [
+    "text/html; charset=UTF-8"
+   ]
+  },
+  "status_lines": [
+   "HTTP/2 200"
+  ],
+  "expect": [
+   "403",
+   "404"
+  ],
+  "why": "composer vendor tree -- the config-pdf endpoint depends on it existing",
+  "verdict": "REVIEW"
+ },
+ {
+  "path": "/wp-content/vendor/",
+  "status": 403,
+  "size": 199,
+  "redirect": "",
+  "headers": {
+   "server": [
+    "cloudflare"
+   ],
+   "x-robots-tag": [
+    "noindex, nofollow, noarchive"
+   ],
+   "content-type": [
+    "text/html; charset=iso-8859-1"
+   ]
+  },
+  "status_lines": [
+   "HTTP/2 403"
+  ],
+  "expect": [
+   "403",
+   "404"
+  ],
+  "why": "directory listing over vendor",
+  "verdict": "ok"
+ },
+ {
+  "path": "/wp-content/themes/sinofresh-theme/README.md",
+  "status": 404,
+  "size": 91046,
+  "redirect": "",
+  "headers": {
+   "server": [
+    "cloudflare"
+   ],
+   "x-powered-by": [
+    "PHP/8.3.33"
+   ],
+   "x-robots-tag": [
+    "noindex, nofollow, noarchive"
+   ],
+   "content-type": [
+    "text/html; charset=UTF-8"
+   ]
+  },
+  "status_lines": [
+   "HTTP/2 404"
+  ],
+  "expect": [
+   "403",
+   "404"
+  ],
+  "why": "dev notes in the docroot",
+  "verdict": "ok"
+ },
+ {
+  "path": "/wp-content/themes/sinofresh-theme/docs/",
+  "status": 403,
+  "size": 199,
+  "redirect": "",
+  "headers": {
+   "server": [
+    "cloudflare"
+   ],
+   "x-robots-tag": [
+    "noindex, nofollow, noarchive"
+   ],
+   "content-type": [
+    "text/html; charset=iso-8859-1"
+   ]
+  },
+  "status_lines": [
+   "HTTP/2 403"
+  ],
+  "expect": [
+   "403",
+   "404"
+  ],
+  "why": "docs in the docroot",
+  "verdict": "ok"
+ },
+ {
+  "path": "/wp-content/themes/sinofresh-theme/_backup/",
+  "status": 404,
+  "size": 91038,
+  "redirect": "",
+  "headers": {
+   "server": [
+    "cloudflare"
+   ],
+   "x-powered-by": [
+    "PHP/8.3.33"
+   ],
+   "x-robots-tag": [
+    "noindex, nofollow, noarchive"
+   ],
+   "content-type": [
+    "text/html; charset=UTF-8"
+   ]
+  },
+  "status_lines": [
+   "HTTP/2 404"
+  ],
+  "expect": [
+   "403",
+   "404"
+  ],
+  "why": "the pre-change rollback archive must not be reachable",
+  "verdict": "ok"
+ },
+ {
+  "path": "/wp-content/themes/sinofresh-theme/tools/",
+  "status": 403,
+  "size": 199,
+  "redirect": "",
+  "headers": {
+   "server": [
+    "cloudflare"
+   ],
+   "x-robots-tag": [
+    "noindex, nofollow, noarchive"
+   ],
+   "content-type": [
+    "text/html; charset=iso-8859-1"
+   ]
+  },
+  "status_lines": [
+   "HTTP/2 403"
+  ],
+  "expect": [
+   "403",
+   "404"
+  ],
+  "why": "dev scaffolding must not be reachable",
+  "verdict": "ok"
+ },
+ {
+  "path": "/wp-json/",
+  "status": 200,
+  "size": 225132,
+  "redirect": "",
+  "headers": {
+   "x-content-type-options": [
+    "nosniff"
+   ],
+   "server": [
+    "cloudflare"
+   ],
+   "x-powered-by": [
+    "PHP/8.3.33"
+   ],
+   "x-robots-tag": [
+    "noindex, nofollow, noarchive"
+   ],
+   "content-type": [
+    "application/json; charset=UTF-8"
+   ]
+  },
+  "status_lines": [
+   "HTTP/2 200"
+  ],
+  "expect": [
+   "200"
+  ],
+  "why": "REST index -- lists every namespace",
+  "verdict": "ok"
+ },
+ {
+  "path": "/wp-cron.php",
+  "status": 200,
+  "size": 0,
+  "redirect": "",
+  "headers": {
+   "server": [
+    "cloudflare"
+   ],
+   "x-powered-by": [
+    "PHP/8.3.33"
+   ],
+   "x-robots-tag": [
+    "noindex, nofollow, noarchive"
+   ],
+   "content-type": [
+    "text/html; charset=UTF-8"
+   ]
+  },
+  "status_lines": [
+   "HTTP/2 200"
+  ],
+  "expect": [
+   "200",
+   "403",
+   "404"
+  ],
+  "why": "cron endpoint",
+  "verdict": "ok"
+ },
+ {
+  "path": "/feed/",
+  "status": 200,
+  "size": 22750,
+  "redirect": "",
+  "headers": {
+   "server": [
+    "cloudflare"
+   ],
+   "x-powered-by": [
+    "PHP/8.3.33"
+   ],
+   "x-robots-tag": [
+    "noindex, nofollow, noarchive"
+   ],
+   "content-type": [
+    "application/rss+xml; charset=UTF-8"
+   ]
+  },
+  "status_lines": [
+   "HTTP/2 200"
+  ],
+  "expect": [
+   "200"
+  ],
+  "why": "feed exists",
+  "verdict": "ok"
+ },
+ {
+  "path": "/?s=%3Cscript%3Ealert(1)%3C/script%3E",
+  "status": 200,
+  "size": 101504,
+  "redirect": "",
+  "headers": {
+   "server": [
+    "cloudflare"
+   ],
+   "x-powered-by": [
+    "PHP/8.3.33"
+   ],
+   "x-robots-tag": [
+    "noindex, nofollow, noarchive"
+   ],
+   "content-type": [
+    "text/html; charset=UTF-8"
+   ]
+  },
+  "status_lines": [
+   "HTTP/2 200"
+  ],
+  "expect": [
+   "200"
+  ],
+  "why": "search reflection -- the payload must come back escaped",
+  "verdict": "ok",
+  "payload_escaped": true,
+  "payload_raw": false
+ }
+]
