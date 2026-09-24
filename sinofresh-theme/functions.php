@@ -6741,7 +6741,7 @@ add_action('rest_api_init', function () {
 });
 
 /* Fluent Forms — WhatsApp fallback hint under Form 8's submit button (was
-   Gravity Forms Form 2's gform_submit_button_2 filter, removed with GF).
+   Gravity Forms Form 2's per-form button filter, removed with GF).
    Form 8 ("Get a Quote") is embedded by 10 templates (front page, contact,
    8 dosage pages), so the hint is injected here once instead of being pasted
    into every template. Scoped to form ID 8 via the per-element render filter
