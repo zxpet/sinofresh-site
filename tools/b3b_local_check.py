@@ -141,10 +141,14 @@ def band_of(h2, text):
 
 c1 = band_of('Custom Formulation Capability', svc)
 c2 = band_of('Manufacturing Capability', svc)
-ck('C1 lists the four formulation items',
+ck('C1 lists the four development stages',
+   # The close-out batch rewrote these four: the originals were byte-identical
+   # to What We Handle's R&D & Formulation column one band above, so the band
+   # said nothing the page did not already say. The stages are what a custom
+   # recipe moves through instead of a list of things the lab owns.
    re.findall(r'<li>([^<]+)</li>', c1) ==
-   ['Custom formula development', 'Custom active ingredient levels',
-    'Palatability testing', 'Stability testing'],
+   ['Brief &amp; reference match', 'Prototype &amp; sample round',
+    'Palatability &amp; stability trials', 'Scale-up &amp; packaging validation'],
    re.findall(r'<li>([^<]+)</li>', c1))
 ck('C2 lists the four manufacturing items',
    re.findall(r'<li>([^<]+)</li>', c2) ==

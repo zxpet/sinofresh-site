@@ -21,6 +21,7 @@ open (a fresh context after `close --all` carries neither credentials nor
 headers -- the classic 401-page trap where every selector answers 0).
 """
 import argparse
+import base64
 import json
 import subprocess
 import sys
@@ -178,6 +179,10 @@ def main():
                          'without breaking the 4:3 photo or the full copy')
     ap.add_argument('--sim-maxw', type=int, default=1014)
     ap.add_argument('--sim-gap', type=int, default=28)
+    ap.add_argument('--preflight', action='store_true',
+                    help='render the preflight COPY theme: the X-SF-Preflight '
+                         'header has to travel with Authorization, and the '
+                         'served stylesheet is asserted before any measuring')
     ap.add_argument('--json', default=None)
     args = ap.parse_args()
 
@@ -189,6 +194,20 @@ def main():
     ab('close', '--all')
     ab('set', 'credentials', USER, PASS)
     ab('open', url)
+
+    if args.preflight:
+        # The copy theme is reached with a request header, and `set headers`
+        # rebuilds the browser context -- so it has to carry Authorization
+        # itself (the credentials above are gone the moment it runs), and it
+        # has to run AFTER an open on the target origin, because a header set
+        # on about:blank belongs to about:blank and never applies.
+        ab('set', 'headers', json.dumps({
+            'Authorization': 'Basic ' + base64.b64encode(
+                ('%s:%s' % (USER, PASS)).encode()).decode(),
+            'X-SF-Preflight': '1',
+        }))
+        # reload, not open: another open would drop the custom header again.
+        ab('reload')
 
     out = {}
     for w in vps:
@@ -227,7 +246,25 @@ def main():
             evaljs("(() => { const s = document.getElementById('sf-sim');"
                    " if (s) s.remove(); return 'removed'; })()")
 
+    # Which copy did we actually render? A header that failed to apply would
+    # have measured the LIVE bytes and printed an honest number for the wrong
+    # theme, which is a false green this project has hit before. So it is
+    # asserted here rather than assumed from the flag.
+    served = evaljs("(() => { const l = [...document.querySelectorAll("
+                    "'link[rel=stylesheet]')].map(x => x.href)"
+                    ".filter(h => h.includes('/themes/'));"
+                    " return { sheets: l, path: location.pathname }; })()")
+    sheet = next((h for h in served.get('sheets', [])
+                  if '/style.css?' in h), '')
+    if args.preflight and 'sinofresh-theme-preflight' not in sheet:
+        raise SystemExit('asked for the preflight copy but rendered %r' % sheet)
+    if not args.preflight and '/sinofresh-theme-preflight/' in sheet:
+        raise SystemExit('asked for the live theme but rendered %r' % sheet)
+    if not sheet:
+        raise SystemExit('no theme stylesheet on %r' % served.get('path'))
+
     print('== /quality/  "Quality Control at Every Step"  rendered geometry ==')
+    print('   served theme: %s' % sheet.split('/themes/')[-1])
     print('   url: %s' % url)
     for w in vps:
         d = out[w]
