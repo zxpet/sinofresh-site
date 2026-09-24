@@ -2,7 +2,7 @@
 Theme Name: SINO FRESH
 Author: Shandong SINO FRESH Pet Food Co., Ltd.
 Text Domain: sinofresh
-Version: 2.10.77
+Version: 2.10.78
 Requires at least: 6.0
 Requires PHP: 7.4
 License: GNU General Public License v2 or later
@@ -3938,6 +3938,17 @@ body.has-cookie-banner .sf-float-stack {
 	bottom: 100px;
 }
 
+/* TranslatePress injects its floating switcher, not us, and it anchors to the
+   same bottom edge at z-index 99999 — an order of magnitude above the banner,
+   which is how the banner's own right-hand side became unclickable. It gets
+   the same treatment as the stack above. `bottom` is written directly rather
+   than through the plugin's own --bottom variable: the declaration wins on
+   specificity (0,2,1 against the plugin's 0,1,0), so no `!important` is needed
+   and no variable is fought over. */
+body.has-cookie-banner .trp-floating-switcher {
+	bottom: 88px;
+}
+
 @media (prefers-reduced-motion: reduce) {
 	.sf-cookie-banner__btn,
 	.sf-float-btn {
@@ -3981,6 +3992,11 @@ body.has-cookie-banner .sf-float-stack {
 	body.has-cookie-banner .sf-float-stack {
 		/* Calibrated against the stacked mobile banner height (~248px). */
 		bottom: 268px;
+	}
+
+	/* The switcher rides the same stacked height as the stack above. */
+	body.has-cookie-banner .trp-floating-switcher {
+		bottom: 280px;
 	}
 }
 
@@ -7871,9 +7887,16 @@ body.sf-inquiry-lock {
 }
 /* <dl> ships margin-block 1em; the groups are grid items, not prose. */
 .sf-fdetail-specs__group { margin: 0; }
+/* The label column is sized to its own content and floored at 120px. The nine
+   labels in the sheet run 32–105px wide, so the floor is what decides every
+   row: each row is its own grid, and a floor above the widest label is the
+   only thing that keeps the ten values on one x. The 40% share it replaces
+   resolved to 227px on a desk — 144px of it empty on the widest row, and 164px
+   between the longest label and its value. `max-content` is the ceiling, so a
+   future label longer than 120px widens its own row instead of clipping. */
 .sf-fdetail-specs__row {
 	display: grid;
-	grid-template-columns: minmax(150px, 40%) minmax(0, 1fr);
+	grid-template-columns: minmax(120px, max-content) minmax(0, 1fr);
 	align-items: baseline;
 	column-gap: 20px;
 	padding: 12px 0;

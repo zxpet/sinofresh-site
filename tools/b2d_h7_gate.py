@@ -746,7 +746,7 @@ BATCHES['h7c'] = {
         ('two columns on a desk', 'css_live',
          r'\.sf-fdetail-specs__inner \{[^}]*grid-template-columns: repeat\(2, minmax\(0, 1fr\)\)', True),
         ('a row is a label/value grid', 'css_live',
-         r'\.sf-fdetail-specs__row \{[^}]*grid-template-columns: minmax\(150px, 40%\) minmax\(0, 1fr\)', True),
+         r'\.sf-fdetail-specs__row \{[^}]*grid-template-columns: minmax\(120px, max-content\) minmax\(0, 1fr\)', True),
         # The ordering claim, as ONE chain. Each link is anchored twice — the
         # media query AND a marker only this band's rule carries — so the chain
         # cannot be satisfied by some other component's 1240/900/768 block later
