@@ -2,7 +2,7 @@
 Theme Name: SINO FRESH
 Author: Shandong SINO FRESH Pet Food Co., Ltd.
 Text Domain: sinofresh
-Version: 2.10.80
+Version: 2.10.81
 Requires at least: 6.0
 Requires PHP: 7.4
 License: GNU General Public License v2 or later
@@ -96,10 +96,16 @@ body {
 	border-color: var(--wp--preset--color--border-light);
 }
 
-/* === 3. Gravity Forms === */
-.gform_wrapper .gform_button,
-.gform_wrapper input[type="submit"],
-.gform_wrapper button[type="submit"] {
+/* === 3. Fluent Forms ===
+   (was Gravity Forms; appearance replicated for the GF→FF template switch.
+   Baseline measured on the GF render at 2.10.80: button bg --cta, radius 6px,
+   padding 14px/24px, full card width; text/email/tel inputs 48px tall,
+   radius 6px, border --border-medium; selects self-sized; focus border --cta;
+   16px row gap; 6px label margin. GF's phone-country-selector rules are gone
+   with GF — FF phone fields are plain tel inputs.) */
+.fluentform .ff-btn-submit,
+.fluentform input[type="submit"],
+.fluentform button[type="submit"] {
 	background-color: var(--wp--preset--color--cta) !important;
 	background-image: none !important;
 	color: #FFFFFF !important;
@@ -113,106 +119,53 @@ body {
 	cursor: pointer;
 	transition: background-color 0.15s ease;
 }
-.gform_wrapper .gform_button:hover,
-.gform_wrapper input[type="submit"]:hover,
-.gform_wrapper button[type="submit"]:hover {
+.fluentform .ff-btn-submit:hover,
+.fluentform input[type="submit"]:hover,
+.fluentform button[type="submit"]:hover {
 	background-color: var(--wp--preset--color--cta-hover) !important;
 	background-image: none !important;
 }
-.gform_wrapper input[type="text"],
-.gform_wrapper input[type="email"],
-.gform_wrapper input[type="tel"],
-.gform_wrapper select,
-.gform_wrapper textarea {
+.fluentform .ff-el-form-control {
 	border: 1px solid var(--wp--preset--color--border-medium) !important;
 	border-radius: 6px !important;
 	padding: 12px 14px !important;
 	font-size: 16px !important;
 }
-/* Selects: GF's fixed control height (38px) + line-height (38px) leaves a
-   16px content box under our 10px vertical padding, so the option text
-   overflows the top and gets clipped. Let the select size itself and use a
-   normal line-height — the browser then centres the text vertically. */
-.gform_wrapper select {
+/* Selects: let the control size itself so the option text is never clipped
+   (same fix the GF render needed — a fixed height starves the content box). */
+select.ff-el-form-control {
 	height: auto !important;
 	line-height: normal !important;
 	padding-top: 12px !important;
 	padding-bottom: 12px !important;
 }
-/* Single-line inputs: GF's foundation theme fixes them at a 38px control
-   height — below the 44px touch-target minimum. Height wins over padding
-   (text stays vertically centred by the browser). */
-.gform_wrapper input[type="text"],
-.gform_wrapper input[type="email"],
-.gform_wrapper input[type="tel"] {
+/* Single-line inputs: 48px keeps the 44px touch-target minimum; height wins
+   over padding so the browser centres the text vertically. */
+input.ff-el-form-control[type="text"],
+input.ff-el-form-control[type="email"],
+input.ff-el-form-control[type="tel"] {
 	height: 48px !important;
 	padding-top: 0 !important;
 	padding-bottom: 0 !important;
 }
-.gform_wrapper input:focus,
-.gform_wrapper select:focus,
-.gform_wrapper textarea:focus {
+.fluentform input:focus,
+.fluentform select:focus,
+.fluentform textarea:focus {
 	border-color: var(--wp--preset--color--cta) !important;
 	outline: none;
 }
-
-/* International phone field: GF's wrapper is a 0-gap grid, so the country
-   selector button sits flush against the number input, at a shorter height
-   (38px vs 48px). Two tidy columns, matched heights, one shared radius.
-   The country column has to clear its own chrome — border 2px + padding 28px
-   + flag 30px + two 6px gaps + caret 9.8px — plus the dial code itself, and
-   the longest ITU code (+998) measures 35.3px in Inter 14/500, so the column
-   is 120px. At the old 100px the content box was 66px against the 66.3px a
-   bare "+1" needs, and the code broke onto a second line (28px tall). */
-.gform_wrapper .gform-phone__input-wrapper {
-	grid-template-columns: 120px minmax(0, 1fr) !important;
-	gap: 10px !important;
-	align-items: stretch;
+/* Compact row rhythm: FF's default group margin and label spacing are airier
+   than the GF render — 16px / 6px keeps the lead form on roughly one screen. */
+.fluentform .ff-el-group {
+	margin-bottom: 16px !important;
 }
-.gform_wrapper .gform-phone__country-selector {
-	height: 48px !important;
-	width: 100% !important;
-	border-radius: 6px !important;
-	padding-inline: 14px !important;
-	flex-wrap: nowrap !important;
-	justify-content: flex-start !important;
-}
-/* Flag sits on the same 14px inset as the number input's text, the caret is
-   pinned to the right edge, and only the dial code grows in between — so the
-   badge does not shift sideways when the selected country changes. */
-.gform_wrapper .gform-phone__country-selector::after {
-	margin-inline-start: auto !important;
-}
-/* Flag, dial code and caret keep their intrinsic size and stay on one line,
-   so no dial code can ever wrap regardless of its length. */
-.gform_wrapper .gform-phone__country-selector .gform-phone__flag-icon,
-.gform_wrapper .gform-phone__dial-code,
-.gform_wrapper .gform-phone__country-selector::after {
-	flex: 0 0 auto !important;
-}
-.gform_wrapper .gform-phone__dial-code {
-	white-space: nowrap !important;
-	word-break: keep-all !important;
-	overflow-wrap: normal !important;
-}
-
-/* Compact two-column layout: GF's foundation theme defaults to a 40px row
-   gap (--gf-form-gap-y) and 8px label spacing — both too airy for a form
-   that should fit on roughly one screen. Width classes themselves
-   (gfield--width-half / gfield--width-full) are set per field in GF. */
-.gform_wrapper .gform_fields {
-	row-gap: 16px !important;
-}
-.gform_wrapper .gfield_label {
+.fluentform .ff-el-input--label {
 	margin-bottom: 6px !important;
 }
-
-/* WhatsApp fallback hint, rendered under Form 2's submit button by the
-   gform_submit_button_2 filter in functions.php. GF's foundation theme makes
-   .gform_footer a wrapping flex row with its own gap, so the hint claims a
-   full line via flex-basis and its own top margin collapses to zero to keep
-   the gap as the single source of spacing. */
-.gform_wrapper .sf-gf-wa-hint {
+/* WhatsApp fallback hint (Form 2; reimplemented on the Fluent Forms submit
+   hook — see functions.php). Standalone class so it works inside FF's button
+   wrapper, which is a flex row like GF's footer was. */
+.fluentform .sf-gf-wa-hint {
 	flex: 0 0 100%;
 	width: 100%;
 	margin: 0 !important;
@@ -224,17 +177,11 @@ body {
 	color: var(--wp--preset--color--text-secondary) !important;
 	text-align: center;
 }
-
-/* Default confirmation messages (forms 2/3/4/6). The form sections are green
-   with white text by design; GF 3.1's theme-reset sets color:unset on the
-   confirmation element, so it inherits that white and lands invisibly on the
-   .sf-form-card white card. Pin the text to the dark body color. Form 5's
-   certificate confirmation (.sf-cert-result) styles its own children and is
-   deliberately left out of this list. */
-#gform_confirmation_message_2,
-#gform_confirmation_message_3,
-#gform_confirmation_message_4,
-#gform_confirmation_message_6 {
+/* Default success (confirmation) messages: FF renders them inside the form
+   wrapper, which sits on the white .sf-form-card — pin the dark body color so
+   the message never lands light-on-white. (The COA certificate result keeps
+   its own .sf-cert-result styles, reimplemented with the FF hook.) */
+.fluentform .ff-message-success {
 	color: var(--wp--preset--color--text-primary);
 }
 
@@ -2848,15 +2795,15 @@ body.admin-bar .sf-header.is-sticky {
 		padding: 12px !important;
 	}
 	/* lead form: keep every field, trim the air between them */
-	.gform_wrapper .gform_fields {
-		row-gap: 12px !important;
+	.fluentform .ff-el-group {
+		margin-bottom: 12px !important;
 	}
-	.gform_wrapper .gfield_label {
+	.fluentform .ff-el-input--label {
 		margin-bottom: 4px !important;
 	}
-	.gform_wrapper input[type="text"],
-	.gform_wrapper input[type="email"],
-	.gform_wrapper input[type="tel"] {
+	input.ff-el-form-control[type="text"],
+	input.ff-el-form-control[type="email"],
+	input.ff-el-form-control[type="tel"] {
 		height: 44px !important;
 	}
 }
@@ -3703,17 +3650,16 @@ body.admin-bar .sf-header.is-sticky {
 	   focus below that) at every phone width; the single-column field grid
 	   only below 640px — at 768 a half/half row still reads fine and stacking
 	   it there cost factory-tour +9% */
-	.gform_wrapper .gfield input:not([type="submit"]):not([type="checkbox"]):not([type="radio"]),
-	.gform_wrapper .gfield select,
-	.gform_wrapper .gfield textarea {
+	.fluentform .ff-el-form-control {
 		font-size: 16px !important;
 	}
 	@media (max-width: 640px) {
-		.gform_wrapper .gform_fields {
-			grid-template-columns: 1fr !important;
+		.fluentform .ff-t-container {
+			display: block !important;
 		}
-		.gform_wrapper .gfield {
-			grid-column: 1 / -1 !important;
+		.fluentform .ff-t-cell {
+			display: block !important;
+			width: 100% !important;
 		}
 	}
 }
@@ -6171,7 +6117,7 @@ body.sf-inquiry-lock {
 /* ✓ selling points: now the last row INSIDE the white form card, so the
    left column is exactly the form card and the right column can align to
    it perfectly (grid stretch). */
-.sf-form-card .gform_wrapper {
+.sf-form-card .fluentform {
 	margin-bottom: 0;
 }
 
@@ -6540,11 +6486,11 @@ body.sf-inquiry-lock {
 	overscroll-behavior: contain;
 }
 
-.sf-certmodal__body .gform_wrapper {
+.sf-certmodal__body .fluentform {
 	margin: 0;
 }
 
-.sf-certmodal__body .gform_wrapper .gform_fields {
+.sf-certmodal__body .fluentform .ff-el-group {
 	row-gap: 14px !important;
 }
 

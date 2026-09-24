@@ -262,7 +262,7 @@ def main():
     got = whose()
     print('== session: preflight copy ==')
     print('   serving %s' % (got or {}).get('theme'))
-    if not (got or {}).get('pre') or (got or {}).get('v') != '2.10.80':
+    if not (got or {}).get('pre') or (got or {}).get('v') != '2.10.81':
         raise SystemExit('the session is not on the preflight copy: %r' % got)
 
     last = None
@@ -274,7 +274,7 @@ def main():
             ab('set', 'viewport', str(w), str(h))
             time.sleep(0.8)
         served = whose()
-        if not (served or {}).get('pre') or (served or {}).get('v') != '2.10.80':
+        if not (served or {}).get('pre') or (served or {}).get('v') != '2.10.81':
             raise SystemExit('wrong copy for %s: %r' % (name, served))
         print('%s  %s  w=%d' % (name, path, w))
 
