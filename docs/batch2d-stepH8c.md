@@ -302,3 +302,93 @@ Service/BreadcrumbList(3 级)/FAQPage 各一、无横向溢出。
 | ① 扫描与预期方向不符 | 未触发（扫描结论与四条裁决一致） |
 | ② 门抓到产品 bug | **未触发**——门自身四处判据写错并已重构（§3.3），产品侧零缺陷 |
 | ③ 需要用户裁决 | 触发一次（待办21 落地形态），已按 §0.1 三条裁决执行 |
+
+---
+
+## 6. 部署记录（2026-09-24）——用户授权后的 dev 上线
+
+> 授权原话：「授权 pull 到 dev 站」，九步执行清单＋「生产站不动、完成后停下汇报」。
+> 本章是该次执行的存档；工具三件（`b2d_h8c_live_check.py`／`b2d_h8c_live_parity.py`／
+> `b2d_h8c_live_accept.py`）为**生产上线时可原样复用**的同一套判据。
+
+### 6.1 执行链（九步全做）
+
+| # | 步骤 | 结果 |
+|---|---|---|
+| 1 | 补推未推提交 | H8c 证据段补成 **`c5eb2ab`**（docs＋tools，零主题字节）并 push；`origin/main == HEAD`、未推 0 |
+| 2–5 | ssh → `site-repo` → `fetch --prune` → `pull --ff-only` | dev `2a99068` → **`c5eb2ab`**（6 个提交：H8a×2、H8b×2、H8c×2），工作区干净、符号链接完好 |
+| 6 | live 主题版本 | **`2.10.73` → `2.10.76`** ✅（页面引用与文件头两处一致） |
+| 7 | 服务侧验证（不带预检头） | **23/23**（§6.2） |
+| 8 | 浏览器验收（不带预检头） | **39/39 ＋ 13 帧 0 平帧**（§6.4） |
+| 9 | 报告 | 本章 ＋ 当日日志 |
+
+### 6.2 服务侧：before 5/23 → after 23/23
+
+`tools/b2d_h8c_live_check.py` 九组检查（`--preflight` 跑预检层、默认跑 dev 实答层）：
+
+- before（2.10.73）**5/23**——通过的那 5 条全是旧站既有机制（媒体列元素、config.js 入队 1.3.0、
+  缩略图条规则、`/services/` 自身原样、整卡 `::after` 规则）；其余 18 条全红：
+  无 sticky 规则／无折叠规则／Flavor 是 **checkbox** 且无 Custom 框／保质期行打印 specs 的
+  `18 months shelf life`／粉剂组名仍叫 **Shape**（选项还是 slug 形态的 bone/round）／
+  四条子路由 200 但零载荷（`breadcrumb=["Home","OEM Manufacturing"]`、无 Service 节点、FAQ 0）／
+  `/services/` 四卡 **0 锚**。
+- after（2.10.76）**23/23**，且与预检层逐字节同版（338,102 B）。
+- 判别性用例（防" laxer 版本两头绿"）：保质期看
+  `/formulas/joint-support-soft-chews/` —— specs 全篇写 `18 months shelf life`（4 处），
+  规格表行却打印 **24 months** ⇒ 只有「字段覆盖 specs」能解释，H8a 前该行是 18。
+- 写这份工具时自查出四处判据错并全部重构（未放宽）：① 选项文本应读 radio 的 `value=` 而非可见
+  span（无图库时可见文本落在 `__empty-label` 上，两种剂型两种形态）；② `/services/` 的 h2 是
+  **6** 个不是 5（断言改成六条标题全文逐一相等，裸计数分不清「改名」和「删掉」）；③ 卡片元组
+  (href, title) 顺序写反；④ **名称断言必须锚在元素上**——`<title>`/og:title 里 WP 会解码实体，
+  裸 grep 页面找标题串会在 h1 缺失时照样绿（H8c 详情页正文是 `&#8212;`、head 是 `—`）。
+
+### 6.3 全站逐页一致性：live-after vs 预检候选 = **79/79 相同**
+
+`tools/b2d_h8c_live_parity.py`：抓 live 全站（75＋4，不带预检头）与门签收过的预检候选逐页比
+（同走门的 `mask()`，只折 `sinofresh-theme-preflight` → `sinofresh-theme` 一个目录名）。
+
+- 第一次配对（预检候选是**前一天**抓的）66/75，9 页差异**全部**是 zh 页的一个字段
+  `translation-revision-date`（`2026-08-19…` → `2026-09-23 15:49:57+0000`）。
+- 取证闭环（与 pull 无关的三条证据）：
+  1. `zh_CN.po` 的 **`PO-Revision-Date: 2026-09-23 15:49:57+0000`** 正是该字段值的出处；
+  2. 该文件写入时间 **09-23 22:23:11 UTC**，比 pull（09-24 **02:04:06** UTC）**早 3h41m**
+     ——是 WordPress 昨晚自动更新翻译包；
+  3. 本次 pull 的 6 个提交**零** `.po/.mo/.json/languages` 文件，主题也无 `languages/` 目录。
+- 再从预检层**现抓**同一批页比对：zh 31/31 全同 ⇒ 差异纯属「抓取时点」，非层间差异。
+- 最终（预检层与 live 同一时段各抓一份）：**75/75 ＋ 4/4 逐页相同**。
+
+### 6.4 浏览器验收 39/39（`tools/b2d_h8c_live_accept.py`，13 帧 `docs/batchH8c-deploy-shots/`）
+
+| 清单项 | 实测 |
+|---|---|
+| style.css?ver=2.10.76 | ✅ 页面引用与文件头一致，且确认不是 `-preflight` 目录 |
+| 详情页主图 sticky | ✅ `position:sticky; top:100px`；滚 900px 后 mediaTop=100、右栏同程上移 901px（帧 before/after 对） |
+| 右栏折叠 | ✅ ≤480 起始折叠（可见 4 组：价格梯＋Flavor＋Piece Weight＋Pack Size，Shape/Container 藏）、按钮 `View all specs ▾`→点击全显 `Show fewer specs ▴`、`aria-expanded` 正确 |
+| 横滑 | ⚠️ 见下——**能力在，数据不够用**；手机上真正的滑动是**舞台拖拽**，已验 |
+| Flavor 单选＋Custom | ✅ 全 radio 零 checkbox；选 Beef 后再选 Custom 只留一个；Custom 选中即显输入框，键入 `Smoked Bacon` 后保持选中且回显 `Flavor: Custom` |
+| 保质期固定池 | ✅ 规格表 `24 months`，specs 文本仍 4 处 `18 months shelf life`（字段覆盖 specs 的活证） |
+| 剂型差异化（粉剂无 Shape） | ✅ 粉剂组名 `Appearance`（Piece Weight/Appearance/Container Type 三组），选项 Fine Powder/Granules/Microencapsulated；软咀嚼仍是 `Shape`＋Bone…；Container 都是包装池（粉剂 Jar/Foil Pouch/Stand-up Pouch） |
+| Services 4 子页 | ✅ 各自 h1／d3 面包屑／Key Facts 表（6 行，与 `/services/` 逐字节同）／Service 节点按名各认各的／FAQ 3 问／点轨 5 项＝该页 h2 |
+| /services/ 4 卡整块可点 | ✅ 7×5 网格 35 点全中链接（`other:` 恒空）；**卡片正中心真实鼠标点击**四连跳四条路由 |
+
+**「横滑」的实情（写给下一次）**：缩略图条在「是行的所有宽度」都是
+`overflow-x:auto`＋`scroll-snap-type:x mandatory`（600px 实测），**但全站每条配方记录只有
+4 张照片**——4×84px＋3×12px 间隙 = 372px，塞进 524px 的内容列**不会溢出**；样式表注释自述的
+溢出场景是六帧记录。⇒ 今天「横滑」可见的形态是**舞台拖拽**（formula-gallery.js 2.1.0，
+≥40px 横向位移翻页、1.5:1 轴锁），实测 90px 拖拽翻到下一张、20px 拖拽判为误触不动。
+若希望缩略图条呈现滑动，需要记录侧多传帧或改条宽——**数据/设计决策，留给用户**。
+
+**工具限制（本次钉死，写进脚本注释）**：`mouse down left` 之后只要插过一次
+`mouse move`，随后的 `mouse up` **不派发任何事件**（pointerup 连 document 级都收不到；
+无 move 时正常）。三种写法实测皆然 ⇒ 拖拽类断言只能走合成 pointer 序列
+（`PointerEvent`，`isPrimary:true`＋`buttons:1`），脚本里已如此并点名。
+
+### 6.5 部署后遗留 / 交接
+
+1. **预检层与 live 现在逐字节相同**（都 `2.10.76`＝`b9930fd` 的主题字节）。预检副本的
+   删/留仍待用户裁决；生产上线时这套三件工具可直接对生产站再跑一轮。
+2. **生产站零改动**（本次所有动作只在 `site-repo` 与 dev docroot）。
+3. `post 158`：页面现在打印字段值 `24 months`，而 specs 文本仍写 `18 months` ——
+   **销售确认后**改字段或改 specs，页面向哪边对齐由数据决定。
+4. 悬浮按钮/cookie 横幅盖住手机卡片下缘（H8c 批已报）依旧存在，非本批引入。
+5. 本档案与三件工具由 **`H8c deploy` 提交**入库；该提交零主题字节，dev 所跑字节仍属 `b9930fd`。
