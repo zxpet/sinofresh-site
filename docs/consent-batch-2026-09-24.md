@@ -1,7 +1,7 @@
 # 同意批 · 决定加版本与有效期 ＋ 接上 WP Consent API
 
 > 日期 2026-09-24 · 落点 `sinofresh-theme/assets/js/ui-components.js` ＋ `functions.php`
-> 候选 `46cabb7`（**已装预检副本，未 pull**）· dev live 仍 `aa9abc6` · 令牌仍 `2.10.79`（无 CSS 改动）
+> 候选 `9b22148`（**已装预检副本，未 pull**；主题树与 `46cabb7` 逐字节相同 —— 之后两次提交只动 `docs/` 与 `tools/`）· dev live 仍 `aa9abc6` · 令牌仍 `2.10.79`（无 CSS 改动）
 > 依据：`docs/security-supplement-2026-09-24.md` §3.2 的 Cookie 缺口 ②④⑤，用户裁决「技术修正可直接做」
 
 ## 1. 范围
