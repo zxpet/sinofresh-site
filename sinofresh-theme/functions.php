@@ -14,6 +14,12 @@ require get_template_directory() . '/inc/cert-download.php';
 require get_template_directory() . '/inc/formula-pools.php';
 require get_template_directory() . '/inc/formula-admin.php';
 
+/* Withdrawn ZH locale: 301 the /zh/ URLs while publish-languages holds no
+   zh_CN, so no indexed Chinese URL becomes a dead end. Reads the option rather
+   than a constant, which is what lets it retire itself once the translations
+   exist — see "reattaching ZH" in docs/zh-unpublish-scan-2026-09-24.md. */
+require get_template_directory() . '/inc/zh-unpublish.php';
+
 add_action('after_setup_theme', function() {
 	add_theme_support('wp-block-styles');
 	add_theme_support('editor-styles');
