@@ -2160,6 +2160,38 @@ function sf_formula_custom_option($image = '') {
 }
 
 /**
+ * The option list a record-driven group ends with (batch 3b).
+ *
+ * "Custom" is MARKED rather than appended — the rule
+ * sf_formula_library_options() follows for every pool-driven group, and the
+ * one the H1 note spells out: appending a second one prints the word twice.
+ *
+ * The record-driven groups grew their Custom pick a different way: they
+ * appended one unconditionally, on the assumption that the record's own list
+ * never carries the word. post 158's flavor list does, so its page drew nine
+ * chips — the record's own "Custom" with no marker, and the appended one that
+ * owns the text box. The unmarked chip was the broken one: picking it checked
+ * the radio, opened nothing, and stole the marked chip's tick, so the only
+ * answer it could produce was the bare word "Custom" with no flavour in it.
+ *
+ * Marking the record's own entry settles both halves: the word appears once,
+ * and the chip that carries it is the one that opens the box. A record whose
+ * list does not already spell Custom is left exactly as it was, so this is a
+ * no-op on every page but the one that carried the duplicate.
+ */
+function sf_formula_options_with_custom($options) {
+	foreach ($options as $i => $option) {
+		$label = isset($option['label']) ? (string) $option['label'] : '';
+		if (0 === strcasecmp($label, 'Custom')) {
+			$options[$i]['custom'] = true;
+			return $options;
+		}
+	}
+	$options[] = sf_formula_custom_option();
+	return $options;
+}
+
+/**
  * The text box a group's Custom option reveals (batch H8a).
  *
  * Rendered by the server and `hidden`, then revealed by config.js when the
@@ -2227,7 +2259,7 @@ function sinofresh_formula_config_groups($post_id) {
 		foreach ($flavors as $flavor) {
 			$options[] = array('value' => $flavor, 'label' => $flavor, 'image' => '', 'note' => '');
 		}
-		$options[] = sf_formula_custom_option();
+		$options = sf_formula_options_with_custom($options);
 		/* H8a — `multi` became `single`, and the hint says so. A flavour is one
 		   answer: "Chicken, Beef" is not a product, it is a range, and the
 		   sales desk cannot quote from it. Suitable For below stays multi
@@ -2248,10 +2280,9 @@ function sinofresh_formula_config_groups($post_id) {
 		$groups[] = array(
 			'key' => 'weight', 'label' => 'Piece Weight', 'meta' => $unit,
 			'type' => 'single', 'style' => 'chips', 'hint' => '',
-			'options' => array(
+			'options' => sf_formula_options_with_custom(array(
 				array('value' => $unit, 'label' => $unit, 'image' => '', 'note' => ''),
-				sf_formula_custom_option(),
-			),
+			)),
 		);
 	}
 
@@ -2263,7 +2294,7 @@ function sinofresh_formula_config_groups($post_id) {
 			foreach ($packs as $p) {
 				$options[] = array('value' => $p, 'label' => $p, 'image' => '', 'note' => '');
 			}
-			$options[] = sf_formula_custom_option();
+			$options = sf_formula_options_with_custom($options);
 			$groups[] = array(
 				'key' => 'pack', 'label' => 'Pack Size', 'meta' => $pack,
 				'type' => 'single', 'style' => 'chips',
@@ -2288,7 +2319,7 @@ function sinofresh_formula_config_groups($post_id) {
 		foreach ($species as $s) {
 			$options[] = array('value' => $s, 'label' => $s, 'image' => '', 'note' => '');
 		}
-		$options[] = sf_formula_custom_option();
+		$options = sf_formula_options_with_custom($options);
 		$groups[] = array(
 			'key' => 'species', 'label' => 'Suitable For', 'meta' => implode(', ', $species),
 			'type' => 'multi', 'style' => 'chips',
@@ -2300,10 +2331,9 @@ function sinofresh_formula_config_groups($post_id) {
 		$groups[] = array(
 			'key' => 'stage', 'label' => 'Life Stage', 'meta' => $lifestage,
 			'type' => 'single', 'style' => 'chips', 'hint' => '',
-			'options' => array(
+			'options' => sf_formula_options_with_custom(array(
 				array('value' => $lifestage, 'label' => $lifestage, 'image' => '', 'note' => ''),
-				sf_formula_custom_option(),
-			),
+			)),
 		);
 	}
 

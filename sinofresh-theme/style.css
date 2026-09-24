@@ -4960,47 +4960,48 @@ section:has(> .sf-faq) > :where(:not(.alignwide):not(.alignfull)) {
 	}
 }
 
-/* --- 31d. Quality control steps: zigzag ---------------------------------
-   One step per row with the sides alternating — copy/photo, then photo/copy —
-   so the eye travels down the page instead of re-scanning a repeated template.
-   The number lives in the copy column directly above its heading (64px brand
-   green, the row's anchor) rather than in a rail to its left: the old rail
-   plus a vertically centred copy block is what left a dead band between the
-   two. The photo is a fixed 350px column and the pair shares one centred
-   spine, so alternating rows align on the same midline. Separators stay
-   hairlines so the six steps still read as a counted sequence. */
+/* --- 31d. Quality control steps: three-up card grid ---------------------
+   Six steps in two rows of three. The zigzag this replaces ran one step per
+   row and measured 1800px of band; three-up measures 861px, so the section
+   stops costing the visitor two extra screens of scrolling.
+   The card is a flex column-reverse: the DOM stays copy-first (number,
+   heading, copy, then the photo) for screen readers and for the no-CSS
+   reading order, while the photo renders above the copy the way every other
+   card on this page reads. Because the photo moved to the top, the number
+   needs a top margin of its own — without one it would sit flush against the
+   photo's shadow.
+   No frame is drawn: .sf-qs__media img already carries this page's image
+   language (8px radius, soft shadow, the same one .sf-eq uses), so the six
+   cards stand on the band's own background rather than in white boxes.
+   The row hairlines and their 22px lead-in go with the layout: the 01-06
+   numbers are what carries the sequence now, and a separator between grid
+   cells has nothing to attach to.
+   The even-row selector rides along in the base rule rather than being
+   dropped: both parities are identical on purpose now, and stating that at
+   one specificity is what stops the zigzag from being reinstated by a later
+   edit that only touches the odd rows. */
 .sf-qs {
-	max-width: 1014px; /* 620 copy + 44 gap + 350 photo */
+	max-width: 1014px; /* three 319px columns + two 28px gutters */
 	margin: 32px auto 0;
-}
-.sf-qs__step {
 	display: grid;
-	grid-template-columns: minmax(0, 1fr) minmax(0, 350px);
-	column-gap: 44px;
-	align-items: center;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	column-gap: 28px;
+	row-gap: 28px;
 }
-/* even rows flip: photo left, copy right. DOM order stays copy-first for
-   screen readers, so the two children are placed explicitly instead of
-   relying on source order — and the track sizes flip with them, or the
-   photo would land in the wide track. */
+.sf-qs__step,
 .sf-qs__step:nth-child(even) {
-	grid-template-columns: minmax(0, 350px) minmax(0, 1fr);
+	display: flex;
+	flex-direction: column-reverse;
+	column-gap: 0;
+	row-gap: 0;
+	align-items: stretch;
 }
-.sf-qs__step:nth-child(even) .sf-qs__text {
-	grid-column: 2;
-	grid-row: 1;
-}
-.sf-qs__step:nth-child(even) .sf-qs__media {
-	grid-column: 1;
-	grid-row: 1;
-}
-.sf-qs__step + .sf-qs__step {
-	margin-top: 22px;
-	padding-top: 22px;
-	border-top: 1px solid #e0e5dc;
+.sf-qs__text {
+	display: flex;
+	flex-direction: column;
 }
 .sf-qs__num {
-	margin-bottom: 16px;
+	margin: 16px 0 8px;
 	font-size: 64px;
 	font-weight: 600;
 	line-height: 1;
@@ -5111,33 +5112,22 @@ section:has(> .sf-faq) > :where(:not(.alignwide):not(.alignfull)) {
 		height: 123px;
 		max-height: none;
 	}
-	/* QC steps: the zigzag collapses to one column — number, heading, copy,
-	   then the photo — in source order. The even-row flip must be undone at
-	   the same specificity or its two-column tracks survive here (the photo
-	   track then gets squeezed to 0), so the selector is repeated below. */
-	.sf-qs__step,
-	.sf-qs__step:nth-child(even) {
+	/* QC steps: the three-up grid drops to a single column. Only the base
+	   grid's three tracks have to be undone — the cards themselves are flex
+	   columns and need no adjustment at this width. */
+	.sf-qs {
 		grid-template-columns: minmax(0, 1fr);
-		row-gap: 18px;
-	}
-	.sf-qs__step:nth-child(even) .sf-qs__text,
-	.sf-qs__step:nth-child(even) .sf-qs__media {
-		grid-column: auto;
-		grid-row: auto;
+		column-gap: 0;
 	}
 	.sf-qs__num {
 		font-size: 44px;
-		margin-bottom: 10px;
+		margin: 12px 0 6px;
 	}
 	.sf-qs__text h3 {
 		font-size: 20px;
 	}
 	.sf-qs__text p {
 		font-size: 15px;
-	}
-	.sf-qs__step + .sf-qs__step {
-		margin-top: 22px;
-		padding-top: 22px;
 	}
 	/* palatability: one step per row, connector running down between them */
 	.sf-pal {
