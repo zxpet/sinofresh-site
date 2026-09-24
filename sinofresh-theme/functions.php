@@ -6721,17 +6721,21 @@ add_action('rest_api_init', function () {
 	));
 });
 
-/* Gravity Forms — WhatsApp fallback hint under Form 2's submit button.
-   Form 2 ("Get a Quote") is embedded by 10 templates (front page, contact,
+/* Fluent Forms — WhatsApp fallback hint under Form 8's submit button (was
+   Gravity Forms Form 2's gform_submit_button_2 filter, removed with GF).
+   Form 8 ("Get a Quote") is embedded by 10 templates (front page, contact,
    8 dosage pages), so the hint is injected here once instead of being pasted
-   into every template. Scoped to form ID 2 via the per-form filter name —
-   Form 3 (sample) and Form 4 (factory tour) must not show it.
-   The hint is a full-width flex item: GF's foundation theme renders
-   .gform_footer as a wrapping flex row, so `flex-basis:100%` puts it on its
-   own line under the button. */
-add_filter('gform_submit_button_2', function($button, $form) {
-	return $button . '<p class="sf-gf-wa-hint">Prefer WhatsApp? Email us and we\'ll switch to WhatsApp.</p>';
-}, 10, 2);
+   into every template. Scoped to form ID 8 via the per-element render filter
+   ($form->id check) — Forms 9 (sample) and 10 (factory tour) must not show it.
+   FF's submit "button" element compiles to a wrapper div ending in </div>;
+   the hint is appended as a sibling block after it, and style.css gives
+   .sf-gf-wa-hint width:100% + centred text so it sits on its own line. */
+add_filter('fluentform/rendering_field_html_button', function ($html, $data, $form) {
+	if ((int) $form->id !== 8) {
+		return $html;
+	}
+	return $html . '<p class="sf-gf-wa-hint">Prefer WhatsApp? Email us and we\'ll switch to WhatsApp.</p>';
+}, 10, 3);
 
 /* --------------------------------------------------------------------
    Security hardening (2026-09-18, audit refs R3 / Y6 / Y8).
