@@ -6670,17 +6670,18 @@ add_action('wp_head', function () {
 }, 23);
 
 /* Article feedback endpoint — up/down votes on single posts (toc-nav.js).
-   Submits Gravity Forms Form 6 ("Feedback") server-side via GFAPI so no GF
-   REST/AJAX endpoint has to be made public and no form embed is needed in
-   the article markup. A plain vote is stored with just the vote; an optional
-   email/description travels along when the visitor fills the mini form that
-   opens on a down-vote. */
+   Submits Fluent Forms Form 12 ("Feedback", the Gravity Forms Form 6 twin)
+   server-side by writing the submission row directly, so no FF AJAX endpoint
+   has to be made public and no form embed is needed in the article markup. A
+   plain vote is stored with just the vote; an optional email/description
+   travels along when the visitor fills the mini form that opens on a
+   down-vote. */
 add_action('rest_api_init', function () {
 	register_rest_route('sinofresh/v1', '/article-feedback', array(
 		'methods'             => 'POST',
 		'permission_callback' => '__return_true',
 		'callback'            => function (WP_REST_Request $req) {
-			if (!class_exists('GFAPI')) {
+			if (!function_exists('wpFluent')) {
 				return new WP_Error('sf_no_form', 'Feedback form unavailable.', array('status' => 503));
 			}
 			$vote = sanitize_key((string) $req->get_param('vote'));
@@ -6693,28 +6694,46 @@ add_action('rest_api_init', function () {
 			if ($email && !is_email($email)) {
 				return new WP_Error('sf_bad_email', 'Invalid email address.', array('status' => 400));
 			}
-			/* GFAPI::submit_form() runs the full form pipeline but showed
-			 * non-deterministic validation state when driven outside a real
-			 * page request (measured: identical payloads flip is_valid between
-			 * requests). Form 6 has no notifications, confirmations or
-			 * after_submission hooks, so add_entry() is behaviourally
-			 * identical here AND deterministic — use it directly. */
-			$entry = array(
-				'form_id' => 6,
-				'ip'      => isset($_SERVER['REMOTE_ADDR']) ? sanitize_text_field(wp_unslash($_SERVER['REMOTE_ADDR'])) : '',
-				'1'       => 'General Feedback', // Form 6 field 1 (select) — closest match
-				'2'       => 'Article feedback (' . $vote . ')' . ($post_id ? ': ' . get_the_title($post_id) : ''),
-				'3'       => $message,
+			/* The row is written straight into wp_fluentform_submissions —
+			 * the same shape FormHandler::prepareInsertData() produces —
+			 * instead of driving the form pipeline: the endpoint runs outside
+			 * a real page render (no nonce, no rendered form), and Form 12 has
+			 * no notifications, confirmations or submission hooks that a
+			 * pipeline run would fire. The response JSON mirrors the form's
+			 * field names (feedback_type_1, subject_2, description_3,
+			 * email_4, privacy_consent_5) so the FF entries screen renders
+			 * these rows exactly like native submissions. */
+			$form_data = array(
+				'feedback_type_1' => 'General Feedback', // Form 12 field 1 (select) — closest match
+				'subject_2'       => 'Article feedback (' . $vote . ')' . ($post_id ? ': ' . get_the_title($post_id) : ''),
+				'description_3'   => $message,
 			);
 			if ($email) {
-				$entry['4'] = $email;
+				$form_data['email_4'] = $email;
 			}
 			if ($req->get_param('consent')) {
-				$entry['5.1'] = 'I agree to the Privacy Policy';
+				$form_data['privacy_consent_5'] = array('I agree to the Privacy Policy');
 			}
-			$entry_id = GFAPI::add_entry($entry);
-			if (is_wp_error($entry_id)) {
-				return new WP_Error('sf_gf_add', 'Could not store feedback.', array('status' => 500));
+
+			$previous = wpFluent()->table('fluentform_submissions')
+				->where('form_id', 12)
+				->orderBy('id', 'DESC')
+				->first();
+			$serial = $previous ? ((int) $previous->serial_number + 1) : 1;
+
+			$now = current_time('mysql');
+			$insert_id = wpFluent()->table('fluentform_submissions')->insertGetId(array(
+				'form_id'      => 12,
+				'serial_number' => $serial,
+				'response'     => wp_json_encode($form_data),
+				'source_url'   => $post_id ? get_permalink($post_id) : home_url('/'),
+				'status'       => 'unread',
+				'ip'           => isset($_SERVER['REMOTE_ADDR']) ? sanitize_text_field(wp_unslash($_SERVER['REMOTE_ADDR'])) : '',
+				'created_at'   => $now,
+				'updated_at'   => $now,
+			));
+			if (!$insert_id) {
+				return new WP_Error('sf_ff_add', 'Could not store feedback.', array('status' => 500));
 			}
 			return array('ok' => true);
 		},
