@@ -1,11 +1,11 @@
 /* SINO FRESH — certificate request modal (B4), Quality page only.
 
    The dialog itself is server-rendered in templates/page-quality.html: the
-   shell, the heading and Gravity Forms Form 5 ("Request COA"). This file is
-   only the behaviour.
+   shell, the heading and Fluent Forms Form 11 ("Request COA", the Gravity
+   Forms Form 5 twin). This file is only the behaviour.
 
    Every control that carries data-cert="<document key>" opens the dialog and
-   writes that key into Form 5's hidden `certificate` field (id 10) — the same
+   writes that key into Form 11's hidden `certificate_10` field — the same
    key inc/cert-download.php maps to a file. Delegated from the document, so
    the certificate rows, the COA buttons and the lightbox footer can be wired
    in any order without coming back here.
@@ -14,19 +14,19 @@
    inquiry basket's (style.css section 45 is shared); this file only adds what
    a centred dialog needs on top of that.
 
-   Success state (B4.3): Gravity Forms answers a submission by swapping the
-   whole form node for the confirmation markup — the inline iframe postback
-   handler does jQuery('#gform_wrapper_5').replaceWith(...). That markup is
-   ours (the gform_confirmation_5 filter in functions.php) and carries the
-   one-time download URL as JSON in data-payload, because the plain <a> it
-   also contains is what a visitor without JavaScript would click. This file
-   reads the payload, builds the success card and puts the untouched form back
-   when the dialog is opened again.
-
-   That filter also rebuilds the two nodes GF's own confirmation carries and
-   its postback handler needs (#gf_5, the anchor it scrolls to, and
-   #gform_confirmation_message_5, what it announces), so the handler runs to
-   the end — see the comment above the return value in functions.php. */
+   Success state (B4.3): Fluent Forms answers a submission over AJAX and
+   renders the confirmation message (functions.php's
+   fluentform/form_submission_confirmation filter) in a .ff-message-success
+   node after the form, hiding the form itself when the confirmation's
+   samePageFormBehavior is "hide_form". The message is deliberately plain
+   HTML — FF strips data-* attributes (kses) and brace payloads
+   (ShortCodeParser) from confirmations — so the payload is read back from
+   the DOM: the one-time download URL is the card link's href and the email
+   is the <strong> in the note. This file listens for the native
+   `fluentform_submission_success` CustomEvent FF dispatches on `document`,
+   builds the success card, and puts the untouched form back when the dialog
+   is opened again. A MutationObserver covers paths where the event does not
+   arrive; showSuccess() is idempotent, so both firing is fine. */
 (() => {
 	'use strict';
 
@@ -38,21 +38,20 @@
 	const closeBtn = modal.querySelector('.sf-certmodal__close');
 	const lockClass = 'sf-certmodal-lock';
 
-	const FORM_ID = '5';
+	const FORM_KEY = 'fluentform_11';
 	const TITLE_ID = 'sf-certmodal-title';
 
-	/* Re-queried on every open: Gravity Forms replaces the whole
-	   .gform_wrapper with the confirmation after a submission, so a reference
-	   cached at load time can end up detached. */
-	const certField = () => modal.querySelector('#input_5_10');
-	const formWrapper = () => modal.querySelector('#gform_wrapper_' + FORM_ID);
+	/* Re-queried on every open: the form node survives submissions (FF hides
+	   it), but reset() may have restored it from a hidden state, so nothing
+	   here may be cached from a stale reference. */
+	const certField = () => modal.querySelector('[name="certificate_10"]');
+	const formWrapper = () => modal.querySelector('#' + FORM_KEY);
 
 	/* First real control of the form — the hidden field and the submit button
 	   are skipped, so focus lands where the visitor has to type. */
 	const firstControl = () => {
 		const nodes = modal.querySelectorAll(
-			'.gform_wrapper input:not([type="hidden"]):not([type="submit"]):not([type="button"]),'
-			+ '.gform_wrapper select:not([hidden]), .gform_wrapper textarea'
+			'.ff-el-form-control'
 		);
 		for (let i = 0; i < nodes.length; i++) {
 			if (!nodes[i].disabled && nodes[i].offsetParent !== null) return nodes[i];
@@ -60,50 +59,27 @@
 		return null;
 	};
 
-	/* The confirmation markup once Gravity Forms has swapped it in. */
-	const resultNode = () => modal.querySelector('[data-payload]');
+	/* The confirmation card once FF has rendered it (functions.php). */
+	const resultNode = () => modal.querySelector('.sf-cert-result');
 
-	/* data-payload is the machine-readable copy of the confirmation
-	   (functions.php); the flat data-* attributes next to it are the fallback
-	   when that JSON cannot be parsed. Either way the card is built from
-	   strings only, never from markup. */
+	/* The payload is the card's DOM: the download URL is the CTA link's href,
+	   the email is the <strong> inside the note, and "attached" is simply
+	   whether the link exists (no file behind the token means nothing was
+	   attached — functions.php only renders the link when it is). */
 	const parsePayload = () => {
-		const node = resultNode();
-		if (!node) return null;
-		const attr = (name) => node.getAttribute(name) || '';
-
-		let data = null;
-		try {
-			data = JSON.parse(node.getAttribute('data-payload'));
-		} catch (e) {
-			data = null;
-		}
-		if (!data || typeof data !== 'object') data = {};
-
-		const text = (key, fallback) => (typeof data[key] === 'string' && data[key] ? data[key] : fallback);
-
+		const card = resultNode();
+		if (!card) return null;
+		const link = card.querySelector('.sf-cert-result__btn');
+		const mail = card.querySelector('.sf-cert-result__note strong');
 		const payload = {
-			download_url: text('download_url', attr('data-download-url')),
-			email_sent_to: text('email_sent_to', attr('data-email-sent-to')),
-			certificate: typeof data.certificate === 'string' ? data.certificate : '',
-			label: typeof data.label === 'string' ? data.label : '',
-			attached: data.attached === true || data.attached === 'true',
+			download_url: link ? link.getAttribute('href') || '' : '',
+			email_sent_to: mail ? mail.textContent.trim() : '',
+			attached: !!link,
 		};
-		// no file behind the token means nothing was attached, whatever the payload says
 		if (!payload.download_url) payload.attached = false;
 		if (!payload.email_sent_to && !payload.download_url) return null;
 		return payload;
 	};
-
-	/* The pristine form, kept because a submission replaces the form node
-	   itself — without this copy the second open would have nothing to show.
-	   Taken before any submission, and only when the page really does still
-	   hold the form: a postback without JavaScript reloads straight into the
-	   confirmation. */
-	const pristineForm = (() => {
-		const node = formWrapper();
-		return node && !resultNode() ? node.outerHTML : '';
-	})();
 
 	let opener = null;
 
@@ -172,22 +148,12 @@
 		return card;
 	};
 
-	/* The whole block Gravity Forms swapped in, not just the card: functions.php
-	   wraps the card in GF's own anchor (#gf_5), wrapper and message divs so the
-	   postback handler can scroll and announce as it expects to. Parking only
-	   the card would leave two empty nodes and a duplicate id behind for the
-	   next submission, so every node of the block is marked together. */
+	/* FF's message node (the .ff-message-success wrapper around the card) is
+	   parked stale — it is the copy a visitor without JavaScript would rely
+	   on, but it must never sit next to the success card. Removed on reset. */
 	const parkConfirmation = () => {
-		const card = modal.querySelector('.sf-cert-result');
-		if (!card) return;
-		card.classList.add('sf-certmodal__stale');
-
-		const wrap = card.closest('.gform_confirmation_wrapper');
-		if (!wrap) return;                       // bare card: nothing else to park
-		wrap.classList.add('sf-certmodal__stale');
-
-		const anchor = wrap.previousElementSibling;
-		if (anchor && anchor.id === 'gf_' + FORM_ID) anchor.classList.add('sf-certmodal__stale');
+		const wrap = modal.querySelector('.ff-message-success');
+		if (wrap) wrap.classList.add('sf-certmodal__stale');
 	};
 
 	const showSuccess = () => {
@@ -200,21 +166,16 @@
 		panel.removeAttribute('aria-labelledby');
 		panel.setAttribute('aria-label', 'Request received');
 
-		// the confirmation markup stays in the DOM — it is the copy a visitor
-		// without JavaScript clicks — but never next to the card
 		parkConfirmation();
 
 		body.appendChild(successCard(payload));
-
-		/* Gravity Forms clears this flag itself, a few lines after scrolling to
-		   #gf_5 — which now exists, so that path no longer throws. Kept as a
-		   belt-and-braces reset: a stale flag is what silently swallows the
-		   next submission. */
-		window['gf_submitting_' + FORM_ID] = false;
 	};
 
 	/* Back to a usable form. Runs on open rather than on close so the card is
-	   not yanked out from under the closing dialog. */
+	   not yanked out from under the closing dialog. FF only hides the form
+	   (ff_force_hide) — unlike GF it never replaced the node — so restoring
+	   is: drop the stale message, unhide, done. The hidden certificate field
+	   is cleared so the next open() writes it fresh. */
 	const reset = () => {
 		if (!modal.classList.contains('is-success')) return;
 
@@ -225,21 +186,15 @@
 		const card = modal.querySelector('.sf-certmodal__success');
 		if (card) card.remove();
 
-		// the parked confirmation block: card, wrapper, message div, anchor
 		modal.querySelectorAll('.sf-certmodal__stale').forEach((node) => node.remove());
 
-		// nothing was snapshotted (the page loaded straight into a
-		// confirmation): leave the card up rather than empty the panel
-		if (!pristineForm || formWrapper()) return;
-
-		const holder = document.createElement('div');
-		holder.innerHTML = pristineForm;
-		body.appendChild(holder.firstElementChild);
-
-		window['gf_submitting_' + FORM_ID] = false;
-		if (window.gform && window.gform.core && window.gform.core.triggerPostRenderEvents) {
-			window.gform.core.triggerPostRenderEvents(parseInt(FORM_ID, 10), 1);
+		const form = formWrapper();
+		if (form) {
+			form.classList.remove('ff_force_hide');
+			form.style.display = '';
 		}
+		const field = certField();
+		if (field) field.value = '';
 	};
 
 	const open = (cert, trigger) => {
@@ -300,25 +255,24 @@
 		close();
 	});
 
-	/* Two ways in, one handler. The documented signal is the
-	   gform_confirmation_loaded event, which the inline postback handler
-	   triggers; the observer covers the paths where the confirmation arrives
-	   without that handler (no Gravity Forms script at all, or a markup change
-	   that stops the event). showSuccess() is idempotent, so both firing is
-	   fine. */
-	const onConfirmation = () => showSuccess();
+	/* Two ways in, one handler. The documented signal is the native
+	   fluentform_submission_success CustomEvent, filtered to this form —
+	   form-submission.js dispatches it on document for every FF form on the
+	   page. The observer covers the paths where the event does not arrive
+	   (no FF script, or a markup change); it must watch the subtree, because
+	   FF inserts the message node below the form, not as a direct child of
+	   the modal body. */
+	const onConfirmation = (e) => {
+		if (e && e.detail && e.detail.form && e.detail.form.id !== FORM_KEY) return;
+		showSuccess();
+	};
 
-	if (window.jQuery) {
-		window.jQuery(document).on('gform_confirmation_loaded', onConfirmation);
-	}
-	new MutationObserver(onConfirmation).observe(body, { childList: true });
+	document.addEventListener('fluentform_submission_success', onConfirmation);
+	new MutationObserver(() => showSuccess()).observe(body, { childList: true, subtree: true });
 
-	/* Insurance for the one path that can strand a confirmation: the dialog
-	   opens on JavaScript but the Gravity Forms bundle never arrives, so the
-	   submit becomes a normal POST and the confirmation is rendered into the
-	   (still hidden) dialog. If a confirmation is already in the markup on
-	   load, this is that page — show it instead of leaving the visitor with a
-	   form that looks like it did nothing. */
+	/* Insurance for the no-JS-postback edge: if a confirmation is already in
+	   the markup on load, show it instead of leaving the visitor with a form
+	   that looks like it did nothing. */
 	if (resultNode()) {
 		modal.hidden = false;
 		modal.classList.add('is-open');

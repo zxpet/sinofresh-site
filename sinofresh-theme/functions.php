@@ -6821,78 +6821,80 @@ add_action('wp_head', function () {
 }, 22);
 
 /* --------------------------------------------------------------------
-   Certificate gated download — Gravity Forms Form 5 ("Request COA").
+   Certificate gated download — Fluent Forms Form 11 ("Request COA",
+   the Gravity Forms Form 5 twin; the GF hooks went with GF).
 
-   The Quality page's certificate buttons open a modal that fills the hidden
-   `certificate` field (id 10) with a document key (fda / cgmp / iso9001 /
-   iso22000 / haccp / brc / coa-sample). On submit the visitor gets a
-   one-time download token (inc/cert-download.php) in the confirmation,
-   and the same document by email with that same link as a fallback.
+   The Quality page's certificate buttons open a modal that fills the
+   hidden `certificate_10` field with a document key (fda / cgmp /
+   iso9001 / iso22000 / haccp / brc / coa-sample). On submit the visitor
+   gets a one-time download token (inc/cert-download.php) in the
+   confirmation, and the same document by email with that same link as
+   a fallback.
 
-   Hook order: GF 3.1 resolves the confirmation inside
-   GFFormDisplay::process_form() *before* firing gform_after_submission
-   (handle_submission() is called first, the action after it). The grant is
-   therefore memoised per entry, so whichever hook runs first mints the
-   token and the other reuses it — the emailed link and the button in the
-   browser are always the exact same one-time token.
+   Hook order: Fluent Forms resolves the confirmation (the
+   fluentform/form_submission_confirmation filter inside
+   FormHandler::getReturnData()) BEFORE firing
+   fluentform/submission_inserted — the same order GF 3.1 used. The
+   grant is memoised per request, so whichever hook runs first mints
+   the token and the other reuses it — the emailed link and the button
+   in the browser are always the exact same one-time token.
 
-   No Gravity Forms settings screen is involved: Form 5 has no confirmation
-   or notification configured, and both the confirmation markup and the
-   customer email are produced here.
+   The confirmation card is deliberately plain HTML. FF post-processes
+   the confirmation message with fluentform_sanitize_html() (kses —
+   data-* attributes and <script> are stripped) and then runs the
+   brace-based ShortCodeParser over it ({"..."} JSON would be eaten),
+   so the payload travels as DOM instead of attributes: the download
+   URL is the card link's href and the email is the <strong> inside
+   the note. cert-modal.js reads exactly those two.
+
+   No FF settings screen is involved: Form 11 keeps its default
+   confirmation (the message below replaces messageToShow) and both
+   the confirmation markup and the customer email are produced here.
    -------------------------------------------------------------------- */
 
 /** Resolve — and memoise — the download grant for one submission. */
-function sinofresh_cert_grant($entry) {
-	static $grants = array();
-
-	$entry_id = (int) rgar($entry, 'id');
-	if (isset($grants[$entry_id])) {
-		return $grants[$entry_id];
+function sinofresh_cert_grant($form_data) {
+	static $grant = null;
+	if (null !== $grant) {
+		return $grant;
 	}
 
 	$certs = sinofresh_cert_files();
-	$cert  = sanitize_key((string) rgar($entry, '10'));
+	$cert  = sanitize_key((string) (isset($form_data['certificate_10']) ? $form_data['certificate_10'] : ''));
 	if (!isset($certs[$cert])) {
 		$cert = 'coa-sample'; // fallback for the page's generic "Request COA" buttons
 	}
 	$path  = sinofresh_cert_file_path($cert, $certs[$cert]);
-	$email = sanitize_email((string) rgar($entry, '3'));
+	$email = sanitize_email((string) (isset($form_data['email_3']) ? $form_data['email_3'] : ''));
 	$token = sinofresh_cert_mint_token($cert, $email);
 
-	$grants[$entry_id] = array(
+	$grant = array(
 		'cert'     => $cert,
 		'label'    => sinofresh_cert_label($cert),
 		'email'    => $email,
-		'name'     => trim((string) rgar($entry, '2')),
+		'name'     => trim((string) (isset($form_data['contact_person_2']) ? $form_data['contact_person_2'] : '')),
 		'url'      => $token ? sinofresh_cert_download_url($cert, $token) : '',
 		'has_file' => ('' !== $path && is_readable($path)),
 		'path'     => $path,
 		'download' => $certs[$cert]['download'],
 	);
-	return $grants[$entry_id];
+	return $grant;
 }
 
-/* Confirmation: replaces Form 5's (unconfigured) default message. The markup
-   is what the modal shows in its success state; the JSON payload in
-   data-payload is what the front-end reads (B4), and the plain <a> keeps the
-   form usable with JavaScript disabled. */
-add_filter('gform_confirmation_5', function ($confirmation, $form, $entry, $ajax) {
-	$g = sinofresh_cert_grant($entry);
+/* Confirmation: replaces Form 11's default message. The markup is what the
+   modal shows in its success state; the plain <a> keeps the form usable with
+   JavaScript disabled. FF hides the form itself (hide_form) and renders this
+   message in a .ff-message-success node after it. */
+add_filter('fluentform/form_submission_confirmation', function ($confirmation, $form_data, $form) {
+	if ((int) $form->id !== 11 || !is_array($confirmation)) {
+		return $confirmation;
+	}
+	$g = sinofresh_cert_grant($form_data);
 	if (empty($g['url'])) {
 		return $confirmation;
 	}
 
-	$payload = array(
-		'download_url'  => $g['has_file'] ? $g['url'] : '',
-		'email_sent_to' => $g['email'],
-		'certificate'   => $g['cert'],
-		'label'         => $g['label'],
-		'attached'      => (bool) $g['has_file'],
-	);
-
-	$card = '<div class="sf-cert-result" data-payload="' . esc_attr(wp_json_encode($payload)) . '"'
-		. ' data-download-url="' . esc_attr($payload['download_url']) . '"'
-		. ' data-email-sent-to="' . esc_attr($g['email']) . '">'
+	$card = '<div class="sf-cert-result">'
 		. '<p class="sf-cert-result__title">Request received.</p>';
 
 	if ($g['has_file']) {
@@ -6907,33 +6909,18 @@ add_filter('gform_confirmation_5', function ($confirmation, $form, $entry, $ajax
 	}
 	$card .= '</div>';
 
-	/* This filter replaces GF's confirmation markup wholesale, and that markup
-	   is not only the message: handle_confirmation() builds
-
-	     <div id='gf_{id}' class='gform_anchor'>…</div>
-	     <div id='gform_confirmation_wrapper_{id}'>
-	       <div id='gform_confirmation_message_{id}'>…message…</div>
-	     </div>
-
-	   and the page's inline postback handler depends on both extra nodes. It
-	   scrolls with jQuery('#gf_5').offset() and, when the anchor is missing,
-	   throws there — which aborted the handler before it cleared
-	   gf_submitting_5 (so the next submit was swallowed) and before it
-	   announced the message. #gform_confirmation_message_5 is what
-	   wp.a11y.speak() reads. The three nodes are rebuilt here around our own
-	   card, which is unchanged. */
-	return '<div id="gf_5" class="gform_anchor" tabindex="-1"></div>'
-		. '<div id="gform_confirmation_wrapper_5" class="gform_confirmation_wrapper">'
-		. '<div id="gform_confirmation_message_5" class="gform_confirmation_message">'
-		. $card
-		. '</div></div>';
-}, 10, 4);
+	$confirmation['messageToShow'] = $card;
+	return $confirmation;
+}, 10, 3);
 
 /* Customer email + sales copy. The lead must survive a bad customer address,
    so sales always receives a copy — as the Cc of the customer email, or as
    the sole recipient when the address is unusable. */
-add_action('gform_after_submission_5', function ($entry, $form) {
-	$g = sinofresh_cert_grant($entry);
+add_action('fluentform/submission_inserted', function ($submission_id, $form_data, $form) {
+	if ((int) $form->id !== 11) {
+		return;
+	}
+	$g = sinofresh_cert_grant($form_data);
 	if (empty($g['url'])) {
 		return;
 	}
@@ -6982,10 +6969,10 @@ add_action('gform_after_submission_5', function ($entry, $form) {
 		$lines   = array(
 			'A certificate request came in without a usable customer address.',
 			'',
-			'Company: ' . (string) rgar($entry, '1'),
-			'Contact: ' . (string) rgar($entry, '2'),
-			'Email on the entry: ' . (string) rgar($entry, '3'),
-			'Country: ' . (string) rgar($entry, '4'),
+			'Company: ' . (string) (isset($form_data['company_name_1']) ? $form_data['company_name_1'] : ''),
+			'Contact: ' . (string) (isset($form_data['contact_person_2']) ? $form_data['contact_person_2'] : ''),
+			'Email on the entry: ' . (string) (isset($form_data['email_3']) ? $form_data['email_3'] : ''),
+			'Country: ' . (string) (isset($form_data['country_4']) ? $form_data['country_4'] : ''),
 			'Document: ' . $g['label'] . ' (' . $g['cert'] . ')',
 			'',
 			'Download link: ' . $g['url'],
@@ -7000,107 +6987,66 @@ add_action('gform_after_submission_5', function ($entry, $form) {
 		@rmdir($tmp_dir);
 	}
 
-	/* Visibility from the entry screen: what they asked for, the link that was
-	   issued, and whether the mail actually left. */
-	gform_update_meta($entry['id'], 'sf_cert_document', $g['cert'], 5);
-	gform_update_meta($entry['id'], 'sf_cert_download_url', $g['url'], 5);
-	gform_update_meta($entry['id'], 'sf_cert_mail', $sent ? 'sent' : 'failed', 5);
-}, 10, 2);
+	/* Visibility from the entries screen: what they asked for, the link that
+	   was issued, and whether the mail actually left. */
+	if (class_exists('\FluentForm\App\Helpers\Helper')) {
+		\FluentForm\App\Helpers\Helper::setSubmissionMeta($submission_id, 'sf_cert_document', $g['cert'], 11);
+		\FluentForm\App\Helpers\Helper::setSubmissionMeta($submission_id, 'sf_cert_download_url', $g['url'], 11);
+		\FluentForm\App\Helpers\Helper::setSubmissionMeta($submission_id, 'sf_cert_mail', $sent ? 'sent' : 'failed', 11);
+	}
+}, 10, 3);
 
 /**
- * 59. Inquiry conversion tracking (GA4 generate_lead).
+ * 59. Inquiry conversion tracking (GA4 generate_lead) — client-side now.
  *
- * Order matters here: GF 3.1 runs handle_submission() (which builds the
- * confirmation and fires gform_confirmation) BEFORE gform_after_submission,
- * so a payload captured in gform_after_submission would arrive too late.
- * The payload is therefore derived from ($entry, $form) inside the
- * confirmation filters themselves; gform_after_submission only records the
- * same snapshot on $GLOBALS for debugging / other consumers.
+ * This used to ride the GF confirmation filters (forms 2-5) as an inline
+ * <script> appended to the message. Fluent Forms sanitizes the confirmation
+ * message with kses (script tags stripped), so the tracking moved to the
+ * native `fluentform_submission_success` CustomEvent that FF's
+ * form-submission.js dispatches on `document` (jQuery signal + DOM event,
+ * see cert-modal.js for the same pattern). Scope: forms 8-11 — Form 12
+ * (article feedback) is not an inquiry. The event fires before FF resets
+ * the form, so the dosage select still holds the visitor's choice.
  *
- * Scope: forms 2-5 only — the Feedback form 6 is not an inquiry. Form 5's
- * certificate flow lives in versioned hooks above and is untouched; because
- * gf_apply_filters runs 'gform_confirmation' before 'gform_confirmation_5',
- * the script for form 5 is appended by a separate priority-20 listener on
- * the versioned hook, after the cert flow has built its confirmation.
- *
- * The inline script reads sf_cookie_consent (the site's own consent banner
- * storage) and fires gtag('event', 'generate_lead', ...) only when the
- * visitor accepted analytics; without gtag (Local, or GA4 not yet connected)
- * it silently no-ops. No PII is sent: form id, form title, dosage form
- * choice, source page URL.
+ * The script reads sf_cookie_consent (the site's own consent banner storage)
+ * and fires gtag('event', 'generate_lead', ...) only when the visitor
+ * accepted analytics; without gtag (GA4 not yet connected) it silently
+ * no-ops. No PII: form id, form title, dosage form choice, source URL.
  */
-if (!function_exists('sinofresh_lead_payload')) {
-	/**
-	 * Build the conversion payload for one lead. The dosage select is field 7
-	 * on forms 2/3, 11 on form 4 and 6 on form 5; matching on the label keeps
-	 * this alive if ids ever shift.
-	 *
-	 * @param array $entry GF entry.
-	 * @param array $form  GF form.
-	 * @return array
-	 */
-	function sinofresh_lead_payload($entry, $form) {
-		$dosage = '';
-		foreach ($form['fields'] as $field) {
-			if (false !== stripos((string) rgar($field, 'label'), 'Dosage Form')) {
-				$dosage = (string) rgar($entry, (string) rgar($field, 'id'));
-				break;
-			}
-		}
-		return array(
-			'form_id'         => (string) rgar($form, 'id'),
-			'form_title'      => (string) rgar($form, 'title'),
-			'dosage'          => $dosage,
-			'form_source_url' => isset($_SERVER['HTTP_REFERER']) ? esc_url_raw(wp_unslash($_SERVER['HTTP_REFERER'])) : '',
-		);
-	}
-}
-
-if (!function_exists('sinofresh_lead_tracking_script')) {
-	/**
-	 * Build the consent-gated inline script for one lead. Returns an empty
-	 * string when there is nothing to send (not an inquiry form, or a form id
-	 * mismatch with the confirmation being filtered).
-	 *
-	 * @param array $entry   GF entry.
-	 * @param array $form    GF form.
-	 * @return string
-	 */
-	function sinofresh_lead_tracking_script($entry, $form) {
-		$form_id = (int) rgar($form, 'id');
-		if (!in_array($form_id, array(2, 3, 4, 5), true)) {
-			return '';
-		}
-		$json = wp_json_encode(sinofresh_lead_payload($entry, $form));
-		return '<script>(function(){try{var c=null;'
-			. 'try{c=JSON.parse(localStorage.getItem("sf_cookie_consent")||"null");}catch(e){}'
-			. 'if(!c||c.analytics!==true)return;'
-			. 'if(typeof window.gtag!=="function")return;'
-			. 'window.gtag("event","generate_lead",' . $json . ');'
-			. '}catch(e){}})();</script>';
-	}
-}
-
-add_action('gform_after_submission', function ($entry, $form) {
-	if (!in_array((int) rgar($form, 'id'), array(2, 3, 4, 5), true)) {
-		return;
-	}
-	$GLOBALS['sf_lead_payload'] = sinofresh_lead_payload($entry, $form);
-}, 10, 2);
-
-add_filter('gform_confirmation', function ($confirmation, $form, $entry, $ajax) {
-	/* Form 5 appends after its certificate flow on the versioned hook below. */
-	if (5 === (int) rgar($form, 'id') || !is_string($confirmation)) {
-		return $confirmation;
-	}
-	return $confirmation . sinofresh_lead_tracking_script($entry, $form);
-}, 10, 4);
-
-/* Form 5: run after the certificate-flow confirmation builder (priority 10) so
-   the script is appended to whatever that flow returned, never replacing it. */
-add_filter('gform_confirmation_5', function ($confirmation, $form, $entry, $ajax) {
-	if (!is_string($confirmation)) {
-		return $confirmation;
-	}
-	return $confirmation . sinofresh_lead_tracking_script($entry, $form);
-}, 20, 4);
+add_action('wp_footer', function () {
+	$titles = array(
+		8  => 'Get a Quote',
+		9  => 'Request a Sample',
+		10 => 'Book a Factory Tour',
+		11 => 'Request COA',
+	);
+	?>
+	<script>
+	(function () {
+		'use strict';
+		var titles = <?php echo wp_json_encode($titles); ?>;
+		document.addEventListener('fluentform_submission_success', function (e) {
+			try {
+				var consent = null;
+				try { consent = JSON.parse(localStorage.getItem('sf_cookie_consent') || 'null'); } catch (err) {}
+				if (!consent || consent.analytics !== true) return;
+				if (typeof window.gtag !== 'function') return;
+				var form = e.detail && e.detail.form;
+				if (!form || !form.id) return;
+				var id = String(form.id).replace('fluentform_', '');
+				if (!titles[id]) return;
+				var dosage = '';
+				var sel = form.querySelector('select[name^="interested_dosage_form"]');
+				if (sel) dosage = sel.value || '';
+				window.gtag('event', 'generate_lead', {
+					form_id: id,
+					form_title: titles[id],
+					dosage: dosage,
+					form_source_url: document.referrer || ''
+				});
+			} catch (err) {}
+		});
+	})();
+	</script>
+	<?php
+}, 99);
