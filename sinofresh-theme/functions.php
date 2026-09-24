@@ -132,7 +132,7 @@ add_action('wp_enqueue_scripts', function() {
  */
 add_action('wp_enqueue_scripts', function() {
 	if (is_page('quality') || is_page_template('page-quality')) {
-		wp_enqueue_script('sinofresh-cert-modal', get_template_directory_uri() . '/assets/js/cert-modal.js', array(), '1.2.0', true);
+		wp_enqueue_script('sinofresh-cert-modal', get_template_directory_uri() . '/assets/js/cert-modal.js', array(), '1.3.0', true);
 	}
 });
 
