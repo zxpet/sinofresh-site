@@ -150,8 +150,14 @@
 
 	/* FF's message node (the .ff-message-success wrapper around the card) is
 	   parked stale — it is the copy a visitor without JavaScript would rely
-	   on, but it must never sit next to the success card. Removed on reset. */
+	   on, but it must never sit next to the success card. The card itself is
+	   marked stale too: style.css re-shows a hidden dialog that holds an
+	   unclaimed .sf-cert-result (the no-JS postback insurance, and the same
+	   rule must not re-open a dialog the visitor just closed). Removed on
+	   reset; removing the wrapper takes the card with it. */
 	const parkConfirmation = () => {
+		const card = modal.querySelector('.sf-cert-result');
+		if (card) card.classList.add('sf-certmodal__stale');
 		const wrap = modal.querySelector('.ff-message-success');
 		if (wrap) wrap.classList.add('sf-certmodal__stale');
 	};
