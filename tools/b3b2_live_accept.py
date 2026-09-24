@@ -25,6 +25,13 @@ before, and the reason the assertion is here rather than in the caller.
 
 Usage:
     python3 tools/b3b2_live_accept.py [--json /tmp/out.json] [--only a|b]
+                                      [--shots <dir>]
+
+NOTE — `--shots` exists for the same reason it exists on the h7c E2E: the
+default is the directory holding the committed evidence, so a post-pull re-run
+would quietly overwrite the BEFORE frames with the AFTER picture and leave the
+pair meaningless. Point it at /tmp when re-measuring a site that has already
+moved to the candidate.
 """
 
 import argparse
@@ -348,10 +355,14 @@ def group_b(out):
 
 
 def main():
+    global SHOTS
     ap = argparse.ArgumentParser()
     ap.add_argument('--json', default='/tmp/b3b2-accept.json')
     ap.add_argument('--only', choices=['a', 'b'])
+    ap.add_argument('--shots', default=SHOTS,
+                    help='frame directory; defaults to the committed evidence dir')
     args = ap.parse_args()
+    SHOTS = os.path.abspath(args.shots)
     os.makedirs(SHOTS, exist_ok=True)
     out = {'shots': SHOTS}
     try:
