@@ -2,18 +2,53 @@
 (() => {
 	"use strict";
 	const KEY = "sf_cookie_consent";
+	/* The decision record is versioned and time-boxed.
+	   Version: a record made against an older banner does not answer the current one.
+	   Expiry: consent that never lapses is not consent.
+	   Both are read through ONE validator, so the banner, the GA4 bridge and the
+	   Consent API cannot disagree about whether a decision is still in force. */
+	const VERSION = 2;
+	const DAYS = 182;
+	const MS_DAY = 864e5;
 	const banner = document.querySelector(".sf-cookie-banner");
 
+	/* The record, but only if it answers the current banner and has not expired. */
+	const readDecision = () => {
+		let rec = null;
+		try {
+			rec = JSON.parse(localStorage.getItem(KEY) || "null");
+		} catch (e) {
+			return null;
+		}
+		if (!rec || typeof rec !== "object") return null;
+		if (rec.version !== VERSION) return null;
+		if (typeof rec.expires !== "number" || rec.expires <= Date.now()) return null;
+		return rec;
+	};
+
+	/* Mirror the decision into the WP Consent API. That plugin is installed and
+	   loaded on every page but nothing ever called it. wp_set_consent() is its
+	   public entry point: it writes an expiring consent cookie that server-side
+	   code reads with wp_has_consent(), and fires wp_listen_for_consent_change. */
+	const bridgeConsent = (on) => {
+		if (typeof window.wp_set_consent !== "function") return;
+		const v = on ? "allow" : "deny";
+		window.wp_set_consent("statistics", v);
+		window.wp_set_consent("marketing", v);
+	};
+
 	if (banner) {
-		let saved = null;
-		try { saved = JSON.parse(localStorage.getItem(KEY)); } catch (e) {}
+		const saved = readDecision();
 
 		const decide = (on) => {
+			const now = Date.now();
 			try {
 				localStorage.setItem(KEY, JSON.stringify({
-					analytics: on, marketing: on, timestamp: Date.now()
+					analytics: on, marketing: on,
+					version: VERSION, timestamp: now, expires: now + DAYS * MS_DAY
 				}));
 			} catch (e) {}
+			bridgeConsent(on);
 			banner.hidden = true;
 			document.body.classList.remove("has-cookie-banner");
 			dispatchEvent(new CustomEvent("sf:consent", { detail: { analytics: on, marketing: on } }));
@@ -44,8 +79,20 @@
 		});
 	};
 	try {
-		const prior = JSON.parse(localStorage.getItem(KEY) || "null");
-		if (prior) applyGtagConsent(prior.analytics === true);
+		const prior = readDecision();
+		if (prior) {
+			applyGtagConsent(prior.analytics === true);
+			/* Re-assert into the Consent API only when its own cookie disagrees,
+			   so a returning visitor does not get a consent cookie rewritten on
+			   every single page view. */
+			if (typeof window.wp_has_consent === "function") {
+				const granted = prior.analytics === true;
+				if (window.wp_has_consent("statistics") !== granted ||
+					window.wp_has_consent("marketing") !== granted) {
+					bridgeConsent(granted);
+				}
+			}
+		}
 	} catch (e) {}
 	addEventListener("sf:consent", (e) => {
 		applyGtagConsent(!!(e.detail && e.detail.analytics));
