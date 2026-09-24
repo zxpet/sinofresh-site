@@ -198,7 +198,7 @@ def main():
     ap.add_argument('--base', default=BASE)
     ap.add_argument('--preflight', action='store_true',
                     help='send X-SF-Preflight: 1 (default: what dev serves)')
-    ap.add_argument('--expect-ver', default='2.10.79')
+    ap.add_argument('--expect-ver', default='2.10.80')
     ap.add_argument('--json', metavar='OUT')
     ap.add_argument('--label', default='')
     args = ap.parse_args()

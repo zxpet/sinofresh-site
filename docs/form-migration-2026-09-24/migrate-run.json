@@ -1,0 +1,59 @@
+{
+    "reset": [
+        3,
+        4,
+        5,
+        6,
+        7,
+        1,
+        2
+    ],
+    "imported": [
+        {
+            "gf": "2",
+            "gf_name": "Get a Quote",
+            "ff": 8,
+            "fields": 8
+        },
+        {
+            "gf": "3",
+            "gf_name": "Request a Sample",
+            "ff": 9,
+            "fields": 12
+        },
+        {
+            "gf": "4",
+            "gf_name": "Book a Factory Tour",
+            "ff": 10,
+            "fields": 15
+        },
+        {
+            "gf": "5",
+            "gf_name": "Request COA",
+            "ff": 11,
+            "fields": 10
+        },
+        {
+            "gf": "6",
+            "gf_name": "Feedback",
+            "ff": 12,
+            "fields": 5
+        }
+    ],
+    "repairs": {
+        "2": [],
+        "3": [
+            "phone -> input_text (GF field 4 Phone / WhatsApp)",
+            "phone field carries type=tel"
+        ],
+        "4": [
+            "phone -> input_text (GF field 5 Phone / WhatsApp)",
+            "time -> input_text (GF field 10 Preferred Time)",
+            "phone field carries type=tel",
+            "time field carries a time placeholder"
+        ],
+        "5": [],
+        "6": []
+    },
+    "unsupported": []
+}

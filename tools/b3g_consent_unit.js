@@ -49,7 +49,7 @@ function mkEl(map) {
 		hidden: true, _map: map || {}, classList: mkClassList(),
 		querySelector(sel) { return (this._map && this._map[sel]) || null; },
 		addEventListener(t, fn) { (listeners[t] = listeners[t] || []).push(fn); },
-		_fire(t) { (listeners[t] || []).forEach((fn) => fn({ target: this })); },
+		_fire(t) { (listeners[t] || []).forEach((fn) => fn({ target: this, preventDefault() {} })); },
 		getAttribute() { return 'false'; }, setAttribute() {},
 		closest() { return null; }, nextElementSibling: null,
 	};
@@ -60,12 +60,12 @@ function boot(env, source) {
 	env = env || {};
 	const calls = { setConsent: [], gtag: [], events: [] };
 
-	const btn = { accept: mkEl(), reject: mkEl(), manage: mkEl() };
+	const btn = { accept: mkEl(), reject: mkEl() };
 	const banner = mkEl({
 		'.sf-cookie-banner__btn--accept': btn.accept,
 		'.sf-cookie-banner__btn--reject': btn.reject,
-		'.sf-cookie-banner__manage': btn.manage,
 	});
+	const reopen = env.reopen === false ? null : mkEl();
 
 	const store = Object.create(null);
 	Object.keys(env.store || {}).forEach((k) => { store[k] = env.store[k]; });
@@ -73,8 +73,11 @@ function boot(env, source) {
 	const bus = {};
 	const sandbox = {
 		document: {
-			querySelector: (sel) =>
-				(sel === '.sf-cookie-banner' ? (env.banner === false ? null : banner) : null),
+			querySelector: (sel) => {
+				if (sel === '.sf-cookie-banner') return env.banner === false ? null : banner;
+				if (sel === '.sf-cookie-preferences') return reopen;
+				return null;
+			},
 			body: { classList: mkClassList() },
 			addEventListener: () => {},
 		},
@@ -119,8 +122,9 @@ function boot(env, source) {
 	};
 
 	return {
-		banner, body: sandbox.document.body, calls, record,
+		banner, body: sandbox.document.body, calls, record, reopen,
 		click: (which) => btn[which]._fire('click'),
+		clickReopen: () => reopen._fire('click'),
 		decisionEvent: () => calls.events.filter((e) => e.type === 'sf:consent').pop(),
 		gtagState: (i) => {
 			const c = calls.gtag[i || 0];
@@ -261,6 +265,36 @@ console.log('    source: ' + SRC);
 	check('accept works when the Consent API is absent', threw === null, String(threw));
 	check('accept still writes the record without the Consent API',
 		!!(r && r.record() && r.record().version === 2));
+}
+
+/* C11 — the footer withdraw entry */
+{
+	const r = boot({ gtag: true, consentApi: true });
+	r.click('accept');
+	check('after accepting, the banner is hidden', r.banner.hidden === true);
+	r.clickReopen();
+	check('the withdraw link re-opens the banner', r.banner.hidden === false,
+		'banner.hidden = ' + r.banner.hidden);
+	check('and re-adds the body class', r.body.classList.contains('has-cookie-banner'));
+	check('the withdraw link cleared the record', r.record() === null, JSON.stringify(r.record()));
+	check('the accept button still answers after reopening', (() => {
+		r.click('accept'); return r.record() && r.record().version === 2 && r.banner.hidden === true;
+	})());
+}
+
+/* C12 — the withdraw entry on a page whose banner never showed (no record yet) */
+{
+	const r = boot({ gtag: true, consentApi: true });
+	r.clickReopen();
+	check('the withdraw link is harmless before any decision',
+		r.banner.hidden === false && r.record() === null);
+}
+
+/* C13 — a page without the footer link still boots cleanly */
+{
+	let threw = null;
+	try { boot({ gtag: true, consentApi: true, reopen: false }); } catch (e) { threw = e.message; }
+	check('a page without the withdraw link boots without throwing', threw === null, String(threw));
 }
 
 /* ---- negative control: both guards deleted from the source, in memory ----

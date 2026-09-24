@@ -43,7 +43,7 @@ LIVE = json.dumps({"Authorization": AUTH})
 
 OUT = "docs/batchH8c-deploy-shots"
 TMP = "_backup/_h8c_accept_tmp"
-EXPECT_VER = "2.10.79"
+EXPECT_VER = "2.10.80"
 
 OVERVIEW = "/services/"
 CHEWS = "/formulas/joint-support-soft-chews/"

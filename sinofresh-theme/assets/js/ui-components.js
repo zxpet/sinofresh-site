@@ -54,14 +54,31 @@
 			dispatchEvent(new CustomEvent("sf:consent", { detail: { analytics: on, marketing: on } }));
 		};
 
+		/* Bound whenever the banner exists, not only on the first visit: the
+		   footer's withdraw entry re-opens the banner for a visitor who already
+		   decided, and the buttons must still answer. Re-deciding is harmless:
+		   decide() just rewrites the record and re-hides. */
+		const on = (sel, fn) => banner.querySelector(sel).addEventListener("click", fn);
+		on(".sf-cookie-banner__btn--accept", () => decide(true));
+		on(".sf-cookie-banner__btn--reject", () => decide(false));
+
 		if (!saved) {
 			banner.hidden = false;
 			document.body.classList.add("has-cookie-banner");
-			const on = (sel, fn) => banner.querySelector(sel).addEventListener("click", fn);
-			on(".sf-cookie-banner__btn--accept", () => decide(true));
-			on(".sf-cookie-banner__btn--reject", () => decide(false));
-			on(".sf-cookie-banner__manage", () => decide(false));
 		}
+	}
+
+	/* Withdrawal entry: the footer link clears the stored decision and re-opens
+	   the banner, so consent can be revisited at any time. Without it the
+	   record could only ever lapse silently after 182 days. */
+	const reopen = document.querySelector(".sf-cookie-preferences");
+	if (reopen && banner) {
+		reopen.addEventListener("click", (e) => {
+			e.preventDefault();
+			try { localStorage.removeItem(KEY); } catch (err) {}
+			banner.hidden = false;
+			document.body.classList.add("has-cookie-banner");
+		});
 	}
 
 	/* GA4 consent mode bridge: mirrors the banner decision into gtag consent

@@ -1,0 +1,1649 @@
+{
+ "passed": [
+  "GF 2 -> FF 8: title preserved",
+  "GF 2 -> FF 8: field count preserved",
+  "GF 2 -> FF 8 field 1 (Company Name): label",
+  "GF 2 -> FF 8 field 1 (Company Name): required",
+  "GF 2 -> FF 8 field 1 (Company Name): choices",
+  "GF 2 -> FF 8 field 1 (Company Name): element input_text",
+  "GF 2 -> FF 8 field 2 (Contact Person): label",
+  "GF 2 -> FF 8 field 2 (Contact Person): required",
+  "GF 2 -> FF 8 field 2 (Contact Person): choices",
+  "GF 2 -> FF 8 field 2 (Contact Person): element input_text",
+  "GF 2 -> FF 8 field 3 (Email): label",
+  "GF 2 -> FF 8 field 3 (Email): required",
+  "GF 2 -> FF 8 field 3 (Email): choices",
+  "GF 2 -> FF 8 field 3 (Email): element input_email",
+  "GF 2 -> FF 8 field 4 (Country): label",
+  "GF 2 -> FF 8 field 4 (Country): required",
+  "GF 2 -> FF 8 field 4 (Country): choices",
+  "GF 2 -> FF 8 field 4 (Country): element select",
+  "GF 2 -> FF 8 field 5 (Interested Dosage Form): label",
+  "GF 2 -> FF 8 field 5 (Interested Dosage Form): required",
+  "GF 2 -> FF 8 field 5 (Interested Dosage Form): choices",
+  "GF 2 -> FF 8 field 5 (Interested Dosage Form): element select",
+  "GF 2 -> FF 8 field 6 (Notes): label",
+  "GF 2 -> FF 8 field 6 (Notes): required",
+  "GF 2 -> FF 8 field 6 (Notes): choices",
+  "GF 2 -> FF 8 field 6 (Notes): element textarea",
+  "GF 2 -> FF 8 field 7 (Privacy Consent): label",
+  "GF 2 -> FF 8 field 7 (Privacy Consent): required",
+  "GF 2 -> FF 8 field 7 (Privacy Consent): choices",
+  "GF 2 -> FF 8 field 7 (Privacy Consent): element input_checkbox",
+  "GF 2 -> FF 8 field 8 (Configuration Summary): label",
+  "GF 2 -> FF 8 field 8 (Configuration Summary): required",
+  "GF 2 -> FF 8 field 8 (Configuration Summary): choices",
+  "GF 2 -> FF 8 field 8 (Configuration Summary): element input_hidden",
+  "GF 2 -> FF 8: every notification kept (2)",
+  "GF 3 -> FF 9: title preserved",
+  "GF 3 -> FF 9: field count preserved",
+  "GF 3 -> FF 9 field 1 (Company Name): label",
+  "GF 3 -> FF 9 field 1 (Company Name): required",
+  "GF 3 -> FF 9 field 1 (Company Name): choices",
+  "GF 3 -> FF 9 field 1 (Company Name): element input_text",
+  "GF 3 -> FF 9 field 2 (Contact Person): label",
+  "GF 3 -> FF 9 field 2 (Contact Person): required",
+  "GF 3 -> FF 9 field 2 (Contact Person): choices",
+  "GF 3 -> FF 9 field 2 (Contact Person): element input_text",
+  "GF 3 -> FF 9 field 3 (Email): label",
+  "GF 3 -> FF 9 field 3 (Email): required",
+  "GF 3 -> FF 9 field 3 (Email): choices",
+  "GF 3 -> FF 9 field 3 (Email): element input_email",
+  "GF 3 -> FF 9 field 4 (Phone / WhatsApp): label",
+  "GF 3 -> FF 9 field 4 (Phone / WhatsApp): required",
+  "GF 3 -> FF 9 field 4 (Phone / WhatsApp): choices",
+  "GF 3 -> FF 9 field 4 (Phone / WhatsApp): element input_text",
+  "GF 3 -> FF 9 field 5 (Country): label",
+  "GF 3 -> FF 9 field 5 (Country): required",
+  "GF 3 -> FF 9 field 5 (Country): choices",
+  "GF 3 -> FF 9 field 5 (Country): element select",
+  "GF 3 -> FF 9 field 6 (Target Market): label",
+  "GF 3 -> FF 9 field 6 (Target Market): required",
+  "GF 3 -> FF 9 field 6 (Target Market): choices",
+  "GF 3 -> FF 9 field 6 (Target Market): element select",
+  "GF 3 -> FF 9 field 7 (Interested Dosage Form): label",
+  "GF 3 -> FF 9 field 7 (Interested Dosage Form): required",
+  "GF 3 -> FF 9 field 7 (Interested Dosage Form): choices",
+  "GF 3 -> FF 9 field 7 (Interested Dosage Form): element select",
+  "GF 3 -> FF 9 field 8 (Sample Quantity): label",
+  "GF 3 -> FF 9 field 8 (Sample Quantity): required",
+  "GF 3 -> FF 9 field 8 (Sample Quantity): choices",
+  "GF 3 -> FF 9 field 8 (Sample Quantity): element select",
+  "GF 3 -> FF 9 field 9 (Flavor Preference): label",
+  "GF 3 -> FF 9 field 9 (Flavor Preference): required",
+  "GF 3 -> FF 9 field 9 (Flavor Preference): choices",
+  "GF 3 -> FF 9 field 9 (Flavor Preference): element input_text",
+  "GF 3 -> FF 9 field 10 (Shipping Address): label",
+  "GF 3 -> FF 9 field 10 (Shipping Address): required",
+  "GF 3 -> FF 9 field 10 (Shipping Address): choices",
+  "GF 3 -> FF 9 field 10 (Shipping Address): element textarea",
+  "GF 3 -> FF 9 field 11 (Notes): label",
+  "GF 3 -> FF 9 field 11 (Notes): required",
+  "GF 3 -> FF 9 field 11 (Notes): choices",
+  "GF 3 -> FF 9 field 11 (Notes): element textarea",
+  "GF 3 -> FF 9 field 12 (Privacy Consent): label",
+  "GF 3 -> FF 9 field 12 (Privacy Consent): required",
+  "GF 3 -> FF 9 field 12 (Privacy Consent): choices",
+  "GF 3 -> FF 9 field 12 (Privacy Consent): element input_checkbox",
+  "GF 3 -> FF 9: every notification kept (2)",
+  "GF 4 -> FF 10: title preserved",
+  "GF 4 -> FF 10: field count preserved",
+  "GF 4 -> FF 10 field 1 (Company Name): label",
+  "GF 4 -> FF 10 field 1 (Company Name): required",
+  "GF 4 -> FF 10 field 1 (Company Name): choices",
+  "GF 4 -> FF 10 field 1 (Company Name): element input_text",
+  "GF 4 -> FF 10 field 2 (Contact Person): label",
+  "GF 4 -> FF 10 field 2 (Contact Person): required",
+  "GF 4 -> FF 10 field 2 (Contact Person): choices",
+  "GF 4 -> FF 10 field 2 (Contact Person): element input_text",
+  "GF 4 -> FF 10 field 3 (Email): label",
+  "GF 4 -> FF 10 field 3 (Email): required",
+  "GF 4 -> FF 10 field 3 (Email): choices",
+  "GF 4 -> FF 10 field 3 (Email): element input_email",
+  "GF 4 -> FF 10 field 4 (Phone / WhatsApp): label",
+  "GF 4 -> FF 10 field 4 (Phone / WhatsApp): required",
+  "GF 4 -> FF 10 field 4 (Phone / WhatsApp): choices",
+  "GF 4 -> FF 10 field 4 (Phone / WhatsApp): element input_text",
+  "GF 4 -> FF 10 field 5 (Country): label",
+  "GF 4 -> FF 10 field 5 (Country): required",
+  "GF 4 -> FF 10 field 5 (Country): choices",
+  "GF 4 -> FF 10 field 5 (Country): element select",
+  "GF 4 -> FF 10 field 6 (Tour Type): label",
+  "GF 4 -> FF 10 field 6 (Tour Type): required",
+  "GF 4 -> FF 10 field 6 (Tour Type): choices",
+  "GF 4 -> FF 10 field 6 (Tour Type): element select",
+  "GF 4 -> FF 10 field 7 (Preferred Date): label",
+  "GF 4 -> FF 10 field 7 (Preferred Date): required",
+  "GF 4 -> FF 10 field 7 (Preferred Date): choices",
+  "GF 4 -> FF 10 field 7 (Preferred Date): element input_date",
+  "GF 4 -> FF 10 field 8 (html): label",
+  "GF 4 -> FF 10 field 8 (html): required",
+  "GF 4 -> FF 10 field 8 (html): choices",
+  "GF 4 -> FF 10 field 8 (html): element custom_html",
+  "GF 4 -> FF 10 field 8 (html): notice content kept",
+  "GF 4 -> FF 10 field 9 (Job Title): label",
+  "GF 4 -> FF 10 field 9 (Job Title): required",
+  "GF 4 -> FF 10 field 9 (Job Title): choices",
+  "GF 4 -> FF 10 field 9 (Job Title): element input_text",
+  "GF 4 -> FF 10 field 10 (Preferred Time): label",
+  "GF 4 -> FF 10 field 10 (Preferred Time): required",
+  "GF 4 -> FF 10 field 10 (Preferred Time): choices",
+  "GF 4 -> FF 10 field 10 (Preferred Time): element input_text",
+  "GF 4 -> FF 10 field 11 (Target Market): label",
+  "GF 4 -> FF 10 field 11 (Target Market): required",
+  "GF 4 -> FF 10 field 11 (Target Market): choices",
+  "GF 4 -> FF 10 field 11 (Target Market): element select",
+  "GF 4 -> FF 10 field 12 (Interested Dosage Form): label",
+  "GF 4 -> FF 10 field 12 (Interested Dosage Form): required",
+  "GF 4 -> FF 10 field 12 (Interested Dosage Form): choices",
+  "GF 4 -> FF 10 field 12 (Interested Dosage Form): element select",
+  "GF 4 -> FF 10 field 13 (Number of Visitors): label",
+  "GF 4 -> FF 10 field 13 (Number of Visitors): required",
+  "GF 4 -> FF 10 field 13 (Number of Visitors): choices",
+  "GF 4 -> FF 10 field 13 (Number of Visitors): element select",
+  "GF 4 -> FF 10 field 14 (Notes): label",
+  "GF 4 -> FF 10 field 14 (Notes): required",
+  "GF 4 -> FF 10 field 14 (Notes): choices",
+  "GF 4 -> FF 10 field 14 (Notes): element textarea",
+  "GF 4 -> FF 10 field 15 (Privacy Consent): label",
+  "GF 4 -> FF 10 field 15 (Privacy Consent): required",
+  "GF 4 -> FF 10 field 15 (Privacy Consent): choices",
+  "GF 4 -> FF 10 field 15 (Privacy Consent): element input_checkbox",
+  "GF 4 -> FF 10: every notification kept (2)",
+  "GF 5 -> FF 11: title preserved",
+  "GF 5 -> FF 11: field count preserved",
+  "GF 5 -> FF 11 field 1 (Company Name): label",
+  "GF 5 -> FF 11 field 1 (Company Name): required",
+  "GF 5 -> FF 11 field 1 (Company Name): choices",
+  "GF 5 -> FF 11 field 1 (Company Name): element input_text",
+  "GF 5 -> FF 11 field 2 (Contact Person): label",
+  "GF 5 -> FF 11 field 2 (Contact Person): required",
+  "GF 5 -> FF 11 field 2 (Contact Person): choices",
+  "GF 5 -> FF 11 field 2 (Contact Person): element input_text",
+  "GF 5 -> FF 11 field 3 (Country): label",
+  "GF 5 -> FF 11 field 3 (Country): required",
+  "GF 5 -> FF 11 field 3 (Country): choices",
+  "GF 5 -> FF 11 field 3 (Country): element select",
+  "GF 5 -> FF 11 field 4 (Target Market): label",
+  "GF 5 -> FF 11 field 4 (Target Market): required",
+  "GF 5 -> FF 11 field 4 (Target Market): choices",
+  "GF 5 -> FF 11 field 4 (Target Market): element select",
+  "GF 5 -> FF 11 field 5 (Email): label",
+  "GF 5 -> FF 11 field 5 (Email): required",
+  "GF 5 -> FF 11 field 5 (Email): choices",
+  "GF 5 -> FF 11 field 5 (Email): element input_email",
+  "GF 5 -> FF 11 field 6 (Interested Dosage Form): label",
+  "GF 5 -> FF 11 field 6 (Interested Dosage Form): required",
+  "GF 5 -> FF 11 field 6 (Interested Dosage Form): choices",
+  "GF 5 -> FF 11 field 6 (Interested Dosage Form): element select",
+  "GF 5 -> FF 11 field 7 (Document Type): label",
+  "GF 5 -> FF 11 field 7 (Document Type): required",
+  "GF 5 -> FF 11 field 7 (Document Type): choices",
+  "GF 5 -> FF 11 field 7 (Document Type): element input_checkbox",
+  "GF 5 -> FF 11 field 8 (Notes): label",
+  "GF 5 -> FF 11 field 8 (Notes): required",
+  "GF 5 -> FF 11 field 8 (Notes): choices",
+  "GF 5 -> FF 11 field 8 (Notes): element textarea",
+  "GF 5 -> FF 11 field 9 (Privacy Consent): label",
+  "GF 5 -> FF 11 field 9 (Privacy Consent): required",
+  "GF 5 -> FF 11 field 9 (Privacy Consent): choices",
+  "GF 5 -> FF 11 field 9 (Privacy Consent): element input_checkbox",
+  "GF 5 -> FF 11 field 10 (Certificate): label",
+  "GF 5 -> FF 11 field 10 (Certificate): required",
+  "GF 5 -> FF 11 field 10 (Certificate): choices",
+  "GF 5 -> FF 11 field 10 (Certificate): element input_hidden",
+  "GF 5 -> FF 11: every notification kept (2)",
+  "GF 6 -> FF 12: title preserved",
+  "GF 6 -> FF 12: field count preserved",
+  "GF 6 -> FF 12 field 1 (Feedback Type): label",
+  "GF 6 -> FF 12 field 1 (Feedback Type): required",
+  "GF 6 -> FF 12 field 1 (Feedback Type): choices",
+  "GF 6 -> FF 12 field 1 (Feedback Type): element select",
+  "GF 6 -> FF 12 field 2 (Subject): label",
+  "GF 6 -> FF 12 field 2 (Subject): required",
+  "GF 6 -> FF 12 field 2 (Subject): choices",
+  "GF 6 -> FF 12 field 2 (Subject): element input_text",
+  "GF 6 -> FF 12 field 3 (Description): label",
+  "GF 6 -> FF 12 field 3 (Description): required",
+  "GF 6 -> FF 12 field 3 (Description): choices",
+  "GF 6 -> FF 12 field 3 (Description): element textarea",
+  "GF 6 -> FF 12 field 4 (Email): label",
+  "GF 6 -> FF 12 field 4 (Email): required",
+  "GF 6 -> FF 12 field 4 (Email): choices",
+  "GF 6 -> FF 12 field 4 (Email): element input_email",
+  "GF 6 -> FF 12 field 5 (Privacy Consent): label",
+  "GF 6 -> FF 12 field 5 (Privacy Consent): required",
+  "GF 6 -> FF 12 field 5 (Privacy Consent): choices",
+  "GF 6 -> FF 12 field 5 (Privacy Consent): element input_checkbox",
+  "GF 6 -> FF 12: every notification kept (1)",
+  "every date field is a date-only picker",
+  "both phone fields exist and are tel inputs",
+  "no demo forms were left behind",
+  "the import map has exactly the five site forms",
+  "rotating one form's fields creates NEW failures",
+  "and every new failure is specific to that form"
+ ],
+ "failed": [],
+ "data": {
+  "gf": {
+   "2": {
+    "title": "Get a Quote",
+    "active": true,
+    "fields": [
+     {
+      "type": "text",
+      "label": "Company Name",
+      "admin_label": "",
+      "required": true,
+      "choices": [],
+      "html": "",
+      "placeholder": ""
+     },
+     {
+      "type": "text",
+      "label": "Contact Person",
+      "admin_label": "",
+      "required": true,
+      "choices": [],
+      "html": "",
+      "placeholder": ""
+     },
+     {
+      "type": "email",
+      "label": "Email",
+      "admin_label": "",
+      "required": true,
+      "choices": [],
+      "html": "",
+      "placeholder": ""
+     },
+     {
+      "type": "select",
+      "label": "Country",
+      "admin_label": "",
+      "required": true,
+      "choices": [
+       "United States",
+       "United Kingdom",
+       "Germany",
+       "France",
+       "Australia",
+       "Canada",
+       "Japan",
+       "Other"
+      ],
+      "html": "",
+      "placeholder": ""
+     },
+     {
+      "type": "select",
+      "label": "Interested Dosage Form",
+      "admin_label": "",
+      "required": true,
+      "choices": [
+       "Soft Chews",
+       "Tablets",
+       "Powders",
+       "Pastes",
+       "Drops",
+       "Liquids",
+       "Fish Oil",
+       "Dental Chews"
+      ],
+      "html": "",
+      "placeholder": ""
+     },
+     {
+      "type": "textarea",
+      "label": "Notes",
+      "admin_label": "",
+      "required": false,
+      "choices": [],
+      "html": "",
+      "placeholder": ""
+     },
+     {
+      "type": "checkbox",
+      "label": "Privacy Consent",
+      "admin_label": "",
+      "required": true,
+      "choices": [
+       "I agree to the Privacy Policy"
+      ],
+      "html": "",
+      "placeholder": ""
+     },
+     {
+      "type": "hidden",
+      "label": "Configuration Summary",
+      "admin_label": "Configuration Summary (configurator)",
+      "required": false,
+      "choices": [],
+      "html": "",
+      "placeholder": ""
+     }
+    ],
+    "notifications": [
+     {
+      "to": "sales@zxpet.com",
+      "subject": "New Inquiry: {Interested Dosage Form:7} from {Company Name:1} ({Country:5})",
+      "event": "form_submission"
+     },
+     {
+      "to": "{Email:3}",
+      "subject": "We've received your inquiry — SINO FRESH",
+      "event": "form_submission"
+     }
+    ]
+   },
+   "3": {
+    "title": "Request a Sample",
+    "active": true,
+    "fields": [
+     {
+      "type": "text",
+      "label": "Company Name",
+      "admin_label": "",
+      "required": false,
+      "choices": [],
+      "html": "",
+      "placeholder": ""
+     },
+     {
+      "type": "text",
+      "label": "Contact Person",
+      "admin_label": "",
+      "required": false,
+      "choices": [],
+      "html": "",
+      "placeholder": ""
+     },
+     {
+      "type": "email",
+      "label": "Email",
+      "admin_label": "",
+      "required": false,
+      "choices": [],
+      "html": "",
+      "placeholder": ""
+     },
+     {
+      "type": "phone",
+      "label": "Phone / WhatsApp",
+      "admin_label": "",
+      "required": false,
+      "choices": [],
+      "html": "",
+      "placeholder": ""
+     },
+     {
+      "type": "select",
+      "label": "Country",
+      "admin_label": "",
+      "required": false,
+      "choices": [
+       "United States",
+       "United Kingdom",
+       "Germany",
+       "France",
+       "Australia",
+       "Canada",
+       "Japan",
+       "Other"
+      ],
+      "html": "",
+      "placeholder": ""
+     },
+     {
+      "type": "select",
+      "label": "Target Market",
+      "admin_label": "",
+      "required": false,
+      "choices": [
+       "US",
+       "EU",
+       "UK",
+       "JP",
+       "AU",
+       "CA",
+       "Other"
+      ],
+      "html": "",
+      "placeholder": ""
+     },
+     {
+      "type": "select",
+      "label": "Interested Dosage Form",
+      "admin_label": "",
+      "required": false,
+      "choices": [
+       "Soft Chews",
+       "Tablets",
+       "Powders",
+       "Pastes",
+       "Drops",
+       "Liquids",
+       "Fish Oil",
+       "Dental Chews"
+      ],
+      "html": "",
+      "placeholder": ""
+     },
+     {
+      "type": "select",
+      "label": "Sample Quantity",
+      "admin_label": "",
+      "required": false,
+      "choices": [
+       "1",
+       "2",
+       "3",
+       "5",
+       "Custom"
+      ],
+      "html": "",
+      "placeholder": ""
+     },
+     {
+      "type": "text",
+      "label": "Flavor Preference",
+      "admin_label": "",
+      "required": false,
+      "choices": [],
+      "html": "",
+      "placeholder": ""
+     },
+     {
+      "type": "textarea",
+      "label": "Shipping Address",
+      "admin_label": "",
+      "required": false,
+      "choices": [],
+      "html": "",
+      "placeholder": ""
+     },
+     {
+      "type": "textarea",
+      "label": "Notes",
+      "admin_label": "",
+      "required": false,
+      "choices": [],
+      "html": "",
+      "placeholder": ""
+     },
+     {
+      "type": "checkbox",
+      "label": "Privacy Consent",
+      "admin_label": "",
+      "required": true,
+      "choices": [
+       "I agree to the Privacy Policy"
+      ],
+      "html": "",
+      "placeholder": ""
+     }
+    ],
+    "notifications": [
+     {
+      "to": "sales@zxpet.com",
+      "subject": "New Sample Request: {Interested Dosage Form:7} from {Company Name:1}",
+      "event": "form_submission"
+     },
+     {
+      "to": "{Email:3}",
+      "subject": "Your sample request — SINO FRESH",
+      "event": "form_submission"
+     }
+    ]
+   },
+   "4": {
+    "title": "Book a Factory Tour",
+    "active": true,
+    "fields": [
+     {
+      "type": "text",
+      "label": "Company Name",
+      "admin_label": "",
+      "required": false,
+      "choices": [],
+      "html": "",
+      "placeholder": ""
+     },
+     {
+      "type": "text",
+      "label": "Contact Person",
+      "admin_label": "",
+      "required": false,
+      "choices": [],
+      "html": "",
+      "placeholder": ""
+     },
+     {
+      "type": "email",
+      "label": "Email",
+      "admin_label": "",
+      "required": false,
+      "choices": [],
+      "html": "",
+      "placeholder": ""
+     },
+     {
+      "type": "phone",
+      "label": "Phone / WhatsApp",
+      "admin_label": "",
+      "required": false,
+      "choices": [],
+      "html": "",
+      "placeholder": ""
+     },
+     {
+      "type": "select",
+      "label": "Country",
+      "admin_label": "",
+      "required": false,
+      "choices": [
+       "United States",
+       "United Kingdom",
+       "Germany",
+       "France",
+       "Australia",
+       "Canada",
+       "Japan",
+       "Other"
+      ],
+      "html": "",
+      "placeholder": ""
+     },
+     {
+      "type": "select",
+      "label": "Tour Type",
+      "admin_label": "",
+      "required": false,
+      "choices": [
+       "On-Site",
+       "Video"
+      ],
+      "html": "",
+      "placeholder": ""
+     },
+     {
+      "type": "date",
+      "label": "Preferred Date",
+      "admin_label": "",
+      "required": false,
+      "choices": [],
+      "html": "",
+      "placeholder": ""
+     },
+     {
+      "type": "html",
+      "label": "",
+      "admin_label": "",
+      "required": false,
+      "choices": [],
+      "html": "<button type=\"button\" class=\"sf-opt-toggle\" aria-expanded=\"false\">Show optional details <span aria-hidden=\"true\">&#9662;</span></button>",
+      "placeholder": ""
+     },
+     {
+      "type": "text",
+      "label": "Job Title",
+      "admin_label": "",
+      "required": false,
+      "choices": [],
+      "html": "",
+      "placeholder": ""
+     },
+     {
+      "type": "time",
+      "label": "Preferred Time",
+      "admin_label": "",
+      "required": false,
+      "choices": [],
+      "html": "",
+      "placeholder": ""
+     },
+     {
+      "type": "select",
+      "label": "Target Market",
+      "admin_label": "",
+      "required": false,
+      "choices": [
+       "US",
+       "EU",
+       "UK",
+       "JP",
+       "AU",
+       "CA",
+       "Other"
+      ],
+      "html": "",
+      "placeholder": ""
+     },
+     {
+      "type": "select",
+      "label": "Interested Dosage Form",
+      "admin_label": "",
+      "required": false,
+      "choices": [
+       "Soft Chews",
+       "Tablets",
+       "Powders",
+       "Pastes",
+       "Drops",
+       "Liquids",
+       "Fish Oil",
+       "Dental Chews"
+      ],
+      "html": "",
+      "placeholder": ""
+     },
+     {
+      "type": "select",
+      "label": "Number of Visitors",
+      "admin_label": "",
+      "required": false,
+      "choices": [
+       "1",
+       "2",
+       "3",
+       "4+"
+      ],
+      "html": "",
+      "placeholder": ""
+     },
+     {
+      "type": "textarea",
+      "label": "Notes",
+      "admin_label": "",
+      "required": false,
+      "choices": [],
+      "html": "",
+      "placeholder": ""
+     },
+     {
+      "type": "checkbox",
+      "label": "Privacy Consent",
+      "admin_label": "",
+      "required": false,
+      "choices": [
+       "I agree to the Privacy Policy"
+      ],
+      "html": "",
+      "placeholder": ""
+     }
+    ],
+    "notifications": [
+     {
+      "to": "sales@zxpet.com",
+      "subject": "Factory Tour Request: {Tour Type:8} - {Company Name:1}",
+      "event": "form_submission"
+     },
+     {
+      "to": "{Email:4}",
+      "subject": "Factory tour request received — SINO FRESH",
+      "event": "form_submission"
+     }
+    ]
+   },
+   "5": {
+    "title": "Request COA",
+    "active": true,
+    "fields": [
+     {
+      "type": "text",
+      "label": "Company Name",
+      "admin_label": "",
+      "required": true,
+      "choices": [],
+      "html": "",
+      "placeholder": ""
+     },
+     {
+      "type": "text",
+      "label": "Contact Person",
+      "admin_label": "",
+      "required": true,
+      "choices": [],
+      "html": "",
+      "placeholder": ""
+     },
+     {
+      "type": "select",
+      "label": "Country",
+      "admin_label": "",
+      "required": true,
+      "choices": [
+       "United States",
+       "United Kingdom",
+       "Germany",
+       "France",
+       "Australia",
+       "Canada",
+       "Japan",
+       "Other"
+      ],
+      "html": "",
+      "placeholder": ""
+     },
+     {
+      "type": "select",
+      "label": "Target Market",
+      "admin_label": "",
+      "required": false,
+      "choices": [
+       "US",
+       "EU",
+       "UK",
+       "JP",
+       "AU",
+       "CA",
+       "Other"
+      ],
+      "html": "",
+      "placeholder": ""
+     },
+     {
+      "type": "email",
+      "label": "Email",
+      "admin_label": "",
+      "required": true,
+      "choices": [],
+      "html": "",
+      "placeholder": ""
+     },
+     {
+      "type": "select",
+      "label": "Interested Dosage Form",
+      "admin_label": "",
+      "required": false,
+      "choices": [
+       "Soft Chews",
+       "Tablets",
+       "Powders",
+       "Pastes",
+       "Drops",
+       "Liquids",
+       "Fish Oil",
+       "Dental Chews"
+      ],
+      "html": "",
+      "placeholder": ""
+     },
+     {
+      "type": "checkbox",
+      "label": "Document Type",
+      "admin_label": "",
+      "required": false,
+      "choices": [
+       "COA Sample",
+       "Compliance Package",
+       "Specification Sheet",
+       "MSDS",
+       "Health Certificate"
+      ],
+      "html": "",
+      "placeholder": ""
+     },
+     {
+      "type": "textarea",
+      "label": "Notes",
+      "admin_label": "",
+      "required": false,
+      "choices": [],
+      "html": "",
+      "placeholder": ""
+     },
+     {
+      "type": "checkbox",
+      "label": "Privacy Consent",
+      "admin_label": "",
+      "required": false,
+      "choices": [
+       "I agree to the Privacy Policy"
+      ],
+      "html": "",
+      "placeholder": ""
+     },
+     {
+      "type": "hidden",
+      "label": "Certificate",
+      "admin_label": "Certificate",
+      "required": false,
+      "choices": [],
+      "html": "",
+      "placeholder": ""
+     }
+    ],
+    "notifications": [
+     {
+      "to": "sales@zxpet.com",
+      "subject": "Document Request: {Company Name:1} ({Country:4})",
+      "event": "form_submission"
+     },
+     {
+      "to": "{Email:3}",
+      "subject": "Your document request — SINO FRESH",
+      "event": "form_submission"
+     }
+    ]
+   },
+   "6": {
+    "title": "Feedback",
+    "active": true,
+    "fields": [
+     {
+      "type": "select",
+      "label": "Feedback Type",
+      "admin_label": "",
+      "required": false,
+      "choices": [
+       "General Feedback",
+       "Website Issue",
+       "Product Inquiry",
+       "Partnership Proposal"
+      ],
+      "html": "",
+      "placeholder": ""
+     },
+     {
+      "type": "text",
+      "label": "Subject",
+      "admin_label": "",
+      "required": false,
+      "choices": [],
+      "html": "",
+      "placeholder": "Brief summary of your feedback"
+     },
+     {
+      "type": "textarea",
+      "label": "Description",
+      "admin_label": "",
+      "required": false,
+      "choices": [],
+      "html": "",
+      "placeholder": "Tell us the details"
+     },
+     {
+      "type": "email",
+      "label": "Email",
+      "admin_label": "",
+      "required": false,
+      "choices": [],
+      "html": "",
+      "placeholder": "Leave blank for anonymous"
+     },
+     {
+      "type": "checkbox",
+      "label": "Privacy Consent",
+      "admin_label": "",
+      "required": false,
+      "choices": [
+       "I agree to the Privacy Policy"
+      ],
+      "html": "",
+      "placeholder": ""
+     }
+    ],
+    "notifications": [
+     {
+      "to": "info@zxpet.com",
+      "subject": "New Feedback: {Feedback Type:1} — {Subject:2}",
+      "event": "form_submission"
+     }
+    ]
+   }
+  },
+  "ff": {
+   "8": {
+    "title": "Get a Quote",
+    "status": "published",
+    "elements": [
+     "input_text",
+     "input_text",
+     "input_email",
+     "select",
+     "select",
+     "textarea",
+     "input_checkbox",
+     "input_hidden"
+    ],
+    "fields": [
+     {
+      "type": "input_text",
+      "label": "Company Name",
+      "required": true,
+      "choices": [],
+      "html": "",
+      "placeholder": "",
+      "input_type": "text",
+      "is_time_enabled": null
+     },
+     {
+      "type": "input_text",
+      "label": "Contact Person",
+      "required": true,
+      "choices": [],
+      "html": "",
+      "placeholder": "",
+      "input_type": "text",
+      "is_time_enabled": null
+     },
+     {
+      "type": "input_email",
+      "label": "Email",
+      "required": true,
+      "choices": [],
+      "html": "",
+      "placeholder": "",
+      "input_type": "email",
+      "is_time_enabled": null
+     },
+     {
+      "type": "select",
+      "label": "Country",
+      "required": true,
+      "choices": [
+       "United States",
+       "United Kingdom",
+       "Germany",
+       "France",
+       "Australia",
+       "Canada",
+       "Japan",
+       "Other"
+      ],
+      "html": "",
+      "placeholder": "",
+      "input_type": "",
+      "is_time_enabled": null
+     },
+     {
+      "type": "select",
+      "label": "Interested Dosage Form",
+      "required": true,
+      "choices": [
+       "Soft Chews",
+       "Tablets",
+       "Powders",
+       "Pastes",
+       "Drops",
+       "Liquids",
+       "Fish Oil",
+       "Dental Chews"
+      ],
+      "html": "",
+      "placeholder": "",
+      "input_type": "",
+      "is_time_enabled": null
+     },
+     {
+      "type": "textarea",
+      "label": "Notes",
+      "required": false,
+      "choices": [],
+      "html": "",
+      "placeholder": "",
+      "input_type": "",
+      "is_time_enabled": null
+     },
+     {
+      "type": "input_checkbox",
+      "label": "Privacy Consent",
+      "required": true,
+      "choices": [
+       "I agree to the Privacy Policy"
+      ],
+      "html": "",
+      "placeholder": "",
+      "input_type": "checkbox",
+      "is_time_enabled": null
+     },
+     {
+      "type": "input_hidden",
+      "label": "Configuration Summary (configurator)",
+      "required": false,
+      "choices": [],
+      "html": "",
+      "placeholder": "",
+      "input_type": "hidden",
+      "is_time_enabled": null
+     }
+    ]
+   },
+   "9": {
+    "title": "Request a Sample",
+    "status": "published",
+    "elements": [
+     "input_text",
+     "input_text",
+     "input_email",
+     "input_text",
+     "select",
+     "select",
+     "select",
+     "select",
+     "input_text",
+     "textarea",
+     "textarea",
+     "input_checkbox"
+    ],
+    "fields": [
+     {
+      "type": "input_text",
+      "label": "Company Name",
+      "required": false,
+      "choices": [],
+      "html": "",
+      "placeholder": "",
+      "input_type": "text",
+      "is_time_enabled": null
+     },
+     {
+      "type": "input_text",
+      "label": "Contact Person",
+      "required": false,
+      "choices": [],
+      "html": "",
+      "placeholder": "",
+      "input_type": "text",
+      "is_time_enabled": null
+     },
+     {
+      "type": "input_email",
+      "label": "Email",
+      "required": false,
+      "choices": [],
+      "html": "",
+      "placeholder": "",
+      "input_type": "email",
+      "is_time_enabled": null
+     },
+     {
+      "type": "input_text",
+      "label": "Phone / WhatsApp",
+      "required": false,
+      "choices": [],
+      "html": "",
+      "placeholder": "e.g. +86 138 0000 0000",
+      "input_type": "tel",
+      "is_time_enabled": null
+     },
+     {
+      "type": "select",
+      "label": "Country",
+      "required": false,
+      "choices": [
+       "United States",
+       "United Kingdom",
+       "Germany",
+       "France",
+       "Australia",
+       "Canada",
+       "Japan",
+       "Other"
+      ],
+      "html": "",
+      "placeholder": "",
+      "input_type": "",
+      "is_time_enabled": null
+     },
+     {
+      "type": "select",
+      "label": "Target Market",
+      "required": false,
+      "choices": [
+       "US",
+       "EU",
+       "UK",
+       "JP",
+       "AU",
+       "CA",
+       "Other"
+      ],
+      "html": "",
+      "placeholder": "",
+      "input_type": "",
+      "is_time_enabled": null
+     },
+     {
+      "type": "select",
+      "label": "Interested Dosage Form",
+      "required": false,
+      "choices": [
+       "Soft Chews",
+       "Tablets",
+       "Powders",
+       "Pastes",
+       "Drops",
+       "Liquids",
+       "Fish Oil",
+       "Dental Chews"
+      ],
+      "html": "",
+      "placeholder": "",
+      "input_type": "",
+      "is_time_enabled": null
+     },
+     {
+      "type": "select",
+      "label": "Sample Quantity",
+      "required": false,
+      "choices": [
+       "1",
+       "2",
+       "3",
+       "5",
+       "Custom"
+      ],
+      "html": "",
+      "placeholder": "",
+      "input_type": "",
+      "is_time_enabled": null
+     },
+     {
+      "type": "input_text",
+      "label": "Flavor Preference",
+      "required": false,
+      "choices": [],
+      "html": "",
+      "placeholder": "",
+      "input_type": "text",
+      "is_time_enabled": null
+     },
+     {
+      "type": "textarea",
+      "label": "Shipping Address",
+      "required": false,
+      "choices": [],
+      "html": "",
+      "placeholder": "",
+      "input_type": "",
+      "is_time_enabled": null
+     },
+     {
+      "type": "textarea",
+      "label": "Notes",
+      "required": false,
+      "choices": [],
+      "html": "",
+      "placeholder": "",
+      "input_type": "",
+      "is_time_enabled": null
+     },
+     {
+      "type": "input_checkbox",
+      "label": "Privacy Consent",
+      "required": true,
+      "choices": [
+       "I agree to the Privacy Policy"
+      ],
+      "html": "",
+      "placeholder": "",
+      "input_type": "checkbox",
+      "is_time_enabled": null
+     }
+    ]
+   },
+   "10": {
+    "title": "Book a Factory Tour",
+    "status": "published",
+    "elements": [
+     "input_text",
+     "input_text",
+     "input_email",
+     "input_text",
+     "select",
+     "select",
+     "input_date",
+     "custom_html",
+     "input_text",
+     "input_text",
+     "select",
+     "select",
+     "select",
+     "textarea",
+     "input_checkbox"
+    ],
+    "fields": [
+     {
+      "type": "input_text",
+      "label": "Company Name",
+      "required": false,
+      "choices": [],
+      "html": "",
+      "placeholder": "",
+      "input_type": "text",
+      "is_time_enabled": null
+     },
+     {
+      "type": "input_text",
+      "label": "Contact Person",
+      "required": false,
+      "choices": [],
+      "html": "",
+      "placeholder": "",
+      "input_type": "text",
+      "is_time_enabled": null
+     },
+     {
+      "type": "input_email",
+      "label": "Email",
+      "required": false,
+      "choices": [],
+      "html": "",
+      "placeholder": "",
+      "input_type": "email",
+      "is_time_enabled": null
+     },
+     {
+      "type": "input_text",
+      "label": "Phone / WhatsApp",
+      "required": false,
+      "choices": [],
+      "html": "",
+      "placeholder": "e.g. +86 138 0000 0000",
+      "input_type": "tel",
+      "is_time_enabled": null
+     },
+     {
+      "type": "select",
+      "label": "Country",
+      "required": false,
+      "choices": [
+       "United States",
+       "United Kingdom",
+       "Germany",
+       "France",
+       "Australia",
+       "Canada",
+       "Japan",
+       "Other"
+      ],
+      "html": "",
+      "placeholder": "",
+      "input_type": "",
+      "is_time_enabled": null
+     },
+     {
+      "type": "select",
+      "label": "Tour Type",
+      "required": false,
+      "choices": [
+       "On-Site",
+       "Video"
+      ],
+      "html": "",
+      "placeholder": "",
+      "input_type": "",
+      "is_time_enabled": null
+     },
+     {
+      "type": "input_date",
+      "label": "Preferred Date",
+      "required": false,
+      "choices": [],
+      "html": "",
+      "placeholder": "",
+      "input_type": "text",
+      "is_time_enabled": false
+     },
+     {
+      "type": "custom_html",
+      "label": "",
+      "required": false,
+      "choices": [],
+      "html": "<button type=\"button\" class=\"sf-opt-toggle\" aria-expanded=\"false\">Show optional details <span aria-hidden=\"true\">&#9662;</span></button>",
+      "placeholder": "",
+      "input_type": "",
+      "is_time_enabled": null
+     },
+     {
+      "type": "input_text",
+      "label": "Job Title",
+      "required": false,
+      "choices": [],
+      "html": "",
+      "placeholder": "",
+      "input_type": "text",
+      "is_time_enabled": null
+     },
+     {
+      "type": "input_text",
+      "label": "Preferred Time",
+      "required": false,
+      "choices": [],
+      "html": "",
+      "placeholder": "e.g. 10:00 (GMT+8)",
+      "input_type": "text",
+      "is_time_enabled": null
+     },
+     {
+      "type": "select",
+      "label": "Target Market",
+      "required": false,
+      "choices": [
+       "US",
+       "EU",
+       "UK",
+       "JP",
+       "AU",
+       "CA",
+       "Other"
+      ],
+      "html": "",
+      "placeholder": "",
+      "input_type": "",
+      "is_time_enabled": null
+     },
+     {
+      "type": "select",
+      "label": "Interested Dosage Form",
+      "required": false,
+      "choices": [
+       "Soft Chews",
+       "Tablets",
+       "Powders",
+       "Pastes",
+       "Drops",
+       "Liquids",
+       "Fish Oil",
+       "Dental Chews"
+      ],
+      "html": "",
+      "placeholder": "",
+      "input_type": "",
+      "is_time_enabled": null
+     },
+     {
+      "type": "select",
+      "label": "Number of Visitors",
+      "required": false,
+      "choices": [
+       "1",
+       "2",
+       "3",
+       "4+"
+      ],
+      "html": "",
+      "placeholder": "",
+      "input_type": "",
+      "is_time_enabled": null
+     },
+     {
+      "type": "textarea",
+      "label": "Notes",
+      "required": false,
+      "choices": [],
+      "html": "",
+      "placeholder": "",
+      "input_type": "",
+      "is_time_enabled": null
+     },
+     {
+      "type": "input_checkbox",
+      "label": "Privacy Consent",
+      "required": false,
+      "choices": [
+       "I agree to the Privacy Policy"
+      ],
+      "html": "",
+      "placeholder": "",
+      "input_type": "checkbox",
+      "is_time_enabled": null
+     }
+    ]
+   },
+   "11": {
+    "title": "Request COA",
+    "status": "published",
+    "elements": [
+     "input_text",
+     "input_text",
+     "select",
+     "select",
+     "input_email",
+     "select",
+     "input_checkbox",
+     "textarea",
+     "input_checkbox",
+     "input_hidden"
+    ],
+    "fields": [
+     {
+      "type": "input_text",
+      "label": "Company Name",
+      "required": true,
+      "choices": [],
+      "html": "",
+      "placeholder": "",
+      "input_type": "text",
+      "is_time_enabled": null
+     },
+     {
+      "type": "input_text",
+      "label": "Contact Person",
+      "required": true,
+      "choices": [],
+      "html": "",
+      "placeholder": "",
+      "input_type": "text",
+      "is_time_enabled": null
+     },
+     {
+      "type": "select",
+      "label": "Country",
+      "required": true,
+      "choices": [
+       "United States",
+       "United Kingdom",
+       "Germany",
+       "France",
+       "Australia",
+       "Canada",
+       "Japan",
+       "Other"
+      ],
+      "html": "",
+      "placeholder": "",
+      "input_type": "",
+      "is_time_enabled": null
+     },
+     {
+      "type": "select",
+      "label": "Target Market",
+      "required": false,
+      "choices": [
+       "US",
+       "EU",
+       "UK",
+       "JP",
+       "AU",
+       "CA",
+       "Other"
+      ],
+      "html": "",
+      "placeholder": "",
+      "input_type": "",
+      "is_time_enabled": null
+     },
+     {
+      "type": "input_email",
+      "label": "Email",
+      "required": true,
+      "choices": [],
+      "html": "",
+      "placeholder": "",
+      "input_type": "email",
+      "is_time_enabled": null
+     },
+     {
+      "type": "select",
+      "label": "Interested Dosage Form",
+      "required": false,
+      "choices": [
+       "Soft Chews",
+       "Tablets",
+       "Powders",
+       "Pastes",
+       "Drops",
+       "Liquids",
+       "Fish Oil",
+       "Dental Chews"
+      ],
+      "html": "",
+      "placeholder": "",
+      "input_type": "",
+      "is_time_enabled": null
+     },
+     {
+      "type": "input_checkbox",
+      "label": "Document Type",
+      "required": false,
+      "choices": [
+       "COA Sample",
+       "Compliance Package",
+       "Specification Sheet",
+       "MSDS",
+       "Health Certificate"
+      ],
+      "html": "",
+      "placeholder": "",
+      "input_type": "checkbox",
+      "is_time_enabled": null
+     },
+     {
+      "type": "textarea",
+      "label": "Notes",
+      "required": false,
+      "choices": [],
+      "html": "",
+      "placeholder": "",
+      "input_type": "",
+      "is_time_enabled": null
+     },
+     {
+      "type": "input_checkbox",
+      "label": "Privacy Consent",
+      "required": false,
+      "choices": [
+       "I agree to the Privacy Policy"
+      ],
+      "html": "",
+      "placeholder": "",
+      "input_type": "checkbox",
+      "is_time_enabled": null
+     },
+     {
+      "type": "input_hidden",
+      "label": "Certificate",
+      "required": false,
+      "choices": [],
+      "html": "",
+      "placeholder": "",
+      "input_type": "hidden",
+      "is_time_enabled": null
+     }
+    ]
+   },
+   "12": {
+    "title": "Feedback",
+    "status": "published",
+    "elements": [
+     "select",
+     "input_text",
+     "textarea",
+     "input_email",
+     "input_checkbox"
+    ],
+    "fields": [
+     {
+      "type": "select",
+      "label": "Feedback Type",
+      "required": false,
+      "choices": [
+       "General Feedback",
+       "Website Issue",
+       "Product Inquiry",
+       "Partnership Proposal"
+      ],
+      "html": "",
+      "placeholder": "",
+      "input_type": "",
+      "is_time_enabled": null
+     },
+     {
+      "type": "input_text",
+      "label": "Subject",
+      "required": false,
+      "choices": [],
+      "html": "",
+      "placeholder": "Brief summary of your feedback",
+      "input_type": "text",
+      "is_time_enabled": null
+     },
+     {
+      "type": "textarea",
+      "label": "Description",
+      "required": false,
+      "choices": [],
+      "html": "",
+      "placeholder": "Tell us the details",
+      "input_type": "",
+      "is_time_enabled": null
+     },
+     {
+      "type": "input_email",
+      "label": "Email",
+      "required": false,
+      "choices": [],
+      "html": "",
+      "placeholder": "Leave blank for anonymous",
+      "input_type": "email",
+      "is_time_enabled": null
+     },
+     {
+      "type": "input_checkbox",
+      "label": "Privacy Consent",
+      "required": false,
+      "choices": [
+       "I agree to the Privacy Policy"
+      ],
+      "html": "",
+      "placeholder": "",
+      "input_type": "checkbox",
+      "is_time_enabled": null
+     }
+    ]
+   }
+  },
+  "ff_notification_rows": {
+   "8": 2,
+   "9": 2,
+   "10": 2,
+   "11": 2,
+   "12": 1
+  },
+  "map": {
+   "8": {
+    "imported_form_id": 2,
+    "form_type": "gravityform"
+   },
+   "9": {
+    "imported_form_id": 3,
+    "form_type": "gravityform"
+   },
+   "10": {
+    "imported_form_id": 4,
+    "form_type": "gravityform"
+   },
+   "11": {
+    "imported_form_id": 5,
+    "form_type": "gravityform"
+   },
+   "12": {
+    "imported_form_id": 6,
+    "form_type": "gravityform"
+   }
+  }
+ }
+}

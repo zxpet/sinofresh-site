@@ -2,7 +2,7 @@
 Theme Name: SINO FRESH
 Author: Shandong SINO FRESH Pet Food Co., Ltd.
 Text Domain: sinofresh
-Version: 2.10.79
+Version: 2.10.80
 Requires at least: 6.0
 Requires PHP: 7.4
 License: GNU General Public License v2 or later
@@ -3858,22 +3858,6 @@ body.admin-bar .sf-header.is-sticky {
 
 .sf-cookie-banner__btn--reject:hover {
 	background-color: rgba(255, 255, 255, 0.12);
-}
-
-.sf-cookie-banner__manage {
-	background: none;
-	border: none;
-	padding: 8px 4px;
-	font-size: 13px;
-	color: #ffffff;
-	text-decoration: underline;
-	text-underline-offset: 2px;
-	cursor: pointer;
-	opacity: 0.85;
-}
-
-.sf-cookie-banner__manage:hover {
-	opacity: 1;
 }
 
 /* Floating contact stack — bottom-right column. */

@@ -1,0 +1,980 @@
+{
+    "gf": {
+        "2": {
+            "title": "Get a Quote",
+            "active": true,
+            "fields": [
+                {
+                    "type": "text",
+                    "label": "Company Name",
+                    "required": true,
+                    "choices": []
+                },
+                {
+                    "type": "text",
+                    "label": "Contact Person",
+                    "required": true,
+                    "choices": []
+                },
+                {
+                    "type": "email",
+                    "label": "Email",
+                    "required": true,
+                    "choices": []
+                },
+                {
+                    "type": "select",
+                    "label": "Country",
+                    "required": true,
+                    "choices": [
+                        "United States",
+                        "United Kingdom",
+                        "Germany",
+                        "France",
+                        "Australia",
+                        "Canada",
+                        "Japan",
+                        "Other"
+                    ]
+                },
+                {
+                    "type": "select",
+                    "label": "Interested Dosage Form",
+                    "required": true,
+                    "choices": [
+                        "Soft Chews",
+                        "Tablets",
+                        "Powders",
+                        "Pastes",
+                        "Drops",
+                        "Liquids",
+                        "Fish Oil",
+                        "Dental Chews"
+                    ]
+                },
+                {
+                    "type": "textarea",
+                    "label": "Notes",
+                    "required": false,
+                    "choices": []
+                },
+                {
+                    "type": "checkbox",
+                    "label": "Privacy Consent",
+                    "required": true,
+                    "choices": [
+                        "I agree to the Privacy Policy"
+                    ]
+                },
+                {
+                    "type": "hidden",
+                    "label": "Configuration Summary",
+                    "required": false,
+                    "choices": []
+                }
+            ],
+            "notifications": [
+                {
+                    "to": "sales@zxpet.com",
+                    "subject": "New Inquiry: {Interested Dosage Form:7} from {Company Name:1} ({Country:5})",
+                    "event": "form_submission"
+                },
+                {
+                    "to": "{Email:3}",
+                    "subject": "We've received your inquiry — SINO FRESH",
+                    "event": "form_submission"
+                }
+            ]
+        },
+        "3": {
+            "title": "Request a Sample",
+            "active": true,
+            "fields": [
+                {
+                    "type": "text",
+                    "label": "Company Name",
+                    "required": false,
+                    "choices": []
+                },
+                {
+                    "type": "text",
+                    "label": "Contact Person",
+                    "required": false,
+                    "choices": []
+                },
+                {
+                    "type": "email",
+                    "label": "Email",
+                    "required": false,
+                    "choices": []
+                },
+                {
+                    "type": "phone",
+                    "label": "Phone / WhatsApp",
+                    "required": false,
+                    "choices": []
+                },
+                {
+                    "type": "select",
+                    "label": "Country",
+                    "required": false,
+                    "choices": [
+                        "United States",
+                        "United Kingdom",
+                        "Germany",
+                        "France",
+                        "Australia",
+                        "Canada",
+                        "Japan",
+                        "Other"
+                    ]
+                },
+                {
+                    "type": "select",
+                    "label": "Target Market",
+                    "required": false,
+                    "choices": [
+                        "US",
+                        "EU",
+                        "UK",
+                        "JP",
+                        "AU",
+                        "CA",
+                        "Other"
+                    ]
+                },
+                {
+                    "type": "select",
+                    "label": "Interested Dosage Form",
+                    "required": false,
+                    "choices": [
+                        "Soft Chews",
+                        "Tablets",
+                        "Powders",
+                        "Pastes",
+                        "Drops",
+                        "Liquids",
+                        "Fish Oil",
+                        "Dental Chews"
+                    ]
+                },
+                {
+                    "type": "select",
+                    "label": "Sample Quantity",
+                    "required": false,
+                    "choices": [
+                        "1",
+                        "2",
+                        "3",
+                        "5",
+                        "Custom"
+                    ]
+                },
+                {
+                    "type": "text",
+                    "label": "Flavor Preference",
+                    "required": false,
+                    "choices": []
+                },
+                {
+                    "type": "textarea",
+                    "label": "Shipping Address",
+                    "required": false,
+                    "choices": []
+                },
+                {
+                    "type": "textarea",
+                    "label": "Notes",
+                    "required": false,
+                    "choices": []
+                },
+                {
+                    "type": "checkbox",
+                    "label": "Privacy Consent",
+                    "required": true,
+                    "choices": [
+                        "I agree to the Privacy Policy"
+                    ]
+                }
+            ],
+            "notifications": [
+                {
+                    "to": "sales@zxpet.com",
+                    "subject": "New Sample Request: {Interested Dosage Form:7} from {Company Name:1}",
+                    "event": "form_submission"
+                },
+                {
+                    "to": "{Email:3}",
+                    "subject": "Your sample request — SINO FRESH",
+                    "event": "form_submission"
+                }
+            ]
+        },
+        "4": {
+            "title": "Book a Factory Tour",
+            "active": true,
+            "fields": [
+                {
+                    "type": "text",
+                    "label": "Company Name",
+                    "required": false,
+                    "choices": []
+                },
+                {
+                    "type": "text",
+                    "label": "Contact Person",
+                    "required": false,
+                    "choices": []
+                },
+                {
+                    "type": "email",
+                    "label": "Email",
+                    "required": false,
+                    "choices": []
+                },
+                {
+                    "type": "phone",
+                    "label": "Phone / WhatsApp",
+                    "required": false,
+                    "choices": []
+                },
+                {
+                    "type": "select",
+                    "label": "Country",
+                    "required": false,
+                    "choices": [
+                        "United States",
+                        "United Kingdom",
+                        "Germany",
+                        "France",
+                        "Australia",
+                        "Canada",
+                        "Japan",
+                        "Other"
+                    ]
+                },
+                {
+                    "type": "select",
+                    "label": "Tour Type",
+                    "required": false,
+                    "choices": [
+                        "On-Site",
+                        "Video"
+                    ]
+                },
+                {
+                    "type": "date",
+                    "label": "Preferred Date",
+                    "required": false,
+                    "choices": []
+                },
+                {
+                    "type": "html",
+                    "label": "",
+                    "required": false,
+                    "choices": []
+                },
+                {
+                    "type": "text",
+                    "label": "Job Title",
+                    "required": false,
+                    "choices": []
+                },
+                {
+                    "type": "time",
+                    "label": "Preferred Time",
+                    "required": false,
+                    "choices": []
+                },
+                {
+                    "type": "select",
+                    "label": "Target Market",
+                    "required": false,
+                    "choices": [
+                        "US",
+                        "EU",
+                        "UK",
+                        "JP",
+                        "AU",
+                        "CA",
+                        "Other"
+                    ]
+                },
+                {
+                    "type": "select",
+                    "label": "Interested Dosage Form",
+                    "required": false,
+                    "choices": [
+                        "Soft Chews",
+                        "Tablets",
+                        "Powders",
+                        "Pastes",
+                        "Drops",
+                        "Liquids",
+                        "Fish Oil",
+                        "Dental Chews"
+                    ]
+                },
+                {
+                    "type": "select",
+                    "label": "Number of Visitors",
+                    "required": false,
+                    "choices": [
+                        "1",
+                        "2",
+                        "3",
+                        "4+"
+                    ]
+                },
+                {
+                    "type": "textarea",
+                    "label": "Notes",
+                    "required": false,
+                    "choices": []
+                },
+                {
+                    "type": "checkbox",
+                    "label": "Privacy Consent",
+                    "required": false,
+                    "choices": [
+                        "I agree to the Privacy Policy"
+                    ]
+                }
+            ],
+            "notifications": [
+                {
+                    "to": "sales@zxpet.com",
+                    "subject": "Factory Tour Request: {Tour Type:8} - {Company Name:1}",
+                    "event": "form_submission"
+                },
+                {
+                    "to": "{Email:4}",
+                    "subject": "Factory tour request received — SINO FRESH",
+                    "event": "form_submission"
+                }
+            ]
+        },
+        "5": {
+            "title": "Request COA",
+            "active": true,
+            "fields": [
+                {
+                    "type": "text",
+                    "label": "Company Name",
+                    "required": true,
+                    "choices": []
+                },
+                {
+                    "type": "text",
+                    "label": "Contact Person",
+                    "required": true,
+                    "choices": []
+                },
+                {
+                    "type": "select",
+                    "label": "Country",
+                    "required": true,
+                    "choices": [
+                        "United States",
+                        "United Kingdom",
+                        "Germany",
+                        "France",
+                        "Australia",
+                        "Canada",
+                        "Japan",
+                        "Other"
+                    ]
+                },
+                {
+                    "type": "select",
+                    "label": "Target Market",
+                    "required": false,
+                    "choices": [
+                        "US",
+                        "EU",
+                        "UK",
+                        "JP",
+                        "AU",
+                        "CA",
+                        "Other"
+                    ]
+                },
+                {
+                    "type": "email",
+                    "label": "Email",
+                    "required": true,
+                    "choices": []
+                },
+                {
+                    "type": "select",
+                    "label": "Interested Dosage Form",
+                    "required": false,
+                    "choices": [
+                        "Soft Chews",
+                        "Tablets",
+                        "Powders",
+                        "Pastes",
+                        "Drops",
+                        "Liquids",
+                        "Fish Oil",
+                        "Dental Chews"
+                    ]
+                },
+                {
+                    "type": "checkbox",
+                    "label": "Document Type",
+                    "required": false,
+                    "choices": [
+                        "COA Sample",
+                        "Compliance Package",
+                        "Specification Sheet",
+                        "MSDS",
+                        "Health Certificate"
+                    ]
+                },
+                {
+                    "type": "textarea",
+                    "label": "Notes",
+                    "required": false,
+                    "choices": []
+                },
+                {
+                    "type": "checkbox",
+                    "label": "Privacy Consent",
+                    "required": false,
+                    "choices": [
+                        "I agree to the Privacy Policy"
+                    ]
+                },
+                {
+                    "type": "hidden",
+                    "label": "Certificate",
+                    "required": false,
+                    "choices": []
+                }
+            ],
+            "notifications": [
+                {
+                    "to": "sales@zxpet.com",
+                    "subject": "Document Request: {Company Name:1} ({Country:4})",
+                    "event": "form_submission"
+                },
+                {
+                    "to": "{Email:3}",
+                    "subject": "Your document request — SINO FRESH",
+                    "event": "form_submission"
+                }
+            ]
+        },
+        "6": {
+            "title": "Feedback",
+            "active": true,
+            "fields": [
+                {
+                    "type": "select",
+                    "label": "Feedback Type",
+                    "required": false,
+                    "choices": [
+                        "General Feedback",
+                        "Website Issue",
+                        "Product Inquiry",
+                        "Partnership Proposal"
+                    ]
+                },
+                {
+                    "type": "text",
+                    "label": "Subject",
+                    "required": false,
+                    "choices": []
+                },
+                {
+                    "type": "textarea",
+                    "label": "Description",
+                    "required": false,
+                    "choices": []
+                },
+                {
+                    "type": "email",
+                    "label": "Email",
+                    "required": false,
+                    "choices": []
+                },
+                {
+                    "type": "checkbox",
+                    "label": "Privacy Consent",
+                    "required": false,
+                    "choices": [
+                        "I agree to the Privacy Policy"
+                    ]
+                }
+            ],
+            "notifications": [
+                {
+                    "to": "info@zxpet.com",
+                    "subject": "New Feedback: {Feedback Type:1} — {Subject:2}",
+                    "event": "form_submission"
+                }
+            ]
+        }
+    },
+    "ff": {
+        "1": {
+            "title": "Contact Form Demo",
+            "status": "published",
+            "elements": [
+                "input_name",
+                "input_email",
+                "input_text",
+                "textarea"
+            ],
+            "fields": [
+                {
+                    "type": "input_name",
+                    "label": "",
+                    "required": false,
+                    "choices": []
+                },
+                {
+                    "type": "input_email",
+                    "label": "Email",
+                    "required": true,
+                    "choices": []
+                },
+                {
+                    "type": "input_text",
+                    "label": "Subject",
+                    "required": false,
+                    "choices": []
+                },
+                {
+                    "type": "textarea",
+                    "label": "Your Message",
+                    "required": true,
+                    "choices": []
+                }
+            ]
+        },
+        "2": {
+            "title": "Subscription Form",
+            "status": "published",
+            "elements": [
+                "container"
+            ],
+            "fields": [
+                {
+                    "type": "container",
+                    "label": "",
+                    "required": false,
+                    "choices": []
+                }
+            ]
+        },
+        "3": {
+            "title": "Get a Quote",
+            "status": "published",
+            "elements": [
+                "input_text",
+                "input_text",
+                "input_email",
+                "select",
+                "select",
+                "textarea",
+                "input_checkbox",
+                "input_hidden"
+            ],
+            "fields": [
+                {
+                    "type": "input_text",
+                    "label": "Company Name",
+                    "required": true,
+                    "choices": []
+                },
+                {
+                    "type": "input_text",
+                    "label": "Contact Person",
+                    "required": true,
+                    "choices": []
+                },
+                {
+                    "type": "input_email",
+                    "label": "Email",
+                    "required": true,
+                    "choices": []
+                },
+                {
+                    "type": "select",
+                    "label": "Country",
+                    "required": true,
+                    "choices": []
+                },
+                {
+                    "type": "select",
+                    "label": "Interested Dosage Form",
+                    "required": true,
+                    "choices": []
+                },
+                {
+                    "type": "textarea",
+                    "label": "Notes",
+                    "required": false,
+                    "choices": []
+                },
+                {
+                    "type": "input_checkbox",
+                    "label": "Privacy Consent",
+                    "required": true,
+                    "choices": []
+                },
+                {
+                    "type": "input_hidden",
+                    "label": "",
+                    "required": false,
+                    "choices": []
+                }
+            ]
+        },
+        "4": {
+            "title": "Request a Sample",
+            "status": "published",
+            "elements": [
+                "input_text",
+                "input_text",
+                "input_email",
+                "select",
+                "select",
+                "select",
+                "select",
+                "input_text",
+                "textarea",
+                "textarea",
+                "input_checkbox"
+            ],
+            "fields": [
+                {
+                    "type": "input_text",
+                    "label": "Company Name",
+                    "required": false,
+                    "choices": []
+                },
+                {
+                    "type": "input_text",
+                    "label": "Contact Person",
+                    "required": false,
+                    "choices": []
+                },
+                {
+                    "type": "input_email",
+                    "label": "Email",
+                    "required": false,
+                    "choices": []
+                },
+                {
+                    "type": "select",
+                    "label": "Country",
+                    "required": false,
+                    "choices": []
+                },
+                {
+                    "type": "select",
+                    "label": "Target Market",
+                    "required": false,
+                    "choices": []
+                },
+                {
+                    "type": "select",
+                    "label": "Interested Dosage Form",
+                    "required": false,
+                    "choices": []
+                },
+                {
+                    "type": "select",
+                    "label": "Sample Quantity",
+                    "required": false,
+                    "choices": []
+                },
+                {
+                    "type": "input_text",
+                    "label": "Flavor Preference",
+                    "required": false,
+                    "choices": []
+                },
+                {
+                    "type": "textarea",
+                    "label": "Shipping Address",
+                    "required": false,
+                    "choices": []
+                },
+                {
+                    "type": "textarea",
+                    "label": "Notes",
+                    "required": false,
+                    "choices": []
+                },
+                {
+                    "type": "input_checkbox",
+                    "label": "Privacy Consent",
+                    "required": true,
+                    "choices": []
+                }
+            ]
+        },
+        "5": {
+            "title": "Book a Factory Tour",
+            "status": "published",
+            "elements": [
+                "input_text",
+                "input_text",
+                "input_email",
+                "select",
+                "select",
+                "input_date",
+                "custom_html",
+                "input_text",
+                "input_date",
+                "select",
+                "select",
+                "select",
+                "textarea",
+                "input_checkbox"
+            ],
+            "fields": [
+                {
+                    "type": "input_text",
+                    "label": "Company Name",
+                    "required": false,
+                    "choices": []
+                },
+                {
+                    "type": "input_text",
+                    "label": "Contact Person",
+                    "required": false,
+                    "choices": []
+                },
+                {
+                    "type": "input_email",
+                    "label": "Email",
+                    "required": false,
+                    "choices": []
+                },
+                {
+                    "type": "select",
+                    "label": "Country",
+                    "required": false,
+                    "choices": []
+                },
+                {
+                    "type": "select",
+                    "label": "Tour Type",
+                    "required": false,
+                    "choices": []
+                },
+                {
+                    "type": "input_date",
+                    "label": "Preferred Date",
+                    "required": false,
+                    "choices": []
+                },
+                {
+                    "type": "custom_html",
+                    "label": "",
+                    "required": false,
+                    "choices": []
+                },
+                {
+                    "type": "input_text",
+                    "label": "Job Title",
+                    "required": false,
+                    "choices": []
+                },
+                {
+                    "type": "input_date",
+                    "label": "Preferred Time",
+                    "required": false,
+                    "choices": []
+                },
+                {
+                    "type": "select",
+                    "label": "Target Market",
+                    "required": false,
+                    "choices": []
+                },
+                {
+                    "type": "select",
+                    "label": "Interested Dosage Form",
+                    "required": false,
+                    "choices": []
+                },
+                {
+                    "type": "select",
+                    "label": "Number of Visitors",
+                    "required": false,
+                    "choices": []
+                },
+                {
+                    "type": "textarea",
+                    "label": "Notes",
+                    "required": false,
+                    "choices": []
+                },
+                {
+                    "type": "input_checkbox",
+                    "label": "Privacy Consent",
+                    "required": false,
+                    "choices": []
+                }
+            ]
+        },
+        "6": {
+            "title": "Request COA",
+            "status": "published",
+            "elements": [
+                "input_text",
+                "input_text",
+                "select",
+                "select",
+                "input_email",
+                "select",
+                "input_checkbox",
+                "textarea",
+                "input_checkbox",
+                "input_hidden"
+            ],
+            "fields": [
+                {
+                    "type": "input_text",
+                    "label": "Company Name",
+                    "required": true,
+                    "choices": []
+                },
+                {
+                    "type": "input_text",
+                    "label": "Contact Person",
+                    "required": true,
+                    "choices": []
+                },
+                {
+                    "type": "select",
+                    "label": "Country",
+                    "required": true,
+                    "choices": []
+                },
+                {
+                    "type": "select",
+                    "label": "Target Market",
+                    "required": false,
+                    "choices": []
+                },
+                {
+                    "type": "input_email",
+                    "label": "Email",
+                    "required": true,
+                    "choices": []
+                },
+                {
+                    "type": "select",
+                    "label": "Interested Dosage Form",
+                    "required": false,
+                    "choices": []
+                },
+                {
+                    "type": "input_checkbox",
+                    "label": "Document Type",
+                    "required": false,
+                    "choices": []
+                },
+                {
+                    "type": "textarea",
+                    "label": "Notes",
+                    "required": false,
+                    "choices": []
+                },
+                {
+                    "type": "input_checkbox",
+                    "label": "Privacy Consent",
+                    "required": false,
+                    "choices": []
+                },
+                {
+                    "type": "input_hidden",
+                    "label": "",
+                    "required": false,
+                    "choices": []
+                }
+            ]
+        },
+        "7": {
+            "title": "Feedback",
+            "status": "published",
+            "elements": [
+                "select",
+                "input_text",
+                "textarea",
+                "input_email",
+                "input_checkbox"
+            ],
+            "fields": [
+                {
+                    "type": "select",
+                    "label": "Feedback Type",
+                    "required": false,
+                    "choices": []
+                },
+                {
+                    "type": "input_text",
+                    "label": "Subject",
+                    "required": false,
+                    "choices": []
+                },
+                {
+                    "type": "textarea",
+                    "label": "Description",
+                    "required": false,
+                    "choices": []
+                },
+                {
+                    "type": "input_email",
+                    "label": "Email",
+                    "required": false,
+                    "choices": []
+                },
+                {
+                    "type": "input_checkbox",
+                    "label": "Privacy Consent",
+                    "required": false,
+                    "choices": []
+                }
+            ]
+        }
+    },
+    "ff_notification_rows": {
+        "1": 0,
+        "2": 1,
+        "3": 2,
+        "4": 2,
+        "5": 2,
+        "6": 2,
+        "7": 1
+    },
+    "map": {
+        "3": {
+            "imported_form_id": 2,
+            "form_type": "gravityform"
+        },
+        "4": {
+            "imported_form_id": 3,
+            "form_type": "gravityform"
+        },
+        "5": {
+            "imported_form_id": 4,
+            "form_type": "gravityform"
+        },
+        "6": {
+            "imported_form_id": 5,
+            "form_type": "gravityform"
+        },
+        "7": {
+            "imported_form_id": 6,
+            "form_type": "gravityform"
+        }
+    }
+}

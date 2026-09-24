@@ -93,8 +93,8 @@ ab("set", "viewport", str(VIEWPORT[0]), str(VIEWPORT[1]))
 g = ev(GUARD)
 check("the stylesheet is the preflight copy",
       any("-preflight" in h for h in (g.get("css") or [])), g.get("css"))
-check("the candidate script is the one enqueued (ver=1.1.0)",
-      any("ui-components.js?ver=1.1.0" in s for s in (g.get("js") or [])), g.get("js"))
+check("the candidate script is the one enqueued (ver=1.2.0)",
+      any("ui-components.js?ver=1.2.0" in s for s in (g.get("js") or [])), g.get("js"))
 check("the viewport emulation actually applied",
       g.get("w") == VIEWPORT[0] and g.get("h") == VIEWPORT[1], (g.get("w"), g.get("h")))
 check("the page is /about/ of the real site", g.get("path") == "/about/", g.get("path"))
@@ -150,7 +150,26 @@ s = ev(STATE)
 check("a live record survives a reload and keeps the banner closed",
       s.get("hidden") is True and s.get("body") is False, s)
 
-# --- 7. the withdrawn-locale rule is untouched by this batch ---------------
+# --- 7. the withdraw entry (footer link) ----------------------------------
+s = ev("(function(){var a=document.querySelectorAll('.sf-legal-links a');"
+       "for (var i=0;i<a.length;i++){if(a[i].classList.contains('sf-cookie-preferences'))return 'found';}"
+       "return 'missing';})()")
+check("the footer carries a Cookie Preferences link", s == 'found', s)
+# A live record from step 6 keeps the banner closed; the link must undo it.
+ev("document.querySelector('.sf-cookie-preferences').click(); true")
+s = ev(STATE)
+check("withdraw: the banner re-opens", s.get("hidden") is False, s)
+check("withdraw: the body class is back", s.get("body") is True, s)
+check("withdraw: the record is gone", s.get("version") is None, s)
+s = ev("(function(){var b=document.querySelector('.sf-cookie-banner__btn--accept');"
+       "if(!b)return 'no-button'; b.click(); return 'clicked';})()")
+s2 = ev(STATE)
+check("withdraw: the buttons still answer after reopening",
+      s == 'clicked' and s2.get("version") == 2 and s2.get("hidden") is True, (s, s2))
+check("withdraw: re-accept writes the Consent API cookie as allow again",
+      s2.get("consentCookie") == "allow", s2.get("consentCookie"))
+
+# --- 8. the withdrawn-locale rule is untouched by this batch ---------------
 # Through the public host: an earlier version of this step curled 127.0.0.1 from
 # the workstation, which is not the server, and reported 000 as a failure.
 p = subprocess.run(["curl", "-sS", "-o", "/dev/null", "-w", "%{http_code} %{redirect_url}",

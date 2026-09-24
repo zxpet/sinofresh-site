@@ -34,14 +34,14 @@ add_action('after_setup_theme', function() {
 });
 
 add_action('wp_enqueue_scripts', function() {
-	wp_enqueue_style('sinofresh-style', get_stylesheet_uri(), array(), '2.10.79');
+	wp_enqueue_style('sinofresh-style', get_stylesheet_uri(), array(), '2.10.80');
 	// Sticky nav: every template renders parts/header.html, so this is site-wide.
 	wp_enqueue_script('sinofresh-sticky-header', get_template_directory_uri() . '/assets/js/sticky-header.js', array(), '1.0.0', true);
 	/* Consent decisions are now versioned + time-boxed and bridged into WP
 	   Consent API, so the file itself changed: its own literal moves 1.0.0 ->
 	   1.1.0 (static assets are served immutable for a year, so without a
 	   changed URL returning browsers would keep the old copy). */
-	wp_enqueue_script('sinofresh-ui-components', get_template_directory_uri() . '/assets/js/ui-components.js', array(), '1.1.0', true);
+	wp_enqueue_script('sinofresh-ui-components', get_template_directory_uri() . '/assets/js/ui-components.js', array(), '1.2.0', true);
 	// Mobile nav: collapse the overlay's submenus until their chevron is tapped.
 	wp_enqueue_script('sinofresh-mobile-nav', get_template_directory_uri() . '/assets/js/mobile-nav.js', array(), '1.1.0', true);
 	// Quote CTA smart scroll: in-page form -> smooth scroll, else native /contact/#quote.
