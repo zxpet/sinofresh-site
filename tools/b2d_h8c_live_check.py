@@ -71,8 +71,10 @@ CARDS = [('/services/oem/', 'OEM \u2014 You Bring the Formula'),
           'Contract Manufacturing \u2014 You Own the IP'),
          ('/services/private-label/',
           'Private Label \u2014 Pick From Our Proven Formulas')]
-# The overview's own headings, all six, named rather than counted: a bare count
-# cannot tell a renamed band from a deleted one.
+# The overview's own headings, all eight, named rather than counted: a bare
+# count cannot tell a renamed band from a deleted one. Batch 3b added the two
+# capability bands in the middle, so this list is a batch-3b artefact as much
+# as an H8c one.
 OVERVIEW_H2 = ['OEM or ODM \u2014 Choose Your Path',
                'Key Facts: MOQ, Lead Time, Payment & Trade Terms',
                'What We Handle \u2014 R&D, Compliance & Export Documentation',
