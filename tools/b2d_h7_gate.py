@@ -2483,7 +2483,13 @@ def negctl(decl, base, cand, theme, verbose=True):
         # check that survives its own sabotage is a check that cannot fail, and
         # the CSS-order claim in particular only exists because H7b shipped the
         # dead-step version of it.
-        for label, rel, needle, replacement in decl.get('nc_source', []):
+        for entry in decl.get('nc_source', []):
+            label, rel, needle, replacement = entry[:4]
+            # The 5th element, when given, NAMES the source assertion the
+            # mutation is supposed to break. "It fired" is not "it fired for the
+            # stated reason" — this gate's own history has a control that went
+            # green for a check nobody was aiming at.
+            owner = entry[4] if len(entry) > 4 else None
             t = _clone(theme, os.path.join(work, 'theme'))
             p = os.path.join(t, rel)
             before = read(p)
@@ -2495,7 +2501,15 @@ def negctl(decl, base, cand, theme, verbose=True):
                 continue
             _write(p, after)
             r = source_checks(decl, t, verbose=False)
-            report(label, not r['ok'])
+            if not r['ok']:
+                if owner is None:
+                    report(label, True)
+                else:
+                    failed = [row['label'] for row in r['rows'] if not row['ok']]
+                    report(label, owner in failed,
+                           'wanted %r among %r' % (owner, failed))
+            else:
+                report(label, False, 'the sabotage survived')
 
         # NC11/NC12 — the page-scoped counts and the order claim are each
         # breakable by a page edit the MAIN PROOF cannot see, for the same
@@ -6525,6 +6539,774 @@ def source_checks(decl, theme, verbose=True):
     return {'ok': ok, 'rows': rows}
 
 
+# ------------------------------------------------------------------- batch h8c
+
+# The four cooperation-model cards on /services/ and the detail page each one
+# points at. Both halves live in one table, so a card that links somewhere else
+# cannot be declared without editing this line.
+H8C_CARDS = (
+    ('OEM &#8212; You Bring the Formula', '/services/oem/'),
+    ('ODM &#8212; We Develop From Your Idea', '/services/odm/'),
+    ('Contract Manufacturing &#8212; You Own the IP', '/services/contract-manufacturing/'),
+    ('Private Label &#8212; Pick From Our Proven Formulas', '/services/private-label/'),
+)
+
+# The transform is handed a page's bytes and nothing else, and the two headings
+# it must NOT touch stand verbatim on two other pages — the front page and its
+# zh twin draw them in a two-card teaser band. The scope is therefore read off
+# the page: `sf-keyfacts` is the overview's own table and sits on exactly one of
+# the 75 pages (declared in `unmoved`). Unscoped, this transform would wrap the
+# teaser's headings too, which is sabotage mutant #6 in the matrix.
+H8C_SCOPE = 'sf-keyfacts'
+
+
+def _h8c_transform(text):
+    """Batch H8c's declared edit: the four cooperation-model cards on the
+    overview become links to their own detail pages.
+
+    The anchor goes INSIDE the existing <h3>, so the link text is the card's own
+    name — a real label, one tab stop — while the theme's existing stretched-link
+    rule (.sf-card__title-link::after, already carrying the front page's article
+    cards) stretches the hit area over the whole card. Not one byte of CSS
+    changes, and no JS is involved.
+    """
+    if H8C_SCOPE not in text:
+        return text, 0
+    n = 0
+    for label, href in H8C_CARDS:
+        old = '<h3 class="wp-block-heading">%s</h3>' % label
+        new = ('<h3 class="wp-block-heading"><a class="sf-card__title-link" '
+               'href="%s">%s</a></h3>' % (href, label))
+        k = text.count(old)
+        if k:
+            text = text.replace(old, new)
+            n += k
+    return text, n
+
+
+def _h8c_partial(skip=(), retarget=None):
+    """Links all but `skip` of the cards, optionally pointing one of them at the
+    wrong page. Sabotage matrix only."""
+    def f(text):
+        if H8C_SCOPE not in text:
+            return text, 0
+        n = 0
+        for label, href in H8C_CARDS:
+            if label in skip:
+                continue
+            if retarget and retarget[0] == label:
+                href = retarget[1]
+            old = '<h3 class="wp-block-heading">%s</h3>' % label
+            new = ('<h3 class="wp-block-heading"><a class="sf-card__title-link" '
+                   'href="%s">%s</a></h3>' % (href, label))
+            k = text.count(old)
+            if k:
+                text = text.replace(old, new)
+                n += k
+        return text, n
+    return f
+
+
+def _h8c_unscoped(text):
+    """The same transform with its scope removed: the front page's teaser cards
+    get links too. Sabotage matrix only — the point of the mutant is that the
+    scope is load-bearing rather than tidiness."""
+    n = 0
+    for label, href in H8C_CARDS:
+        old = '<h3 class="wp-block-heading">%s</h3>' % label
+        new = ('<h3 class="wp-block-heading"><a class="sf-card__title-link" '
+               'href="%s">%s</a></h3>' % (href, label))
+        k = text.count(old)
+        if k:
+            text = text.replace(old, new)
+            n += k
+    return text, n
+
+
+def _h8c_swap_href(text):
+    """Points the OEM card one slug over — a page edit neither the mask nor the
+    h2 count can see. NC-page only."""
+    return text.replace('href="/services/oem/"', 'href="/services/oem-2/"', 1)
+
+
+def _h8c_link_one_more(text):
+    """Turns a fifth heading on the overview into a card link, which is what a
+    transform that walked the wrong set of headings would produce."""
+    return text.replace('<h3 class="wp-block-heading">R&amp;D &amp; Formulation</h3>',
+                        '<h3 class="wp-block-heading"><a class="sf-card__title-link"'
+                        ' href="/services/oem/">R&amp;D &amp; Formulation</a></h3>', 1)
+
+
+def _h8c_link_teaser(text):
+    """Wraps the teaser's own heading, the thing the batch deliberately did not
+    do. NC-page only."""
+    return text.replace('<h3 class="wp-block-heading">OEM &#8212; You Bring the Formula</h3>',
+                        '<h3 class="wp-block-heading"><a class="sf-card__title-link"'
+                        ' href="/services/oem/">OEM &#8212; You Bring the Formula</a></h3>', 1)
+
+
+# The four routes this batch creates, with the copy each one must carry. Read by
+# the `new_pages` pass below.
+H8C_NEW_ROUTES = {
+    'services__oem.html': {
+        'path':  '/services/oem/',
+        'title': 'OEM Manufacturing &#8211; sinofresh',
+        'crumb': 'OEM Manufacturing',
+        'h1':    'OEM Manufacturing &#8212; You Bring the Formula',
+    },
+    'services__odm.html': {
+        'path':  '/services/odm/',
+        'title': 'ODM Development &#8211; sinofresh',
+        'crumb': 'ODM Development',
+        'h1':    'ODM Development &#8212; We Develop From Your Idea',
+    },
+    'services__contract-manufacturing.html': {
+        'path':  '/services/contract-manufacturing/',
+        'title': 'Contract Manufacturing &#8211; sinofresh',
+        'crumb': 'Contract Manufacturing',
+        'h1':    'Contract Manufacturing &#8212; You Own the IP',
+    },
+    'services__private-label.html': {
+        'path':  '/services/private-label/',
+        'title': 'Private Label &#8211; sinofresh',
+        'crumb': 'Private Label',
+        'h1':    'Private Label &#8212; Pick From Our Proven Formulas',
+    },
+}
+
+# The region of /services/ the four new pages repeat verbatim: the commercial
+# terms table and the two lines above it. Anchored on the content, not on the
+# band's wrapper — the wrapper's background differs on purpose (the overview
+# alternates its bands differently), so a claim written on the wrapper would be
+# asserting the wrong object.
+H8C_KEYFACTS_ANCHOR = 'Key Facts: MOQ, Lead Time, Payment &amp; Trade Terms'
+
+
+def _h8c_keyfacts_region(text):
+    """The overview's commercial-terms block, read off a SERVED page.
+
+    Anchored on the rendered markup, not on a block comment: WordPress renders
+    these pages with no `<!-- wp:` comments at all (measured 0 occurrences on
+    the candidate's /services/), so an anchor written on `<!-- wp:heading`
+    would return None on every page — and a claim that cannot find its region
+    is not a claim. The region runs from the band's own <h2> to the table's
+    closing tag, so it covers the heading, the lead line and the rows, and
+    stops before the band wrapper (whose background differs by design — the
+    overview alternates its bands differently from the four detail pages).
+    """
+    i = text.find(H8C_KEYFACTS_ANCHOR)
+    if i < 0:
+        return None
+    s = text.rfind('<h2', 0, i)
+    j = text.find('</table>', i)
+    if s < 0 or j < 0:
+        return None
+    return text[s:j + len('</table>')]
+
+
+def _h8c_norm_baseline(text, crumb):
+    """Blank the route's OWN identity out of a render, by NAMING its carriers.
+
+    The claim this feeds: before the batch, the theme drew all four routes with
+    one generic page and nothing about the model appeared in it. What varies
+    between the four renders is the route's identity, and the theme prints it in
+    exactly four carriers, every one of them generated from the page being
+    rendered: <title>, the BreadcrumbList's ListItem names, the breadcrumb's
+    `aria-current` span, and the <h1>.
+
+    Naming the carriers instead of replacing the name wherever it appears is not
+    tidiness. On /services/private-label/ the name is ALSO a substring of a
+    constant the Organization node publishes on all four pages —
+    `"Private Label Pet Supplements"` — so a blanket replace takes the same
+    bytes out of one page's constant only, and the normalisation MANUFACTURES
+    the difference the claim exists to rule out. Measured: the blanket version
+    put the four renders into two groups, three and one; this one puts them in
+    one.
+
+    The rest of the stripping is the route's own id and URL, which WordPress and
+    wp_statistics print in the body class, in canonical/og:url, and in their own
+    page-scoped analytics fields.
+    """
+    def blank_in(m):
+        s = m.group(0)
+        return s.replace(crumb, '\u00a7CRUMB\u00a7') if crumb in s else s
+
+    for pat in (r'<title>[^<]*</title>',
+                r'<h1[^>]*>[^<]*</h1>',
+                r'aria-current="page">[^<]*</span>',
+                r'"position":\d+,"name":"[^"]*"'):
+        text = re.sub(pat, blank_in, text)
+
+    t = text
+    t = re.sub(r'pages/\d+', 'pages/\u00a7ID\u00a7', t)
+    t = re.sub(r'\?p=\d+', '?p=\u00a7ID\u00a7', t)
+    # The body class carries the page id too, and it is the FIRST difference the
+    # four renders show up on — `pages/217` alone does not blank it.
+    t = re.sub(r'page-id-\d+', 'page-id-\u00a7ID\u00a7', t)
+    # wp_statistics prints its own page-scoped hit id and a per-page signature,
+    # both of which differ between four routes that are otherwise the same page.
+    t = re.sub(r'"source_id":\d+', '"source_id":\u00a7ID\u00a7', t)
+    t = re.sub(r'"signature":"[0-9a-f]+"', '"signature":"\u00a7SIG\u00a7"', t)
+    t = re.sub(r'services%2F[a-z\-]+%2F', '\u00a7ROUTE\u00a7', t)
+    t = re.sub(r'/services/[a-z\-]+/', '\u00a7ROUTE\u00a7', t)
+    t = re.sub(r'"services/[a-z\-]+"', '"\u00a7ROUTE\u00a7"', t)
+    return t
+
+
+def _h8c_neutral(text, crumb):
+    """A render with the route's own identity and the per-render noise gone.
+
+    Two claims are made on this form rather than on the raw bytes, and both need
+    the same stripping: the four baseline renders were one page (so what still
+    differs must be the route's identity, nothing else), and the four candidate
+    renders share one document shell (so what still differs inside the shell
+    must again be the route's identity). The per-render noise — Cloudflare's
+    email-obfuscation hex, Gravity Forms' nonces — is what the site-wide mask
+    already removes for the 75-page comparison; reusing it here keeps one
+    definition of "noise" instead of a second one that could disagree.
+    """
+    return mask(_h8c_norm_baseline(text, crumb))[0]
+
+
+def new_pages(decl, base_new, cand_new, base, cand, verbose=True):
+    """The four routes the batch creates, proven against the state that had none.
+
+    They cannot go through `main_proof`: that pass transforms the BASELINE and
+    requires the result to equal the candidate, and the baseline render of these
+    routes is a generic page. Making the transform build a whole page from one
+    would mean teaching the gate to render, and a gate that renders is a gate
+    that can agree with a broken renderer. So the claim is made here, on the two
+    captures and on the served bytes alone:
+
+      * BEFORE — the theme drew all four routes with ONE generic page: carrying
+        none of the payload, and identical to each other once the route's own
+        identity is blanked out.
+      * AFTER — each carries its own payload (its own h1, its own third-level
+        breadcrumb, its own three FAQ pairs), the four agree byte-for-byte
+        wherever the batch says they must, and they disagree wherever they must.
+    """
+    spec = decl['new_pages']
+    routes = spec['routes']
+    ok = True
+    rows = []
+
+    def add(label, good, detail=''):
+        nonlocal ok
+        ok &= bool(good)
+        rows.append({'label': label, 'ok': bool(good), 'detail': detail})
+        if verbose:
+            print('  %-62s %s%s' % (label, 'ok' if good else 'FAIL',
+                                    ('  ' + detail) if detail else ''))
+
+    bl, cd = {}, {}
+    for name in sorted(routes):
+        pb = os.path.join(base_new, name)
+        pc = os.path.join(cand_new, name)
+        if not (os.path.isfile(pb) and os.path.isfile(pc)):
+            add('captured on both sides: %s' % name, False,
+                'base=%s cand=%s' % (os.path.isfile(pb), os.path.isfile(pc)))
+            continue
+        bl[name] = read(pb)
+        cd[name] = read(pc)
+    if len(bl) != len(routes) or len(cd) != len(routes):
+        return {'ok': False, 'rows': rows}
+
+    # --- BEFORE -----------------------------------------------------------
+    for name in sorted(routes):
+        counts = {needle: bl[name].count(needle)
+                  for needle in spec['baseline_absent']}
+        add('before: %s carries none of the payload' % routes[name]['path'],
+            all(v == 0 for v in counts.values()), str(counts))
+
+    norms = {name: _h8c_neutral(bl[name], routes[name]['crumb'])
+             for name in routes}
+    uniq = len(set(norms.values()))
+    add('before: the four routes were one generic page, re-titled per route',
+        uniq == 1, 'distinct renders after blanking the route = %d' % uniq)
+
+    # --- AFTER ------------------------------------------------------------
+    for name in sorted(routes):
+        r = routes[name]
+        c = cd[name]
+        bad = {}
+        for needle, want in spec['candidate_counts']:
+            got = c.count(needle)
+            if got != want:
+                bad[needle] = 'got %d want %d' % (got, want)
+        add('after: %s carries the declared payload' % r['path'],
+            not bad, str(bad) if bad else '')
+
+        # Each name is asserted through the element that CARRIES it, not as a
+        # bare substring: "OEM Manufacturing" is also inside the <title>, the
+        # Service node's name, the h1 and the band-1 h2, which is why a bare
+        # count runs to 5-7 and says nothing. These three needles each pick out
+        # exactly one element, and each is the element the corresponding
+        # schema node is generated from.
+        ident = {}
+        for key, needle in (('title', '<title>%s</title>' % r['title']),
+                            ('h1', '>%s</h1>' % r['h1']),
+                            ('crumb', 'aria-current="page">%s</span>' % r['crumb'])):
+            got = c.count(needle)
+            if got != 1:
+                ident[key] = 'x%d' % got
+        add('...and names itself exactly once in title, breadcrumb and h1',
+            not ident, str(ident) if ident else '')
+
+    for key in ('h1', 'crumb'):
+        vals = [routes[n][key] for n in sorted(routes)]
+        add('after: the four %s values are pairwise distinct' % key,
+            len(set(vals)) == len(vals))
+
+    # --- the four agree where they must ----------------------------------
+    ref = None
+    ref_path = os.path.join(cand, spec['keyfacts_ref'])
+    if os.path.isfile(ref_path):
+        ref = _h8c_keyfacts_region(read(ref_path))
+    if ref is None:
+        add('the commercial-terms region could not be read from %s'
+            % spec['keyfacts_ref'], False)
+    else:
+        bad = []
+        for name in sorted(routes):
+            got = _h8c_keyfacts_region(cd[name])
+            if got != ref:
+                bad.append(name)
+        add('the four pages repeat the overview\'s commercial terms verbatim',
+            not bad, ','.join(bad))
+
+    for label, s, e in spec['shell']:
+        vals, unmatched = set(), 0
+        for name in sorted(routes):
+            t = _h8c_neutral(cd[name], routes[name]['crumb'])
+            i = t.find(s)
+            j = t.find(e, i + len(s)) if i >= 0 else -1
+            if i < 0 or j < 0:
+                unmatched += 1
+                continue
+            vals.add(t[i:j + len(e)])
+        # `unmatched` is the half that matters: a shell claim whose anchors are
+        # not on the page would otherwise compare two empty strings and pass.
+        add('the %s is identical on all four' % label,
+            unmatched == 0 and len(vals) == 1,
+            'unmatched=%d distinct=%d' % (unmatched, len(vals)))
+
+    # --- the JSON-LD each page must carry --------------------------------
+    for name in sorted(routes):
+        r = routes[name]
+        blocks = []
+        for raw in json_blocks(cd[name]):
+            try:
+                blocks.append(json.loads(raw))
+            except ValueError:
+                add('after: %s has a parseable JSON-LD block' % r['path'], False)
+                blocks = None
+                break
+        if blocks is None:
+            continue
+        svc = [b for b in blocks if b.get('@type') == 'Service']
+        crumb = [b for b in blocks if b.get('@type') == 'BreadcrumbList']
+        faq = [b for b in blocks if b.get('@type') == 'FAQPage']
+        good = (len(svc) == 1 and len(crumb) == 1 and len(faq) == 1)
+        add('after: %s publishes one Service, one BreadcrumbList, one FAQPage'
+            % r['path'], good,
+            'service=%d breadcrumb=%d faq=%d' % (len(svc), len(crumb), len(faq)))
+        if not good:
+            continue
+        # The Service node's name is the page's own H1 — the same
+        # single-source-of-truth rule the parent page has always followed.
+        add('...whose Service name is that page\'s own h1',
+            svc[0].get('name') == r['h1'].replace('&#8212;', '\u2014'),
+            repr(svc[0].get('name')))
+        add('...and which points at the one Organization node',
+            isinstance(svc[0].get('provider'), dict)
+            and svc[0]['provider'].get('@id', '').endswith('/#organization'))
+        items = crumb[0].get('itemListElement') or []
+        add('...and whose breadcrumb has three levels ending on the page itself',
+            len(items) == 3 and items[2].get('name') == r['crumb'],
+            'levels=%d last=%r' % (len(items), items[2].get('name') if len(items) > 2 else None))
+        add('...with the middle level pointing at the overview',
+            len(items) > 1 and str(items[1].get('item', '')).endswith('/services/'),
+            str(items[1].get('item', '')) if len(items) > 1 else '')
+        qs = [q.get('name') for q in (faq[0].get('mainEntity') or [])]
+        add('...and three FAQ answers, none of them a repeat',
+            len(qs) == 3 and len(set(qs)) == 3, 'questions=%d' % len(qs))
+
+        # The rail is why the toc whitelist had to be extended.
+        add('...and the page loads the on-this-page rail',
+            'assets/js/toc-nav.js' in cd[name])
+
+    # --- and the overview now points at them -----------------------------
+    svc_path = os.path.join(cand, spec['keyfacts_ref'])
+    if os.path.isfile(svc_path):
+        t = read(svc_path)
+        got = {href: t.count('href="%s"' % href)
+               for _, href in H8C_CARDS}
+        add('the overview links all four models, each exactly once',
+            all(v == 1 for v in got.values()), str(got))
+    else:
+        add('the overview page could not be read from %s' % spec['keyfacts_ref'],
+            False)
+
+    if verbose:
+        print('  %s  new routes: the four pages exist, agree where declared, '
+              'and the baseline had none' % ('PASS' if ok else 'FAIL'))
+    return {'ok': ok, 'rows': rows}
+
+
+BATCHES['h8c'] = {
+    'name': "H8c — the four cooperation models get their own detail pages, and "
+            "the overview's cards point at them",
+    'mode': 'insert',
+    'tokens': [
+        ('?ver=2.10.75', '?ver=2.10.76'),                      # style.css
+    ],
+    # Four edits, all on the overview: one anchor per cooperation-model card.
+    # The transform is scoped to the one page carrying `sf-keyfacts`, because the
+    # front page and its zh twin stand two of these same headings in a teaser
+    # band that this batch deliberately leaves alone.
+    'applies': 4,
+    'transform': _h8c_transform,
+    'coverage': [
+        ('?ver=2.10.75', 0),
+        # These two headings are on the overview and on no other page, so they
+        # can be asserted absent outright. The other two cannot: they also stand
+        # (unlinked, and staying that way) on the front page and its zh twin —
+        # see `counts`, where the move is 3 -> 2 rather than 1 -> 0.
+        ('<h3 class="wp-block-heading">Contract Manufacturing &#8212; You Own the IP</h3>', 0),
+        ('<h3 class="wp-block-heading">Private Label &#8212; Pick From Our Proven Formulas</h3>', 0),
+    ],
+    'insertions': [
+        ('?ver=2.10.76', 75),
+        ('<h3 class="wp-block-heading"><a class="sf-card__title-link"', 4),
+    ],
+    'counts': [
+        # Zero on the baseline: no page referenced these routes before, because
+        # the routes did not exist. The rows below are also what makes the four
+        # links pointed at four DIFFERENT pages rather than four copies of one.
+        ('the OEM card points at its own detail page', 'href="/services/oem/"', 0, 1),
+        ('the ODM card points at its own', 'href="/services/odm/"', 0, 1),
+        ('the Contract card points at its own',
+         'href="/services/contract-manufacturing/"', 0, 1),
+        ('the Private Label card points at its own',
+         'href="/services/private-label/"', 0, 1),
+        # The stretched-link class the theme already owns: three article cards on
+        # the front page and three on its zh twin before, plus these four.
+        ('the stretched-link class, already used by the front page\'s articles',
+         'class="sf-card__title-link"', 6, 10),
+        # Which headings were wrapped, stated on the heading itself. Two of the
+        # four titles stand on three pages each, and only the overview's copy is
+        # wrapped — 3 -> 2, not 1 -> 0. The other two are the overview's alone.
+        ('the OEM heading as an unlinked card title',
+         '<h3 class="wp-block-heading">OEM &#8212; You Bring the Formula</h3>', 3, 2),
+        ('...and the ODM one, which the teaser band also carries',
+         '<h3 class="wp-block-heading">ODM &#8212; We Develop From Your Idea</h3>', 3, 2),
+        ('the Contract heading, which only the overview carries',
+         '<h3 class="wp-block-heading">Contract Manufacturing &#8212; You Own the IP</h3>', 1, 0),
+        ('...and the Private Label one likewise',
+         '<h3 class="wp-block-heading">Private Label &#8212; Pick From Our Proven Formulas</h3>', 1, 0),
+        # A heading tag stays a heading tag: the batch wraps four and creates
+        # none, so the site's heading inventory is unchanged.
+        ('the h3 headings the site draws', '<h3 class="wp-block-heading">', 839, 839),
+        # The teaser band itself, by its own class.
+        ('the card boxes on the site', 'sf-card--roomy', 34, 34),
+    ],
+    'unmoved': [
+        ('the cookie banner', r'class="sf-cookie-banner"', 75),
+        ('the float stack', r'class="sf-float-stack"', 75),
+        ('the navigation', r'wp-block-navigation', 75),
+        # The overview table that scopes the transform, and the reason that scope
+        # is safe to read off a page: there is exactly one such page.
+        ('the overview\'s commercial-terms table', r'sf-keyfacts', 1),
+        ('the second-level breadcrumbs', r'sf-breadcrumb--d2', 15),
+        ('...and the third-level ones only the dosage pages carry',
+         r'sf-breadcrumb--d3', 16),
+        ('the FAQ accordions', r'sf-faq__item', 67),
+        ('the third-party card wall', r'sf-card ', 4),
+        ('the dosage configurator', r'sf-fdetail-config', 42),
+        ('the engagement band, shared with the front page', r'\bsf-oem\b', 3),
+    ],
+    'per_page': [
+        ('h1', r'<h1[ >]', 1),
+        ('the new style token', r'style\.css\?ver=2\.10\.76', 1),
+    ],
+    'scoped': [
+        # NOT written on `class="sf-card__title-link"`: that class already had a
+        # carrier before this batch (the front page's and /zh/'s three article
+        # cards), so a per-page count of it over ALL pages would be 3 there and
+        # 4 on the overview. The claim that is specific to this batch is the
+        # combination of the two — the stretched-link class AND one of the four
+        # new routes — and that combination has no carrier on any other page.
+        ('the overview links all four models and no other page links any',
+         r'href="/services/(oem|odm|contract-manufacturing|private-label)/"',
+         lambda n: n == 'services', 4),
+        ('...and the anchor pattern this batch writes exists only there',
+         '<h3 class="wp-block-heading"><a class="sf-card__title-link"',
+         lambda n: n == 'services', 4),
+        # The front page and /zh/ draw two of the same card titles in their own
+        # teaser band, unlinked. This is the claim that the batch stopped at the
+        # overview, made on the served bytes rather than on intent.
+        ('the teaser cards on the front page keep their unlinked headings',
+         '<h3 class="wp-block-heading">OEM &#8212; You Bring the Formula</h3>',
+         lambda n: n in ('root', 'zh'), 1),
+    ],
+    'corroborated': [
+        # One link per card, with the CARD COUNT read off the baseline instead of
+        # taken from the side being checked: a heading wrapped twice, or a fifth
+        # heading wrapped, would move the candidate off the number of card boxes
+        # the baseline actually drew on the overview.
+        #
+        # Everywhere else the class already had a carrier (three article cards on
+        # the front page, three on /zh/), so the expectation there is the page's
+        # own baseline count — the weaker claim that this batch did not move it,
+        # which is the strongest one available on a page whose cards this batch
+        # never touched.
+        ('one link per cooperation-model card (cards counted on the baseline)',
+         'class="sf-card__title-link"',
+         lambda b, n: counts_of(
+             read(os.path.join(b, n + '.html')),
+             r'<div class="wp-block-group sf-card sf-card--roomy'
+             if n == 'services' else r'class="sf-card__title-link"')),
+    ],
+    'order': [
+        # With `insert` the payload IS compared, so this is not the H7c blind
+        # spot — it is the cheaper half of the same claim: the four anchors stand
+        # in the order the four cards are drawn, so no card can be pointed at a
+        # neighbour's page while all four hrefs are still present.
+        ('the OEM link comes before the ODM one',
+         'href="/services/oem/"', 'href="/services/odm/"', lambda n: n == 'services'),
+        ('...ODM before Contract Manufacturing',
+         'href="/services/odm/"', 'href="/services/contract-manufacturing/"',
+         lambda n: n == 'services'),
+        ('...and Contract Manufacturing before Private Label',
+         'href="/services/contract-manufacturing/"', 'href="/services/private-label/"',
+         lambda n: n == 'services'),
+    ],
+    'h2_delta': None,
+    # The overview's own Service node is byte-for-byte what it has always been —
+    # the batch adds four entries to the lookup table in the hook without
+    # touching the parent's. `None` here means the JSON-LD of all 75 pages is
+    # required to be deep-equal, which is exactly that claim.
+    'jsonld_delta': None,
+    'sources': {
+        'tpl_svc': 'templates/page-services.html',
+        'tpl_oem': 'templates/page-oem.html',
+        'tpl_odm': 'templates/page-odm.html',
+        'tpl_con': 'templates/page-contract-manufacturing.html',
+        'tpl_pri': 'templates/page-private-label.html',
+    },
+    'reinject': ('an unlinked card heading put back on the overview fails coverage',
+                 'services.html',
+                 '<a class="sf-card__title-link" href="/services/oem/">',
+                 '<h3 class="wp-block-heading">OEM &#8212; You Bring the Formula</h3>'),
+    'delete': ("the overview's Private Label link removed fails coverage",
+               'services.html',
+               '<a class="sf-card__title-link" href="/services/private-label/">'),
+    'nc13_mode': 'sighted',
+    'nc13_label': ('NC13 the insert direction SEES a card link renamed, '
+                   'and coverage confirms it'),
+    'matrix': [
+        ('the tokens are not folded', {'tokens': []}, None),
+        ('only three of the four cards link',
+         {'transform': _h8c_partial(skip=('Private Label &#8212; Pick From Our Proven Formulas',)),
+          'applies': 3}, None),
+        ('the Contract card points at the ODM page',
+         {'transform': _h8c_partial(
+             retarget=('Contract Manufacturing &#8212; You Own the IP', '/services/odm/'))},
+         None),
+        ('the run count is declared one short', {'applies': 3}, None),
+        ('nothing is applied at all',
+         {'transform': (lambda t: (t, 0)), 'applies': 0}, None),
+        # The scope is load-bearing: without it the front page's teaser cards get
+        # links too, and the overview's own four are no longer the whole story.
+        ('the transform reaches the front page\'s teaser band as well',
+         {'transform': _h8c_unscoped, 'applies': 6}, None),
+    ],
+    # Each entry may carry a 5th element: the label of the source assertion the
+    # mutation is supposed to break. Every entry here names one, because these
+    # controls exist to show that a NAMED claim is load-bearing, and "some claim
+    # went red" does not show that.
+    'nc_source': [
+        ('NC-src the source pass fails when the stylesheet keeps its old version',
+         'style.css', 'Version: 2.10.76', 'Version: 2.10.75',
+         'style.css declares 2.10.76'),
+        ('NC-src ...and when the enqueue keeps its own',
+         'functions.php', "array(), '2.10.76');", "array(), '2.10.75');",
+         'functions.php enqueues 2.10.76 for style.css'),
+        # The rail: without these four slugs the new pages get no dot rail, and
+        # nothing about the served bytes would say so.
+        ('NC-src ...and when the toc whitelist drops the new pages',
+         'functions.php',
+         "'services', 'oem', 'odm', 'contract-manufacturing', 'private-label'",
+         "'services'",
+         'the four new pages are on the on-this-page rail\'s whitelist'),
+        # The schema: back to one hard-coded page.
+        ('NC-src ...and when the Service schema hard-codes the overview again',
+         'functions.php',
+         "if (is_admin() || defined('REST_REQUEST') || !is_page()) {",
+         "if (is_admin() || defined('REST_REQUEST')) {\n\t\treturn;\n\t}\n\tif (!is_page('services')) {",
+         '...and no longer hard-codes the overview'),
+        # The cards: every one of them, and the scope that keeps the teaser
+        # alone.
+        ('NC-src ...and when the OEM card stops linking',
+         'templates/page-services.html',
+         '<a class="sf-card__title-link" href="/services/oem/">', '<span>',
+         'the OEM card is a stretched link to its own page'),
+        ('NC-src ...and when the Contract card points one slug over',
+         'templates/page-services.html',
+         'href="/services/contract-manufacturing/"', 'href="/services/odm/"',
+         '...and so are the Contract and Private Label cards'),
+        ('NC-src ...and when the overview stops publishing its terms table',
+         'templates/page-services.html',
+         '<table class="sf-keyfacts">', '<table class="sf-terms">',
+         'the overview still publishes that table itself'),
+        # The detail pages themselves.
+        ('NC-src ...and when a detail page drops to a two-level breadcrumb',
+         'templates/page-oem.html', 'sf-breadcrumb--d3', 'sf-breadcrumb--d2',
+         'every detail page opens at the third breadcrumb level'),
+        ('NC-src ...and when a detail page stops naming its parent',
+         'templates/page-odm.html',
+         'sf-breadcrumb__crumb--mid" href="/services/">OEM/ODM Services</a>', '',
+         'the ODM page\'s breadcrumb names the overview too'),
+        # The needle is the Trade Terms ROW, not the <table> class: the assertion
+        # this control owns is the verbatim-repeat claim, and a mutant that
+        # renames the table's class leaves that row exactly where it was. An
+        # earlier version of this entry did rename the class, and the control
+        # went red for the honest reason that nothing it touched was asserted.
+        ('NC-src ...and when a detail page loses its commercial terms',
+         'templates/page-contract-manufacturing.html',
+         '<tr><td>Trade Terms</td><td>FOB / CIF / EXW / DDP</td></tr>',
+         '<tr><td>Trade Terms</td><td>FOB</td></tr>',
+         '...which the other three repeat verbatim'),
+        # The CLASS TOKEN, not the whole open tag: one of the three pairs in this
+        # template is written with a bare ` open` attribute
+        # (`class="wp-block-details sf-faq__item" open>`), so a needle that
+        # demands `>` right after the closing quote matches only two of the
+        # three — the mutant then leaves the assertion true and the control
+        # reports "the sabotage survived". Measured, it cost one round.
+        ('NC-src ...and when a detail page loses its FAQ markup',
+         'templates/page-private-label.html',
+         lambda t: t.replace('class="wp-block-details sf-faq__item"',
+                             'class="wp-block-details"'),
+         '',
+         'every detail page carries the FAQ the schema generator reads'),
+    ],
+    'nc_page': [
+        # Claims the MAIN PROOF cannot see, each owned by a clause that reads the
+        # counts rather than the payload's position.
+        ('NC-page the invariants fail when a card points at a page that is not there',
+         'services.html', _h8c_swap_href),
+        ('NC-page ...and when a fifth heading becomes a card link',
+         'services.html', _h8c_link_one_more),
+        ('NC-page ...and when the front page\'s teaser is linked as well',
+         'root.html', _h8c_link_teaser),
+    ],
+    'nc_blind': ('services.html', 'class="sf-card__title-link"',
+                 'class="sf-card__titlelink"'),
+    'source': [
+        ('style.css declares 2.10.76', 'css', r'(?m)^Version: 2\.10\.76$', True),
+        # Read on the RAW bytes: the theme header lives inside a `/* */` block
+        # and the comment-blanked twin has it erased, so this claim written on
+        # `css_live` could never fire. (Batch H8a shipped exactly that.)
+        ('no 2.10.75 header survives', 'css', r'(?m)^Version: 2\.10\.75$', False),
+        ('functions.php enqueues 2.10.76 for style.css', 'php',
+         r"wp_enqueue_style\('sinofresh-style'[^;]*'2\.10\.76'", True),
+        # --- the overview links its four cards --------------------------
+        ('the OEM card is a stretched link to its own page', 'tpl_svc',
+         r'<a class="sf-card__title-link" href="/services/oem/">OEM &#8212; You Bring the Formula</a>',
+         True),
+        ('the ODM card is too', 'tpl_svc',
+         r'<a class="sf-card__title-link" href="/services/odm/">ODM &#8212; We Develop From Your Idea</a>',
+         True),
+        ('...and so are the Contract and Private Label cards', 'tpl_svc',
+         r'<a class="sf-card__title-link" href="/services/contract-manufacturing/">',
+         True),
+        ('...linking four different routes, not four copies of one', 'tpl_svc',
+         r'<a class="sf-card__title-link" href="/services/private-label/">', True),
+        # --- the four detail pages exist as templates -------------------
+        # The templates open with a dark hero band, so the h1 carries the
+        # card-white colour pair the theme already puts on the other heroes.
+        ('the OEM template is titled with its own route name', 'tpl_oem',
+         r'<h1 class="wp-block-heading has-card-white-color has-text-color">OEM Manufacturing &#8212; You Bring the Formula</h1>',
+         True),
+        ('...the ODM one likewise', 'tpl_odm',
+         r'<h1 class="wp-block-heading has-card-white-color has-text-color">ODM Development &#8212; We Develop From Your Idea</h1>',
+         True),
+        ('...the Contract one likewise', 'tpl_con',
+         r'<h1 class="wp-block-heading has-card-white-color has-text-color">Contract Manufacturing &#8212; You Own the IP</h1>',
+         True),
+        ('...and the Private Label one', 'tpl_pri',
+         r'<h1 class="wp-block-heading has-card-white-color has-text-color">Private Label &#8212; Pick From Our Proven Formulas</h1>',
+         True),
+        ('every detail page names the overview in its breadcrumb', 'tpl_oem',
+         r'sf-breadcrumb__crumb--mid" href="/services/">OEM/ODM Services</a>', True),
+        ('...which is also what its BreadcrumbList is generated from', 'tpl_con',
+         r'sf-breadcrumb__crumb--mid" href="/services/">OEM/ODM Services</a>', True),
+        # The two elements the schema generator reads, asserted per page. Written
+        # out rather than looped so that each page owns its own assertion: a
+        # negative control edits ONE page, and a claim it cannot move on that one
+        # page is a claim that is not being made.
+        ('the ODM page\'s breadcrumb names the overview too', 'tpl_odm',
+         r'sf-breadcrumb__crumb--mid" href="/services/">OEM/ODM Services</a>', True),
+        ('...and so does the Private Label page\'s', 'tpl_pri',
+         r'sf-breadcrumb__crumb--mid" href="/services/">OEM/ODM Services</a>', True),
+        ('every detail page opens at the third breadcrumb level', 'tpl_oem',
+         r'<nav class="sf-breadcrumb sf-breadcrumb--d3"', True),
+        ('...the ODM page as well', 'tpl_odm',
+         r'<nav class="sf-breadcrumb sf-breadcrumb--d3"', True),
+        ('...the Contract page as well', 'tpl_con',
+         r'<nav class="sf-breadcrumb sf-breadcrumb--d3"', True),
+        ('...and the Private Label page', 'tpl_pri',
+         r'<nav class="sf-breadcrumb sf-breadcrumb--d3"', True),
+        ('every detail page carries the FAQ the schema generator reads', 'tpl_pri',
+         r'<details class="wp-block-details sf-faq__item"', True),
+        ('...and the commercial-terms table the overview publishes', 'tpl_oem',
+         r'<table class="sf-keyfacts">', True),
+        ('...which the other three repeat verbatim', 'tpl_con',
+         r'<tr><td>Trade Terms</td><td>FOB / CIF / EXW / DDP</td></tr>', True),
+        # The overview half of that claim. Without it "the four repeat the
+        # overview's table verbatim" would only say the four agree with each
+        # other, and the overview could have stopped publishing it.
+        ('the overview still publishes that table itself', 'tpl_svc',
+         r'<table class="sf-keyfacts">', True),
+        ('the detail pages introduce no inline CSS of their own', 'tpl_odm',
+         r'<style', False),
+        # --- the two mechanisms the new pages need ---------------------
+        ('the four new pages are on the on-this-page rail\'s whitelist', 'php',
+         r"'services', 'oem', 'odm', 'contract-manufacturing', 'private-label'",
+         True),
+        ('the Service schema is keyed on the current page\'s slug', 'php',
+         r"\$slug = \(string\) get_post_field\('post_name', get_queried_object_id\(\)\);",
+         True),
+        ('...and no longer hard-codes the overview', 'php_live',
+         r"if \(!is_page\('services'\)\) \{", False),
+        ('...carrying one name/description pair per page in the family', 'php',
+         r"'contract-manufacturing' => array\(\s+'name'\s+=> 'Contract Manufacturing",
+         True),
+        ('...including the overview\'s own, unchanged', 'php',
+         r"'name'\s+=> 'Pet Supplement OEM/ODM Manufacturing'", True),
+    ],
+    'new_pages': {
+        'routes': H8C_NEW_ROUTES,
+        'baseline_absent': ['sf-breadcrumb--d3', 'sf-keyfacts', 'sf-faq__item',
+                            'sf-panel--3', 'sf-card__title-link'],
+        'candidate_counts': [('sf-breadcrumb--d3', 1), ('sf-keyfacts', 1),
+                             ('sf-faq__item', 3), ('<h2', 5), ('<h1', 1),
+                             ('sf-panel--3', 1), ('sf-card__title-link', 0)],
+        'keyfacts_ref': 'services.html',
+        'shell': [
+            # Anchored, and the pass fails if an anchor is missing — a shell
+            # claim that compares two empty strings is not a claim. The regions
+            # are cut from the NEUTRALISED render: the head legitimately carries
+            # the page's own <title>/canonical and the analytics id, so on the
+            # raw bytes "the shell is identical" is false by construction and
+            # says nothing about whether four hand-written chromes got shipped.
+            ('document shell above the first band', '</head>', '<section'),
+            ('footer shell', '<footer', '</footer>'),
+        ],
+    },
+}
+
+
 # ---------------------------------------------------------------------- driver
 
 def parse(argv=None):
@@ -6534,6 +7316,10 @@ def parse(argv=None):
     ap.add_argument('--cand')
     ap.add_argument('--aa', metavar='DIR2',
                     help='second capture taken on the SAME install as --cand')
+    ap.add_argument('--base-new', metavar='DIR',
+                    help='baseline capture of the routes this batch creates')
+    ap.add_argument('--cand-new', metavar='DIR',
+                    help='candidate capture of the routes this batch creates')
     ap.add_argument('--matrix', action='store_true')
     ap.add_argument('--negctl', action='store_true')
     ap.add_argument('--source', action='store_true')
@@ -6590,6 +7376,25 @@ def main(argv=None):
             r = negctl(decl, args.base, args.cand, args.theme)
             out['negctl'] = r
             ok &= r['ok']
+        if decl.get('new_pages'):
+            # A pass with no call site is a pass that is silently green, so a
+            # batch that declares new routes but is run without the two new-route
+            # captures FAILS here rather than skipping the section.
+            if not (args.base_new and args.cand_new):
+                print('== new routes: the pages this batch creates ==')
+                print('  FAIL  the batch declares new routes but --base-new / '
+                      '--cand-new were not given')
+                out['new_pages'] = {'ok': False,
+                                    'rows': [{'label': 'new-route captures were '
+                                                       'supplied', 'ok': False,
+                                              'detail': 'missing --base-new/--cand-new'}]}
+                ok = False
+            else:
+                print('== new routes: the pages this batch creates ==')
+                r = new_pages(decl, args.base_new, args.cand_new,
+                              args.base, args.cand)
+                out['new_pages'] = r
+                ok &= r['ok']
 
     print('\n%s  batch H7 gate (%s)' % ('PASS' if ok else 'FAIL', args.batch))
     if args.json:
