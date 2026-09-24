@@ -255,14 +255,14 @@ ck('every block comment carries parseable JSON attributes', not bad, bad)
 # --------------------------------------------------------------------------
 print()
 print('== E. version and the gate constants that follow it ==')
-ck('style.css declares 2.10.77',
-   re.search(r'^Version: 2\.10\.77$', css, re.M) is not None)
-ck('functions.php enqueues 2.10.77',
-   "array(), '2.10.77');" in fn)
-for tool, pat in [('tools/b2d_h8c_live_check.py', r"default='2\.10\.77'"),
-                  ('tools/b2d_h8c_live_accept.py', r'EXPECT_VER = "2\.10\.77"')]:
+ck('style.css declares 2.10.79',
+   re.search(r'^Version: 2\.10\.79$', css, re.M) is not None)
+ck('functions.php enqueues 2.10.79',
+   "array(), '2.10.79');" in fn)
+for tool, pat in [('tools/b2d_h8c_live_check.py', r"default='2\.10\.79'"),
+                  ('tools/b2d_h8c_live_accept.py', r'EXPECT_VER = "2\.10\.79"')]:
     body = open(os.path.join(ROOT, tool), encoding='utf-8').read()
-    ck('%s expects 2.10.77' % os.path.basename(tool),
+    ck('%s expects 2.10.79' % os.path.basename(tool),
        re.search(pat, body) is not None)
 
 # --------------------------------------------------------------------------

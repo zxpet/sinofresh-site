@@ -12,7 +12,7 @@ Three things the tick asked for, each answered from the wire:
      and clicking the Custom chip selects it and opens the text box;
   2. /quality/: 861px tall at 1440 with three steps to a row, and the numbers
      01..06 still on the six steps;
-  3. live serves 2.10.77, and no page in the catalogue -- footer included --
+  3. live serves 2.10.79, and no page in the catalogue -- footer included --
      still carries an old theme token.
 
 The no-header run is the point, so there is exactly one place where a request
@@ -44,7 +44,7 @@ from PIL import Image
 USER, PASS = 'sfdev', 'VkEws18Kl5V1qp3TpZ6s'
 BASE = 'https://dev.zxpet.com'
 AUTH = 'Basic ' + base64.b64encode(('%s:%s' % (USER, PASS)).encode()).decode()
-EXPECT_VER = '2.10.77'
+EXPECT_VER = '2.10.79'
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT = os.path.join(ROOT, 'docs', 'batch3b-live-accept-shots')

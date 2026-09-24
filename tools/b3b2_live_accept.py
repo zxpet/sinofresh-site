@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 """Batch 3b-2 acceptance on the dev host.
 
-Two groups, both measured through the preflight theme (2.10.78) with the live
-theme (2.10.77) read the same way as the before-picture:
+Two groups, both measured through the preflight theme with the live theme read
+the same way as the before-picture. The two versions are NOT named here: they
+move with every batch and a docstring that pins them goes stale, which is the
+same disease as pinning them in an assertion (see the `--expect-ver` notes).
 
   A  the cookie banner and TranslatePress's floating language switcher, which
      both anchor to the bottom edge, at 375 / 768 / 1024 / 1440. The measure is
@@ -80,8 +82,15 @@ SERVED = """(() => {
            path: location.pathname, title: (document.title || '').slice(0, 80) }; })()"""
 
 
-def session(path, preflight, w, h, settle=3.2):
-    """One fresh visitor on one URL, with one theme. Asserts which one it got."""
+def _establish(path, preflight, settle):
+    """The one order that works, start to finish.
+
+    `set credentials` and `set headers` each rebuild the browser context, so the
+    later one wins; `open` drops extra headers while `reload` keeps them; and a
+    header set on about:blank belongs to about:blank. Hence: close --all ->
+    credentials -> open -> headers(Authorization + the custom one, ONE call) ->
+    reload -> viewport.
+    """
     ab('close', '--all')
     time.sleep(1.0)
     ab('set', 'credentials', USER, PASS)
@@ -95,9 +104,50 @@ def session(path, preflight, w, h, settle=3.2):
     time.sleep(0.4)
     ab('reload')
     time.sleep(settle)
-    ab('set', 'viewport', str(w), str(h))
-    time.sleep(1.3)
+
+
+def _set_viewport(w, h, tries=3):
+    """Ask for a size until the browser confirms it. None means it never did."""
+    size = None
+    for attempt in range(tries):
+        ab('set', 'viewport', str(w), str(h))
+        time.sleep(1.1)
+        size = ev('JSON.stringify({w: innerWidth, h: innerHeight})')
+        if isinstance(size, dict) and size.get('w') == w and size.get('h') == h:
+            return size
+        time.sleep(0.9)
+    return None
+
+
+def session(path, preflight, w, h, settle=3.2, rebuilds=2):
+    """One fresh visitor on one URL, with one theme, at one viewport.
+
+    Three things are confirmed before the caller may measure: WHICH theme
+    answered, that the size it asked for is the size it got, and that the page
+    is the site at all rather than a 401 sheet wearing the same URL.
+
+    No one of these is bookkeeping. `set viewport` has been observed to no-op
+    silently right after an open — the A group's 375 row once measured at the
+    default height while the report's y-coordinates were read as if it had
+    taken, and every one of them was off by the difference. Retried until the
+    browser confirms; if it never confirms, the browser is thrown away and the
+    session rebuilt, because `innerWidth` parked on the 1280 default is a wedged
+    context, not a slow one. Fatal rather than measure a layout nobody asked for.
+    """
+    size = None
+    for attempt in range(rebuilds):
+        _establish(path, preflight, settle)
+        size = _set_viewport(w, h)
+        if size is not None:
+            break
+    else:
+        raise RuntimeError('viewport did not take in %d sessions: wanted %dx%d, got %r'
+                           % (rebuilds, w, h, size))
     s = ev(SERVED)
+    s['viewport'] = size
+    if not s.get('href'):
+        raise RuntimeError('no theme stylesheet on %s (title %r) — a 401 or an error '
+                           'sheet, not the site' % (s.get('path'), s.get('title')))
     if preflight and not s.get('preflight'):
         raise RuntimeError('asked for the preflight theme, served %r' % s.get('href'))
     if not preflight and s.get('preflight'):

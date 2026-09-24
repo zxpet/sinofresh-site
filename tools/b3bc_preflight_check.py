@@ -8,7 +8,7 @@ that the fix is a no-op on the pages whose records never carried the word.
 
 It compares the candidate (installed at fcc7bdc) with the live theme over the
 same host, and that pairing is what makes it a control rather than a
-self-portrait: live serves 2.10.76 and the candidate serves 2.10.77, so a byte
+self-portrait: live serves 2.10.78 and the candidate serves 2.10.79, so a byte
 comparison of a group neither change touched is a real before/after. Anything
 that shows up there is a regression this batch caused.
 
@@ -179,9 +179,9 @@ def main():
     live_dir, live_ver = theme_and_version(fetch('/'))
     ck('the preflight header switches to the copy theme directory',
        pre_dir == 'sinofresh-theme-preflight', pre_dir)
-    ck('that copy serves 2.10.77', pre_ver == '2.10.77', pre_ver)
-    ck('live still serves sinofresh-theme at 2.10.76 (the pull is held back)',
-       (live_dir, live_ver) == ('sinofresh-theme', '2.10.76'),
+    ck('that copy serves 2.10.79', pre_ver == '2.10.79', pre_ver)
+    ck('live still serves sinofresh-theme at 2.10.78 (the pull is held back)',
+       (live_dir, live_ver) == ('sinofresh-theme', '2.10.78'),
        (live_dir, live_ver))
 
     print()

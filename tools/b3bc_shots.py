@@ -4,7 +4,8 @@
 Every frame here comes off the PREFLIGHT COPY, not live. The copy is a second
 theme directory reached with a request header, so each capture asserts which
 copy answered before it shoots: a header that quietly failed would otherwise
-photograph live's 2.10.76 and file it under the candidate's name.
+photograph whatever live happens to be serving and file it under the
+candidate's name.
 
 Two traps this tool is built around, both measured in earlier batches:
 
@@ -261,7 +262,7 @@ def main():
     got = whose()
     print('== session: preflight copy ==')
     print('   serving %s' % (got or {}).get('theme'))
-    if not (got or {}).get('pre') or (got or {}).get('v') != '2.10.77':
+    if not (got or {}).get('pre') or (got or {}).get('v') != '2.10.79':
         raise SystemExit('the session is not on the preflight copy: %r' % got)
 
     last = None
@@ -273,7 +274,7 @@ def main():
             ab('set', 'viewport', str(w), str(h))
             time.sleep(0.8)
         served = whose()
-        if not (served or {}).get('pre') or (served or {}).get('v') != '2.10.77':
+        if not (served or {}).get('pre') or (served or {}).get('v') != '2.10.79':
             raise SystemExit('wrong copy for %s: %r' % (name, served))
         print('%s  %s  w=%d' % (name, path, w))
 
