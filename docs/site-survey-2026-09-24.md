@@ -28,8 +28,10 @@
 每类各爬一次会让同一次普查在八个不同时刻比较站点自身。
 
 > ⚠️ **为什么不用 sitemap**：`/wp-sitemap.xml` 与 `/sitemap_index.xml` 都返回 404 页。
-> 这不是缺陷：封锁文档 `docs/dev-lockdown.md` 记录 `blog_public=0`，核心 sitemap 因此被关，
+> 这不是缺陷：**实测** `wp option get blog_public` → `0`（与封锁文档 `docs/dev-lockdown.md` 的记录一致），
+> WordPress 核心只在 `blog_public` 开启时才注册 sitemap 服务器，因此该功能被关，
 > 与 `robots.txt: Disallow: /`、`X-Robots-Tag: noindex, nofollow, noarchive` 同属封锁设计。
+> 顺带实测：`siteurl`/`home` = `https://dev.zxpet.com`、`permalink_structure` = `/%postname%/`。
 > **代价**：sitemap 覆盖情况在封锁期内**无法验证**，必须留在生产上线清单里（`blog_public` 0→1 后复验）。
 
 **方法学自查（四处，均为先出错后修正）**
