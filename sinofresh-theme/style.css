@@ -2,7 +2,7 @@
 Theme Name: SINO FRESH
 Author: Shandong SINO FRESH Pet Food Co., Ltd.
 Text Domain: sinofresh
-Version: 2.10.78
+Version: 2.10.79
 Requires at least: 6.0
 Requires PHP: 7.4
 License: GNU General Public License v2 or later
@@ -9840,6 +9840,19 @@ body.sf-config-lock { overflow: hidden; }
 	   circles; lift the bar by the banner's stacked height. */
 	body.has-cookie-banner .sf-float-stack {
 		bottom: 268px;
+	}
+	/* The switcher rides above the bar, not the circle column it replaced. The
+	   bar is 69px tall where that column was 156, so clearing this layout takes
+	   a far smaller lift than the 280px the 767 block hands down: 350 leaves
+	   13px of air between the switcher's bottom edge and the bar's top edge,
+	   and 345 is where the asked-for 8px floor lands. Two geometries, two
+	   values — this block and the bar it compensates share one breakpoint, the
+	   same way the stack's own 268px does. Above 480 nothing moves, and that
+	   placement is the point: the 767 block's 280 is what keeps the column band
+	   clean, where a 350 lift would cost the WhatsApp button 3 of its 11 sample
+	   points at 481 (measured). */
+	body.has-cookie-banner .trp-floating-switcher {
+		bottom: 350px;
 	}
 	/* The bar owns the strip the circles used to share with the page edge. */
 	body {
