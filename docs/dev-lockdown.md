@@ -378,6 +378,7 @@ cf=HIT  /wp-content/themes/sinofresh-theme/assets/images/favicon-32.png
 | 8 | **AI 爬虫 403 段** | `public/.htaccess` | 按业务决定保留或删除（这是策略选择，不是 dev 专属封锁） | 保留则 AI 爬虫无法抓取，视业务目标而定 |
 | 9 | **Cloudflare Cache Rule / 缓存** | CF 面板 | 删除 `dev.zxpet.com` 的 Bypass Cache 规则；清理 dev 缓存 | 规则若误配到生产域名，生产站不被缓存 |
 | 10 | **Cloudflare Access / IP 白名单**（若启用了 8.2 的可选项） | CF 面板 | 移除策略 | 生产站被登录墙挡住 |
+| 11 | **mu-plugins 部署**（⚠️ 新增，2026-09-24） | `server/mu-plugins/*.php`（仓库源码） | **单独 scp 到生产** `wp-content/mu-plugins/`（mu-plugins **不走主题软链**，`git pull` 带不过去） | **同意门控失效**：`zz-sf-wps-consent-bridge.php` 缺位 ⇒ WP Statistics 恢复"未同意也记录"（合规缺口复发）；`zz-sf-preflight.php` 缺位无害可不留 |
 
 **另有两条自检**（上线后立即做）：
 ```bash
