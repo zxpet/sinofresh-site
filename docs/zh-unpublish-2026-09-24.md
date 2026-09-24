@@ -286,8 +286,9 @@ $w = get_option('trp_language_switcher_settings'); $w['floater']['enabled'] = tr
 
 ## 11. 本批未做 / 复现命令
 
-**未做**：未 pull（等确认）；未碰生产（HEAD 读响应头属授权内，本批未再发）；未跑机器翻译回填；
+**未做**：未碰生产（HEAD 读响应头属授权内，本批未再发）；未跑机器翻译回填；
 未改 `translation-languages`；未动词典表；未 bump 版本；未改任何模板/post meta。
+（pull 已于 2026-09-24 完成，见 §12。）
 
 ```bash
 PY=/Users/meng/.workbuddy/binaries/python/versions/3.13.12/bin/python3
@@ -306,3 +307,67 @@ $PY tools/b2d_s1_preflight.py install <40 位 SHA>
 > ⚠️ 复现 2 之前必须先确认 DB 状态：`publish-languages` 若已含 `zh_CN`（即已重新启用），
 > 全量对照的**预检侧会全部变成 200** —— 那是正确行为（规则自愈），不是回归。
 > **先跑 1 的第一块**能立刻区分这两种情况。
+
+---
+
+## 12. pull：已执行，并重测（2026-09-24）
+
+用户确认后执行。**这一节的意义在于「换了一个状态就换了一份门」**：§3 那份全量对照写于 pull 之前，
+它的第 4 条断言是「**live 侧的重定向必须由 WordPress 署名、不是本主题**」—— 那句话在 pull 之后
+**by design 变红**（pull 正是让主题开始署名的那件事）。所以**没有去改旧门的断言**，而是另写
+`tools/b3e_zh_postpull.py`：它只发**一种请求**（无场景头，即真实生产路径），问的是新状态下该成立的事。
+
+### 12.1 落地事实
+
+| 项 | 值 |
+|---|---|
+| `site-repo` HEAD | `5b6beb3` → **`aa9abc6`**（`git pull --ff-only`，工作区干净） |
+| 主题软链 | `public/wp-content/themes/sinofresh-theme → site-repo/sinofresh-theme` ⇒ **pull 即上线** |
+| `inc/zh-unpublish.php` | 已到位（4507 B，Sep 24 10:10） |
+| `functions.php` require | 第 21 行 |
+| 站点令牌 | `style.css` 仍 `2.10.79`（本批零 CSS 改动，**未 bump**） |
+| 预检副本 | 停在 `49942b9`，**已陈旧**（被 aa9abc6 取代） |
+
+### 12.2 重测：**54/54 全 301、`by=SINO FRESH`、0 条 404**（77 项断言 0 失败）
+
+| 指标 | pull 前（§3 实测） | pull 后 |
+|---|---|---|
+| live 侧 301 | 20（全 `by=WordPress`） | **54（全 `by=SINO FRESH`）** |
+| live 侧 404 | 34 | **0** |
+| 预检侧 301 | 54 | 54（两侧现为同一份代码） |
+
+**除此之外逐条复验通过**：豁免（`/zh/wp-json/*` 404 未被本规则碰、`/zh/feed/` 200 未被碰）、
+query string 存活（`/zh/about/?a=1&b=2` → `/about/?a=1&b=2`）、
+`?trp-edit-translation` 仍由核心 404 猜测署名（**不是**本规则，与 §5.1 记录一致）、
+hreflang 仅 `['en-US','en']`、`html lang=en-US`、
+**切换器 markup 为 0**（`trp-language-item` 0、`nav.trp-language-switcher` 0；子串仍在＝asset 引用，
+正是「字符串≠markup」那一类，故断言锚的是元素计数）、
+英文侧 5 条路由未被本规则重定向、`/zhang-not-a-locale/` 未被前缀匹配误捕、
+以及首页仍带本主题样式表链接（**401 页守卫**：拿到的是站点不是错误页）。
+
+**重定向目标是真的页面**：抽查 12 条（首 8 末 4）目标全部 200，不存在「301 → 再跳一次 → 404」。
+唯一到 404 的是 `/zh/does-not-exist-xyz/`（§5.2 已记录的取舍，与直接 404 对搜索引擎等价）。
+
+### 12.3 服务器侧
+
+`/var/log/php-fpm/error.log` 今日（UTC）共 21 行，**pull 时间点（10:10 UTC）之后 0 条 WARNING/ERROR**；
+5 条 WARNING 全在 02:04–02:16（`pm.max_children` 触顶，属普查期爬取造成，与本批无关）。
+`wp-content/debug.log` 不存在。**注意：服务器时区为 UTC，日志时间比本地早 8 小时。**
+
+### 12.4 门的位置
+
+| 门 | 适用状态 | 断言 |
+|---|---|---|
+| `b3e_zh_redirect_unit.py` | 任意（离线，跑真实 PHP 文件） | 31 条；含「zh 仍发布时规则一动不动」的负对照 |
+| `b3e_zh_verify.py` | **pull 前**（live 无本批代码） | 54×2 对照；**pull 后第 4 条必然变红，属设计** |
+| **`b3e_zh_postpull.py`** | **pull 后至今** | 54 条单侧；77 项断言，0 失败 |
+
+```bash
+PY=/Users/meng/.workbuddy/binaries/python/versions/3.13.12/bin/python3
+$PY tools/b3e_zh_postpull.py --json docs/zh-unpublish-2026-09-24/postpull.json
+```
+
+### 12.5 重新启用 zh 时的顺序（与 §9 一致，此处再钉一次）
+
+1. `publish-languages` 加回 `zh_CN`（**写后回读**）→ 2. `floater.enabled` 改回 `true` → 3. 登出态复验。
+额外一步：**把预检副本重新 install 到当时的最新 SHA**（它已陈旧），否则预检侧停在本批代码上。

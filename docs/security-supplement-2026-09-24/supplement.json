@@ -1,0 +1,261 @@
+{
+ "headers": {
+  "html front page": {
+   "path": "/",
+   "status": 200,
+   "headers": {
+    "date": "Thu, 24 Sep 2026 10:21:02 GMT",
+    "content-type": "text/html; charset=UTF-8",
+    "transfer-encoding": "chunked",
+    "connection": "close",
+    "server": "cloudflare",
+    "x-powered-by": "PHP/8.3.33",
+    "link": "<https://dev.zxpet.com/wp-json/>; rel=\"https://api.w.org/\", <https://dev.zxpet.com/wp-json/wp/v2/pages/11>; rel=\"alternate\"; title=\"JSON\"; type=\"application/json\", <https://dev.zxpet.com/>; rel=shortlink",
+    "x-robots-tag": "noindex, nofollow, noarchive",
+    "cache-control": "max-age=86400",
+    "expires": "Fri, 25 Sep 2026 10:21:02 GMT",
+    "vary": "Accept-Encoding",
+    "server-timing": "cfEdge;dur=8,cfOrigin;dur=851",
+    "nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+    "report-to": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=4y5zOMT%2B%2Bc21cFFWBYWXLs8gpBIRPyznzD6fRDlTNbDdYxYGUisqkarNfg7%2FFEP4FxTqB3gfdXRYW4asyE1nRdmHxCf1PTMnquWlXsksqUEp9OCyNmMviqkghldMY21po6EeJe7Oc6yHd5nx\"}]}",
+    "cf-cache-status": "DYNAMIC",
+    "cf-ray": "a4010f568b96edf8-LHR",
+    "alt-svc": "h3=\":443\"; ma=86400"
+   },
+   "err": null,
+   "beacon": true
+  },
+  "html deep page": {
+   "path": "/about/",
+   "status": 200,
+   "headers": {
+    "date": "Thu, 24 Sep 2026 10:21:06 GMT",
+    "content-type": "text/html; charset=UTF-8",
+    "transfer-encoding": "chunked",
+    "connection": "close",
+    "server": "cloudflare",
+    "x-powered-by": "PHP/8.3.33",
+    "link": "<https://dev.zxpet.com/wp-json/>; rel=\"https://api.w.org/\", <https://dev.zxpet.com/wp-json/wp/v2/pages/14>; rel=\"alternate\"; title=\"JSON\"; type=\"application/json\", <https://dev.zxpet.com/?p=14>; rel=shortlink",
+    "x-robots-tag": "noindex, nofollow, noarchive",
+    "cache-control": "max-age=86400",
+    "expires": "Fri, 25 Sep 2026 10:21:05 GMT",
+    "vary": "Accept-Encoding",
+    "server-timing": "cfEdge;dur=9,cfOrigin;dur=873",
+    "nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+    "report-to": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=0ysLDv4OO1EdFsosKiyoS5dy6UjHSa7IqMtC12S8CyHIMuXzB6rp%2B2VubFWvAOtgYLA6Z8ANYOEleE8pay6xrMQIWdnhtHCQR5bu834pCt%2BpyxbSauME9%2FoY%2B6Qq75%2BG\"}]}",
+    "cf-cache-status": "DYNAMIC",
+    "cf-ray": "a4010f6d3fc20038-LHR",
+    "alt-svc": "h3=\":443\"; ma=86400"
+   },
+   "err": null,
+   "beacon": true
+  },
+  "rest api": {
+   "path": "/wp-json/",
+   "status": 200,
+   "headers": {
+    "date": "Thu, 24 Sep 2026 10:21:10 GMT",
+    "content-type": "application/json; charset=UTF-8",
+    "transfer-encoding": "chunked",
+    "connection": "close",
+    "server": "cloudflare",
+    "x-powered-by": "PHP/8.3.33",
+    "x-robots-tag": "noindex, nofollow, noarchive",
+    "link": "<https://dev.zxpet.com/wp-json/>; rel=\"https://api.w.org/\"",
+    "x-content-type-options": "nosniff",
+    "access-control-expose-headers": "X-WP-Total, X-WP-TotalPages, Link",
+    "access-control-allow-headers": "Authorization, X-WP-Nonce, Content-Disposition, Content-MD5, Content-Type",
+    "allow": "GET",
+    "vary": "Origin,Accept-Encoding",
+    "cache-control": "max-age=86400",
+    "expires": "Fri, 25 Sep 2026 10:21:10 GMT",
+    "nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+    "report-to": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=cRAgWNtTo9CusLKzFrrWuf%2F%2BVYiBDLucfHa5vjH17j4WBoZXabKbgvu3vsIiwz5cN0yDiJKVcJy8prWMrbUfjw27Gb4I6l0fKYM%2Bbiu6pR1iQicahl2LpP0T%2FkYJYpWT\"}]}",
+    "cf-cache-status": "DYNAMIC",
+    "cf-ray": "a4010f897f0aa49a-LHR",
+    "alt-svc": "h3=\":443\"; ma=86400"
+   },
+   "err": null,
+   "beacon": false
+  },
+  "static css": {
+   "path": "/wp-content/themes/sinofresh-theme/style.css",
+   "status": 200,
+   "headers": {
+    "date": "Thu, 24 Sep 2026 10:21:13 GMT",
+    "content-type": "text/css",
+    "transfer-encoding": "chunked",
+    "connection": "close",
+    "server": "cloudflare",
+    "x-robots-tag": "noindex, nofollow, noarchive",
+    "last-modified": "Thu, 24 Sep 2026 08:19:46 GMT",
+    "cache-control": "public, max-age=31536000, immutable",
+    "expires": "Sat, 24 Oct 2026 10:21:13 GMT",
+    "vary": "Accept-Encoding",
+    "etag": "W/\"5330a-65c3643458804-br\"",
+    "nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+    "report-to": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=8DkqsAKczD1oS19z%2FdagfI0mvvm0Ie9cy%2FhEcX6h7yyzAmshXochElr7LpKfAk6N6xskVNkg5AGVmZu3XHsWknYrFLLd0A09PziLlJYTkCyQ%2FmLrzXMeS3h9RVUxvXcZsWj6K4qrYi%2BgYhOu\"}]}",
+    "cf-cache-status": "DYNAMIC",
+    "cf-ray": "a4010f9d6d4323e3-AMS",
+    "alt-svc": "h3=\":443\"; ma=86400"
+   },
+   "err": null,
+   "beacon": false
+  },
+  "404": {
+   "path": "/no-such-page-8-8/",
+   "status": 404,
+   "headers": {
+    "date": "Thu, 24 Sep 2026 10:21:17 GMT",
+    "content-type": "text/html; charset=UTF-8",
+    "transfer-encoding": "chunked",
+    "connection": "close",
+    "server": "cloudflare",
+    "x-powered-by": "PHP/8.3.33",
+    "expires": "Wed, 11 Jan 1984 05:00:00 GMT",
+    "cache-control": "no-cache, must-revalidate, max-age=0, no-store, private",
+    "link": "<https://dev.zxpet.com/wp-json/>; rel=\"https://api.w.org/\"",
+    "x-robots-tag": "noindex, nofollow, noarchive",
+    "vary": "Accept-Encoding",
+    "report-to": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=ZHYWbdlaE%2B9HppoFVgiGOuCxBs4aXHEySbnfbOtxtpHUeosLnFK%2BmrpUTNcjFa%2FYjjMde8ZZju9DMQcswXvjbVBRZ%2BOifi1zWDXPJPRazQDRWX25KJ88rn9Sl3Xs39EL9mpUWRh9esrsZ7Rh\"}]}",
+    "nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+    "cf-cache-status": "DYNAMIC",
+    "server-timing": "cfEdge;dur=38,cfOrigin;dur=657",
+    "cf-ray": "a4010fb30eadcd7e-LHR",
+    "alt-svc": "h3=\":443\"; ma=86400"
+   },
+   "err": null,
+   "beacon": true
+  }
+ },
+ "third_party": {
+  "hosts": {
+   "static.cloudflareinsights.com": 108,
+   "i.ytimg.com": 2
+  },
+  "pages": {
+   "static.cloudflareinsights.com": 108,
+   "i.ytimg.com": 2
+  },
+  "example": {
+   "static.cloudflareinsights.com": [
+    "https://static.cloudflareinsights.com/beacon.min.js/v31edd6df95cf4e85bb4c19e7a9bdbcba1788362987495"
+   ],
+   "i.ytimg.com": [
+    "https://i.ytimg.com/vi/jNQXAC9IVRw/hqdefault.jpg"
+   ]
+  },
+  "ext_tags": 108,
+  "sri": 108
+ },
+ "consent_source": {
+  "key": "sf_cookie_consent",
+  "buttons": [
+   [
+    "inner",
+    ""
+   ],
+   [
+    "text",
+    "We use cookies to improve your experience and analyze traffic. By clicking \"Accept All,\" you consent to our use of cookies. Learn more in our"
+   ],
+   [
+    "actions",
+    ""
+   ],
+   [
+    "accept",
+    "Accept All"
+   ],
+   [
+    "reject",
+    "Reject Non-Essential"
+   ],
+   [
+    "manage",
+    "Manage Preferences"
+   ]
+  ],
+  "manage_handler": "on(\".sf-cookie-banner__manage\", () => decide(false))"
+ },
+ "consent_served": {
+  "wp-statistics tracker (site analytics)": true,
+  "Cloudflare Web Analytics beacon": true,
+  "Google Analytics / gtag": false,
+  "WP Consent API client": true
+ },
+ "passed": [
+  "the origin server is not named",
+  "static assets are fingerprinted-immutable",
+  "no xmlrpc advertisement on the front page",
+  "plain HTTP is redirected to HTTPS",
+  "the CF beacon is present for a browser navigation",
+  "every external script/stylesheet is covered by SRI",
+  "no third-party font or asset CDN beyond Cloudflare and a video poster",
+  "the video poster is the only Google-domain request before play",
+  "the accept path grants analytics",
+  "the reject path withholds analytics",
+  "gtag is bridged to the stored decision",
+  "the same flag drives the lead event in functions.php",
+  "nothing loads from a Google tag domain",
+  "an anonymous visit sets no cookie at all"
+ ],
+ "failed": [
+  [
+   "front-end HTML sends strict-transport-security",
+   "no downgrade to plain HTTP for a year"
+  ],
+  [
+   "front-end HTML sends content-security-policy",
+   "injected script cannot run; XSS blast radius"
+  ],
+  [
+   "front-end HTML sends x-content-type-options",
+   "no MIME sniffing of uploaded/odd types"
+  ],
+  [
+   "front-end HTML sends x-frame-options",
+   "no framing: clickjacking"
+  ],
+  [
+   "front-end HTML sends referrer-policy",
+   "no full URL leaked to third parties"
+  ],
+  [
+   "front-end HTML sends permissions-policy",
+   "camera/mic/geolocation off by declaration"
+  ],
+  [
+   "no x-powered-by leaking the exact PHP build",
+   "PHP/8.3.33"
+  ],
+  [
+   "HTML is not marked privately cacheable for a day",
+   "max-age=86400"
+  ],
+  [
+   "Manage Preferences opens a panel rather than deciding for the user",
+   "handler is on(\".sf-cookie-banner__manage\", () => decide(false))"
+  ],
+  [
+   "the theme publishes its decision through the Consent API",
+   "no wp_set_consent()/wp_has_consent() anywhere in the theme"
+  ],
+  [
+   "consent carries a version or an expiry",
+   "stored with timestamp only, so it never lapses"
+  ],
+  [
+   "the cookie policy does not promise trackers that are absent",
+   "policy names third-party cookies the site does not run"
+  ],
+  [
+   "the cookie policy names the analytics that do run",
+   "the prose never mentions Cloudflare Web Analytics or WP Statistics"
+  ],
+  [
+   "the cookie policy states retention or a withdrawal route",
+   "neither appears in the prose"
+  ]
+ ]
+}

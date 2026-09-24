@@ -1,0 +1,551 @@
+{
+ "routes": [
+  {
+   "zh": "/zh/",
+   "status": 301,
+   "location": "https://dev.zxpet.com/",
+   "by": "SINO FRESH",
+   "want": "https://dev.zxpet.com/",
+   "err": null
+  },
+  {
+   "zh": "/zh/about/",
+   "status": 301,
+   "location": "https://dev.zxpet.com/about/",
+   "by": "SINO FRESH",
+   "want": "https://dev.zxpet.com/about/",
+   "err": null
+  },
+  {
+   "zh": "/zh/blog/",
+   "status": 301,
+   "location": "https://dev.zxpet.com/blog/",
+   "by": "SINO FRESH",
+   "want": "https://dev.zxpet.com/blog/",
+   "err": null
+  },
+  {
+   "zh": "/zh/case-study-australia-fish-oil-trading/",
+   "status": 301,
+   "location": "https://dev.zxpet.com/case-study-australia-fish-oil-trading/",
+   "by": "SINO FRESH",
+   "want": "https://dev.zxpet.com/case-study-australia-fish-oil-trading/",
+   "err": null
+  },
+  {
+   "zh": "/zh/case-study-germany-ecommerce-powders/",
+   "status": 301,
+   "location": "https://dev.zxpet.com/case-study-germany-ecommerce-powders/",
+   "by": "SINO FRESH",
+   "want": "https://dev.zxpet.com/case-study-germany-ecommerce-powders/",
+   "err": null
+  },
+  {
+   "zh": "/zh/case-study-japan-pastes-palatability/",
+   "status": 301,
+   "location": "https://dev.zxpet.com/case-study-japan-pastes-palatability/",
+   "by": "SINO FRESH",
+   "want": "https://dev.zxpet.com/case-study-japan-pastes-palatability/",
+   "err": null
+  },
+  {
+   "zh": "/zh/case-study-spain-veterinary-drops/",
+   "status": 301,
+   "location": "https://dev.zxpet.com/case-study-spain-veterinary-drops/",
+   "by": "SINO FRESH",
+   "want": "https://dev.zxpet.com/case-study-spain-veterinary-drops/",
+   "err": null
+  },
+  {
+   "zh": "/zh/case-study-uk-distributor-tablets/",
+   "status": 301,
+   "location": "https://dev.zxpet.com/case-study-uk-distributor-tablets/",
+   "by": "SINO FRESH",
+   "want": "https://dev.zxpet.com/case-study-uk-distributor-tablets/",
+   "err": null
+  },
+  {
+   "zh": "/zh/case-study-us-brand-owner-soft-chews/",
+   "status": 301,
+   "location": "https://dev.zxpet.com/case-study-us-brand-owner-soft-chews/",
+   "by": "SINO FRESH",
+   "want": "https://dev.zxpet.com/case-study-us-brand-owner-soft-chews/",
+   "err": null
+  },
+  {
+   "zh": "/zh/contact/",
+   "status": 301,
+   "location": "https://dev.zxpet.com/contact/",
+   "by": "SINO FRESH",
+   "want": "https://dev.zxpet.com/contact/",
+   "err": null
+  },
+  {
+   "zh": "/zh/cookie-policy/",
+   "status": 301,
+   "location": "https://dev.zxpet.com/cookie-policy/",
+   "by": "SINO FRESH",
+   "want": "https://dev.zxpet.com/cookie-policy/",
+   "err": null
+  },
+  {
+   "zh": "/zh/cooperation/",
+   "status": 301,
+   "location": "https://dev.zxpet.com/cooperation/",
+   "by": "SINO FRESH",
+   "want": "https://dev.zxpet.com/cooperation/",
+   "err": null
+  },
+  {
+   "zh": "/zh/factory-tour/",
+   "status": 301,
+   "location": "https://dev.zxpet.com/factory-tour/",
+   "by": "SINO FRESH",
+   "want": "https://dev.zxpet.com/factory-tour/",
+   "err": null
+  },
+  {
+   "zh": "/zh/faq/",
+   "status": 301,
+   "location": "https://dev.zxpet.com/faq/",
+   "by": "SINO FRESH",
+   "want": "https://dev.zxpet.com/faq/",
+   "err": null
+  },
+  {
+   "zh": "/zh/feedback/",
+   "status": 301,
+   "location": "https://dev.zxpet.com/feedback/",
+   "by": "SINO FRESH",
+   "want": "https://dev.zxpet.com/feedback/",
+   "err": null
+  },
+  {
+   "zh": "/zh/formulas/bladder-support-powder/",
+   "status": 301,
+   "location": "https://dev.zxpet.com/formulas/bladder-support-powder/",
+   "by": "SINO FRESH",
+   "want": "https://dev.zxpet.com/formulas/bladder-support-powder/",
+   "err": null
+  },
+  {
+   "zh": "/zh/formulas/calcium-phosphorus-tablets/",
+   "status": 301,
+   "location": "https://dev.zxpet.com/formulas/calcium-phosphorus-tablets/",
+   "by": "SINO FRESH",
+   "want": "https://dev.zxpet.com/formulas/calcium-phosphorus-tablets/",
+   "err": null
+  },
+  {
+   "zh": "/zh/formulas/calming-soft-chews/",
+   "status": 301,
+   "location": "https://dev.zxpet.com/formulas/calming-soft-chews/",
+   "by": "SINO FRESH",
+   "want": "https://dev.zxpet.com/formulas/calming-soft-chews/",
+   "err": null
+  },
+  {
+   "zh": "/zh/formulas/digestive-soft-chews/",
+   "status": 301,
+   "location": "https://dev.zxpet.com/formulas/digestive-soft-chews/",
+   "by": "SINO FRESH",
+   "want": "https://dev.zxpet.com/formulas/digestive-soft-chews/",
+   "err": null
+  },
+  {
+   "zh": "/zh/formulas/ear-care-drops/",
+   "status": 301,
+   "location": "https://dev.zxpet.com/formulas/ear-care-drops/",
+   "by": "SINO FRESH",
+   "want": "https://dev.zxpet.com/formulas/ear-care-drops/",
+   "err": null
+  },
+  {
+   "zh": "/zh/formulas/hairball-remedy-paste/",
+   "status": 301,
+   "location": "https://dev.zxpet.com/formulas/hairball-remedy-paste/",
+   "by": "SINO FRESH",
+   "want": "https://dev.zxpet.com/formulas/hairball-remedy-paste/",
+   "err": null
+  },
+  {
+   "zh": "/zh/formulas/joint-support-soft-chews/",
+   "status": 301,
+   "location": "https://dev.zxpet.com/formulas/joint-support-soft-chews/",
+   "by": "SINO FRESH",
+   "want": "https://dev.zxpet.com/formulas/joint-support-soft-chews/",
+   "err": null
+  },
+  {
+   "zh": "/zh/formulas/joint-support-tablets/",
+   "status": 301,
+   "location": "https://dev.zxpet.com/formulas/joint-support-tablets/",
+   "by": "SINO FRESH",
+   "want": "https://dev.zxpet.com/formulas/joint-support-tablets/",
+   "err": null
+  },
+  {
+   "zh": "/zh/formulas/liquid-joint-support/",
+   "status": 301,
+   "location": "https://dev.zxpet.com/formulas/liquid-joint-support/",
+   "by": "SINO FRESH",
+   "want": "https://dev.zxpet.com/formulas/liquid-joint-support/",
+   "err": null
+  },
+  {
+   "zh": "/zh/formulas/liquid-skin-coat/",
+   "status": 301,
+   "location": "https://dev.zxpet.com/formulas/liquid-skin-coat/",
+   "by": "SINO FRESH",
+   "want": "https://dev.zxpet.com/formulas/liquid-skin-coat/",
+   "err": null
+  },
+  {
+   "zh": "/zh/formulas/multivitamin-tablets/",
+   "status": 301,
+   "location": "https://dev.zxpet.com/formulas/multivitamin-tablets/",
+   "by": "SINO FRESH",
+   "want": "https://dev.zxpet.com/formulas/multivitamin-tablets/",
+   "err": null
+  },
+  {
+   "zh": "/zh/formulas/natural-cleaning-dental-sticks/",
+   "status": 301,
+   "location": "https://dev.zxpet.com/formulas/natural-cleaning-dental-sticks/",
+   "by": "SINO FRESH",
+   "want": "https://dev.zxpet.com/formulas/natural-cleaning-dental-sticks/",
+   "err": null
+  },
+  {
+   "zh": "/zh/formulas/nutrition-paste/",
+   "status": 301,
+   "location": "https://dev.zxpet.com/formulas/nutrition-paste/",
+   "by": "SINO FRESH",
+   "want": "https://dev.zxpet.com/formulas/nutrition-paste/",
+   "err": null
+  },
+  {
+   "zh": "/zh/formulas/oral-care-dental-sticks/",
+   "status": 301,
+   "location": "https://dev.zxpet.com/formulas/oral-care-dental-sticks/",
+   "by": "SINO FRESH",
+   "want": "https://dev.zxpet.com/formulas/oral-care-dental-sticks/",
+   "err": null
+  },
+  {
+   "zh": "/zh/formulas/plaque-control-dental-chews/",
+   "status": 301,
+   "location": "https://dev.zxpet.com/formulas/plaque-control-dental-chews/",
+   "by": "SINO FRESH",
+   "want": "https://dev.zxpet.com/formulas/plaque-control-dental-chews/",
+   "err": null
+  },
+  {
+   "zh": "/zh/formulas/probiotic-powder/",
+   "status": 301,
+   "location": "https://dev.zxpet.com/formulas/probiotic-powder/",
+   "by": "SINO FRESH",
+   "want": "https://dev.zxpet.com/formulas/probiotic-powder/",
+   "err": null
+  },
+  {
+   "zh": "/zh/formulas/pumpkin-digestive-powder/",
+   "status": 301,
+   "location": "https://dev.zxpet.com/formulas/pumpkin-digestive-powder/",
+   "by": "SINO FRESH",
+   "want": "https://dev.zxpet.com/formulas/pumpkin-digestive-powder/",
+   "err": null
+  },
+  {
+   "zh": "/zh/formulas/pure-fish-oil-blend/",
+   "status": 301,
+   "location": "https://dev.zxpet.com/formulas/pure-fish-oil-blend/",
+   "by": "SINO FRESH",
+   "want": "https://dev.zxpet.com/formulas/pure-fish-oil-blend/",
+   "err": null
+  },
+  {
+   "zh": "/zh/formulas/skin-coat-soft-chews/",
+   "status": 301,
+   "location": "https://dev.zxpet.com/formulas/skin-coat-soft-chews/",
+   "by": "SINO FRESH",
+   "want": "https://dev.zxpet.com/formulas/skin-coat-soft-chews/",
+   "err": null
+  },
+  {
+   "zh": "/zh/formulas/urinary-care-drops/",
+   "status": 301,
+   "location": "https://dev.zxpet.com/formulas/urinary-care-drops/",
+   "by": "SINO FRESH",
+   "want": "https://dev.zxpet.com/formulas/urinary-care-drops/",
+   "err": null
+  },
+  {
+   "zh": "/zh/formulas/wild-alaskan-salmon-oil/",
+   "status": 301,
+   "location": "https://dev.zxpet.com/formulas/wild-alaskan-salmon-oil/",
+   "by": "SINO FRESH",
+   "want": "https://dev.zxpet.com/formulas/wild-alaskan-salmon-oil/",
+   "err": null
+  },
+  {
+   "zh": "/zh/privacy-policy/",
+   "status": 301,
+   "location": "https://dev.zxpet.com/privacy-policy/",
+   "by": "SINO FRESH",
+   "want": "https://dev.zxpet.com/privacy-policy/",
+   "err": null
+  },
+  {
+   "zh": "/zh/products/",
+   "status": 301,
+   "location": "https://dev.zxpet.com/products/",
+   "by": "SINO FRESH",
+   "want": "https://dev.zxpet.com/products/",
+   "err": null
+  },
+  {
+   "zh": "/zh/products/dental-chews/",
+   "status": 301,
+   "location": "https://dev.zxpet.com/products/dental-chews/",
+   "by": "SINO FRESH",
+   "want": "https://dev.zxpet.com/products/dental-chews/",
+   "err": null
+  },
+  {
+   "zh": "/zh/products/drops/",
+   "status": 301,
+   "location": "https://dev.zxpet.com/products/drops/",
+   "by": "SINO FRESH",
+   "want": "https://dev.zxpet.com/products/drops/",
+   "err": null
+  },
+  {
+   "zh": "/zh/products/fish-oil/",
+   "status": 301,
+   "location": "https://dev.zxpet.com/products/fish-oil/",
+   "by": "SINO FRESH",
+   "want": "https://dev.zxpet.com/products/fish-oil/",
+   "err": null
+  },
+  {
+   "zh": "/zh/products/liquids/",
+   "status": 301,
+   "location": "https://dev.zxpet.com/products/liquids/",
+   "by": "SINO FRESH",
+   "want": "https://dev.zxpet.com/products/liquids/",
+   "err": null
+  },
+  {
+   "zh": "/zh/products/pastes/",
+   "status": 301,
+   "location": "https://dev.zxpet.com/products/pastes/",
+   "by": "SINO FRESH",
+   "want": "https://dev.zxpet.com/products/pastes/",
+   "err": null
+  },
+  {
+   "zh": "/zh/products/powders/",
+   "status": 301,
+   "location": "https://dev.zxpet.com/products/powders/",
+   "by": "SINO FRESH",
+   "want": "https://dev.zxpet.com/products/powders/",
+   "err": null
+  },
+  {
+   "zh": "/zh/products/soft-chews/",
+   "status": 301,
+   "location": "https://dev.zxpet.com/products/soft-chews/",
+   "by": "SINO FRESH",
+   "want": "https://dev.zxpet.com/products/soft-chews/",
+   "err": null
+  },
+  {
+   "zh": "/zh/products/tablets/",
+   "status": 301,
+   "location": "https://dev.zxpet.com/products/tablets/",
+   "by": "SINO FRESH",
+   "want": "https://dev.zxpet.com/products/tablets/",
+   "err": null
+  },
+  {
+   "zh": "/zh/quality/",
+   "status": 301,
+   "location": "https://dev.zxpet.com/quality/",
+   "by": "SINO FRESH",
+   "want": "https://dev.zxpet.com/quality/",
+   "err": null
+  },
+  {
+   "zh": "/zh/services/",
+   "status": 301,
+   "location": "https://dev.zxpet.com/services/",
+   "by": "SINO FRESH",
+   "want": "https://dev.zxpet.com/services/",
+   "err": null
+  },
+  {
+   "zh": "/zh/services/contract-manufacturing/",
+   "status": 301,
+   "location": "https://dev.zxpet.com/services/contract-manufacturing/",
+   "by": "SINO FRESH",
+   "want": "https://dev.zxpet.com/services/contract-manufacturing/",
+   "err": null
+  },
+  {
+   "zh": "/zh/services/odm/",
+   "status": 301,
+   "location": "https://dev.zxpet.com/services/odm/",
+   "by": "SINO FRESH",
+   "want": "https://dev.zxpet.com/services/odm/",
+   "err": null
+  },
+  {
+   "zh": "/zh/services/oem/",
+   "status": 301,
+   "location": "https://dev.zxpet.com/services/oem/",
+   "by": "SINO FRESH",
+   "want": "https://dev.zxpet.com/services/oem/",
+   "err": null
+  },
+  {
+   "zh": "/zh/services/private-label/",
+   "status": 301,
+   "location": "https://dev.zxpet.com/services/private-label/",
+   "by": "SINO FRESH",
+   "want": "https://dev.zxpet.com/services/private-label/",
+   "err": null
+  },
+  {
+   "zh": "/zh/terms/",
+   "status": 301,
+   "location": "https://dev.zxpet.com/terms/",
+   "by": "SINO FRESH",
+   "want": "https://dev.zxpet.com/terms/",
+   "err": null
+  },
+  {
+   "zh": "/zh/test-article/",
+   "status": 301,
+   "location": "https://dev.zxpet.com/test-article/",
+   "by": "SINO FRESH",
+   "want": "https://dev.zxpet.com/test-article/",
+   "err": null
+  }
+ ],
+ "extras": [
+  {
+   "path": "/zh/wp-json/wp/v2/types",
+   "status": 404,
+   "location": null,
+   "by": null,
+   "why": "declared exempt: this rule must not touch it"
+  },
+  {
+   "path": "/zh/feed/",
+   "status": 200,
+   "location": null,
+   "by": null,
+   "why": "declared exempt: this rule must not touch it"
+  },
+  {
+   "path": "/zh/about/?trp-edit-translation=true",
+   "status": 301,
+   "location": "https://dev.zxpet.com/about/?trp-edit-translation=true",
+   "by": "WordPress",
+   "why": "editor request: this rule must not touch it"
+  },
+  {
+   "path": "/zh/about/?a=1&b=2",
+   "status": 301,
+   "location": "https://dev.zxpet.com/about/?a=1&b=2",
+   "by": "SINO FRESH",
+   "why": "must 301 and keep the query"
+  }
+ ],
+ "hreflang": [
+  "en-US",
+  "en"
+ ],
+ "html_lang": "en-US",
+ "failed": [],
+ "passed": [
+  "the served page carries this theme's stylesheet",
+  "the served page does not advertise the preflight copy",
+  "301 /zh/ -> /",
+  "301 /zh/about/ -> /about/",
+  "301 /zh/blog/ -> /blog/",
+  "301 /zh/case-study-australia-fish-oil-trading/ -> /case-study-australia-fish-oil-trading/",
+  "301 /zh/case-study-germany-ecommerce-powders/ -> /case-study-germany-ecommerce-powders/",
+  "301 /zh/case-study-japan-pastes-palatability/ -> /case-study-japan-pastes-palatability/",
+  "301 /zh/case-study-spain-veterinary-drops/ -> /case-study-spain-veterinary-drops/",
+  "301 /zh/case-study-uk-distributor-tablets/ -> /case-study-uk-distributor-tablets/",
+  "301 /zh/case-study-us-brand-owner-soft-chews/ -> /case-study-us-brand-owner-soft-chews/",
+  "301 /zh/contact/ -> /contact/",
+  "301 /zh/cookie-policy/ -> /cookie-policy/",
+  "301 /zh/cooperation/ -> /cooperation/",
+  "301 /zh/factory-tour/ -> /factory-tour/",
+  "301 /zh/faq/ -> /faq/",
+  "301 /zh/feedback/ -> /feedback/",
+  "301 /zh/formulas/bladder-support-powder/ -> /formulas/bladder-support-powder/",
+  "301 /zh/formulas/calcium-phosphorus-tablets/ -> /formulas/calcium-phosphorus-tablets/",
+  "301 /zh/formulas/calming-soft-chews/ -> /formulas/calming-soft-chews/",
+  "301 /zh/formulas/digestive-soft-chews/ -> /formulas/digestive-soft-chews/",
+  "301 /zh/formulas/ear-care-drops/ -> /formulas/ear-care-drops/",
+  "301 /zh/formulas/hairball-remedy-paste/ -> /formulas/hairball-remedy-paste/",
+  "301 /zh/formulas/joint-support-soft-chews/ -> /formulas/joint-support-soft-chews/",
+  "301 /zh/formulas/joint-support-tablets/ -> /formulas/joint-support-tablets/",
+  "301 /zh/formulas/liquid-joint-support/ -> /formulas/liquid-joint-support/",
+  "301 /zh/formulas/liquid-skin-coat/ -> /formulas/liquid-skin-coat/",
+  "301 /zh/formulas/multivitamin-tablets/ -> /formulas/multivitamin-tablets/",
+  "301 /zh/formulas/natural-cleaning-dental-sticks/ -> /formulas/natural-cleaning-dental-sticks/",
+  "301 /zh/formulas/nutrition-paste/ -> /formulas/nutrition-paste/",
+  "301 /zh/formulas/oral-care-dental-sticks/ -> /formulas/oral-care-dental-sticks/",
+  "301 /zh/formulas/plaque-control-dental-chews/ -> /formulas/plaque-control-dental-chews/",
+  "301 /zh/formulas/probiotic-powder/ -> /formulas/probiotic-powder/",
+  "301 /zh/formulas/pumpkin-digestive-powder/ -> /formulas/pumpkin-digestive-powder/",
+  "301 /zh/formulas/pure-fish-oil-blend/ -> /formulas/pure-fish-oil-blend/",
+  "301 /zh/formulas/skin-coat-soft-chews/ -> /formulas/skin-coat-soft-chews/",
+  "301 /zh/formulas/urinary-care-drops/ -> /formulas/urinary-care-drops/",
+  "301 /zh/formulas/wild-alaskan-salmon-oil/ -> /formulas/wild-alaskan-salmon-oil/",
+  "301 /zh/privacy-policy/ -> /privacy-policy/",
+  "301 /zh/products/ -> /products/",
+  "301 /zh/products/dental-chews/ -> /products/dental-chews/",
+  "301 /zh/products/drops/ -> /products/drops/",
+  "301 /zh/products/fish-oil/ -> /products/fish-oil/",
+  "301 /zh/products/liquids/ -> /products/liquids/",
+  "301 /zh/products/pastes/ -> /products/pastes/",
+  "301 /zh/products/powders/ -> /products/powders/",
+  "301 /zh/products/soft-chews/ -> /products/soft-chews/",
+  "301 /zh/products/tablets/ -> /products/tablets/",
+  "301 /zh/quality/ -> /quality/",
+  "301 /zh/services/ -> /services/",
+  "301 /zh/services/contract-manufacturing/ -> /services/contract-manufacturing/",
+  "301 /zh/services/odm/ -> /services/odm/",
+  "301 /zh/services/oem/ -> /services/oem/",
+  "301 /zh/services/private-label/ -> /services/private-label/",
+  "301 /zh/terms/ -> /terms/",
+  "301 /zh/test-article/ -> /test-article/",
+  "no ZH route is left as a 404",
+  "every redirect is authored by this theme",
+  "the redirect target answers 200 for the sampled routes",
+  "/zh/wp-json/... is not redirected by this rule",
+  "/zh/feed/ is not redirected by this rule",
+  "this rule does not redirect the editor request",
+  "query string survives the redirect",
+  "EN / is not redirected by this rule",
+  "EN /about/ is not redirected by this rule",
+  "EN /quality/ is not redirected by this rule",
+  "EN /formulas/ is not redirected by this rule",
+  "EN /blog/ is not redirected by this rule",
+  "a path that merely starts with z-h is not captured",
+  "no zh / zh-CN hreflang left",
+  "the English side still declares itself",
+  "the English page is served as English",
+  "floating switcher no longer rendered",
+  "no language-item markup, so no empty shell is left behind",
+  "no <nav class=\"trp-language-switcher\"> markup",
+  "home still 200",
+  "transport answered twice with the same status"
+ ]
+}
