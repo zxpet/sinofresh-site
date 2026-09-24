@@ -1,9 +1,20 @@
 # Batch 3b-2 — deploy record
 
 Theme commit `cfbdc2e`, installed to the preflight copy as
-`sinofresh-theme-preflight` (style.css `dee6df66…`). **Live is still `2.10.77`
-at `4dc0906`** — the pull is held back until the tick confirms, so everything
-below was measured through the preflight header, never on the live theme.
+`sinofresh-theme-preflight`. Everything below was originally measured through
+the preflight header, with live still on `2.10.77` at `4dc0906`.
+
+**Post-pull addendum.** The tick approved the pull and dev took `fbec90b`
+(`95cac91` → `fbec90b`), so live is now `2.10.78`. Both groups were re-measured
+against live and reproduce field for field — `Manage 11/11` at all four widths
+with the switcher intersection at 0, `term 宽=[120]` with one value x per
+column, no overflow. The two theme directories are byte-identical:
+`style.css` md5 `96c8ce70e65ed70730d09629258efad8` on the `cfbdc2e` blob, the
+repo working tree, the preflight copy and live (a symlink) alike — the earlier
+`dee6df66…` recorded here was a transcription error and matched no object in
+the repository. The `2.10.77` bytes are `364ed825d4eccda4df8ede8f6c032f40`.
+Re-measure with `--shots /tmp/...`: this harness's default frame directory
+holds the committed before/after pair.
 
 Two stylesheet defects, both fixed in `style.css` and nowhere else. One gate
 assertion moves with them; nothing else does.
