@@ -34,7 +34,7 @@ add_action('after_setup_theme', function() {
 });
 
 add_action('wp_enqueue_scripts', function() {
-	wp_enqueue_style('sinofresh-style', get_stylesheet_uri(), array(), '2.10.83');
+	wp_enqueue_style('sinofresh-style', get_stylesheet_uri(), array(), '2.10.84');
 	// Sticky nav: every template renders parts/header.html, so this is site-wide.
 	wp_enqueue_script('sinofresh-sticky-header', get_template_directory_uri() . '/assets/js/sticky-header.js', array(), '1.0.0', true);
 	/* Consent decisions are now versioned + time-boxed and bridged into WP
@@ -2918,7 +2918,6 @@ add_shortcode('sf_formula_config', 'sinofresh_formula_config');
  *   Shelf Life         sf_formula_shelf_life            (the fixed pool, H8a;
  *                      the spec sheet's "… shelf life" segment is the
  *                      fallback — see sinofresh_formula_shelf_life_line())
- *   Main Ingredients   sf_formula_ingredients            (the first three)
  *   MOQ                dosage page .sf-facts-mini row    (via spec_cell)
  *   Certifications     Site Settings sf_certifications   (the same reader the
  *                      factsheet row and the batch C FAQ answer use, so the
@@ -2926,6 +2925,8 @@ add_shortcode('sf_formula_config', 'sinofresh_formula_config');
  *   Place of Origin    Site Settings sf_factory_origin   (batch H7e; the field
  *                      ships with the constant it replaced, so no page moved)
  *   OEM / ODM          Site Settings sf_factory_oem      (batch H7e, same)
+ *   Main Ingredients   sf_formula_ingredients            (the first three;
+ *                      batch H10b moved the row into this group)
  *
  * sf_formula_shape is read although nothing registers it. The field predates
  * the meta registry and exists on one record; WordPress reads an unregistered
@@ -2936,7 +2937,9 @@ add_shortcode('sf_formula_config', 'sinofresh_formula_config');
  * below prints the whole list as pills, so this row only has to answer "what
  * is this made of" at a glance. The cut is silent on purpose: an "and more"
  * tail would make the table promise a list it then truncates, and the complete
- * list is a band away.
+ * list is a band away. Batch H10b moved this row into the core group: the
+ * product-specifications group it used to open usually has no other rows yet,
+ * and a group heading over a single line breaks the sheet's grid.
  *
  * Empty means absent, the contract [sf_formula_params] keeps: a row with no
  * value is not rendered at all, so the row set differs per record by design
@@ -2975,9 +2978,11 @@ function sinofresh_formula_specs_table() {
 
 	/* Each cell is escaped where it is built — the chip builder escapes its own
 	   values — so the row loop below must not escape a second time. Batch H10
-	   splits the one flat list into the sheet's three display groups; a row
-	   with no value is still not rendered at all (empty-means-absent), and a
-	   group with no rows is not either. */
+	   split the one flat list into display groups; batch H10b removed the
+	   formula-copy, label-compliance and logistics rows (product-specific
+	   prose now, written by the editors into the body), leaving two groups. A
+	   row with no value is still not rendered at all (empty-means-absent), and
+	   a group with no rows is not either. */
 
 	/* --- Core parameters: what the product IS and how it is bought. --- */
 	$rows = array();
@@ -3031,8 +3036,30 @@ function sinofresh_formula_specs_table() {
 	if ($value !== '') {
 		$rows['OEM / ODM'] = esc_html($value);
 	}
-
-	/* --- Product specifications: what is IN it and what the label says. --- */
+	/* Batch H10b — the ingredients overview line lives in the core group: the
+	   product-specifications group it used to open now usually has no other
+	   rows (the per-record structured fields are still unfilled), and a group
+	   heading over a single line breaks the sheet's grid. Core keeps the
+	   "what a buyer should know at a glance" reading order, the full list is
+	   still one screen below in the Formula & nutrition band, and the
+	   specifications group returns on its own once the record fields ship. */
+	$ingredients = array();
+	foreach (explode(',', (string) get_post_meta($post_id, 'sf_formula_ingredients', true)) as $line) {
+		$line = trim($line);
+		if ($line !== '') {
+			$ingredients[] = $line;
+		}
+	}
+	$ingredients = array_slice($ingredients, 0, 3);
+	if ($ingredients) {
+		$rows['Main Ingredients'] = sinofresh_formula_specs_table_chips($ingredients);
+	}
+	/* --- Product specifications: per-record structured facts. Batch H10b
+	   removed the formula-copy, label-compliance and logistics rows (they are
+	   product-specific prose now, written by the editors into the body); what
+	   remains is the structured record layer. A group with no rows is not
+	   rendered (the empty-means-absent contract), so until the sales desk
+	   fills the record fields this group stays off the page. --- */
 	$spec_rows = array();
 
 	/* Batch H9 — the four rows below read the record's own meta FIRST (the
@@ -3064,8 +3091,7 @@ function sinofresh_formula_specs_table() {
 			? (string) sf_formula_field_pool_label($form_slug, 'shape') : '';
 		$spec_rows[($shape_row !== '' ? $shape_row : 'Shape')] = esc_html(implode(', ', $shape_vals));
 	}
-	/* Batch H9 — Unit Weight and Pack Size: meta first, specs fallback. */
-	$weight_vals = sf_json_array(get_post_meta($post_id, 'sf_formula_weight', true));
+	/* Batch H9 — Unit Weight and Pack Size: meta first, specs fallback. */	$weight_vals = sf_json_array(get_post_meta($post_id, 'sf_formula_weight', true));
 	if (!$weight_vals) {
 		$legacy = trim((string) get_post_meta($post_id, 'sf_formula_weight', true));
 		if ($legacy !== '') {
@@ -3083,31 +3109,13 @@ function sinofresh_formula_specs_table() {
 	} elseif (trim((string) $parts['pack']) !== '') {
 		$spec_rows['Pack Size'] = esc_html(trim((string) $parts['pack']));
 	}
-	/* The comma is the separator every sf_formula_ingredients value uses. */
-	$ingredients = array();
-	foreach (explode(',', (string) get_post_meta($post_id, 'sf_formula_ingredients', true)) as $line) {
-		$line = trim($line);
-		if ($line !== '') {
-			$ingredients[] = $line;
-		}
-	}
-	$ingredients = array_slice($ingredients, 0, 3);
-	if ($ingredients) {
-		$spec_rows['Main Ingredients'] = sinofresh_formula_specs_table_chips($ingredients);
-	}
-	/* Batch H10 — the spec-sheet fields (the sf_param_* keys, Spec Sheet
-	   metabox group). Every one is empty-means-absent: the sales desk fills
-	   what it can stand behind, and a blank field prints no row. */
+	/* Batch H10b — the three OEM-capability fields the ruling kept. Every one
+	   is empty-means-absent: the sales desk fills what it can stand behind,
+	   and a blank field prints no row. */
 	foreach (array(
-		'sf_param_inactive_ingredients' => 'Inactive Ingredients',
-		'sf_param_calorie'              => 'Calorie Content',
-		'sf_param_adequacy'             => 'Nutritional Adequacy',
-		'sf_param_compliance_markets'   => 'Compliance Markets',
-		'sf_param_label_language'       => 'Label Language',
-		'sf_param_label_items'          => 'Label Items Available',
-		'sf_param_customizable'         => 'Customizable',
-		'sf_param_private_label'        => 'Private Label',
-		'sf_param_payment_terms'        => 'Payment Terms',
+		'sf_param_customizable'  => 'Customizable',
+		'sf_param_private_label' => 'Private Label',
+		'sf_param_payment_terms' => 'Payment Terms',
 	) as $key => $label) {
 		$value = trim((string) get_post_meta($post_id, $key, true));
 		if ($value !== '') {
@@ -3115,33 +3123,9 @@ function sinofresh_formula_specs_table() {
 		}
 	}
 
-	/* --- Packaging & logistics: how it ships. --- */
-	$pack_rows = array();
-	/* The record's own primary packaging wins; the dosage form's fact is the
-	   fallback (the same "record first, form fact second" order as Lead Time
-	   and MOQ). */
-	$value = trim((string) get_post_meta($post_id, 'sf_param_primary_packaging', true));
-	if ($value === '' && $form_slug !== '') {
-		$value = sinofresh_formula_spec_cell($form_slug, 'Packaging formats');
-	}
-	if (trim((string) $value) !== '') {
-		$pack_rows['Primary Packaging'] = esc_html(trim((string) $value));
-	}
-	foreach (array(
-		'sf_param_gross_net_weight' => 'Gross-Net Weight',
-		'sf_param_container_load'   => 'Container Load',
-		'sf_param_storage'          => 'Storage',
-	) as $key => $label) {
-		$value = trim((string) get_post_meta($post_id, $key, true));
-		if ($value !== '') {
-			$pack_rows[$label] = esc_html($value);
-		}
-	}
-
 	$groups = array(
-		'core'      => array('title' => 'Core Parameters', 'rows' => $rows),
-		'specs'     => array('title' => 'Product Specifications', 'rows' => $spec_rows),
-		'packaging' => array('title' => 'Packaging & Logistics', 'rows' => $pack_rows),
+		'core'  => array('title' => 'Core Parameters', 'rows' => $rows),
+		'specs' => array('title' => 'Product Specifications', 'rows' => $spec_rows),
 	);
 
 	$html = '';

@@ -3,6 +3,11 @@
 Factory & Trust band, and the sf_form_facts option that replaced the eight
 templates' hard-coded .sf-facts-mini bands.
 
+Batch H10b evolution: the formula-copy, label-compliance and logistics
+sf_param_* rows were removed (that content is product-specific prose in the
+body band now) — the spec sheet renders two groups, the specsheet metabox
+holds 4 fields, and Main Ingredients moved into the core group.
+
 Modes:
   --source      static assertions on the workspace files
   --preflight   behavioural assertions against the preflight theme copy
@@ -165,8 +170,11 @@ def source_mode():
           "SF_FACTS_MINI" in fn and "add_filter('render_block'" in fn)
     check("the band builder routes Certifications through the Site Settings chain",
           "sf_formula_certifications_value($form)" in fn)
-    check("spec sheet renders the three named groups",
-          all(t in fn for t in ["Core Parameters", "Product Specifications", "Packaging & Logistics"]))
+    check("spec sheet renders the two named groups (H10b: logistics rows removed)",
+          all(t in fn for t in ["Core Parameters", "Product Specifications"])
+          and "Packaging & Logistics" not in fn)
+    check("Main Ingredients row sits in the core group (H10b)",
+          "$rows['Main Ingredients']" in fn and "$spec_rows['Main Ingredients']" not in fn)
     check("trust band is its own section",
           "sf-fdetail-trust" in fn and "sinofresh_formula_trust_html()" in fn)
     check("trust defaults: three factory-tour facts + 24h response, three blank",
@@ -176,19 +184,25 @@ def source_mode():
           and "'15,000㎡'" in fn and "Within 24 hours" in fn)
     check("trust reader: never-saved shows default, stored empty hides the row",
           "get_option($key, null)" in fn and "return trim((string) $stored)" in fn)
-    check("spec sheet reads the sf_param_* keys",
-          fn.count("sf_param_") >= 13)
-    check("version bumped to 2.10.83 in the enqueue",
-          "'2.10.83'" in fn and "'2.10.82'" not in fn)
+    check("spec sheet reads only the four kept sf_param_* keys (H10b trim)",
+          all(k in fn for k in ["'sf_param_sample_policy'", "'sf_param_customizable'",
+                                "'sf_param_private_label'", "'sf_param_payment_terms'"])
+          and not any(k in fn for k in ["sf_param_inactive_ingredients", "sf_param_calorie",
+                                        "sf_param_adequacy", "sf_param_compliance_markets",
+                                        "sf_param_label_language", "sf_param_label_items",
+                                        "sf_param_primary_packaging", "sf_param_gross_net_weight",
+                                        "sf_param_container_load", "sf_param_storage"]))
+    check("version bumped to 2.10.84 in the enqueue",
+          "'2.10.84'" in fn and "'2.10.83'" not in fn)
     check("no CJK survives comment-stripping in functions.php",
           CJK.search(fn) is None, CJK.findall(fn)[:5])
-    check("style.css header bumped to 2.10.83",
-          "Version: 2.10.83" in css)
+    check("style.css header bumped to 2.10.84",
+          "Version: 2.10.84" in css)
 
     print("== S2 formula-admin.php — Spec Sheet group + settings pages ==")
     check("'specsheet' group registered", "'specsheet' => array('title' => 'Spec Sheet'" in admin)
-    check("14 sf_param_* fields registered in the specsheet group",
-          admin.count("'group' => 'specsheet'") == 14)
+    check("4 sf_param_* fields registered in the specsheet group (H10b: 14 -> 4)",
+          admin.count("'group' => 'specsheet'") == 4)
     check("the fields carry Chinese hints (admin-only by construction)",
           CJK.search(admin) is not None)
     check("the five configurator keys carry the 158 test-residue annotation",
@@ -200,12 +214,14 @@ def source_mode():
           and "'sanitize_callback' => 'sanitize_text_field'" in admin)
     check("Dosage Form Facts submenu page registered",
           "'sf-form-facts', 'sf_render_form_facts_page'" in admin)
-    check("meta registration covers the sf_param_* keys",
+    check("meta registration covers the kept sf_param_* keys",
           all(("'sf_param_%s'" % k) in admin for k in
-              ["sample_policy", "inactive_ingredients", "calorie", "adequacy",
-               "compliance_markets", "label_language", "label_items", "customizable",
-               "private_label", "payment_terms", "primary_packaging",
-               "gross_net_weight", "container_load", "storage"]))
+              ["sample_policy", "customizable", "private_label", "payment_terms"]))
+    check("the ten removed H10 keys are unregistered (H10b trim)",
+          not any(("'sf_param_%s'" % k) in admin for k in
+                  ["inactive_ingredients", "calorie", "adequacy", "compliance_markets",
+                   "label_language", "label_items", "primary_packaging",
+                   "gross_net_weight", "container_load", "storage"]))
 
     print("== S3 templates — marker in, static band out ==")
     for f in FORMS:
@@ -276,8 +292,20 @@ def behaviour_mode(preflight):
     detail = detail_url_of(int(pid))
     status, html = fetch(detail, preflight)
     check("detail page served (%s)" % detail, status == 200)
-    check("three group headings render",
-          all(t in html for t in ["Core Parameters", "Product Specifications", "Packaging &amp; Logistics"]))
+    check("Core Parameters group renders", "Core Parameters" in html)
+    check("Packaging & Logistics group is gone (H10b)",
+          "Packaging &amp; Logistics" not in html and "Packaging & Logistics" not in html)
+    check("removed H10 row labels absent from the spec sheet (H10b trim)",
+          all(("sf-fdetail-specs__term\">%s</dt>" % t) not in html for t in
+              ["Inactive Ingredients", "Calorie Content", "Nutritional Adequacy",
+               "Compliance Markets", "Label Language", "Label Items Available",
+               "Primary Packaging", "Gross-Net Weight", "Container Load", "Storage"]))
+    m_core = re.search(r'<dl class="sf-fdetail-specs__group sf-fdetail-specs__group--core">(.*?)</dl>', html, re.S)
+    check("Main Ingredients row sits in the core group (H10b)",
+          m_core is not None and "Main Ingredients" in m_core.group(1))
+    m_spec = re.search(r'__group--specs"', html)
+    check("spec group heading and dl agree (empty group fully absent)",
+          ("Product Specifications" in html) == bool(m_spec))
     check("trust band renders with the shipped defaults",
           "sf-fdetail-trust" in html and "Factory &amp; Trust" in html
           and "15,000㎡" in html and "ISO 8" in html and "30+ countries" in html
@@ -288,7 +316,7 @@ def behaviour_mode(preflight):
     check("front-end HTML has zero CJK ideographs",
           CJK.search(html) is None, CJK.findall(html)[:5])
     check("unfilled sf_param_* rows stay absent (empty-means-absent)",
-          "Inactive Ingredients" not in html and "Payment Terms" not in html)
+          "Inactive Ingredients" not in html and "sf-fdetail-specs__term\">Payment Terms</dt>" not in html)
     check("right-column params band still renders",
           'sf-fdetail2__params' in html)
     time.sleep(1.3)

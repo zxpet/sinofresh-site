@@ -48,19 +48,9 @@ add_action('init', function () {
 		'sf_formula_faq_data'         => 'JSON array of {q, a} product FAQ rows.',
 		'sf_formula_groups_config'    => 'Configurator Display overrides (JSON, batch H9): {group: {show, label, options}}.',
 		'sf_param_sample_policy'       => 'Sample Policy line (batch H10 spec sheet).',
-		'sf_param_inactive_ingredients'=> 'Inactive ingredients, comma-separated (batch H10 spec sheet).',
-		'sf_param_calorie'             => 'Calorie Content line, AAFCO format (batch H10 spec sheet).',
-		'sf_param_adequacy'            => 'Nutritional Adequacy statement (batch H10 spec sheet).',
-		'sf_param_compliance_markets'  => 'Compliance markets line (batch H10 spec sheet).',
-		'sf_param_label_language'      => 'Label language line (batch H10 spec sheet).',
-		'sf_param_label_items'         => 'Customisable label items (batch H10 spec sheet).',
 		'sf_param_customizable'        => 'Customisation scope line (batch H10 spec sheet).',
 		'sf_param_private_label'       => 'Private label availability line (batch H10 spec sheet).',
 		'sf_param_payment_terms'       => 'Payment terms line (batch H10 spec sheet).',
-		'sf_param_primary_packaging'   => 'Primary packaging; falls back to the dosage-form fact when empty (batch H10).',
-		'sf_param_gross_net_weight'    => 'Gross/net carton weight line (batch H10 spec sheet).',
-		'sf_param_container_load'      => 'Container load quantities (batch H10 spec sheet).',
-		'sf_param_storage'             => 'Storage conditions line (batch H10 spec sheet).',
 	);
 	foreach ($keys as $key => $desc) {
 		register_post_meta('sf_formula', $key, array(
@@ -179,36 +169,20 @@ function sf_formula_mb_fields() {
 			'hint' => '包装形式：勾选该剂型支持的包装，前台只显示勾选的，客户单选。历史值（如 Round）会保留可选，改存后落入新词汇。'),
 		array('key' => 'sf_formula_faq_data', 'label' => 'Product FAQ', 'group' => 'faq', 'type' => 'faqtable', 'req' => 1,
 			'hint' => 'Questions ship prefilled; fill the answers. Site-wide questions are appended from the Global FAQ.'),
-		// specsheet — batch H10. Chinese hints again render in this metabox only;
-		// the front end prints the row's LABEL and the value, never the hint.
+		// specsheet — batch H10, trimmed by H10b. The formula-copy, label-
+		// compliance and logistics fields were removed: that content is
+		// product-specific prose the editors write into the body band (Word /
+		// Excel paste), not per-field rows. Chinese hints again render in this
+		// metabox only; the front end prints the row's LABEL and the value,
+		// never the hint.
 		array('key' => 'sf_param_sample_policy', 'label' => 'Sample Policy', 'group' => 'specsheet', 'type' => 'text', 'req' => 1,
 			'hint' => '样品政策，如 Samples available, freight collect。留空该行不显示。'),
-		array('key' => 'sf_param_inactive_ingredients', 'label' => 'Inactive Ingredients', 'group' => 'specsheet', 'type' => 'textarea', 'req' => 1, 'rows' => 2,
-			'hint' => '非活性成分（辅料），逗号分隔，如 Gelatin, Glycerin, Purified Water。留空该行不显示。'),
-		array('key' => 'sf_param_calorie', 'label' => 'Calorie Content', 'group' => 'specsheet', 'type' => 'text', 'req' => 1,
-			'hint' => '热量声明（AAFCO 格式），如 3,600 kcal/kg。留空该行不显示。'),
-		array('key' => 'sf_param_adequacy', 'label' => 'Nutritional Adequacy', 'group' => 'specsheet', 'type' => 'textarea', 'req' => 1, 'rows' => 2,
-			'hint' => '营养适用性声明，如 For adult dogs of all breeds。留空该行不显示。'),
-		array('key' => 'sf_param_compliance_markets', 'label' => 'Compliance Markets', 'group' => 'specsheet', 'type' => 'text', 'req' => 1,
-			'hint' => '合规出口市场，填公司实际合规区域，如 US, EU, AU。勿猜，留空该行不显示。'),
-		array('key' => 'sf_param_label_language', 'label' => 'Label Language', 'group' => 'specsheet', 'type' => 'text', 'req' => 1,
-			'hint' => '标签语言，如 English by default; other languages available on request。涉及对外承诺，核对后填。'),
-		array('key' => 'sf_param_label_items', 'label' => 'Label Items Available', 'group' => 'specsheet', 'type' => 'textarea', 'req' => 1, 'rows' => 2,
-			'hint' => '可定制标签项，如 Client logo, brand name, ingredient panel, feeding guide, barcode。'),
 		array('key' => 'sf_param_customizable', 'label' => 'Customizable', 'group' => 'specsheet', 'type' => 'text', 'req' => 1,
 			'hint' => '可定制范围，如 Yes — formula, flavor, shape, color and packaging。'),
 		array('key' => 'sf_param_private_label', 'label' => 'Private Label', 'group' => 'specsheet', 'type' => 'text', 'req' => 1,
 			'hint' => '是否支持贴牌，如 Available。'),
 		array('key' => 'sf_param_payment_terms', 'label' => 'Payment Terms', 'group' => 'specsheet', 'type' => 'text', 'req' => 1,
 			'hint' => '付款方式（公司政策），如 T/T 30% deposit, balance before shipment。勿编，留空该行不显示。'),
-		array('key' => 'sf_param_primary_packaging', 'label' => 'Primary Packaging', 'group' => 'specsheet', 'type' => 'text', 'req' => 1,
-			'hint' => '主包装。留空时自动回退该剂型的 Packaging formats（Site Settings → Dosage Form Facts）。'),
-		array('key' => 'sf_param_gross_net_weight', 'label' => 'Gross-Net Weight', 'group' => 'specsheet', 'type' => 'text', 'req' => 1,
-			'hint' => '每箱毛重/净重，如 G.W. 6.5kg / N.W. 5.8kg。留空该行不显示。'),
-		array('key' => 'sf_param_container_load', 'label' => 'Container Load', 'group' => 'specsheet', 'type' => 'textarea', 'req' => 1, 'rows' => 2,
-			'hint' => '柜量，如 1×20GP: 1,800 cartons。留空该行不显示。'),
-		array('key' => 'sf_param_storage', 'label' => 'Storage', 'group' => 'specsheet', 'type' => 'text', 'req' => 1,
-			'hint' => '储存条件，如 Store in a cool, dry place away from direct sunlight; reseal after opening。'),
 	);
 }
 
