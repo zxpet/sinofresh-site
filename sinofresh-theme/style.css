@@ -2,7 +2,7 @@
 Theme Name: SINO FRESH
 Author: Shandong SINO FRESH Pet Food Co., Ltd.
 Text Domain: sinofresh
-Version: 2.10.82
+Version: 2.10.83
 Requires at least: 6.0
 Requires PHP: 7.4
 License: GNU General Public License v2 or later
@@ -7814,9 +7814,23 @@ body.sf-inquiry-lock {
 	display: grid;
 	grid-template-columns: repeat(2, minmax(0, 1fr));
 	column-gap: 64px;
+	/* Batch H10 — three named groups (Core / Specs / Packaging) instead of one
+	   list sliced into two anonymous columns; the gap joins them vertically. */
+	row-gap: 36px;
 }
 /* <dl> ships margin-block 1em; the groups are grid items, not prose. */
 .sf-fdetail-specs__group { margin: 0; }
+/* Batch H10 — the small-caps group heading. Sits inside its dl, above its
+   rows; the row rules below address it with the sibling selector so the
+   first row after it keeps the list's own rhythm. */
+.sf-fdetail-specs__gtitle {
+	margin: 0 0 2px;
+	font-size: 12px;
+	font-weight: 700;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: var(--wp--preset--color--text-secondary);
+}
 /* The label column is sized to its own content and floored at 120px. The nine
    labels in the sheet run 32–105px wide, so the floor is what decides every
    row: each row is its own grid, and a floor above the widest label is the
@@ -7832,12 +7846,13 @@ body.sf-inquiry-lock {
 	padding: 12px 0;
 	border-bottom: 1px solid var(--wp--preset--color--border-light);
 }
-/* No rule above the first row and none under the last: the band's own padding
-   is the whole space, and a group should not read as a boxed table. In the
-   two-column state that leaves each column's last row open, which is the point
-   — the two columns are one list that happens to wrap. */
-.sf-fdetail-specs__group > .sf-fdetail-specs__row:first-child { padding-top: 0; }
-.sf-fdetail-specs__group > .sf-fdetail-specs__row:last-child { border-bottom: 0; }
+/* No rule above the first row and none under the group's last row (the
+   --last class is set by the renderer): the band's own padding is the whole
+   space, and a group should not read as a boxed table. In the two-column
+   state that leaves each column's last row open, which is the point — the
+   columns are one list that happens to wrap. */
+.sf-fdetail-specs__gtitle + .sf-fdetail-specs__row { padding-top: 0; }
+.sf-fdetail-specs__row--last { border-bottom: 0; }
 .sf-fdetail-specs__term {
 	font-size: 13px;
 	font-weight: 600;
@@ -7861,6 +7876,63 @@ body.sf-inquiry-lock {
 	font-size: 13px;
 	line-height: 1.6;
 }
+/* Batch H10 — the Factory & Trust band. Its OWN section below the spec
+   sheet, not a fourth grid group: the top border is the separator the
+   ruling asked for, and the band prints nothing at all when every trust
+   field is off. Rows reuse the sheet's label/value grid vocabulary. */
+.sf-fdetail-trust {
+	padding: 40px 0 48px;
+	background-color: var(--wp--preset--color--card-white);
+	border-top: 1px solid var(--wp--preset--color--border-light);
+}
+.sf-fdetail-trust__inner {
+	max-width: var(--wp--style--global--content-size, 1200px);
+	margin-inline: auto;
+	padding-left: 38px;
+	padding-right: 38px;
+}
+.sf-fdetail-trust__title {
+	margin: 0 0 14px;
+	font-size: 12px;
+	font-weight: 700;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: var(--wp--preset--color--text-secondary);
+}
+.sf-fdetail-trust__list { margin: 0; }
+.sf-fdetail-trust__row {
+	display: grid;
+	grid-template-columns: minmax(120px, max-content) minmax(0, 1fr);
+	align-items: baseline;
+	column-gap: 20px;
+	padding: 12px 0;
+	border-bottom: 1px solid var(--wp--preset--color--border-light);
+}
+.sf-fdetail-trust__row:first-child { padding-top: 0; }
+.sf-fdetail-trust__row:last-child { border-bottom: 0; }
+.sf-fdetail-trust__term {
+	font-size: 13px;
+	font-weight: 600;
+	line-height: 1.5;
+	color: var(--wp--preset--color--text-secondary);
+}
+.sf-fdetail-trust__value {
+	margin: 0;
+	font-size: 15px;
+	line-height: 1.5;
+	color: var(--wp--preset--color--text-primary);
+}
+@media (max-width: 1240px) {
+	.sf-fdetail-trust__inner { padding-left: 38px; padding-right: 38px; }
+}
+@media (max-width: 768px) {
+	.sf-fdetail-trust { padding: 32px 0 40px; }
+	.sf-fdetail-trust__inner { padding-left: 20px; padding-right: 20px; }
+	.sf-fdetail-trust__row {
+		grid-template-columns: minmax(0, 1fr);
+		row-gap: 2px;
+	}
+}
 @media (max-width: 1240px) {
 	.sf-fdetail-specs {
 		padding-left: 38px;
@@ -7869,22 +7941,20 @@ body.sf-inquiry-lock {
 }
 /* 900, not 768: two columns of a 150px label plus a value stop fitting before
    the phone breakpoint does — at 768 the value column is under 300px and every
-   ingredient chip already wraps twice. One column from here down. */
+   ingredient chip already wraps twice. One column from here down, the three
+   groups stacking under their headings. */
 @media (max-width: 900px) {
 	.sf-fdetail-specs__inner {
 		grid-template-columns: minmax(0, 1fr);
 		column-gap: 0;
 	}
-	/* The two groups stack now, so they are one continuous list and the join
-	   needs the rule the first group's last row would otherwise drop — plus the
-	   top padding the second group's first row never had while it was a column
-	   beside the first. */
-	.sf-fdetail-specs__group:first-child > .sf-fdetail-specs__row:last-child {
-		border-bottom: 1px solid var(--wp--preset--color--border-light);
-	}
-	.sf-fdetail-specs__group:last-child > .sf-fdetail-specs__row:first-child {
-		padding-top: 12px;
-	}
+	/* The groups stack now, so they are one continuous list: every group's
+	   last row keeps the rule its own column would have dropped, and each
+	   heading after the first re-opens the space the previous group's last
+	   row never had. */
+	.sf-fdetail-specs__row--last { border-bottom: 1px solid var(--wp--preset--color--border-light); }
+	.sf-fdetail-specs__group:last-child > .sf-fdetail-specs__row--last { border-bottom: 0; }
+	.sf-fdetail-specs__group + .sf-fdetail-specs__group > .sf-fdetail-specs__gtitle { padding-top: 12px; }
 }
 @media (max-width: 768px) {
 	.sf-fdetail-specs {

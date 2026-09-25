@@ -34,7 +34,7 @@ add_action('after_setup_theme', function() {
 });
 
 add_action('wp_enqueue_scripts', function() {
-	wp_enqueue_style('sinofresh-style', get_stylesheet_uri(), array(), '2.10.82');
+	wp_enqueue_style('sinofresh-style', get_stylesheet_uri(), array(), '2.10.83');
 	// Sticky nav: every template renders parts/header.html, so this is site-wide.
 	wp_enqueue_script('sinofresh-sticky-header', get_template_directory_uri() . '/assets/js/sticky-header.js', array(), '1.0.0', true);
 	/* Consent decisions are now versioned + time-boxed and bridged into WP
@@ -656,56 +656,192 @@ function sinofresh_formula_badge_markup($badge, $inline = false) {
 }
 
 /**
- * One value of a dosage page's .sf-facts-mini core-facts row, by data-label.
+ * The four dosage-form facts, as one Site Settings option with shipped
+ * defaults (batch H10).
+ *
+ * Until H10 these four values lived as static HTML inside the eight
+ * templates/page-<form>.html files: the dosage page printed them verbatim and
+ * every other consumer read them back OUT of the template file with a regex
+ * (sinofresh_formula_spec_cell, below). Editing a value meant editing HTML and
+ * shipping a deploy. Now the option `sf_form_facts` holds one row per dosage
+ * form — {moq, lead, certs, packaging} — the templates carry a marker the
+ * block renderer swaps for the band built from this option, and every consumer
+ * keeps reading through sinofresh_formula_spec_cell(), which is why the swap
+ * moves where the value COMES FROM and nothing else: the defaults are the
+ * template strings character for character (en dashes included), which is what
+ * lets the byte-identity gate assert zero drift.
+ *
+ * Certifications keeps its two-layer chain: the Site Settings → Certifications
+ * line (sf_formula_certifications_value) wins everywhere it is non-empty, so
+ * this per-form value is only the last resort — the same role the template
+ * hardcode used to play.
+ *
+ * An emptied field falls back to the shipped default at read time (H7e's
+ * contract), so a stray empty submit can never blank the band on eight pages.
+ */
+function sf_form_facts_defaults() {
+	$lead  = 'Typically 7–15 working days after packaging is ready';
+	$certs = 'FDA, cGMP, ISO 9001, FSSC 22000, HACCP, BRC';
+	return array(
+		'soft-chews'   => array(
+			'moq'       => 'from 500–1,000 units',
+			'lead'      => $lead,
+			'certs'     => $certs,
+			'packaging' => 'Aluminum Stand-up Pouch, Aluminum Foil Pouch with Zipper, Plastic Bottle, Jar, Blister Pack, Box + Foil, or custom formats',
+		),
+		'tablets'      => array(
+			'moq'       => 'from 1,000 units',
+			'lead'      => $lead,
+			'certs'     => $certs,
+			'packaging' => 'Plastic Bottle, Jar, Blister Pack, Foil Pouch, or custom formats',
+		),
+		'dental-chews' => array(
+			'moq'       => 'from 1,000 units',
+			'lead'      => $lead,
+			'certs'     => $certs,
+			'packaging' => 'Foil Pouch, Stand-up Pouch, Box, or custom formats',
+		),
+		'fish-oil'     => array(
+			'moq'       => 'from 1,000 units',
+			'lead'      => $lead,
+			'certs'     => $certs,
+			'packaging' => 'Plastic Bottle, Glass Bottle, Pump Bottle, or custom formats',
+		),
+		'liquids'      => array(
+			'moq'       => 'from 500 units',
+			'lead'      => $lead,
+			'certs'     => $certs,
+			'packaging' => 'Plastic Bottle, Glass Bottle, Bottle with Cup, or custom formats',
+		),
+		'pastes'       => array(
+			'moq'       => 'from 500 units',
+			'lead'      => $lead,
+			'certs'     => $certs,
+			'packaging' => 'Plastic Tube, Metal Tube, Aluminum Tube, or custom formats',
+		),
+		'powders'      => array(
+			'moq'       => 'from 500 units',
+			'lead'      => $lead,
+			'certs'     => $certs,
+			'packaging' => 'Jar, Foil Pouch, Stand-up Pouch, or custom formats',
+		),
+		'drops'        => array(
+			'moq'       => 'from 500 units',
+			'lead'      => $lead,
+			'certs'     => $certs,
+			'packaging' => 'Dropper Bottle, Glass Bottle, Plastic Bottle, or custom formats',
+		),
+	);
+}
+
+/** One dosage-form fact: the stored value wins, an empty one gets the default. */
+function sf_form_facts_value($form, $fact) {
+	$d = sf_form_facts_defaults();
+	if (!isset($d[$form][$fact])) {
+		return '';
+	}
+	$opt = get_option('sf_form_facts', null);
+	if (is_array($opt) && isset($opt[$form][$fact])) {
+		$v = trim((string) $opt[$form][$fact]);
+		if ($v !== '') {
+			return $v;
+		}
+	}
+	return $d[$form][$fact];
+}
+
+/**
+ * One value of a dosage form's core-facts row, by data-label.
  *
  * The formula detail hero needs the MOQ and the lead time of the dosage form
- * the formula belongs to. Both exist as value spans of the .sf-facts-mini row
- * on /products/<form>/ (batch F1 re-established what the sf-spectable table
- * fed before 2D-E deleted it), so the hero reads them from that template file
- * instead of restating them — same single-source-of-truth rule the FAQPage,
- * BreadcrumbList and Product schema generators follow. Editing the row on
- * the dosage page updates every formula hero of that form.
+ * the formula belongs to. Until H10 both were read out of the dosage page's
+ * template file with a regex — the single-source trick that kept the hero, the
+ * intro clause, the FAQ answer, the Product schema and the spec sheet agreeing
+ * with each other and with the dosage page. H10 keeps the trick and changes
+ * the source: the four facts now live in the sf_form_facts option (see
+ * sf_form_facts_defaults), and this function is still the ONE reader all five
+ * consumers go through — edit the value in Site Settings → Dosage Form Facts
+ * and the dosage band, both hero meta rows, the intro clause, the FAQ answer,
+ * the spec sheet and the JSON-LD all move together.
  *
  * $label is the data-label attribute ("MOQ", "Lead time"), not the visible
  * label text, because data-label is the stable machine-readable twin of the
- * visible label (it also survives a wording change to the row's labels).
- *
- * The lookup is scoped to the .sf-facts-mini block, not the whole page: a
- * second data-label anywhere else on the page must never shadow the value.
- *
- * Returns a decoded string; callers escape per context. Memoised per
- * form+label, and returns '' for anything it cannot resolve so the caller
- * can drop the clause rather than print an empty "MOQ".
+ * visible label. Only the four labels the band carries resolve; anything else
+ * returns '' so the caller can drop the clause rather than print an empty row.
  */
 function sinofresh_formula_spec_cell($form, $label) {
-	$form  = sanitize_title($form);
-	$label = (string) $label;
-	if ($form === '' || $label === '') {
+	static $map = array(
+		'MOQ'               => 'moq',
+		'Lead time'         => 'lead',
+		'Certifications'    => 'certs',
+		'Packaging formats' => 'packaging',
+	);
+	$form = sanitize_title($form);
+	if ($form === '' || !isset($map[$label])) {
 		return '';
 	}
 	static $cache = array();
 	$key = $form . '|' . $label;
-	if (array_key_exists($key, $cache)) {
-		return $cache[$key];
-	}
-	$cache[$key] = '';
-
-	$file = get_stylesheet_directory() . '/templates/page-' . $form . '.html';
-	if (!file_exists($file)) {
-		return '';
-	}
-	$html = (string) file_get_contents($file);
-	/* Scope to the .sf-facts-mini row (batch F1's replacement for the
-	   sf-spectable table): the band's wp:html wrapper is consumed by the
-	   renderer, so the template carries the section verbatim. Non-greedy on
-	   both spans — the row holds no nested section and the page must never
-	   gain one inside it. */
-	if (preg_match('/<section class="sf-facts-mini">(.*?)<\/section>/s', $html, $band)
-		&& preg_match('/data-label="' . preg_quote($label, '/') . '"[^>]*>(.*?)<\/span>/s', $band[1], $m)) {
-		$cache[$key] = html_entity_decode(trim(wp_strip_all_tags($m[1])), ENT_QUOTES, 'UTF-8');
+	if (!array_key_exists($key, $cache)) {
+		$cache[$key] = sf_form_facts_value($form, $map[$label]);
 	}
 	return $cache[$key];
 }
+
+/**
+ * The dosage page's core-facts band, built from the sf_form_facts option.
+ *
+ * The markup is the eight templates' static band character for character —
+ * same line breaks, same attribute order, same visible labels ("Packaging" on
+ * the page, "Packaging formats" in data-label) — because the byte-identity
+ * gate diffs this output against the band those templates shipped. The block
+ * renderer swaps the templates' [SF_FACTS_MINI <slug>] marker for this (see
+ * the render_block hook below), so editing the option in Site Settings moves
+ * all eight dosage pages at once.
+ */
+function sinofresh_form_facts_mini_html($form) {
+	$form = sanitize_title($form);
+	$moq  = sinofresh_formula_spec_cell($form, 'MOQ');
+	$lead = sinofresh_formula_spec_cell($form, 'Lead time');
+	/* Certifications goes through the same chain the spec sheet uses: the
+	   Site Settings → Certifications line wins, the per-form value is the
+	   fallback — exactly what the template hardcode used to be. */
+	$certs = sf_formula_certifications_value($form);
+	$pack  = sinofresh_formula_spec_cell($form, 'Packaging formats');
+	if ($moq === '' && $lead === '' && $certs === '' && $pack === '') {
+		return '';
+	}
+	$item = function ($label, $data_label, $value) {
+		if ($value === '') {
+			return '';
+		}
+		return '<div class="sf-facts-mini__item"><span class="sf-facts-mini__label">' . esc_html($label)
+			. '</span> <span class="sf-facts-mini__value" data-label="' . esc_attr($data_label) . '">'
+			. esc_html($value) . '</span></div>';
+	};
+	return '<section class="sf-facts-mini">' . "\n"
+		. $item('MOQ', 'MOQ', $moq) . "\n"
+		. $item('Lead time', 'Lead time', $lead) . "\n"
+		. $item('Certifications', 'Certifications', $certs) . "\n"
+		. $item('Packaging', 'Packaging formats', $pack) . "\n"
+		. '</section>';
+}
+
+/**
+ * The templates' marker swap. The eight page-<form>.html files carry
+ * `[SF_FACTS_MINI <slug>]` inside a wp:html block; block templates render
+ * through do_blocks (no the_content filters), so render_block is the hook
+ * that sees the marker. Anything else passes through untouched.
+ */
+add_filter('render_block', function ($block_content, $block) {
+	if (($block['blockName'] ?? '') !== 'core/html') {
+		return $block_content;
+	}
+	if (preg_match('/^\[SF_FACTS_MINI ([a-z0-9-]+)\]$/', trim((string) $block_content), $m)) {
+		return sinofresh_form_facts_mini_html($m[1]);
+	}
+	return $block_content;
+}, 10, 2);
 
 /**
  * The three facts buried in a formula's one-line sf_formula_specs value.
@@ -2838,7 +2974,12 @@ function sinofresh_formula_specs_table() {
 	$parts = sinofresh_formula_specs_parts(trim((string) get_post_meta($post_id, 'sf_formula_specs', true)));
 
 	/* Each cell is escaped where it is built — the chip builder escapes its own
-	   values — so the row loop below must not escape a second time. */
+	   values — so the row loop below must not escape a second time. Batch H10
+	   splits the one flat list into the sheet's three display groups; a row
+	   with no value is still not rendered at all (empty-means-absent), and a
+	   group with no rows is not either. */
+
+	/* --- Core parameters: what the product IS and how it is bought. --- */
 	$rows = array();
 
 	if ($form_name !== '') {
@@ -2848,77 +2989,9 @@ function sinofresh_formula_specs_table() {
 	if ($species) {
 		$rows['Applicable Pet'] = sinofresh_formula_specs_table_chips($species);
 	}
-	/* Batch H9 — the four rows below read the record's own meta FIRST (the
-	   same values the configurator offers: the sheet cannot disagree with
-	   the picker) and fall back to the specs blob for a record whose meta
-	   has not been backfilled yet. Lifestage and shape accept the legacy
-	   plain-string value the pre-H9 saves stored. */
-	$lifestage_vals = sf_json_array(get_post_meta($post_id, 'sf_formula_lifestage', true));
-	if (!$lifestage_vals) {
-		$legacy = trim((string) get_post_meta($post_id, 'sf_formula_lifestage', true));
-		if ($legacy !== '') {
-			$lifestage_vals = array($legacy);
-		}
-	}
-	if ($lifestage_vals) {
-		$rows['Life Stage'] = esc_html(implode(', ', $lifestage_vals));
-	}
-	$shape_vals = sf_json_array(get_post_meta($post_id, 'sf_formula_shape', true));
-	if (!$shape_vals) {
-		$legacy = trim((string) get_post_meta($post_id, 'sf_formula_shape', true));
-		if ($legacy !== '') {
-			$shape_vals = array($legacy);
-		}
-	}
-	if ($shape_vals) {
-		/* Batch H8b — the row is named whatever the dosage form calls this
-		   question, because the picker one screen up is. A powder sheet that
-		   said "Shape: Fine Powder" under a picker headed "Appearance" would
-		   be this batch contradicting itself. On today's data the label only
-		   ever resolves to "Shape" (the one record carrying a value is a soft
-		   chew), so this is a no-op in bytes and a correctness fix for the
-		   first powder the sales desk fills in. */
-		$shape_row = function_exists('sf_formula_field_pool_label')
-			? (string) sf_formula_field_pool_label($form_slug, 'shape') : '';
-		$rows[($shape_row !== '' ? $shape_row : 'Shape')] = esc_html(implode(', ', $shape_vals));
-	}
-	/* Batch H9 — Unit Weight and Pack Size: meta first, specs fallback. On a
-	   backfilled record the two rows print the SAME strings the picker
-	   offers; on an unbackfilled one the specs blob keeps the sheet from
-	   going blank. */
-	$weight_vals = sf_json_array(get_post_meta($post_id, 'sf_formula_weight', true));
-	if (!$weight_vals) {
-		$legacy = trim((string) get_post_meta($post_id, 'sf_formula_weight', true));
-		if ($legacy !== '') {
-			$weight_vals = array($legacy);
-		}
-	}
-	if ($weight_vals) {
-		$rows['Unit Weight'] = esc_html(implode(', ', $weight_vals));
-	} elseif (trim((string) $parts['unit']) !== '') {
-		$rows['Unit Weight'] = esc_html(trim((string) $parts['unit']));
-	}
-	$counts_vals = sf_json_array(get_post_meta($post_id, 'sf_formula_counts', true));
-	if ($counts_vals) {
-		$rows['Pack Size'] = esc_html(implode(', ', $counts_vals));
-	} elseif (trim((string) $parts['pack']) !== '') {
-		$rows['Pack Size'] = esc_html(trim((string) $parts['pack']));
-	}
 	$shelf = sf_formula_shelf_life_line($post_id, $parts);
 	if ($shelf !== '') {
 		$rows['Shelf Life'] = esc_html($shelf);
-	}
-	/* The comma is the separator every sf_formula_ingredients value uses. */
-	$ingredients = array();
-	foreach (explode(',', (string) get_post_meta($post_id, 'sf_formula_ingredients', true)) as $line) {
-		$line = trim($line);
-		if ($line !== '') {
-			$ingredients[] = $line;
-		}
-	}
-	$ingredients = array_slice($ingredients, 0, 3);
-	if ($ingredients) {
-		$rows['Main Ingredients'] = sinofresh_formula_specs_table_chips($ingredients);
 	}
 	$value = ($form_slug !== '') ? sinofresh_formula_spec_cell($form_slug, 'MOQ') : '';
 	if (trim((string) $value) !== '') {
@@ -2927,6 +3000,20 @@ function sinofresh_formula_specs_table() {
 	$value = sf_formula_certifications_value($form_slug);
 	if (trim((string) $value) !== '') {
 		$rows['Certifications'] = esc_html(trim((string) $value));
+	}
+	/* The record's own lead time (the FAQ group's field) wins; the dosage
+	   form's fact is the fallback, so an unfilled record still shows the
+	   form-level answer rather than dropping the row. */
+	$value = trim((string) get_post_meta($post_id, 'sf_formula_lead_time', true));
+	if ($value === '' && $form_slug !== '') {
+		$value = sinofresh_formula_spec_cell($form_slug, 'Lead time');
+	}
+	if (trim((string) $value) !== '') {
+		$rows['Lead Time'] = esc_html(trim((string) $value));
+	}
+	$value = trim((string) get_post_meta($post_id, 'sf_param_sample_policy', true));
+	if ($value !== '') {
+		$rows['Sample Policy'] = esc_html($value);
 	}
 	/* Batch H7e moved both of these out of this function and into Site Settings
 	   -> Factory Information. They are read through one reader rather than
@@ -2945,30 +3032,213 @@ function sinofresh_formula_specs_table() {
 		$rows['OEM / ODM'] = esc_html($value);
 	}
 
-	if (!$rows) {
-		return '';
+	/* --- Product specifications: what is IN it and what the label says. --- */
+	$spec_rows = array();
+
+	/* Batch H9 — the four rows below read the record's own meta FIRST (the
+	   same values the configurator offers: the sheet cannot disagree with
+	   the picker) and fall back to the specs blob for a record whose meta
+	   has not been backfilled yet. Lifestage and shape accept the legacy
+	   plain-string value the pre-H9 saves stored. */
+	$lifestage_vals = sf_json_array(get_post_meta($post_id, 'sf_formula_lifestage', true));
+	if (!$lifestage_vals) {
+		$legacy = trim((string) get_post_meta($post_id, 'sf_formula_lifestage', true));
+		if ($legacy !== '') {
+			$lifestage_vals = array($legacy);
+		}
+	}
+	if ($lifestage_vals) {
+		$spec_rows['Life Stage'] = esc_html(implode(', ', $lifestage_vals));
+	}
+	$shape_vals = sf_json_array(get_post_meta($post_id, 'sf_formula_shape', true));
+	if (!$shape_vals) {
+		$legacy = trim((string) get_post_meta($post_id, 'sf_formula_shape', true));
+		if ($legacy !== '') {
+			$shape_vals = array($legacy);
+		}
+	}
+	if ($shape_vals) {
+		/* Batch H8b — the row is named whatever the dosage form calls this
+		   question, because the picker one screen up is. */
+		$shape_row = function_exists('sf_formula_field_pool_label')
+			? (string) sf_formula_field_pool_label($form_slug, 'shape') : '';
+		$spec_rows[($shape_row !== '' ? $shape_row : 'Shape')] = esc_html(implode(', ', $shape_vals));
+	}
+	/* Batch H9 — Unit Weight and Pack Size: meta first, specs fallback. */
+	$weight_vals = sf_json_array(get_post_meta($post_id, 'sf_formula_weight', true));
+	if (!$weight_vals) {
+		$legacy = trim((string) get_post_meta($post_id, 'sf_formula_weight', true));
+		if ($legacy !== '') {
+			$weight_vals = array($legacy);
+		}
+	}
+	if ($weight_vals) {
+		$spec_rows['Unit Weight'] = esc_html(implode(', ', $weight_vals));
+	} elseif (trim((string) $parts['unit']) !== '') {
+		$spec_rows['Unit Weight'] = esc_html(trim((string) $parts['unit']));
+	}
+	$counts_vals = sf_json_array(get_post_meta($post_id, 'sf_formula_counts', true));
+	if ($counts_vals) {
+		$spec_rows['Pack Size'] = esc_html(implode(', ', $counts_vals));
+	} elseif (trim((string) $parts['pack']) !== '') {
+		$spec_rows['Pack Size'] = esc_html(trim((string) $parts['pack']));
+	}
+	/* The comma is the separator every sf_formula_ingredients value uses. */
+	$ingredients = array();
+	foreach (explode(',', (string) get_post_meta($post_id, 'sf_formula_ingredients', true)) as $line) {
+		$line = trim($line);
+		if ($line !== '') {
+			$ingredients[] = $line;
+		}
+	}
+	$ingredients = array_slice($ingredients, 0, 3);
+	if ($ingredients) {
+		$spec_rows['Main Ingredients'] = sinofresh_formula_specs_table_chips($ingredients);
+	}
+	/* Batch H10 — the spec-sheet fields (the sf_param_* keys, Spec Sheet
+	   metabox group). Every one is empty-means-absent: the sales desk fills
+	   what it can stand behind, and a blank field prints no row. */
+	foreach (array(
+		'sf_param_inactive_ingredients' => 'Inactive Ingredients',
+		'sf_param_calorie'              => 'Calorie Content',
+		'sf_param_adequacy'             => 'Nutritional Adequacy',
+		'sf_param_compliance_markets'   => 'Compliance Markets',
+		'sf_param_label_language'       => 'Label Language',
+		'sf_param_label_items'          => 'Label Items Available',
+		'sf_param_customizable'         => 'Customizable',
+		'sf_param_private_label'        => 'Private Label',
+		'sf_param_payment_terms'        => 'Payment Terms',
+	) as $key => $label) {
+		$value = trim((string) get_post_meta($post_id, $key, true));
+		if ($value !== '') {
+			$spec_rows[$label] = esc_html($value);
+		}
 	}
 
-	$half = (int) ceil(count($rows) / 2);
+	/* --- Packaging & logistics: how it ships. --- */
+	$pack_rows = array();
+	/* The record's own primary packaging wins; the dosage form's fact is the
+	   fallback (the same "record first, form fact second" order as Lead Time
+	   and MOQ). */
+	$value = trim((string) get_post_meta($post_id, 'sf_param_primary_packaging', true));
+	if ($value === '' && $form_slug !== '') {
+		$value = sinofresh_formula_spec_cell($form_slug, 'Packaging formats');
+	}
+	if (trim((string) $value) !== '') {
+		$pack_rows['Primary Packaging'] = esc_html(trim((string) $value));
+	}
+	foreach (array(
+		'sf_param_gross_net_weight' => 'Gross-Net Weight',
+		'sf_param_container_load'   => 'Container Load',
+		'sf_param_storage'          => 'Storage',
+	) as $key => $label) {
+		$value = trim((string) get_post_meta($post_id, $key, true));
+		if ($value !== '') {
+			$pack_rows[$label] = esc_html($value);
+		}
+	}
+
+	$groups = array(
+		'core'      => array('title' => 'Core Parameters', 'rows' => $rows),
+		'specs'     => array('title' => 'Product Specifications', 'rows' => $spec_rows),
+		'packaging' => array('title' => 'Packaging & Logistics', 'rows' => $pack_rows),
+	);
+
 	$html = '';
-	foreach (array(array_slice($rows, 0, $half, true), array_slice($rows, $half, null, true)) as $group) {
-		if (!$group) {
+	foreach ($groups as $slug => $group) {
+		if (!$group['rows']) {
 			continue;
 		}
-		$body = '';
-		foreach ($group as $label => $cell) {
-			$body .= '<div class="sf-fdetail-specs__row">'
+		$body = '<div class="sf-fdetail-specs__gtitle">' . esc_html($group['title']) . '</div>';
+		$last = count($group['rows']) - 1;
+		$i    = 0;
+		foreach ($group['rows'] as $label => $cell) {
+			$body .= '<div class="sf-fdetail-specs__row' . ($i === $last ? ' sf-fdetail-specs__row--last' : '') . '">'
 				. '<dt class="sf-fdetail-specs__term">' . esc_html($label) . '</dt>'
 				. '<dd class="sf-fdetail-specs__value">' . $cell . '</dd>'
 				. '</div>';
+			$i++;
 		}
-		$html .= '<dl class="sf-fdetail-specs__group">' . $body . '</dl>';
+		$html .= '<dl class="sf-fdetail-specs__group sf-fdetail-specs__group--' . $slug . '">' . $body . '</dl>';
 	}
-	return '<section class="sf-fdetail-specs"><div class="sf-fdetail-specs__inner">'
+	if ($html === '') {
+		return '';
+	}
+	$out = '<section class="sf-fdetail-specs"><div class="sf-fdetail-specs__inner">'
 		. $html
 		. '</div></section>';
+	/* The trust band is its own section, not a fourth group in the grid: the
+	   ruling asked for a visually independent block with a separator, and an
+	   all-empty set of trust fields prints nothing at all. */
+	return $out . sinofresh_formula_trust_html();
 }
 add_shortcode('sf_formula_specs_table', 'sinofresh_formula_specs_table');
+
+/**
+ * The seven factory-trust facts (batch H10): Site Settings → Factory
+ * Information, one option per fact, read through this one function.
+ *
+ * The contract differs from the contact fields above on purpose: an EMPTY
+ * stored value hides the row (empty-means-absent, so operations can switch
+ * e.g. On-time Delivery off without a deploy), while an option that was never
+ * saved shows the shipped default — the three facts the factory-tour page
+ * already carried (facility size, cleanroom class, export countries) plus the
+ * 24-hour response wording that page uses. Nothing ships with a made-up
+ * number: Annual Capacity, On-time Delivery and Reorder Rate default to empty
+ * and stay off the page until someone fills a real value.
+ */
+function sf_trust_defaults() {
+	return array(
+		'sf_trust_factory_size'   => '15,000㎡',
+		'sf_trust_cleanroom'      => 'ISO 8',
+		'sf_trust_capacity'       => '',
+		'sf_trust_export_markets' => '30+ countries',
+		'sf_trust_ontime'         => '',
+		'sf_trust_response'       => 'Within 24 hours',
+		'sf_trust_reorder'        => '',
+	);
+}
+
+/** One trust fact: '' when the row must not print. */
+function sf_formula_trust_value($key) {
+	$d = sf_trust_defaults();
+	if (!isset($d[$key])) {
+		return '';
+	}
+	$stored = get_option($key, null);
+	if ($stored === null) {
+		return $d[$key]; // never saved: the shipped default stands
+	}
+	return trim((string) $stored); // '' = the row is off
+}
+
+/** The trust band, or '' when every fact is switched off. */
+function sinofresh_formula_trust_html() {
+	$rows = '';
+	foreach (array(
+		'sf_trust_factory_size'   => 'Factory Size',
+		'sf_trust_cleanroom'      => 'Cleanroom Class',
+		'sf_trust_capacity'       => 'Annual Capacity',
+		'sf_trust_export_markets' => 'Export Markets',
+		'sf_trust_ontime'         => 'On-time Delivery',
+		'sf_trust_response'       => 'Response Time',
+		'sf_trust_reorder'        => 'Reorder Rate',
+	) as $key => $label) {
+		$value = sf_formula_trust_value($key);
+		if ($value === '') {
+			continue;
+		}
+		$rows .= '<div class="sf-fdetail-trust__row"><dt class="sf-fdetail-trust__term">' . esc_html($label)
+			. '</dt><dd class="sf-fdetail-trust__value">' . esc_html($value) . '</dd></div>';
+	}
+	if ($rows === '') {
+		return '';
+	}
+	return '<section class="sf-fdetail-trust"><div class="sf-fdetail-trust__inner">'
+		. '<h2 class="sf-fdetail-trust__title">Factory &amp; Trust</h2>'
+		. '<dl class="sf-fdetail-trust__list">' . $rows . '</dl>'
+		. '</div></section>';
+}
 
 /** The spec sheet's multi-value rows: chips. '' when nothing is left. */
 function sinofresh_formula_specs_table_chips($items) {
