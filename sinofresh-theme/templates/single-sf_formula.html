@@ -78,40 +78,25 @@
 [sf_formula_specs_table]
 <!-- /wp:html -->
 
-<!-- Block 3: long copy (emitted only when the record has some) -->
+<!-- Block 3: long copy (emitted only when the record has some). Batch H11 —
+     this is the page's only editable-prose band now: the four structured
+     bands that used to sit below it (Specification cards, Formula &
+     nutrition, Ingredients & composition, Recommended/Packaging) were
+     removed and the record's own post_content is where the sales desk
+     writes whatever the page needs, pasted from Word/Excel or built as
+     blocks. The band stays a shortcode for the same reason as before —
+     it must vanish entirely on a record whose content is still empty,
+     which a static wp:post-content block cannot express. -->
 <!-- wp:html -->
 [sf_formula_body]
 <!-- /wp:html -->
-
-<!-- Block 2: Specification -->
-<!-- wp:group {"tagName":"section","className":"sf-fdetail","backgroundColor":"card-white","layout":{"type":"constrained"},"style":{"spacing":{"padding":{"top":"var:preset|spacing|80","bottom":"var:preset|spacing|80"}}}} -->
-<section class="wp-block-group sf-fdetail has-card-white-background-color has-background" style="padding-top:var(--wp--preset--spacing--80);padding-bottom:var(--wp--preset--spacing--80)">
-<!-- wp:heading -->
-<h2 class="wp-block-heading">Specification</h2>
-<!-- /wp:heading -->
-<!-- wp:html -->
-[sf_formula_detail]
-<!-- /wp:html -->
-</section>
-<!-- /wp:group -->
-
-<!-- B2D-S3: actives -->
-<!-- wp:html -->
-[sf_formula_detail_actives]
-<!-- /wp:html -->
-
-<!-- B2D-S3: composition -->
-<!-- wp:html -->
-[sf_formula_detail_composition]
-<!-- /wp:html -->
-<!-- Batch H3: the detailed content area. It sits after the three data bands
-     and before the FAQ so the card-white reading surface runs unbroken from
-     the Specification cards to the end of the FAQ, each band separated by its
-     own heading. The band is a shortcode because it has to vanish completely
-     on a record whose fields are still empty. -->
-<!-- wp:html -->
-[sf_formula_content]
-<!-- /wp:html -->
+<!-- Batch H11: the four structured bands between here and the FAQ
+     (Specification / Formula & nutrition / Ingredients & composition /
+     Recommended-Packaging) are gone — removed, not disabled: their meta
+     stays (the Product JSON-LD still reads it), the rendered copy was
+     archived to docs/h11-archive/ before the removal, and the shortcode
+     renderers remain registered in functions.php so an editor can paste
+     one back into the body band if a page ever needs it. -->
 <!-- Batch C: the formula FAQ. The accordion is emitted by the FAQ shortcode
      in the core/html block below, so the nine answers can carry this record's
      own values and the FAQPage schema can read the same function instead of

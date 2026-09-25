@@ -7023,7 +7023,11 @@ add_action('wp_head', function () {
    has to be made public and no form embed is needed in the article markup. A
    plain vote is stored with just the vote; an optional email/description
    travels along when the visitor fills the mini form that opens on a
-   down-vote. */
+   down-vote. Batch H11 adds the two things the write-only path lacked: the
+   per-IP throttle the inquiry endpoint already has, and the
+   fluentform/submission_inserted dispatch that makes Form 12's own Admin
+   Notification (info@) fire — the straight insert never triggered it, which
+   is why every vote since the GF migration was stored but never mailed. */
 add_action('rest_api_init', function () {
 	register_rest_route('sinofresh/v1', '/article-feedback', array(
 		'methods'             => 'POST',
@@ -7042,15 +7046,30 @@ add_action('rest_api_init', function () {
 			if ($email && !is_email($email)) {
 				return new WP_Error('sf_bad_email', 'Invalid email address.', array('status' => 400));
 			}
+			/* 60s per IP, the inquiry endpoint's damper: a transient keyed on the
+			   client's address (behind the edge that is CF-Connecting-IP —
+			   REMOTE_ADDR is the edge itself, one bucket for the whole site),
+			   taken before the insert so a failure cannot be hammered, and
+			   answered with a real 429 so the widget can tell the visitor to
+			   slow down instead of pretending the vote was cast. Same helper,
+			   same shape, different key prefix — the two endpoints throttle
+			   independently. */
+			$rl_key = 'sf_afb_rl_' . md5(sinofresh_inquiry_client_ip());
+			if (get_transient($rl_key)) {
+				return new WP_Error('sf_feedback_rate', 'You just voted. Please wait a minute.', array('status' => 429));
+			}
+			set_transient($rl_key, 1, 60);
 			/* The row is written straight into wp_fluentform_submissions —
 			 * the same shape FormHandler::prepareInsertData() produces —
 			 * instead of driving the form pipeline: the endpoint runs outside
-			 * a real page render (no nonce, no rendered form), and Form 12 has
-			 * no notifications, confirmations or submission hooks that a
-			 * pipeline run would fire. The response JSON mirrors the form's
-			 * field names (feedback_type_1, subject_2, description_3,
-			 * email_4, privacy_consent_5) so the FF entries screen renders
-			 * these rows exactly like native submissions. */
+			 * a real page render (no nonce, no rendered form). Batch H11:
+			 * Form 12 HAS an Admin Notification now (the old "no notifications"
+			 * note outlived its truth the day that notification was added), so
+			 * the insert is followed by the same action a native submission
+			 * fires — FF's GlobalNotificationHandler reads Form 12's own
+			 * notification config and mails info@, and the FF log records the
+			 * send. Future feeds added to the form in FF's dashboard attach
+			 * to this same hook with no further theme work. */
 			$form_data = array(
 				'feedback_type_1' => 'General Feedback', // Form 12 field 1 (select) — closest match
 				'subject_2'       => 'Article feedback (' . $vote . ')' . ($post_id ? ': ' . get_the_title($post_id) : ''),
@@ -7076,12 +7095,21 @@ add_action('rest_api_init', function () {
 				'response'     => wp_json_encode($form_data),
 				'source_url'   => $post_id ? get_permalink($post_id) : home_url('/'),
 				'status'       => 'unread',
-				'ip'           => isset($_SERVER['REMOTE_ADDR']) ? sanitize_text_field(wp_unslash($_SERVER['REMOTE_ADDR'])) : '',
+				'ip'           => sinofresh_inquiry_client_ip(),
 				'created_at'   => $now,
 				'updated_at'   => $now,
 			));
 			if (!$insert_id) {
 				return new WP_Error('sf_ff_add', 'Could not store feedback.', array('status' => 500));
+			}
+			/* The dispatch a native FF submission gets (FormHandler line for
+			   line): notification mail, log entry, feeds. $form is the row FF
+			   itself would pass — the form object, not an id. The theme's own
+			   listener on this hook guards on form id 11, so this dispatch
+			   only ever reaches FF's handlers and Form 12's notification. */
+			$form = wpFluent()->table('fluentform_forms')->find(12);
+			if ($form) {
+				do_action('fluentform/submission_inserted', $insert_id, $form_data, $form);
 			}
 			return array('ok' => true);
 		},

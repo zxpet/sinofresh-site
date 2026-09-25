@@ -1,0 +1,380 @@
+{
+ "natural-cleaning-dental-sticks": {
+  "Specification (sf_formula_detail)": {
+   "html": "<section class=\"wp-block-group sf-fdetail has-card-white-background-color has-background is-layout-constrained wp-block-group-is-layout-constrained\" style=\"padding-top:var(--wp--preset--spacing--80);padding-bottom:var(--wp--preset--spacing--80)\">\n\n<h2 class=\"wp-block-heading\">Specification</h2>\n\n\n<div class=\"sf-fdetail__grid sf-fdetail__grid--solo\"><div class=\"sf-fdetail__card\"><h3 class=\"sf-fdetail__label\">Standard Specs</h3><p class=\"sf-fdetail__value\">18g/piece · 7/14/28 per bag · 18 months shelf life</p></div></div>\n\n</section>",
+   "text": "Specification\nStandard Specs\n18g/piece · 7/14/28 per bag · 18 months shelf life"
+  },
+  "Formula & nutrition (sf_formula_detail_actives)": {
+   "html": "<section class=\"sf-fdetail-actives\"><div class=\"sf-fdetail-actives__inner\"><h2 class=\"sf-fdetail-actives__title\">Formula &amp; nutrition</h2><p class=\"sf-actives__label\">Ingredients</p><ul class=\"sf-actives__ing\"><li class=\"sf-actives__pill\">Tapioca (46%)</li><li class=\"sf-actives__pill\">Peas (29%)</li><li class=\"sf-actives__pill\">Vegetable Glycerin (12%)</li><li class=\"sf-actives__pill\">Cheddar Cheese (6%)</li><li class=\"sf-actives__pill\">Hydrolyzed Yeast (4%)</li></ul><p class=\"sf-actives__label\">Guaranteed Analysis</p><dl class=\"sf-spec-list\"><div class=\"sf-spec-row\"><dt class=\"sf-spec-term\">Crude Protein</dt><dd class=\"sf-spec-value\">≥8%</dd></div><div class=\"sf-spec-row\"><dt class=\"sf-spec-term\">Crude Fiber</dt><dd class=\"sf-spec-value\">≥2%</dd></div></dl></div></section>",
+   "text": "Formula &amp; nutrition\nIngredients\nTapioca (46%)\nPeas (29%)\nVegetable Glycerin (12%)\nCheddar Cheese (6%)\nHydrolyzed Yeast (4%)\nGuaranteed Analysis\nCrude Protein\n≥8%\nCrude Fiber\n≥2%"
+  },
+  "Ingredients & composition (sf_formula_detail_composition)": {
+   "html": "",
+   "text": ""
+  },
+  "Recommended / Use cases / Packaging (sf_formula_content)": {
+   "html": "<section class=\"sf-fdetail-content\"><div class=\"sf-fdetail-content__inner\"><div class=\"sf-fdetail-content__block\"><h2 class=\"sf-fdetail-content__subtitle\">Packaging &amp; Specifications</h2><div class=\"sf-fdetail-content__specs\"><div class=\"sf-fdetail-content__spec\"><p class=\"sf-fdetail-content__label\">Storage</p><p class=\"sf-fdetail-content__prose\">Cool, dry place out of direct sunlight; keep the container closed after opening.</p></div></div></div></div></section>",
+   "text": "Packaging &amp; Specifications\nStorage\nCool, dry place out of direct sunlight; keep the container closed after opening."
+  }
+ },
+ "oral-care-dental-sticks": {
+  "Specification (sf_formula_detail)": {
+   "html": "<section class=\"wp-block-group sf-fdetail has-card-white-background-color has-background is-layout-constrained wp-block-group-is-layout-constrained\" style=\"padding-top:var(--wp--preset--spacing--80);padding-bottom:var(--wp--preset--spacing--80)\">\n\n<h2 class=\"wp-block-heading\">Specification</h2>\n\n\n<div class=\"sf-fdetail__grid sf-fdetail__grid--solo\"><div class=\"sf-fdetail__card\"><h3 class=\"sf-fdetail__label\">Standard Specs</h3><p class=\"sf-fdetail__value\">20g/piece · 7/14/28 per bag · 18 months shelf life</p></div></div>\n\n</section>",
+   "text": "Specification\nStandard Specs\n20g/piece · 7/14/28 per bag · 18 months shelf life"
+  },
+  "Formula & nutrition (sf_formula_detail_actives)": {
+   "html": "<section class=\"sf-fdetail-actives\"><div class=\"sf-fdetail-actives__inner\"><h2 class=\"sf-fdetail-actives__title\">Formula &amp; nutrition</h2><p class=\"sf-actives__label\">Ingredients</p><ul class=\"sf-actives__ing\"><li class=\"sf-actives__pill\">Wheat Flour</li><li class=\"sf-actives__pill\">Wheat Starch</li><li class=\"sf-actives__pill\">Corn Flour</li><li class=\"sf-actives__pill\">Glycerin</li><li class=\"sf-actives__pill\">Natural Flavors</li><li class=\"sf-actives__pill\">Sodium Tripolyphosphate</li></ul><p class=\"sf-actives__label\">Guaranteed Analysis</p><dl class=\"sf-spec-list\"><div class=\"sf-spec-row\"><dt class=\"sf-spec-term\">Crude Protein</dt><dd class=\"sf-spec-value\">≥10%</dd></div><div class=\"sf-spec-row\"><dt class=\"sf-spec-term\">Crude Fat</dt><dd class=\"sf-spec-value\">≥2%</dd></div></dl></div></section>",
+   "text": "Formula &amp; nutrition\nIngredients\nWheat Flour\nWheat Starch\nCorn Flour\nGlycerin\nNatural Flavors\nSodium Tripolyphosphate\nGuaranteed Analysis\nCrude Protein\n≥10%\nCrude Fat\n≥2%"
+  },
+  "Ingredients & composition (sf_formula_detail_composition)": {
+   "html": "",
+   "text": ""
+  },
+  "Recommended / Use cases / Packaging (sf_formula_content)": {
+   "html": "<section class=\"sf-fdetail-content\"><div class=\"sf-fdetail-content__inner\"><div class=\"sf-fdetail-content__block\"><h2 class=\"sf-fdetail-content__subtitle\">Packaging &amp; Specifications</h2><div class=\"sf-fdetail-content__specs\"><div class=\"sf-fdetail-content__spec\"><p class=\"sf-fdetail-content__label\">Storage</p><p class=\"sf-fdetail-content__prose\">Cool, dry place out of direct sunlight; keep the container closed after opening.</p></div></div></div></div></section>",
+   "text": "Packaging &amp; Specifications\nStorage\nCool, dry place out of direct sunlight; keep the container closed after opening."
+  }
+ },
+ "plaque-control-dental-chews": {
+  "Specification (sf_formula_detail)": {
+   "html": "<section class=\"wp-block-group sf-fdetail has-card-white-background-color has-background is-layout-constrained wp-block-group-is-layout-constrained\" style=\"padding-top:var(--wp--preset--spacing--80);padding-bottom:var(--wp--preset--spacing--80)\">\n\n<h2 class=\"wp-block-heading\">Specification</h2>\n\n\n<div class=\"sf-fdetail__grid sf-fdetail__grid--solo\"><div class=\"sf-fdetail__card\"><h3 class=\"sf-fdetail__label\">Standard Specs</h3><p class=\"sf-fdetail__value\">15g/piece · 14/28/56 per bag · 18 months shelf life</p></div></div>\n\n</section>",
+   "text": "Specification\nStandard Specs\n15g/piece · 14/28/56 per bag · 18 months shelf life"
+  },
+  "Formula & nutrition (sf_formula_detail_actives)": {
+   "html": "<section class=\"sf-fdetail-actives\"><div class=\"sf-fdetail-actives__inner\"><h2 class=\"sf-fdetail-actives__title\">Formula &amp; nutrition</h2><p class=\"sf-actives__label\">Ingredients</p><ul class=\"sf-actives__ing\"><li class=\"sf-actives__pill\">Coconut Oil</li><li class=\"sf-actives__pill\">Parsley</li><li class=\"sf-actives__pill\">Shiitake Mushroom</li><li class=\"sf-actives__pill\">Organic Honey</li></ul><p class=\"sf-actives__label\">Guaranteed Analysis</p><dl class=\"sf-spec-list\"><div class=\"sf-spec-row\"><dt class=\"sf-spec-term\">Coconut Oil</dt><dd class=\"sf-spec-value\">≥5%</dd></div></dl></div></section>",
+   "text": "Formula &amp; nutrition\nIngredients\nCoconut Oil\nParsley\nShiitake Mushroom\nOrganic Honey\nGuaranteed Analysis\nCoconut Oil\n≥5%"
+  },
+  "Ingredients & composition (sf_formula_detail_composition)": {
+   "html": "",
+   "text": ""
+  },
+  "Recommended / Use cases / Packaging (sf_formula_content)": {
+   "html": "<section class=\"sf-fdetail-content\"><div class=\"sf-fdetail-content__inner\"><div class=\"sf-fdetail-content__block\"><h2 class=\"sf-fdetail-content__subtitle\">Packaging &amp; Specifications</h2><div class=\"sf-fdetail-content__specs\"><div class=\"sf-fdetail-content__spec\"><p class=\"sf-fdetail-content__label\">Storage</p><p class=\"sf-fdetail-content__prose\">Cool, dry place out of direct sunlight; keep the container closed after opening.</p></div></div></div></div></section>",
+   "text": "Packaging &amp; Specifications\nStorage\nCool, dry place out of direct sunlight; keep the container closed after opening."
+  }
+ },
+ "pure-fish-oil-blend": {
+  "Specification (sf_formula_detail)": {
+   "html": "<section class=\"wp-block-group sf-fdetail has-card-white-background-color has-background is-layout-constrained wp-block-group-is-layout-constrained\" style=\"padding-top:var(--wp--preset--spacing--80);padding-bottom:var(--wp--preset--spacing--80)\">\n\n<h2 class=\"wp-block-heading\">Specification</h2>\n\n\n<div class=\"sf-fdetail__grid sf-fdetail__grid--solo\"><div class=\"sf-fdetail__card\"><h3 class=\"sf-fdetail__label\">Standard Specs</h3><p class=\"sf-fdetail__value\">8oz/16oz/32oz pump bottle · 24 months shelf life</p></div></div>\n\n</section>",
+   "text": "Specification\nStandard Specs\n8oz/16oz/32oz pump bottle · 24 months shelf life"
+  },
+  "Formula & nutrition (sf_formula_detail_actives)": {
+   "html": "<section class=\"sf-fdetail-actives\"><div class=\"sf-fdetail-actives__inner\"><h2 class=\"sf-fdetail-actives__title\">Formula &amp; nutrition</h2><p class=\"sf-actives__label\">Ingredients</p><ul class=\"sf-actives__ing\"><li class=\"sf-actives__pill\">Sardine</li><li class=\"sf-actives__pill\">Anchovy</li><li class=\"sf-actives__pill\">Herring</li><li class=\"sf-actives__pill\">Mackerel Oil</li></ul><p class=\"sf-actives__label\">Guaranteed Analysis</p><dl class=\"sf-spec-list\"><div class=\"sf-spec-row\"><dt class=\"sf-spec-term\">Omega-3</dt><dd class=\"sf-spec-value\">≥35%</dd></div><div class=\"sf-spec-row\"><dt class=\"sf-spec-term\">EPA</dt><dd class=\"sf-spec-value\">≥18%</dd></div><div class=\"sf-spec-row\"><dt class=\"sf-spec-term\">DHA</dt><dd class=\"sf-spec-value\">≥12%</dd></div></dl></div></section>",
+   "text": "Formula &amp; nutrition\nIngredients\nSardine\nAnchovy\nHerring\nMackerel Oil\nGuaranteed Analysis\nOmega-3\n≥35%\nEPA\n≥18%\nDHA\n≥12%"
+  },
+  "Ingredients & composition (sf_formula_detail_composition)": {
+   "html": "",
+   "text": ""
+  },
+  "Recommended / Use cases / Packaging (sf_formula_content)": {
+   "html": "<section class=\"sf-fdetail-content\"><div class=\"sf-fdetail-content__inner\"><div class=\"sf-fdetail-content__block\"><h2 class=\"sf-fdetail-content__subtitle\">Packaging &amp; Specifications</h2><div class=\"sf-fdetail-content__specs\"><div class=\"sf-fdetail-content__spec\"><p class=\"sf-fdetail-content__label\">Storage</p><p class=\"sf-fdetail-content__prose\">Cool, dry place out of direct sunlight; keep the container closed after opening.</p></div></div></div></div></section>",
+   "text": "Packaging &amp; Specifications\nStorage\nCool, dry place out of direct sunlight; keep the container closed after opening."
+  }
+ },
+ "wild-alaskan-salmon-oil": {
+  "Specification (sf_formula_detail)": {
+   "html": "<section class=\"wp-block-group sf-fdetail has-card-white-background-color has-background is-layout-constrained wp-block-group-is-layout-constrained\" style=\"padding-top:var(--wp--preset--spacing--80);padding-bottom:var(--wp--preset--spacing--80)\">\n\n<h2 class=\"wp-block-heading\">Specification</h2>\n\n\n<div class=\"sf-fdetail__grid sf-fdetail__grid--solo\"><div class=\"sf-fdetail__card\"><h3 class=\"sf-fdetail__label\">Standard Specs</h3><p class=\"sf-fdetail__value\">8oz/16oz/32oz pump bottle · 24 months shelf life</p></div></div>\n\n</section>",
+   "text": "Specification\nStandard Specs\n8oz/16oz/32oz pump bottle · 24 months shelf life"
+  },
+  "Formula & nutrition (sf_formula_detail_actives)": {
+   "html": "<section class=\"sf-fdetail-actives\"><div class=\"sf-fdetail-actives__inner\"><h2 class=\"sf-fdetail-actives__title\">Formula &amp; nutrition</h2><p class=\"sf-actives__label\">Ingredients</p><ul class=\"sf-actives__ing\"><li class=\"sf-actives__pill\">Wild-caught Salmon Oil</li><li class=\"sf-actives__pill\">Mixed Tocopherols</li></ul><p class=\"sf-actives__label\">Guaranteed Analysis</p><dl class=\"sf-spec-list\"><div class=\"sf-spec-row\"><dt class=\"sf-spec-term\">Omega-3</dt><dd class=\"sf-spec-value\">≥30%</dd></div><div class=\"sf-spec-row\"><dt class=\"sf-spec-term\">EPA</dt><dd class=\"sf-spec-value\">≥10%</dd></div><div class=\"sf-spec-row\"><dt class=\"sf-spec-term\">DHA</dt><dd class=\"sf-spec-value\">≥12%</dd></div><div class=\"sf-spec-row\"><dt class=\"sf-spec-term\">Omega-6</dt><dd class=\"sf-spec-value\">≥3%</dd></div><div class=\"sf-spec-row\"><dt class=\"sf-spec-term\">Omega-9</dt><dd class=\"sf-spec-value\">≥16%</dd></div></dl></div></section>",
+   "text": "Formula &amp; nutrition\nIngredients\nWild-caught Salmon Oil\nMixed Tocopherols\nGuaranteed Analysis\nOmega-3\n≥30%\nEPA\n≥10%\nDHA\n≥12%\nOmega-6\n≥3%\nOmega-9\n≥16%"
+  },
+  "Ingredients & composition (sf_formula_detail_composition)": {
+   "html": "",
+   "text": ""
+  },
+  "Recommended / Use cases / Packaging (sf_formula_content)": {
+   "html": "<section class=\"sf-fdetail-content\"><div class=\"sf-fdetail-content__inner\"><div class=\"sf-fdetail-content__block\"><h2 class=\"sf-fdetail-content__subtitle\">Packaging &amp; Specifications</h2><div class=\"sf-fdetail-content__specs\"><div class=\"sf-fdetail-content__spec\"><p class=\"sf-fdetail-content__label\">Storage</p><p class=\"sf-fdetail-content__prose\">Cool, dry place out of direct sunlight; keep the container closed after opening.</p></div></div></div></div></section>",
+   "text": "Packaging &amp; Specifications\nStorage\nCool, dry place out of direct sunlight; keep the container closed after opening."
+  }
+ },
+ "liquid-skin-coat": {
+  "Specification (sf_formula_detail)": {
+   "html": "<section class=\"wp-block-group sf-fdetail has-card-white-background-color has-background is-layout-constrained wp-block-group-is-layout-constrained\" style=\"padding-top:var(--wp--preset--spacing--80);padding-bottom:var(--wp--preset--spacing--80)\">\n\n<h2 class=\"wp-block-heading\">Specification</h2>\n\n\n<div class=\"sf-fdetail__grid sf-fdetail__grid--solo\"><div class=\"sf-fdetail__card\"><h3 class=\"sf-fdetail__label\">Standard Specs</h3><p class=\"sf-fdetail__value\">8oz/16oz/32oz pump bottle · 24 months shelf life</p></div></div>\n\n</section>",
+   "text": "Specification\nStandard Specs\n8oz/16oz/32oz pump bottle · 24 months shelf life"
+  },
+  "Formula & nutrition (sf_formula_detail_actives)": {
+   "html": "<section class=\"sf-fdetail-actives\"><div class=\"sf-fdetail-actives__inner\"><h2 class=\"sf-fdetail-actives__title\">Formula &amp; nutrition</h2><p class=\"sf-actives__label\">Ingredients</p><ul class=\"sf-actives__ing\"><li class=\"sf-actives__pill\">Cod Liver Oil</li><li class=\"sf-actives__pill\">Pollock Oil</li><li class=\"sf-actives__pill\">Mixed Tocopherols</li></ul><p class=\"sf-actives__label\">Guaranteed Analysis</p><dl class=\"sf-spec-list\"><div class=\"sf-spec-row\"><dt class=\"sf-spec-term\">Omega-3</dt><dd class=\"sf-spec-value\">≥30%</dd></div><div class=\"sf-spec-row\"><dt class=\"sf-spec-term\">EPA</dt><dd class=\"sf-spec-value\">≥10%</dd></div><div class=\"sf-spec-row\"><dt class=\"sf-spec-term\">DHA</dt><dd class=\"sf-spec-value\">≥12%</dd></div></dl></div></section>",
+   "text": "Formula &amp; nutrition\nIngredients\nCod Liver Oil\nPollock Oil\nMixed Tocopherols\nGuaranteed Analysis\nOmega-3\n≥30%\nEPA\n≥10%\nDHA\n≥12%"
+  },
+  "Ingredients & composition (sf_formula_detail_composition)": {
+   "html": "",
+   "text": ""
+  },
+  "Recommended / Use cases / Packaging (sf_formula_content)": {
+   "html": "<section class=\"sf-fdetail-content\"><div class=\"sf-fdetail-content__inner\"><div class=\"sf-fdetail-content__block\"><h2 class=\"sf-fdetail-content__subtitle\">Packaging &amp; Specifications</h2><div class=\"sf-fdetail-content__specs\"><div class=\"sf-fdetail-content__spec\"><p class=\"sf-fdetail-content__label\">Storage</p><p class=\"sf-fdetail-content__prose\">Cool, dry place out of direct sunlight; keep the container closed after opening.</p></div></div></div></div></section>",
+   "text": "Packaging &amp; Specifications\nStorage\nCool, dry place out of direct sunlight; keep the container closed after opening."
+  }
+ },
+ "liquid-joint-support": {
+  "Specification (sf_formula_detail)": {
+   "html": "<section class=\"wp-block-group sf-fdetail has-card-white-background-color has-background is-layout-constrained wp-block-group-is-layout-constrained\" style=\"padding-top:var(--wp--preset--spacing--80);padding-bottom:var(--wp--preset--spacing--80)\">\n\n<h2 class=\"wp-block-heading\">Specification</h2>\n\n\n<div class=\"sf-fdetail__grid sf-fdetail__grid--solo\"><div class=\"sf-fdetail__card\"><h3 class=\"sf-fdetail__label\">Standard Specs</h3><p class=\"sf-fdetail__value\">8oz/16oz/32oz pump bottle · 24 months shelf life</p></div></div>\n\n</section>",
+   "text": "Specification\nStandard Specs\n8oz/16oz/32oz pump bottle · 24 months shelf life"
+  },
+  "Formula & nutrition (sf_formula_detail_actives)": {
+   "html": "<section class=\"sf-fdetail-actives\"><div class=\"sf-fdetail-actives__inner\"><h2 class=\"sf-fdetail-actives__title\">Formula &amp; nutrition</h2><p class=\"sf-actives__label\">Ingredients</p><ul class=\"sf-actives__ing\"><li class=\"sf-actives__pill\">Glucosamine Sulfate</li><li class=\"sf-actives__pill\">MSM</li><li class=\"sf-actives__pill\">Chondroitin Sulfate</li><li class=\"sf-actives__pill\">Vitamin C</li><li class=\"sf-actives__pill\">L-Proline</li><li class=\"sf-actives__pill\">Grape Seed Extract</li><li class=\"sf-actives__pill\">CoQ10</li><li class=\"sf-actives__pill\">Hyaluronic Acid</li></ul><p class=\"sf-actives__label\">Guaranteed Analysis</p><dl class=\"sf-spec-list\"><div class=\"sf-spec-row\"><dt class=\"sf-spec-term\">Glucosamine</dt><dd class=\"sf-spec-value\">≥1600mg/oz</dd></div><div class=\"sf-spec-row\"><dt class=\"sf-spec-term\">MSM</dt><dd class=\"sf-spec-value\">≥1500mg/oz</dd></div><div class=\"sf-spec-row\"><dt class=\"sf-spec-term\">Chondroitin</dt><dd class=\"sf-spec-value\">≥1200mg/oz</dd></div></dl></div></section>",
+   "text": "Formula &amp; nutrition\nIngredients\nGlucosamine Sulfate\nMSM\nChondroitin Sulfate\nVitamin C\nL-Proline\nGrape Seed Extract\nCoQ10\nHyaluronic Acid\nGuaranteed Analysis\nGlucosamine\n≥1600mg/oz\nMSM\n≥1500mg/oz\nChondroitin\n≥1200mg/oz"
+  },
+  "Ingredients & composition (sf_formula_detail_composition)": {
+   "html": "",
+   "text": ""
+  },
+  "Recommended / Use cases / Packaging (sf_formula_content)": {
+   "html": "<section class=\"sf-fdetail-content\"><div class=\"sf-fdetail-content__inner\"><div class=\"sf-fdetail-content__block\"><h2 class=\"sf-fdetail-content__subtitle\">Packaging &amp; Specifications</h2><div class=\"sf-fdetail-content__specs\"><div class=\"sf-fdetail-content__spec\"><p class=\"sf-fdetail-content__label\">Storage</p><p class=\"sf-fdetail-content__prose\">Cool, dry place out of direct sunlight; keep the container closed after opening.</p></div></div></div></div></section>",
+   "text": "Packaging &amp; Specifications\nStorage\nCool, dry place out of direct sunlight; keep the container closed after opening."
+  }
+ },
+ "urinary-care-drops": {
+  "Specification (sf_formula_detail)": {
+   "html": "<section class=\"wp-block-group sf-fdetail has-card-white-background-color has-background is-layout-constrained wp-block-group-is-layout-constrained\" style=\"padding-top:var(--wp--preset--spacing--80);padding-bottom:var(--wp--preset--spacing--80)\">\n\n<h2 class=\"wp-block-heading\">Specification</h2>\n\n\n<div class=\"sf-fdetail__grid sf-fdetail__grid--solo\"><div class=\"sf-fdetail__card\"><h3 class=\"sf-fdetail__label\">Standard Specs</h3><p class=\"sf-fdetail__value\">30ml/50ml dropper bottle · 24 months shelf life</p></div></div>\n\n</section>",
+   "text": "Specification\nStandard Specs\n30ml/50ml dropper bottle · 24 months shelf life"
+  },
+  "Formula & nutrition (sf_formula_detail_actives)": {
+   "html": "<section class=\"sf-fdetail-actives\"><div class=\"sf-fdetail-actives__inner\"><h2 class=\"sf-fdetail-actives__title\">Formula &amp; nutrition</h2><p class=\"sf-actives__label\">Ingredients</p><ul class=\"sf-actives__ing\"><li class=\"sf-actives__pill\">Cranberry Extract</li><li class=\"sf-actives__pill\">Marshmallow Root</li><li class=\"sf-actives__pill\">Dandelion</li></ul><p class=\"sf-actives__label\">Guaranteed Analysis</p><dl class=\"sf-spec-list\"><div class=\"sf-spec-row\"><dt class=\"sf-spec-term\">Cranberry</dt><dd class=\"sf-spec-value\">≥200mg/ml</dd></div></dl></div></section>",
+   "text": "Formula &amp; nutrition\nIngredients\nCranberry Extract\nMarshmallow Root\nDandelion\nGuaranteed Analysis\nCranberry\n≥200mg/ml"
+  },
+  "Ingredients & composition (sf_formula_detail_composition)": {
+   "html": "",
+   "text": ""
+  },
+  "Recommended / Use cases / Packaging (sf_formula_content)": {
+   "html": "<section class=\"sf-fdetail-content\"><div class=\"sf-fdetail-content__inner\"><div class=\"sf-fdetail-content__block\"><h2 class=\"sf-fdetail-content__subtitle\">Packaging &amp; Specifications</h2><div class=\"sf-fdetail-content__specs\"><div class=\"sf-fdetail-content__spec\"><p class=\"sf-fdetail-content__label\">Storage</p><p class=\"sf-fdetail-content__prose\">Cool, dry place out of direct sunlight; keep the container closed after opening.</p></div></div></div></div></section>",
+   "text": "Packaging &amp; Specifications\nStorage\nCool, dry place out of direct sunlight; keep the container closed after opening."
+  }
+ },
+ "ear-care-drops": {
+  "Specification (sf_formula_detail)": {
+   "html": "<section class=\"wp-block-group sf-fdetail has-card-white-background-color has-background is-layout-constrained wp-block-group-is-layout-constrained\" style=\"padding-top:var(--wp--preset--spacing--80);padding-bottom:var(--wp--preset--spacing--80)\">\n\n<h2 class=\"wp-block-heading\">Specification</h2>\n\n\n<div class=\"sf-fdetail__grid sf-fdetail__grid--solo\"><div class=\"sf-fdetail__card\"><h3 class=\"sf-fdetail__label\">Standard Specs</h3><p class=\"sf-fdetail__value\">30ml/50ml dropper bottle · 24 months shelf life</p></div></div>\n\n</section>",
+   "text": "Specification\nStandard Specs\n30ml/50ml dropper bottle · 24 months shelf life"
+  },
+  "Formula & nutrition (sf_formula_detail_actives)": {
+   "html": "<section class=\"sf-fdetail-actives\"><div class=\"sf-fdetail-actives__inner\"><h2 class=\"sf-fdetail-actives__title\">Formula &amp; nutrition</h2><p class=\"sf-actives__label\">Ingredients</p><ul class=\"sf-actives__ing\"><li class=\"sf-actives__pill\">Organic Aloe Vera</li><li class=\"sf-actives__pill\">Tea Tree Oil</li><li class=\"sf-actives__pill\">Calendula</li></ul><p class=\"sf-actives__label\">Guaranteed Analysis</p><dl class=\"sf-spec-list\"><div class=\"sf-spec-row\"><dt class=\"sf-spec-term\">Aloe Vera</dt><dd class=\"sf-spec-value\">≥10%</dd></div></dl></div></section>",
+   "text": "Formula &amp; nutrition\nIngredients\nOrganic Aloe Vera\nTea Tree Oil\nCalendula\nGuaranteed Analysis\nAloe Vera\n≥10%"
+  },
+  "Ingredients & composition (sf_formula_detail_composition)": {
+   "html": "",
+   "text": ""
+  },
+  "Recommended / Use cases / Packaging (sf_formula_content)": {
+   "html": "<section class=\"sf-fdetail-content\"><div class=\"sf-fdetail-content__inner\"><div class=\"sf-fdetail-content__block\"><h2 class=\"sf-fdetail-content__subtitle\">Packaging &amp; Specifications</h2><div class=\"sf-fdetail-content__specs\"><div class=\"sf-fdetail-content__spec\"><p class=\"sf-fdetail-content__label\">Storage</p><p class=\"sf-fdetail-content__prose\">Cool, dry place out of direct sunlight; keep the container closed after opening.</p></div></div></div></div></section>",
+   "text": "Packaging &amp; Specifications\nStorage\nCool, dry place out of direct sunlight; keep the container closed after opening."
+  }
+ },
+ "nutrition-paste": {
+  "Specification (sf_formula_detail)": {
+   "html": "<section class=\"wp-block-group sf-fdetail has-card-white-background-color has-background is-layout-constrained wp-block-group-is-layout-constrained\" style=\"padding-top:var(--wp--preset--spacing--80);padding-bottom:var(--wp--preset--spacing--80)\">\n\n<h2 class=\"wp-block-heading\">Specification</h2>\n\n\n<div class=\"sf-fdetail__grid sf-fdetail__grid--solo\"><div class=\"sf-fdetail__card\"><h3 class=\"sf-fdetail__label\">Standard Specs</h3><p class=\"sf-fdetail__value\">50g/60g/100g/120g tube · 24 months shelf life</p></div></div>\n\n</section>",
+   "text": "Specification\nStandard Specs\n50g/60g/100g/120g tube · 24 months shelf life"
+  },
+  "Formula & nutrition (sf_formula_detail_actives)": {
+   "html": "<section class=\"sf-fdetail-actives\"><div class=\"sf-fdetail-actives__inner\"><h2 class=\"sf-fdetail-actives__title\">Formula &amp; nutrition</h2><p class=\"sf-actives__label\">Ingredients</p><ul class=\"sf-actives__ing\"><li class=\"sf-actives__pill\">Oils and Fats</li><li class=\"sf-actives__pill\">Milk and Dairy</li><li class=\"sf-actives__pill\">Malt Extract (12%)</li><li class=\"sf-actives__pill\">Yeast (MOS 1%)</li></ul><p class=\"sf-actives__label\">Guaranteed Analysis</p><dl class=\"sf-spec-list\"><div class=\"sf-spec-row\"><dt class=\"sf-spec-term\">Crude Fat</dt><dd class=\"sf-spec-value\">≥25%</dd></div><div class=\"sf-spec-row\"><dt class=\"sf-spec-term\">Crude Protein</dt><dd class=\"sf-spec-value\">≥5%</dd></div></dl></div></section>",
+   "text": "Formula &amp; nutrition\nIngredients\nOils and Fats\nMilk and Dairy\nMalt Extract (12%)\nYeast (MOS 1%)\nGuaranteed Analysis\nCrude Fat\n≥25%\nCrude Protein\n≥5%"
+  },
+  "Ingredients & composition (sf_formula_detail_composition)": {
+   "html": "",
+   "text": ""
+  },
+  "Recommended / Use cases / Packaging (sf_formula_content)": {
+   "html": "<section class=\"sf-fdetail-content\"><div class=\"sf-fdetail-content__inner\"><div class=\"sf-fdetail-content__block\"><h2 class=\"sf-fdetail-content__subtitle\">Packaging &amp; Specifications</h2><div class=\"sf-fdetail-content__specs\"><div class=\"sf-fdetail-content__spec\"><p class=\"sf-fdetail-content__label\">Storage</p><p class=\"sf-fdetail-content__prose\">Cool, dry place out of direct sunlight; keep the container closed after opening.</p></div></div></div></div></section>",
+   "text": "Packaging &amp; Specifications\nStorage\nCool, dry place out of direct sunlight; keep the container closed after opening."
+  }
+ },
+ "hairball-remedy-paste": {
+  "Specification (sf_formula_detail)": {
+   "html": "<section class=\"wp-block-group sf-fdetail has-card-white-background-color has-background is-layout-constrained wp-block-group-is-layout-constrained\" style=\"padding-top:var(--wp--preset--spacing--80);padding-bottom:var(--wp--preset--spacing--80)\">\n\n<h2 class=\"wp-block-heading\">Specification</h2>\n\n\n<div class=\"sf-fdetail__grid sf-fdetail__grid--solo\"><div class=\"sf-fdetail__card\"><h3 class=\"sf-fdetail__label\">Standard Specs</h3><p class=\"sf-fdetail__value\">50g/60g/100g/120g tube · 24 months shelf life</p></div></div>\n\n</section>",
+   "text": "Specification\nStandard Specs\n50g/60g/100g/120g tube · 24 months shelf life"
+  },
+  "Formula & nutrition (sf_formula_detail_actives)": {
+   "html": "<section class=\"sf-fdetail-actives\"><div class=\"sf-fdetail-actives__inner\"><h2 class=\"sf-fdetail-actives__title\">Formula &amp; nutrition</h2><p class=\"sf-actives__label\">Ingredients</p><ul class=\"sf-actives__ing\"><li class=\"sf-actives__pill\">Malt Extract (43%)</li><li class=\"sf-actives__pill\">Oils and Fats (30%)</li><li class=\"sf-actives__pill\">Chicken Meal (4%)</li><li class=\"sf-actives__pill\">Yeast</li><li class=\"sf-actives__pill\">Minerals</li></ul><p class=\"sf-actives__label\">Guaranteed Analysis</p><dl class=\"sf-spec-list\"><div class=\"sf-spec-row\"><dt class=\"sf-spec-term\">Crude Fat</dt><dd class=\"sf-spec-value\">≥30%</dd></div><div class=\"sf-spec-row\"><dt class=\"sf-spec-term\">Crude Fiber</dt><dd class=\"sf-spec-value\">≥5%</dd></div></dl></div></section>",
+   "text": "Formula &amp; nutrition\nIngredients\nMalt Extract (43%)\nOils and Fats (30%)\nChicken Meal (4%)\nYeast\nMinerals\nGuaranteed Analysis\nCrude Fat\n≥30%\nCrude Fiber\n≥5%"
+  },
+  "Ingredients & composition (sf_formula_detail_composition)": {
+   "html": "",
+   "text": ""
+  },
+  "Recommended / Use cases / Packaging (sf_formula_content)": {
+   "html": "<section class=\"sf-fdetail-content\"><div class=\"sf-fdetail-content__inner\"><div class=\"sf-fdetail-content__block\"><h2 class=\"sf-fdetail-content__subtitle\">Packaging &amp; Specifications</h2><div class=\"sf-fdetail-content__specs\"><div class=\"sf-fdetail-content__spec\"><p class=\"sf-fdetail-content__label\">Storage</p><p class=\"sf-fdetail-content__prose\">Cool, dry place out of direct sunlight; keep the container closed after opening.</p></div></div></div></div></section>",
+   "text": "Packaging &amp; Specifications\nStorage\nCool, dry place out of direct sunlight; keep the container closed after opening."
+  }
+ },
+ "bladder-support-powder": {
+  "Specification (sf_formula_detail)": {
+   "html": "<section class=\"wp-block-group sf-fdetail has-card-white-background-color has-background is-layout-constrained wp-block-group-is-layout-constrained\" style=\"padding-top:var(--wp--preset--spacing--80);padding-bottom:var(--wp--preset--spacing--80)\">\n\n<h2 class=\"wp-block-heading\">Specification</h2>\n\n\n<div class=\"sf-fdetail__grid sf-fdetail__grid--solo\"><div class=\"sf-fdetail__card\"><h3 class=\"sf-fdetail__label\">Standard Specs</h3><p class=\"sf-fdetail__value\">4oz/8oz/16oz jar · 24 months shelf life</p></div></div>\n\n</section>",
+   "text": "Specification\nStandard Specs\n4oz/8oz/16oz jar · 24 months shelf life"
+  },
+  "Formula & nutrition (sf_formula_detail_actives)": {
+   "html": "<section class=\"sf-fdetail-actives\"><div class=\"sf-fdetail-actives__inner\"><h2 class=\"sf-fdetail-actives__title\">Formula &amp; nutrition</h2><p class=\"sf-actives__label\">Ingredients</p><ul class=\"sf-actives__ing\"><li class=\"sf-actives__pill\">Cranberry</li><li class=\"sf-actives__pill\">D-Mannose</li><li class=\"sf-actives__pill\">Herbal Blend</li></ul><p class=\"sf-actives__label\">Guaranteed Analysis</p><dl class=\"sf-spec-list\"><div class=\"sf-spec-row\"><dt class=\"sf-spec-term\">Cranberry</dt><dd class=\"sf-spec-value\">≥500mg/scoop</dd></div></dl></div></section>",
+   "text": "Formula &amp; nutrition\nIngredients\nCranberry\nD-Mannose\nHerbal Blend\nGuaranteed Analysis\nCranberry\n≥500mg/scoop"
+  },
+  "Ingredients & composition (sf_formula_detail_composition)": {
+   "html": "",
+   "text": ""
+  },
+  "Recommended / Use cases / Packaging (sf_formula_content)": {
+   "html": "<section class=\"sf-fdetail-content\"><div class=\"sf-fdetail-content__inner\"><div class=\"sf-fdetail-content__block\"><h2 class=\"sf-fdetail-content__subtitle\">Packaging &amp; Specifications</h2><div class=\"sf-fdetail-content__specs\"><div class=\"sf-fdetail-content__spec\"><p class=\"sf-fdetail-content__label\">Storage</p><p class=\"sf-fdetail-content__prose\">Cool, dry place out of direct sunlight; keep the container closed after opening.</p></div></div></div></div></section>",
+   "text": "Packaging &amp; Specifications\nStorage\nCool, dry place out of direct sunlight; keep the container closed after opening."
+  }
+ },
+ "pumpkin-digestive-powder": {
+  "Specification (sf_formula_detail)": {
+   "html": "<section class=\"wp-block-group sf-fdetail has-card-white-background-color has-background is-layout-constrained wp-block-group-is-layout-constrained\" style=\"padding-top:var(--wp--preset--spacing--80);padding-bottom:var(--wp--preset--spacing--80)\">\n\n<h2 class=\"wp-block-heading\">Specification</h2>\n\n\n<div class=\"sf-fdetail__grid sf-fdetail__grid--solo\"><div class=\"sf-fdetail__card\"><h3 class=\"sf-fdetail__label\">Standard Specs</h3><p class=\"sf-fdetail__value\">4oz/8oz/16oz jar · 18 months shelf life</p></div></div>\n\n</section>",
+   "text": "Specification\nStandard Specs\n4oz/8oz/16oz jar · 18 months shelf life"
+  },
+  "Formula & nutrition (sf_formula_detail_actives)": {
+   "html": "<section class=\"sf-fdetail-actives\"><div class=\"sf-fdetail-actives__inner\"><h2 class=\"sf-fdetail-actives__title\">Formula &amp; nutrition</h2><p class=\"sf-actives__label\">Ingredients</p><ul class=\"sf-actives__ing\"><li class=\"sf-actives__pill\">100% Pumpkin Powder (fiber source)</li></ul><p class=\"sf-actives__label\">Guaranteed Analysis</p><dl class=\"sf-spec-list\"><div class=\"sf-spec-row\"><dt class=\"sf-spec-term\">Crude Fiber</dt><dd class=\"sf-spec-value\">≥15%</dd></div></dl></div></section>",
+   "text": "Formula &amp; nutrition\nIngredients\n100% Pumpkin Powder (fiber source)\nGuaranteed Analysis\nCrude Fiber\n≥15%"
+  },
+  "Ingredients & composition (sf_formula_detail_composition)": {
+   "html": "",
+   "text": ""
+  },
+  "Recommended / Use cases / Packaging (sf_formula_content)": {
+   "html": "<section class=\"sf-fdetail-content\"><div class=\"sf-fdetail-content__inner\"><div class=\"sf-fdetail-content__block\"><h2 class=\"sf-fdetail-content__subtitle\">Packaging &amp; Specifications</h2><div class=\"sf-fdetail-content__specs\"><div class=\"sf-fdetail-content__spec\"><p class=\"sf-fdetail-content__label\">Storage</p><p class=\"sf-fdetail-content__prose\">Cool, dry place out of direct sunlight; keep the container closed after opening.</p></div></div></div></div></section>",
+   "text": "Packaging &amp; Specifications\nStorage\nCool, dry place out of direct sunlight; keep the container closed after opening."
+  }
+ },
+ "probiotic-powder": {
+  "Specification (sf_formula_detail)": {
+   "html": "<section class=\"wp-block-group sf-fdetail has-card-white-background-color has-background is-layout-constrained wp-block-group-is-layout-constrained\" style=\"padding-top:var(--wp--preset--spacing--80);padding-bottom:var(--wp--preset--spacing--80)\">\n\n<h2 class=\"wp-block-heading\">Specification</h2>\n\n\n<div class=\"sf-fdetail__grid sf-fdetail__grid--solo\"><div class=\"sf-fdetail__card\"><h3 class=\"sf-fdetail__label\">Standard Specs</h3><p class=\"sf-fdetail__value\">4oz/8oz/16oz jar · 24 months shelf life</p></div></div>\n\n</section>",
+   "text": "Specification\nStandard Specs\n4oz/8oz/16oz jar · 24 months shelf life"
+  },
+  "Formula & nutrition (sf_formula_detail_actives)": {
+   "html": "<section class=\"sf-fdetail-actives\"><div class=\"sf-fdetail-actives__inner\"><h2 class=\"sf-fdetail-actives__title\">Formula &amp; nutrition</h2><p class=\"sf-actives__label\">Ingredients</p><ul class=\"sf-actives__ing\"><li class=\"sf-actives__pill\">Inulin</li><li class=\"sf-actives__pill\">Spinach Extract</li><li class=\"sf-actives__pill\">Bacillus subtilis DE111</li><li class=\"sf-actives__pill\">L. acidophilus</li><li class=\"sf-actives__pill\">L. plantarum</li><li class=\"sf-actives__pill\">B. coagulans</li></ul><p class=\"sf-actives__label\">Guaranteed Analysis</p><dl class=\"sf-spec-list\"><div class=\"sf-spec-row\"><dt class=\"sf-spec-term\">Total microorganisms</dt><dd class=\"sf-spec-value\">≥5 billion CFU/scoop</dd></div></dl></div></section>",
+   "text": "Formula &amp; nutrition\nIngredients\nInulin\nSpinach Extract\nBacillus subtilis DE111\nL. acidophilus\nL. plantarum\nB. coagulans\nGuaranteed Analysis\nTotal microorganisms\n≥5 billion CFU/scoop"
+  },
+  "Ingredients & composition (sf_formula_detail_composition)": {
+   "html": "",
+   "text": ""
+  },
+  "Recommended / Use cases / Packaging (sf_formula_content)": {
+   "html": "<section class=\"sf-fdetail-content\"><div class=\"sf-fdetail-content__inner\"><div class=\"sf-fdetail-content__block\"><h2 class=\"sf-fdetail-content__subtitle\">Packaging &amp; Specifications</h2><div class=\"sf-fdetail-content__specs\"><div class=\"sf-fdetail-content__spec\"><p class=\"sf-fdetail-content__label\">Storage</p><p class=\"sf-fdetail-content__prose\">Cool, dry place out of direct sunlight; keep the container closed after opening.</p></div></div></div></div></section>",
+   "text": "Packaging &amp; Specifications\nStorage\nCool, dry place out of direct sunlight; keep the container closed after opening."
+  }
+ },
+ "calcium-phosphorus-tablets": {
+  "Specification (sf_formula_detail)": {
+   "html": "<section class=\"wp-block-group sf-fdetail has-card-white-background-color has-background is-layout-constrained wp-block-group-is-layout-constrained\" style=\"padding-top:var(--wp--preset--spacing--80);padding-bottom:var(--wp--preset--spacing--80)\">\n\n<h2 class=\"wp-block-heading\">Specification</h2>\n\n\n<div class=\"sf-fdetail__grid sf-fdetail__grid--solo\"><div class=\"sf-fdetail__card\"><h3 class=\"sf-fdetail__label\">Standard Specs</h3><p class=\"sf-fdetail__value\">1g/tablet · 60/120/180 per bottle · 24 months shelf life</p></div></div>\n\n</section>",
+   "text": "Specification\nStandard Specs\n1g/tablet · 60/120/180 per bottle · 24 months shelf life"
+  },
+  "Formula & nutrition (sf_formula_detail_actives)": {
+   "html": "<section class=\"sf-fdetail-actives\"><div class=\"sf-fdetail-actives__inner\"><h2 class=\"sf-fdetail-actives__title\">Formula &amp; nutrition</h2><p class=\"sf-actives__label\">Ingredients</p><ul class=\"sf-actives__ing\"><li class=\"sf-actives__pill\">Dicalcium Phosphate</li><li class=\"sf-actives__pill\">Dried Yeast</li><li class=\"sf-actives__pill\">Whey</li><li class=\"sf-actives__pill\">Hydrolyzed Soy Protein</li><li class=\"sf-actives__pill\">Vitamin D3</li></ul><p class=\"sf-actives__label\">Guaranteed Analysis</p><dl class=\"sf-spec-list\"><div class=\"sf-spec-row\"><dt class=\"sf-spec-term\">Calcium</dt><dd class=\"sf-spec-value\">≥200mg/tablet</dd></div><div class=\"sf-spec-row\"><dt class=\"sf-spec-term\">Phosphorus</dt><dd class=\"sf-spec-value\">≥100mg/tablet</dd></div></dl></div></section>",
+   "text": "Formula &amp; nutrition\nIngredients\nDicalcium Phosphate\nDried Yeast\nWhey\nHydrolyzed Soy Protein\nVitamin D3\nGuaranteed Analysis\nCalcium\n≥200mg/tablet\nPhosphorus\n≥100mg/tablet"
+  },
+  "Ingredients & composition (sf_formula_detail_composition)": {
+   "html": "",
+   "text": ""
+  },
+  "Recommended / Use cases / Packaging (sf_formula_content)": {
+   "html": "<section class=\"sf-fdetail-content\"><div class=\"sf-fdetail-content__inner\"><div class=\"sf-fdetail-content__block\"><h2 class=\"sf-fdetail-content__subtitle\">Packaging &amp; Specifications</h2><div class=\"sf-fdetail-content__specs\"><div class=\"sf-fdetail-content__spec\"><p class=\"sf-fdetail-content__label\">Storage</p><p class=\"sf-fdetail-content__prose\">Cool, dry place out of direct sunlight; keep the container closed after opening.</p></div></div></div></div></section>",
+   "text": "Packaging &amp; Specifications\nStorage\nCool, dry place out of direct sunlight; keep the container closed after opening."
+  }
+ },
+ "multivitamin-tablets": {
+  "Specification (sf_formula_detail)": {
+   "html": "<section class=\"wp-block-group sf-fdetail has-card-white-background-color has-background is-layout-constrained wp-block-group-is-layout-constrained\" style=\"padding-top:var(--wp--preset--spacing--80);padding-bottom:var(--wp--preset--spacing--80)\">\n\n<h2 class=\"wp-block-heading\">Specification</h2>\n\n\n<div class=\"sf-fdetail__grid sf-fdetail__grid--solo\"><div class=\"sf-fdetail__card\"><h3 class=\"sf-fdetail__label\">Standard Specs</h3><p class=\"sf-fdetail__value\">1g/tablet · 60/120/180 per bottle · 24 months shelf life</p></div></div>\n\n</section>",
+   "text": "Specification\nStandard Specs\n1g/tablet · 60/120/180 per bottle · 24 months shelf life"
+  },
+  "Formula & nutrition (sf_formula_detail_actives)": {
+   "html": "<section class=\"sf-fdetail-actives\"><div class=\"sf-fdetail-actives__inner\"><h2 class=\"sf-fdetail-actives__title\">Formula &amp; nutrition</h2><p class=\"sf-actives__label\">Ingredients</p><ul class=\"sf-actives__ing\"><li class=\"sf-actives__pill\">Vitamin A</li><li class=\"sf-actives__pill\">D3</li><li class=\"sf-actives__pill\">E</li><li class=\"sf-actives__pill\">B-complex</li><li class=\"sf-actives__pill\">Zinc</li><li class=\"sf-actives__pill\">Iron</li><li class=\"sf-actives__pill\">Methionine</li><li class=\"sf-actives__pill\">EPA</li><li class=\"sf-actives__pill\">DHA</li></ul><p class=\"sf-actives__label\">Guaranteed Analysis</p><dl class=\"sf-spec-list\"><div class=\"sf-spec-row\"><dt class=\"sf-spec-term\">Vitamin E</dt><dd class=\"sf-spec-value\">≥50 IU/tablet</dd></div><div class=\"sf-spec-row\"><dt class=\"sf-spec-term\">Zinc</dt><dd class=\"sf-spec-value\">≥5mg/tablet</dd></div></dl></div></section>",
+   "text": "Formula &amp; nutrition\nIngredients\nVitamin A\nD3\nE\nB-complex\nZinc\nIron\nMethionine\nEPA\nDHA\nGuaranteed Analysis\nVitamin E\n≥50 IU/tablet\nZinc\n≥5mg/tablet"
+  },
+  "Ingredients & composition (sf_formula_detail_composition)": {
+   "html": "",
+   "text": ""
+  },
+  "Recommended / Use cases / Packaging (sf_formula_content)": {
+   "html": "<section class=\"sf-fdetail-content\"><div class=\"sf-fdetail-content__inner\"><div class=\"sf-fdetail-content__block\"><h2 class=\"sf-fdetail-content__subtitle\">Packaging &amp; Specifications</h2><div class=\"sf-fdetail-content__specs\"><div class=\"sf-fdetail-content__spec\"><p class=\"sf-fdetail-content__label\">Storage</p><p class=\"sf-fdetail-content__prose\">Cool, dry place out of direct sunlight; keep the container closed after opening.</p></div></div></div></div></section>",
+   "text": "Packaging &amp; Specifications\nStorage\nCool, dry place out of direct sunlight; keep the container closed after opening."
+  }
+ },
+ "joint-support-tablets": {
+  "Specification (sf_formula_detail)": {
+   "html": "<section class=\"wp-block-group sf-fdetail has-card-white-background-color has-background is-layout-constrained wp-block-group-is-layout-constrained\" style=\"padding-top:var(--wp--preset--spacing--80);padding-bottom:var(--wp--preset--spacing--80)\">\n\n<h2 class=\"wp-block-heading\">Specification</h2>\n\n\n<div class=\"sf-fdetail__grid sf-fdetail__grid--solo\"><div class=\"sf-fdetail__card\"><h3 class=\"sf-fdetail__label\">Standard Specs</h3><p class=\"sf-fdetail__value\">1g/tablet · 60/120/180 per bottle · 24 months shelf life</p></div></div>\n\n</section>",
+   "text": "Specification\nStandard Specs\n1g/tablet · 60/120/180 per bottle · 24 months shelf life"
+  },
+  "Formula & nutrition (sf_formula_detail_actives)": {
+   "html": "<section class=\"sf-fdetail-actives\"><div class=\"sf-fdetail-actives__inner\"><h2 class=\"sf-fdetail-actives__title\">Formula &amp; nutrition</h2><p class=\"sf-actives__label\">Ingredients</p><ul class=\"sf-actives__ing\"><li class=\"sf-actives__pill\">Glucosamine HCl</li><li class=\"sf-actives__pill\">MSM</li><li class=\"sf-actives__pill\">Chondroitin</li><li class=\"sf-actives__pill\">Green-lipped Mussel</li></ul><p class=\"sf-actives__label\">Guaranteed Analysis</p><dl class=\"sf-spec-list\"><div class=\"sf-spec-row\"><dt class=\"sf-spec-term\">Glucosamine</dt><dd class=\"sf-spec-value\">≥500mg/tablet</dd></div><div class=\"sf-spec-row\"><dt class=\"sf-spec-term\">MSM</dt><dd class=\"sf-spec-value\">≥500mg/tablet</dd></div><div class=\"sf-spec-row\"><dt class=\"sf-spec-term\">Chondroitin</dt><dd class=\"sf-spec-value\">≥200mg/tablet</dd></div></dl></div></section>",
+   "text": "Formula &amp; nutrition\nIngredients\nGlucosamine HCl\nMSM\nChondroitin\nGreen-lipped Mussel\nGuaranteed Analysis\nGlucosamine\n≥500mg/tablet\nMSM\n≥500mg/tablet\nChondroitin\n≥200mg/tablet"
+  },
+  "Ingredients & composition (sf_formula_detail_composition)": {
+   "html": "",
+   "text": ""
+  },
+  "Recommended / Use cases / Packaging (sf_formula_content)": {
+   "html": "<section class=\"sf-fdetail-content\"><div class=\"sf-fdetail-content__inner\"><div class=\"sf-fdetail-content__block\"><h2 class=\"sf-fdetail-content__subtitle\">Packaging &amp; Specifications</h2><div class=\"sf-fdetail-content__specs\"><div class=\"sf-fdetail-content__spec\"><p class=\"sf-fdetail-content__label\">Storage</p><p class=\"sf-fdetail-content__prose\">Cool, dry place out of direct sunlight; keep the container closed after opening.</p></div></div></div></div></section>",
+   "text": "Packaging &amp; Specifications\nStorage\nCool, dry place out of direct sunlight; keep the container closed after opening."
+  }
+ },
+ "skin-coat-soft-chews": {
+  "Specification (sf_formula_detail)": {
+   "html": "<section class=\"wp-block-group sf-fdetail has-card-white-background-color has-background is-layout-constrained wp-block-group-is-layout-constrained\" style=\"padding-top:var(--wp--preset--spacing--80);padding-bottom:var(--wp--preset--spacing--80)\">\n\n<h2 class=\"wp-block-heading\">Specification</h2>\n\n\n<div class=\"sf-fdetail__grid sf-fdetail__grid--solo\"><div class=\"sf-fdetail__card\"><h3 class=\"sf-fdetail__label\">Standard Specs</h3><p class=\"sf-fdetail__value\">2g/piece · 60/90/120 per bottle · 18 months shelf life</p></div></div>\n\n</section>",
+   "text": "Specification\nStandard Specs\n2g/piece · 60/90/120 per bottle · 18 months shelf life"
+  },
+  "Formula & nutrition (sf_formula_detail_actives)": {
+   "html": "<section class=\"sf-fdetail-actives\"><div class=\"sf-fdetail-actives__inner\"><h2 class=\"sf-fdetail-actives__title\">Formula &amp; nutrition</h2><p class=\"sf-actives__label\">Ingredients</p><ul class=\"sf-actives__ing\"><li class=\"sf-actives__pill\">Marine Fish Oil</li><li class=\"sf-actives__pill\">Safflower Oil</li><li class=\"sf-actives__pill\">Coconut Oil</li><li class=\"sf-actives__pill\">Biotin</li><li class=\"sf-actives__pill\">Vitamin C</li><li class=\"sf-actives__pill\">Vitamin E</li><li class=\"sf-actives__pill\">Kelp</li></ul><p class=\"sf-actives__label\">Guaranteed Analysis</p><dl class=\"sf-spec-list\"><div class=\"sf-spec-row\"><dt class=\"sf-spec-term\">Omega-3</dt><dd class=\"sf-spec-value\">≥50mg/chew</dd></div><div class=\"sf-spec-row\"><dt class=\"sf-spec-term\">Biotin</dt><dd class=\"sf-spec-value\">≥50mcg/chew</dd></div></dl></div></section>",
+   "text": "Formula &amp; nutrition\nIngredients\nMarine Fish Oil\nSafflower Oil\nCoconut Oil\nBiotin\nVitamin C\nVitamin E\nKelp\nGuaranteed Analysis\nOmega-3\n≥50mg/chew\nBiotin\n≥50mcg/chew"
+  },
+  "Ingredients & composition (sf_formula_detail_composition)": {
+   "html": "",
+   "text": ""
+  },
+  "Recommended / Use cases / Packaging (sf_formula_content)": {
+   "html": "<section class=\"sf-fdetail-content\"><div class=\"sf-fdetail-content__inner\"><div class=\"sf-fdetail-content__block\"><h2 class=\"sf-fdetail-content__subtitle\">Packaging &amp; Specifications</h2><div class=\"sf-fdetail-content__specs\"><div class=\"sf-fdetail-content__spec\"><p class=\"sf-fdetail-content__label\">Storage</p><p class=\"sf-fdetail-content__prose\">Cool, dry place out of direct sunlight; keep the container closed after opening.</p></div></div></div></div></section>",
+   "text": "Packaging &amp; Specifications\nStorage\nCool, dry place out of direct sunlight; keep the container closed after opening."
+  }
+ },
+ "digestive-soft-chews": {
+  "Specification (sf_formula_detail)": {
+   "html": "<section class=\"wp-block-group sf-fdetail has-card-white-background-color has-background is-layout-constrained wp-block-group-is-layout-constrained\" style=\"padding-top:var(--wp--preset--spacing--80);padding-bottom:var(--wp--preset--spacing--80)\">\n\n<h2 class=\"wp-block-heading\">Specification</h2>\n\n\n<div class=\"sf-fdetail__grid sf-fdetail__grid--solo\"><div class=\"sf-fdetail__card\"><h3 class=\"sf-fdetail__label\">Standard Specs</h3><p class=\"sf-fdetail__value\">2g/piece · 60/90/120 per bottle · 18 months shelf life</p></div></div>\n\n</section>",
+   "text": "Specification\nStandard Specs\n2g/piece · 60/90/120 per bottle · 18 months shelf life"
+  },
+  "Formula & nutrition (sf_formula_detail_actives)": {
+   "html": "<section class=\"sf-fdetail-actives\"><div class=\"sf-fdetail-actives__inner\"><h2 class=\"sf-fdetail-actives__title\">Formula &amp; nutrition</h2><p class=\"sf-actives__label\">Ingredients</p><ul class=\"sf-actives__ing\"><li class=\"sf-actives__pill\">Alpha-Amylase</li><li class=\"sf-actives__pill\">Lipase</li><li class=\"sf-actives__pill\">Cellulase</li><li class=\"sf-actives__pill\">Protease</li><li class=\"sf-actives__pill\">Bacillus coagulans</li><li class=\"sf-actives__pill\">FOS</li></ul><p class=\"sf-actives__label\">Guaranteed Analysis</p><dl class=\"sf-spec-list\"><div class=\"sf-spec-row\"><dt class=\"sf-spec-term\">Total microorganisms</dt><dd class=\"sf-spec-value\">≥1 billion CFU/chew</dd></div></dl></div></section>",
+   "text": "Formula &amp; nutrition\nIngredients\nAlpha-Amylase\nLipase\nCellulase\nProtease\nBacillus coagulans\nFOS\nGuaranteed Analysis\nTotal microorganisms\n≥1 billion CFU/chew"
+  },
+  "Ingredients & composition (sf_formula_detail_composition)": {
+   "html": "",
+   "text": ""
+  },
+  "Recommended / Use cases / Packaging (sf_formula_content)": {
+   "html": "<section class=\"sf-fdetail-content\"><div class=\"sf-fdetail-content__inner\"><div class=\"sf-fdetail-content__block\"><h2 class=\"sf-fdetail-content__subtitle\">Packaging &amp; Specifications</h2><div class=\"sf-fdetail-content__specs\"><div class=\"sf-fdetail-content__spec\"><p class=\"sf-fdetail-content__label\">Storage</p><p class=\"sf-fdetail-content__prose\">Cool, dry place out of direct sunlight; keep the container closed after opening.</p></div></div></div></div></section>",
+   "text": "Packaging &amp; Specifications\nStorage\nCool, dry place out of direct sunlight; keep the container closed after opening."
+  }
+ },
+ "calming-soft-chews": {
+  "Specification (sf_formula_detail)": {
+   "html": "<section class=\"wp-block-group sf-fdetail has-card-white-background-color has-background is-layout-constrained wp-block-group-is-layout-constrained\" style=\"padding-top:var(--wp--preset--spacing--80);padding-bottom:var(--wp--preset--spacing--80)\">\n\n<h2 class=\"wp-block-heading\">Specification</h2>\n\n\n<div class=\"sf-fdetail__grid sf-fdetail__grid--solo\"><div class=\"sf-fdetail__card\"><h3 class=\"sf-fdetail__label\">Standard Specs</h3><p class=\"sf-fdetail__value\">2g/piece · 60/90/120 per bottle · 18 months shelf life</p></div></div>\n\n</section>",
+   "text": "Specification\nStandard Specs\n2g/piece · 60/90/120 per bottle · 18 months shelf life"
+  },
+  "Formula & nutrition (sf_formula_detail_actives)": {
+   "html": "<section class=\"sf-fdetail-actives\"><div class=\"sf-fdetail-actives__inner\"><h2 class=\"sf-fdetail-actives__title\">Formula &amp; nutrition</h2><p class=\"sf-actives__label\">Ingredients</p><ul class=\"sf-actives__ing\"><li class=\"sf-actives__pill\">L-Tryptophan</li><li class=\"sf-actives__pill\">Kelp</li><li class=\"sf-actives__pill\">Ginger Root</li><li class=\"sf-actives__pill\">Valerian Root</li><li class=\"sf-actives__pill\">Chamomile</li><li class=\"sf-actives__pill\">Thiamine</li></ul><p class=\"sf-actives__label\">Guaranteed Analysis</p><dl class=\"sf-spec-list\"><div class=\"sf-spec-row\"><dt class=\"sf-spec-term\">L-Tryptophan</dt><dd class=\"sf-spec-value\">≥120mg/chew</dd></div><div class=\"sf-spec-row\"><dt class=\"sf-spec-term\">Chamomile</dt><dd class=\"sf-spec-value\">≥20mg/chew</dd></div></dl></div></section>",
+   "text": "Formula &amp; nutrition\nIngredients\nL-Tryptophan\nKelp\nGinger Root\nValerian Root\nChamomile\nThiamine\nGuaranteed Analysis\nL-Tryptophan\n≥120mg/chew\nChamomile\n≥20mg/chew"
+  },
+  "Ingredients & composition (sf_formula_detail_composition)": {
+   "html": "",
+   "text": ""
+  },
+  "Recommended / Use cases / Packaging (sf_formula_content)": {
+   "html": "<section class=\"sf-fdetail-content\"><div class=\"sf-fdetail-content__inner\"><div class=\"sf-fdetail-content__block\"><h2 class=\"sf-fdetail-content__subtitle\">Packaging &amp; Specifications</h2><div class=\"sf-fdetail-content__specs\"><div class=\"sf-fdetail-content__spec\"><p class=\"sf-fdetail-content__label\">Storage</p><p class=\"sf-fdetail-content__prose\">Cool, dry place out of direct sunlight; keep the container closed after opening.</p></div></div></div></div></section>",
+   "text": "Packaging &amp; Specifications\nStorage\nCool, dry place out of direct sunlight; keep the container closed after opening."
+  }
+ },
+ "joint-support-soft-chews": {
+  "Specification (sf_formula_detail)": {
+   "html": "<section class=\"wp-block-group sf-fdetail has-card-white-background-color has-background is-layout-constrained wp-block-group-is-layout-constrained\" style=\"padding-top:var(--wp--preset--spacing--80);padding-bottom:var(--wp--preset--spacing--80)\">\n\n<h2 class=\"wp-block-heading\">Specification</h2>\n\n\n<div class=\"sf-fdetail__grid sf-fdetail__grid--solo\"><div class=\"sf-fdetail__card\"><h3 class=\"sf-fdetail__label\">Standard Specs</h3><p class=\"sf-fdetail__value\">2g/piece · 60/90/120 per bottle · 18 months shelf life</p></div></div>\n\n</section>",
+   "text": "Specification\nStandard Specs\n2g/piece · 60/90/120 per bottle · 18 months shelf life"
+  },
+  "Formula & nutrition (sf_formula_detail_actives)": {
+   "html": "<section class=\"sf-fdetail-actives\"><div class=\"sf-fdetail-actives__inner\"><h2 class=\"sf-fdetail-actives__title\">Formula &amp; nutrition</h2><p class=\"sf-actives__label\">Ingredients</p><ul class=\"sf-actives__ing\"><li class=\"sf-actives__pill\">Glucosamine HCl</li><li class=\"sf-actives__pill\">Chondroitin Sulfate</li><li class=\"sf-actives__pill\">MSM</li><li class=\"sf-actives__pill\">Green-lipped Mussel</li><li class=\"sf-actives__pill\">Chicken Flavor</li></ul><p class=\"sf-actives__label\">Guaranteed Analysis</p><dl class=\"sf-spec-list\"><div class=\"sf-spec-row\"><dt class=\"sf-spec-term\">Glucosamine</dt><dd class=\"sf-spec-value\">≥500mg/chew</dd></div><div class=\"sf-spec-row\"><dt class=\"sf-spec-term\">Chondroitin</dt><dd class=\"sf-spec-value\">≥200mg/chew</dd></div><div class=\"sf-spec-row\"><dt class=\"sf-spec-term\">MSM</dt><dd class=\"sf-spec-value\">≥100mg/chew</dd></div></dl></div></section>",
+   "text": "Formula &amp; nutrition\nIngredients\nGlucosamine HCl\nChondroitin Sulfate\nMSM\nGreen-lipped Mussel\nChicken Flavor\nGuaranteed Analysis\nGlucosamine\n≥500mg/chew\nChondroitin\n≥200mg/chew\nMSM\n≥100mg/chew"
+  },
+  "Ingredients & composition (sf_formula_detail_composition)": {
+   "html": "",
+   "text": ""
+  },
+  "Recommended / Use cases / Packaging (sf_formula_content)": {
+   "html": "<section class=\"sf-fdetail-content\"><div class=\"sf-fdetail-content__inner\"><div class=\"sf-fdetail-content__block\"><h2 class=\"sf-fdetail-content__heading\">Recommended For</h2><p class=\"sf-fdetail-content__prose\">testsadasdfasf</p></div><div class=\"sf-fdetail-content__block\"><h2 class=\"sf-fdetail-content__heading\">Use Cases</h2><p class=\"sf-fdetail-content__prose\">sdasdasdasdasd</p></div><div class=\"sf-fdetail-content__block\"><h2 class=\"sf-fdetail-content__heading\">Who It&#039;s For</h2><p class=\"sf-fdetail-content__prose\">asdasdasdasdfgggffff</p></div><div class=\"sf-fdetail-content__block\"><h2 class=\"sf-fdetail-content__subtitle\">Packaging &amp; Specifications</h2><div class=\"sf-fdetail-content__specs\"><div class=\"sf-fdetail-content__spec\"><p class=\"sf-fdetail-content__label\">Container Options</p><ul class=\"sf-fdetail-content__chips\"><li class=\"sf-fdetail-content__chip\">Plastic Bottle</li></ul></div><div class=\"sf-fdetail-content__spec\"><p class=\"sf-fdetail-content__label\">Additional Packaging</p><ul class=\"sf-fdetail-content__chips\"><li class=\"sf-fdetail-content__chip\">Aluminum Stand-up Pouch</li><li class=\"sf-fdetail-content__chip\">Aluminum Foil Pouch with Zipper</li><li class=\"sf-fdetail-content__chip\">Plastic Bottle</li><li class=\"sf-fdetail-content__chip\">Jar</li><li class=\"sf-fdetail-content__chip\">Blister Pack</li><li class=\"sf-fdetail-content__chip\">Box + Foil</li><li class=\"sf-fdetail-content__chip\">Custom</li></ul></div><div class=\"sf-fdetail-content__spec\"><p class=\"sf-fdetail-content__label\">Color Options</p><ul class=\"sf-fdetail-content__chips\"><li class=\"sf-fdetail-content__chip\">Brown</li><li class=\"sf-fdetail-content__chip\">Beige</li><li class=\"sf-fdetail-content__chip\">Red</li><li class=\"sf-fdetail-content__chip\">Green</li><li class=\"sf-fdetail-content__chip\">Yellow</li><li class=\"sf-fdetail-content__chip\">Orange</li><li class=\"sf-fdetail-content__chip\">Purple</li><li class=\"sf-fdetail-content__chip\">Multi-color</li><li class=\"sf-fdetail-content__chip\">Custom</li></ul></div><div class=\"sf-fdetail-content__spec\"><p class=\"sf-fdetail-content__label\">Storage</p><p class=\"sf-fdetail-content__prose\">Cool, dry place out of direct sunlight; keep the container closed after opening.</p></div><div class=\"sf-fdetail-content__spec\"><p class=\"sf-fdetail-content__label\">Carton Dimensions</p><table class=\"sf-fdetail-content__cartons\"><thead><tr><th scope=\"col\">Pack count</th><th scope=\"col\">Units per carton</th><th scope=\"col\">Carton size (cm)</th></tr></thead><tbody><tr><td>saasd</td><td></td><td></td></tr></tbody></table></div></div></div></div></section>",
+   "text": "Recommended For\ntestsadasdfasf\nUse Cases\nsdasdasdasdasd\nWho It&#039;s For\nasdasdasdasdfgggffff\nPackaging &amp; Specifications\nContainer Options\nPlastic Bottle\nAdditional Packaging\nAluminum Stand-up Pouch\nAluminum Foil Pouch with Zipper\nPlastic Bottle\nJar\nBlister Pack\nBox + Foil\nCustom\nColor Options\nBrown\nBeige\nRed\nGreen\nYellow\nOrange\nPurple\nMulti-color\nCustom\nStorage\nCool, dry place out of direct sunlight; keep the container closed after opening.\nCarton Dimensions\nPack count\nUnits per carton\nCarton size (cm)\nsaasd"
+  }
+ }
+}
