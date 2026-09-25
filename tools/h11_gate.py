@@ -11,7 +11,7 @@ What changed in H11:
      registered so an editor can paste a shortcode back into the body.
   2. The /article-feedback endpoint now dispatches
      fluentform/submission_inserted after its straight insert, so Form 12's
-     Admin Notification (info@) actually fires — every vote since the GF
+     Admin Notification (sales@) actually fires — every vote since the GF
      migration was stored but never mailed.
   3. The endpoint gained the inquiry endpoint's 60s-per-IP transient damper
      (key prefix sf_afb_rl_, real 429) and records the client's address
@@ -24,7 +24,7 @@ Modes:
 
 Mail hygiene: the gate rewrites Form 12's notification recipient to an
 example.invalid sink for its runtime and restores the original in finally,
-so no gate-driven mail reaches info@. The throttle transients the gate
+so no gate-driven mail reaches sales@. The throttle transients the gate
 creates are deleted before the run ends. 158's post_content is used for
 the body-band probe and restored (byte for byte) after.
 """
@@ -190,7 +190,21 @@ def formula_url(post_id):
 
 def set_form12_sink():
     """Rewrite Form 12's notification recipient to the sink and stash the
-    original on the server for the restore."""
+    original on the server for the restore.
+
+    Guard: if the live recipient is already the sink, a previous gate run
+    died before its finally ran and the state is poisoned — refuse to run
+    rather than back up the sink into the restore file (that is how the
+    2026-09-25 "restored to sink" red happened).
+    """
+    cur = wp_php(('<?php\n'
+                  '$meta = wpFluent()->table("fluentform_form_meta")->where("form_id", 12)->where("meta_key", "notifications")->first();\n'
+                  '$v = json_decode($meta->value, true); echo $v["to"];')).strip()
+    if cur == SINK:
+        raise RuntimeError(
+            "Form 12 recipient is already the sink (%s): a previous gate run "
+            "was killed before restore_form12(). Fix the DB recipient first, "
+            "then re-run." % SINK)
     wp_php(("<?php\n"
             "$meta = wpFluent()->table('fluentform_form_meta')->where('form_id', 12)->where('meta_key', 'notifications')->first();\n"
             "$v = json_decode($meta->value, true);\n"
@@ -321,7 +335,7 @@ def behaviour_mode(preflight):
     val = wp_php(('<?php\n'
                   '$meta = wpFluent()->table("fluentform_form_meta")->where("form_id", 12)->where("meta_key", "notifications")->first();\n'
                   '$v = json_decode($meta->value, true); echo $v["to"];'))
-    check("Form 12 notification recipient restored to info@", val.strip() == "info@zxpet.com", "got %s" % val)
+    check("Form 12 notification recipient restored to sales@", val.strip() == "sales@zxpet.com", "got %s" % val)
 
     print("== %s P4 — gate hygiene ==" % label)
     n = wp_php(('<?php\n'
