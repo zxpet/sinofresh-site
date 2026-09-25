@@ -2,7 +2,7 @@
 Theme Name: SINO FRESH
 Author: Shandong SINO FRESH Pet Food Co., Ltd.
 Text Domain: sinofresh
-Version: 2.10.85
+Version: 2.10.86
 Requires at least: 6.0
 Requires PHP: 7.4
 License: GNU General Public License v2 or later
@@ -182,6 +182,14 @@ input.ff-el-form-control[type="tel"] {
    the message never lands light-on-white. (The COA certificate result keeps
    its own .sf-cert-result styles, reimplemented with the FF hook.) */
 .fluentform .ff-message-success {
+	color: var(--wp--preset--color--text-primary);
+}
+/* Field labels: forms live inside white cards that sit on deep-green sections
+   carrying textColor:card-white — the card sets its own background but never
+   resets text colour, so FF labels inherit white-on-white. Pin the dark body
+   colour at the wrapper level (same root cause / fix as .ff-message-success
+   above). Labels keep FF's own weight/size; only the colour source changes. */
+.fluentform {
 	color: var(--wp--preset--color--text-primary);
 }
 

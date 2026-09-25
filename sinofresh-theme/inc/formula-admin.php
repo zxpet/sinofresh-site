@@ -89,11 +89,12 @@ function sf_formula_mb_fields() {
 	return array(
 		// basics
 		array('key' => 'sf_formula_intro', 'label' => 'Introduction', 'group' => 'basics', 'type' => 'textarea', 'req' => 2, 'rows' => 4,
-			'hint' => 'One short paragraph under the title. Shown verbatim on the page.'),
+			'hint' => '简介（页面参数列的 Overview 段）：标题下的一段短文字，前台原样显示；留空则按剂型自动生成一句模板文案。'),
 		// media
 		array('key' => 'sf_formula_gallery_ids', 'label' => 'Gallery images', 'group' => 'media', 'type' => 'gallery', 'req' => 1,
-			'hint' => 'Optional. The main photo is the Featured Image panel in the editor.'),
-		array('key' => 'sf_formula_video_url', 'label' => 'YouTube URL', 'group' => 'media', 'type' => 'url', 'req' => 1),
+			'hint' => '图集：可选。主图不用这里设——用编辑器右侧的特色图片面板。'),
+		array('key' => 'sf_formula_video_url', 'label' => 'YouTube URL', 'group' => 'media', 'type' => 'url', 'req' => 1,
+			'hint' => 'YouTube 视频链接：可选，留空不显示。'),
 		/* 待办17 — a dropdown, not radios: four answers including "none", and
 		   the options come from the same map the card reads (see
 		   sinofresh_formula_card_badges()), so the editor can only pick a badge
@@ -101,7 +102,7 @@ function sf_formula_mb_fields() {
 		   never carry one, and a banner that asks for a decoration is noise. */
 		array('key' => 'sf_formula_card_badge', 'label' => 'Card badge', 'group' => 'media', 'type' => 'select', 'req' => 1,
 			'pool' => array_keys(sinofresh_formula_card_badges()), 'empty_label' => '— None —',
-			'hint' => 'Optional overlay on the card image: Best Seller (gold), Hot (red), New (blue). Leave as "None" for no badge.'),
+			'hint' => '卡片角标：可选的图片覆盖层 — Best Seller（金）/ Hot（红）/ New（蓝），选 None 不显示。'),
 		// params — pools resolve per dosage form at render time.
 		// Batch H9 — every configurator-fed field is MULTI: the editor ticks
 		// which options the record supports, the front end shows exactly that
@@ -123,6 +124,9 @@ function sf_formula_mb_fields() {
 			'hint' => '净含量，如 120g per bottle。所有剂型显示；粒数信息一并写进净含量文字（鱼油如 60 softgels (60g) per bottle）。'),
 		array('key' => 'sf_formula_shape', 'label' => 'Shape', 'group' => 'params', 'type' => 'multi', 'req' => 2, 'pool' => 'shape', 'config_group' => 'shape',
 			'hint' => '形状/质地/外观：勾选该剂型支持的选项，前台只显示勾选的，客户单选。（158 疑似测试残留：全池值，填内容阶段逐条核对）'),
+		array('key' => 'sf_formula_functions', 'label' => 'Function', 'group' => 'params', 'type' => 'multi', 'req' => 2,
+			'pool' => sf_formula_functions_pool(), 'config_group' => 'function',
+			'hint' => '功能：勾选该产品支持的功能宣称，前台客户从中单选一个（可 Custom）。所有剂型显示；组名/选项可在下方 Configurator Display 覆盖。'),
 		array('key' => 'sf_formula_species', 'label' => 'Suitable for', 'group' => 'params', 'type' => 'multi', 'req' => 2, 'pool' => array('Dog', 'Cat'), 'config_group' => 'species',
 			'hint' => '适用宠物：Dog 和 Cat 两项都勾选时，前台会额外出现 "Dog and Cat" 单选项。（158 疑似测试残留：全池值，填内容阶段逐条核对）'),
 		array('key' => 'sf_formula_lifestage', 'label' => 'Life stage', 'group' => 'params', 'type' => 'multi', 'req' => 2,
@@ -130,9 +134,9 @@ function sf_formula_mb_fields() {
 			'hint' => '生命周期：勾选该产品适用的阶段（可多选），前台客户单选一个。（158 疑似测试残留：全池值，填内容阶段逐条核对）'),
 		array('key' => 'sf_formula_price_tiers', 'label' => 'Tier pricing', 'group' => 'params', 'type' => 'table', 'req' => 2,
 			'cols' => array('min' => 'Min quantity', 'max' => 'Max quantity', 'price' => 'Unit price (USD)'),
-			'hint' => 'Leave Max empty on the top tier: the ladder prints it as "1,000 and up".'),
+			'hint' => '阶梯价：最高一档 Max 留空，前台自动显示 "1,000 and up"。'),
 		array('key' => 'sf_formula_sample_price', 'label' => 'Sample price (USD)', 'group' => 'params', 'type' => 'text', 'req' => 1,
-			'hint' => 'e.g. 50 — printed beside "Get Sample" under the price ladder. Leave empty to hide the row.'),
+			'hint' => '样品价（美元）：如 50。显示在价格阶梯旁的 Get Sample 一行，留空隐藏。'),
 		/* Batch H8a — a fixed pool, not free text. The field was free text and
 		   the front end never read it (it parsed the spec sheet instead), so
 		   the two could — and did — disagree: post 158 says 24 months here and
@@ -148,27 +152,36 @@ function sf_formula_mb_fields() {
 		   real value and chooses when to canonicalise it. */
 		array('key' => 'sf_formula_shelf_life', 'label' => 'Shelf life', 'group' => 'params', 'type' => 'select', 'req' => 2,
 			'pool' => sf_formula_shelf_life_pool(), 'empty_label' => '— None —', 'keep_unknown' => true,
-			'hint' => 'Printed read-only under the parameters: the customer cannot pick a different one.'),
+			'hint' => '保质期：四选一（如 24 months），前台只读显示在参数下方，客户不可改。'),
 		// detail
-		array('key' => 'sf_formula_ingredients', 'label' => 'Ingredients', 'group' => 'detail', 'type' => 'textarea', 'req' => 2, 'rows' => 3),
-		array('key' => 'sf_formula_analysis', 'label' => 'Guaranteed Analysis', 'group' => 'detail', 'type' => 'textarea', 'req' => 2, 'rows' => 3),
-		array('key' => 'sf_formula_specs', 'label' => 'Standard Specs', 'group' => 'detail', 'type' => 'textarea', 'req' => 2, 'rows' => 2),
-		array('key' => 'sf_formula_recommended_for', 'label' => 'Recommended For', 'group' => 'detail', 'type' => 'textarea', 'req' => 2, 'rows' => 3),
-		array('key' => 'sf_formula_use_cases', 'label' => 'Use Cases', 'group' => 'detail', 'type' => 'textarea', 'req' => 2, 'rows' => 3),
-		array('key' => 'sf_formula_who_for', 'label' => "Who It's For", 'group' => 'detail', 'type' => 'textarea', 'req' => 2, 'rows' => 3),
+		array('key' => 'sf_formula_ingredients', 'label' => 'Ingredients', 'group' => 'detail', 'type' => 'textarea', 'req' => 2, 'rows' => 3,
+			'hint' => '成分列表：每行一项，前台 Formula & nutrition 区以 pills 形式显示。'),
+		array('key' => 'sf_formula_analysis', 'label' => 'Guaranteed Analysis', 'group' => 'detail', 'type' => 'textarea', 'req' => 2, 'rows' => 3,
+			'hint' => '保证分析值：每行一条「成分: 含量」，前台以 term/value 网格显示；无含量的行不显示。'),
+		array('key' => 'sf_formula_specs', 'label' => 'Standard Specs', 'group' => 'detail', 'type' => 'textarea', 'req' => 2, 'rows' => 2,
+			'hint' => '标准规格：每行一条「标签: 值」，前台规格表显示。'),
+		array('key' => 'sf_formula_recommended_for', 'label' => 'Recommended For', 'group' => 'detail', 'type' => 'textarea', 'req' => 2, 'rows' => 3,
+			'hint' => '推荐场景：每行一条；留空区块隐藏。'),
+		array('key' => 'sf_formula_use_cases', 'label' => 'Use Cases', 'group' => 'detail', 'type' => 'textarea', 'req' => 2, 'rows' => 3,
+			'hint' => '用例：每行一条；留空区块隐藏。'),
+		array('key' => 'sf_formula_who_for', 'label' => "Who It's For", 'group' => 'detail', 'type' => 'textarea', 'req' => 2, 'rows' => 3,
+			'hint' => '适合谁：每行一条；留空区块隐藏。'),
 		// packaging
-		array('key' => 'sf_formula_packaging_extra', 'label' => 'Extra packaging', 'group' => 'packaging', 'type' => 'multi', 'req' => 1, 'pool' => 'packaging'),
-		array('key' => 'sf_formula_colors', 'label' => 'Colors', 'group' => 'packaging', 'type' => 'multi', 'req' => 1, 'pool' => 'colors',
-			'hint' => 'Not available for this dosage form when no options appear.'),
+		array('key' => 'sf_formula_packaging_extra', 'label' => 'Extra packaging', 'group' => 'packaging', 'type' => 'multi', 'req' => 1, 'pool' => 'packaging',
+			'hint' => '额外包装选项：勾选该产品支持的包装形式。'),
+		array('key' => 'sf_formula_colors', 'label' => 'Colors', 'group' => 'params', 'type' => 'multi', 'req' => 1, 'pool' => 'colors', 'config_group' => 'color',
+			'hint' => '颜色：勾选该产品支持的颜色，前台客户从中单选一个（可 Custom）。鱼油/滴剂/液体无颜色池，此字段为空即前台不显示该组。'),
 		array('key' => 'sf_formula_cartons', 'label' => 'Carton dimensions', 'group' => 'packaging', 'type' => 'table', 'req' => 1,
-			'cols' => array('count' => 'Pack count', 'boxes' => 'Units per carton', 'size' => 'Carton size (cm)')),
+			'cols' => array('count' => 'Pack count', 'boxes' => 'Units per carton', 'size' => 'Carton size (cm)'),
+			'hint' => '装箱信息：Pack count / Units per carton / Carton size (cm) 三列；留空该行不显示。'),
 		// faq
-		array('key' => 'sf_formula_lead_time', 'label' => 'Lead time', 'group' => 'faq', 'type' => 'text', 'req' => 1),
-		array('key' => 'sf_formula_container', 'label' => 'Container Type', 'group' => 'faq', 'type' => 'multi', 'req' => 2,
+		array('key' => 'sf_formula_lead_time', 'label' => 'Lead time', 'group' => 'faq', 'type' => 'text', 'req' => 1,
+			'hint' => '交期：如 30-35 days，显示在详情页 meta 与 FAQ 区；留空不显示。'),
+		array('key' => 'sf_formula_container', 'label' => 'Container Type', 'group' => 'params', 'type' => 'multi', 'req' => 2,
 			'pool' => 'packaging', 'config_group' => 'container',
 			'hint' => '包装形式：勾选该剂型支持的包装，前台只显示勾选的，客户单选。历史值（如 Round）会保留可选，改存后落入新词汇。'),
 		array('key' => 'sf_formula_faq_data', 'label' => 'Product FAQ', 'group' => 'faq', 'type' => 'faqtable', 'req' => 1,
-			'hint' => 'Questions ship prefilled; fill the answers. Site-wide questions are appended from the Global FAQ.'),
+			'hint' => '产品 FAQ：问题已预填，填答案即可；全站 Global FAQ 自动追加在后面。'),
 		// specsheet — batch H10, trimmed by H10b. The formula-copy, label-
 		// compliance and logistics fields were removed: that content is
 		// product-specific prose the editors write into the body band (Word /
@@ -273,7 +286,9 @@ function sf_formula_config_group_rows() {
 		'counts'      => array('name' => '粒数（Counts）', 'hint' => '仅软咀嚼/片剂/洁齿显示。组名不填用池默认（Count per Bottle / Count per Pack）。'),
 		'net-content' => array('name' => '净含量（Net Content）', 'hint' => '所有剂型显示。建议值如 120g per bottle；鱼油把粒数写进净含量，如 60 softgels (60g) per bottle。'),
 		'shape'       => array('name' => '形状/质地/外观（Shape）', 'hint' => '组名不填用池默认（Shape / Texture / Appearance / Form）。选项覆盖后即为该组全部选项。'),
+		'color'       => array('name' => '颜色（Color）', 'hint' => '仅有颜色池的剂型显示（软咀嚼/片剂/洁齿/膏剂/粉剂；鱼油/滴剂/液体整组隐藏）。组名不填用默认（Color）。选项覆盖后即为该组全部选项。'),
 		'container'   => array('name' => '包装形式（Container Type）', 'hint' => '选项覆盖后即为该组全部选项；覆盖列表里写什么，前台就显示什么。'),
+		'function'    => array('name' => '功能（Function）', 'hint' => '所有剂型显示。组名不填用默认（Function）。选项覆盖后即为该组全部选项。'),
 		'species'     => array('name' => '适用宠物（Suitable For）', 'hint' => '默认 Dog / Cat；后台两项都勾选时前台额外出现 "Dog and Cat"。此组无 Custom 自由文本。'),
 		'stage'       => array('name' => '生命周期（Life Stage）', 'hint' => '默认 Puppy / Kitten / Adult / Senior / All Life Stages。此组无 Custom 自由文本。'),
 	);

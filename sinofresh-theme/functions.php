@@ -34,7 +34,7 @@ add_action('after_setup_theme', function() {
 });
 
 add_action('wp_enqueue_scripts', function() {
-	wp_enqueue_style('sinofresh-style', get_stylesheet_uri(), array(), '2.10.85');
+	wp_enqueue_style('sinofresh-style', get_stylesheet_uri(), array(), '2.10.86');
 	// Sticky nav: every template renders parts/header.html, so this is site-wide.
 	wp_enqueue_script('sinofresh-sticky-header', get_template_directory_uri() . '/assets/js/sticky-header.js', array(), '1.0.0', true);
 	/* Consent decisions are now versioned + time-boxed and bridged into WP
@@ -242,6 +242,128 @@ function sinofresh_archive_count($atts = array()) {
 	return esc_html($label);
 }
 add_shortcode('sf_archive_count', 'sinofresh_archive_count');
+
+/**
+ * [sf_page_body] — the editable body of a company page (H12 Step2).
+ *
+ * The four company templates (page-about / page-quality / page-services /
+ * page-factory-tour) used to hardcode every sentence between the header and
+ * footer template parts; the DB pages behind them were empty shells. This
+ * shortcode inverts that: the template keeps only the skeleton (header part,
+ * this shortcode, footer part) and the whole body markup lives in the page's
+ * post_content, where editors reach it through Pages → Edit.
+ *
+ * empty-means-absent, same contract as [sf_formula_body] below: an empty
+ * post_content renders an empty string, so a page whose editor wiped the
+ * content shows header + footer rather than a padded gap.
+ *
+ * The raw post_content is returned WITHOUT apply_filters('the_content') on
+ * purpose. Block templates run do_shortcode() before do_blocks(), so the
+ * injected block comments are rendered by the template's own do_blocks pass
+ * — the same pipeline that rendered the identical markup when it was
+ * hardcoded in the template. Going through the_content instead would add
+ * wptexturize and wp_filter_content_tags (curly quotes, lazy-loading
+ * attributes) that the hardcoded render never had, which would break the
+ * byte-identical migration guarantee this batch was verified under.
+ */
+function sinofresh_page_body() {
+	if (!is_singular('page')) {
+		return '';
+	}
+	$post = get_post((int) get_queried_object_id());
+	if (!($post instanceof WP_Post)) {
+		return '';
+	}
+	if (trim((string) $post->post_content) === '') {
+		return '';
+	}
+	/* The template-level do_shortcode() pass already ran by the time this
+	   expands, so any shortcode the seeded body carries (the company pages
+	   embed [fluentform] inquiry forms) must be resolved here — the hardcoded
+	   render did both passes over the same markup. Exactly one trailing
+	   newline is dropped so the newline the template writes after the tag
+	   keeps the byte count identical to the hardcoded render. */
+	/* The template-level do_shortcode() pass already ran by the time this
+	   expands, so any shortcode the seeded body carries (the company pages
+	   embed [fluentform] inquiry forms) must be resolved here — the hardcoded
+	   render did both passes over the same markup. Exactly one trailing
+	   newline is dropped (the one the seed file writer added); the block
+	   pipeline is then byte-identical to the hardcoded render, verified
+	   against the archived pre-migration HTML (docs/h12-archive/). NOTE:
+	   substr, not preg_replace('/\n$/') — PCRE's $ also matches before a
+	   trailing newline, so that pattern eats BOTH trailing newlines and
+	   the inter-block whitespace before the footer loses a line. */
+	$c = (string) $post->post_content;
+	if (substr($c, -1) === "\n") {
+		$c = substr($c, 0, -1);
+	}
+	return do_shortcode($c);
+}
+add_shortcode('sf_page_body', 'sinofresh_page_body');
+
+/**
+ * [sf_home_about] — the editable "About SINO FRESH" company band on the
+ * front page (H12 Step2).
+ *
+ * front-page.html is a 1450-line hardcoded template; the one band the brief
+ * opens for editing is the company column (eyebrow, heading, subtitle, the
+ * four ✓ proof points and the Learn-more button). The whole inner group
+ * moved into the front page's post_content (page_on_front), and the template
+ * now calls this shortcode from inside the same fixed column. Rendering is
+ * raw post_content + the template's do_blocks pass, for the same
+ * byte-identical reasons as [sf_page_body] above; empty-means-absent means a
+ * wiped page collapses to an empty column rather than a padded gap.
+ */
+function sinofresh_home_about() {
+	$front_id = (int) get_option('page_on_front');
+	if (!$front_id) {
+		return '';
+	}
+	$post = get_post($front_id);
+	if (!($post instanceof WP_Post)) {
+		return '';
+	}
+	if (trim((string) $post->post_content) === '') {
+		return '';
+	}
+	/* Same reason as [sf_page_body]: the template's do_shortcode() pass has
+	   already run, so the seeded band resolves its own shortcodes here, and
+	   exactly one trailing newline is dropped (see the substr note there). */
+	$c = (string) $post->post_content;
+	if (substr($c, -1) === "\n") {
+		$c = substr($c, 0, -1);
+	}
+	return do_shortcode($c);
+}
+add_shortcode('sf_home_about', 'sinofresh_home_about');
+
+/**
+ * Inline the migrated page bodies into a template-file read (H12 Step2).
+ *
+ * The wp_head schema generators (FAQPage, BreadcrumbList) derive structured
+ * data from the current view's template FILE, and the company bodies now live
+ * in post_content behind the [sf_page_body] / [sf_home_about] shortcodes —
+ * reading the raw file would drop the FAQ accordions and breadcrumbs the
+ * bodies carry. Both generators call this after file_get_contents() so the
+ * scanned source matches what the render path assembles: template skeleton +
+ * DB body. Raw post_content (not do_shortcode'd output) is enough — the
+ * generators scan for <details>/<nav> markup that no shortcode contributes.
+ */
+function sinofresh_inline_page_bodies($html) {
+	if (strpos($html, '[sf_page_body]') !== false && is_singular('page')) {
+		$post = get_post((int) get_queried_object_id());
+		if ($post instanceof WP_Post) {
+			$html = str_replace('[sf_page_body]', (string) $post->post_content, $html);
+		}
+	}
+	if (strpos($html, '[sf_home_about]') !== false && is_front_page()) {
+		$front = get_post((int) get_option('page_on_front'));
+		if ($front instanceof WP_Post) {
+			$html = str_replace('[sf_home_about]', (string) $front->post_content, $html);
+		}
+	}
+	return $html;
+}
 
 /**
  * [sf_blog_chips] — blog filter chips, shared by /blog/ and the archive
@@ -2451,6 +2573,53 @@ function sinofresh_formula_config_groups($post_id) {
 		return $vals;
 	};
 
+	$groups = array();
+
+	/* Batch H9 — Shape shows THE RECORD'S CHECKED VALUES. H8b made the pool
+	   the option source so page and editor agreed on the vocabulary; the H9
+	   model goes one step further — the editor's ticks ARE the option list
+	   ("后台多选，前台只显示勾选的"), and the pool is demoted to vocabulary
+	   whitelist + image carrier: sf_formula_library_options() still matches
+	   each checked label against the Site Settings library for its picture,
+	   and returns '' where no picture exists (the dashed slot).
+
+	   The group's NAME still follows the pool ("Appearance" on powders,
+	   "Texture" on pastes, "Form" on fish oil) or the Configurator Display
+	   override, via $state(). No meta, no group — no empty husk. */
+	$st = $state('shape', 'Shape');
+	$shape_vals = $st ? $meta_values('sf_formula_shape') : array();
+	if ($st && $shape_vals) {
+		$shape_opts = function_exists('sf_formula_library_options')
+			? sf_formula_library_options($shape_vals, sf_shape_library()) : array();
+		if ($shape_opts) {
+			$groups[] = array(
+				'key' => 'shape', 'label' => $st['label'],
+				'meta' => implode(', ', $shape_vals),
+				'type' => 'single', 'style' => 'image', 'hint' => 'Choose one',
+				/* The helper appends the Custom pick when the editor did not
+				   tick one — every choice group ends in Custom (H8a), and the
+				   pick is what opens the free-text box. */
+				'options' => sf_formula_options_with_custom($shape_opts),
+			);
+		}
+	}
+
+	/* H12 Step4 — Color joins the same model: the record's own checked
+	   sf_formula_colors values ARE the option list (chips, one pick, Custom
+	   appended when the editor did not tick one), the per-form pool is the
+	   vocabulary whitelist, and the Configurator Display row names the
+	   group. Forms whose pool is empty (drops / liquids / fish oil) do not
+	   apply, so neither the editor's field nor the page shows a husk. */
+	$st = $state('color', 'Color');
+	$color_vals = $st ? $meta_values('sf_formula_colors') : array();
+	if ($st && $color_vals) {
+		$groups[] = array(
+			'key' => 'color', 'label' => $st['label'], 'meta' => implode(', ', $color_vals),
+			'type' => 'single', 'style' => 'chips', 'hint' => 'Choose one',
+			'options' => sf_formula_options_with_custom($options_from($color_vals)),
+		);
+	}
+
 	$st = $state('flavor', 'Flavor');
 	$flavors = $st ? sf_json_array(get_post_meta($post_id, 'sf_formula_flavors', true)) : array();
 	if ($st && $flavors) {
@@ -2501,6 +2670,43 @@ function sinofresh_formula_config_groups($post_id) {
 		);
 	}
 
+	/* Batch H9 — Container Type shows the record's checked values too, same
+	   model as Shape: ticks are the option list, the pool is the vocabulary
+	   and the picture carrier. Legacy slugs (158's "Round" until its
+	   migration lands) print verbatim through sinofresh_container_label()
+	   and are migrated to the current vocabulary by the H9 script. No meta,
+	   no group. */
+	$st = $state('container', 'Container Type');
+	$cont_vals = $st ? $meta_values('sf_formula_container') : array();
+	if ($st && $cont_vals) {
+		$cont_labels = array_map('sinofresh_container_label', $cont_vals);
+		$cont_opts   = function_exists('sf_formula_library_options')
+			? sf_formula_library_options($cont_labels, sf_container_library()) : array();
+		if ($cont_opts) {
+			$groups[] = array(
+				'key' => 'container', 'label' => $st['label'],
+				'meta' => implode(', ', $cont_labels),
+				'type' => 'single', 'style' => 'image', 'hint' => 'Choose one',
+				'options' => sf_formula_options_with_custom($cont_opts),
+			);
+		}
+	}
+
+	/* H12 Step4 — Function is the tenth group, the same model with a fixed
+	   vocabulary (sf_formula_functions_pool()): a formula's benefit claim is
+	   not dosage-form-specific, so unlike Color there is no per-form pool
+	   gate — the group applies wherever the editor ticks values, and the
+	   Configurator Display row can rename or trim it like every other. */
+	$st = $state('function', 'Function');
+	$function_vals = $st ? $meta_values('sf_formula_functions') : array();
+	if ($st && $function_vals) {
+		$groups[] = array(
+			'key' => 'function', 'label' => $st['label'], 'meta' => implode(', ', $function_vals),
+			'type' => 'single', 'style' => 'chips', 'hint' => 'Choose one',
+			'options' => sf_formula_options_with_custom($options_from($function_vals)),
+		);
+	}
+
 	/* Batch H9 — Suitable For becomes single-choice. "Dog and Cat" appears
 	   only when the editor ticked BOTH (user ruling C), and the group carries
 	   no Custom pick (a pet kind is not something a visitor types). */
@@ -2525,57 +2731,6 @@ function sinofresh_formula_config_groups($post_id) {
 			'type' => 'single', 'style' => 'chips', 'hint' => 'Choose one',
 			'options' => sf_formula_options_with_custom($options_from($lifestage_vals), true),
 		);
-	}
-
-	/* Batch H9 — Shape shows THE RECORD'S CHECKED VALUES. H8b made the pool
-	   the option source so page and editor agreed on the vocabulary; the H9
-	   model goes one step further — the editor's ticks ARE the option list
-	   ("后台多选，前台只显示勾选的"), and the pool is demoted to vocabulary
-	   whitelist + image carrier: sf_formula_library_options() still matches
-	   each checked label against the Site Settings library for its picture,
-	   and returns '' where no picture exists (the dashed slot).
-
-	   The group's NAME still follows the pool ("Appearance" on powders,
-	   "Texture" on pastes, "Form" on fish oil) or the Configurator Display
-	   override, via $state(). No meta, no group — no empty husk. */
-	$st = $state('shape', 'Shape');
-	$shape_vals = $st ? $meta_values('sf_formula_shape') : array();
-	if ($st && $shape_vals) {
-		$shape_opts = function_exists('sf_formula_library_options')
-			? sf_formula_library_options($shape_vals, sf_shape_library()) : array();
-		if ($shape_opts) {
-			$groups[] = array(
-				'key' => 'shape', 'label' => $st['label'],
-				'meta' => implode(', ', $shape_vals),
-				'type' => 'single', 'style' => 'image', 'hint' => 'Choose one',
-				/* The helper appends the Custom pick when the editor did not
-				   tick one — every choice group ends in Custom (H8a), and the
-				   pick is what opens the free-text box. */
-				'options' => sf_formula_options_with_custom($shape_opts),
-			);
-		}
-	}
-
-	/* Batch H9 — Container Type shows the record's checked values too, same
-	   model as Shape: ticks are the option list, the pool is the vocabulary
-	   and the picture carrier. Legacy slugs (158's "Round" until its
-	   migration lands) print verbatim through sinofresh_container_label()
-	   and are migrated to the current vocabulary by the H9 script. No meta,
-	   no group. */
-	$st = $state('container', 'Container Type');
-	$cont_vals = $st ? $meta_values('sf_formula_container') : array();
-	if ($st && $cont_vals) {
-		$cont_labels = array_map('sinofresh_container_label', $cont_vals);
-		$cont_opts   = function_exists('sf_formula_library_options')
-			? sf_formula_library_options($cont_labels, sf_container_library()) : array();
-		if ($cont_opts) {
-			$groups[] = array(
-				'key' => 'container', 'label' => $st['label'],
-				'meta' => implode(', ', $cont_labels),
-				'type' => 'single', 'style' => 'image', 'hint' => 'Choose one',
-				'options' => sf_formula_options_with_custom($cont_opts),
-			);
-		}
 	}
 
 	/* Batch H7i — the ladder. The admin's row is {min, max, price} (the order's
@@ -5304,6 +5459,10 @@ add_action('wp_head', function() {
 		return;
 	}
 	$html = file_get_contents($file);
+	/* H12 Step2: the company bodies moved into post_content behind
+	   [sf_page_body] / [sf_home_about]; inline them so the <details> pairs
+	   the accordions carry are still found. */
+	$html = sinofresh_inline_page_bodies($html);
 
 	// Extract <details> accordions: question = summary text, answer = inner text.
 	if (!preg_match_all('/<details[^>]*>(.*?)<\/details>/s', $html, $items, PREG_SET_ORDER)) {
@@ -5590,6 +5749,9 @@ add_action('wp_head', function() {
 		}
 		$html = file_get_contents($file);
 	}
+	/* H12 Step2: inline the migrated page bodies (see sinofresh_inline_page_bodies)
+	   so the .sf-breadcrumb <nav> that moved into post_content is still found. */
+	$html = sinofresh_inline_page_bodies($html);
 	// Run the same placeholder engine the render path uses, so the {{TITLE}}
 	// and {{MID_*}} crumbs resolve identically in the JSON-LD breadcrumb.
 	$html = sinofresh_template_placeholders($html);

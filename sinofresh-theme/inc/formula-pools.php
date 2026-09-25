@@ -221,12 +221,29 @@ function sf_formula_groups_config($post_id) {
 }
 
 /**
- * The eight configurator groups' defaults for one dosage form.
+ * H12 Step4 — the Function group's vocabulary. A formula's benefit claim is
+ * not dosage-form-specific, so unlike every per-form pool above this one is
+ * global: the editor ticks the claims the record supports and the customer
+ * picks one. The Configurator Display row can rename or trim it like any
+ * other group.
+ */
+function sf_formula_functions_pool() {
+	return array(
+		'Hip & Joint', 'Skin & Coat', 'Digestive Health', 'Immune Support', 'Calming',
+		'Dental Care', 'Urinary Health', 'Multivitamin', 'Heart Health', 'Eye Health',
+	);
+}
+
+/**
+ * The ten configurator groups' defaults for one dosage form (H9's eight plus
+ * H12's Color and Function).
  *
  * `applies` is the group's dosage-form gate: Unit Weight and Counts exist
  * only on the three chew/tablet forms (user ruling A, 2026-09-25 — fish oil's
- * count information lives in net_content as "60 softgels (60g) per bottle").
- * A group whose options pool is empty on a form (none today) would render
+ * count information lives in net_content as "60 softgels (60g) per bottle");
+ * Color exists only where the form's color pool is non-empty (drops /
+ * liquids / fish oil have none, so neither the editor's field nor the page
+ * shows a husk). A group whose options pool is empty on a form would render
  * nothing anyway; `applies` is the explicit statement of the same fact.
  */
 function sf_formula_group_defaults($form) {
@@ -242,12 +259,14 @@ function sf_formula_group_defaults($form) {
 		return (isset($lb[$dim]) && trim((string) $lb[$dim]) !== '') ? (string) $lb[$dim] : $fallback;
 	};
 	return array(
+		'shape'       => array('label' => $label('shape', 'Shape'), 'options' => $pool('shape'), 'applies' => true),
+		'color'       => array('label' => $label('colors', 'Color'), 'options' => $pool('colors'), 'applies' => count($pool('colors')) > 0),
 		'flavor'      => array('label' => $label('flavors', 'Flavor'), 'options' => $pool('flavors'), 'applies' => true),
 		'weight'      => array('label' => $label('weights', 'Unit Weight'), 'options' => $pool('weights'), 'applies' => $chew),
 		'counts'      => array('label' => $label('counts', 'Counts'), 'options' => $pool('counts'), 'applies' => $chew),
 		'net-content' => array('label' => $label('net_content', 'Net Content'), 'options' => $pool('net_content'), 'applies' => true),
-		'shape'       => array('label' => $label('shape', 'Shape'), 'options' => $pool('shape'), 'applies' => true),
 		'container'   => array('label' => 'Container Type', 'options' => $pool('packaging'), 'applies' => true),
+		'function'    => array('label' => 'Function', 'options' => sf_formula_functions_pool(), 'applies' => true),
 		'species'     => array('label' => 'Suitable For', 'options' => array('Dog', 'Cat'), 'applies' => true),
 		'stage'       => array('label' => 'Life Stage', 'options' => array('Puppy', 'Kitten', 'Adult', 'Senior', 'All Life Stages'), 'applies' => true),
 	);
