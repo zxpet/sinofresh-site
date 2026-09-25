@@ -34,7 +34,7 @@ add_action('after_setup_theme', function() {
 });
 
 add_action('wp_enqueue_scripts', function() {
-	wp_enqueue_style('sinofresh-style', get_stylesheet_uri(), array(), '2.10.81');
+	wp_enqueue_style('sinofresh-style', get_stylesheet_uri(), array(), '2.10.82');
 	// Sticky nav: every template renders parts/header.html, so this is site-wide.
 	wp_enqueue_script('sinofresh-sticky-header', get_template_directory_uri() . '/assets/js/sticky-header.js', array(), '1.0.0', true);
 	/* Consent decisions are now versioned + time-boxed and bridged into WP
@@ -1957,11 +1957,12 @@ add_shortcode('sf_formula_detail', 'sinofresh_formula_detail');
  * record's own sf_formula_packaging_extra list still prints in the body under
  * "Packaging & Specifications → Additional Packaging".
  *
- * The six that left — Flavor, Piece Weight, Pack Size, Suitable For, Life Stage
- * and Quantity & Pricing — are controls there, and each prints this record's own
- * value as its meta line. Keeping them here as well would print every one of
- * those values twice on the same page, which is why this renderer lost rows in a
- * batch that added a renderer.
+ * The six that left — Flavor, Unit Weight, Counts, Net Content, Suitable For,
+ * Life Stage, Shape, Container Type and Quantity & Pricing (batch H9 renamed
+ * and extended H7d's set) — are controls in [sf_formula_config], and each
+ * prints this record's own value as its meta line. Keeping them here as well
+ * would print every one of those values twice on the same page, which is why
+ * this renderer lost rows in a batch that added a renderer.
  *
  * Empty means absent: a row with no value is not rendered at all, so a
  * record that carries only what batch H1a migrated renders the rows it can
@@ -1996,13 +1997,12 @@ function sinofresh_formula_params() {
 	   &amp;#8211; for "–"). */
 	$rows = array();
 
-	/* Batch H7d moved the six rows that are CHOICES over to
-	   [sf_formula_config]: Flavor, Piece Weight, Pack Size, Suitable For, Life
-	   Stage and Quantity & Pricing are controls now, and each prints the
-	   record's own value as its meta line — so leaving them here as well would
-	   put every one of those values on the page twice. What stays is the four
-	   rows that are not a choice. The split is by "can the customer pick a
-	   different one", not by importance. */
+	/* Batch H7d moved the rows that are CHOICES over to
+	   [sf_formula_config]; batch H9 renamed the set (Unit Weight, Counts, Net
+	   Content, Shape, Container Type — see that renderer) and made every one
+	   of them a record-driven control. What stays here is the rows that are
+	   not a choice. The split is by "can the customer pick a different one",
+	   not by importance. */
 	$shelf = sf_formula_shelf_life_line($post_id, $parts);
 	if ($shelf !== '') {
 		$rows['Shelf life'] = esc_html($shelf);
@@ -2189,7 +2189,12 @@ function sf_formula_custom_option($image = '') {
  * list does not already spell Custom is left exactly as it was, so this is a
  * no-op on every page but the one that carried the duplicate.
  */
-function sf_formula_options_with_custom($options) {
+function sf_formula_options_with_custom($options, $no_custom = false) {
+	/* Batch H9 — two groups (Suitable For, Life Stage) carry no Custom pick:
+	   a pet kind and a life stage are catalogued answers, not typed ones. */
+	if ($no_custom) {
+		return $options;
+	}
 	foreach ($options as $i => $option) {
 		$label = isset($option['label']) ? (string) $option['label'] : '';
 		if (0 === strcasecmp($label, 'Custom')) {
@@ -2255,168 +2260,186 @@ function sinofresh_formula_config_groups($post_id) {
 	if ($post_id <= 0) {
 		return array();
 	}
-	$parts  = sinofresh_formula_specs_parts(trim((string) get_post_meta($post_id, 'sf_formula_specs', true)));
-	/* Batch H8b — the dosage form, for the two groups whose options come from
-	   a pool rather than from the record. sf_formula_record_form() is the same
-	   reader the publishing form uses to resolve those pools, so the page and
-	   the editor cannot resolve them differently. */
-	$form_slug = function_exists('sf_formula_record_form') ? sf_formula_record_form($post_id) : '';
-	$groups = array();
-
-	$flavors = sf_json_array(get_post_meta($post_id, 'sf_formula_flavors', true));
-	if ($flavors) {
-		$options = array();
-		foreach ($flavors as $flavor) {
-			$options[] = array('value' => $flavor, 'label' => $flavor, 'image' => '', 'note' => '');
+	/* Batch H9 — one state reader for every group. `applies` is the dosage
+	   gate (Unit Weight and Counts exist only on the three chew/tablet
+	   forms; user ruling A), `show` is the Configurator Display switch, and
+	   the label is override-else-default — the SAME override the editor sees
+	   in wp-admin, so the two screens can never show two names for one
+	   group. The OPTIONS are the record's own checked values — the whole
+	   point of the batch ("后台多选，前台只显示勾选的") — so a record with
+	   no meta for a group renders no group at all (user ruling, 2026-09-25:
+	   the 20 unbackfilled records must not leave empty husks on the page). */
+	$defaults = function_exists('sf_formula_group_defaults')
+		? sf_formula_group_defaults(sf_formula_record_form($post_id)) : array();
+	$groups_cfg = function_exists('sf_formula_groups_config')
+		? sf_formula_groups_config($post_id) : array();
+	$state = function ($key, $fallback_label) use ($defaults, $groups_cfg) {
+		$d = isset($defaults[$key]) ? $defaults[$key] : array('label' => $fallback_label, 'applies' => true);
+		if (empty($d['applies'])) {
+			return null;
 		}
-		$options = sf_formula_options_with_custom($options);
-		/* H8a — `multi` became `single`, and the hint says so. A flavour is one
-		   answer: "Chicken, Beef" is not a product, it is a range, and the
-		   sales desk cannot quote from it. Suitable For below stays multi
-		   because a formula genuinely is for dogs AND cats. */
-		$groups[] = array(
-			'key' => 'flavor', 'label' => 'Flavor', 'meta' => implode(', ', $flavors),
-			'type' => 'single', 'style' => 'chips',
-			'hint' => 'Choose one', 'options' => $options,
-		);
-	}
-
-	$unit = trim((string) $parts['unit']);
-	if ($unit !== '') {
-		/* One published weight. A single-choice control with one choice is not
-		   a degenerate case here — it is how the row reads as a choice the
-		   customer can see, and it is what makes "nothing checked" a state the
-		   dialog has to handle. */
-		$groups[] = array(
-			'key' => 'weight', 'label' => 'Piece Weight', 'meta' => $unit,
-			'type' => 'single', 'style' => 'chips', 'hint' => '',
-			'options' => sf_formula_options_with_custom(array(
-				array('value' => $unit, 'label' => $unit, 'image' => '', 'note' => ''),
-			)),
-		);
-	}
-
-	$pack = trim((string) $parts['pack']);
-	if ($pack !== '') {
-		list($packs, $pack_tail) = sinofresh_formula_pack_parts($pack);
-		if ($packs) {
-			$options = array();
-			foreach ($packs as $p) {
-				$options[] = array('value' => $p, 'label' => $p, 'image' => '', 'note' => '');
+		$own = isset($groups_cfg[$key]) && is_array($groups_cfg[$key]) ? $groups_cfg[$key] : array();
+		if (isset($own['show']) && empty($own['show'])) {
+			return null;
+		}
+		if (isset($own['label']) && trim((string) $own['label']) !== '') {
+			return array('label' => trim((string) $own['label']));
+		}
+		$def = (isset($d['label']) && trim((string) $d['label']) !== '') ? trim((string) $d['label']) : $fallback_label;
+		return array('label' => $def);
+	};
+	/* A record's checked values as option rows. Records saved before H9 hold
+	   a plain string where the batch stores a JSON array; the readers below
+	   accept both, so 158 renders identically before and after its one-off
+	   meta migration. */
+	$options_from = static function ($values) {
+		$out = array();
+		foreach ((array) $values as $v) {
+			$v = trim((string) $v);
+			if ($v === '') {
+				continue;
 			}
-			$options = sf_formula_options_with_custom($options);
+			$out[] = array('value' => $v, 'label' => $v, 'image' => '', 'note' => '');
+		}
+		return $out;
+	};
+	/* Array-or-legacy-string reader. */
+	$meta_values = static function ($key) use ($post_id) {
+		$vals = sf_json_array(get_post_meta($post_id, $key, true));
+		if (!$vals) {
+			$legacy = trim((string) get_post_meta($post_id, $key, true));
+			if ($legacy !== '') {
+				$vals = array($legacy);
+			}
+		}
+		return $vals;
+	};
+
+	$st = $state('flavor', 'Flavor');
+	$flavors = $st ? sf_json_array(get_post_meta($post_id, 'sf_formula_flavors', true)) : array();
+	if ($st && $flavors) {
+		/* Single-choice (H8a) with the H9 label: pool default or the
+		   Configurator Display override, never a second hard-coded name. */
+		$groups[] = array(
+			'key' => 'flavor', 'label' => $st['label'], 'meta' => implode(', ', $flavors),
+			'type' => 'single', 'style' => 'chips',
+			'hint' => 'Choose one', 'options' => sf_formula_options_with_custom($options_from($flavors)),
+		);
+	}
+
+	/* Batch H9 — Unit Weight reads the record's own checked values
+	   (sf_formula_weight, now a JSON array) instead of parsing the specs
+	   blob, closing the two-source disagreement the H8a survey found on 158
+	   (specs said 2g/piece, the field said 2.5g). No meta, no group. */
+	$st = $state('weight', 'Unit Weight');
+	$weight_vals = $st ? $meta_values('sf_formula_weight') : array();
+	if ($st && $weight_vals) {
+		$groups[] = array(
+			'key' => 'weight', 'label' => $st['label'], 'meta' => implode(', ', $weight_vals),
+			'type' => 'single', 'style' => 'chips', 'hint' => 'Choose one',
+			'options' => sf_formula_options_with_custom($options_from($weight_vals)),
+		);
+	}
+
+	/* Batch H9 — Counts likewise reads sf_formula_counts, and the old
+	   specs-parsed "Pack Size" group is retired: its unit phrase lives in
+	   the count/net-content strings themselves now ("60g per bottle"). */
+	$st = $state('counts', 'Counts');
+	$counts_vals = $st ? $meta_values('sf_formula_counts') : array();
+	if ($st && $counts_vals) {
+		$groups[] = array(
+			'key' => 'counts', 'label' => $st['label'], 'meta' => implode(', ', $counts_vals),
+			'type' => 'single', 'style' => 'chips', 'hint' => 'Choose one',
+			'options' => sf_formula_options_with_custom($options_from($counts_vals)),
+		);
+	}
+
+	/* Batch H9 — Net Content, the new all-forms group. */
+	$st = $state('net-content', 'Net Content');
+	$net_vals = $st ? $meta_values('sf_formula_net_content') : array();
+	if ($st && $net_vals) {
+		$groups[] = array(
+			'key' => 'net-content', 'label' => $st['label'], 'meta' => implode(', ', $net_vals),
+			'type' => 'single', 'style' => 'chips', 'hint' => 'Choose one',
+			'options' => sf_formula_options_with_custom($options_from($net_vals)),
+		);
+	}
+
+	/* Batch H9 — Suitable For becomes single-choice. "Dog and Cat" appears
+	   only when the editor ticked BOTH (user ruling C), and the group carries
+	   no Custom pick (a pet kind is not something a visitor types). */
+	$st = $state('species', 'Suitable For');
+	$species = $st ? sf_json_array(get_post_meta($post_id, 'sf_formula_species', true)) : array();
+	if ($st && $species) {
+		$options = $options_from($species);
+		if (in_array('Dog', $species, true) && in_array('Cat', $species, true)) {
+			$options[] = array('value' => 'Dog and Cat', 'label' => 'Dog and Cat', 'image' => '', 'note' => '');
+		}
+		$groups[] = array(
+			'key' => 'species', 'label' => $st['label'], 'meta' => implode(', ', $species),
+			'type' => 'single', 'style' => 'chips',
+			'hint' => 'Choose one', 'options' => sf_formula_options_with_custom($options, true),
+		);
+	}
+	$st = $state('stage', 'Life Stage');
+	$lifestage_vals = $st ? $meta_values('sf_formula_lifestage') : array();
+	if ($st && $lifestage_vals) {
+		$groups[] = array(
+			'key' => 'stage', 'label' => $st['label'], 'meta' => implode(', ', $lifestage_vals),
+			'type' => 'single', 'style' => 'chips', 'hint' => 'Choose one',
+			'options' => sf_formula_options_with_custom($options_from($lifestage_vals), true),
+		);
+	}
+
+	/* Batch H9 — Shape shows THE RECORD'S CHECKED VALUES. H8b made the pool
+	   the option source so page and editor agreed on the vocabulary; the H9
+	   model goes one step further — the editor's ticks ARE the option list
+	   ("后台多选，前台只显示勾选的"), and the pool is demoted to vocabulary
+	   whitelist + image carrier: sf_formula_library_options() still matches
+	   each checked label against the Site Settings library for its picture,
+	   and returns '' where no picture exists (the dashed slot).
+
+	   The group's NAME still follows the pool ("Appearance" on powders,
+	   "Texture" on pastes, "Form" on fish oil) or the Configurator Display
+	   override, via $state(). No meta, no group — no empty husk. */
+	$st = $state('shape', 'Shape');
+	$shape_vals = $st ? $meta_values('sf_formula_shape') : array();
+	if ($st && $shape_vals) {
+		$shape_opts = function_exists('sf_formula_library_options')
+			? sf_formula_library_options($shape_vals, sf_shape_library()) : array();
+		if ($shape_opts) {
 			$groups[] = array(
-				'key' => 'pack', 'label' => 'Pack Size', 'meta' => $pack,
-				'type' => 'single', 'style' => 'chips',
-				/* TWO STRINGS, because one cannot do both jobs. The hint is
-				   what a reader sees beside "60 / 90 / 120"; the unit phrase is
-				   what the chosen number has to carry into the inquiry, or the
-				   sales desk receives "60, 90" with no unit at all. The first
-				   cut printed ONE string to both readers and the page read
-				   "Per per bottle" on all 20 pack pages: the splitter's tail
-				   already begins with the preposition, because it starts at the
-				   first character that is not a digit. */
-				'hint' => $pack_tail !== '' ? ucfirst($pack_tail) : 'Choose one',
-				'unit_phrase' => $pack_tail,
-				'options' => $options,
+				'key' => 'shape', 'label' => $st['label'],
+				'meta' => implode(', ', $shape_vals),
+				'type' => 'single', 'style' => 'image', 'hint' => 'Choose one',
+				/* The helper appends the Custom pick when the editor did not
+				   tick one — every choice group ends in Custom (H8a), and the
+				   pick is what opens the free-text box. */
+				'options' => sf_formula_options_with_custom($shape_opts),
 			);
 		}
 	}
 
-	$species = sf_json_array(get_post_meta($post_id, 'sf_formula_species', true));
-	if ($species) {
-		$options = array();
-		foreach ($species as $s) {
-			$options[] = array('value' => $s, 'label' => $s, 'image' => '', 'note' => '');
+	/* Batch H9 — Container Type shows the record's checked values too, same
+	   model as Shape: ticks are the option list, the pool is the vocabulary
+	   and the picture carrier. Legacy slugs (158's "Round" until its
+	   migration lands) print verbatim through sinofresh_container_label()
+	   and are migrated to the current vocabulary by the H9 script. No meta,
+	   no group. */
+	$st = $state('container', 'Container Type');
+	$cont_vals = $st ? $meta_values('sf_formula_container') : array();
+	if ($st && $cont_vals) {
+		$cont_labels = array_map('sinofresh_container_label', $cont_vals);
+		$cont_opts   = function_exists('sf_formula_library_options')
+			? sf_formula_library_options($cont_labels, sf_container_library()) : array();
+		if ($cont_opts) {
+			$groups[] = array(
+				'key' => 'container', 'label' => $st['label'],
+				'meta' => implode(', ', $cont_labels),
+				'type' => 'single', 'style' => 'image', 'hint' => 'Choose one',
+				'options' => sf_formula_options_with_custom($cont_opts),
+			);
 		}
-		$options = sf_formula_options_with_custom($options);
-		$groups[] = array(
-			'key' => 'species', 'label' => 'Suitable For', 'meta' => implode(', ', $species),
-			'type' => 'multi', 'style' => 'chips',
-			'hint' => 'Choose one or more', 'options' => $options,
-		);
-	}
-	$lifestage = trim((string) get_post_meta($post_id, 'sf_formula_lifestage', true));
-	if ($lifestage !== '') {
-		$groups[] = array(
-			'key' => 'stage', 'label' => 'Life Stage', 'meta' => $lifestage,
-			'type' => 'single', 'style' => 'chips', 'hint' => '',
-			'options' => sf_formula_options_with_custom(array(
-				array('value' => $lifestage, 'label' => $lifestage, 'image' => '', 'note' => ''),
-			)),
-		);
-	}
-
-	/* Batch H8b — Shape reads the SAME per-dosage pool the publishing form
-	   does, and that is the whole of it.
-
-	   inc/formula-admin.php declares this field as `'pool' => 'shape'`, so a
-	   powder's editor can only pick Fine Powder / Granules /
-	   Microencapsulated / Custom. This renderer drew sf_shape_library()'s
-	   eight soft-chew shapes on all 42 pages regardless — the powder page
-	   offered "Bone" and "Paw", and the answer the editor had actually chosen
-	   was nowhere on the page. One pool, two readers, and they now agree.
-
-	   The library is not retired: sf_formula_library_options() takes the
-	   OPTIONS from the pool and the PICTURES from it, matched by label. Every
-	   attachment_id is 0 today, so this changes no pixels — it keeps the
-	   "upload the shape images later" path the Site Settings page promises.
-
-	   The group's NAME follows the pool too ("Appearance" on powders and
-	   drops and liquids, "Texture" on pastes, "Form" on fish oil), because
-	   the pool has always said so and "Shape: Clear" is not a sentence.
-
-	   The record's own sf_formula_shape still gets its word in, verbatim: it
-	   is the meta line beside the picker, and it is the same string the spec
-	   sheet prints. It never pre-checks the radio — nothing here is checked
-	   until the visitor checks it. */
-	$shape_label = function_exists('sf_formula_field_pool_label')
-		? (string) sf_formula_field_pool_label($form_slug, 'shape') : '';
-	if ($shape_label === '') {
-		$shape_label = 'Shape';
-	}
-	$shape_opts = function_exists('sf_formula_library_options')
-		? sf_formula_library_options(sf_formula_field_pool($form_slug, 'shape'), sf_shape_library())
-		: array();
-	if ($shape_opts) {
-		$groups[] = array(
-			'key' => 'shape', 'label' => $shape_label,
-			'meta' => trim((string) get_post_meta($post_id, 'sf_formula_shape', true)),
-			'type' => 'single', 'style' => 'image', 'hint' => 'Choose one',
-			'options' => $shape_opts,
-		);
-	}
-
-	/* Batch H8b — Container Type reads the dosage pool too, and renders on
-	   every page.
-
-	   Its options were the Site Settings container library, whose rows are
-	   "Round / Square / Oval / Jar / Pouch / Tube / Custom" — bottle SHAPES,
-	   not containers; "Round" is not a packaging format. The pool that answers
-	   this question has existed since batch H1 and is per dosage form
-	   (powders: Jar / Foil Pouch / Stand-up Pouch; drops: Dropper Bottle /
-	   Glass Bottle / Plastic Bottle; pastes: Plastic Tube / Metal Tube /
-	   Aluminum Tube), so the group now says what the buyer is choosing.
-
-	   The old gate went with it: this group used to wait for the record's own
-	   sf_formula_container before it rendered, which is why one page in 21
-	   drew it. The options no longer depend on the record, so it follows the
-	   same rule Shape does. post 158's stored slug "Round" is in no packaging
-	   pool; sinofresh_container_label() falls back to the raw value, so the
-	   meta line still prints the record's own word rather than dropping a
-	   fact, and re-saving that record lands it in the new vocabulary. */
-	$container  = trim((string) get_post_meta($post_id, 'sf_formula_container', true));
-	$cont_opts  = function_exists('sf_formula_library_options')
-		? sf_formula_library_options(sf_formula_field_pool($form_slug, 'packaging'), sf_container_library())
-		: array();
-	if ($cont_opts) {
-		$own = ($container !== '' && function_exists('sinofresh_container_label'))
-			? sinofresh_container_label($container) : $container;
-		$groups[] = array(
-			'key' => 'container', 'label' => 'Container Type', 'meta' => $own,
-			'type' => 'single', 'style' => 'image', 'hint' => 'Choose one',
-			'options' => $cont_opts,
-		);
 	}
 
 	/* Batch H7i — the ladder. The admin's row is {min, max, price} (the order's
@@ -2549,14 +2572,10 @@ function sinofresh_formula_config_rows($post_id, $posted) {
 			$text[] = $own . ' (custom)';
 		}
 		$rows[$group['label']] = implode(', ', $text);
-		/* The unit the options share is printed with the choice, or "60, 90"
-		   arrives at the sales desk with no unit at all. Read from the group's
-		   own unit phrase, NOT sliced out of the hint: the hint is display
-		   text and is capitalised for the reader, and the two stopped being
-		   the same string the day the page read "Per per bottle". */
-		if ($group['label'] === 'Pack Size' && !empty($group['unit_phrase'])) {
-			$rows[$group['label']] .= ' ' . $group['unit_phrase'];
-		}
+		/* Batch H9 — the old Pack Size unit-phrase rider is gone with the
+		   specs-parsed pack group: the count and the unit travel in ONE string
+		   now ("60g per bottle", "60 softgels (60g) per bottle"), so there is
+		   no second string to append and no bare number can reach the desk. */
 	}
 	return $rows;
 }
@@ -2564,18 +2583,13 @@ function sinofresh_formula_config_rows($post_id, $posted) {
 /**
  * [sf_formula_config] — the right column's choice controls (batch H7d).
  *
- * Seven rows that were plain text become controls: Flavor, Piece Weight, Pack
- * Size, Suitable For, Life Stage, Container Type and Quantity & Pricing. The
- * rows that are NOT choices — Shelf life, Certifications, Lead time — stay
- * text and stay in [sf_formula_params], which is why the two renderers exist
- * side by side rather than one replacing the other.
- *
- * Batch H8a: Flavor and Pack Size became single-choice (one flavour is one
- * answer), and every choice group may now end in a Custom pick that reveals a
- * text box. The box is server-rendered and hidden — see
- * sf_formula_custom_field() — and the answer it collects is the one thing on
- * this form a visitor writes themselves, so the endpoint validates it rather
- * than merely forwarding it (sinofresh_formula_custom_text()).
+ * Batch H9 — the groups are: Quantity & Pricing, Flavor, Unit Weight,
+ * Counts, Net Content, Suitable For, Life Stage, Shape and Container Type.
+ * Every choice group except Suitable For and Life Stage ends in a Custom
+ * pick that reveals a text box (server-rendered and hidden — see
+ * sf_formula_custom_field()). The options are the record's own checked
+ * values: the editor ticks which options a record supports, the page offers
+ * exactly that subset, and the customer picks ONE.
  *
  * Every group prints its own value as text (`__meta`) whether or not anything
  * is checked. That single decision does three jobs: it is the no-JS answer
@@ -2834,12 +2848,29 @@ function sinofresh_formula_specs_table() {
 	if ($species) {
 		$rows['Applicable Pet'] = sinofresh_formula_specs_table_chips($species);
 	}
-	$value = trim((string) get_post_meta($post_id, 'sf_formula_lifestage', true));
-	if ($value !== '') {
-		$rows['Life Stage'] = esc_html($value);
+	/* Batch H9 — the four rows below read the record's own meta FIRST (the
+	   same values the configurator offers: the sheet cannot disagree with
+	   the picker) and fall back to the specs blob for a record whose meta
+	   has not been backfilled yet. Lifestage and shape accept the legacy
+	   plain-string value the pre-H9 saves stored. */
+	$lifestage_vals = sf_json_array(get_post_meta($post_id, 'sf_formula_lifestage', true));
+	if (!$lifestage_vals) {
+		$legacy = trim((string) get_post_meta($post_id, 'sf_formula_lifestage', true));
+		if ($legacy !== '') {
+			$lifestage_vals = array($legacy);
+		}
 	}
-	$value = trim((string) get_post_meta($post_id, 'sf_formula_shape', true));
-	if ($value !== '') {
+	if ($lifestage_vals) {
+		$rows['Life Stage'] = esc_html(implode(', ', $lifestage_vals));
+	}
+	$shape_vals = sf_json_array(get_post_meta($post_id, 'sf_formula_shape', true));
+	if (!$shape_vals) {
+		$legacy = trim((string) get_post_meta($post_id, 'sf_formula_shape', true));
+		if ($legacy !== '') {
+			$shape_vals = array($legacy);
+		}
+	}
+	if ($shape_vals) {
 		/* Batch H8b — the row is named whatever the dosage form calls this
 		   question, because the picker one screen up is. A powder sheet that
 		   said "Shape: Fine Powder" under a picker headed "Appearance" would
@@ -2849,12 +2880,28 @@ function sinofresh_formula_specs_table() {
 		   first powder the sales desk fills in. */
 		$shape_row = function_exists('sf_formula_field_pool_label')
 			? (string) sf_formula_field_pool_label($form_slug, 'shape') : '';
-		$rows[($shape_row !== '' ? $shape_row : 'Shape')] = esc_html($value);
+		$rows[($shape_row !== '' ? $shape_row : 'Shape')] = esc_html(implode(', ', $shape_vals));
 	}
-	if (trim((string) $parts['unit']) !== '') {
+	/* Batch H9 — Unit Weight and Pack Size: meta first, specs fallback. On a
+	   backfilled record the two rows print the SAME strings the picker
+	   offers; on an unbackfilled one the specs blob keeps the sheet from
+	   going blank. */
+	$weight_vals = sf_json_array(get_post_meta($post_id, 'sf_formula_weight', true));
+	if (!$weight_vals) {
+		$legacy = trim((string) get_post_meta($post_id, 'sf_formula_weight', true));
+		if ($legacy !== '') {
+			$weight_vals = array($legacy);
+		}
+	}
+	if ($weight_vals) {
+		$rows['Unit Weight'] = esc_html(implode(', ', $weight_vals));
+	} elseif (trim((string) $parts['unit']) !== '') {
 		$rows['Unit Weight'] = esc_html(trim((string) $parts['unit']));
 	}
-	if (trim((string) $parts['pack']) !== '') {
+	$counts_vals = sf_json_array(get_post_meta($post_id, 'sf_formula_counts', true));
+	if ($counts_vals) {
+		$rows['Pack Size'] = esc_html(implode(', ', $counts_vals));
+	} elseif (trim((string) $parts['pack']) !== '') {
 		$rows['Pack Size'] = esc_html(trim((string) $parts['pack']));
 	}
 	$shelf = sf_formula_shelf_life_line($post_id, $parts);
@@ -3237,18 +3284,23 @@ function sinofresh_formula_content() {
 			'<p class="sf-fdetail-content__prose">' . esc_html($value) . '</p>');
 	}
 
-	/* Packaging & Specifications. Container Type contributes one chip: the
-	   record's own value, read through sinofresh_container_label() so a value
-	   that is a Site Settings library slug prints as its label. Batch H8b made
-	   the picker's vocabulary the dosage pool's (labels such as "Pump Bottle")
-	   and left this reader alone on purpose — the label it returns for a pool
-	   label is the label itself, and for the one legacy slug on record
-	   ("Round") it returns the raw word rather than dropping the fact. */
+	/* Packaging & Specifications. Container Type contributes one chip per
+	   checked value (batch H9: the meta is a JSON array of the record's own
+	   packaging options — the same list the configurator offers), read
+	   through sinofresh_container_label() so a value that is a Site Settings
+	   library slug prints as its label; the one legacy slug on record
+	   ("Round", until the H9 migration) prints as the raw word. */
 	$specs = '';
-	$container = trim((string) get_post_meta($post_id, 'sf_formula_container', true));
-	if ($container !== '') {
+	$cont_vals = sf_json_array(get_post_meta($post_id, 'sf_formula_container', true));
+	if (!$cont_vals) {
+		$legacy = trim((string) get_post_meta($post_id, 'sf_formula_container', true));
+		if ($legacy !== '') {
+			$cont_vals = array($legacy);
+		}
+	}
+	if ($cont_vals) {
 		$specs .= sinofresh_formula_content_spec('Container Options',
-			sinofresh_formula_content_chips(array(sinofresh_container_label($container))));
+			sinofresh_formula_content_chips(array_map('sinofresh_container_label', $cont_vals)));
 	}
 	$specs .= sinofresh_formula_content_spec('Additional Packaging',
 		sinofresh_formula_content_chips(sf_json_array(get_post_meta($post_id, 'sf_formula_packaging_extra', true))));
@@ -3494,15 +3546,11 @@ add_shortcode('sf_formula_sampling', 'sinofresh_formula_sampling');
  *      SFBasket.add() any more — its only caller was configurator.js (batch
  *      H7f has since deleted that API and its UI outright) — and a
  *      detail page has no control to tick, so the dialog renders this
- *      record's own Flavor / Piece Weight / Pack Size / Suitable For /
- *      Life Stage / Quantity & Pricing from the SAME meta the parameter band
- *      reads. One source, two renderings; no second source to drift.
- *      ⚠️ Measured at gate time on the 42 detail pages: Flavor, Suitable For,
- *      Life Stage and the tiers are filled on 0 of them, so the block shows
- *      one row (Piece Weight) today and two on the 20 records that also carry
- *      Pack Size. Same "renderer first, data later" state as the parameter
- *      band (H2a) and the content band (H3), and it fills in without a
- *      deploy.
+ *      record's own configurator values from the SAME source the page reads.
+ *      Batch H9 made that literal: the rows are derived from
+ *      sinofresh_formula_config_groups() itself, so a group that is hidden
+ *      or unbackfilled is absent from the dialog too. One source, two
+ *      renderings; no second source to drift.
  *   2. The capsule is the FIRST child of .sf-float-stack. The stack is
  *      bottom-anchored (style.css 3913), so its first child is the top one
  *      and the three buttons already there do not move — the geometry H2b1
@@ -3530,12 +3578,18 @@ add_shortcode('sf_formula_sampling', 'sinofresh_formula_sampling');
 /**
  * The rows the inquiry dialog's "Your Selection" panel shows.
  *
- * Reads the same meta the parameter band reads, in the brief's order, and
- * returns plain text values: the band prints chips and a pricing table, but
- * the dialog is a summary read at a glance, so a chip list becomes one
- * comma-joined line and the tier rows become one line of "qty — price"
- * pairs. Empty means absent — a record that proves nothing renders nothing,
- * the same rule sinofresh_formula_params() follows.
+ * Batch H9 — the rows are now DERIVED from sinofresh_formula_config_groups():
+ * each group already carries its (override-aware) label and the record's own
+ * values as its `meta` line, so the dialog and the page cannot disagree the
+ * way the H8a survey found (the dialog used to parse the specs blob for
+ * "Piece Weight"/"Pack Size" while the picker read the record). The pricing
+ * rows stay their own reader below — the ladder's card layout is not a meta
+ * line — and the labels they print are unchanged.
+ *
+ * Empty means absent — a record that proves nothing renders nothing, the
+ * same rule sinofresh_formula_params() follows (and, since H9, the same rule
+ * as the configurator: an unbackfilled record's dialog lists only what the
+ * record actually declares).
  *
  * @param int $post_id Formula post id.
  * @return array Label => plain text value, in print order.
@@ -3545,26 +3599,16 @@ function sinofresh_inquiry_selection_rows($post_id) {
 	if ($post_id <= 0) {
 		return array();
 	}
-	$rows  = array();
-	$parts = sinofresh_formula_specs_parts(trim((string) get_post_meta($post_id, 'sf_formula_specs', true)));
+	$rows = array();
 
-	$flavors = sf_json_array(get_post_meta($post_id, 'sf_formula_flavors', true));
-	if ($flavors) {
-		$rows['Flavor'] = implode(', ', $flavors);
-	}
-	if (trim((string) $parts['unit']) !== '') {
-		$rows['Piece Weight'] = trim((string) $parts['unit']);
-	}
-	if (trim((string) $parts['pack']) !== '') {
-		$rows['Pack Size'] = trim((string) $parts['pack']);
-	}
-	$species = sf_json_array(get_post_meta($post_id, 'sf_formula_species', true));
-	if ($species) {
-		$rows['Suitable For'] = implode(', ', $species);
-	}
-	$lifestage = trim((string) get_post_meta($post_id, 'sf_formula_lifestage', true));
-	if ($lifestage !== '') {
-		$rows['Life Stage'] = $lifestage;
+	foreach (sinofresh_formula_config_groups($post_id) as $group) {
+		if ($group['key'] === 'pricing') {
+			continue; // the ladder has its own reader below
+		}
+		$meta = trim((string) (isset($group['meta']) ? $group['meta'] : ''));
+		if ($meta !== '') {
+			$rows[(string) $group['label']] = $meta;
+		}
 	}
 
 	$tiers = array();

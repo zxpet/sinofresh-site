@@ -193,7 +193,9 @@ print()
 print('== C. Flavor — every record-driven group routes through the helper ==')
 
 ck('the helper exists',
-   'function sf_formula_options_with_custom($options) {' in fn)
+   'function sf_formula_options_with_custom($options, $no_custom = false) {' in fn)
+ck('the helper honours the H9 no-custom flag (Suitable For / Life Stage)',
+   'if ($no_custom) {' in fn)
 ck('the helper marks rather than appends',
    "if (0 === strcasecmp($label, 'Custom')) {" in fn
    and "$options[$i]['custom'] = true;" in fn)
@@ -202,11 +204,14 @@ ck('the helper appends only when the list does not already spell Custom',
 
 # The definition line matches the same pattern as a call, so the definition is
 # counted and subtracted rather than pattern-matched away — a bare count of
-# `sf_formula_options_with_custom(` reads 6 on a correct file.
+# `sf_formula_options_with_custom(` reads 9 on a correct file (batch H9:
+# flavor, weight, counts, net-content, species, stage, shape, container =
+# eight call sites; the last two wrap the library options so the Custom pick
+# is appended even when the editor did not tick one).
 defs = len(re.findall(r'^function sf_formula_options_with_custom\(', fn, re.M))
 calls = len(re.findall(r'sf_formula_options_with_custom\(', fn)) - defs
-ck('the helper is defined exactly once and called by all five groups',
-   defs == 1 and calls == 5, (defs, calls))
+ck('the helper is defined exactly once and called by all eight groups',
+   defs == 1 and calls == 8, (defs, calls))
 
 ck('no group appends a Custom unconditionally any more',
    # The append survives in exactly one place — inside the helper, for the
@@ -216,9 +221,11 @@ ck('no group appends a Custom unconditionally any more',
    (len(re.findall(r'\$options\[\] = sf_formula_custom_option\(\);', fn)),
     len(re.findall(r'^\t\t\t\tsf_formula_custom_option\(\),$', fn, re.M))))
 
-# Each of the five groups must reach the helper within its own block.
-for key in ['flavor', 'weight', 'pack', 'species', 'stage']:
-    gm = re.search(r"'key' => '%s'.*?\n\t\t\),\n" % key, fn, re.S)
+# Each of the six record-driven groups must reach the helper within its own
+# block (batch H9: 'pack' retired, 'counts'/'net-content' added; 'species'
+# and 'stage' pass the no-custom flag).
+for key in ['flavor', 'weight', 'counts', 'net-content', 'species', 'stage']:
+    gm = re.search(r"'key' => '%s'.*?\n\t\t\),\n" % re.escape(key), fn, re.S)
     ck("the '%s' group builds its options through the helper" % key,
        bool(gm) and 'sf_formula_options_with_custom' in gm.group(0))
 
@@ -255,14 +262,14 @@ ck('every block comment carries parseable JSON attributes', not bad, bad)
 # --------------------------------------------------------------------------
 print()
 print('== E. version and the gate constants that follow it ==')
-ck('style.css declares 2.10.81',
-   re.search(r'^Version: 2\.10\.81$', css, re.M) is not None)
-ck('functions.php enqueues 2.10.81',
-   "array(), '2.10.81');" in fn)
-for tool, pat in [('tools/b2d_h8c_live_check.py', r"default='2\.10\.81'"),
-                  ('tools/b2d_h8c_live_accept.py', r'EXPECT_VER = "2\.10\.81"')]:
+ck('style.css declares 2.10.82',
+   re.search(r'^Version: 2\.10\.82$', css, re.M) is not None)
+ck('functions.php enqueues 2.10.82',
+   "array(), '2.10.82');" in fn)
+for tool, pat in [('tools/b2d_h8c_live_check.py', r"default='2\.10\.82'"),
+                  ('tools/b2d_h8c_live_accept.py', r'EXPECT_VER = "2\.10\.82"')]:
     body = open(os.path.join(ROOT, tool), encoding='utf-8').read()
-    ck('%s expects 2.10.81' % os.path.basename(tool),
+    ck('%s expects 2.10.82' % os.path.basename(tool),
        re.search(pat, body) is not None)
 
 # --------------------------------------------------------------------------

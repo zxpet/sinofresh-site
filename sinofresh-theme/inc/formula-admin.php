@@ -29,11 +29,12 @@ add_action('init', function () {
 		'sf_formula_video_url'        => 'YouTube URL for the product video.',
 		'sf_formula_card_badge'       => 'Card badge overlay: one of sinofresh_formula_card_badges(), or empty for none.',
 		'sf_formula_flavors'          => 'JSON array of flavour options.',
-		'sf_formula_weight'           => 'Weight per piece (single choice).',
-		'sf_formula_counts'           => 'JSON array of pack counts.',
-		'sf_formula_shape'            => 'Shape / texture / appearance (single choice).',
+		'sf_formula_weight'           => 'Unit Weight options (JSON array, batch H9). Soft chews / tablets / dental chews only.',
+		'sf_formula_counts'           => 'JSON array of pack counts (batch H9: the three chew/tablet forms only).',
+		'sf_formula_net_content'      => 'Net Content options (JSON array, batch H9). All dosage forms.',
+		'sf_formula_shape'            => 'Shape options (JSON array, batch H9).',
 		'sf_formula_species'          => 'JSON array: dog / cat.',
-		'sf_formula_lifestage'        => 'Life stage (single choice).',
+		'sf_formula_lifestage'        => 'Life stage options (JSON array, batch H9).',
 		'sf_formula_price_tiers'      => 'JSON array of {qty, price} tiers.',
 		'sf_formula_recommended_for'  => 'Recommended For copy.',
 		'sf_formula_use_cases'        => 'Use Cases copy.',
@@ -43,8 +44,9 @@ add_action('init', function () {
 		'sf_formula_shelf_life'       => 'Shelf life: one value from the fixed pool.',
 		'sf_formula_cartons'          => 'JSON array of {count, boxes, size} carton rows.',
 		'sf_formula_lead_time'        => 'Lead time text.',
-		'sf_formula_container'        => 'Container slug from the global container library.',
+		'sf_formula_container'        => 'Container options (JSON array, batch H9; was a single slug).',
 		'sf_formula_faq_data'         => 'JSON array of {q, a} product FAQ rows.',
+		'sf_formula_groups_config'    => 'Configurator Display overrides (JSON, batch H9): {group: {show, label, options}}.',
 	);
 	foreach ($keys as $key => $desc) {
 		register_post_meta('sf_formula', $key, array(
@@ -68,6 +70,7 @@ function sf_formula_mb_groups() {
 		'basics'    => array('title' => 'Basics', 'context' => 'normal'),
 		'media'     => array('title' => 'Media', 'context' => 'normal'),
 		'params'    => array('title' => 'Right-column Parameters', 'context' => 'normal'),
+		'config'    => array('title' => 'Configurator Display', 'context' => 'normal'),
 		'detail'    => array('title' => 'Detailed Content', 'context' => 'normal'),
 		'packaging' => array('title' => 'Packaging', 'context' => 'normal'),
 		'faq'       => array('title' => 'FAQ & Delivery', 'context' => 'normal'),
@@ -91,14 +94,32 @@ function sf_formula_mb_fields() {
 		array('key' => 'sf_formula_card_badge', 'label' => 'Card badge', 'group' => 'media', 'type' => 'select', 'req' => 1,
 			'pool' => array_keys(sinofresh_formula_card_badges()), 'empty_label' => '— None —',
 			'hint' => 'Optional overlay on the card image: Best Seller (gold), Hot (red), New (blue). Leave as "None" for no badge.'),
-		// params — pools resolve per dosage form at render time
-		array('key' => 'sf_formula_flavors', 'label' => 'Flavors', 'group' => 'params', 'type' => 'multi', 'req' => 2, 'pool' => 'flavors'),
-		array('key' => 'sf_formula_weight', 'label' => 'Weight per piece', 'group' => 'params', 'type' => 'radio', 'req' => 2, 'pool' => 'weights'),
-		array('key' => 'sf_formula_counts', 'label' => 'Pack counts', 'group' => 'params', 'type' => 'multi', 'req' => 2, 'pool' => 'counts'),
-		array('key' => 'sf_formula_shape', 'label' => 'Shape', 'group' => 'params', 'type' => 'radio', 'req' => 2, 'pool' => 'shape'),
-		array('key' => 'sf_formula_species', 'label' => 'Suitable for', 'group' => 'params', 'type' => 'multi', 'req' => 2, 'pool' => array('Dog', 'Cat')),
-		array('key' => 'sf_formula_lifestage', 'label' => 'Life stage', 'group' => 'params', 'type' => 'radio', 'req' => 2,
-			'pool' => array('Puppy', 'Kitten', 'Adult', 'Senior', 'All Life Stages')),
+		// params — pools resolve per dosage form at render time.
+		// Batch H9 — every configurator-fed field is MULTI: the editor ticks
+		// which options the record supports, the front end shows exactly that
+		// subset, and the customer picks ONE. `config_group` names the
+		// configurator group whose Configurator Display row (label / show /
+		// option override) drives this field's option list. The hints are
+		// Chinese ON PURPOSE and render ONLY inside this metabox
+		// (sf_formula_render_field outputs them nowhere else) — front-end
+		// bytes are asserted Chinese-free by the H9 gate.
+		array('key' => 'sf_formula_flavors', 'label' => 'Flavors', 'group' => 'params', 'type' => 'multi', 'req' => 2, 'pool' => 'flavors', 'config_group' => 'flavor',
+			'hint' => '口味：勾选该产品支持的口味，前台客户从中单选一个（可在 Configurator Display 改组名/选项）。'),
+		array('key' => 'sf_formula_weight', 'label' => 'Unit Weight', 'group' => 'params', 'type' => 'multi', 'req' => 2, 'pool' => 'weights', 'config_group' => 'weight',
+			'applies' => array('soft-chews', 'tablets', 'dental-chews'),
+			'hint' => '单件克重，如 2g。仅软咀嚼/片剂/洁齿显示；其它剂型此字段隐藏。勾选支持的规格，客户单选。'),
+		array('key' => 'sf_formula_counts', 'label' => 'Counts', 'group' => 'params', 'type' => 'multi', 'req' => 2, 'pool' => 'counts', 'config_group' => 'counts',
+			'applies' => array('soft-chews', 'tablets', 'dental-chews'),
+			'hint' => '粒数，如 60。仅软咀嚼/片剂/洁齿显示；其它剂型此字段隐藏。'),
+		array('key' => 'sf_formula_net_content', 'label' => 'Net Content', 'group' => 'params', 'type' => 'multi', 'req' => 2, 'pool' => 'net_content', 'config_group' => 'net-content',
+			'hint' => '净含量，如 120g per bottle。所有剂型显示；粒数信息一并写进净含量文字（鱼油如 60 softgels (60g) per bottle）。'),
+		array('key' => 'sf_formula_shape', 'label' => 'Shape', 'group' => 'params', 'type' => 'multi', 'req' => 2, 'pool' => 'shape', 'config_group' => 'shape',
+			'hint' => '形状/质地/外观：勾选该剂型支持的选项，前台只显示勾选的，客户单选。'),
+		array('key' => 'sf_formula_species', 'label' => 'Suitable for', 'group' => 'params', 'type' => 'multi', 'req' => 2, 'pool' => array('Dog', 'Cat'), 'config_group' => 'species',
+			'hint' => '适用宠物：Dog 和 Cat 两项都勾选时，前台会额外出现 "Dog and Cat" 单选项。'),
+		array('key' => 'sf_formula_lifestage', 'label' => 'Life stage', 'group' => 'params', 'type' => 'multi', 'req' => 2,
+			'pool' => array('Puppy', 'Kitten', 'Adult', 'Senior', 'All Life Stages'), 'config_group' => 'stage',
+			'hint' => '生命周期：勾选该产品适用的阶段（可多选），前台客户单选一个。'),
 		array('key' => 'sf_formula_price_tiers', 'label' => 'Tier pricing', 'group' => 'params', 'type' => 'table', 'req' => 2,
 			'cols' => array('min' => 'Min quantity', 'max' => 'Max quantity', 'price' => 'Unit price (USD)'),
 			'hint' => 'Leave Max empty on the top tier: the ladder prints it as "1,000 and up".'),
@@ -135,8 +156,9 @@ function sf_formula_mb_fields() {
 			'cols' => array('count' => 'Pack count', 'boxes' => 'Units per carton', 'size' => 'Carton size (cm)')),
 		// faq
 		array('key' => 'sf_formula_lead_time', 'label' => 'Lead time', 'group' => 'faq', 'type' => 'text', 'req' => 1),
-		array('key' => 'sf_formula_container', 'label' => 'Container Type', 'group' => 'faq', 'type' => 'radio', 'req' => 2,
-			'pool' => 'packaging', 'keep_unknown' => true),
+		array('key' => 'sf_formula_container', 'label' => 'Container Type', 'group' => 'faq', 'type' => 'multi', 'req' => 2,
+			'pool' => 'packaging', 'config_group' => 'container',
+			'hint' => '包装形式：勾选该剂型支持的包装，前台只显示勾选的，客户单选。历史值（如 Round）会保留可选，改存后落入新词汇。'),
 		array('key' => 'sf_formula_faq_data', 'label' => 'Product FAQ', 'group' => 'faq', 'type' => 'faqtable', 'req' => 1,
 			'hint' => 'Questions ship prefilled; fill the answers. Site-wide questions are appended from the Global FAQ.'),
 	);
@@ -162,14 +184,23 @@ function sf_formula_mb_options($spec, $post_id) {
 	if (!isset($spec['pool'])) {
 		return array();
 	}
-	if (is_array($spec['pool'])) {
-		return $spec['pool'];
+	$opts = is_array($spec['pool']) ? $spec['pool'] : sf_formula_field_pool(sf_formula_record_form($post_id), $spec['pool']);
+	/* Batch H9 — a Configurator Display option override replaces the pool for
+	   its group, and the override list IS the new whitelist (user ruling F,
+	   2026-09-25): whatever the editor typed there is what the checkboxes
+	   offer and what the front end can show. Empty means "use the pool". */
+	if (!empty($spec['config_group'])) {
+		$cfg = sf_formula_groups_config($post_id);
+		if (isset($cfg[$spec['config_group']]['options']) && is_array($cfg[$spec['config_group']]['options']) && $cfg[$spec['config_group']]['options']) {
+			$opts = $cfg[$spec['config_group']]['options'];
+		}
 	}
-	return sf_formula_field_pool(sf_formula_record_form($post_id), $spec['pool']);
+	return $opts;
 }
 
 /* --------------------------------------------------------------------------
- * Meta boxes — six groups, one shared renderer.
+ * Meta boxes — seven groups, one shared renderer (batch H9 adds Configurator
+ * Display, which has its own renderer below).
  * ------------------------------------------------------------------------ */
 add_action('add_meta_boxes', function () {
 	foreach (sf_formula_mb_groups() as $slug => $g) {
@@ -181,6 +212,10 @@ add_action('add_meta_boxes', function () {
 function sf_formula_render_mb_box($post, $metabox) {
 	$group = $metabox['args']['group'];
 	wp_nonce_field('sf_mb_save', 'sf_mb_nonce_' . $group);
+	if ('config' === $group) {
+		sf_formula_render_config_box($post);
+		return;
+	}
 	echo '<div class="sf-mb" data-sf-group="' . esc_attr($group) . '">';
 	foreach (sf_formula_mb_fields() as $spec) {
 		if ($spec['group'] !== $group) {
@@ -191,11 +226,122 @@ function sf_formula_render_mb_box($post, $metabox) {
 	echo '</div>';
 }
 
+/* --------------------------------------------------------------------------
+ * Configurator Display (batch H9) — per-group show / label / option override.
+ *
+ * Eight rows, one per configurator group. Storage is ONE meta key
+ * (sf_formula_groups_config, JSON): {group: {show: false, label: "...",
+ * options: [...]}}. A group whose row is all-default is omitted from the
+ * JSON, so "key absent" reads as "pool defaults, group shown" — the same
+ * empty-means-absent contract every other meta key here follows.
+ *
+ * The three fields are read by BOTH ends through sf_formula_groups_config()
+ * (formula-pools.php) and sf_formula_group_defaults(): the front end applies
+ * them in sinofresh_formula_config_groups(), the publishing form's own
+ * checkboxes in sf_formula_mb_options(). One store, two readers, no drift.
+ *
+ * All Chinese on this screen lives in $row_hints and the row placeholders —
+ * neither is ever printed on the front end (the H9 gate asserts the front
+ * pages stay Chinese-free).
+ * ------------------------------------------------------------------------ */
+function sf_formula_config_group_rows() {
+	return array(
+		'flavor'      => array('name' => '口味（Flavor）', 'hint' => '组名不填用默认（按剂型：Flavor / Source）。选项每行一个，不填用池默认。'),
+		'weight'      => array('name' => '单件克重（Unit Weight）', 'hint' => '仅软咀嚼/片剂/洁齿显示，其它剂型整组隐藏。组名不填用池默认（Weight per Piece / Weight per Tablet）。'),
+		'counts'      => array('name' => '粒数（Counts）', 'hint' => '仅软咀嚼/片剂/洁齿显示。组名不填用池默认（Count per Bottle / Count per Pack）。'),
+		'net-content' => array('name' => '净含量（Net Content）', 'hint' => '所有剂型显示。建议值如 120g per bottle；鱼油把粒数写进净含量，如 60 softgels (60g) per bottle。'),
+		'shape'       => array('name' => '形状/质地/外观（Shape）', 'hint' => '组名不填用池默认（Shape / Texture / Appearance / Form）。选项覆盖后即为该组全部选项。'),
+		'container'   => array('name' => '包装形式（Container Type）', 'hint' => '选项覆盖后即为该组全部选项；覆盖列表里写什么，前台就显示什么。'),
+		'species'     => array('name' => '适用宠物（Suitable For）', 'hint' => '默认 Dog / Cat；后台两项都勾选时前台额外出现 "Dog and Cat"。此组无 Custom 自由文本。'),
+		'stage'       => array('name' => '生命周期（Life Stage）', 'hint' => '默认 Puppy / Kitten / Adult / Senior / All Life Stages。此组无 Custom 自由文本。'),
+	);
+}
+
+function sf_formula_render_config_box($post) {
+	$form     = sf_formula_record_form($post->ID);
+	$defaults = sf_formula_group_defaults($form);
+	$raw      = json_decode((string) get_post_meta($post->ID, 'sf_formula_groups_config', true), true);
+	$cfg      = is_array($raw) ? $raw : array();
+	echo '<div class="sf-mb sf-cfg" data-sf-group="config">';
+	echo '<p class="sf-mb__hint">前台配置器每组「显示开关 / 组名 / 选项列表」。组名与选项不填用默认；填了即覆盖（前后台显示同一个名）。每组对每个剂型独立生效。</p>';
+	foreach (sf_formula_config_group_rows() as $gk => $row) {
+		$d        = $defaults[$gk];
+		$state    = isset($cfg[$gk]) && is_array($cfg[$gk]) ? $cfg[$gk] : array();
+		$shown    = !isset($state['show']) || !empty($state['show']);
+		$label    = isset($state['label']) && is_string($state['label']) ? $state['label'] : '';
+		$options  = isset($state['options']) && is_array($state['options']) ? implode("\n", $state['options']) : '';
+		$def_lb   = $d['label'];
+		echo '<div class="sf-cfg__row" data-sf-cfg-group="' . esc_attr($gk) . '">';
+		if (empty($d['applies'])) {
+			echo '<p class="sf-mb__hint"><strong>' . esc_html($row['name']) . '</strong> — 该剂型不显示此组（仅软咀嚼/片剂/洁齿）。</p>';
+			echo '</div>';
+			continue;
+		}
+		echo '<p class="sf-cfg__name"><strong>' . esc_html($row['name']) . '</strong></p>';
+		echo '<p class="sf-mb__hint">' . esc_html($row['hint']) . '</p>';
+		echo '<p class="sf-cfg__controls">';
+		echo '<label class="sf-cfg__show"><input type="checkbox" name="sf_groups_config[' . esc_attr($gk) . '][show]" value="1"' . checked($shown, true, false) . '/> 显示此组</label> ';
+		echo '<input type="text" class="regular-text" name="sf_groups_config[' . esc_attr($gk) . '][label]" value="' . esc_attr($label) . '" placeholder="组名，默认：' . esc_attr($def_lb) . '"/>';
+		echo '</p>';
+		echo '<textarea class="widefat sf-cfg__options" rows="' . esc_attr(max(3, min(8, $options ? substr_count($options, "\n") + 1 : 3))) . '" name="sf_groups_config[' . esc_attr($gk) . '][options]" placeholder="选项列表，每行一个；留空用池默认（默认 ' . esc_attr(count($d['options'])) . ' 项）">' . esc_textarea($options) . '</textarea>';
+		echo '</div>';
+	}
+	echo '</div>';
+}
+
+/** Persist the Configurator Display rows (batch H9). Runs after the field
+ *  loop in the save handler below; the 'config' box's nonce is verified by
+ *  that handler's existing all-groups nonce check. */
+function sf_formula_save_groups_config($post_id, $form) {
+	$in  = isset($_POST['sf_groups_config']) && is_array($_POST['sf_groups_config']) ? wp_unslash($_POST['sf_groups_config']) : array();
+	$all = sf_formula_group_defaults($form);
+	$out = array();
+	foreach (array_keys(sf_formula_config_group_rows()) as $gk) {
+		if (empty($all[$gk]['applies'])) {
+			continue; // the row was not rendered for this dosage form
+		}
+		$row   = isset($in[$gk]) && is_array($in[$gk]) ? $in[$gk] : array();
+		$show  = !empty($row['show']);
+		$label = sanitize_text_field(isset($row['label']) ? $row['label'] : '');
+		$opts  = array();
+		foreach (preg_split('/\r\n|\r|\n/', (string) (isset($row['options']) ? $row['options'] : '')) as $line) {
+			$line = sanitize_text_field($line);
+			if ($line !== '') {
+				$opts[] = $line;
+			}
+		}
+		$entry = array();
+		if (!$show) {
+			$entry['show'] = false; // shown is the default; only the off state is stored
+		}
+		if ($label !== '' && $label !== (string) $all[$gk]['label']) {
+			$entry['label'] = $label; // equal-to-default labels are not stored
+		}
+		if ($opts && $opts !== $all[$gk]['options']) {
+			$entry['options'] = $opts;
+		}
+		if ($entry) {
+			$out[$gk] = $entry;
+		}
+	}
+	sf_mb_store($post_id, 'sf_formula_groups_config', wp_json_encode($out, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+}
+
 function sf_formula_render_field($spec, $post_id) {
 	$raw    = get_post_meta($post_id, $spec['key'], true);
 	$opts   = sf_formula_mb_options($spec, $post_id);
 	$req    = (2 === (int) $spec['req']) ? ' <span class="sf-mb__req" title="Required before publish">*</span>' : '';
 	$hid    = ('multi' === $spec['type'] || 'radio' === $spec['type']) && empty($opts);
+	/* Batch H9 — a spec may carry an `applies` list of dosage-form slugs. A
+	   record outside the list hides the field entirely (Unit Weight and
+	   Counts exist only on the three chew/tablet forms); either this or the
+	   empty-options hide below is what "hidden" means. */
+	if (!empty($spec['applies'])) {
+		$form = sf_formula_record_form($post_id);
+		if ($form === '' || !in_array($form, $spec['applies'], true)) {
+			$hid = true;
+		}
+	}
 	echo '<div class="sf-mb__field sf-mb__field--' . esc_attr($spec['type']) . '" data-sf-key="' . esc_attr($spec['key']) . '"' . ($hid ? ' hidden' : '') . '>';
 	echo '<span class="sf-mb__label">' . esc_html($spec['label']) . $req . '</span>';
 	if (!empty($spec['hint'])) {
@@ -436,10 +582,14 @@ add_action('save_post_sf_formula', function ($post_id) {
 						$rows[] = array('q' => $q, 'a' => $a);
 					}
 				}
-				sf_mb_store($post_id, $key, wp_slash(wp_json_encode(array_values($rows), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)));
-				break;
+			sf_mb_store($post_id, $key, wp_slash(wp_json_encode(array_values($rows), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)));
+			break;
 		}
 	}
+
+	/* Batch H9 — the Configurator Display rows ride the same save round-trip
+	   (their nonce is verified by the all-groups check above). */
+	sf_formula_save_groups_config($post_id, $form);
 }, 10, 1);
 
 /** FAQ answers are plain text plus <a href> — nothing else survives. */
@@ -575,7 +725,7 @@ add_action('admin_enqueue_scripts', function ($hook) {
 		return;
 	}
 	$dir = get_template_directory_uri();
-	wp_enqueue_style('sf-mb', $dir . '/assets/admin/sf-mb.css', array(), '1.0.0');
+	wp_enqueue_style('sf-mb', $dir . '/assets/admin/sf-mb.css', array(), '1.1.0');
 	wp_enqueue_script('sf-mb-tables', $dir . '/assets/admin/sf-mb-tables.js', array(), '1.0.0', true);
 	if ($is_formula) {
 		wp_enqueue_script('sf-mb-precheck', $dir . '/assets/admin/sf-mb-precheck.js', array(), '1.0.1', true);

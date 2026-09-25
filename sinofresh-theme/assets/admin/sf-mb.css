@@ -27,3 +27,12 @@
 
 .sf-mb-banner { margin: 8px 0 16px; padding: 10px 14px; border-left: 4px solid #dba617; background: #fff8e5; }
 .sf-mb-banner ul { margin: 4px 0 0 18px; list-style: disc; }
+
+/* Batch H9 — Configurator Display rows. */
+.sf-cfg { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 24px; }
+.sf-cfg__row { border: 1px solid #dcdcde; border-radius: 4px; padding: 10px 12px; background: #fff; min-width: 0; }
+.sf-cfg__name { margin: 0 0 2px; }
+.sf-cfg__controls { display: flex; align-items: center; gap: 14px; margin: 6px 0; flex-wrap: wrap; }
+.sf-cfg__show { white-space: nowrap; }
+.sf-cfg__options { margin-top: 4px; font-family: Consolas, Monaco, monospace; }
+@media (max-width: 1100px) { .sf-cfg { grid-template-columns: 1fr; } }

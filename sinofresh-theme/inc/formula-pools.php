@@ -17,9 +17,19 @@
  *            | product form (fish-oil)
  *   weights  weight | weight_per_piece (dental) | tube_weight (pastes)
  *            | serving_size (powders/liquids) | bottle_size (drops)
- *            | omega3_per_unit (fish-oil)
+ *            | omega3_per_unit (fish-oil)   — batch H9: the Unit Weight
+ *            configurator group only APPLIES to soft chews / tablets /
+ *            dental chews; on the other five forms the pool's own values
+ *            folded into net_content (see below) and the group is hidden.
  *   counts   count | net_weight (powders) | tube_weight (pastes)
- *            | bottle_size (drops/liquids)
+ *            | bottle_size (drops/liquids) — batch H9: same narrowing as
+ *            weights, Count per Bottle only on the three chew/tablet forms.
+ *   net_content  batch H9, new dimension, all eight forms. The count and
+ *            the unit travel in ONE string ("120g per bottle", fish oil:
+ *            "60 softgels (60g) per bottle") so the sales desk never
+ *            receives a bare number. The three chew/tablet forms' values
+ *            are the user's suggested defaults (2026-09-25); an editor
+ *            overrides them per record via the Configurator Display box.
  *   flavors  flavor | source (fish-oil — user-approved label swap)
  *   colors   color | none on drops/liquids/fish-oil
  *   packaging packaging
@@ -39,73 +49,81 @@ function sf_formula_pools() {
 			'shape'     => array('Bone', 'Round', 'Square', 'Heart', 'Star', 'Paw', 'Cylinder', 'Custom'),
 			'weights'   => array('0.5g', '1g', '1.5g', '2g', '2.5g', '3g', '4g', '5g', 'Custom'),
 			'counts'    => array('30', '60', '90', '120', '150', '180', '250', '500', 'Custom'),
+			'net_content' => array('120g per bottle', '240g per bottle', '360g per bottle', 'Custom'),
 			'flavors'   => array('Chicken', 'Beef', 'Lamb', 'Salmon', 'Peanut Butter', 'Cheese', 'Mint', 'Sweet Potato', 'Pumpkin', 'Blueberry', 'Mixed', 'Unflavored', 'Custom'),
 			'colors'    => array('Brown', 'Beige', 'Red', 'Green', 'Yellow', 'Orange', 'Purple', 'Multi-color', 'Custom'),
 			'packaging' => array('Aluminum Stand-up Pouch', 'Aluminum Foil Pouch with Zipper', 'Plastic Bottle', 'Jar', 'Blister Pack', 'Box + Foil', 'Custom'),
-			'label'     => array('shape' => 'Shape', 'weights' => 'Weight per Piece', 'counts' => 'Count per Bottle', 'flavors' => 'Flavor', 'colors' => 'Color'),
+			'label'     => array('shape' => 'Shape', 'weights' => 'Weight per Piece', 'counts' => 'Count per Bottle', 'net_content' => 'Net Content', 'flavors' => 'Flavor', 'colors' => 'Color'),
 		),
 		'tablets' => array(
 			'shape'     => array('Round', 'Oval', 'Square', 'Bone', 'Custom'),
 			'weights'   => array('250mg', '300mg', '500mg', '750mg', '1000mg', 'Custom'),
 			'counts'    => array('60', '90', '120', '180', 'Custom'),
+			'net_content' => array('30g per bottle', '60g per bottle', '90g per bottle', 'Custom'),
 			'flavors'   => array('Chicken', 'Beef', 'Cheese', 'Liver', 'Unflavored', 'Custom'),
 			'colors'    => array('White', 'Beige', 'Brown', 'Green', 'Custom'),
 			'packaging' => array('Plastic Bottle', 'Jar', 'Blister Pack', 'Foil Pouch', 'Custom'),
-			'label'     => array('shape' => 'Shape', 'weights' => 'Weight per Tablet', 'counts' => 'Count per Bottle', 'flavors' => 'Flavor', 'colors' => 'Color'),
+			'label'     => array('shape' => 'Shape', 'weights' => 'Weight per Tablet', 'counts' => 'Count per Bottle', 'net_content' => 'Net Content', 'flavors' => 'Flavor', 'colors' => 'Color'),
 		),
 		'dental-chews' => array(
 			'shape'     => array('Bone', 'Stick', 'Round', 'Spiral', 'Toothbrush', 'Custom'),
 			'weights'   => array('10g', '15g', '20g', '25g', '30g', 'Custom'),
 			'counts'    => array('14', '24', '28', '30', 'Custom'),
+			'net_content' => array('140g per pack', '280g per pack', 'Custom'),
 			'flavors'   => array('Mint', 'Chicken', 'Beef', 'Cheese', 'Seaweed', 'Unflavored', 'Custom'),
 			'colors'    => array('Green', 'Brown', 'Beige', 'Multi-color', 'Custom'),
 			'packaging' => array('Foil Pouch', 'Stand-up Pouch', 'Box', 'Custom'),
-			'label'     => array('shape' => 'Shape', 'weights' => 'Weight per Piece', 'counts' => 'Count per Pack', 'flavors' => 'Flavor', 'colors' => 'Color'),
+			'label'     => array('shape' => 'Shape', 'weights' => 'Weight per Piece', 'counts' => 'Count per Pack', 'net_content' => 'Net Content', 'flavors' => 'Flavor', 'colors' => 'Color'),
 		),
 		'pastes' => array(
 			'shape'     => array('Smooth Paste', 'Thick Paste', 'Squeezable Gel', 'Custom'),
 			'weights'   => array('30g', '35g', '50g', '75g', '100g', 'Custom'),
 			'counts'    => array('30g', '35g', '50g', '75g', '100g', 'Custom'),
+			'net_content' => array('30g per tube', '35g per tube', '50g per tube', '75g per tube', '100g per tube', 'Custom'),
 			'flavors'   => array('Liver', 'Chicken', 'Salmon', 'Unflavored', 'Cheese', 'Custom'),
 			'colors'    => array('Brown', 'Beige', 'Green', 'Clear', 'Custom'),
 			'packaging' => array('Plastic Tube', 'Metal Tube', 'Aluminum Tube', 'Custom'),
-			'label'     => array('shape' => 'Texture', 'weights' => 'Tube Weight', 'counts' => 'Tube Weight', 'flavors' => 'Flavor', 'colors' => 'Color'),
+			'label'     => array('shape' => 'Texture', 'weights' => 'Tube Weight', 'counts' => 'Tube Weight', 'net_content' => 'Net Content', 'flavors' => 'Flavor', 'colors' => 'Color'),
 		),
 		'powders' => array(
 			'shape'     => array('Fine Powder', 'Granules', 'Microencapsulated', 'Custom'),
 			'weights'   => array('1g', '2g', '3g', '5g', 'Custom'),
 			'counts'    => array('2oz', '4oz', '8oz', '16oz', 'Custom'),
+			'net_content' => array('2oz per jar', '4oz per jar', '8oz per jar', '16oz per jar', 'Custom'),
 			'flavors'   => array('Unflavored', 'Chicken', 'Beef', 'Cheese', 'Fish', 'Custom'),
 			'colors'    => array('White', 'Beige', 'Light Yellow', 'Brown', 'Custom'),
 			'packaging' => array('Jar', 'Foil Pouch', 'Stand-up Pouch', 'Custom'),
-			'label'     => array('shape' => 'Appearance', 'weights' => 'Serving Size', 'counts' => 'Net Weight', 'flavors' => 'Flavor', 'colors' => 'Color'),
+			'label'     => array('shape' => 'Appearance', 'weights' => 'Serving Size', 'counts' => 'Net Weight', 'net_content' => 'Net Content', 'flavors' => 'Flavor', 'colors' => 'Color'),
 		),
 		'drops' => array(
 			'shape'     => array('Clear', 'Light Yellow', 'Amber', 'Custom'),
 			'weights'   => array('10ml', '20ml', '30ml', '60ml', 'Custom'),
 			'counts'    => array('10ml', '20ml', '30ml', '60ml', 'Custom'),
+			'net_content' => array('10ml per bottle', '20ml per bottle', '30ml per bottle', '60ml per bottle', 'Custom'),
 			'flavors'   => array('Unflavored', 'Chicken', 'Beef', 'Fish', 'Mint', 'Custom'),
 			'colors'    => array(),
 			'packaging' => array('Dropper Bottle', 'Glass Bottle', 'Plastic Bottle', 'Custom'),
-			'label'     => array('shape' => 'Appearance', 'weights' => 'Bottle Size', 'counts' => 'Bottle Size', 'flavors' => 'Flavor'),
+			'label'     => array('shape' => 'Appearance', 'weights' => 'Bottle Size', 'counts' => 'Bottle Size', 'net_content' => 'Net Content', 'flavors' => 'Flavor'),
 		),
 		'liquids' => array(
 			'shape'     => array('Clear', 'Light Color', 'Suspension', 'Custom'),
 			'weights'   => array('2.5ml', '5ml', 'By body weight', 'Custom'),
 			'counts'    => array('60ml', '100ml', '120ml', '250ml', '500ml', 'Custom'),
+			'net_content' => array('60ml per bottle', '100ml per bottle', '120ml per bottle', '250ml per bottle', '500ml per bottle', 'Custom'),
 			'flavors'   => array('Unflavored', 'Chicken', 'Beef', 'Fish', 'Liver', 'Custom'),
 			'colors'    => array(),
 			'packaging' => array('Plastic Bottle', 'Glass Bottle', 'Bottle with Cup', 'Custom'),
-			'label'     => array('shape' => 'Appearance', 'weights' => 'Serving Size', 'counts' => 'Bottle Size', 'flavors' => 'Flavor'),
+			'label'     => array('shape' => 'Appearance', 'weights' => 'Serving Size', 'counts' => 'Bottle Size', 'net_content' => 'Net Content', 'flavors' => 'Flavor'),
 		),
 		'fish-oil' => array(
 			'shape'     => array('Softgel', 'Liquid Oil', 'Pump Bottle', 'Custom'),
 			'weights'   => array('200mg', '320mg', '500mg', '1000mg', 'Custom'),
 			'counts'    => array('60', '90', '120', '180', 'Custom'),
+			'net_content' => array('60 softgels (60g) per bottle', '90 softgels (90g) per bottle', '120 softgels (120g) per bottle', '180 softgels (180g) per bottle', 'Custom'),
 			'flavors'   => array('Salmon', 'Sardine', 'Anchovy', 'Cod', 'Fish Blend', 'Custom'),
 			'colors'    => array(),
 			'packaging' => array('Plastic Bottle', 'Glass Bottle', 'Pump Bottle', 'Custom'),
-			'label'     => array('shape' => 'Form', 'weights' => 'Omega-3 per Unit', 'counts' => 'Count per Bottle', 'flavors' => 'Source'),
+			'label'     => array('shape' => 'Form', 'weights' => 'Omega-3 per Unit', 'counts' => 'Count per Bottle', 'net_content' => 'Net Content', 'flavors' => 'Source'),
 		),
 	);
 	return $pools;
@@ -187,6 +205,52 @@ function sf_formula_field_pool_label($form, $dim) {
 	$pools = sf_formula_pools();
 	$form  = sanitize_title($form);
 	return (isset($pools[$form]['label'][$dim])) ? $pools[$form]['label'][$dim] : '';
+}
+
+/* --------------------------------------------------------------------------
+ * Batch H9 — the configurator's group defaults and the Configurator Display
+ * overrides. Two readers share this file's vocabulary: the publishing form's
+ * checkboxes (formula-admin.php) and the detail page's configurator
+ * (functions.php). One defaults table, one override store, no drift.
+ * ------------------------------------------------------------------------ */
+
+/** The record's Configurator Display overrides: {group: {show,label,options}}. */
+function sf_formula_groups_config($post_id) {
+	$v = json_decode((string) get_post_meta((int) $post_id, 'sf_formula_groups_config', true), true);
+	return is_array($v) ? $v : array();
+}
+
+/**
+ * The eight configurator groups' defaults for one dosage form.
+ *
+ * `applies` is the group's dosage-form gate: Unit Weight and Counts exist
+ * only on the three chew/tablet forms (user ruling A, 2026-09-25 — fish oil's
+ * count information lives in net_content as "60 softgels (60g) per bottle").
+ * A group whose options pool is empty on a form (none today) would render
+ * nothing anyway; `applies` is the explicit statement of the same fact.
+ */
+function sf_formula_group_defaults($form) {
+	$pools = sf_formula_pools();
+	$form  = sanitize_title($form);
+	$p     = isset($pools[$form]) && is_array($pools[$form]) ? $pools[$form] : array();
+	$lb    = isset($p['label']) && is_array($p['label']) ? $p['label'] : array();
+	$chew  = in_array($form, array('soft-chews', 'tablets', 'dental-chews'), true);
+	$pool  = static function ($dim) use ($p) {
+		return (isset($p[$dim]) && is_array($p[$dim])) ? $p[$dim] : array();
+	};
+	$label = static function ($dim, $fallback) use ($lb) {
+		return (isset($lb[$dim]) && trim((string) $lb[$dim]) !== '') ? (string) $lb[$dim] : $fallback;
+	};
+	return array(
+		'flavor'      => array('label' => $label('flavors', 'Flavor'), 'options' => $pool('flavors'), 'applies' => true),
+		'weight'      => array('label' => $label('weights', 'Unit Weight'), 'options' => $pool('weights'), 'applies' => $chew),
+		'counts'      => array('label' => $label('counts', 'Counts'), 'options' => $pool('counts'), 'applies' => $chew),
+		'net-content' => array('label' => $label('net_content', 'Net Content'), 'options' => $pool('net_content'), 'applies' => true),
+		'shape'       => array('label' => $label('shape', 'Shape'), 'options' => $pool('shape'), 'applies' => true),
+		'container'   => array('label' => 'Container Type', 'options' => $pool('packaging'), 'applies' => true),
+		'species'     => array('label' => 'Suitable For', 'options' => array('Dog', 'Cat'), 'applies' => true),
+		'stage'       => array('label' => 'Life Stage', 'options' => array('Puppy', 'Kitten', 'Adult', 'Senior', 'All Life Stages'), 'applies' => true),
+	);
 }
 
 /* --------------------------------------------------------------------------
