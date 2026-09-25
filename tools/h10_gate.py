@@ -116,9 +116,18 @@ def wp(*args):
     return out.stdout.decode().strip()
 
 
+# Last commit that still carried the static .sf-facts-mini bands. The gate
+# proves the dynamic renderer reproduces those bytes; after the merge HEAD's
+# templates hold only [SF_FACTS_MINI] markers, so "HEAD" is no longer a
+# valid baseline and this pin is what the byte-identity assertions compare
+# against. Site Settings' Certifications line is substituted in (single
+# source; see behaviour_mode).
+BASELINE_COMMIT = "9bbd97e"
+
+
 def git_head_band(form):
     out = subprocess.run(["git", "-C", REPO, "show",
-                          "HEAD:sinofresh-theme/templates/page-%s.html" % form],
+                          "%s:sinofresh-theme/templates/page-%s.html" % (BASELINE_COMMIT, form)],
                          capture_output=True, timeout=30)
     if out.returncode != 0:
         raise RuntimeError(out.stderr.decode()[-200:])
@@ -255,7 +264,7 @@ def behaviour_mode(preflight):
     for f in FORMS:
         status, html = fetch("/products/%s/" % f, preflight)
         got = served_band(html)
-        want = git_head_band(f)
+        want = git_head_band(f)  # baseline = pre-H10 static band (see BASELINE_COMMIT)
         want = re.sub(r'(data-label="Certifications"[^>]*>).*?(</span>)',
                       lambda m: m.group(1) + site_certs + m.group(2), want, flags=re.S)
         check("/products/%s/ band byte-identical to HEAD (certs = Site Settings line)" % f,
