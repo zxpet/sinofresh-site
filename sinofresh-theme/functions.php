@@ -3808,7 +3808,7 @@ add_action('wp_footer', 'sinofresh_inquiry_modal', 5);
  * Public by design, like /article-feedback: the visitor is not logged in and
  * the only thing it can do is send one mail to the site's own address. There
  * is no nonce — a cached page would serve a stale one and reject a legitimate
- * submission — so the four server-side checks below are what stands between
+ * submission — so the five server-side checks below are what stands between
  * the endpoint and a spammer, and every one of them is enforced here rather
  * than in the script.
  *
@@ -3817,6 +3817,25 @@ add_action('wp_footer', 'sinofresh_inquiry_modal', 5);
  * this path follows. The customer is not copied on it — an auto-reply is a
  * separate decision and not part of this batch.
  */
+/**
+ * The visitor's address, for the inquiry throttle only.
+ *
+ * Behind Cloudflare the edge forwards the visitor's address in
+ * CF-Connecting-IP and REMOTE_ADDR is the edge itself — keying the throttle
+ * on REMOTE_ADDR alone would put every visitor of the site into one bucket
+ * and lock out the second legitimate sender. A request straight to the
+ * origin can forge that header, but the throttle is a damper on mail
+ * volume, not an identity check: the worst a forged header buys the forger
+ * is a seat in a stranger's bucket, and a direct attacker is already past
+ * the edge where CF's own rate limiting can no longer see them.
+ */
+function sinofresh_inquiry_client_ip() {
+	if (!empty($_SERVER['HTTP_CF_CONNECTING_IP'])) {
+		return (string) $_SERVER['HTTP_CF_CONNECTING_IP'];
+	}
+	return isset($_SERVER['REMOTE_ADDR']) ? (string) $_SERVER['REMOTE_ADDR'] : 'unknown';
+}
+
 add_action('rest_api_init', function () {
 	register_rest_route('sinofresh/v1', '/inquiry', array(
 		'methods'             => 'POST',
@@ -3853,7 +3872,22 @@ add_action('rest_api_init', function () {
 				return new WP_Error('sf_inquiry_email', 'Please enter a valid email address.', array('status' => 400));
 			}
 
-			/* 4. The selection panel is rebuilt from the post id, and H7d keeps
+			/* 4. Per-IP throttle. One inquiry per address per minute, counted
+			   by a short-lived transient (the options table holds it for its
+			   minute and expires it on its own — no dedicated table, nothing
+			   permanent). The slot is taken here rather than after wp_mail()
+			   on purpose: a send failure must not leave the endpoint open to
+			   being hammered. It sits after the cheap checks so a rejected
+			   request never burns a real visitor's slot, and answers 429 —
+			   not a fake success — so an honest client can tell its submission
+			   was not sent and stop. */
+			$rl_key = 'sf_inq_rl_' . md5(sinofresh_inquiry_client_ip());
+			if (get_transient($rl_key)) {
+				return new WP_Error('sf_inquiry_rate', 'You just sent an inquiry. Please wait a minute before sending another.', array('status' => 429));
+			}
+			set_transient($rl_key, 1, 60);
+
+			/* 5. The selection panel is rebuilt from the post id, and H7d keeps
 			   that rule in the only form that survives the visitor making a
 			   choice: the request says WHICH options, the server says what they
 			   are CALLED. A posted value that is not one of this record's own
