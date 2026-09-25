@@ -62,8 +62,11 @@ FLAVOR = '[data-sf-config-group="flavor"]'
 QS = '.sf-qs'
 STEP = '.sf-qs__step'
 
+# Batch H9 — the flavour chips are the RECORD'S OWN checked list (13 values
+# incl. its Custom), no longer the eight-entry soft-chews pool.
 FLAVOR_LABELS = ['Chicken', 'Beef', 'Lamb', 'Salmon', 'Peanut Butter',
-                 'Cheese', 'Mint', 'Custom']
+                 'Cheese', 'Mint', 'Sweet Potato', 'Pumpkin', 'Blueberry',
+                 'Mixed', 'Unflavored', 'Custom']
 
 # A stylesheet token from this theme's own version line: 2.10.x. Anything older
 # than the one being deployed is a page that cached a link to last week's CSS.
@@ -138,6 +141,25 @@ def option_labels(segment):
 
 # ----------------------------------------------------------------- html layer
 
+def zh_published():
+    """True when TP still publishes /zh/ (batch H9 era: it does not — the
+    ZH re-enable is a separate pending batch — so the ZH legs SKIP instead
+    of burning by-design reds on the 301 to the EN page)."""
+    class NoRedirect(urllib.request.HTTPRedirectHandler):
+        def redirect_request(self, *a, **k):
+            return None
+    op = urllib.request.build_opener(NoRedirect)
+    req = urllib.request.Request(
+        BASE + CHEWS_ZH, method='HEAD',
+        headers={'Authorization': AUTH,
+                 'User-Agent': 'sf-b3bc-live-accept/1'})
+    try:
+        rsp = op.open(req, timeout=20)
+        return rsp.status == 200
+    except urllib.error.HTTPError as exc:
+        return exc.code == 200
+
+
 def check_flavor(path, tag):
     page = fetch(path)
     if page.startswith('__HTTP_'):
@@ -150,7 +172,8 @@ def check_flavor(path, tag):
     seg = group_segment(page, 'flavor')
     opts = option_labels(seg)
     labels = [o['label'] for o in opts]
-    ck('%s: the Flavor group draws eight chips' % tag, len(opts) == 8, len(opts))
+    ck('%s: the Flavor group draws the record\'s thirteen chips' % tag,
+       len(opts) == 13, len(opts))
     ck('%s: exactly one of them says Custom' % tag,
        sum(1 for x in labels if x == 'Custom') == 1, labels)
     ck('%s: exactly one of them owns the text box' % tag,
@@ -501,31 +524,35 @@ def browser_pass():
     ck('clicking it checks its radio', (after or {}).get('checkedRadio') == 'Custom',
        (after or {}).get('checkedRadio'))
     ck('...and the chip reads as selected',
-       (after or {}).get('on') == [8], (after or {}).get('on'))
+       (after or {}).get('on') == [13], (after or {}).get('on'))
     ck('...and the text box is open, not hidden',
        (after or {}).get('boxHidden') is False
        and (after or {}).get('boxVisible') is True, after)
     shoot_sel('la-flavor-en-custom-open-1440', FLAVOR, 14, 14, 90)
 
     print()
-    print('== 7. post 158 ZH: the same eight chips behave the same way ==')
-    at(CHEWS_ZH, 1440)
-    served_guard(CHEWS_ZH)
-    shoot_sel('la-flavor-zh-1440', FLAVOR, 14, 14)
-    where_z, after_z = click_marked_chip()
-    print('        clicked at %s,%s -> %s' % ((where_z or {}).get('x'),
-                                               (where_z or {}).get('y'), after_z))
-    ck('the mouse landed on the Custom chip (ZH)',
-       bool((where_z or {}).get('hitOnChip')), where_z)
-    ck('clicking it checks its radio (ZH)',
-       (after_z or {}).get('checkedRadio') == 'Custom',
-       (after_z or {}).get('checkedRadio'))
-    ck('...and the chip reads as selected (ZH)',
-       (after_z or {}).get('on') == [8], (after_z or {}).get('on'))
-    ck('...and the text box is open, not hidden (ZH)',
-       (after_z or {}).get('boxHidden') is False
-       and (after_z or {}).get('boxVisible') is True, after_z)
-    shoot_sel('la-flavor-zh-custom-open-1440', FLAVOR, 14, 14, 90)
+    print('== 7. post 158 ZH: the same thirteen chips behave the same way ==')
+    if not zh_published():
+        print('   SKIPPED — /zh/ is unpublished (301 to EN); the ZH re-enable')
+        print('   is its own pending batch, so these browser legs skip.')
+    else:
+        at(CHEWS_ZH, 1440)
+        served_guard(CHEWS_ZH)
+        shoot_sel('la-flavor-zh-1440', FLAVOR, 14, 14)
+        where_z, after_z = click_marked_chip()
+        print('        clicked at %s,%s -> %s' % ((where_z or {}).get('x'),
+                                                   (where_z or {}).get('y'), after_z))
+        ck('the mouse landed on the Custom chip (ZH)',
+           bool((where_z or {}).get('hitOnChip')), where_z)
+        ck('clicking it checks its radio (ZH)',
+           (after_z or {}).get('checkedRadio') == 'Custom',
+           (after_z or {}).get('checkedRadio'))
+        ck('...and the chip reads as selected (ZH)',
+           (after_z or {}).get('on') == [13], (after_z or {}).get('on'))
+        ck('...and the text box is open, not hidden (ZH)',
+           (after_z or {}).get('boxHidden') is False
+           and (after_z or {}).get('boxVisible') is True, after_z)
+        shoot_sel('la-flavor-zh-custom-open-1440', FLAVOR, 14, 14, 90)
 
     print()
     flat = [r for r in FRAMES if not r[4]]
@@ -542,10 +569,14 @@ def main():
 
     print('== 1. the flavour group, EN and ZH, off the live bytes ==')
     en = check_flavor(CHEWS, 'EN')
-    zh = check_flavor(CHEWS_ZH, 'ZH')
-    if en is not None and zh is not None:
-        ck('the two locales render the same group markup',
-           en == zh, 'EN %d bytes vs ZH %d bytes' % (len(en), len(zh)))
+    if zh_published():
+        zh = check_flavor(CHEWS_ZH, 'ZH')
+        if en is not None and zh is not None:
+            ck('the two locales render the same group markup',
+               en == zh, 'EN %d bytes vs ZH %d bytes' % (len(en), len(zh)))
+    else:
+        print('   ZH leg SKIPPED — /zh/ is unpublished (301 to EN); the')
+        print('   re-enable is its own pending batch.')
 
     print()
     print('== 2. the quality band ==')
