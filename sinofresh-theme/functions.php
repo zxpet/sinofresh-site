@@ -34,7 +34,7 @@ add_action('after_setup_theme', function() {
 });
 
 add_action('wp_enqueue_scripts', function() {
-	wp_enqueue_style('sinofresh-style', get_stylesheet_uri(), array(), '2.10.84');
+	wp_enqueue_style('sinofresh-style', get_stylesheet_uri(), array(), '2.10.85');
 	// Sticky nav: every template renders parts/header.html, so this is site-wide.
 	wp_enqueue_script('sinofresh-sticky-header', get_template_directory_uri() . '/assets/js/sticky-header.js', array(), '1.0.0', true);
 	/* Consent decisions are now versioned + time-boxed and bridged into WP
@@ -7115,6 +7115,83 @@ add_filter('fluentform/rendering_field_html_button', function ($html, $data, $fo
 	}
 	return $html . '<p class="sf-gf-wa-hint">Prefer WhatsApp? Email us and we\'ll switch to WhatsApp.</p>';
 }, 10, 3);
+
+/* ---------------------------------------------------------------------
+   Batch H9b — form option text the back office can edit.
+
+   The three shared select lists (Country, Target Market, Interested
+   Dosage Form) lived as 11 independent copies inside the Fluent Forms
+   field definitions — rewording one country meant opening four forms in
+   FF's editor. Site Settings → Form Options is now the single source:
+   one textarea per list, and the render filter below rewrites the
+   options at display time.
+
+   Contract (the theme's usual empty-means-absent): a list that is empty
+   or missing rewrites nothing — FF renders its own stored options, so
+   with the option never saved the front-end bytes are identical to the
+   pre-H9b site, and deleting the option is the whole rollback.
+
+   The field names carry FF-generated suffixes (country_5, target_market_10,
+   interested_dosage_form_7 — the number is the editor's field counter and
+   is NOT stable across forms), so matching is by prefix. Form-specific
+   selects (Sample Quantity, Tour Type, Number of Visitors, Feedback Type)
+   and checkboxes deliberately stay in FF's editor: one copy each, no
+   drift to prevent.
+   --------------------------------------------------------------------- */
+function sinofresh_form_options_defaults() {
+	return array(
+		'dosage_forms'   => 'Soft Chews' . "\n" . 'Tablets' . "\n" . 'Powders' . "\n" . 'Pastes' . "\n" . 'Drops' . "\n" . 'Liquids' . "\n" . 'Fish Oil' . "\n" . 'Dental Chews',
+		'countries'      => 'United States' . "\n" . 'United Kingdom' . "\n" . 'Germany' . "\n" . 'France' . "\n" . 'Australia' . "\n" . 'Canada' . "\n" . 'Japan' . "\n" . 'Other',
+		'target_markets' => 'US' . "\n" . 'EU' . "\n" . 'UK' . "\n" . 'JP' . "\n" . 'AU' . "\n" . 'CA' . "\n" . 'Other',
+	);
+}
+
+/** One option list as a clean array (the admin page edits newline text). */
+function sinofresh_form_options_list($key) {
+	$opt = get_option('sf_form_options', array());
+	$val = (is_array($opt) && isset($opt[$key])) ? $opt[$key] : '';
+	if (!is_string($val)) {
+		return array();
+	}
+	$out = array();
+	foreach (explode("\n", $val) as $line) {
+		$line = trim($line);
+		if ($line !== '') {
+			$out[] = $line;
+		}
+	}
+	return $out;
+}
+
+/** Field-name prefix → option list key. Order matters for nothing; both sides are distinct prefixes. */
+function sinofresh_form_options_map() {
+	return array(
+		'country_'                => 'countries',
+		'target_market_'          => 'target_markets',
+		'interested_dosage_form_' => 'dosage_forms',
+	);
+}
+
+add_filter('fluentform/rendering_field_data_select', function ($data, $form) {
+	if (!is_array($data) || empty($data['attributes']['name'])) {
+		return $data;
+	}
+	$name = (string) $data['attributes']['name'];
+	foreach (sinofresh_form_options_map() as $prefix => $key) {
+		if (strpos($name, $prefix) === 0) {
+			$list = sinofresh_form_options_list($key);
+			if ($list) {
+				$opts = array();
+				foreach ($list as $label) {
+					$opts[] = array('label' => $label, 'value' => $label);
+				}
+				$data['settings']['advanced_options'] = $opts;
+			}
+			break;
+		}
+	}
+	return $data;
+}, 10, 2);
 
 /* --------------------------------------------------------------------
    Security hardening (2026-09-18, audit refs R3 / Y6 / Y8).

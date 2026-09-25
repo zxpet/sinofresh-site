@@ -892,7 +892,54 @@ add_action('admin_init', function () {
 			return $rows;
 		},
 	));
-	/* Batch H7e — the two factory facts the spec sheet prints. They had no
+	/* Batch H9b — the three shared form option lists. One textarea per list;
+   every line becomes one <option>. Editing here rewrites the Country,
+   Target Market and Interested Dosage Form selects on all four forms at
+   once (8 quote, 9 sample, 10 tour, 11 COA) — the 11 copies inside the FF
+   field definitions stop being the thing to maintain. A list left empty
+   hands control back to Fluent Forms (the form's own options render), so
+   clearing a box can never blank a live dropdown. */
+function sf_render_form_options_page() {
+	if (!current_user_can('manage_options')) {
+		return;
+	}
+	$saved = get_option('sf_form_options', array());
+	if (!is_array($saved)) {
+		$saved = array();
+	}
+	$defaults = sinofresh_form_options_defaults();
+	$fields   = array(
+		'dosage_forms'   => array('Interested Dosage Form', '剂型选项。询盘 / 样品 / 参观 / COA 四个表单同步。每行一项，与 8 个剂型页对应（独立维护，删页面不会联动选项）。'),
+		'countries'      => array('Country', '国家选项。四个表单同步。每行一项，最后一项通常保留 Other。'),
+		'target_markets' => array('Target Market', '目标市场选项。样品 / 参观 / COA 三个表单同步。每行一项（US / EU / UK / JP / AU / CA / Other）。'),
+	);
+	?>
+	<div class="wrap">
+		<h1>Form Options</h1>
+		<p>The option lists of the shared selects on the inquiry forms. One edit here updates every form at once.
+		<strong>清空某一组＝该组回退为表单内现值</strong>（下拉永远不会被清空）。</p>
+		<form method="post" action="options.php">
+			<?php settings_fields('sf_site_settings'); ?>
+			<table class="form-table" role="presentation">
+				<?php foreach ($fields as $key => $meta) : ?>
+					<tr>
+						<th scope="row"><label for="sf_form_options_<?php echo esc_attr($key); ?>"><?php echo esc_html($meta[0]); ?></label></th>
+						<td><textarea name="sf_form_options[<?php echo esc_attr($key); ?>]" id="sf_form_options_<?php echo esc_attr($key); ?>"
+							rows="<?php echo max(4, substr_count((string) (isset($saved[$key]) ? $saved[$key] : $defaults[$key]), "\n") + 2); ?>"
+							class="large-text code"><?php
+							echo esc_textarea(isset($saved[$key]) && is_string($saved[$key]) ? $saved[$key] : $defaults[$key]);
+						?></textarea>
+						<p class="description"><?php echo esc_html($meta[1]); ?></p></td>
+					</tr>
+				<?php endforeach; ?>
+			</table>
+			<?php submit_button(); ?>
+		</form>
+	</div>
+	<?php
+}
+
+/* Batch H7e — the two factory facts the spec sheet prints. They had no
 	   field anywhere: sinofresh_formula_specs_table() spelled them out as
 	   constants, so the only way to change them was a deploy. Same contract as
 	   the text fields on the parent page — an emptied field falls back to the
@@ -943,6 +990,32 @@ add_action('admin_init', function () {
 			'sanitize_callback' => 'sanitize_text_field',
 		));
 	}
+	/* Batch H9b — the three shared form option lists. Each list is stored
+	   as one newline-separated string (what the textarea shows). A list the
+	   back office empties is an EMPTY override, and the render filter
+	   (sinofresh_form_options_list) then lets Fluent Forms print its own
+	   stored options — the usual empty-means-absent, so the rollback for a
+	   bad edit is clearing the box, and the rollback for everything is
+	   deleting the option. Unknown keys are dropped so a stale POST cannot
+	   plant a list no field will ever read. */
+	register_setting('sf_site_settings', 'sf_form_options', array(
+		'type'              => 'array',
+		'sanitize_callback' => function ($v) {
+			$out = array();
+			foreach (array_keys(sinofresh_form_options_defaults()) as $key) {
+				$raw  = (is_array($v) && isset($v[$key]) && is_string($v[$key])) ? $v[$key] : '';
+				$lines = array();
+				foreach (explode("\n", $raw) as $line) {
+					$line = trim($line);
+					if ($line !== '') {
+						$lines[] = sanitize_text_field($line);
+					}
+				}
+				$out[$key] = implode("\n", $lines);
+			}
+			return $out;
+		},
+	));
 });
 
 add_action('admin_menu', function () {
@@ -956,6 +1029,9 @@ add_action('admin_menu', function () {
 	/* Batch H10. Same precedent as Factory Information: plain form-table, no
 	   shared admin assets. One row per dosage form, four facts per row. */
 	add_submenu_page('sf-site-settings', 'Dosage Form Facts', 'Dosage Form Facts', 'manage_options', 'sf-form-facts', 'sf_render_form_facts_page');
+	/* Batch H9b. Plain form-table, no shared admin assets — three textareas,
+	   one per shared option list. */
+	add_submenu_page('sf-site-settings', 'Form Options', 'Form Options', 'manage_options', 'sf-form-options', 'sf_render_form_options_page');
 }, 20); // after the parent menu registers (priority 9) and Social Links (default 10)
 
 /** Row template the tables JS clones for new rows. */
