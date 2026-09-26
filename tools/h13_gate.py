@@ -115,6 +115,7 @@ def live_gate():
     # WP-CLI does not fire admin_init on its own; fire it once so the
     # register_setting + H13 delete-on-empty hooks exist in this process.
     eval_php = r"""
+<?php
 // WP-CLI does not run wp-admin/admin.php, so admin_init has not fired and
 // the admin includes are not loaded. Load them, then fire admin_init once
 // so register_setting() and the H13 delete-on-empty hooks exist here.
@@ -129,9 +130,21 @@ update_option('sf_containers', array());
 $a2 = count(sf_container_library());
 update_option('sf_certifications', array());
 $a3 = count(sf_active_cert_names());
-// WRITE half: the empty save must have DELETED the option
+// WRITE half, path 1: option ABSENT -> empty save must not persist it.
+// (delete_option first: an option that already holds array(0) makes
+// update_option(array()) a no-op — old === new — and no hook fires.)
+delete_option('sf_shapes');
+update_option('sf_shapes', array());
 $b1 = get_option('sf_shapes', 'ABSENT') === 'ABSENT';
+// WRITE half, path 2: existing data -> emptied save must delete it.
+update_option('sf_shapes', array(array('slug' => 'x', 'label' => 'X', 'attachment_id' => 0)));
+update_option('sf_shapes', array());
+$b4 = get_option('sf_shapes', 'ABSENT') === 'ABSENT';
+delete_option('sf_containers');
+update_option('sf_containers', array());
 $b2 = get_option('sf_containers', 'ABSENT') === 'ABSENT';
+delete_option('sf_certifications');
+update_option('sf_certifications', array());
 $b3 = get_option('sf_certifications', 'ABSENT') === 'ABSENT';
 // helper contract directly
 $a4 = sf_admin_table_rows(array(), array('blank')) === array('blank');
@@ -140,9 +153,9 @@ $a5 = sf_admin_table_rows(array('x'), array('blank')) === array('x');
 delete_option('sf_shapes');
 delete_option('sf_containers');
 delete_option('sf_certifications');
-printf("RESULT %d %d %d %d %d %d %d %d %d %d\n",
+printf("RESULT %d %d %d %d %d %d %d %d %d %d %d\n",
   $c_shapes, $c_conts, $a1, $a2, ($a3 > 0) ? 1 : 0,
-  $b1 ? 1 : 0, $b2 ? 1 : 0, $b3 ? 1 : 0, $a4 ? 1 : 0, $a5 ? 1 : 0);
+  $b1 ? 1 : 0, $b2 ? 1 : 0, $b3 ? 1 : 0, $a4 ? 1 : 0, $a5 ? 1 : 0, $b4 ? 1 : 0);
 """
     out = ssh(f"""cd /var/www/dev.zxpet.com/public
 V=$(grep -m1 '^Version:' wp-content/themes/sinofresh-theme/style.css | awk '{{print $2}}')
@@ -174,11 +187,12 @@ rm -f /tmp/h13-eval.php
     check("shapes read-back equals defaults", vals[2] == str(want[0]))
     check("containers read-back equals defaults", vals[3] == str(want[1]))
     check("cert names on empty option still non-empty", vals[4] == "1")
-    check("empty save deleted sf_shapes", vals[5] == "1")
-    check("empty save deleted sf_containers", vals[6] == "1")
-    check("empty save deleted sf_certifications", vals[7] == "1")
+    check("empty save on absent option deleted sf_shapes (add path)", vals[5] == "1")
+    check("empty save on absent option deleted sf_containers (add path)", vals[6] == "1")
+    check("empty save on absent option deleted sf_certifications (add path)", vals[7] == "1")
     check("helper: empty -> fallback", vals[8] == "1")
     check("helper: non-empty passes through", vals[9] == "1")
+    check("emptied save on existing data deleted sf_shapes (update path)", vals[10] == "1")
 
     print(f"\n--live: {PASS} passed, {FAIL} failed")
     return FAIL

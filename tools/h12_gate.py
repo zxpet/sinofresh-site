@@ -87,6 +87,13 @@ def normalize(html):
                         "wp-theme-sinofresh-theme")
     html = re.sub(r"[0-9a-f]{16,}", "<HEX>", html)
     html = re.sub(r"ver=2\.10\.\d+", "ver=VER", html)
+    # Batch H13b — 10-char nonces (FluentForm fields, WP Statistics REST)
+    # rotate with the 12-hour nonce tick, which made zero-drift flap between
+    # gate runs captured on either side of a tick boundary. They are session
+    # tokens, not page content.
+    html = re.sub(r"nonce=[0-9a-f]{10}\b", "nonce=NONCE", html)
+    html = re.sub(r'fluentformnonce" value="[0-9a-f]{10}"',
+                  'fluentformnonce" value="NONCE"', html)
     return html
 
 
