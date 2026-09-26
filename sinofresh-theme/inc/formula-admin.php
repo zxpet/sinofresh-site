@@ -769,13 +769,33 @@ add_action('admin_enqueue_scripts', function ($hook) {
 	}
 	if ($is_settings) {
 		wp_enqueue_media(); /* the Container Library picks images via wp.media */
-		wp_enqueue_script('sf-site-settings', $dir . '/assets/admin/sf-site-settings.js', array(), '1.0.1', true);
+		wp_enqueue_script('sf-site-settings', $dir . '/assets/admin/sf-site-settings.js', array(), '1.0.2', true);
 	}
 });
 
 /* --------------------------------------------------------------------------
  * Site Settings subpages — Container Library and Global FAQ.
  * ------------------------------------------------------------------------ */
+/* Batch H13 — the one empty-table contract every Site Settings row-table
+   shares (Global FAQ, Shape Library, Container Library, Certifications).
+   The tables JS clones the LAST <tr> and silently no-ops on an empty tbody,
+   so a page that renders zero rows can never receive its first row — and a
+   fully-emptied save once persisted array(), which is a legal array that
+   every "!is_array → defaults" fallback skipped, locking the page up (the
+   H1 Global FAQ fix was the first instance; Shape/Container were found
+   broken the same way on 2026-09-26). Contract has two halves:
+   1. READ  — an empty array must read exactly like an absent option:
+      defaults where defaults exist (Shape/Container/Certifications), one
+      blank row where they do not (Global FAQ). sf_admin_table_rows() is
+      the shared READ half used by all four render/reader call sites.
+   2. WRITE — a save where no row survives must DELETE the option, not
+      persist array() (the update_option_/add_option_ hooks below).
+   A library row with a real slug always survives, so defaults can only
+   come back when the admin emptied every row — never mid-editing. */
+function sf_admin_table_rows($rows, $empty_fallback) {
+	return (is_array($rows) && $rows) ? $rows : $empty_fallback;
+}
+
 function sf_default_containers() {
 	return array(
 		array('slug' => 'round',  'label' => 'Round',  'attachment_id' => 0),
@@ -791,7 +811,9 @@ function sf_default_containers() {
 /** The global container library, with images from the media library. */
 function sf_container_library() {
 	$opt = get_option('sf_containers', null);
-	if (!is_array($opt)) {
+	/* H13: an EMPTY array reads as "no custom library" exactly like an
+	   absent option — is_array() alone let a stored array() blank the page. */
+	if (!is_array($opt) || !$opt) {
 		return sf_default_containers();
 	}
 	$out = array();
@@ -828,7 +850,8 @@ function sf_default_shapes() {
 /** The global shape library, with images from the media library. */
 function sf_shape_library() {
 	$opt = get_option('sf_shapes', null);
-	if (!is_array($opt)) {
+	/* H13: same empty-array fallback as sf_container_library(). */
+	if (!is_array($opt) || !$opt) {
 		return sf_default_shapes();
 	}
 	$out = array();
@@ -890,6 +913,25 @@ add_action('admin_init', function () {
 			return $out;
 		},
 	));
+	/* Batch H13 — the WRITE half of the empty-table contract: a save where
+	   no row survives must not persist array() into the option (that is how
+	   Shape/Container locked up). Deleting the option makes "absent" mean
+	   "use the shipped defaults" in every reader. update_option() routes a
+	   first write through add_option(), so BOTH actions are hooked to cover
+	   every write path. Deletion runs after the row is written, so the
+	   option cache is always left consistent by delete_option(). */
+	foreach (array('sf_shapes', 'sf_containers', 'sf_global_faq', 'sf_certifications') as $sf_h13_opt) {
+		add_action("update_option_{$sf_h13_opt}", function ($old, $new) use ($sf_h13_opt) {
+			if (is_array($new) && !count($new)) {
+				delete_option($sf_h13_opt);
+			}
+		}, 10, 2);
+		add_action("add_option_{$sf_h13_opt}", function ($name, $value) use ($sf_h13_opt) {
+			if (is_array($value) && !count($value)) {
+				delete_option($sf_h13_opt);
+			}
+		}, 10, 2);
+	}
 	register_setting('sf_site_settings', 'sf_global_faq', array(
 		'type'              => 'array',
 		'sanitize_callback' => function ($v) {
@@ -1065,6 +1107,9 @@ function sf_render_containers_page() {
 		return;
 	}
 	$rows = sf_container_library();
+	/* H13 — the getter itself now enforces the empty-table contract; the
+	   fallback argument documents what a reader sees if that ever regresses. */
+	$rows = sf_admin_table_rows($rows, sf_default_containers());
 	?>
 	<div class="wrap">
 		<h1>Container Library</h1>
@@ -1106,6 +1151,8 @@ function sf_render_shapes_page() {
 		return;
 	}
 	$rows = sf_shape_library();
+	/* H13 — same contract as the Container Library render above. */
+	$rows = sf_admin_table_rows($rows, sf_default_shapes());
 	?>
 	<div class="wrap">
 		<h1>Shape Library</h1>
@@ -1143,15 +1190,11 @@ function sf_render_global_faq_page() {
 		return;
 	}
 	$rows = get_option('sf_global_faq', array());
-	if (!is_array($rows)) {
-		$rows = array();
-	}
-	/* Empty option still renders ONE blank row: the table JS clones the last
-	 * <tr> and no-ops on an empty tbody, so an empty table could never
-	 * receive its first row. Saving drops fully-empty rows. */
-	if (!$rows) {
-		$rows = array(array('q' => '', 'a' => ''));
-	}
+	/* H13 — unified with Shape/Container/Certifications through
+	   sf_admin_table_rows(): empty option or empty array still renders ONE
+	   blank row (the table JS clones the last <tr> and no-ops otherwise).
+	   Saving drops fully-empty rows. */
+	$rows = sf_admin_table_rows($rows, array(array('q' => '', 'a' => '')));
 	?>
 	<div class="wrap">
 		<h1>Global FAQ</h1>

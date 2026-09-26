@@ -380,7 +380,10 @@ function sf_formula_library_options($pool, $library) {
  *                               add a row without touching this file.
  */
 function sf_active_cert_names() {
-	$certs  = get_option('sf_certifications', sf_default_certifications());
+	/* H13 — empty-table contract shared with Shape/Container/Global FAQ:
+	   an empty array (stored by a fully-emptied save) must read as the
+	   shipped defaults, not as "zero certifications" on the front end. */
+	$certs  = sf_admin_table_rows(get_option('sf_certifications', array()), sf_default_certifications());
 	$names  = array();
 	foreach ($certs as $c) {
 		if (!empty($c['active']) && isset($c['name']) && trim((string) $c['name']) !== '') {

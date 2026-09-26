@@ -34,7 +34,7 @@ add_action('after_setup_theme', function() {
 });
 
 add_action('wp_enqueue_scripts', function() {
-	wp_enqueue_style('sinofresh-style', get_stylesheet_uri(), array(), '2.10.86');
+	wp_enqueue_style('sinofresh-style', get_stylesheet_uri(), array(), '2.10.87');
 	// Sticky nav: every template renders parts/header.html, so this is site-wide.
 	wp_enqueue_script('sinofresh-sticky-header', get_template_directory_uri() . '/assets/js/sticky-header.js', array(), '1.0.0', true);
 	/* Consent decisions are now versioned + time-boxed and bridged into WP
@@ -5956,6 +5956,11 @@ function sf_render_site_settings_page() {
 	$addr  = get_option('sf_contact_address', $d['sf_contact_address']);
 	$wa    = get_option('sf_contact_whatsapp', $d['sf_contact_whatsapp']);
 	$certs = get_option('sf_certifications', sf_default_certifications());
+	/* Batch H13 — the same empty-table contract as Shape/Container/Global
+	   FAQ: an empty array (a fully-emptied save that slipped past the old
+	   fallback) must render the default rows, never a zero-row tbody that
+	   the tables JS cannot clone into. */
+	$certs = sf_admin_table_rows($certs, sf_default_certifications());
 	$co_company = get_option('sf_copyright_company', $d['sf_copyright_company']);
 	$co_suffix  = get_option('sf_copyright_suffix', $d['sf_copyright_suffix']);
 	?>
@@ -6053,7 +6058,10 @@ function sf_render_site_settings_page() {
  * renders as a link (hover turns brand green), without one as a plain pill.
  */
 function sf_render_cert_badges() {
-	$certs = get_option('sf_certifications', sf_default_certifications());
+	/* H13 — front-end half of the same contract: empty array = shipped
+	   defaults, so the top-bar badges can never be wiped by an emptied
+	   save (turn a badge off with its Active checkbox, as documented). */
+	$certs = sf_admin_table_rows(get_option('sf_certifications', array()), sf_default_certifications());
 	$html  = '';
 	foreach ($certs as $c) {
 		if (empty($c['active']) || !isset($c['name']) || trim((string) $c['name']) === '') {

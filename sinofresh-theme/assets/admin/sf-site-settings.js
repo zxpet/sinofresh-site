@@ -42,7 +42,14 @@
 		if (add) {
 			var tbody = certsTbody();
 			var last = tbody && tbody.querySelector('tr:last-child');
-			if (!last) { return; }
+			/* H13 guard: the PHP render contract (sf_admin_table_rows)
+			   guarantees at least one row, so this should be unreachable.
+			   Log loudly instead of the old silent no-op that hid the
+			   empty-library bug until the Shape/Container diagnosis. */
+			if (!last) {
+				if (window.console) { console.warn('sf-site-settings: no rows to clone for #sf-certs-add — render contract broken'); }
+				return;
+			}
 			var tr = last.cloneNode(true);
 			tr.querySelectorAll('input[type="text"]').forEach(function (el) { el.value = ''; });
 			tr.querySelectorAll('input[type="checkbox"]').forEach(function (el) { el.checked = false; });
@@ -69,7 +76,13 @@
 			var tbody = table ? table.querySelector('tbody') : null;
 			if (!tbody) { return; }
 			var last = tbody.querySelector('tr:last-child');
-			if (!last) { return; }
+			/* H13 guard: same contract as the certifications table above —
+			   sf_admin_table_rows() guarantees a non-empty tbody, so a zero-
+			   row clone source means the render contract regressed. */
+			if (!last) {
+				if (window.console) { console.warn('sf-site-settings: no rows to clone for #' + add.id + ' — render contract broken'); }
+				return;
+			}
 			var tr = last.cloneNode(true);
 			tr.querySelectorAll('input[type="text"]').forEach(function (el) { el.value = ''; });
 			/* Read by suffix, not by option name: the same handler serves
