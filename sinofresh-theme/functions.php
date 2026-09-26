@@ -5870,7 +5870,7 @@ function sf_default_certifications() {
 		array('name' => 'ISO 9001', 'url' => '/quality/', 'active' => true),
 		array('name' => 'FSSC 22000', 'url' => '/quality/', 'active' => true),
 		array('name' => 'HACCP', 'url' => '/quality/', 'active' => true),
-		array('name' => 'BRC', 'url' => '/quality/', 'active' => true),
+		array('name' => 'BRCGS', 'url' => '/quality/', 'active' => true),
 		array('name' => '', 'url' => '', 'active' => false),
 		array('name' => '', 'url' => '', 'active' => false),
 	);

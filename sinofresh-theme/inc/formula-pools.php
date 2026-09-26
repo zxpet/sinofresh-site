@@ -400,7 +400,7 @@ function sf_cert_schema_credentials() {
 		'ISO 9001'    => array('ISO 9001 Certified',   'Quality Management System'),
 		'FSSC 22000'  => array('FSSC 22000 Certified', 'GFSI Recognized Food Safety System'),
 		'HACCP'       => array('HACCP Certified',      'Hazard Analysis Critical Control Point'),
-		'BRC'         => array('BRC Certified',        'British Retail Consortium'),
+		'BRCGS'       => array('BRCGS Certified',      'BRCGS Global Standard for Food Safety'),
 	);
 	$out = array();
 	foreach (sf_active_cert_names() as $name) {
