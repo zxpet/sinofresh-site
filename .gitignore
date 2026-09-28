@@ -5,6 +5,12 @@
 /ai-images-raw/
 /.workbuddy/
 
+# 全站迁移包（_export/，407M：repo.bundle + DB dump + uploads）。
+# 它是「一次性搬运产物」，源站与仓库都不是它的家；一旦被 git add -A 带进仓库，
+# 每个克隆都要背 400M。凭据在其中已打码为 CHANGEME，但体积本身就是理由。
+# 需要重新生成时看 _export/sinofresh-full-export/README.md。
+/_export/
+
 # 主题内的批次备份。原来的 /_backup/ 是根目录锚定的，匹配不到
 # sinofresh-theme/_backup/ —— 于是 93 个批次备份全被提交进了仓库
 # （348 个文件、22.86MB），每次 push 都要重新传一遍。这条规则从下一批
