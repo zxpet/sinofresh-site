@@ -1,7 +1,9 @@
-# 生产上线 Runbook（2026-09-25 起草，未执行）
+# 生产上线 Runbook（2026-09-25 起草；2026-09-28 v2：noindex 版 + P0 已执行）
 
-> 状态：**方案待确认，未动生产**。确认后按阶段执行，每阶段末有验收点，任一失败即停。
+> 状态：**P0 备份已完成（2026-09-28，`/root/golive-backup-20260928-0520`，sha256 全过）**；P1 起待执行。
+> v2 修订（用户 noindex 指令）：**P1.7 blog_public 保持 0**、**P1.8 robots.txt＝AI 拦截版**、P2/P4 断言反转。
 > 回滚原则：旧生产（`/var/www/html` + DB `wordpress`）**整个保留不动**，回滚＝vhost 指回去，<1 分钟。
+> 前置阻塞：**SMTP（fluent-smtp 已装、参数已锁定、缺 sales@zxpet.com 密码）**——P1 导库前必须配好，配置随 dev DB 一起进生产。
 
 ## 0. 勘察事实（2026-09-25 实测）
 
@@ -10,7 +12,7 @@
 | docroot | `/var/www/dev.zxpet.com/public` | `/var/www/html` |
 | DB | `sinofresh`（11.3 MB，prefix `wp_`） | `wordpress` |
 | WP / PHP | 7.1.2 / 8.3.33 | 7.1.1 / 8.3.33 |
-| 主题 | sinofresh-theme 2.10.82（软链→site-repo） | generatepress |
+| 主题 | sinofresh-theme 2.10.88（软链→site-repo） | generatepress |
 | 关键插件 | Fluent Forms 6.2.14 / TP 3.3.6 / WPS 14.16.14 / fluent-smtp | rank-math / fluent-smtp / puffergo / naibabiji |
 | blog_public | 0（封锁中） | 1 |
 | home/siteurl | https://dev.zxpet.com | https://www.zxpet.com |
@@ -37,27 +39,40 @@
 
 ## 2. 阶段与验收
 
-### P0 备份（不动状态）
-- `mysqldump` sinofresh + wordpress 两库 → `/root/golive-backup-<ts>/`
-- `tar` `/var/www/html` 全量 → 同目录；`/etc/httpd/conf.d/` 全量副本 + sha256
-- 验收：备份文件存在、大小合理、`sha256sum -c` 通过
+### P0 备份（不动状态）——✅ 已执行 2026-09-28
+- `mysqldump` sinofresh + wordpress 两库 → `/root/golive-backup-20260928-0520/`
+- `tar` `/var/www/html` 全量 → 同目录；额外：dev docroot 此刻快照（上线栈以此为准）；`/etc/httpd/conf.d/` 全量副本
+- 验收 ✅：gzip -t 通过、wordpress 22 / sinofresh 51 张 CREATE TABLE、`sha256sum -c` 全 OK（manifest 在同目录）
 
 ### P1 构建新栈（生产不受影响）
 1. `rsync -a /var/www/dev.zxpet.com/public/ /var/www/zxpet-v2/`，**剔除**：
    `wp-content/mu-plugins/zz-sf-dev-lockdown.php`、`zz-sf-preflight.php`、`zz-sf-preflight.log*`（→ §9 第 3 项）
 2. mu-plugins 只留 **`zz-sf-wps-consent-bridge.php`**（从仓库 `server/mu-plugins/` 取源码 → §9 第 11 项，⚠️ 不走软链必须显式拷）
-3. 主题解软链：`rsync` 后 sinofresh-theme 已是实拷贝（确认 `git log` 对应 9bbd97e）
+3. 主题解软链：`rsync` 后 sinofresh-theme 已是实拷贝（确认 `git log` 对应 dfa91ba）
 4. DB：`CREATE DATABASE zxpet_prod` → 导入 sinofresh dump →（按 D3）清统计/测试提交
 5. `wp search-replace 'https://dev.zxpet.com' 'https://www.zxpet.com' --all-tables`（含裸 `dev.zxpet.com` 复扫一遍）
 6. 新 `wp-config.php`：指向 zxpet_prod、**无 `SF_DEV_LOCKDOWN`**（→ §9 第 4 项）、新随机 salts
-7. `wp option update blog_public 1`（→ §9 第 7 项 ⚠️ 最易漏）
-8. `robots.txt` 换正式版（`Disallow: /wp-admin/` 型，→ §9 第 6 项）
+7. ~~`wp option update blog_public 1`~~ **v2：跳过此步，blog_public 保持 0**（sinofresh 库本就是 0；noindex 阶段指令，放开收录时才改 1）
+8. `robots.txt` **v2：noindex＋AI 拦截版**（物理文件，物理 robots 存在时 WP 虚拟 robots 不生效）：
+```
+User-agent: *
+Disallow: /
+User-agent: GPTBot
+Disallow: /
+User-agent: ClaudeBot
+Disallow: /
+User-agent: PerplexityBot
+Disallow: /
+User-agent: Google-Extended
+Disallow: /
+```
+（`blog_public=0` 同时输出 `<meta name="robots" content="noindex">` 作第二道保险）
 9. Basic auth / X-Robots-Tag 只存在于 dev vhost——新 vhost 重写时天然不带（→ §9 第 1/2/5 项）；`.htpasswd` 是 dev 实体**保留不动**（dev 还要用，§9 第 2 项顺延到 dev 退役时）
 10. 验收：`wp core verify-checksums`（php-ai-client 差异为预已知）、`wp plugin list` 与 dev 一致、首页 200
 
 ### P2 切换前预验（不经公网）
 - 临时 vhost `:8080` 指向 `/var/www/zxpet-v2`，`curl -H 'Host: www.zxpet.com' http://127.0.0.1:8080/` 全链路：
-  首页 200 / 主题样式 `ver=2.10.82` / 无 `noindex` / 无 `WWW-Authenticate` / robots.txt 正式版 / hreflang / inquiry 端点 429 行为
+  首页 200 / 主题样式 `ver=2.10.88` / **有 `noindex` meta（v2 断言反转）** / 无 `WWW-Authenticate` / **robots.txt＝AI 拦截版全 Disallow（v2）** / hreflang / inquiry 端点 429 行为
 - 验收后**删除临时 vhost**
 
 ### P3 切换（秒级）
@@ -65,14 +80,19 @@
 - `apachectl -t && systemctl reload httpd`
 - 停机窗口＝reload 一瞬，无维护页需要
 
-### P4 上线后自检（§9 末尾两条 + 扩展）
+### P4 上线后自检（§9 末尾两条 + 扩展）——v2 断言反转
 ```bash
-curl -sI https://zxpet.com/ | grep -iE "www-authenticate|x-robots-tag"   # 应无输出
-curl -s  https://zxpet.com/ | grep -o "<meta name=.robots.[^>]*>"        # 应无 noindex
-curl -s  https://zxpet.com/robots.txt                                    # 不应 Disallow: /
+curl -sI https://zxpet.com/ | grep -iE "www-authenticate|x-robots-tag"   # 应无输出（WWW-Authenticate 无；X-Robots-Tag 无）
+curl -s  https://zxpet.com/ | grep -o "<meta name=.robots.[^>]*>"        # v2：应有 noindex（内容期）
+curl -s  https://zxpet.com/robots.txt                                    # v2：应有全站 Disallow + 4 个 AI UA 段
 ```
 - 扩展：首页/表单页 200、inquiry 60s 节流 429、consent 门（未同意 0 hit）、sitemap、SEO 头、CF 缓存命中率
 - dev 站保持封锁不动（继续当开发环境，DB 已导出快照）
+
+### P6 放开收录（内容确认后，用户手令才执行）
+- `wp option update blog_public 1`
+- robots.txt 换正式版（`Disallow: /wp-admin/` 型）
+- Google Search Console 提交 sitemap
 
 ### P5 回滚（随时可执行）
 - vhost DocumentRoot 指回 `/var/www/html` + `systemctl reload httpd`
@@ -85,8 +105,8 @@ curl -s  https://zxpet.com/robots.txt                                    # 不�
 | 1 Basic Auth / 2 .htpasswd / 5 X-Robots-Tag | 新 vhost 不含；.htpasswd 保留给 dev（退役时再删） |
 | 3 meta robots 门控 | rsync 剔除 dev-lockdown mu-plugin |
 | 4 SF_DEV_LOCKDOWN | 新 wp-config 不写 |
-| 6 robots.txt | P1.8 换正式版 |
-| 7 blog_public | P1.7 → 1 |
+| 6 robots.txt | P1.8 v2：noindex＋AI 拦截版（放开时换正式版） |
+| 7 blog_public | v2：P1.7 跳过、保持 0（noindex 期）；P6 放开 |
 | 9 CF cache rule | D4② dev bypass 保留（dev 还在）；生产无 bypass 规则 |
 | 10 CF Access / IP 白名单 | 未启用，N/A |
 | 11 mu-plugins 单独部署 | P1.2 只带 consent-bridge |
