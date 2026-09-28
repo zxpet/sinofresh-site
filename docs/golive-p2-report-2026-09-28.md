@@ -2,6 +2,10 @@
 
 > 执行范围：runbook v2 的 **P1（构建生产栈）→ P2（不经公网预验）**。**未切生产、未动 `/var/www/html` 与 `wordpress` 库**。
 > P3（vhost 切换）**未执行**，等确认。
+>
+> ✅ **2026-09-28 16:25 更新：SMTP 已闭环。** P2 唯一卡点（prod 客户端密码失效）已修复并三步验收通过——
+> 探针 `235` ✓ / 询盘重测日志 `status=sent` ✓ / 门 `--with-mail` **37/37** ✓。postfix 旧凭据一并换新（relay 实测 `250 Ok`）。
+> **P2 全绿，P3 待你点头。** 详见 `docs/golive-smtp-rootcause-2026-09-28.md`。
 
 ---
 
@@ -34,7 +38,7 @@ FluentSMTP 的 SMTP 密码用 **AES-256-CTR** 加密存库，密钥＝**wp-confi
 
 临时 vhost：`/etc/httpd/conf.d/zz-temp-v2-preverify.conf`，`Listen 127.0.0.1:8080`（**仅本机**，外网不可达），`ServerName www.zxpet.com` + `X-Forwarded-Proto: https → HTTPS=on`（避免 WP 跳到线上 https 主机）。
 
-### 门：`tools/p2_preverify.py` → **34 项，34 通过，0 失败**
+### 门：`tools/p2_preverify.py` → **34 项，34 通过，0 失败**（`--with-mail` 版 **37/37**，见 §3.8）
 
 | 组 | 结果 |
 |---|---|
@@ -55,11 +59,12 @@ FluentSMTP 的 SMTP 密码用 **AES-256-CTR** 加密存库，密钥＝**wp-confi
 
 ---
 
-## 三、SMTP：配置正确，但账号被腾讯限流（**P2 唯一未闭环项**）
+## 三、SMTP：曾误判为腾讯限流 → 真因＝prod 密码失效 → **已修复闭环**
 
-> 🔴 **本节结论已于 2026-09-28 16:00+ 被推翻并更正。** dev 站 15:57 两封邮件均收到 ⇒ 账号**未**被限流。
-> 真因：**prod 库里存的客户端密码已失效，dev 已换新密码**（salts 相同、导入逐字节忠实，非导入 bug）。
-> 权威结论见 `docs/golive-smtp-rootcause-2026-09-28.md`。下方 3.x 的「限流 / postfix 触发风控」归因**作废**，保留仅作过程记录。
+> ✅ **本节已闭环（16:25）。** 结论链：① 曾判「腾讯账号级限流」→ ② dev 15:57 两封都到货 ⇒ 限流假设被证伪
+> → ③ 逐字节对比定位到 **prod 库 FluentSMTP 客户端密码失效**（salts 相同、导入逐字节忠实，非导入 bug）
+> → ④ 覆盖修复 + postfix 凭据换新 + 三步验收全绿。权威取证见 `docs/golive-smtp-rootcause-2026-09-28.md`。
+> 下方 3.x 的「限流 / postfix 触发风控」归因**作废**，保留仅作过程记录。
 
 ### 3.5 追加处置与更正（同日 15:05–15:15）
 
@@ -122,6 +127,41 @@ P2 pre-verify: 37 checks, 35 passed, 2 failed
 ⇒ **34 项基线检查全过 ＋ 限流 429 也过**（35 passed）；2 个红全部是「真实发信成功」这条链。
 **结论：限流仍在生效，非配置问题** —— 必须由腾讯侧解封（或更长冷却）。
 
+### 3.8 修复执行与三步验收（16:15–16:24）— ✅ 闭环
+
+用户确认方案 A 后执行。**只动 prod 的 `fluentmail-settings` option 与 postfix 凭据，未碰 docroot/DB 结构。**
+
+**① 覆盖 fluentmail-settings（备份先行）**
+
+```bash
+# 备份（JSON + 原始 DB 值双份）
+/root/prod-fms-backup-20260928-081513.json      # 1035 B  —— 回滚＝ wp option update fluentmail-settings --format=json < 该文件
+/root/prod-fms-rawbackup-20260928-081513.txt    # 1318 B  —— 原始序列化值
+# 覆盖：dev → prod
+```
+
+回读校验：prod 值 **逐字节 == dev 值**；密码密文 md5 `b3ac3c10c1508e8f911ee312f9251b88`（=dev，len 168）。
+
+**② postfix 凭据换新**
+
+`/etc/postfix/sasl_passwd` 里原是一个 **32 位失效密码**（md5 `a820bfaa…`，07:09 仍 535）。
+处置：用 dev 的**有效**密码重建（备份 `sasl_passwd.bak.20260928-081625`）＋ `postmap` ＋ `systemctl reload postfix`。
+实测发信：`status=sent (250 Ok: queued as …)`，队列清空。**postfix 这条独立问题同步闭环。**
+
+**③ 三步验收（全绿）**
+
+| 步 | 命令 | 结果 |
+|---|---|---|
+| 1 · 探针 | `php fms-probe.php PROD` ＋ `smtp-auth-probe.php PROD` | 解密 OK（明文 md5 `72275dd9…`）；直连 `235 Authentication successful` ✅ |
+| 2 · 询盘重测 | POST `/wp-json/sinofresh/v1/inquiry`（经临时 vhost） | HTTP **200** `{"ok":true}`；`wp_fsmpt_email_logs` id=9 `status=sent` / `OK` ✅ |
+| 3 · 门 | `python3 tools/p2_preverify.py --with-mail` | **37 checks, 37 passed, 0 failed** ✅ |
+
+**④ 痕迹清理（P2 收尾）**
+
+- `wp_fsmpt_email_logs` 10 行（全为 P2 测试）→ 归档 `/root/p2-email-logs-archive-20260928-082437.txt` 后删除，`AUTO_INCREMENT` 重置 1，**现 0 行**
+- WP Statistics / Fluent Forms 提交表：**0 行**（无残留）；询盘限流 transient 无残留
+- 服务器探针 `/tmp/{fms-probe,smtp-auth-probe,smtp-auth-probe2,pw-extract}.php`、`/tmp/{dev,prod}-fms*.json`、`/tmp/retest*.txt` **已删**（提取明文的临时文件用 `shred -u` 销毁）
+
 ### 已证实的部分
 
 - FluentSMTP 配置完整且正确：`smtp.exmail.qq.com` / `465` / `ssl` / 账号 `sales@zxpet.com` / sender `SINO FRESH` / `force_from_email=yes`
@@ -176,15 +216,15 @@ P2 pre-verify: 37 checks, 35 passed, 2 failed
 
 ## 五、需要你确认 / 决定的点（P3 前）
 
-| # | 事项 | 建议 |
+| # | 事项 | 状态 / 建议 |
 |---|---|---|
-| 1 | **SMTP 限流（唯一卡点）** | 已冷却 45 min 后自动重测（15:24）仍 535/422 ⇒ **在腾讯侧**。请你登录**腾讯企业邮箱管理后台**看「登录/发信记录」是否有异常锁定并解封；或再等更久（数小时级）冷却 |
-| 2 | ~~postfix relay~~ **已完成** | 已换为当前有效凭据（备份 `sasl_passwd.bak.20260928`）＋ `postmap` |
-| 3 | ~~积压 50 封~~ **已完成** | 先删 25 封不可投递测试件、再删 25 封内部/测试件；逐封存档保留（`/root/stuck-mail-20260928/` ＋ `.tgz`）。**经复核无真实客户邮件**（见 §3.5③） |
-| 4 | **泄露的旧密码** | 被打印的那个是 postfix 里**已被替换掉的失效密码**，实际风险已消除；若你仍想彻底了断，可在企邮后台再轮换一次客户端专用密码（换后需同步更新 FluentSMTP 与 postfix 两处） |
-| 5 | **`noarchive`** | dev 有、prod 无（来自被剔除的 lockdown 插件）。可加 `X-Robots-Tag: noindex,nofollow,noarchive`（服务器现成文件 `zz-noindex-zxpet.conf.disabled` 可直接启用）作第三道保险，或保持现状 |
-| 6 | **`wp_gf_*` 遗留表** | 生产库里还有 Gravity Forms 时代 6 张表（entry 136 行等）。建议本次一并 drop，或留下次 |
-| 7 | **站点标题** | `blogname` ＝ `sinofresh`（首页 `<title>sinofresh</title>`，与 dev 一致，非本批引入）。上线前是否要改成 SINO FRESH 品牌写法？ |
+| 1 | **SMTP 密码失效**（原唯一卡点） | ✅ **已闭环**：覆盖 prod 的 `fluentmail-settings` + postfix 换新 + 三步验收全绿（见 §3.8） |
+| 2 | ~~postfix relay 凭据~~ | ✅ **已闭环**：换为有效密码，relay 实测 `250 Ok` |
+| 3 | ~~积压 50 封邮件~~ | ✅ **已闭环**：逐封存档（`/root/stuck-mail-20260928/` ＋ `.tgz`），队列清空；经复核无真实客户邮件 |
+| 4 | **泄露的旧密码** | 被打印的是 postfix 里**已被替换掉的失效密码**，风险已消除。如仍想彻底了断，可在企邮后台再轮换客户端密码（换后需同步 FluentSMTP + postfix 两处） |
+| 5 | **`noarchive` 第三道保险** | dev 有、prod 无。可启用现成文件 `zz-noindex-zxpet.conf.disabled`（`X-Robots-Tag: noindex,nofollow,noarchive`），建议 P3 时一并做 |
+| 6 | **`wp_gf_*` 遗留 6 张表** | 生产库仍有 Gravity Forms 时代残留（entry 136 行等）。建议 P3 批次一并 drop |
+| 7 | **站点标题** | `blogname` ＝ `sinofresh`（首页 `<title>sinofresh</title>`）。是否改成 SINO FRESH 品牌写法由你拍板 |
 
 ---
 
@@ -201,7 +241,12 @@ P2 pre-verify: 37 checks, 35 passed, 2 failed
 全部 `DocumentRoot /var/www/html` → `/var/www/zxpet-v2`，然后 `apachectl -t && systemctl reload httpd`（**只改路径、不改 Listen，reload 安全**）。
 回滚＝三处改回 `/var/www/html` + reload（<1 分钟；DB 全程不动，`wordpress` 库未写）。
 
-**P3 前待办**：SMTP 重测通过 → 删临时 vhost（`rm zz-temp-v2-preverify.conf` + reload）→ 清测试会话（`wp_statistics`、`wp_fsmpt_email_logs` 里 P2 的探测记录）。
+**P3 前待办（更新）**：
+- ✅ SMTP 三步验收通过（§3.8）
+- ✅ 清测试痕迹（`wp_fsmpt_email_logs` 归零、探针删除）
+- ⬜ 删临时 vhost：`rm /etc/httpd/conf.d/zz-temp-v2-preverify.conf && apachectl -t && systemctl reload httpd`
+- ⬜（可选，随 P3 一并）启用 `noarchive` 头、drop `wp_gf_*` 6 张表
+- **P3 执行前先 `httpd -t` 自检**（现为 `Syntax OK`）＋ 复核 4 处 `DocumentRoot` 仍为 `/var/www/html`（现均如此）
 
 ---
 

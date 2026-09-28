@@ -1,7 +1,9 @@
 # SMTP 真因定位报告（2026-09-28）
 
 > 起因：dev 站 15:57 提交表单，**回执 + 通知两封都收到** ⇒ 推翻此前「腾讯账号级限流」结论。
-> 本报告为**只读诊断**，**未做任何修改**；修复方案已端到端验证可行，等确认后执行。
+> 本报告诊断部分为**只读取证**；修复方案已于 **16:15–16:24 经用户确认后执行并验收通过**（见 §五「执行结果」）。
+>
+> ✅ **状态：已闭环。** 探针 `235` ✓ / 询盘重测日志 `status=sent` ✓ / 门 `--with-mail` **37/37** ✓；postfix 凭据同步换新。
 
 ---
 
@@ -113,7 +115,7 @@ AUTH_RESULT: *** SUCCESS ***
 
 ---
 
-## 五、修复方案（**待确认，尚未执行**）
+## 五、修复方案（**已于 2026-09-28 16:15 执行，方案 A**）
 
 ### 方案 A（推荐）：把 dev 的 `fluentmail-settings` 覆盖进 prod
 
@@ -150,22 +152,50 @@ php /tmp/smtp-auth-probe.php PROD /var/www/zxpet-v2
 
 ---
 
-## 六、附带发现（**独立问题**，不阻塞本次修复）
+## 五·补 · 执行结果（16:15–16:24，✅ 全绿）
 
-**postfix relay 仍持第三把失效密码**：
+**① 覆盖 `fluentmail-settings`（备份先行）**
+
+| 项 | 值 |
+|---|---|
+| 备份（JSON，回滚用） | `/root/prod-fms-backup-20260928-081513.json`（1035 B） |
+| 备份（原始序列化值） | `/root/prod-fms-rawbackup-20260928-081513.txt`（1318 B） |
+| 覆盖后回读 | **逐字节 == dev 值** |
+| 密码密文 md5 | `b3ac3c10c1508e8f911ee312f9251b88`（= dev，len 168） |
+
+**回滚**：`cd /var/www/zxpet-v2 && wp option update fluentmail-settings --format=json --allow-root < /root/prod-fms-backup-20260928-081513.json`
+
+**② postfix 凭据换新 + 验证**
+
+`/etc/postfix/sasl_passwd` 改造前后均为 `sales@zxpet.com`（relay `[smtp.exmail.qq.com]:587`）。原密码是 **32 位失效值**（md5 `a820bfaa…`），已换为 dev 的有效密码（备份 `sasl_passwd.bak.20260928-081625`）＋ `postmap` ＋ `systemctl reload postfix`。
+
+实测内投（server → `sales@zxpet.com`）：`status=sent (250 Ok: queued as …)`，队列清空。
+
+**③ 三步验收**
+
+| 步 | 命令 | 结果 |
+|---|---|---|
+| 1 | `fms-probe.php PROD` / `smtp-auth-probe.php PROD` | 解密 OK（明文 md5 `72275dd9…`）；`235 Authentication successful` ✅ |
+| 2 | POST 询盘 → 临时 vhost | HTTP **200** `{"ok":true}`；日志 id=9 `status=sent` / `OK` ✅ |
+| 3 | `p2_preverify.py --with-mail` | **37 / 37 / 0** ✅ |
+
+**④ 痕迹清理**：`wp_fsmpt_email_logs` 10 行归档后删除（现 0 行）、探针删除、明文临时文件 `shred`。详见 `golive-p2-report-2026-09-28.md` §3.8。
+
+---
+
+## 六、附带发现：postfix relay **已于同批处置闭环**
+
+修复时实测发现 postfix 用的是一把 **32 位失效密码**（md5 `a820bfaa…`，非早前记录的 16 位值），最近一次失败在 07:09 UTC 仍 `535`：
 
 ```
-最近 3 小时 SASL authentication failed 次数：108
-最新一条：Sep 28 07:09:38 UTC → sales@zxpet.com  status=deferred
+最新一条：Sep 28 07:09:38 UTC → <sales@zxpet.com>  status=deferred
          said: 535 Error: authentication failed, system busy
-/etc/postfix/sasl_passwd 密码明文 md5 = f65dd323c8e37539cbaf156e3a48941d
-对照：dev 可用密码 = 72275dd9…   prod 旧密码 = fa667daf…   （第三把，两者都不是）
-队列现状：0 封（此前清空有效）
+/etc/postfix/sasl_passwd 密码明文 md5 = a820bfaa80c278e902bdce7543377bb5
 ```
 
-- 它**不会**影响网站发信（WP 邮件全走 FluentSMTP），但持续对腾讯做失败认证，属卫生问题。
-- 处置二选一：① 改为当前可用密码；② 若确认网站/系统不依赖 postfix 外发，直接停用 relay。
-- 另外：postfix 走 **587**，FluentSMTP 走 **465/SSL**，两者路径本就不同。
+- 它**不影响**网站发信（WP 邮件全走 FluentSMTP），但持续对腾讯做失败认证，属卫生问题。
+- **处置（已执行）**：改为当前可用密码（与 FluentSMTP 同一把），备份 `sasl_passwd.bak.20260928-081625`；`postmap` + reload 后实测 **`status=sent (250 Ok)`**，队列 0。
+- 备注：postfix 走 **587/STARTTLS**，FluentSMTP 走 **465/SSL**，路径不同但同一账号同一密码。
 
 ---
 
@@ -179,10 +209,13 @@ php /tmp/smtp-auth-probe.php PROD /var/www/zxpet-v2
 
 ---
 
-## 八、验证用的临时探针（服务器 `/tmp`，修复后删除）
+## 八、验证用的临时探针（✅ 已删除）
+
+诊断期使用、**修复验收后已全部从服务器 `/tmp` 删除**：
 
 - `/tmp/fms-probe.php` — 解密密文 + 打印 salts/密文 md5
 - `/tmp/smtp-auth-probe.php` — 用本机配置实连 SMTP，只打印应答码
 - `/tmp/smtp-auth-probe2.php` — 支持外来密文的交叉验证版
+- `/tmp/pw-extract.php` — 提取明文到 root-only 文件（用完 `shred -u` 销毁）
 
 均**只输出 md5 与 SMTP 应答码**，不打印任何明文密码。
