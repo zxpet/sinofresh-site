@@ -89,6 +89,23 @@ postfix/smtp[…]: SASL authentication failed; server smtp.exmail.qq.com[101.32.
 
 **④ D3 的一处副作用与结论**：TRUNCATE 清掉了 dev 里全部 22 条表单提交，**其中 1 条一开始被我当成真实询盘**。逐条核对后确认 22 条全为测试（E2E 机器人 / 乱敲内容 / 内部地址），**没有真实客户数据丢失**。教训：清测试数据应**按规则删**（按邮箱域名 / 来源 URL / 时间窗），不要整表 TRUNCATE。
 
+### 3.6 配置快照与发送日志（15:14 补充证据）
+
+**配置快照图**：`docs/golive-smtp-config-2026-09-28.png`（由 `wp option get fluentmail-settings` 实读渲染，密码掩码；非后台像素截图——临时 vhost 上 WP 认 `https://www.zxpet.com` 主机名，浏览器直登 admin 会跨域跳转，故未做 UI 截图）。
+
+**`wp_fsmpt_email_logs` 实录**（生产栈，6 行）：
+
+| id | 主题 | status | 应答 | 时间(站内时区 UTC+8) |
+|---|---|---|---|---|
+| 1 | [Inquiry] Website — P2 Preverify | **sent** | OK | 14:38:57 |
+| 2 | [P2] SMTP test from production stack | failed | 422 认证失败 | 14:39:24 |
+| 3 | [P2] SMTP test A (cli path) | failed | 422 | 14:40:19 |
+| 4 | [Inquiry] Website — P2 Web Path | failed | 422 | 14:40:26 |
+| 5 | [P2] SMTP retest after cool-down | failed | 422 | 14:42:15 |
+| 6 | [Inquiry] Website — Fast | failed | 422 | 14:52:21 |
+
+⇒ **配置本身已被 id=1 证明可用**（成功发送一次），之后全被账号级限流拦下。
+
 ### 已证实的部分
 
 - FluentSMTP 配置完整且正确：`smtp.exmail.qq.com` / `465` / `ssl` / 账号 `sales@zxpet.com` / sender `SINO FRESH` / `force_from_email=yes`
