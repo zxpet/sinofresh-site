@@ -86,8 +86,12 @@
 			var tr = last.cloneNode(true);
 			tr.querySelectorAll('input[type="text"]').forEach(function (el) { el.value = ''; });
 			/* Read by suffix, not by option name: the same handler serves
-			   sf_containers[attachment_id][] and sf_shapes[attachment_id][]. */
-			var att = tr.querySelector('input[name$="[attachment_id]"]');
+			   sf_containers[attachment_id][] and sf_shapes[attachment_id][].
+			   H14: the suffix MUST carry the trailing [] — the rendered name
+			   is sf_shapes[attachment_id][], i.e. an append-array element, so
+			   a bare "[attachment_id]" suffix never matched and the clone
+			   inherited the previous row's image id. */
+			var att = tr.querySelector('input[name$="[attachment_id][]"]');
 			if (att) { att.value = '0'; }
 			var prev = tr.querySelector('.sf-containers__preview');
 			if (prev) { prev.innerHTML = ''; }
@@ -114,7 +118,11 @@
 		var frame = window.wp.media({ title: 'Choose image', multiple: false, library: { type: 'image' } });
 		frame.on('select', function () {
 			var att = frame.state().get('selection').first().toJSON();
-			var attInput = row.querySelector('input[name$="[attachment_id]"]');
+			/* H14: trailing [] is load-bearing — see the Add-row handler
+			   above. Without it attInput is null, the id is never written,
+			   and the save posts attachment_id=0 for every row (silent
+			   "picked an image, nothing saved"). */
+			var attInput = row.querySelector('input[name$="[attachment_id][]"]');
 			if (attInput) { attInput.value = String(att.id); }
 			var thumb = (att.sizes && att.sizes.thumbnail) ? att.sizes.thumbnail.url : att.url;
 			var previewEl = row.querySelector('.sf-containers__preview');

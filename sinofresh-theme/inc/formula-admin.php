@@ -769,7 +769,7 @@ add_action('admin_enqueue_scripts', function ($hook) {
 	}
 	if ($is_settings) {
 		wp_enqueue_media(); /* the Container Library picks images via wp.media */
-		wp_enqueue_script('sf-site-settings', $dir . '/assets/admin/sf-site-settings.js', array(), '1.0.2', true);
+		wp_enqueue_script('sf-site-settings', $dir . '/assets/admin/sf-site-settings.js', array(), '1.0.3', true);
 	}
 });
 
@@ -875,39 +875,65 @@ add_action('admin_init', function () {
 	register_setting('sf_site_settings', 'sf_containers', array(
 		'type'              => 'array',
 		'sanitize_callback' => function ($v) {
-			$out = array();
-			foreach ((array) $v as $row) {
-				$row = (array) $row;
-				$slug = sanitize_title(isset($row['slug']) ? $row['slug'] : '');
-				if ($slug === '') {
+			/* H14 — the form posts three PARALLEL arrays
+			   (sf_containers[attachment_id][] / [label][] / [slug][]), read
+			   them POSITIONALLY, exactly like sf_global_faq's q[]/a[] pair.
+			   The H7g row-major read ($row['slug']) matched nothing on a
+			   parallel payload, so every row failed the empty test and the
+			   whole save collapsed — H13's delete-on-empty then turned the
+			   symptom into "picked an image, nothing saved" (2026-09-26
+			   diagnosis). A row now survives as long as it carries any value;
+			   only a row with no slug, no label and no image is dropped. */
+			$out    = array();
+			$slugs  = isset($v['slug']) && is_array($v['slug']) ? $v['slug'] : array();
+			$labels = isset($v['label']) && is_array($v['label']) ? $v['label'] : array();
+			$atts   = isset($v['attachment_id']) && is_array($v['attachment_id']) ? $v['attachment_id'] : array();
+			$n      = max(count($slugs), count($labels), count($atts));
+			for ($i = 0; $i < $n; $i++) {
+				$slug  = sanitize_title(isset($slugs[$i]) ? $slugs[$i] : '');
+				$label = sanitize_text_field(isset($labels[$i]) ? $labels[$i] : '');
+				$att   = absint(isset($atts[$i]) ? $atts[$i] : 0);
+				if ($slug === '' && $label !== '') {
+					$slug = sanitize_title($label);
+				}
+				if ($slug === '' && $label === '' && !$att) {
 					continue;
 				}
 				$out[] = array(
 					'slug'          => $slug,
-					'label'         => sanitize_text_field(isset($row['label']) ? $row['label'] : ''),
-					'attachment_id' => absint(isset($row['attachment_id']) ? $row['attachment_id'] : 0),
+					'label'         => $label,
+					'attachment_id' => $att,
 				);
 			}
 			return $out;
 		},
 	));
-	/* Batch H7g — same contract as sf_containers: rows with a slug survive,
-	   fully-empty rows are dropped, an absent option falls back to the eight
-	   shipped shapes. */
+	/* Batch H7g — same contract as sf_containers: a row survives while it
+	   carries any value, fully-empty rows are dropped, an absent option falls
+	   back to the eight shipped shapes. Batch H14 replaced the row-major read
+	   with the parallel one — see the sf_containers callback above. */
 	register_setting('sf_site_settings', 'sf_shapes', array(
 		'type'              => 'array',
 		'sanitize_callback' => function ($v) {
-			$out = array();
-			foreach ((array) $v as $row) {
-				$row = (array) $row;
-				$slug = sanitize_title(isset($row['slug']) ? $row['slug'] : '');
-				if ($slug === '') {
+			$out    = array();
+			$slugs  = isset($v['slug']) && is_array($v['slug']) ? $v['slug'] : array();
+			$labels = isset($v['label']) && is_array($v['label']) ? $v['label'] : array();
+			$atts   = isset($v['attachment_id']) && is_array($v['attachment_id']) ? $v['attachment_id'] : array();
+			$n      = max(count($slugs), count($labels), count($atts));
+			for ($i = 0; $i < $n; $i++) {
+				$slug  = sanitize_title(isset($slugs[$i]) ? $slugs[$i] : '');
+				$label = sanitize_text_field(isset($labels[$i]) ? $labels[$i] : '');
+				$att   = absint(isset($atts[$i]) ? $atts[$i] : 0);
+				if ($slug === '' && $label !== '') {
+					$slug = sanitize_title($label);
+				}
+				if ($slug === '' && $label === '' && !$att) {
 					continue;
 				}
 				$out[] = array(
 					'slug'          => $slug,
-					'label'         => sanitize_text_field(isset($row['label']) ? $row['label'] : ''),
-					'attachment_id' => absint(isset($row['attachment_id']) ? $row['attachment_id'] : 0),
+					'label'         => $label,
+					'attachment_id' => $att,
 				);
 			}
 			return $out;

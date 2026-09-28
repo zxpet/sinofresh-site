@@ -47,12 +47,15 @@ def source_gate():
     css = read(THEME / "style.css")
 
     # --- version bumps ---
-    check("style.css Version is 2.10.87",
-          "Version: 2.10.87" in css)
-    check("functions.php main style enqueue bumped to 2.10.87",
-          "get_stylesheet_uri(), array(), '2.10.87')" in functions)
-    check("sf-site-settings.js enqueue ver bumped to 1.0.2",
-          "/assets/admin/sf-site-settings.js', array(), '1.0.2'" in admin)
+    # H14 keeps the theme's live-version pin in step with the release: bumping
+    # only the theme would leave this gate's self-evidence stale, and its
+    # --live mode asserts the exact version the dev server serves.
+    check("style.css Version is 2.10.88",
+          "Version: 2.10.88" in css)
+    check("functions.php main style enqueue bumped to 2.10.88",
+          "get_stylesheet_uri(), array(), '2.10.88')" in functions)
+    check("sf-site-settings.js enqueue ver bumped to 1.0.3",
+          "/assets/admin/sf-site-settings.js', array(), '1.0.3'" in admin)
 
     # --- READ half: shared helper ---
     check("sf_admin_table_rows() defined exactly once",
@@ -173,7 +176,7 @@ rm -f /tmp/h13-eval.php
             ver = line.split("=", 1)[1].strip()
         if line.startswith("RESULT"):
             result = line
-    check("dev theme version is 2.10.87", ver == "2.10.87", f"got {ver!r}")
+    check("dev theme version is 2.10.88", ver == "2.10.88", f"got {ver!r}")
     if not result:
         check("live behavioral eval produced RESULT", False, "no RESULT line")
         print(f"\n--live aborted. raw output:\n{out}")
