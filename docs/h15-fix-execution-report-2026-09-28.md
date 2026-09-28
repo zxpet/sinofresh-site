@@ -66,7 +66,7 @@ if (is_array($v) && isset($v[0]) && is_array($v[0]) && array_key_exists('attachm
 
 **盖章机制（已在源码逐行核实）**：`wp-admin/options.php` 把整组的**每一个**选项都写一遍；本页没有对应字段的选项，`$_POST[$option]` 不存在 ⇒ `$value = null` ⇒ `update_option($option, null)` ⇒ 过 sanitize ⇒ **变成空串并建行**。对「**空串 = 这一行关掉**」型读者（`sf_formula_trust_value()`）就是**静默内容消失**。
 
-**修法（＝「跳过未提交字段」，落在写侧，最省事也最稳）**：给组内 23 个选项各挂一个 `pre_update_option_{$opt}` 过滤器：
+**修法（＝「跳过未提交字段」，落在写侧，改动面最小）**：给组内 23 个选项各挂一个 `pre_update_option_{$opt}` 过滤器：
 
 ```php
 add_action('admin_init', function () {
