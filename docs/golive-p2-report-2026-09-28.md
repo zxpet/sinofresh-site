@@ -106,6 +106,18 @@ postfix/smtp[…]: SASL authentication failed; server smtp.exmail.qq.com[101.32.
 
 ⇒ **配置本身已被 id=1 证明可用**（成功发送一次），之后全被账号级限流拦下。
 
+### 3.7 冷却 45 分钟后的自动重测（15:24:15）— 仍被限流
+
+```
+P2 pre-verify: 37 checks, 35 passed, 2 failed
+  FAIL inquiry happy path accepted (200 ok:true)  — 500 {"code":"sf_inquiry_mail","message":"We could not send that just now..."}
+  FAIL mail transport reported the send as sent   — last log status: 'failed'
+```
+
+`--with-mail` 比基线多 3 项：happy path（依赖真实发信）、限流 429、邮件落库状态。
+⇒ **34 项基线检查全过 ＋ 限流 429 也过**（35 passed）；2 个红全部是「真实发信成功」这条链。
+**结论：限流仍在生效，非配置问题** —— 必须由腾讯侧解封（或更长冷却）。
+
 ### 已证实的部分
 
 - FluentSMTP 配置完整且正确：`smtp.exmail.qq.com` / `465` / `ssl` / 账号 `sales@zxpet.com` / sender `SINO FRESH` / `force_from_email=yes`
@@ -162,7 +174,7 @@ postfix/smtp[…]: SASL authentication failed; server smtp.exmail.qq.com[101.32.
 
 | # | 事项 | 建议 |
 |---|---|---|
-| 1 | **SMTP 限流（唯一卡点）** | 已挂自动单次重测（25 分钟冷却后）。凭据与配置均已核对正确、postfix 也已换用有效凭据，仍 535 ⇒ **在腾讯侧**。若重测仍红：请你登录**腾讯企业邮箱管理后台**看「登录/发信记录」是否有异常锁定并解封 |
+| 1 | **SMTP 限流（唯一卡点）** | 已冷却 45 min 后自动重测（15:24）仍 535/422 ⇒ **在腾讯侧**。请你登录**腾讯企业邮箱管理后台**看「登录/发信记录」是否有异常锁定并解封；或再等更久（数小时级）冷却 |
 | 2 | ~~postfix relay~~ **已完成** | 已换为当前有效凭据（备份 `sasl_passwd.bak.20260928`）＋ `postmap` |
 | 3 | ~~积压 50 封~~ **已完成** | 先删 25 封不可投递测试件、再删 25 封内部/测试件；逐封存档保留（`/root/stuck-mail-20260928/` ＋ `.tgz`）。**经复核无真实客户邮件**（见 §3.5③） |
 | 4 | **泄露的旧密码** | 被打印的那个是 postfix 里**已被替换掉的失效密码**，实际风险已消除；若你仍想彻底了断，可在企邮后台再轮换一次客户端专用密码（换后需同步更新 FluentSMTP 与 postfix 两处） |
