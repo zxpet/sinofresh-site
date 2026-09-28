@@ -875,6 +875,23 @@ add_action('admin_init', function () {
 	register_setting('sf_site_settings', 'sf_containers', array(
 		'type'              => 'array',
 		'sanitize_callback' => function ($v) {
+			/* Batch H15 — IDEMPOTENCY GUARD, must stay FIRST in this closure.
+			   WordPress runs a settings callback TWICE when the option does not
+			   exist yet: update_option() calls it, then update_option() sees
+			   `default_option_$opt === $old_value` (false) and delegates to
+			   add_option(), which calls it again (wp-includes/option.php).
+			   The second call receives what the first one RETURNED — a row list
+			   of array('slug'=>…,'label'=>…,'attachment_id'=>…). The H14 body
+			   below reads a PARALLEL payload, so it found no 'slug' key, every
+			   row failed the empty test, it returned array(), and H13's
+			   delete-on-empty hook then removed the row that had just been
+			   written. Saving a row was therefore permanently impossible, while
+			   update_option() still reported success — a silent deadlock, not
+			   an error. Recognising our own output and passing it straight
+			   through makes the callback idempotent, which is the only way out. */
+			if (is_array($v) && isset($v[0]) && is_array($v[0]) && array_key_exists('attachment_id', $v[0])) {
+				return $v;
+			}
 			/* H14 — the form posts three PARALLEL arrays
 			   (sf_containers[attachment_id][] / [label][] / [slug][]), read
 			   them POSITIONALLY, exactly like sf_global_faq's q[]/a[] pair.
@@ -915,6 +932,15 @@ add_action('admin_init', function () {
 	register_setting('sf_site_settings', 'sf_shapes', array(
 		'type'              => 'array',
 		'sanitize_callback' => function ($v) {
+			/* Batch H15 — IDEMPOTENCY GUARD, must stay FIRST in this closure.
+			   See the sf_containers callback above for the full mechanism: WP
+			   calls a settings callback twice while the option does not exist,
+			   and the second call receives this closure's own output. Reading
+			   that row list as a parallel payload emptied it, and H13's
+			   delete-on-empty hook then undid the write. */
+			if (is_array($v) && isset($v[0]) && is_array($v[0]) && array_key_exists('attachment_id', $v[0])) {
+				return $v;
+			}
 			$out    = array();
 			$slugs  = isset($v['slug']) && is_array($v['slug']) ? $v['slug'] : array();
 			$labels = isset($v['label']) && is_array($v['label']) ? $v['label'] : array();
@@ -961,6 +987,12 @@ add_action('admin_init', function () {
 	register_setting('sf_site_settings', 'sf_global_faq', array(
 		'type'              => 'array',
 		'sanitize_callback' => function ($v) {
+			/* Batch H15 — IDEMPOTENCY GUARD, must stay FIRST in this closure.
+			   Same double-call mechanism as sf_containers / sf_shapes above; the
+			   row list here is array('q'=>…,'a'=>…), so 'q' is the probe key. */
+			if (is_array($v) && isset($v[0]) && is_array($v[0]) && array_key_exists('q', $v[0])) {
+				return $v;
+			}
 			$rows = array();
 			$qs   = isset($v['q']) && is_array($v['q']) ? $v['q'] : array();
 			$as   = isset($v['a']) && is_array($v['a']) ? $v['a'] : array();
@@ -1100,6 +1132,51 @@ function sf_render_form_options_page() {
 		},
 	));
 });
+
+/* Batch H15 — stop the "blanket stamp" wp-admin/options.php performs on every
+   settings save. options.php walks EVERY option in the submitted page's group
+   and writes it, passing NULL for the ones that page has no field for
+   (`$value = null; if ( isset( $_POST[ $option ] ) ) { … }`). Two kinds of
+   damage came out of that on this site:
+     • sf_trust_* — the reader treats '' as "row switched off", so saving an
+       unrelated page silently dropped the whole Factory & Trust band;
+     • sf_shapes / sf_containers / sf_global_faq — NULL sanitises down to
+       array(), which H13's delete-on-empty hook then turns into a delete of
+       rows that had nothing to do with the page being saved.
+   The guard: when the option was NOT posted and the submit targets this group,
+   hand update_option() its own old value back. It then hits
+   `$value === $old_value` and returns before writing, so the option is neither
+   created nor overwritten. A page that DOES own the field still posts it —
+   including an empty string — so "clear the box to switch that row off" and
+   "clear the list to fall back to the shipped default" both keep working.
+   Priority 99 because every register_setting() for this group runs at 10 (two
+   of them live in functions.php), so the group cannot be read any earlier. */
+add_action('admin_init', function () {
+	$allowed = apply_filters('allowed_options', array());
+	$guard   = isset($allowed['sf_site_settings']) ? array_values((array) $allowed['sf_site_settings']) : array();
+	if (!$guard) {
+		/* Fall back to the options this theme registers itself, so a core change
+		   that stops option_update_filter() merging the group in cannot make the
+		   guard disappear silently. Kept in sync by the H15 gate. */
+		$guard = array(
+			'sf_containers', 'sf_shapes', 'sf_global_faq',
+			'sf_factory_origin', 'sf_factory_oem', 'sf_form_facts',
+			'sf_trust_factory_size', 'sf_trust_cleanroom', 'sf_trust_capacity',
+			'sf_trust_export_markets', 'sf_trust_ontime', 'sf_trust_response', 'sf_trust_reorder',
+			'sf_form_options', 'sf_working_hours', 'sf_contact_phone', 'sf_contact_address',
+			'sf_contact_whatsapp', 'sf_copyright_company', 'sf_copyright_suffix',
+			'sf_contact_email', 'sf_nav_active_style', 'sf_certifications',
+		);
+	}
+	foreach ($guard as $sf_guard_opt) {
+		add_filter("pre_update_option_{$sf_guard_opt}", function ($value, $old_value, $option) {
+			if (isset($_POST['option_page']) && 'sf_site_settings' === $_POST['option_page'] && !isset($_POST[$option])) {
+				return $old_value; // not on this page: leave the option exactly as it was
+			}
+			return $value;
+		}, 10, 3);
+	}
+}, 99);
 
 add_action('admin_menu', function () {
 	add_submenu_page('sf-site-settings', 'Container Library', 'Container Library', 'manage_options', 'sf-containers', 'sf_render_containers_page');
@@ -1287,9 +1364,10 @@ function sf_render_factory_info_page() {
 				</tr>
 			</table>
 			<h2>Factory &amp; Trust</h2>
-			<p>Seven facts on the detail page's independent Factory &amp; Trust band. Different contract from the two above:
-			<strong>clearing a field turns that row OFF</strong> (nothing prints) — never saved yet shows the shipped default.
-			 Annual Capacity, On-time Delivery and Reorder Rate ship empty on purpose: fill a real number or leave them off.</p>
+			<p>Seven facts on the detail page's independent Factory &amp; Trust band. Each box shows the value in effect —
+			the shipped default until someone saves this page. <strong>Clearing a box turns that row OFF</strong> (nothing
+			prints, also without a deploy). Annual Capacity, On-time Delivery and Reorder Rate ship empty on purpose:
+			fill a real number or leave them off.</p>
 			<table class="form-table" role="presentation">
 				<?php foreach (array(
 					'sf_trust_factory_size'   => array('Factory Size', '厂区面积，如 15,000㎡（默认取自 factory-tour 页）'),
@@ -1303,7 +1381,7 @@ function sf_render_factory_info_page() {
 				<tr>
 					<th scope="row"><label for="<?php echo esc_attr($key); ?>"><?php echo esc_html($meta[0]); ?></label></th>
 					<td><input name="<?php echo esc_attr($key); ?>" id="<?php echo esc_attr($key); ?>" type="text" class="large-text"
-						value="<?php echo esc_attr(get_option($key, '')); ?>"
+						value="<?php echo esc_attr(sf_formula_trust_value($key)); ?>"
 						placeholder="<?php echo esc_attr(sf_formula_trust_value($key)); ?>">
 					<p class="description"><?php echo esc_html($meta[1]); ?></p></td>
 				</tr>
