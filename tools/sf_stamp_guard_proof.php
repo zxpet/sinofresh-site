@@ -55,7 +55,7 @@ foreach ($group as $opt) {
 sf_gate_ck('23 个组选项全部装上 pre_update_option 守卫', count($group) === 23 && !$missing,
 	$missing ? '缺：' . implode(',', $missing) : count($group) . ' 项');
 
-echo "\n2) 模拟盖章：$_POST 无该键 ⇒ 过滤器必须交还旧值\n";
+echo "\n2) 模拟盖章：\$_POST 无该键 ⇒ 过滤器必须交还旧值\n";
 $probe = 'sf_trust_factory_size';
 $old   = get_option($probe, null);
 $_POST = array('option_page' => 'sf_site_settings', 'sf_contact_email' => 'sales@zxpet.com');
@@ -63,7 +63,7 @@ $back  = apply_filters("pre_update_option_{$probe}", '', $old, $probe);
 sf_gate_ck('未提交 ⇒ 过滤器返回旧值（$value === $old_value ⇒ 不写）', $back === $old,
 	'old=' . var_export($old, true));
 
-echo "\n3) 正向：$_POST 有该键 ⇒ 必须原样放行（页面拥有的字段照写）\n";
+echo "\n3) 正向：\$_POST 有该键 ⇒ 必须原样放行（页面拥有的字段照写）\n";
 $_POST[$probe] = '15,000㎡';
 $pass = apply_filters("pre_update_option_{$probe}", '15,000㎡', $old, $probe);
 sf_gate_ck('已提交 ⇒ 过滤器原样放行', $pass === '15,000㎡', 'value=' . $pass);
@@ -95,7 +95,7 @@ $d = sf_trust_defaults();
 foreach ($d as $k => $dv) {
 	$stored = get_option($k, null);
 	$val    = sf_formula_trust_value($k);
-	sf_gate_ck("$k：不存在 ⇒ 回默认", $stored === null ? ($val === $dv) : ($val === trim((string) $stored)),
+	sf_gate_ck("{$k}：不存在 ⇒ 回默认", $stored === null ? ($val === $dv) : ($val === trim((string) $stored)),
 		'default=[' . $dv . '] stored=' . var_export($stored, true) . ' out=[' . $val . ']');
 }
 $nonEmpty = 0;
