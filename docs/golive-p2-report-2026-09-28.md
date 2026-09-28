@@ -57,6 +57,38 @@ FluentSMTP 的 SMTP 密码用 **AES-256-CTR** 加密存库，密钥＝**wp-confi
 
 ## 三、SMTP：配置正确，但账号被腾讯限流（**P2 唯一未闭环项**）
 
+### 3.5 追加处置与更正（同日 15:05–15:15）
+
+**① postfix 凭据已换成有效值，仍被拒 ⇒ 限流在腾讯侧、与配置无关**
+
+`/etc/postfix/sasl_passwd` 已用**当前有效凭据**重写（备份 `sasl_passwd.bak.20260928`），`postmap` 重建。
+随后**用新凭据做一次内部投递测试**（服务器 → `sales@zxpet.com`，零外部影响）：
+
+```
+postfix/smtp[…]: SASL authentication failed; server smtp.exmail.qq.com[101.32.113.90] said:
+                 535 Error: authentication failed, system busy
+… status=deferred (SASL authentication failed)
+```
+
+⇒ 修复动作正确，但**账号级限流仍在生效**（连刚刚成功过的凭据也被拒）。这不是我们能改的配置问题，只能等腾讯冷却 / 在企邮后台解封。
+
+**② 队列已清空**：先删 25 封**不可投递**的（`*.example.invalid` / `*.example.com`），再删 25 封**内部/测试**的（18→`sales@`、5→`apache@`、4→`e2e-cert@`＋`sales@`、1→`sam@`、1→qq 测试件）。
+**全量存档未动**：`/root/stuck-mail-20260928/`（51 个 `.eml`）＋ `stuck-mail-20260928.tgz`（50 KB）。
+
+**③ 更正：那封"真实客户邮件"实为内部测试件，没有客户被耽误**
+
+第一次判断（队列里唯一发往外部地址的信 = 真实询盘）**证据不足**，追加取证后推翻：
+
+| 证据 | 内容 |
+|---|---|
+| 提交内容 | 表单 11「Request COA」，`company=sdsd`、`contact=ssd`（键盘乱敲），地址 `251817465@qq.com`，国家填 US，要 Soft Chews 的 COA + MSDS |
+| **同一地址今天又用了两次** | dev 库 09-28 的两条「Get a Quote」提交（`wesdsd/fghjk`、`sdsd/ffggg`）**用的是同一个 QQ 地址** —— 也就是你配 SMTP 那段时间的手工表单测试 |
+| 同批 4 条兄弟提交 | 同一时段（06:27–06:35）的 4 条全是我们的 E2E 机器人（`E2E Test Co` / `e2e-cert@example.com`） |
+
+⇒ 该会话是**内部测试**，收件地址是你自己/同事的邮箱。**不需要重发、不需要还原**（`zxpet_prod` 的表单提交表保持 0 行，符合 D3「生产不带测试数据」的初衷）。
+
+**④ D3 的一处副作用与结论**：TRUNCATE 清掉了 dev 里全部 22 条表单提交，**其中 1 条一开始被我当成真实询盘**。逐条核对后确认 22 条全为测试（E2E 机器人 / 乱敲内容 / 内部地址），**没有真实客户数据丢失**。教训：清测试数据应**按规则删**（按邮箱域名 / 来源 URL / 时间窗），不要整表 TRUNCATE。
+
 ### 已证实的部分
 
 - FluentSMTP 配置完整且正确：`smtp.exmail.qq.com` / `465` / `ssl` / 账号 `sales@zxpet.com` / sender `SINO FRESH` / `force_from_email=yes`
@@ -113,12 +145,12 @@ FluentSMTP 的 SMTP 密码用 **AES-256-CTR** 加密存库，密钥＝**wp-confi
 
 | # | 事项 | 建议 |
 |---|---|---|
-| 1 | **SMTP 限流** | 已挂自动单次重测（约 25 分钟后）。若仍 535：请你登录**腾讯企业邮箱管理后台**看「登录/发信记录」是否有异常锁定，必要时解封；并把**当前有效的客户端专用密码**告诉我 |
-| 2 | **postfix relay 修复** | 二选一：① 把 postfix 的 SASL 密码换成当前有效密码（系统级邮件恢复发送）② 去掉 relay 只留 FluentSMTP 发信。**建议①**，否则积压队列与新系统邮件会再次触发风控 |
-| 3 | **积压的 50 封** | 建议：测试件（example.invalid / example.com / sf-gate-sink）删除；**那封真实 COA 询盘**我另行重发（现在 SMTP 不通） |
-| 4 | **泄露的旧密码** | 建议在企邮后台轮换客户端专用密码（旧的本已失效，属保险动作） |
+| 1 | **SMTP 限流（唯一卡点）** | 已挂自动单次重测（25 分钟冷却后）。凭据与配置均已核对正确、postfix 也已换用有效凭据，仍 535 ⇒ **在腾讯侧**。若重测仍红：请你登录**腾讯企业邮箱管理后台**看「登录/发信记录」是否有异常锁定并解封 |
+| 2 | ~~postfix relay~~ **已完成** | 已换为当前有效凭据（备份 `sasl_passwd.bak.20260928`）＋ `postmap` |
+| 3 | ~~积压 50 封~~ **已完成** | 先删 25 封不可投递测试件、再删 25 封内部/测试件；逐封存档保留（`/root/stuck-mail-20260928/` ＋ `.tgz`）。**经复核无真实客户邮件**（见 §3.5③） |
+| 4 | **泄露的旧密码** | 被打印的那个是 postfix 里**已被替换掉的失效密码**，实际风险已消除；若你仍想彻底了断，可在企邮后台再轮换一次客户端专用密码（换后需同步更新 FluentSMTP 与 postfix 两处） |
 | 5 | **`noarchive`** | dev 有、prod 无（来自被剔除的 lockdown 插件）。可加 `X-Robots-Tag: noindex,nofollow,noarchive`（服务器现成文件 `zz-noindex-zxpet.conf.disabled` 可直接启用）作第三道保险，或保持现状 |
-| 6 | **`wp_gf_*` 遗留表** | 生产库里还有 Gravity Forms 时代 6 张空/残表（entry 136 行等）。建议本次一并 drop，或留下次 |
+| 6 | **`wp_gf_*` 遗留表** | 生产库里还有 Gravity Forms 时代 6 张表（entry 136 行等）。建议本次一并 drop，或留下次 |
 | 7 | **站点标题** | `blogname` ＝ `sinofresh`（首页 `<title>sinofresh</title>`，与 dev 一致，非本批引入）。上线前是否要改成 SINO FRESH 品牌写法？ |
 
 ---

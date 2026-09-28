@@ -112,9 +112,9 @@ Listen 127.0.0.1:8080            # ⚠️ 必须绑 loopback，否则 IP:8080 �
 - 停机窗口＝reload 一瞬，无维护页需要；回滚＝三处改回 `/var/www/html` + reload（旧站与 `wordpress` 库全程未写）
 
 ### P3 前待办（2026-09-28 实测新增）
-1. **SMTP 重测通过**（见 §5）；未通过前切过去＝询盘邮件静默丢件
-2. **postfix relay 处置**：`/etc/postfix/sasl_passwd` 里的旧 credential 自 Sep 24 起失败 2724 次，是账号被腾讯限流的根因。切前需换当前有效密码，或去掉 relay
-3. **积压队列**：50 封已 `postsuper -h ALL` 暂停（存档 `/root/stuck-mail-20260928/`）；测试件清理、真实件（`lead-251817465-20260924.eml`）重发
+1. **SMTP 重测通过**（见 §5）；未通过前切过去＝询盘邮件静默丢件。**卡点＝腾讯账号级限流**（凭据已核对正确、postfix 已换用有效凭据，仍 535）⇒ 需等冷却或在企邮后台解封
+2. **postfix relay**：凭据已换为有效值（备份 `.bak.20260928`）＋ `postmap`；队列已清空，不再有失败认证风暴
+3. ~~积压队列~~ **已完成**：逐封存档后清空（无真实客户邮件）
 4. **删除临时 vhost** + reload
 5. 清 P2 探测痕迹：`wp_fsmpt_email_logs` / `wp_statistics_*`（本轮探测记录）
 
@@ -169,8 +169,9 @@ curl -s  https://zxpet.com/robots.txt                                    # v2：
 
 - postfix：`relayhost=[smtp.exmail.qq.com]:587`、`smtp_sasl_auth_enable=yes`、`inet_interfaces=loopback-only`
 - **根因链**：旧 credential 失效 → postfix 每几分钟重试 → 大规模失败登录 → 腾讯判定异常 → 账号返回 `535 authentication failed, system busy`（换 IP 复测同样 535 ⇒ 账号级，非 IP 级）
-- **止血**：`postsuper -h ALL`（50 封暂停，可逆 `-H ALL`）；全量存档 `/root/stuck-mail-20260928.tgz`
-- **❗被掩码漏掉的泄露**：查配置时 `sasl_passwd` 的密码明文被打印到会话输出 → **建议轮换该客户端专用密码**（该密码本就已失效）
+- **止血**：`postsuper -h ALL` 暂停全部 → 逐封存档 `/root/stuck-mail-20260928[.tgz]`（51 个 `.eml`）→ 复核后**清空队列**（先 25 封不可投递测试件，再 25 封内部/测试件；无真实客户邮件，见报告 §3.5③）
+- ✅ **凭据已修**：`/etc/postfix/sasl_passwd` 换成当前有效值（备份 `.bak.20260928`）＋ `postmap`；但**用新凭据的内部投递测试仍 535** ⇒ 限流在腾讯侧，只能等冷却/后台解封
+- **❗被掩码漏掉的泄露**：查配置时 `sasl_passwd` 的密码明文被打印到会话输出 → **建议轮换该客户端专用密码**（该密码本就已失效，属保险动作）
 
 ### SMTP 验证纪律（本批踩坑）
 - ⛔ **不要连续发测试邮件**：短时间多次认证/发信会触发腾讯风控，可能让本来正常的 credential 也被拒（本批连续 4 次重测后全线 535）
