@@ -1,4 +1,38 @@
-# H16 排查 — `[SF_FACTS_MINI]` 裸文本 Bug（已扫清，未修，等确认）
+# H16b 修复执行 — `[SF_FACTS_MINI]` 裸文本（方案 B，已上线，3/3 验收通过）
+
+> 2026-09-30 ｜ 详报：`docs/h16b-fix-execution-report-2026-09-30.md`（排查见 `docs/h16-facts-mini-marker-report-2026-09-30.md`）
+
+## 一句话
+
+`functions.php` 的 marker 过滤器从「只认 `core/html`」放宽为「**`core/html` + freeform**」（替换判据不变：`trim` 后整行精确等于 marker），**生产已上线**：Soft Chews 参数带恢复、8 个剂型页全绿、Site Editor 再保存也不复发；**4 份 DB 副本一律未删**。
+
+## 改动与部署
+
+- 唯一文件 `sinofresh-theme/functions.php`：md5 `d1be8b90…`（330929B）→ **`4adaf274…`（331822B）**，本地/dev/生产**三方一致**；git `578a24d` → **`983111b`**（已 push，dev 已 ff）。**未 bump 版本**（不改资产）。
+- 生产显式部署：备份 `/root/h16-rollback-prod-functions.php` → `php -l` → 原子 `mv` → `chown apache:apache/644`；opcache 自动生效无需 reload。
+
+## 验收（生产实测）
+
+| # | 标准 | 结果 |
+|---|---|---|
+| ① | `/products/soft-chews/` 参数带正常、无裸文本 | ✅ 事实带 1 段/4 项，裸文本 0，其余 13 个区块全在；可见文本含 MOQ/Lead time/Certifications/Packaging |
+| ② | 8 个剂型页全查 | ✅ 8/8 页 `code=200 leak=0 band=1 items=4`，配方网格/Explore/FF/FAQ 全在 |
+| ③ | Site Editor 再保存一次不复发 | ✅ 真浏览器点保存（REST POST 200）后 `freeform-marker 1→1`（降级被固化＝会复发的机理仍在）但前台仍 `leak=0 band=1`；随后 396 按快照**逐字节还原**（md5 回 `33ba53cc…`）、探针修订删除、编辑锁清除、**4 份副本零残留** |
+
+## dev 验证（生产前）
+
+- **影响面**：整块内容恰为 marker 的集合**只有** `page-soft-chews` 副本 1 个（+3 条 revision）；「含 marker 但整行非 marker」的集合**为空** ⇒ 精确匹配零误伤。
+- **测试 A**（生产真实受损字节）：修复后 `leak=0 band=1 items=4`；同字节跑修复前逻辑 `leak=1 band=0` ⇒ 差异只来自过滤器。
+- **零漂移**：真回退文件后 8 个模板输出 **8/8 逐字节相同**（md5 列表见报告）。
+- **误伤对照 10/10**、**dev 全页端到端**（用生产字节建临时副本，含判别性守卫串）修复前 `leak=1/band=0` → 修复后 `leak=0/band=1`；测试后 dev 回到基线（9 行/11 关系）。
+
+## 保留与遗留
+
+- 🔒 **4 份 DB 副本未删**（352 header / 353 front-page / 357 page-products / 396 page-soft-chews），其中 353 与 396 含用户今天的真实编辑（+618 字 / 剂型卡片文案重写）⇒ **另立批次反向同步进主题文件**。
+- 遗留：方案 C（marker 真短码化，对块状态彻底免疫，需动 H10 字节基线）；块降级的**触发点**未完全钉死（编辑器内部校验/恢复环节，非序列化器）；`tools/p2_preverify.py` 仍过时；站点仍 `noindex`（P6 待开）。
+
+---
+
 
 > 2026-09-30 ｜ 详报：`docs/h16-sf-facts-mini-marker-report-2026-09-30.md`
 
