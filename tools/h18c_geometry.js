@@ -48,6 +48,12 @@ const TILE = 72, GAP_SEVEN = 8, PAD = 8;      /* 4px top + 4px bottom padding */
 const SEVEN_H = 7 * TILE + 6 * GAP_SEVEN + PAD; /* 560 */
 const WIDE = [1440, 1240, 1200, 1101];
 
+/* The theme version this run expects in the served ?ver= URL. Kept as a plain
+   literal (not a regex) so a version bump can find it with a normal grep —
+   the first cut wrote /\?ver=2\.10\.88/, and the escaping made it invisible to
+   a search for "2.10.88" during the H18c cache follow-up. */
+const VERSION = '2.10.89';
+
 let pass = 0, fail = 0;
 const rows = [];
 const ck = (name, ok, detail) => {
@@ -165,12 +171,16 @@ function probe(cfg) {
     const body = await (await r.page.request.get(href)).text();
     report.sheetUrl = href;
     report.sheetMd5 = crypto.createHash('md5').update(body, 'utf8').digest('hex');
+    /* NOT bytes: `body` is a decoded JS string, so .length counts UTF-16 code
+       units (341375) while the file on disk is 342067 bytes — style.css is
+       mostly ASCII but not entirely. Do not read this field as a byte count;
+       the byte figure comes from h18c_gate.py / the deploy md5. */
     report.sheetBytes = body.length;
     ck('the served style.css carries the H18c :has() rule',
        body.includes('.sf-gallery__thumbs:has(.sf-gallery__thumb:nth-child(7))'),
        { md5: report.sheetMd5, bytes: body.length, href });
-    ck('the served style.css still declares the shipped version',
-       /\?ver=2\.10\.88/.test(href || ''), { href });
+    ck(`the served style.css is the ${VERSION} build`,
+       (href || '').includes(`?ver=${VERSION}`), { href, want: VERSION });
     await r.ctx.close();
   }
 

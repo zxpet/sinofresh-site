@@ -1,9 +1,9 @@
 # H18c 执行报告 — 图集照片帧上限 6→7（含视频时帧上限 8）＋ 竖列第七格
 
 日期：2026-09-30
-状态：**已上线生产，五条验收全绿** —— 但有一项部署后新发现待裁决：**边缘/浏览器仍拿旧 CSS**（见 §3 ⑤-b）
-提交：`12c114d`（实现）→ `838a52a`（收尾），dev 已 `git pull --ff-only` 同步
-生产回滚备份：`/root/_h18c_rollback_20260930-111053/`
+状态：**已上线生产，五条验收全绿**；部署后新发现「边缘/浏览器拿旧 CSS」**已于同日跟进修复**（bump `2.10.88 → 2.10.89`，见 §3 ⑤-b / ⑤-c）
+提交：`12c114d` → `838a52a`（本批）→ `b630187`（报告补录）→ `82afc8c`（缓存跟进），dev 已 `git pull --ff-only` 同步
+生产回滚备份：`/root/_h18c_rollback_20260930-111053/`（本批）、`/root/_h18c_bump_rollback_20260930-193747/`（bump）
 扫描报告（前序，只读）：`docs/scan-gallery-rail-7th-thumb-2026-09-30.md`
 
 ---
@@ -132,6 +132,47 @@ PHP 那一半（cap 7 / 帧 8）是服务端渲染，**不受影响、已生效*
 **注意**：单纯「purge CF 那一个 URL」**不够** —— 已经取过 `?ver=2.10.88` 的浏览器因为 `immutable` 一年内不会回源。
 能同时覆盖边缘与浏览器的只有**换 URL**，即 bump 前台版本（`2.10.88 → 2.10.89`，约 6–8 处：主题 3 + 工具门 4–5）。
 
+### ⑤-c 缓存跟进：前台版本 bump `2.10.88 → 2.10.89`（已上线，边缘已实测拉新）
+
+用户拍板后执行。改动 8 处：
+
+| 类型 | 文件 | 改动 |
+|---|---|---|
+| 主题 | `sinofresh-theme/style.css:5` | `Version: 2.10.88` → `2.10.89` |
+| 主题 | `sinofresh-theme/functions.php:37` | 主样式 enqueue `'2.10.88'` → `'2.10.89'` |
+| 主题 | `sinofresh-theme/inc/formula-admin.php:807` | 注释措辞（原写「前台保持 2.10.88」已不成立） |
+| 工具 | `tools/h13_gate.py` | 2 条 source 版本断言 + 1 条 live 版本断言 → `2.10.89`（不同步则 pull 后必红） |
+| 工具 | `tools/h14_gate.py` | `VERSION` 常量 → `2.10.89` |
+| 工具 | `tools/h18_gate.py` | `VERSION` + 注释改准（H18 未 bump、本批跟进 bump） |
+| 工具 | `tools/h18c_gate.py` | `VERSION` + docstring 记录这段因果 + 断言措辞 |
+| 工具 | `tools/p2_preverify.py` | `EXPECT_THEME_VER`（该工具已知过时，一并保持诚实） |
+
+**未动**（按 H14 先例）：`h9/h10/h12` 的陈旧版本钉（`2.10.82/84/86`，早已是红，不是本批引入）、
+`b3b_local_check.py`（故意停旧版）。
+
+**部署与实测**：
+
+- 生产回滚备份 `/root/_h18c_bump_rollback_20260930-193747/`（pre-bump 三文件：`bde32d55…` / `36b0a46d…` / `6f47d728…`）
+- `php -l` 通过 → 原子 `install -m 644 -o apache -g apache` + `mv` → 无残留
+- 三方 md5 逐字节一致：`functions.php 13582d32…`（340179B）／`style.css a9a6fada…`（342067B）／`inc/formula-admin.php 62eb11a4…`
+- **dev**：`git pull --ff-only`（→ `82afc8c`）后，页面已输出 `style.css?ver=2.10.89`，该 URL 回 342067B / md5 一致 / 含规则
+- **生产边缘（决定性）**：带浏览器 UA 取生产配方页 ⇒ HTML 已输出 `?ver=2.10.89`；
+  取该 CSS ⇒ `cf-cache-status: MISS`、`last-modified: 09-30 11:38`、342067B、md5 `a9a6fada…`、含 `nth-child(7)` 规则
+  ⇒ **边缘与浏览器都换到新 URL 了，问题关闭**
+
+**bump 后回归**：`h18c_gate --source` 24/24；`--live` dev 27/27、生产 27/27；`h13_gate --live` **12/12**（版本断言已同步）；
+`h18_gate --live` 8/8；`h14_gate --live` 25/1（唯一红＝既有 row-major 负对照基线）⇒ **红集合未增**。
+`h18c_geometry.js` 复跑 **32/32**（21 条记录仍 4 格 / 12px / 332px；served CSS md5 `a9a6fada…`）。
+
+**顺带修掉一个自伤**：`h18c_geometry.js` 里的版本断言原本写作正则字面量 `/\?ver=2\.10\.88/`，
+字符串里并不含 `2.10.88` 这个子串（而是 `2\.10\.88`）⇒ 我按 `grep "2.10.88"` 做的 bump 扫描**漏掉了它**，
+第一次复跑几何验收因此在「版本」一条上红。已改为普通常量 `const VERSION = '2.10.89'` + `href.includes('?ver=' + VERSION)`，
+今后 bump 能被普通 grep 命中。（扫描版本字面量的正确模式：`grep -rnE "2\\\\?\.?10\\\\?\.?8[0-9]"`。）
+
+> 版本号变更只改了 `style.css` 第 5 行的一个数字，**CSS 规则与字节数（342067）不变** ⇒ 21 条记录的几何不受影响。
+> ⚠️ `docs/h18c-geometry-evidence.json` 里的 `sheetBytes` **不是字节数**，是 JS 字符串 `.length`（UTF-16 码元，341375）；
+> 真实字节数 342067 以部署 md5/`wc -c` 为准（已在脚本里加注说明）。
+
 ## 4. 不新增红（兄弟门复核）
 
 H18c 之后对 dev 逐门复跑 `--live`，红集合与 H18 收尾记录**逐条相同**：
@@ -208,11 +249,10 @@ H18c 之后对 dev 逐门复跑 `--live`，红集合与 H18 收尾记录**逐条
 
 ## 7. 遗留 / 下一步
 
-- ⚠️ **【优先】CSS 的第八格规则尚未真正到达访客**（§3 ⑤-b）：源站已对，CF 边缘 HIT 旧字节、浏览器因
-  `max-age=31536000, immutable` 一年不回源。**唯一同时覆盖两层的办法是 bump 前台版本**（`2.10.88 → 2.10.89`）。
-  若选此路，需要同步：主题 3 处（`style.css` header、`functions.php`、`inc/formula-admin.php`）+ 工具门 4–5 处
-  （`h13_gate.py` 5 处、`h18c_gate.py` 2 处、`h18_gate.py` 1 处、`h14_gate.py` 1 处、`p2_preverify.py` 1 处 —— 后两者已知停旧版/过时），
-  并重跑 h18c_gate 与 h18_gate（门的「前台版本」断言会红 by design，需同步）。**影响当天为零**（无 7 格记录），故不紧急。
+- ⚠️ **【已完成】CSS 的第八格规则未到达访客**（§3 ⑤-b / ⑤-c）：源站已对而 CF 边缘 HIT 旧字节、浏览器因
+  `max-age=31536000, immutable` 一年不回源 ⇒ 已 **bump 前台版本到 `2.10.89`**（8 处：主题 3 + 工具门 5），
+  生产显式部署 + 边缘实测拉到新字节。**问题关闭**。（教训已入 `MEMORY.md`：改了 CSS/JS 必须 bump；验收必须走 HTTP 看
+  `last-modified`/`content-length`/`cf-cache-status`，不能只看磁盘 md5。）
 - **生产 21 条记录的三个 H18 槽仍大量为空**；运营已于 **2026-09-30 18:38** 开始填图 ——
   生产 158 现有 `sf_formula_frame2_id = 316`、`frame3_id = 321`、`frame4_id = 328`、`gallery_ids = 314`、
   `_thumbnail_id = 404`、有视频，渲染 6 帧（1 主图 + 2 自传 + VIDEO + 2 车间残留）；172 liquid-joint-support 也已有槽位。
@@ -231,6 +271,7 @@ H18c 之后对 dev 逐门复跑 `--live`，红集合与 H18 收尾记录**逐条
 | 类型 | 路径 |
 |---|---|
 | 实现 | `sinofresh-theme/functions.php`（双上限 + 两处 docblock）、`sinofresh-theme/style.css`（`:has()` gap 8px） |
+| 缓存跟进 | 同上两文件 + `sinofresh-theme/inc/formula-admin.php`（版本 → **2.10.89**）；门 `h13/h14/h18/h18c_gate.py` + `p2_preverify.py` 常量同步 |
 | 门 | `tools/h18c_gate.py`（`--source` 24 / `--live` 27；环境变量 `H18C_WP_ROOT` / `H18C_THEME_DIR` 可指向生产） |
 | 几何验收 | `tools/h18c_geometry.js`（21 条零漂移 + 四档七格 + 375），证据 `docs/h18c-geometry-evidence.json` |
 | 真数据验收 | `tools/h18c_real7_accept.js`（158 七张 + 视频；快照/改/复原/复核） |
