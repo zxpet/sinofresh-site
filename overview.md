@@ -1,3 +1,74 @@
+# H19 执行 — Gallery images 只能选一张（**已上线生产，6 项验收全绿 + 双向负对照**）
+
+> 2026-09-30 ｜ **执行报告：`docs/h19-fix-execution-report-2026-09-30.md`** ｜ 截图 `docs/h19-shots/`（3 张）
+> 提交 `12adbdf`（修复＋门）→ 本次提交（报告/工具/概览）｜ 生产回滚备份 `/root/_h19_rollback_20260930-203638/`
+
+## 一句话
+
+媒体选择器向 `wp.media` 请求的是 `multiple: true`。在 WordPress 7.1.2 里
+**`true` 的语义是「必须按住 Shift 或 Cmd 才能多选」**，普通单击的 method 被归一成 `'reset'`
+⇒ 每次点第二张就把整个选择**替换**掉。**要累加，唯一正确的值是字符串 `'add'`**。
+改一行取值 + 后台包版本 `1.1.0 → 1.2.0`（不换号＝已取过旧文件的后台浏览器带着坏文件用满一年）。
+**保存分支与前台读取本来就是对的，没动。**
+
+## 根因（读核心代码，不猜）
+
+| 位置（WP 7.1.2） | 事实 |
+|---|---|
+| `media-views.js:1358` `Library.initialize` | 传进来的 `multiple` **被原样交给** `new wp.media.model.Selection(...)` |
+| `media-views.js:3121` `Attachment#toggleSelection` | `method = _.isUndefined(method) ? selection.multiple : method` → 非 `'add'` 的真值统一归一成 `'reset'` |
+| `media-views.js:3098-3104` | 缩略图**普通单击不带 method**；只有 `shiftKey`→`'between'`、`ctrlKey/metaKey`→`'toggle'` |
+| `media-views.js:26-28`（文档原话） | `true` = "requires Shift or Cmd/Ctrl"；`'add'` = "allows selecting multiple items by clicking thumbnails" |
+
+`multiple: true` **确实**打开了多选能力（Shift/Cmd 可用）⇒ 代码形状和肉眼都像"设了多选"，
+只有把核心的 method 分流读出来才看得出单击走的是 `reset`。
+
+**H18 的门为什么没拦住**：`h18_gate.py` 只有一条 `"multiple: false" in js`，
+被 H18 自己新增的**单图槽**（`singleFrameFor`）单独满足了 ⇒ 图集帧的取值从未被断言。
+本批补 **6b 段**：逐调用点锚定完整字面量 `"title: 'Choose images', multiple: 'add'"`
+＋ 反面断言 `"multiple: true" not in js` ＋ 两种帧各一。
+
+## 改动清单
+
+| 文件 | 前 → 后 md5 | 内容 |
+|---|---|---|
+| `assets/admin/sf-mb-tables.js` | `506cb28c…`(5648B) → `ab1b7b15…`(6481B) | `multiple: true` → `'add'`；头部 docblock 写清「为什么必须是 `'add'`」，防后人"整理"回去 |
+| `inc/formula-admin.php` | `62eb11a4…` → `99b8fcdc…` | 后台包 enqueue `1.1.0` → `1.2.0`＋缓存注释 |
+| `functions.php` | `13582d32…` | **未动**（读取段本来就逐 id 全读） |
+| `tools/h18_gate.py` | — | 补 6b 段 ＋ `ADMIN_JS_VER → 1.2.0` |
+| `tools/h18c_gate.py` | — | `ADMIN_JS_VER → 1.2.0` ＋ docstring 记因果 |
+| `tools/h19_gate.py`（新） | — | source 15 条 / live 18 条 |
+| `tools/h19_admin_e2e.js`（新） | — | 真实后台浏览器 E2E 22 条 |
+| `tools/h19_e2e.php`（新） | — | E2E 脚手架（签发 cookie ＋ 一次性记录 / 拆除） |
+
+**前台版本不 bump**（未改前台 CSS/JS；`style.css` 仍 `2.10.89`）。
+
+## 验收（6 项）
+
+| # | 标准 | 结果 |
+|---|------|------|
+| ① | 门 source 半场 | ✅ `h19_gate.py --source` **15/15** |
+| ② | 门 live（dev） | ✅ **18/18**（HTTP 取真实下发字节比 md5 ＋ 真实保存处理器跑 5-id CSV ＋ 读取段注入对照 ＋ postmeta 指纹前后相等自证零写） |
+| ③ | 门 live（**生产**） | ✅ **18/18** |
+| ④ | 浏览器 E2E（dev 真实后台） | ✅ **22/22**，核心两条：**4 次普通单击 → 选中 1/2/3/4 张**（旧代码恒为 1）、隐藏域持有全部 4 个 id、保存重载后回读全部、前台全部渲染 |
+| ⑤ | 显式部署生产 | ✅ 备份 → `php -l` → 原子 `install`+`mv` → 三方 md5 一致、`apache:apache 644`、无残留 |
+| ⑥ | 缓存层（走 HTTP） | ✅ 边缘 `cf-cache-status: MISS`、6481 B、md5 一致、含 `'add'`、**无** `true`；生产后台页实测请求 `?ver=1.2.0` |
+
+## 负对照（两组，证明断言真能抓住这个 bug）
+
+- **代码侧**：`git worktree` 到修复前 `4ebaec8` 跑 `--source` ⇒ **9 过 / 6 红**，6 条红**全部**落在描述修复的条目上，9 条「本批不该改」的保持绿。
+- **浏览器侧**：把修复前 JS 装回 dev（**版本号不变、URL 相同**）跑 E2E ⇒ **17 过 / 5 红**，`A3 hasTrue=true`、`B2/B3/B4` 全部 `selected=1`（复现症状）、`C2` 只剩 1 个 id；还原后复跑回 **22/22**。
+
+## 实测所得「已知行为遗留」
+
+**重开选择器预选数 = 0 / 4** ⇒ 该按钮是**替换整套选择**而非增删：
+已有 4 张时只补选 1 张 → 存成 1 张。**非本批回归**（H19 前同样），
+修预选时取值要换 `'toggle'`（否则预选进来的图点不掉）。已记入待办⑨。
+
+**不新增红**：h9=4／h10=1／h11=4／h12=4／h14=1（与各自汇总行一致）；h13 12/12、h18 8/8、h18c 27/27、h19 18/18 全绿。
+
+---
+
 # H18c 执行 — 图集照片帧上限 6→7（＋视频＝8 帧）＋ 竖列第七格（**已上线生产，五条验收全绿**）
 
 > 2026-09-30 ｜ 扫描报告：`docs/scan-gallery-rail-7th-thumb-2026-09-30.md` ｜ **执行报告：`docs/h18c-fix-execution-report-2026-09-30.md`**

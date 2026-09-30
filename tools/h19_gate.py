@@ -307,6 +307,10 @@ def live_gate():
     basic = ("-u '" + BASIC + "' ") if BASIC else ""
     url = ("https://127.0.0.1/wp-content/themes/sinofresh-theme"
            "/assets/admin/sf-mb-tables.js?ver=" + ADMIN_JS_VER)
+    q2 = "'"
+    admin_file = THEME_DIR + "/inc/formula-admin.php"
+    # the enqueue line, quotes included, as a fixed string
+    enq_pat = "sf-mb-tables.js" + q2 + ", array(), " + q2 + ADMIN_JS_VER + q2
 
     shell = (
         "cd " + WP_ROOT + "\n"
@@ -321,8 +325,10 @@ def live_gate():
         'echo "H19_SERVED_TRUE=$(grep -c "multiple: true" /tmp/h19-mb.js)"\n'
         'echo "H19_HDR=$(curl -sk ' + basic + '-I -H "Host: ' + SITE + '" "'
         + url + '" | grep -i cache-control | tr -d "\\r")"\n'
-        "echo \"H19_ENQUEUE=$(grep -c \\\"'/assets/admin/sf-mb-tables.js', "
-        "array(), '" + ADMIN_JS_VER + "'\\\" " + THEME_DIR + "/inc/formula-admin.php)\"\n"
+        # -F with the literal (quotes and all). A BRE spelling of the same
+        # string does not match here, and the literal is what is asserted.
+        'echo "H19_ENQUEUE=$(grep -cF "' + enq_pat + '" ' + admin_file + ')"\n'
+        'echo "H19_120=$(grep -cF "' + ADMIN_JS_VER + q2 + '" ' + admin_file + ')"\n'
         "echo \"H19_FILE_MD5=$(md5sum " + THEME_DIR
         + "/assets/admin/sf-mb-tables.js | cut -d' ' -f1)\"\n"
         "cat > /tmp/h19-eval.php <<'PHP'\n" + LIVE_PHP + "\nPHP\n"
