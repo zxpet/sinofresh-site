@@ -1853,6 +1853,41 @@ function sinofresh_formula_gallery_slots($form, $post_id = 0) {
 	   instead — the first cut of this — would have dropped the video, since
 	   it would have been the item at the tail. */
 	if ($post_id > 0) {
+		/* Batch H17 — the featured image takes over frame 1, the "main photo".
+
+		   The admin form has always sent the editor to the Featured Image
+		   panel for the main photo (inc/formula-admin.php: "主图不用这里设——
+		   用编辑器右侧的特色图片面板"), and sf_formula_missing_required() counts a
+		   missing thumbnail as a gap — but nothing on the front end ever read
+		   it. Frame 1 was the dosage still from
+		   sinofresh_formula_card_image(), a file keyed to the FORM, so an
+		   editor who set a featured image watched the gallery ignore it.
+		   That is the gap this closes.
+
+		   Byte-compatible when unused: with no thumbnail the block is
+		   skipped and $slots is the very same array as before, so every
+		   record that has filled nothing renders identically (all 21 today
+		   — asserted by the H17 gate). A thumbnail that exists but has no
+		   'large' rendition (attachment deleted, exotic mime) also falls
+		   through instead of blanking frame 1. */
+		$thumb_id = (int) get_post_thumbnail_id($post_id);
+		if ($thumb_id > 0) {
+			$thumb = wp_get_attachment_image_src($thumb_id, 'large');
+			if ($thumb) {
+				$thumb_alt = trim((string) get_post_meta($thumb_id, '_wp_attachment_image_alt', true));
+				$slots[0] = array(
+					'file'   => '',
+					'url'    => (string) $thumb[0],
+					/* Real pixels of the chosen size, never the source file's:
+					   a declared size that disagrees with the URL lets the
+					   aspect ratio flip once the image lands. */
+					'width'  => (int) $thumb[1],
+					'height' => (int) $thumb[2],
+					'alt'    => $thumb_alt !== '' ? $thumb_alt : sinofresh_formula_product_alt($form),
+				);
+			}
+		}
+
 		$own = array();
 		foreach (explode(',', (string) get_post_meta($post_id, 'sf_formula_gallery_ids', true)) as $id) {
 			$id = absint($id);
