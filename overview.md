@@ -1,6 +1,24 @@
-# H15 执行结果 — Shape/Container/FAQ 保存失效已修复上线
+# H16 排查 — `[SF_FACTS_MINI]` 裸文本 Bug（已扫清，未修，等确认）
 
-> 2026-09-28 ｜ 状态：**4/4 验收通过，生产已上线** ｜ 详报：`docs/h15-fix-execution-report-2026-09-28.md`
+> 2026-09-30 ｜ 详报：`docs/h16-sf-facts-mini-marker-report-2026-09-30.md`
+
+## 结论（三层）
+
+1. **前台也坏了，不只后台**：生产 Soft Chews 页参数带（MOQ/Lead time/Certifications/Packaging）整条缺失，原位置吐裸文本 `[SF_FACTS_MINI soft-chews]`；其余区块全在。其余 7 个剂型页全部健康，dev 8 页全健康。
+2. **根因**：今天 13:38 在 Site Editor 保存 `page-soft-chews` 模板 → 产生 DB 副本（ID 396）→ 副本里该块的 `<!-- wp:html -->` 定界符被剥掉 → 块从 `core/html` 降级 freeform → H10 过滤器（只认 `core/html`）失配。同型损伤 2/2（header 09-28 也是）。已用 parse_blocks + do_blocks 实渲 + Gutenberg 序列化器源码 + 真实 JS parse→serialize 往返（不剥）四重定证。
+3. **编辑器里看到裸文本＝设计如此**：HTML 块永远显示源码，`render_block` 是服务端 PHP 过滤器，编辑器不跑。页面编辑器（Pages→Soft Chews）实际是空的（post_content len=0）。
+
+## ⚠️ 修法上的关键约束
+
+生产现有 4 个模板 DB 副本，其中 **front-page（+618 字可见文本，`[sf_home_about]` 已被实际文案替代）和 page-soft-chews（相关剂型卡片文案已重写）含用户今天的真实编辑** —— 「删 DB 副本恢复文件权威」会丢工作，不可单用。
+
+## 推荐修法（未执行）
+
+**方案 B：过滤器加固（~3 行）** —— `functions.php:958` 从「只认 core/html」放宽为「core/html ＋ freeform」，前台立即恢复、零内容丢失、防复发。另立批次把两份编辑反向同步进主题文件（还「Site Editor 禁存模板」铁律的欠账）。
+
+---
+
+# H15 执行结果 — Shape/Container/FAQ 保存失效已修复上线
 
 ## 做了什么
 
