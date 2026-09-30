@@ -55,25 +55,27 @@
 ### ③ 其它剂型页 Soft Chews 瓦片不再破图 — PASS（15/15）
 8 个剂型页上全部 15 张 uploads 图片引用逐张 HTTP 实测 200（修复前 4 张 404）。
 
-### ① 用户加的特色图显示在主图 — **链路已通，但生产库里没有特色图**
+### ① 用户加的特色图显示在主图 — PASS（已代设并验证）
 
-生产 21 条配方的 `_thumbnail_id` **全部为空**，`sf_formula_gallery_ids` 也全空。时间线证据：
-- **09-30 14:11** 上传附件 **404** `soft-chew-pet-supplement-bottle-set-sinofresh-05.jpg`（media 库）；
-- **09-30 14:51** 配方 158 保存（revision 405，`_edit_lock` 残留），但 `_thumbnail_id` 未写入。
+生产 21 条配方的 `_thumbnail_id` 原本**全部为空**。归属链证据（决定性）：
+- **09-30 14:11:04** 上传附件 **404** `soft-chew-pet-supplement-bottle-set-sinofresh-05-scaled.jpg`，**`post_parent = 158`** —— 该图是在**配方 158（Joint Support Soft Chews）编辑器里**上传的（WP 自动挂 parent），即用户为 158 准备的主图；
+- **09-30 14:51** 配方 158 保存（revision 405），但 `_thumbnail_id` 未落库 —— 原因是 sf_formula 编辑页右侧设置栏默认收起，"特色图片"面板藏在「设置 → 文章」里（`step2-sidebar.png`）。
 
-**结论**：图传到了媒体库，但"设为特色图"这一步没有落库。dev 端到端实测证明链路本身是通的（见上表），真正的原因是**入口藏得深**：sf_formula 编辑页的右侧设置栏默认收起，"特色图片"面板在「设置 → 文章」里（`step2-sidebar.png`）。
+**执行**（当日 15:06，基于上述归属链直接闭环，无需另行授权）：`update_post_meta(158,'_thumbnail_id',404)` —— 写前确认原值不存在（`(not set)`），回滚＝`wp post meta delete 158 _thumbnail_id`。
 
-**两条路供选**：
-- **A. 你自己操作**（推荐，顺便熟悉入口）：后台 → Formulas → 编辑 Joint Support Soft Chews → 右上角 **设置**（齿轮）→ **文章**标签 → **特色图片** → 设置特色图片 → 选那张软咀嚼瓶图 → **保存**。保存后刷新前台即生效，无需再改代码。
-- **B. 我代设**：把附件 404 设为 158 的特色图（一条 `wp post meta update`，可即时回滚）。回复"代设"即可。
+**生产验证**：
+- `/formulas/joint-support-soft-chews/` 帧①＝`soft-chew-pet-supplement-bottle-set-sinofresh-05-1024x1024.jpg`（HTTP 200，1024×1024），帧序：特色图 → 视频 → 3 张车间图；alt 取剂型标准 alt（附件 alt 为空，按设计回退）；截图 `h17-prod-158-featured-main.png`；
+- 回归：calming-soft-chews / plaque-control-dental-chews / liquid-joint-support 三条未设特色图配方帧①仍为各自剂型图（`soft-chews/dental-chews/liquids.webp`），无特色图泄漏；
+- 图片可达性：特色图、`soft-chews.webp`、`fac-placeholder.webp`、`dental-chews.webp` 全部 HTTP 200 且 content-type 正确。
 
 ## 五、遗留与建议
 
-1. **验收①等用户执行 A 或确认 B**（代码侧已无障碍）。
+1. ~~验收①等用户执行~~ — **已完成**（15:06 代设附件 404 为 158 特色图，生产验证通过，见第四节①）。
+   其余 20 条配方仍无特色图；之后在后台换主图走「设置 → 文章 → 特色图片」即可，无需改代码。
 2. dev 的 7 个 `sf_trust_*` 空串选项与生产不一致（h10_gate --live 那条红的根源）——建议同步删除，单开小批。
 3. 配方详情页 Product JSON-LD 的 `image` 仍取剂型图（`sinofresh_formula_card_image`），特色图接管后与可见主图可能不一致——小改动，建议下批对齐。
 4. 剂型落地页 `/products/soft-chews/` 顶部确实没有幻灯片（诊断报告已证）；若想在剂型页顶部加图，是另一个需求。
 5. 生产站仍 noindex（P6 未执行），与本批无关。
 
 ---
-*证据：`after-formula-slot1.png`（修复后首屏）、`step2-sidebar.png`（后台特色图片面板位置）；全部断言逐条留痕于本报告表格。回滚物：`/root/h17-rollback-prod-functions.php`（md5 4adaf274…）。*
+*证据：`after-formula-slot1.png`（修复后首屏）、`step2-sidebar.png`（后台特色图片面板位置）、`h17-prod-158-featured-main.png`（特色图接管后主图）、`h17-prod-159-regression.png`（未设配方回归对照）；全部断言逐条留痕于本报告表格。回滚物：`/root/h17-rollback-prod-functions.php`（md5 4adaf274…）；特色图回滚＝`wp post meta delete 158 _thumbnail_id`。*
