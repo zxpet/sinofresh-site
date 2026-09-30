@@ -803,10 +803,15 @@ add_action('admin_enqueue_scripts', function ($hook) {
 	}
 	$dir = get_template_directory_uri();
 	wp_enqueue_style('sf-mb', $dir . '/assets/admin/sf-mb.css', array(), '1.1.0');
-	/* 1.1.0 — batch H18 added the single-image slot control (Frame 2/3/4).
-	   Admin-only asset; the front-end enqueue and style.css carry their own
-	   version (2.10.89 after the H18c cache follow-up). */
-	wp_enqueue_script('sf-mb-tables', $dir . '/assets/admin/sf-mb-tables.js', array(), '1.1.0', true);
+	/* 1.2.0 — batch H19 fixed the gallery picker's `multiple` value
+	   (true -> 'add'; `true` made every click after the first replace the
+	   pick). 1.1.0 was batch H18, which added the single-image slot control
+	   (Frame 2/3/4). Admin-only asset; the front-end enqueue and style.css
+	   carry their own version (2.10.89 after the H18c cache follow-up).
+	   The admin asset is served with `Cache-Control: max-age=31536000,
+	   immutable` like the rest, so this number has to move whenever the file
+	   does or browsers keep the old one for a year. */
+	wp_enqueue_script('sf-mb-tables', $dir . '/assets/admin/sf-mb-tables.js', array(), '1.2.0', true);
 	if ($is_formula) {
 		wp_enqueue_script('sf-mb-precheck', $dir . '/assets/admin/sf-mb-precheck.js', array(), '1.0.1', true);
 	}

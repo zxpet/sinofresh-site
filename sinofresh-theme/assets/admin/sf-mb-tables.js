@@ -7,9 +7,17 @@
  *      arrays (name="key[col][]") stay intact, and a moved row keeps its
  *      q/a or col/value pairing because the inputs travel with the <tr>;
  *   2. the gallery field: the WordPress media frame (wp.media, core) fills
- *      the hidden IDs input and the preview strip (multiple selection);
+ *      the hidden IDs input and the preview strip. Its `multiple` option is
+ *      the string 'add' — NOT `true`. In core a bare click resolves its
+ *      method to `selection.multiple`, and Library's plain-click path turns
+ *      any truthy value other than 'add' into `reset`, i.e. `true` makes the
+ *      choosing REPLACE the previous pick, while Shift/Cmd stays the only way
+ *      to accumulate. 'add' is the documented value (wp.media.model.Selection)
+ *      and is what core's own CollectionAdd state uses, so a click accumulates.
+ *      Fixed in batch H19; the picker had shipped with `true` since H1.
  *   3. batch H18 — the single-image slot control (Frame 2/3/4), one photo
- *      per slot, same media frame with `multiple: false`.
+ *      per slot, same media frame with `multiple: false` (the single-value
+ *      sibling: a plain click there is meant to replace, and it does).
  *
  * Loaded on sf_formula edit screens and the Site Settings subpages only.
  */
@@ -65,7 +73,10 @@
 	/* --- gallery field ------------------------------------------------------ */
 	function frameFor(onSelect) {
 		if (!window.wp || !window.wp.media) { return null; }
-		var frame = window.wp.media({ title: 'Choose images', multiple: true, library: { type: 'image' } });
+		/* 'add', not true — see the header note. `true` reads like "allow
+		   multiple" but core requires Shift/Cmd for that; a plain click
+		   resets the selection to the one you just clicked. */
+		var frame = window.wp.media({ title: 'Choose images', multiple: 'add', library: { type: 'image' } });
 		frame.on('select', function () {
 			onSelect(frame.state().get('selection').map(function (a) {
 				var att = a.toJSON();

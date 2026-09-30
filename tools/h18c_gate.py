@@ -15,9 +15,11 @@ What H18c changed (2026-09-30):
      to records that actually carry a seventh tile, so the 21 records on the
      site today (four tiles each) keep the pitch they have always had.
 
-By design NOT changed: the admin bundle stays 1.1.0 and no tile size moved.
---source asserts that too, because "unchanged" is exactly what this batch
-promised.
+By design NOT changed by H18c: the admin bundle stayed 1.1.0 and no tile size
+moved. (It moved to 1.2.0 in the later batch H19, which fixed the gallery
+picker's `multiple` value; that number is kept current here because --source
+asserts it.) --source asserts the rest of that "unchanged" promise too,
+because "unchanged" is exactly what this batch promised.
 
 One thing DID move after deployment: the front-end version, 2.10.88 -> 2.10.89.
 The batch shipped without bumping it, which was wrong — style.css had changed,
@@ -54,7 +56,7 @@ SERVER = "root@65.49.215.152"
 WP_ROOT = os.environ.get("H18C_WP_ROOT", "/var/www/dev.zxpet.com/public")
 THEME_DIR = os.environ.get("H18C_THEME_DIR", "/var/www/dev.zxpet.com/site-repo/sinofresh-theme")
 VERSION = "2.10.89"
-ADMIN_JS_VER = "1.1.0"
+ADMIN_JS_VER = "1.2.0"      # 1.1.0 under H18c; H19 fixed the picker, not H18c
 
 PHOTO_CAP = 7
 FRAME_CAP = 8

@@ -51,7 +51,7 @@ CSS = THEME / "style.css"
 SERVER = "root@65.49.215.152"
 WP_ROOT = "/var/www/dev.zxpet.com/public"
 VERSION = "2.10.89"        # H18 did not bump the front end; the H18c cache follow-up did
-ADMIN_JS_VER = "1.1.0"     # admin asset: bumped 1.0.0 -> 1.1.0 by H18
+ADMIN_JS_VER = "1.2.0"     # admin asset: 1.0.0 -> 1.1.0 (H18) -> 1.2.0 (H19)
 
 # the four dosage-level frames a soft-chews record falls back to, in order
 BASE_FRAMES = ["soft-chews.webp", "fac-placeholder.webp",
@@ -173,6 +173,24 @@ def source_gate():
           and "closest('.sf-mb__image-clear')" in js)
     check("H18: JS header advertises the third job",
           "Three jobs" in js and "batch H18" in js)
+
+    # --- 6b. the multi-select gallery frame (blind spot H19 closed) --------
+    # This gate used to assert only that `multiple: false` existed SOMEWHERE,
+    # which the H18 slot control satisfied on its own — so the gallery frame's
+    # own value was never checked and shipped as `true` (which core treats as
+    # "Shift/Cmd required", i.e. a plain click replaces the pick). Assert the
+    # value itself now, per frame.
+    check("H18: the gallery frame asks for accumulating multi-select ('add')",
+          "title: 'Choose images', multiple: 'add'" in js,
+          "the gallery frame's multiple value is not 'add'")
+    check("H18: no frame asks for bare `multiple: true`",
+          "multiple: true" not in js,
+          "a bare `true` is back — core reads that as Shift/Cmd-only multi-select")
+    check("H18: exactly two multi-select frames are declared (one gallery-only)",
+          len(re.findall(r"multiple: 'add'", js)) == 1
+          and len(re.findall(r"multiple: false", js)) == 1,
+          f"add={len(re.findall(chr(39) + 'add' + chr(39), js))} "
+          f"false={len(re.findall('multiple: false', js))}")
 
     # --- 7. no stray placeholders ------------------------------------------
     for label, text in (("functions", func), ("admin", admin), ("js", js)):
