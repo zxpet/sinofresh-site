@@ -8872,6 +8872,22 @@ body.sf-config-lock { overflow: hidden; }
 		flex-direction: column;
 		overflow: visible;
 	}
+	/* Batch H18c — a seventh tile only fits if the rail tightens. Seven 72px
+	   tiles on the base 12px gap come to 584px against a 607px main photo, so
+	   at 1440 it is inside by 23px but at 1237 it is already 82px over; at 8px
+	   the same seven come to 560px and sit inside the photo from ~1198px up.
+	   Measured 2026-09-30, ten viewports, tools/h18c_gallery_capacity_probe.js.
+
+	   Scoped with :has() to records that actually carry a seventh tile, so the
+	   four-tile rails every record on the site ships today keep the 12px
+	   rhythm they have always had — the same "nothing moves until ops fills
+	   it" contract batch H18 kept. Where :has() is unsupported the selector
+	   simply does not match and the rail stays at 12px: a few pixels taller,
+	   never wrong. (This rule needs no html.no-has fallback for that reason —
+	   it degrades to today's layout by itself.) */
+	.sf-fdetail2__media .sf-gallery__thumbs:has(.sf-gallery__thumb:nth-child(7)) {
+		gap: 8px;
+	}
 	.sf-fdetail2__media .sf-gallery__thumb {
 		flex-basis: 72px;
 		width: 72px;

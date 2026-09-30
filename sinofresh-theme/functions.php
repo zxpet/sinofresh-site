@@ -1770,9 +1770,10 @@ function sinofresh_formula_video_id($url) {
  * Four dosage-level frames are the backbone and always in this order: the
  * form's own product photo, then the facility band. Since batch H2a a record
  * can add its OWN photos (sf_formula_gallery_ids) and one video
- * (sf_formula_video_url); the six-frame cap is applied strongest-first, so
- * the ranking is product photo > own photos > video > facility frames — see
- * the block inside.
+ * (sf_formula_video_url); the cap — seven photo frames, plus the video on top
+ * when there is one, as set by batch H18c — is applied strongest-first, so the
+ * ranking is product photo > own photos > video > facility frames — see the
+ * block inside.
  *
  * Since batch H18 the three facility positions (frames 2, 3, 4) are also
  * overridable per record: sf_formula_frame2_id / _frame3_id / _frame4_id each
@@ -1867,13 +1868,31 @@ function sinofresh_formula_gallery_slots($form, $post_id = 0) {
 	   frames it had before — which is every one of the 21 today, both fields
 	   shipping empty, so this list does not move a byte until ops fills them.
 
-	   The cap is six frames. The strip is a strip, not a deck: past six the
-	   thumbnails stop being scannable at the 72px column the detail band
-	   gives them. Because the list is built strongest-first and then trimmed
-	   from the tail, a record with several own photos AND a video keeps the
-	   video and drops facility frames. Appending the video last and slicing
-	   instead — the first cut of this — would have dropped the video, since
-	   it would have been the item at the tail. */
+	   Batch H18c set the ceiling by measurement rather than taste. The rail is
+	   a 72px column and the main photo is a 1:1 square beside it, so a photo
+	   costs 72px of rail against 607px of photo at 1440. Seven 72px tiles on
+	   the rail's 8px gap come to 560px and sit inside the photo; eight come to
+	   640px and overhang. Measured 2026-09-30 over ten viewports
+	   (tools/h18c_gallery_capacity_probe.js): the rail holds seven tiles from
+	   ~1198px up, and seven is the most ANY desktop width can hold. Narrower
+	   than ~1198px the rail runs a little past the photo's bottom edge — the
+	   grid row grows, nothing is clipped, nothing overlaps, no scrollbar
+	   appears — and that is what lets the ceiling be permissive rather than
+	   exact.
+
+	   So the cap is SEVEN PHOTO FRAMES, plus the video when there is one. The
+	   video is not a thumbnail — it gets its own tab and no tile in the rail —
+	   so it must not spend a photo slot. Capping FRAMES alone, as the first
+	   cut of this did, let a record with seven own photos and a video merge to
+	   head + 7 own + video + 3 facility, whose first eight entries are eight
+	   PHOTOS with the video cut off the end: exactly the eight-tile rail the
+	   geometry cannot hold.
+
+	   Because the list is built strongest-first and then trimmed from the
+	   tail, a record with several own photos AND a video keeps the video and
+	   drops facility frames. Appending the video last and slicing instead —
+	   the first cut of this — would have dropped the video, since it would
+	   have been the item at the tail. */
 	if ($post_id > 0) {
 		/* Batch H17 — the featured image takes over frame 1, the "main photo".
 
@@ -2006,10 +2025,37 @@ function sinofresh_formula_gallery_slots($form, $post_id = 0) {
 
 		if ($own || $video) {
 			/* Rebuild strongest-first — backbone photo, own photos, video,
-			   then the facility band — and trim the tail. */
-			$head     = array_slice($slots, 0, 1);
-			$facility = array_slice($slots, 1);
-			$slots    = array_slice(array_merge($head, $own, $video, $facility), 0, 6);
+			   then the facility band — and trim the tail.
+
+			   Two ceilings, not one (batch H18c): at most SEVEN PHOTO FRAMES,
+			   and the video sits on top of those when a record has one. A
+			   plain array_slice(..., 0, 8) would NOT do the job: a record
+			   with seven own photos and a video merges to
+			   head + 7 own + video + 3 facility, and the first eight of that
+			   is eight photos with the video cut off the end — the one shape
+			   the rail cannot hold. The video is never a photo, so it is kept
+			   whatever the photo count has already reached; the PHOTO count
+			   is the thing that gets cut, and cutting it from the tail still
+			   drops facility frames before own photos. */
+			$photo_cap = 7;
+			$frame_cap = 8;   /* the seven photos above, plus the video */
+			$head      = array_slice($slots, 0, 1);
+			$facility  = array_slice($slots, 1);
+			$kept      = array();
+			$photos    = 0;
+			foreach (array_merge($head, $own, $video, $facility) as $candidate) {
+				if (empty($candidate['video_id'])) {
+					if ($photos >= $photo_cap) {
+						continue;
+					}
+					$photos++;
+				}
+				$kept[] = $candidate;
+				if (count($kept) >= $frame_cap) {
+					break;
+				}
+			}
+			$slots = $kept;
 		}
 	}
 
