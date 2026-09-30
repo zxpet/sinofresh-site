@@ -953,10 +953,26 @@ function sinofresh_form_facts_mini_html($form) {
  * The templates' marker swap. The eight page-<form>.html files carry
  * `[SF_FACTS_MINI <slug>]` inside a wp:html block; block templates render
  * through do_blocks (no the_content filters), so render_block is the hook
- * that sees the marker. Anything else passes through untouched.
+ * that sees the marker.
+ *
+ * Two block shapes reach this filter with the marker as their whole content:
+ *
+ *   core/html    the shape in the theme files
+ *   freeform     blockName NULL — what a wp:html wrapper degrades to when
+ *                the Site Editor saves a template: Gutenberg's serializer
+ *                writes no delimiters for a top-level freeform block, so the
+ *                `<!-- wp:html -->` pair is dropped and the downgrade is
+ *                frozen into the DB copy. Measured 2026-09-30 (H16): the
+ *                soft-chews template copy and the header part copy both lost
+ *                their top-level core/html block this way.
+ *
+ * Both are accepted; every other block name still passes through untouched.
+ * The replacement itself stays gated on the trimmed content being EXACTLY the
+ * marker, so a freeform run that merely mentions the marker keeps its text.
  */
 add_filter('render_block', function ($block_content, $block) {
-	if (($block['blockName'] ?? '') !== 'core/html') {
+	$name = $block['blockName'] ?? null;
+	if ($name !== 'core/html' && $name !== null && $name !== '') {
 		return $block_content;
 	}
 	if (preg_match('/^\[SF_FACTS_MINI ([a-z0-9-]+)\]$/', trim((string) $block_content), $m)) {
