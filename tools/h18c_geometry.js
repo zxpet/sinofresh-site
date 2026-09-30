@@ -34,11 +34,15 @@ const { execSync } = require('child_process');
 const fs = require('fs');
 const crypto = require('crypto');
 
-const DEV = 'https://dev.zxpet.com';
-const USER = 'sfdev';
-const PASS = 'VkEws18Kl5V1qp3TpZ6s';
+/* Overridable so the same assertions can be pointed at production:
+     H18C_BASE=https://www.zxpet.com H18C_USER= H18C_PASS= \
+     H18C_WP_ROOT=/var/www/zxpet-v2 node tools/h18c_geometry.js out.json
+   The defaults are dev. */
+const DEV = process.env.H18C_BASE || 'https://dev.zxpet.com';
+const USER = process.env.H18C_USER !== undefined ? process.env.H18C_USER : 'sfdev';
+const PASS = process.env.H18C_PASS !== undefined ? process.env.H18C_PASS : 'VkEws18Kl5V1qp3TpZ6s';
 const SSH = 'root@65.49.215.152';
-const WP_ROOT = '/var/www/dev.zxpet.com/public';
+const WP_ROOT = process.env.H18C_WP_ROOT || '/var/www/dev.zxpet.com/public';
 const UA = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36';
 const TILE = 72, GAP_SEVEN = 8, PAD = 8;      /* 4px top + 4px bottom padding */
 const SEVEN_H = 7 * TILE + 6 * GAP_SEVEN + PAD; /* 560 */
@@ -132,10 +136,11 @@ function probe(cfg) {
   const report = { widths: {}, records: {}, sheetMd5: null };
 
   const open = async (width, slug) => {
-    const ctx = await browser.newContext({
-      viewport: { width, height: 1000 }, deviceScaleFactor: 1,
-      httpCredentials: { username: USER, password: PASS }, userAgent: UA,
-    });
+    const opts = {
+      viewport: { width, height: 1000 }, deviceScaleFactor: 1, userAgent: UA,
+    };
+    if (USER) { opts.httpCredentials = { username: USER, password: PASS }; }
+    const ctx = await browser.newContext(opts);
     const page = await ctx.newPage();
     const resp = await page.goto(`${DEV}/formulas/${slug}/`, { waitUntil: 'load', timeout: 60000 });
     await page.waitForTimeout(900);
