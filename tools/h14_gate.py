@@ -56,7 +56,7 @@ NODE = "/Users/meng/.workbuddy/binaries/node/versions/22.22.2-3/bin/node"
 NODE_PATH = "/Users/meng/.workbuddy/binaries/node/workspace/node_modules"
 PICK_JS = REPO / "tools" / "h14_live_pick.js"
 
-VERSION = "2.10.88"
+VERSION = "2.10.89"
 JS_VER = "1.0.3"
 OPTIONS = ("sf_shapes", "sf_containers")
 

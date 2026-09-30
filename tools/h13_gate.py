@@ -50,10 +50,12 @@ def source_gate():
     # H14 keeps the theme's live-version pin in step with the release: bumping
     # only the theme would leave this gate's self-evidence stale, and its
     # --live mode asserts the exact version the dev server serves.
-    check("style.css Version is 2.10.88",
-          "Version: 2.10.88" in css)
-    check("functions.php main style enqueue bumped to 2.10.88",
-          "get_stylesheet_uri(), array(), '2.10.88')" in functions)
+    # 2.10.89 = the H18c cache follow-up (bumping changes the ?ver= URL, which
+    # is the only thing that gets a stale edge/browser copy to re-fetch).
+    check("style.css Version is 2.10.89",
+          "Version: 2.10.89" in css)
+    check("functions.php main style enqueue bumped to 2.10.89",
+          "get_stylesheet_uri(), array(), '2.10.89')" in functions)
     check("sf-site-settings.js enqueue ver bumped to 1.0.3",
           "/assets/admin/sf-site-settings.js', array(), '1.0.3'" in admin)
 
@@ -176,7 +178,7 @@ rm -f /tmp/h13-eval.php
             ver = line.split("=", 1)[1].strip()
         if line.startswith("RESULT"):
             result = line
-    check("dev theme version is 2.10.88", ver == "2.10.88", f"got {ver!r}")
+    check("dev theme version is 2.10.89", ver == "2.10.89", f"got {ver!r}")
     if not result:
         check("live behavioral eval produced RESULT", False, "no RESULT line")
         print(f"\n--live aborted. raw output:\n{out}")

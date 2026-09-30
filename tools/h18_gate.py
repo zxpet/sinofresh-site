@@ -50,7 +50,7 @@ CSS = THEME / "style.css"
 
 SERVER = "root@65.49.215.152"
 WP_ROOT = "/var/www/dev.zxpet.com/public"
-VERSION = "2.10.88"        # front end: deliberately NOT bumped by H18
+VERSION = "2.10.89"        # H18 did not bump the front end; the H18c cache follow-up did
 ADMIN_JS_VER = "1.1.0"     # admin asset: bumped 1.0.0 -> 1.1.0 by H18
 
 # the four dosage-level frames a soft-chews record falls back to, in order
@@ -156,10 +156,12 @@ def source_gate():
     check(f"H18: sf-mb-tables enqueued at {ADMIN_JS_VER}",
           f"'/assets/admin/sf-mb-tables.js', array(), '{ADMIN_JS_VER}'" in admin)
 
-    # --- 5. front-end version deliberately untouched ------------------------
-    check(f"H18: front-end version stays {VERSION} (style.css)",
+    # --- 5. front-end version is the current release --------------------------
+    # H18 itself left it at 2.10.88; the H18c cache follow-up bumped it to
+    # 2.10.89 (changing ?ver= is what forces a stale edge/browser copy out).
+    check(f"H18: front-end version is {VERSION} (style.css)",
           f"Version: {VERSION}" in css)
-    check(f"H18: front-end enqueue stays {VERSION}",
+    check(f"H18: front-end enqueue is {VERSION}",
           f"get_stylesheet_uri(), array(), '{VERSION}')" in func)
 
     # --- 6. admin JS picker ------------------------------------------------

@@ -15,9 +15,17 @@ What H18c changed (2026-09-30):
      to records that actually carry a seventh tile, so the 21 records on the
      site today (four tiles each) keep the pitch they have always had.
 
-By design NOT changed: the front-end version stays 2.10.88, the admin bundle
-stays 1.1.0, and no tile size moved. --source asserts that too, because
-"unchanged" is exactly what this batch promised.
+By design NOT changed: the admin bundle stays 1.1.0 and no tile size moved.
+--source asserts that too, because "unchanged" is exactly what this batch
+promised.
+
+One thing DID move after deployment: the front-end version, 2.10.88 -> 2.10.89.
+The batch shipped without bumping it, which was wrong — style.css had changed,
+and the origin serves CSS as `max-age=31536000, immutable` while the CDN keys
+on the full URL including `?ver=`. So the edge kept handing out the old bytes
+and browsers would not revalidate for a year. Changing the version is the only
+thing that reaches both layers, so the follow-up bumped it. See
+docs/h18c-fix-execution-report-2026-09-30.md §3 ⑤-b.
 
 The geometry half of the acceptance is not here: --live asserts the CAP in
 real theme code, while the rendered rail is measured by tools/h18c_geometry.js
@@ -45,7 +53,7 @@ SERVER = "root@65.49.215.152"
 #     h18c_gate.py --live
 WP_ROOT = os.environ.get("H18C_WP_ROOT", "/var/www/dev.zxpet.com/public")
 THEME_DIR = os.environ.get("H18C_THEME_DIR", "/var/www/dev.zxpet.com/site-repo/sinofresh-theme")
-VERSION = "2.10.88"
+VERSION = "2.10.89"
 ADMIN_JS_VER = "1.1.0"
 
 PHOTO_CAP = 7
@@ -162,7 +170,7 @@ def source_gate():
           re.search(r"\.sf-fdetail2__media \.sf-gallery__thumb \{[^}]*width: 72px;", css) is not None)
     check("H18c: style.css is still brace-balanced",
           css.count("{") == css.count("}"))
-    check(f"H18c: the front-end version is deliberately still {VERSION}",
+    check(f"H18c: the front-end version is {VERSION} (the cache follow-up bumped it)",
           re.search(rf"^Version:\s*{re.escape(VERSION)}\s*$", css, re.M) is not None,
           "style.css header version moved")
 

@@ -804,7 +804,8 @@ add_action('admin_enqueue_scripts', function ($hook) {
 	$dir = get_template_directory_uri();
 	wp_enqueue_style('sf-mb', $dir . '/assets/admin/sf-mb.css', array(), '1.1.0');
 	/* 1.1.0 — batch H18 added the single-image slot control (Frame 2/3/4).
-	   Admin-only asset; the front-end enqueue and style.css stay on 2.10.88. */
+	   Admin-only asset; the front-end enqueue and style.css carry their own
+	   version (2.10.89 after the H18c cache follow-up). */
 	wp_enqueue_script('sf-mb-tables', $dir . '/assets/admin/sf-mb-tables.js', array(), '1.1.0', true);
 	if ($is_formula) {
 		wp_enqueue_script('sf-mb-precheck', $dir . '/assets/admin/sf-mb-precheck.js', array(), '1.0.1', true);
