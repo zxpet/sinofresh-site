@@ -1,7 +1,7 @@
 # H18c 执行 — 图集照片帧上限 6→7（＋视频＝8 帧）＋ 竖列第七格（**已上线生产，五条验收全绿**）
 
 > 2026-09-30 ｜ 扫描报告：`docs/scan-gallery-rail-7th-thumb-2026-09-30.md` ｜ **执行报告：`docs/h18c-fix-execution-report-2026-09-30.md`**
-> 提交 `12c114d` + `838a52a`（dev 已 ff）｜ 生产回滚备份 `/root/_h18c_rollback_20260930-111053/`
+> 提交 `12c114d` → `838a52a`（本批）→ `82afc8c`（缓存跟进）→ `dae93f2`（收尾），dev 已 ff ｜ 回滚备份 `/root/_h18c_rollback_20260930-111053/`、`/root/_h18c_bump_rollback_20260930-193747/`
 
 ## 一句话
 
@@ -10,12 +10,20 @@
 单纯 `array_slice(…, 0, 8)` 是**错的**：七张自有照片 + 视频的前八项是八张照片、视频被切，
 而八张 72px = 640px > 607px 主图，正是导轨唯一装不下的形状。
 
-## 改动 3 处 / 显式不改
+## 改动 3 处 ／ 显式不改
 
 `functions.php`（双上限循环 `$photo_cap=7` + `$frame_cap=8`，视频不占照片名额）、
 `functions.php` 两处 docblock（按实测改写）、`style.css`（`:has()` gap 8px，全文件唯一一处）。
-**不改**：前台版本 2.10.88、后台 1.1.0、磁贴 72px、`formula-gallery.js`、`formula-admin.php`（门里有断言）。
-三方 md5 一致：`functions.php bde32d55…` / `style.css 36b0a46d…`。
+**不改**：后台 1.1.0、磁贴 72px、`formula-gallery.js`、`formula-admin.php`（门里有断言）。
+
+## ⚠️ 部署后新发现并已修复：CSS 根本没到达访客
+
+验收全绿之后才知道：**源站文件已更新，但 CF 边缘 HIT 旧字节**（`last-modified 09-28`、341088B、无 `:has()` 规则），
+而源站 Apache 对 `text/css` 发 `Cache-Control: max-age=31536000, immutable` ⇒ **浏览器一年不回源**。
+成因＝本批按「前台版本不 bump」执行，`?ver=2.10.88` 未变、cache key 未变。**单 URL purge 只修边缘**。
+⇒ 已 **bump 前台版本 `2.10.88 → 2.10.89`**（8 处：主题 3 + 工具门 5），显式部署生产；
+带浏览器 UA 实测边缘已输出 `?ver=2.10.89`、CSS 回 342067B/md5 `a9a6fada…`/含规则 ⇒ **关闭**。
+（教训：**改了 CSS/JS 必须 bump；验收必须走 HTTP 看 `last-modified`/`cf-cache-status`，只看磁盘 md5 会打出全绿假结论**。）
 
 ## 验收
 
@@ -26,6 +34,9 @@
 | ③ | 有视频记录设满 | ✅ dev 158 七相册 id + 视频 ⇒ `8 帧 / 7 磁贴 / 8px / 560px`，**视频幸存**，复原逐字节相同 |
 | ④ | 门断言 | ✅ `h18c_gate.py` source 24/24 ＋ live dev 27/27 ＋ live **生产** 27/27；**双向负对照** 14 / 9 FAIL |
 | ⑤ | 显式部署生产 | ✅ `php -l` → 原子 `mv` → 三方 md5 逐字节一致；`/tmp` 临时文件已清 |
+| ⑤-c | 缓存跟进（bump） | ✅ bump 后回归：h18c source 24/24、live dev/prod 各 27/27、h13 live **12/12**、h18 live 8/8、geometry **32/32**、h14 25/1（既有红）⇒ 红集合未增 |
+
+三方 md5 一致（bump 后）：`functions.php 13582d32…` ／ `style.css a9a6fada…` ／ `inc/formula-admin.php 62eb11a4…`。
 
 **不新增红**：兄弟门 `--live` 红集合与 H18 收尾逐条相同（h9=4／h10=1／h11=4／h12=4／h14=1；h13 与 h18 全绿）。
 
