@@ -1,13 +1,15 @@
 /*
  * SINO FRESH — batch H1 admin form helpers (vanilla JS, no libraries).
  *
- * Two jobs, both trivial by design:
+ * Three jobs, all trivial by design:
  *   1. repeatable tables: "+ Add row" clones the table's last <tr>, clears
  *      every input inside it and appends it — so column names and parallel
  *      arrays (name="key[col][]") stay intact, and a moved row keeps its
  *      q/a or col/value pairing because the inputs travel with the <tr>;
  *   2. the gallery field: the WordPress media frame (wp.media, core) fills
- *      the hidden IDs input and the preview strip.
+ *      the hidden IDs input and the preview strip (multiple selection);
+ *   3. batch H18 — the single-image slot control (Frame 2/3/4), one photo
+ *      per slot, same media frame with `multiple: false`.
  *
  * Loaded on sf_formula edit screens and the Site Settings subpages only.
  */
@@ -95,6 +97,47 @@
 		if (!btn) { return; }
 		var field = btn.closest('.sf-mb__field');
 		field.querySelector('.sf-mb__gallery-ids').value = '';
+		field.querySelector('.sf-mb__gallery-preview').innerHTML = '';
+		btn.hidden = true;
+	});
+
+	/* --- single-image slot (batch H18): Frame 2 / Frame 3 / Frame 4 --------
+	   One photo per slot. Same media frame, `multiple: false`, and the same
+	   .sf-mb__gallery-preview box so the CSS needs nothing new. An empty slot
+	   posts an empty value, which the save handler turns into "delete the
+	   key" — i.e. back to the factory line photo for that position. */
+	function singleFrameFor(onSelect) {
+		if (!window.wp || !window.wp.media) { return null; }
+		var frame = window.wp.media({ title: 'Choose image', multiple: false, library: { type: 'image' } });
+		frame.on('select', function () {
+			var picked = frame.state().get('selection').first();
+			if (!picked) { return; }
+			var att = picked.toJSON();
+			onSelect({ id: att.id, thumb: (att.sizes && att.sizes.thumbnail) ? att.sizes.thumbnail.url : att.url });
+		});
+		return frame;
+	}
+
+	document.addEventListener('click', function (e) {
+		var btn = e.target.closest('.sf-mb__image-add');
+		if (!btn) { return; }
+		var field = btn.closest('.sf-mb__field');
+		var hidden = field.querySelector('.sf-mb__image-id');
+		var preview = field.querySelector('.sf-mb__gallery-preview');
+		var clear = field.querySelector('.sf-mb__image-clear');
+		var frame = singleFrameFor(function (item) {
+			hidden.value = item.id;
+			preview.innerHTML = '<img src="' + item.thumb + '" alt="" width="80" height="80"/>';
+			if (clear) { clear.hidden = false; }
+		});
+		if (frame) { frame.open(); }
+	});
+
+	document.addEventListener('click', function (e) {
+		var btn = e.target.closest('.sf-mb__image-clear');
+		if (!btn) { return; }
+		var field = btn.closest('.sf-mb__field');
+		field.querySelector('.sf-mb__image-id').value = '';
 		field.querySelector('.sf-mb__gallery-preview').innerHTML = '';
 		btn.hidden = true;
 	});

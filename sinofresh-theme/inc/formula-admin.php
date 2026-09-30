@@ -25,7 +25,10 @@
 add_action('init', function () {
 	$keys = array(
 		'sf_formula_intro'            => 'Short introduction shown under the title.',
-		'sf_formula_gallery_ids'      => 'JSON array of attachment IDs for the gallery.',
+		'sf_formula_gallery_ids'      => 'Gallery photos: comma-separated attachment IDs (CSV). Corrected in batch H18 — it was described as a JSON array, which it never was.',
+		'sf_formula_frame2_id'        => 'Attachment ID overriding gallery frame 2 (batch H18). Empty = the factory line photo.',
+		'sf_formula_frame3_id'        => 'Attachment ID overriding gallery frame 3 (batch H18). Empty = the factory line photo.',
+		'sf_formula_frame4_id'        => 'Attachment ID overriding gallery frame 4 (batch H18). Empty = the factory line photo.',
 		'sf_formula_video_url'        => 'YouTube URL for the product video.',
 		'sf_formula_card_badge'       => 'Card badge overlay: one of sinofresh_formula_card_badges(), or empty for none.',
 		'sf_formula_flavors'          => 'JSON array of flavour options.',
@@ -90,11 +93,23 @@ function sf_formula_mb_fields() {
 		// basics
 		array('key' => 'sf_formula_intro', 'label' => 'Introduction', 'group' => 'basics', 'type' => 'textarea', 'req' => 2, 'rows' => 4,
 			'hint' => '简介（页面参数列的 Overview 段）：标题下的一段短文字，前台原样显示；留空则按剂型自动生成一句模板文案。'),
-		// media
-		array('key' => 'sf_formula_gallery_ids', 'label' => 'Gallery images', 'group' => 'media', 'type' => 'gallery', 'req' => 1,
-			'hint' => '图集：可选。主图不用这里设——用编辑器右侧的特色图片面板。'),
-		array('key' => 'sf_formula_video_url', 'label' => 'YouTube URL', 'group' => 'media', 'type' => 'url', 'req' => 1,
-			'hint' => 'YouTube 视频链接：可选，留空不显示。'),
+	// media
+	array('key' => 'sf_formula_gallery_ids', 'label' => 'Gallery images', 'group' => 'media', 'type' => 'gallery', 'req' => 1,
+		'hint' => '附加照片：可选，可多选，排在主图和三个帧槽之后、视频之前（每条记录自己的额外图）。主图不用这里设——用编辑器右侧的特色图片面板。'),
+	/* Batch H18 — Frame 2/3/4, the three slots that used to be the shared
+	   factory band. One photo each, position-locked: an empty slot shows that
+	   position's stock line photo, so a record with all three empty is exactly
+	   the page it was before this batch. Together with the featured-image
+	   panel for frame 1 the story is one sentence: 主图用特色图片面板，帧②③④
+	   用这三个槽，留空显示工厂默认图。 */
+	array('key' => 'sf_formula_frame2_id', 'label' => 'Frame 2', 'group' => 'media', 'type' => 'image', 'req' => 1,
+		'hint' => '图集第 2 帧：可选，单张。留空显示工厂默认图（车间外景）；设置后本记录只用这张，不影响其它记录。'),
+	array('key' => 'sf_formula_frame3_id', 'label' => 'Frame 3', 'group' => 'media', 'type' => 'image', 'req' => 1,
+		'hint' => '图集第 3 帧：可选，单张。留空显示工厂默认图（包装线）；设置后本记录只用这张。'),
+	array('key' => 'sf_formula_frame4_id', 'label' => 'Frame 4', 'group' => 'media', 'type' => 'image', 'req' => 1,
+		'hint' => '图集第 4 帧：可选，单张。留空显示工厂默认图（车间线体）；设置后本记录只用这张。'),
+	array('key' => 'sf_formula_video_url', 'label' => 'YouTube URL', 'group' => 'media', 'type' => 'url', 'req' => 1,
+		'hint' => 'YouTube 视频链接：可选，留空不显示。'),
 		/* 待办17 — a dropdown, not radios: four answers including "none", and
 		   the options come from the same map the card reads (see
 		   sinofresh_formula_card_badges()), so the editor can only pick a badge
@@ -452,6 +467,22 @@ function sf_formula_render_field($spec, $post_id) {
 			echo '<button type="button" class="button sf-mb__gallery-add">Choose / update images</button> ';
 			echo '<button type="button" class="button-link sf-mb__gallery-clear"' . ($ids ? '' : ' hidden') . '>Remove all</button>';
 			break;
+		case 'image':
+			/* Batch H18 — a single attachment, the sibling of the frame-1
+			   featured image and of the three-frame slot group. Empty means
+			   "use the factory line photo", so an empty slot simply shows no
+			   preview and the Remove button stays hidden. The preview strip
+			   reuses .sf-mb__gallery-preview so no new CSS is needed. */
+			$id = absint($raw);
+			echo '<input type="hidden" class="sf-mb__image-id" name="' . esc_attr($spec['key']) . '" value="' . ($id ? esc_attr((string) $id) : '') . '"/>';
+			echo '<div class="sf-mb__gallery-preview">';
+			if ($id) {
+				echo wp_get_attachment_image($id, 'thumbnail');
+			}
+			echo '</div>';
+			echo '<button type="button" class="button sf-mb__image-add">Choose image</button> ';
+			echo '<button type="button" class="button-link sf-mb__image-clear"' . ($id ? '' : ' hidden') . '>Remove image</button>';
+			break;
 		case 'table':
 			$rows  = sf_json_rows($raw);
 			$cols  = array_keys($spec['cols']);
@@ -579,6 +610,15 @@ add_action('save_post_sf_formula', function ($post_id) {
 			case 'gallery':
 				$ids = array_filter(array_map('absint', explode(',', (string) wp_unslash($_POST[$key] ?? ''))));
 				sf_mb_store($post_id, $key, implode(',', $ids));
+				break;
+			case 'image':
+				/* Batch H18 — one attachment ID, or nothing. absint('') is 0,
+				   and sf_mb_store() deletes on '' but would happily persist
+				   '0' — a stored '0' then reads back as a truthy id in the
+				   next render. Normalise the zero to '' first; an attachment
+				   id is never 0. */
+				$id = absint(wp_unslash($_POST[$key] ?? ''));
+				sf_mb_store($post_id, $key, $id > 0 ? (string) $id : '');
 				break;
 			case 'table':
 				$cols  = array_keys($spec['cols']);
@@ -763,7 +803,9 @@ add_action('admin_enqueue_scripts', function ($hook) {
 	}
 	$dir = get_template_directory_uri();
 	wp_enqueue_style('sf-mb', $dir . '/assets/admin/sf-mb.css', array(), '1.1.0');
-	wp_enqueue_script('sf-mb-tables', $dir . '/assets/admin/sf-mb-tables.js', array(), '1.0.0', true);
+	/* 1.1.0 — batch H18 added the single-image slot control (Frame 2/3/4).
+	   Admin-only asset; the front-end enqueue and style.css stay on 2.10.88. */
+	wp_enqueue_script('sf-mb-tables', $dir . '/assets/admin/sf-mb-tables.js', array(), '1.1.0', true);
 	if ($is_formula) {
 		wp_enqueue_script('sf-mb-precheck', $dir . '/assets/admin/sf-mb-precheck.js', array(), '1.0.1', true);
 	}

@@ -1774,6 +1774,13 @@ function sinofresh_formula_video_id($url) {
  * the ranking is product photo > own photos > video > facility frames — see
  * the block inside.
  *
+ * Since batch H18 the three facility positions (frames 2, 3, 4) are also
+ * overridable per record: sf_formula_frame2_id / _frame3_id / _frame4_id each
+ * replace the stock photo at their OWN position, and an empty slot keeps that
+ * position's stock photo. Position-locked, never queue-filled — see the H18
+ * block for why that distinction matters. A record with the three slots empty
+ * is byte-for-byte the record it was before this batch.
+ *
  * `width`/`height` are the photographs' real pixel sizes, read off the
  * uploads folder with getimagesize on the server — not copied from markup
  * elsewhere in this theme, which carries a stale width="800" height="600" on
@@ -1811,6 +1818,21 @@ function sinofresh_formula_gallery_slots($form, $post_id = 0) {
 			   stage's aria-label, which is the name a screen reader hears. */
 			'alt'    => sinofresh_formula_product_alt($form),
 		),
+		/* Batch H18 note on the three facility frames' sizes. Frame 2 declares
+		   1100x733 and frames 3-4 declare 800x600 — the aspect ratios differ
+		   (1.50 vs 1.33). That is NOT a defect to fix in markup: these two
+		   numbers are the photographs' true pixel sizes, read off the uploads
+		   folder by tools/b2d_s2_dimensions.py, which asserts every row here
+		   against the server. Changing the numbers without replacing the files
+		   would make the declaration disagree with the bytes.
+
+		   They also carry no layout weight: .sf-gallery__stage is a fixed 1:1
+		   box and .sf-gallery__slide img is width:100%/height:100% with
+		   object-fit:cover, so every frame — 720x720, 1100x733 or 800x600 —
+		   renders as the same centre-cropped square, and the 104px (84px on
+		   the detail rail) thumbnails are square too. Unifying the ratios, if
+		   it is ever wanted, is a re-shoot of the stock photos, not an edit
+		   here; tracked as the pre-launch photo shoot item. */
 		array(
 			'file'   => 'fac-placeholder.webp',
 			'url'    => sinofresh_formula_gallery_file_url('fac-placeholder.webp'),
@@ -1886,6 +1908,61 @@ function sinofresh_formula_gallery_slots($form, $post_id = 0) {
 					'alt'    => $thumb_alt !== '' ? $thumb_alt : sinofresh_formula_product_alt($form),
 				);
 			}
+		}
+
+		/* Batch H18 — the record's own photograph may take over frames 2, 3
+		   or 4 (sf_formula_frame2_id / _frame3_id / _frame4_id, the three
+		   single-image slots in the admin Media box). Before this batch those
+		   three positions were the stock facility band and nothing else, so
+		   every record on the site showed the same three line photos and the
+		   sales desk could not change them without a code edit.
+
+		   Where the slots land: frames 2-4 ARE the facility positions. A set
+		   slot replaces the photo at its own position; an empty slot keeps
+		   that position's stock photo, so the band is never shorter than the
+		   four frames it has always had.
+
+		   Position-locked, not queue-filled: the default for frame 2 is always
+		   fac-placeholder, frame 3 always fac-packaging, frame 4 always
+		   fac-line. Filling from a queue (first empty slot takes the next
+		   unused stock photo) would mean the same numbered slot showed a
+		   different default depending on which other slots were set — so
+		   setting frame 2 would silently move frame 3's fallback. Locked to
+		   the position, "Frame 3" means the same thing on every record.
+
+		   An ID that no longer resolves — attachment deleted, or a non-image
+		   mime with no 'large' rendition — falls back to the position's stock
+		   photo rather than dropping the frame, exactly as a blank slot does,
+		   so a stale ID can never shorten the band.
+
+		   Byte-compatible when unused: with all three slots empty this loop
+		   does nothing and $slots is the very array it was, so all 21 records
+		   render identically (asserted by tools/h18_gate.py). */
+		$frame_slots = array(
+			1 => (int) get_post_meta($post_id, 'sf_formula_frame2_id', true),
+			2 => (int) get_post_meta($post_id, 'sf_formula_frame3_id', true),
+			3 => (int) get_post_meta($post_id, 'sf_formula_frame4_id', true),
+		);
+		foreach ($frame_slots as $offset => $frame_id) {
+			if ($frame_id <= 0) {
+				continue;
+			}
+			$src = wp_get_attachment_image_src($frame_id, 'large');
+			if (!$src) {
+				continue;
+			}
+			$alt = trim((string) get_post_meta($frame_id, '_wp_attachment_image_alt', true));
+			$slots[$offset] = array(
+				'file'   => '',
+				'url'    => (string) $src[0],
+				/* Real pixels of the chosen size, not the source file's —
+				   the same rule the H17 featured frame and the own-photo
+				   rows below follow, so a declared size never disagrees
+				   with the URL and flips the aspect ratio once it lands. */
+				'width'  => (int) $src[1],
+				'height' => (int) $src[2],
+				'alt'    => $alt !== '' ? $alt : sprintf('%s private label pet supplement product photo', $label),
+			);
 		}
 
 		$own = array();
