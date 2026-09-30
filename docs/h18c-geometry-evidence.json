@@ -1,0 +1,341 @@
+{
+ "widths": {
+  "1101": {
+   "stylesheet": "https://dev.zxpet.com/wp-content/themes/sinofresh-theme/style.css?ver=2.10.88",
+   "hasSupport": true,
+   "stage": {
+    "w": 502.19,
+    "h": 502.19
+   },
+   "rail": {
+    "dir": "column",
+    "gap": "12px",
+    "overflowY": "visible",
+    "clientH": 332,
+    "scrollH": 332,
+    "h": 332
+   },
+   "tiles": 4,
+   "pitch": 84,
+   "gapMeasured": 12,
+   "seven": {
+    "n": 7,
+    "gap": "8px",
+    "railH": 560,
+    "stageH": 502.19,
+    "overhang": 57.81,
+    "lastTileBottom": 993.27,
+    "railBottom": 997.27,
+    "railClientH": 560,
+    "railScrollH": 560,
+    "tabsTop": 1013.27,
+    "bandBottom": 2342.73,
+    "docH": 5503
+   },
+   "restored": 4
+  },
+  "1200": {
+   "stylesheet": "https://dev.zxpet.com/wp-content/themes/sinofresh-theme/style.css?ver=2.10.88",
+   "hasSupport": true,
+   "stage": {
+    "w": 561.59,
+    "h": 561.59
+   },
+   "rail": {
+    "dir": "column",
+    "gap": "12px",
+    "overflowY": "visible",
+    "clientH": 332,
+    "scrollH": 332,
+    "h": 332
+   },
+   "tiles": 4,
+   "pitch": 84,
+   "gapMeasured": 12,
+   "seven": {
+    "n": 7,
+    "gap": "8px",
+    "railH": 560,
+    "stageH": 561.59,
+    "overhang": -1.59,
+    "lastTileBottom": 997.13,
+    "railBottom": 1001.13,
+    "railClientH": 560,
+    "railScrollH": 560,
+    "tabsTop": 1018.72,
+    "bandBottom": 2244.2,
+    "docH": 5321
+   },
+   "restored": 4
+  },
+  "1240": {
+   "stylesheet": "https://dev.zxpet.com/wp-content/themes/sinofresh-theme/style.css?ver=2.10.88",
+   "hasSupport": true,
+   "stage": {
+    "w": 585.59,
+    "h": 585.59
+   },
+   "rail": {
+    "dir": "column",
+    "gap": "12px",
+    "overflowY": "visible",
+    "clientH": 332,
+    "scrollH": 332,
+    "h": 332
+   },
+   "tiles": 4,
+   "pitch": 84,
+   "gapMeasured": 12,
+   "seven": {
+    "n": 7,
+    "gap": "8px",
+    "railH": 560,
+    "stageH": 585.59,
+    "overhang": -25.59,
+    "lastTileBottom": 998.69,
+    "railBottom": 1002.69,
+    "railClientH": 560,
+    "railScrollH": 560,
+    "tabsTop": 1044.28,
+    "bandBottom": 2245.77,
+    "docH": 5330
+   },
+   "restored": 4
+  },
+  "1440": {
+   "stylesheet": "https://dev.zxpet.com/wp-content/themes/sinofresh-theme/style.css?ver=2.10.88",
+   "hasSupport": true,
+   "stage": {
+    "w": 607.19,
+    "h": 607.19
+   },
+   "rail": {
+    "dir": "column",
+    "gap": "12px",
+    "overflowY": "visible",
+    "clientH": 332,
+    "scrollH": 332,
+    "h": 332
+   },
+   "tiles": 4,
+   "pitch": 84,
+   "gapMeasured": 12,
+   "seven": {
+    "n": 7,
+    "gap": "8px",
+    "railH": 560,
+    "stageH": 607.19,
+    "overhang": -47.19,
+    "lastTileBottom": 1000.81,
+    "railBottom": 1004.81,
+    "railClientH": 560,
+    "railScrollH": 560,
+    "tabsTop": 1068,
+    "bandBottom": 2223.89,
+    "docH": 5315
+   },
+   "restored": 4
+  }
+ },
+ "records": {
+  "joint-support-soft-chews": {
+   "tiles": 4,
+   "gap": "12px",
+   "h": 332,
+   "pitch": 84,
+   "gapMeasured": 12,
+   "has": true,
+   "status": 200
+  },
+  "calming-soft-chews": {
+   "tiles": 4,
+   "gap": "12px",
+   "h": 332,
+   "pitch": 84,
+   "gapMeasured": 12,
+   "has": true,
+   "status": 200
+  },
+  "digestive-soft-chews": {
+   "tiles": 4,
+   "gap": "12px",
+   "h": 332,
+   "pitch": 84,
+   "gapMeasured": 12,
+   "has": true,
+   "status": 200
+  },
+  "skin-coat-soft-chews": {
+   "tiles": 4,
+   "gap": "12px",
+   "h": 332,
+   "pitch": 84,
+   "gapMeasured": 12,
+   "has": true,
+   "status": 200
+  },
+  "joint-support-tablets": {
+   "tiles": 4,
+   "gap": "12px",
+   "h": 332,
+   "pitch": 84,
+   "gapMeasured": 12,
+   "has": true,
+   "status": 200
+  },
+  "multivitamin-tablets": {
+   "tiles": 4,
+   "gap": "12px",
+   "h": 332,
+   "pitch": 84,
+   "gapMeasured": 12,
+   "has": true,
+   "status": 200
+  },
+  "calcium-phosphorus-tablets": {
+   "tiles": 4,
+   "gap": "12px",
+   "h": 332,
+   "pitch": 84,
+   "gapMeasured": 12,
+   "has": true,
+   "status": 200
+  },
+  "probiotic-powder": {
+   "tiles": 4,
+   "gap": "12px",
+   "h": 332,
+   "pitch": 84,
+   "gapMeasured": 12,
+   "has": true,
+   "status": 200
+  },
+  "pumpkin-digestive-powder": {
+   "tiles": 4,
+   "gap": "12px",
+   "h": 332,
+   "pitch": 84,
+   "gapMeasured": 12,
+   "has": true,
+   "status": 200
+  },
+  "bladder-support-powder": {
+   "tiles": 4,
+   "gap": "12px",
+   "h": 332,
+   "pitch": 84,
+   "gapMeasured": 12,
+   "has": true,
+   "status": 200
+  },
+  "hairball-remedy-paste": {
+   "tiles": 4,
+   "gap": "12px",
+   "h": 332,
+   "pitch": 84,
+   "gapMeasured": 12,
+   "has": true,
+   "status": 200
+  },
+  "nutrition-paste": {
+   "tiles": 4,
+   "gap": "12px",
+   "h": 332,
+   "pitch": 84,
+   "gapMeasured": 12,
+   "has": true,
+   "status": 200
+  },
+  "ear-care-drops": {
+   "tiles": 4,
+   "gap": "12px",
+   "h": 332,
+   "pitch": 84,
+   "gapMeasured": 12,
+   "has": true,
+   "status": 200
+  },
+  "urinary-care-drops": {
+   "tiles": 4,
+   "gap": "12px",
+   "h": 332,
+   "pitch": 84,
+   "gapMeasured": 12,
+   "has": true,
+   "status": 200
+  },
+  "liquid-joint-support": {
+   "tiles": 4,
+   "gap": "12px",
+   "h": 332,
+   "pitch": 84,
+   "gapMeasured": 12,
+   "has": true,
+   "status": 200
+  },
+  "liquid-skin-coat": {
+   "tiles": 4,
+   "gap": "12px",
+   "h": 332,
+   "pitch": 84,
+   "gapMeasured": 12,
+   "has": true,
+   "status": 200
+  },
+  "wild-alaskan-salmon-oil": {
+   "tiles": 4,
+   "gap": "12px",
+   "h": 332,
+   "pitch": 84,
+   "gapMeasured": 12,
+   "has": true,
+   "status": 200
+  },
+  "pure-fish-oil-blend": {
+   "tiles": 4,
+   "gap": "12px",
+   "h": 332,
+   "pitch": 84,
+   "gapMeasured": 12,
+   "has": true,
+   "status": 200
+  },
+  "plaque-control-dental-chews": {
+   "tiles": 4,
+   "gap": "12px",
+   "h": 332,
+   "pitch": 84,
+   "gapMeasured": 12,
+   "has": true,
+   "status": 200
+  },
+  "oral-care-dental-sticks": {
+   "tiles": 4,
+   "gap": "12px",
+   "h": 332,
+   "pitch": 84,
+   "gapMeasured": 12,
+   "has": true,
+   "status": 200
+  },
+  "natural-cleaning-dental-sticks": {
+   "tiles": 4,
+   "gap": "12px",
+   "h": 332,
+   "pitch": 84,
+   "gapMeasured": 12,
+   "has": true,
+   "status": 200
+  }
+ },
+ "sheetMd5": "36b0a46db13d33ec07b6d7c5f35d8e45",
+ "sheetUrl": "https://dev.zxpet.com/wp-content/themes/sinofresh-theme/style.css?ver=2.10.88",
+ "sheetBytes": 341375,
+ "recordCount": 21,
+ "phone": {
+  "stripDisplay": "none",
+  "dotsDisplay": "flex",
+  "dots": 4,
+  "dotsW": 299
+ }
+}

@@ -2036,7 +2036,15 @@ function sinofresh_formula_gallery_slots($form, $post_id = 0) {
 			   the rail cannot hold. The video is never a photo, so it is kept
 			   whatever the photo count has already reached; the PHOTO count
 			   is the thing that gets cut, and cutting it from the tail still
-			   drops facility frames before own photos. */
+			   drops facility frames before own photos.
+
+			   One consequence worth stating: the video now outranks the
+			   EIGHTH own photo. A record with eight or more of its own photos
+			   AND a video shows the seven strongest photos and the video,
+			   where the old tail-trim would have shown eight photos and cut
+			   the video. That trade is the whole point of the two ceilings —
+			   it is what lets a record keep a video without spending one of
+			   the seven tiles on it. */
 			$photo_cap = 7;
 			$frame_cap = 8;   /* the seven photos above, plus the video */
 			$head      = array_slice($slots, 0, 1);
