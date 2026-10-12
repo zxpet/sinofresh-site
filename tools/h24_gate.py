@@ -21,6 +21,23 @@
       限流阈值随之前置条件收紧：真实 IP 不可信时退回插件默认，绝不按边缘 IP 收紧（那会先挡真客户）。
   G7  告警有频率控制：当天 >= 阈值发一封，一天最多一封（先落标记再发信，防并发重复）。
 
+  —— H24b（2026-10-12）修订：限流口径换过一次契约，别再用 H24 的旧断言 ——
+
+  G6' 精细限流由**自建计数**承担：只数「真实提交」（由 fluentform/submission_inserted
+      落计，计数键 = 真实 IP，存 transient，窗口 3600s，阈值 SF_FG_REAL_MAX_PER_HOUR=5）。
+      被拦的 spam 提交在本文件里**根本不会进入 Fluent Forms 流程**（sf_fg_intercept 直接
+      wp_send_json_success 终止）⇒ **结构上不可能占配额**，不是靠计数条件过滤。
+      Fluent Forms 自带的 IP 限流保留为**粗粒度兜底**，阈值为 100/3600 —— 插件计数口径是
+      `status != 'trashed'`，会把我们写入的 spam 行一并算进去，一旦收紧就会误伤真客户。
+      真实 IP 层未就绪时自建限流**整体关闭**（计数键会落到 CF 边缘地址，会把同节点多位
+      真客户算成一个人，反而先挡真客户）。
+  G8  审计表有保留期（90 天、每日 cron 清理、同日幂等），告警正文带「审计表当前行数」。
+  G9  同一 IP 在 24h 窗口内被拦次数达 50 ⇒ 自动加黑名单（幂等），防单 IP 刷满审计表。
+  G10 后台入口：菜单带当日被拦数徽标 + Fluent Forms 子菜单入口；FF 条目列表**裸访问**时
+      默认切到「未读」；带 `type=` 参数或 `#/entries/…` 详情页一律不重定向。
+  G11 管理员通知里 Privacy Consent 行渲染**真实勾选值**且**内联单行**：占位符必须带
+      `.value`，否则 FF 在 HTML 邮件分支会把它包成 `<ul><li>`（已用 ShortCodeParser 对照实测）。
+
 Modes
   --source            对 server/mu-plugins/ 的静态断言（含上面全部结构契约）
   --live              对 dev 树的行为断言（通过 ssh 驱动服务器上已交付的 E2E 脚本）
@@ -223,6 +240,54 @@ def source_gate(root: Path):
     check("H24: 支持「改回正常」（release）", "sf_fg_release_row" in fg)
     check("H24: 支持「一键加黑名单」", "sf_fg_blocklist_add" in fg)
 
+    # --- G12 条目页：默认筛选 + 状态总览条（H24b）--------------------------
+    # 前提事实（本批代码级实测）：FF 6.2.14 的状态筛选是**可清空的下拉框**，
+    # 选项只有 unread/read/favorites/spam/trashed，**没有「全部」**；`counts.all`
+    # 有数据却没 UI；`entry_type=all` 会 `WHERE status='all'` 返回 0 行。
+    # 所以我们在下拉**上方**自加一行总览条补「全部」，并刻意零耦合 FF 自己的下拉。
+    m = re.search(r"function sf_fg_entries_print_default_filter\([^)]*\)\s*\{(.*?)\n\}", fg, re.S)
+    ebody = m.group(1) if m else ""
+    ecode = code_lines(ebody)   # 反面断言必须看代码：注释里正当地提到了 entry_type / entry_statuses
+    check("G12: 总览条渲染函数存在", bool(m), "未匹配到函数体")
+    check("G12: 不注入 FF 的 entry_statuses（升级不会被冲掉）",
+          bool(ecode) and "entry_statuses" not in ecode)
+    check("G12: 不直接写 entry_type（含 all）—— 一律走 hash 路由",
+          bool(ecode) and "entry_type" not in ecode)
+    check("G12: 不做整页重定向（靠改 hash，不做 wp_redirect）",
+          bool(ecode) and "wp_redirect" not in ecode)
+    check("G12: 权限门槛 = sf_fg_enabled() + manage_options",
+          "sf_fg_enabled()" in ebody and "current_user_can( 'manage_options' )" in ebody)
+
+    m = re.search(r"\$tabs\s*=\s*array\((.*?)\n\t\);", fg, re.S)
+    tabblk = m.group(1) if m else ""
+    order = re.findall(r"'(\w+)'\s*=>\s*array", tabblk)
+    check("G12: 五个入口顺序固定（未读|全部|已读|垃圾|回收站）",
+          order == ["unread", "all", "read", "spam", "trashed"], str(order))
+    check("G12: 「全部」的 FF entry_type 是空串（FF 里没有 all 这个状态）",
+          bool(re.search(r"'全部'\s*,\s*''", tabblk)), tabblk.strip()[:90])
+
+    check("G12: 计数口径刻意对齐 countByGroup()：all = Σ状态 − trashed",
+          "max( 0, $sum - $counts['trashed'] )" in fg
+          and re.search(r"GROUP BY status", fg) is not None)
+    check("G12: 渲染函数用的就是自建计数（不另算一套）",
+          bool(ebody) and "sf_fg_entry_counts( $form_id )" in ebody)
+    check("G12: 空状态块恒在 DOM 且默认 hidden",
+          'id="sf-fg-empty" hidden' in ebody)
+    check("G12: 空状态 → 只提示不跳转（绝不自动切到全部）",
+          "'unread' === eff && UNREAD < 1" in ebody)
+    check("G12: 详情页让位（bar.hidden = isDetail）", "bar.hidden = isDetail" in ebody)
+    check("G12: 监听 hashchange（FF 走 hash 路由不重载文档）",
+          "addEventListener( 'hashchange', apply )" in ebody)
+    check("G12: 显式 type= 时绝不补默认值（尊重运营点过的筛选）",
+          bool(re.search(r"if\s*\(\s*TYPE\s*&&\s*! /\[\?&\]type=/\.test\( r0 \)", ebody)))
+    check("G12: 一次性导航参数 sf_fg_view 会从地址栏抹掉",
+          "sf_fg_view=" in ebody and "replaceState" in ebody)
+    check("G12: CSS 显式补 [hidden]（display:flex 会盖掉 UA 规则）",
+          "#sf-fg-bar[hidden]{display:none}" in ebody)
+    check("G12: 输出挂在 SPA 挂载点之前且优先级 5",
+          bool(re.search(r"add_action\(\s*'fluentform/before_form_entry_app'\s*,\s*"
+                         r"'sf_fg_entries_print_default_filter'\s*,\s*5\s*\)", fg)))
+
     # --- 加载顺序 ----------------------------------------------------------
     check("H24: 真实 IP 层文件名以 zz-sf-aa- 开头（字母序最先加载）",
           REAL_IP.startswith("zz-sf-aa-"))
@@ -232,10 +297,13 @@ def source_gate(root: Path):
 # --live
 # ==========================================================================
 def live_gate():
-    # 前置：交付的三个 E2E 脚本必须在位
+    # 前置：交付的 E2E / 断言脚本必须在位
     rc, out = ssh(f"ls {TOOLS}/h24_e2e_real.py {TOOLS}/h24_e2e_bot.py "
-                  f"{TOOLS}/h24_e2e_ratelimit.py {TOOLS}/h24_turnstile_degraded.py 2>&1")
-    check("L0: 四个 E2E 脚本已在服务器就位", rc == 0, out.strip()[:200])
+                  f"{TOOLS}/h24_turnstile_degraded.py "
+                  f"{TOOLS}/h24b_rl_e2e.py {TOOLS}/h24b_l1.php "
+                  f"{TOOLS}/h24b_form_counts.php {TOOLS}/h24b_admin_shots.php "
+                  f"{TOOLS}/h24b_notif_render_check.py 2>&1")
+    check("L0: 七个 E2E/断言/脚手架脚本已在服务器就位", rc == 0, out.strip()[:200])
 
     # L1 机器人形态：拦截 + 零发信（G2）
     rc, out = ssh(f"cd {DEV_ROOT} && python3 {TOOLS}/h24_e2e_bot.py 2>&1")
@@ -245,9 +313,14 @@ def live_gate():
     rc, out = ssh(f"cd {DEV_ROOT} && python3 {TOOLS}/h24_e2e_real.py 2>&1")
     check("L2: 真人路径 E2E 全绿（放行/一封通知/未误判）", rc == 0, out.strip()[-220:])
 
-    # L3 限流：阈值被收紧为 3/3600 且第 4 次 429（G6）
-    rc, out = ssh(f"cd {DEV_ROOT} && python3 {TOOLS}/h24_e2e_ratelimit.py 2>&1")
-    check("L3: 限流 E2E 全绿（3/3600 + 第 4 次 429）", rc == 0, out.strip()[-220:])
+    # L3 精细限流（H24b 契约）：5/3600 只数真实提交；spam 不占配额；达限 429。
+    #    H24 的 h24_e2e_ratelimit.py（旧契约 3/3600、第 4 次 429）已随契约变更退役删除。
+    rc, out = ssh(f"cd {DEV_ROOT} && SF_H24B_SITE=dev python3 {TOOLS}/h24b_rl_e2e.py 2>&1")
+    check("L3: 精细限流 E2E 全绿（ALL PASS）", rc == 0 and "ALL PASS" in out, out.strip()[-220:])
+    check("L3: ★ 机器人载荷不占配额（spam 不计入自建计数）",
+          "spam 不占配额" in out, out.strip()[-220:])
+    check("L3: ★ 达限返回 429 且不落库、不写审计",
+          "达限返回 HTTP 429" in out and "429 时未落库" in out, out.strip()[-220:])
 
     # L4 Turnstile 降级：不带 token 仍可提交且不误判（G5）
     rc, out = ssh(f"cd {DEV_ROOT} && python3 {TOOLS}/h24_turnstile_degraded.py 2>&1")
@@ -257,6 +330,23 @@ def live_gate():
     rc, out = ssh(f"cd {DEV_ROOT} && wp db query \"SHOW COLUMNS FROM wp_sf_form_spam_log\" --allow-root 2>&1")
     for col in ("form_id", "submission_id", "ip", "ua", "score", "signals", "signature", "source"):
         check(f"L5: 审计表含列 {col}", col in out)
+
+    # L6 治理层 + 条目页结构断言（H24b 新增）：保留期 / 自动加黑 / 告警带行数 /
+    #    兜底阈值 / 后台默认筛选 / 总览条计数口径与顺序。
+    rc, out = ssh(f"cd {DEV_ROOT} && wp eval-file {TOOLS}/h24b_l1.php --allow-root 2>&1")
+    m = re.search(r"(\d+)\s+passed,\s+(\d+)\s+failed", out)
+    gap = re.search(r"^\s+FAIL\s+(.+)", out, re.MULTILINE)
+    check("L6: 治理层+条目页断言全绿（>=60 passed / 0 failed）",
+          bool(m) and int(m.group(2)) == 0 and int(m.group(1)) >= 60,
+          (m.group(0) if m else "") + ((" | 首个失败: " + gap.group(1)) if gap else ""))
+    check("L6: ★ 总览条计数与独立原始 SQL 一致（[L7]）",
+          "sf_fg_entry_counts() 与独立原始 SQL 一致" in out, out.strip()[-220:])
+
+    # L7 通知渲染（G11）：占位符修正的**真实邮件正文**级验收
+    rc, out = ssh(f"cd {DEV_ROOT} && SF_H24B_SITE=dev python3 {TOOLS}/h24b_notif_render_check.py 2>&1")
+    check("L7: 通知渲染验收全绿（ALL PASS）", rc == 0 and "ALL PASS" in out, out.strip()[-220:])
+    check("L7: ★ 同意声明渲染真实勾选值且内联单行",
+          "同意声明渲染为真实勾选值" in out and "内联单行" in out, out.strip()[-220:])
 
 
 # ==========================================================================
