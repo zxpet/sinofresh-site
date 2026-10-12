@@ -15,9 +15,9 @@
 | 表单 | form_id | 字段数 | 通知 feed | 自动回复状态 |
 |---|---|---|---|---|
 | Get a Quote | 8 | 8 | Admin Notification / Auto Reply to Customer | 已停用 |
-| Request a Sample | 9 | 12 | Admin Notification / Auto Reply to Customer | **开启** |
-| Book a Factory Tour | 10 | 14 | Admin Notification / Auto Reply to Customer | **开启** |
-| Request COA | 11 | 10 | Admin Notification / Auto Reply to Customer | **开启** |
+| Request a Sample | 9 | 12 | Admin Notification / Auto Reply to Customer | 已停用 |
+| Book a Factory Tour | 10 | 14 | Admin Notification / Auto Reply to Customer | 已停用 |
+| Request COA | 11 | 10 | Admin Notification / Auto Reply to Customer | 已停用 |
 | Feedback | 12 | 5 | Admin Notification | 无此 feed |
 
 > 管理员通知一律发往 `sales@zxpet.com`；自动回复发往来访者填的邮箱。
@@ -91,7 +91,7 @@ Privacy Consent: I agree to the Privacy Policy
 | Country | `{inputs.country_5}` | Country | `select` | ✅ |
 | Interested Dosage Form | `{inputs.interested_dosage_form_7}` | Interested Dosage Form | `select` | ✅ |
 | Notes | `{inputs.notes_10}` | Notes | `textarea` | ✅ |
-| Privacy Consent | `{inputs.privacy_consent_11}.value` | Privacy Consent | `input_checkbox` | ✅ |
+| Privacy Consent | `{inputs.privacy_consent_11.value}` | Privacy Consent | `input_checkbox` | ✅ |
 
 ✅ 未发现问题。
 
@@ -195,7 +195,7 @@ Sample Quantity: {inputs.sample_quantity_8}
 Flavor Preference: {inputs.flavor_preference_9}
 Target Market: {inputs.target_market_10}
 Notes: {inputs.notes_11}
-Privacy Consent: {inputs.company_name_1}
+Privacy Consent: {inputs.privacy_consent_12.value}
 
 ```
 
@@ -215,7 +215,7 @@ Sample Quantity: 1
 Flavor Preference: «Flavor Preference»
 Target Market: US
 Notes: «Notes»
-Privacy Consent: «Company Name»
+Privacy Consent: I agree to the Privacy Policy
 
 ```
 
@@ -234,15 +234,13 @@ Privacy Consent: «Company Name»
 | Flavor Preference | `{inputs.flavor_preference_9}` | Flavor Preference | `input_text` | ✅ |
 | Target Market | `{inputs.target_market_10}` | Target Market | `select` | ✅ |
 | Notes | `{inputs.notes_11}` | Notes | `textarea` | ✅ |
-| Privacy Consent | `{inputs.company_name_1}` | Company Name | `input_text` | ✅ |
+| Privacy Consent | `{inputs.privacy_consent_12.value}` | Privacy Consent | `input_checkbox` | ✅ |
 
-**本次普查发现的问题**
-
-- ⚠️ R2 跨语义复用：{inputs.company_name_1} 同时用在「Company」和「Privacy Consent」两个不同标签下（很可能照抄改了字段名却没改值）
+✅ 未发现问题。
 
 ### Auto Reply to Customer — meta_id 46
 
-- 收件人：`{inputs.email_3}`　·　状态：启用
+- 收件人：`{inputs.email_3}`　·　状态：**已停用**
 
 **主题**
 
@@ -346,7 +344,7 @@ Preferred Time: {inputs.preferred_time_10}
 Interested Dosage Form: {inputs.interested_dosage_form_11}
 Number of Visitors: {inputs.number_of_visitors_12}
 Notes: {inputs.notes_13}
-Privacy Consent: {inputs.company_name_1}
+Privacy Consent: {inputs.privacy_consent_14.value}
 
 ```
 
@@ -368,7 +366,7 @@ Preferred Time: «Preferred Time»
 Interested Dosage Form: Soft Chews
 Number of Visitors: 1
 Notes: «Notes»
-Privacy Consent: «Company Name»
+Privacy Consent: I agree to the Privacy Policy
 
 ```
 
@@ -389,15 +387,13 @@ Privacy Consent: «Company Name»
 | Interested Dosage Form | `{inputs.interested_dosage_form_11}` | Interested Dosage Form | `select` | ✅ |
 | Number of Visitors | `{inputs.number_of_visitors_12}` | Number of Visitors | `select` | ✅ |
 | Notes | `{inputs.notes_13}` | Notes | `textarea` | ✅ |
-| Privacy Consent | `{inputs.company_name_1}` | Company Name | `input_text` | ✅ |
+| Privacy Consent | `{inputs.privacy_consent_14.value}` | Privacy Consent | `input_checkbox` | ✅ |
 
-**本次普查发现的问题**
-
-- ⚠️ R2 跨语义复用：{inputs.company_name_1} 同时用在「Company」和「Privacy Consent」两个不同标签下（很可能照抄改了字段名却没改值）
+✅ 未发现问题。
 
 ### Auto Reply to Customer — meta_id 52
 
-- 收件人：`{inputs.email_4}`　·　状态：启用
+- 收件人：`{inputs.email_4}`　·　状态：**已停用**
 
 **主题**
 
@@ -490,9 +486,9 @@ Email: {inputs.email_3}
 Country: {inputs.country_4}
 Target Market: {inputs.target_market_5}
 Interested Dosage Form: {inputs.interested_dosage_form_6}
-Document Type: {inputs.document_type_7}
+Document Type: {inputs.document_type_7.value}
 Notes: {inputs.notes_8}
-Privacy Consent: {inputs.privacy_consent_9.i_agree_to_the_privacy_policy_9_1}
+Privacy Consent: {inputs.privacy_consent_9.value}
 
 ```
 
@@ -509,7 +505,7 @@ Target Market: US
 Interested Dosage Form: Soft Chews
 Document Type: COA Sample
 Notes: «Notes»
-Privacy Consent:
+Privacy Consent: I agree to the Privacy Policy
 
 ```
 
@@ -523,18 +519,15 @@ Privacy Consent:
 | Country | `{inputs.country_4}` | Country | `select` | ✅ |
 | Target Market | `{inputs.target_market_5}` | Target Market | `select` | ✅ |
 | Interested Dosage Form | `{inputs.interested_dosage_form_6}` | Interested Dosage Form | `select` | ✅ |
-| Document Type | `{inputs.document_type_7}` | Document Type | `input_checkbox` | ⚠️ |
+| Document Type | `{inputs.document_type_7.value}` | Document Type | `input_checkbox` | ✅ |
 | Notes | `{inputs.notes_8}` | Notes | `textarea` | ✅ |
-| Privacy Consent | `{inputs.privacy_consent_9.i_agree_to_the_privacy_policy_9_1}` | — | `**不存在**` | ⚠️ |
+| Privacy Consent | `{inputs.privacy_consent_9.value}` | Privacy Consent | `input_checkbox` | ✅ |
 
-**本次普查发现的问题**
-
-- ⚠️ R3 复选框未加 .value：{inputs.document_type_7}（input_checkbox，标签「Document Type」）—— HTML 邮件会渲染成 <ul><li>
-- ⚠️ R1 孤儿占位符 {inputs.privacy_consent_9.i_agree_to_the_privacy_policy_9_1} 在「Privacy Consent」行 —— 表里没有这个字段
+✅ 未发现问题。
 
 ### Auto Reply to Customer — meta_id 58
 
-- 收件人：`{inputs.email_3}`　·　状态：启用
+- 收件人：`{inputs.email_3}`　·　状态：**已停用**
 
 **主题**
 
@@ -620,7 +613,7 @@ Type: {inputs.feedback_type_1}
 Subject: {inputs.subject_2}
 Description: {inputs.description_3}
 Email: {inputs.email_4} (may be blank = anonymous)
-Privacy Consent: {inputs.privacy_consent_5.i_agree_to_the_privacy_policy_5_1}
+Privacy Consent: {inputs.privacy_consent_5.value}
 Page: {embed_post.permalink}
 
 ```
@@ -634,7 +627,7 @@ Type: General Feedback
 Subject: «Subject»
 Description: «Description»
 Email: «Email» (may be blank = anonymous)
-Privacy Consent:
+Privacy Consent: I agree to the Privacy Policy
 Page:
 
 ```
@@ -647,11 +640,9 @@ Page:
 | Subject | `{inputs.subject_2}` | Subject | `input_text` | ✅ |
 | Description | `{inputs.description_3}` | Description | `textarea` | ✅ |
 | Email | `{inputs.email_4}` | Email | `input_email` | ✅ |
-| Privacy Consent | `{inputs.privacy_consent_5.i_agree_to_the_privacy_policy_5_1}` | — | `**不存在**` | ⚠️ |
+| Privacy Consent | `{inputs.privacy_consent_5.value}` | Privacy Consent | `input_checkbox` | ✅ |
 
-**本次普查发现的问题**
-
-- ⚠️ R1 孤儿占位符 {inputs.privacy_consent_5.i_agree_to_the_privacy_policy_5_1} 在「Privacy Consent」行 —— 表里没有这个字段
+✅ 未发现问题。
 
 ---
 
@@ -669,10 +660,43 @@ Page:
 
 修复工具：`tools/h24b_fix_privacy_line.php`（自动发现隐私字段 / 逐表单备份 / 一条命令回滚）
 
-## 6. 以后改模板的注意事项
+## 6. 同批完成的另两项变更（2026-10-12）
+
+### 6.1 自动回复（Auto Reply）全部停用
+
+form 8 在 H24 防护上线时已停用，本批把 **form 9 / 10 / 11 一并停用**（form 12 本就没有此 feed）：
+
+| 表单 | Auto Reply feed | 收件人 | 改前 | 改后 |
+|---|---|---|---|---|
+| form 8 | meta_id 40 | `{inputs.email_3}` | 已停用 | — |
+| form 9 | meta_id 46 | `{inputs.email_3}` | 启用 | **已停用** |
+| form 10 | meta_id 52 | `{inputs.email_4}` | 启用 | **已停用** |
+| form 11 | meta_id 58 | `{inputs.email_3}` | 启用 | **已停用** |
+
+判定依据（源码级）：`GlobalNotificationManager::getEnabledFeeds()` 里
+`ArrayHelper::isTrue($feed, 'enabled')` 是**唯一**发送开关；写成 `false` 即停用。
+用 FF 自己的这个函数实测：5 个管理员通知（39/45/51/57/63）仍然发送，4 个 Auto Reply（40/46/52/58）全部不再发送。
+
+修复工具：`tools/h24b_autoreply_toggle.php`（status / disable / restore，逐 feed 备份整行原始值）。
+**恢复时机**：等防护稳定 ≥1 周后 4 个一起恢复，恢复时统一加「仅非 spam 触发」守卫。
+
+### 6.2 form 11「Document Type」占位符补 `.value`
+
+| 表单 | feed | 改前 | 改后 | 症状 |
+|---|---|---|---|---|
+| form 11 | meta_id 57 | `Document Type: {inputs.document_type_7}` | `Document Type: {inputs.document_type_7.value}` | HTML 邮件里被包成 `<ul><li>` 多行列表 |
+
+实测（同一份构造数据 × 两个渲染分支）：**裸用 + 数组 + `isHtml=true` → `<ul><li>`**；
+`.value` 在**全部场景**（字符串 / 单元素数组 / 多元素数组 × 两个分支）都是**内联单行**，
+多选时输出 `COA Sample, MSDS`（逗号连接，不会出现 `Array`）。
+
+修复工具：`tools/h24b_fix_checkbox_value.php`（通用：自动发现所有 checkbox/radio 字段，批量规范化，逐 feed 备份）。
+
+## 7. 以后改模板的注意事项
 
 1. **复选框/单选框一定要加 `.value`**：`{inputs.privacy_consent_11}` 在邮件分支会被渲染成 `<ul><li>…</li></ul>`（多行列表），
-   而 `{inputs.privacy_consent_11.value}` 直接输出**内联单行**文本。其余字段（text/email/select/textarea）加不加都一样。
+   而 `{inputs.privacy_consent_11.value}` 直接输出**内联单行**文本（多选时逗号连接，如 `COA Sample, MSDS`）。
+   其余字段（text/email/select/textarea）加不加都一样。
 2. **只能用 `{inputs.<字段key>}`**：字段 key 形如 `company_name_1`（`{元素名}_{index}`）。
    不要用「选项级」key（例：`privacy_consent_9.i_agree_to_the_privacy_policy_9_1`）—— FF 解析不到，**渲染为空**。
 3. **复制模板要整段检查**：本批 5 处坏法就是「复制 form 8 的通知、只改了字段却没改占位符」造成的。

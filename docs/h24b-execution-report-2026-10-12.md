@@ -285,3 +285,173 @@ cd /var/www/dev.zxpet.com/public && SF_H24B_SITE=dev  SF_H24B_MODE=restore wp ev
 ---
 
 *本节：小宠（Sam 批准「顺手修掉」+ 两条约束：①改完发真通知验证 ②立刻准备回滚）。dev 与生产同批修复，真通知验证 ALL PASS，门禁 64/0 + live 全绿。*
+
+---
+
+## 八、第二批收尾（同日；Sam 裁决「两件一次定完，不再分次」）
+
+### 8.1 Auto Reply 全部停用（form 9 / 10 / 11）
+
+form 8 在 H24 上线时已停用；本批把 **form 9/10/11 一并停用**，四个表单口径统一（form 12 本就没有此 feed）。
+
+| 表单 | Auto Reply feed | 收件人 | 改前 | 改后 | 改前 md5／len | 改后 md5／len |
+|---|---|---|---|---|---|---|
+| form 8 | meta_id 40 | `{inputs.email_3}` | 已停用 | —（未动） | `2bdbea0d…` / 794 | 不变 |
+| form 9 | meta_id 46 | `{inputs.email_3}` | 启用 | **已停用** | `96560c82…` / 835 | `5e080c3a…` / 823 |
+| form 10 | meta_id 52 | `{inputs.email_4}` | 启用 | **已停用** | `9cf0e277…` / 840 | `8b900da1…` / 828 |
+| form 11 | meta_id 58 | `{inputs.email_3}` | 启用 | **已停用** | `7be5be54…` / 806 | `9ac867e8…` / 794 |
+
+**判定依据（源码级，fluentform 6.2.14）**：`GlobalNotificationManager::getEnabledFeeds()` 里
+`if ($parsedValue && ArrayHelper::isTrue($parsedValue, 'enabled'))` —— `enabled` 是**唯一**发送开关。
+
+**零发信的硬验证**（`tools/h24b_check_enabled_feeds.php`，直接调上面那个 FF 函数，带正对照防假绿）：
+
+```
+[PASS] 正对照：form 8 管理员通知(39) 会被发送（证明本次调用有效、不是假绿）
+[PASS] Auto Reply feed 46/52/58 全部不再发送
+[PASS] form 8 Auto Reply feed 40 不发送
+[PASS] 5 个管理员通知 feed 全部正常发送
+本批生效的 feed（会被发送）meta_id = 39,45,51,57,63
+```
+
+⇒ **停用精准命中 4 个自动回复，5 个管理员通知一个没误伤。**
+
+**写回断言**（每个 feed）：`enabled=false` ✓／**除 enabled 外其它键值逐项相等 = YES** ✓／键集合一致 ✓／无 `"enabled":true` ✓。
+
+> ⚠️ **长度变化说明**：46/52/58 都是 **−12 字节**，其中 `true→false` 本应 **+1**。差额来自 FF 原存 JSON 里的
+> `"\/"` 转义被 PHP `json_encode(JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE)` 规范化。已做**决定性验证**：
+> 「把原值按同一规则重排 → 与『改后把 enabled 还原』**逐字节相等**」= 除目标键外**零变化**，语义完全等价。
+
+**恢复时机（已商定）**：等防护稳定 **≥1 周**后，form 8/9/10/11 四个一起恢复，恢复时**统一加「仅非 spam 触发」守卫**。
+恢复命令见 §8.5。
+
+### 8.2 form 11「Document Type」补 `.value`
+
+| 表单 | feed | 改前 | 改后 |
+|---|---|---|---|
+| form 11 | meta_id 57 | `Document Type: {inputs.document_type_7}` | `Document Type: {inputs.document_type_7.value}` |
+
+md5 `195b5f07…` / 830 → `1fd41ef0…` / 836（message 长度差 **+6**，与预期一致）。
+断言：全部 `.value` 形态 = YES／**非该类 token 一字未动 = YES**／长度差 == 期望 ✓。
+
+**渲染实测**（同一份构造数据 × 两个渲染分支，`tools/h24b_diag_checkbox_render.php`）：
+
+| 场景 | 裸用 `{inputs.X}` | 加值 `{inputs.X.value}` |
+|---|---|---|
+| 字符串 · isHtml=false | `COA Sample` | `COA Sample` |
+| 字符串 · isHtml=**true** | `COA Sample` | `COA Sample` |
+| 单元素数组 · isHtml=false | `COA Sample` | `COA Sample` |
+| 单元素数组 · isHtml=**true** | **`<ul><li>COA Sample</li></ul>`** ⚠️ | `COA Sample` ✓ |
+| 多元素数组 · isHtml=false | `COA Sample, MSDS` | `COA Sample, MSDS` |
+| 多元素数组 · isHtml=**true** | **`<ul><li>COA Sample</li><li>MSDS</li></ul>`** ⚠️ | `COA Sample, MSDS` ✓ |
+
+**真实提交的 checkbox 存的就是数组** ⇒ 裸用必然踩 `<ul><li>`；`.value` 在全部场景都是**内联单行**，
+**多选时逗号连接，不会出现 `Array`**（本次修复的残余风险点已排除）。
+
+改后整篇模板走 HTML 邮件分支渲染：**全篇不含 `<ul>` = no ✓**，正文：
+
+```text
+New document request received from the website:
+Company: ACME PET NUTRITION LLC
+Contact: Jane Doe
+Email: buyer@example.com
+Country: United States
+Target Market: North America
+Interested Dosage Form: Soft Chews
+Document Type: COA Sample                 ← 内联单行
+Notes: Please share the latest COA for our audit.
+Privacy Consent: I agree to the Privacy Policy
+```
+
+### 8.3 普查：5 个表单 0 问题
+
+逐表单独立进程重跑 `h24b_audit_notifs.php`（dev 与生产同结果）：
+
+```
+form 8  2 feed / 0 问题      form 9  2 feed / 0 问题      form 10 2 feed / 0 问题
+form 11 2 feed / 0 问题      form 12 1 feed / 0 问题
+⇒ 5 个表单 / 9 个 feed / 0 个 feed 存在问题
+```
+
+R1 孤儿、R2 跨语义、R3 复选框裸用 **三类全清**。
+
+### 8.4 门禁增强
+
+`tools/h24_gate.py --live`：
+- **L9** 扩展为 R1 + R2 + **R3**（原来漏了 R3 —— 正是本批那处 bug 的规则）
+- 新增 **L10**：调 FF 自己的 `getEnabledFeeds()` 验 Auto Reply 全停用 + 管理员通知全在（带正对照）
+- 新增 **L11**：复选框/单选占位符无待修正
+- **L0** 脚本清单 11 → 14
+
+结果：`--source` **64 / 0**、`--live` **23 / 0**（L0–L11 全绿）。
+
+### 8.5 回滚命令（一条命令，逐表单/全部）
+
+```bash
+# ① 自动回复：恢复全部（form 9/10/11）
+cd /var/www/zxpet-v2 && SF_H24B_SITE=prod SF_H24B_MODE=restore \
+  wp eval-file /root/h24-tools/h24b_autoreply_toggle.php --allow-root
+#    只恢复单个：再追加 SF_H24B_FORM=9
+
+# ② Document Type 占位符
+cd /var/www/zxpet-v2 && SF_H24B_SITE=prod SF_H24B_MODE=restore \
+  SF_H24B_FORM=11 wp eval-file /root/h24-tools/h24b_fix_checkbox_value.php --allow-root
+
+# 把 prod 换成 dev 即回滚测试环境
+```
+
+备份（整行原始 value，逐字节可还原）：
+`/root/h24b-backup/autoreply_raw.{prod,dev}.{9.46,10.52,11.58}.json`、
+`/root/h24b-backup/checkbox_ph_raw.{prod,dev}.11.57.json`
+
+### 8.6 观察窗（24h / 72h / 7d）怎么记录
+
+**看什么**（4 个指标）：
+
+| 指标 | 含义 | 期望 |
+|---|---|---|
+| 审计表新增行数 | 机器人攻击量 | 平稳或下降；若 24h 内单 IP ≥50 会自动加黑（有记录） |
+| form 8 状态分布 | 真询盘量（unread + read 的增量） | 只应被真人提交推高 |
+| 今日邮件数 | 通知是否正常发 | 管理员通知随真人询盘增加；**自动回复应为 0** |
+| 被拦 IP Top | 攻击来源 | 与 `80.94.95.202` 同源则继续观察 |
+
+**怎么跑**（一条命令出一条可粘贴快照，任一时刻可重复执行；**已实测**）：
+
+```bash
+ssh root@65.49.215.152 'cd /var/www/zxpet-v2 && \
+  echo "===== 快照 $(TZ=Asia/Shanghai date +%FT%T%z) =====" && \
+  echo "-- 审计表总量【记下 max_id：下次快照相减即本期新增】--" && \
+  wp db query "SELECT COUNT(*) rows_total, MAX(id) max_id, MIN(created_at) first_at, MAX(created_at) last_at FROM wp_sf_form_spam_log" --allow-root && \
+  echo "-- 被拦 IP Top5（全量）--" && \
+  wp db query "SELECT ip, COUNT(*) n, MIN(created_at) first_at, MAX(created_at) last_at FROM wp_sf_form_spam_log GROUP BY ip ORDER BY n DESC LIMIT 5" --allow-root && \
+  echo "-- form 8 状态分布（unread+read 增量 = 真询盘）--" && \
+  wp db query "SELECT status, COUNT(*) n FROM wp_fluentform_submissions WHERE form_id=8 GROUP BY status" --allow-root && \
+  echo "-- 邮件按日：auto_reply 列在 10-12 之后必须恒为 0 --" && \
+  wp db query "SELECT DATE(created_at) d, SUM(subject LIKE \"We%received your inquiry%\") auto_reply, SUM(subject NOT LIKE \"We%received your inquiry%\") other FROM wp_fsmpt_email_logs GROUP BY DATE(created_at) ORDER BY d DESC LIMIT 5" --allow-root'
+```
+
+**当日基线快照（2026-10-12 13:50 CST，可直接对照）**：
+
+```
+审计表        rows_total=26  max_id=82  区间 10:49:18 → 13:41:32
+被拦 IP Top   80.94.95.202  26 次（全部）
+form 8        read=1  spam=25  trashed=211
+邮件按日      2026-10-12 auto_reply=22 其他=23
+              2026-10-11 auto_reply=121 其他=121
+```
+
+> ⚠️ **两个坑（都已在上面这条命令里规避）**：
+> ① `created_at` / `timestamp` 列存的是**上海墙上时间**，而 MySQL 会话是 UTC ⇒ **别用 `NOW()` 做 24h 过滤**（会错位 8 小时、把 32 小时算成 24 小时）。所以用 **`max_id` 增量**代替时间窗。
+> ② 「今日自动回复=22」是 H24 上线**之前**的历史量，不是异常 ⇒ 判据要看**按日趋势**（10-12 之后必须恒为 0），而不是看单日总数。
+
+**记到哪**：每天一行写进 `.workbuddy/memory/YYYY-MM-DD.md`（时点 / 审计表总数 / 24h 新增 / form 8 状态 / 今日邮件数 / 异常）。
+三个节点各有一次结论：**24h**（10-13 10:38）判「防护是否稳定」→ **72h**（10-15）判「要不要恢复自动回复的准备工作」→ **7d**（10-19）**恢复自动回复 + 加「仅非 spam 触发」守卫**。
+
+### 8.7 关于「误删 247」
+
+Sam 裁决：**接受，不追究**；拦截证据（审计 id=79，含 ip/ua/domain/score/signals）完整保留即可；
+清理逻辑已改为按测试邮箱精确定位。已按此归档，不再做恢复尝试（binlog 未开，无精确恢复手段）。
+
+---
+
+*本节：小宠（Sam 裁决「两件一次定完」+「误删 247 接受不追究」）。dev 与生产同批，FF 判据实测全绿，普查 5 表单 0 问题，门禁 64/0 + 23/0。*

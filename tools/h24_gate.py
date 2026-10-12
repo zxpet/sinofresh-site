@@ -304,8 +304,9 @@ def live_gate():
                   f"{TOOLS}/h24b_form_counts.php {TOOLS}/h24b_admin_shots.php "
                   f"{TOOLS}/h24b_notif_render_check.py {TOOLS}/h24b_fix_privacy_line.php "
                   f"{TOOLS}/h24b_audit_notifs.php {TOOLS}/h24b_notif_verify.py "
-                  f"{TOOLS}/h24b_notif_body_check.py 2>&1")
-    check("L0: 十一个 E2E/断言/脚手架脚本已在服务器就位", rc == 0, out.strip()[:200])
+                  f"{TOOLS}/h24b_notif_body_check.py {TOOLS}/h24b_autoreply_toggle.php "
+                  f"{TOOLS}/h24b_fix_checkbox_value.php {TOOLS}/h24b_check_enabled_feeds.php 2>&1")
+    check("L0: 十四个 E2E/断言/脚手架脚本已在服务器就位", rc == 0, out.strip()[:200])
 
     # L1 机器人形态：拦截 + 零发信（G2）
     rc, out = ssh(f"cd {DEV_ROOT} && python3 {TOOLS}/h24_e2e_bot.py 2>&1")
@@ -358,16 +359,31 @@ def live_gate():
     check("L8: 5 个表单 Privacy Consent 行全部=<字段>.value 形态",
           rc == 0 and fixed == 5 and pending == 0, f"已修正={fixed} 待修正={pending}")
 
-    # L9 通知模板普查无 R1 孤儿 / R2 跨语义（逐表单独立进程，避开 FF 静态缓存）
+    # L9 通知模板普查无 R1 孤儿 / R2 跨语义 / R3 复选框裸用（逐表单独立进程，避开 FF 静态缓存）
     bad, detail = 0, []
     for fid in (8, 9, 10, 11, 12):
         rc, out = ssh(f"cd {DEV_ROOT} && SF_H24B_SITE=dev SF_H24B_FORM={fid} "
                       f"wp eval-file {TOOLS}/h24b_audit_notifs.php --allow-root 2>&1")
-        n = out.count("!! R1") + out.count("!! R2")
+        n = out.count("!! R1") + out.count("!! R2") + out.count("!! R3")
         bad += n
         if n:
             detail.append(f"form {fid}:{n}")
-    check("L9: 通知模板普查无 R1 孤儿 / R2 跨语义", bad == 0, ",".join(detail) or "all clean")
+    check("L9: 通知模板普查无 R1 孤儿 / R2 跨语义 / R3 复选框裸用",
+          bad == 0, ",".join(detail) or "all clean (5 forms)")
+
+    # L10 Auto Reply 全停用 —— 直接调 FF 自己的 getEnabledFeeds()（带正对照，防假绿）
+    rc, out = ssh(f"cd {DEV_ROOT} && SF_H24B_SITE=dev "
+                  f"wp eval-file {TOOLS}/h24b_check_enabled_feeds.php --allow-root 2>&1")
+    ok10 = (rc == 0 and out.count("[PASS]") == 4 and "[FAIL]" not in out)
+    check("L10: 4 个 Auto Reply(40/46/52/58) 全停用 + 5 个管理员通知仍在发（FF 判据）",
+          ok10, out.strip().split("--- 断言 ---")[-1].strip()[:220] if out else "")
+
+    # L11 Doc Type 类复选框占位符已全部规范化（status 应报无待修正）
+    rc, out = ssh(f"cd {DEV_ROOT} && SF_H24B_SITE=dev SF_H24B_MODE=status "
+                  f"wp eval-file {TOOLS}/h24b_fix_checkbox_value.php --allow-root 2>&1")
+    pending11 = out.count("状态: 待修正")
+    check("L11: 复选框/单选占位符无待修正（全部 .value 形态）",
+          rc == 0 and pending11 == 0, f"待修正={pending11}")
 
 
 # ==========================================================================
