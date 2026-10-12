@@ -155,11 +155,11 @@
 | 项 | 状态 | 触发条件 |
 |---|---|---|
 | Turnstile 正式启用 | 未做（裁决延后） | Sam 提供 CF sitekey/secret；届时 CSP 三处补 `challenges.cloudflare.com`（`script-src`/`frame-src`/`connect-src`，现为 Report-Only） |
-| form 8 通知占位符修正 | **待 Sam 点头**（工具就绪，一键 apply + 可 restore） | 随时 |
+| ~~form 8 通知占位符修正~~ | ✅ **已完成**（2026-10-12）—— 实际是 **5 个表单同一处缺陷**，已全部修好并用真通知验证 | 见 §七 |
 | C 组边缘加固 | 待 24h 观察窗 | WAF 规则／提交端点限速／源站只放行 CF 网段 + `at` 自动回滚保险；**源站仍可直连绕过 CF 层** |
 | 恢复自动回复 + 「仅非 spam 触发」守卫 | 待防护稳定 ≥1 周 | 观察 spam 表增速与真询盘量 |
 | DMARC `p=none`→`p=quarantine` | 未做 | 硬约束：SPF/DKIM 未 100% 通过前绝不升档 |
-| 运维手册修订 | **手册两处已过期**：`ops-manual-v1.md` L153「查 WP Mail Log」（插件已停用）与 L198 插件清单「WP Mail Logging 1.16.0」 | 建议随下次手册复审一并重建 docx/pdf（本批不动交付物，避免 md 与 pdf 静默分叉） |
+| ~~运维手册修订~~ | ✅ **已完成**（2026-10-12）—— 实际**8 处**（不止两处）＋快速卡 1 处；docx/pdf/速查卡已重建 | 见 §七.4 |
 | mu-plugin 文件头 `Version:` 未随行 bump | 4 个 mu-plugin 均显示 1.0.0/1.1.0 | 下次触碰对应文件时顺手改 |
 | FF 6.2.14 → 6.2.15 | 有可用更新，本批未动 | 单独窗口评估 |
 
@@ -179,3 +179,109 @@
 ---
 
 *执行：小宠（Sam 批准八项修订 + 四项裁决 + 两项中途裁决）。dev 全绿 → 生产部署 → 生产全量验收 → 零残留。*
+
+---
+
+## 七、追加工作（同日收尾；Sam 批准「顺手修掉」）
+
+### 7.1 `form 8` 通知占位符 —— 修好并**用真通知验证**
+
+| 项 | 值 |
+|---|---|
+| 目标行 | `wp_fluentform_form_meta` **id=39**（form 8「Admin Notification」） |
+| **改前** | `Privacy Consent: {inputs.company_name_1}`　（766 B，sha256 `c7e2915e…`） |
+| **改后** | `Privacy Consent: {inputs.privacy_consent_11.value}`　（776 B） |
+| 应用回读 | 坏锚点残留 0 ／ 公司名 2（subject + Company 行）／ 目标串 1 ／ 长度差 **+10** ／ **反替换逐字节一致 = YES** |
+
+**真通知验证（端到端，走真实访客路径）**：提交测试数据 → `insert_id 249` → 管理员通知**真发**到 `sales@zxpet.com`（FluentSMTP id **449**，`status=sent`）→ 从日志读回邮件正文：
+
+```text
+New inquiry received from the website:
+Company: H24B Notif Verify (TEST)
+Contact: Site Operator
+Email: verify@example.com
+Country: United States
+Interested Dosage Form: Soft Chews
+Notes: Internal end-to-end verification submitted by the site operator ...
+Privacy Consent: I agree to the Privacy Policy          <-- 正确（勾选值）
+```
+
+断言 5 项全 PASS：勾选值 ✓ ／ 不显示公司名 ✓ ／ 未被 `<ul><li>` 包裹 ✓ ／ Company 行仍正常 ✓ ／ 六行字段齐全 ✓。
+测试提交已按**测试邮箱精确定位**清理干净（残留 0）。工具：`tools/h24b_notif_verify.py` + 离线复核器 `tools/h24b_notif_body_check.py`。
+
+**回滚（一条命令）**
+
+```bash
+cd /var/www/zxpet-v2 && SF_H24B_SITE=prod SF_H24B_MODE=restore \
+  SF_H24B_FORM=8 wp eval-file /root/h24-tools/h24b_fix_privacy_line.php --allow-root
+```
+
+> 备份：服务器 `/root/h24b-backup/notif_privacy_raw.prod.8.json`；本地另存 `_backup/notif_placeholder_raw.prod.json`。
+
+### 7.2 全量普查结论：**5 个表单的「Privacy Consent」行全是坏的**（三种坏法）
+
+按 Sam 要求把 form 8/9/10/11/12 的通知模板**全部读了一遍**（工具 `tools/h24b_audit_notifs.php`，只读）：
+
+| 表单 | feed | 改前 | 症状 | 改后 |
+|---|---|---|---|---|
+| 8 Get a Quote | 39 | `{inputs.company_name_1}` | 显示成公司名 | `{inputs.privacy_consent_11.value}` |
+| 9 Request a Sample | 45 | `{inputs.company_name_1}` | 显示成公司名 | `{inputs.privacy_consent_12.value}` |
+| 10 Book a Factory Tour | 51 | `{inputs.company_name_1}` | 显示成公司名 | `{inputs.privacy_consent_14.value}` |
+| 11 Request COA | 57 | `{inputs.privacy_consent_9.i_agree_to_the_privacy_policy_9_1}` | **完全空白**（孤儿 key） | `{inputs.privacy_consent_9.value}` |
+| 12 Feedback | 63 | `{inputs.privacy_consent_5.i_agree_to_the_privacy_policy_5_1}` | **完全空白**（孤儿 key） | `{inputs.privacy_consent_5.value}` |
+
+成因：模板是从 form 8 复制出去的 —— 前两份**照抄了公司名占位符（改了字段没改值）**，后两份用了 FF 界面里「选项级」的 key，而 `ShortCodeParser` 只认 `{inputs.<字段>}` / `{inputs.<字段>.value}`，带选项后缀的**取不到 → 渲染为空**。
+
+Sam 的裁决理由（「每天影响运营、单独走一次部署成本高」）对 9/10/11/12 完全适用，故**一并修掉**（超出原点的 4 处已在同一批次完成，备份齐备、可逐表单回滚）。
+
+**dev 同步**：dev 形态与生产逐字一致，已同批 apply（5/5 已修正），两边状态统一。
+
+### 7.3 字段对照表文档（新增）
+
+`docs/form-notification-fields-2026-10-12.md`（24.7 KB / 690 行，脚本生成）—— 5 个表单的「字段清单 / 通知 feed / 主题与正文（原文+渲染）/ 占位符映射」，供以后改表单时对照。生成器：`tools/h24b_build_field_map.py`。
+
+### 7.4 运维手册同步（实际 8 处 + 快速卡 1 处，非两处）
+
+原以为只有 L153 与 L198 两处过期，实际 `WP Mail Log` 在手册里出现 **8 次**（L153 常见 5 问 / L198 技术栈表 / L226 后台菜单表 / L363 排查链 / L416 每周清单 / L449 日志位置 / L549 推演 / L635 速查表）＋ 快速卡 1 处。已全部改为 **FluentSMTP（Tools → Fluent SMTP → Email Logs）**，并在技术栈表注明「原 WP Mail Logging 1.16.0 已于 2026-10-12 停用，历史记录保留在 `wp_wpml_mails`（454 条）」。
+
+**三件产物已重建**（避免 md 与 docx/pdf 静默分叉）：`ops-manual-v1.docx`（4.62 MB）、`ops-manual-v1.pdf`（6.70 MB / 45 页）、`ops-manual-quick-ref.pdf`（旧版已备份 `_backup/`）。
+校验：docx/pdf 里 `WP Mail Log` 仅剩 1 处（＝刻意保留的「已停用」说明），`FluentSMTP` 7 处。
+
+### 7.5 门禁新增两条防回退断言
+
+`tools/h24_gate.py --live` 新增：
+- **L8**：5 个表单 `Privacy Consent` 行全部为 `<字段>.value` 形态（跑 `h24b_fix_privacy_line.php status`）
+- **L9**：通知模板普查无 R1 孤儿 / R2 跨语义（逐表单独立进程跑 `h24b_audit_notifs.php`）
+
+### 7.6 ⚠️ 事故与处置：误删 1 条 spam 记录（如实记录）
+
+**经过**：`h24b_notif_verify.py` 首版用 `MAX(id)` 当作「本次测试创建的 id」来清理。运行时测试提交因 `country_5` 取值非法被 FF 校验拒（HTTP 423，**未落库**），脚本仍按 `MAX(id)=247` 执行删除 —— **误删了攻击者（80.94.95.202）的一条第 spam 入库记录**。
+
+**影响面（已核实）**：
+- 该条本身就是垃圾询盘，业务数据无损失；
+- **拦截证据链完整保留**：审计表 `wp_sf_form_spam_log` id=79 仍在（`submission_id=247`、ip、ua、email_domain、score=4、signals）；
+- 后台复核页对 `submission_id > 0` 只做 `$wpdb->update(...WHERE id=247)` ⇒ **update 0 行，不报错、不影响功能**，仅该条的「释放」按钮无实际效果；
+- MySQL **binlog 未开启**，无法按时间点精确恢复原文（已确认）。
+
+**处置**：不伪造数据 —— 保留现状（审计证据完整），如实记录；并**修掉脚本根因**：清理一律按「本次测试独有的邮箱」精确定位（`response LIKE '%verify@example.com%'`），并删除遗留的按 id 删除分支。重跑后全 PASS，零残留。
+
+### 7.7 观察窗数据（同日快照）
+
+- 攻击者 **80.94.95.202** 当日累计触发 **24 次**，全部被拦（自动加黑阈值 24h≥50，尚未触发）；最近一次 13:22。
+- 审计表 24 行**全部**来自该 IP，时间跨度 10:49 → 13:22（约 2.5 小时）。
+- 管理员通知今日仅 44 封且**全部在 10:38（H24 上线）之前**；自动回复最后一封 06:37 < 10:38 ⇒ 两条「归零」结论在 v1.2.0 上继续成立。
+
+### 7.8 本节产出的回滚命令汇总
+
+```bash
+# 5 个表单的 Privacy Consent 行（生产 / dev 各一条）
+cd /var/www/zxpet-v2 &&           SF_H24B_SITE=prod SF_H24B_MODE=restore wp eval-file /root/h24-tools/h24b_fix_privacy_line.php --allow-root
+cd /var/www/dev.zxpet.com/public && SF_H24B_SITE=dev  SF_H24B_MODE=restore wp eval-file /root/h24-tools/h24b_fix_privacy_line.php --allow-root
+# 只回滚单个表单：再追加 SF_H24B_FORM=<id>
+```
+
+备份文件：`/root/h24b-backup/notif_privacy_raw.{prod,dev}.{8,9,10,11,12}.json`（含原始 value、改前/改后行、时间戳）。
+
+---
+
+*本节：小宠（Sam 批准「顺手修掉」+ 两条约束：①改完发真通知验证 ②立刻准备回滚）。dev 与生产同批修复，真通知验证 ALL PASS，门禁 64/0 + live 全绿。*

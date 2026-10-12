@@ -302,8 +302,10 @@ def live_gate():
                   f"{TOOLS}/h24_turnstile_degraded.py "
                   f"{TOOLS}/h24b_rl_e2e.py {TOOLS}/h24b_l1.php "
                   f"{TOOLS}/h24b_form_counts.php {TOOLS}/h24b_admin_shots.php "
-                  f"{TOOLS}/h24b_notif_render_check.py 2>&1")
-    check("L0: 七个 E2E/断言/脚手架脚本已在服务器就位", rc == 0, out.strip()[:200])
+                  f"{TOOLS}/h24b_notif_render_check.py {TOOLS}/h24b_fix_privacy_line.php "
+                  f"{TOOLS}/h24b_audit_notifs.php {TOOLS}/h24b_notif_verify.py "
+                  f"{TOOLS}/h24b_notif_body_check.py 2>&1")
+    check("L0: 十一个 E2E/断言/脚手架脚本已在服务器就位", rc == 0, out.strip()[:200])
 
     # L1 机器人形态：拦截 + 零发信（G2）
     rc, out = ssh(f"cd {DEV_ROOT} && python3 {TOOLS}/h24_e2e_bot.py 2>&1")
@@ -347,6 +349,25 @@ def live_gate():
     check("L7: 通知渲染验收全绿（ALL PASS）", rc == 0 and "ALL PASS" in out, out.strip()[-220:])
     check("L7: ★ 同意声明渲染真实勾选值且内联单行",
           "同意声明渲染为真实勾选值" in out and "内联单行" in out, out.strip()[-220:])
+
+    # L8 5 个表单的「Privacy Consent」行形态（H24b 附带修复的防回退断言）
+    rc, out = ssh(f"cd {DEV_ROOT} && SF_H24B_SITE=dev SF_H24B_MODE=status "
+                  f"wp eval-file {TOOLS}/h24b_fix_privacy_line.php --allow-root 2>&1")
+    fixed = out.count("状态: 已修正（无需改动）")
+    pending = out.count("状态: 待修正")
+    check("L8: 5 个表单 Privacy Consent 行全部=<字段>.value 形态",
+          rc == 0 and fixed == 5 and pending == 0, f"已修正={fixed} 待修正={pending}")
+
+    # L9 通知模板普查无 R1 孤儿 / R2 跨语义（逐表单独立进程，避开 FF 静态缓存）
+    bad, detail = 0, []
+    for fid in (8, 9, 10, 11, 12):
+        rc, out = ssh(f"cd {DEV_ROOT} && SF_H24B_SITE=dev SF_H24B_FORM={fid} "
+                      f"wp eval-file {TOOLS}/h24b_audit_notifs.php --allow-root 2>&1")
+        n = out.count("!! R1") + out.count("!! R2")
+        bad += n
+        if n:
+            detail.append(f"form {fid}:{n}")
+    check("L9: 通知模板普查无 R1 孤儿 / R2 跨语义", bad == 0, ",".join(detail) or "all clean")
 
 
 # ==========================================================================
