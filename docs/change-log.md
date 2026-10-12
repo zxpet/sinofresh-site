@@ -1,0 +1,23 @@
+# 变更记录（批记录）— SINO FRESH 官网
+
+> 约定（见 `docs/ops-manual-v1.md` B13）：**谁、何时、改了什么、为何、回滚方案**。改代码/结构/设置/数据库必须审批后执行。
+
+| # | 日期 | 变更 | 范围 | 为何 | 执行人 | 回滚方案 |
+|---|------|------|------|------|--------|----------|
+| 1 | 2026-10-06 | 登录加固：WPS Hide Login 1.9.19 上线，登录地址改 `/sf-linyi/`（原 `/wp-login.php`、`/wp-admin` 不再直通） | dev + 生产 | 陌生 IP 高频触发密码重置邮件（10-04/05 共 5 封） | 小宠（Sam 批准） | `plugin deactivate wps-hide-login`；`/root/_h20_rollback_20261006-054010/`（整库 dump + 选项快照） |
+| 2 | 2026-10-06 | 自研 mu-plugin `zz-sf-login-guard.php` v1.0.0：密码重置端点限流（真实 IP 5 分钟 2 次 → 锁 30 分钟，超限不发信） | dev + 生产 | 隐藏地址挡不住已知地址的定向请求；LLAR 免费版无此能力（源码已核） | 小宠（Sam 批准） | `wp option delete sf_login_guard_state` 解封；删文件即失效 |
+| 3 | 2026-10-06 | 同插件升 **v1.1.0**：新增「每日 1 封拦截摘要」（拦截次数/IP Top10/时间段；无拦截不发；`sent_date` 去重） | dev + 生产 | 拦截需可观测，但不能变成新的邮件骚扰 | 小宠（Sam 批准） | 删 `/root/_h21_guard_rollback_*/` 内的 v1.0.0 副本恢复；或删文件 |
+| 4 | 2026-10-06 | **后台登录用户名由默认可猜名改为自定义用户名**（`user_login`＋`user_nicename`＋`display_name`＋`nickname` 同步改，ID=1 不变，密码不变） | 生产 | 撞库/枚举最后一块纵深防御；改名后旧名不再可解析 | 小宠（Sam 批准，方案 A） | SQL：`UPDATE wp_users SET user_login='admin', user_nicename='admin', display_name='admin' WHERE ID=1;`；表级：`/root/_h21_rename_rollback_20261006-064354/wp_users_usermeta.sql`（md5 `f3f0e797…`） |
+| 5 | 2026-10-06 | 只读安全扫描（管理员清单/插件 checksum/uploads 无 php/cron/主题 md5/可疑 option） | 生产 | 排查有无入侵迹象 | 小宠 | 只读，无需回滚；报告 `docs/security-audit-h21-2026-10-06.md` |
+| 6 | 2026-10-06 | 新增 mu-plugin `zz-sf-author-guard.php` v1.0.0：作者档案与 `?author=`/`?author_name=` 枚举全部 301 回首页（作者 feed 改 404）；公开面作者署名统一替换为 `SINO FRESH`（feed `dc:creator`／oEmbed `author_name`／文章 JSON-LD `author.name`） | dev + 生产 | 改名后实测新用户名仍能从 **6 个公开入口**读出，且**绕过 CF 直连源站同样复现** ⇒ 修复必须落 WP 层，边缘规则覆盖不到 | 小宠（Sam 批准，方案 A） | 删文件即失效：`rm /var/www/zxpet-v2/wp-content/mu-plugins/zz-sf-author-guard.php`；备份 `/root/_h22_author_guard_rollback_20261006-080615/` |
+| 7 | 2026-10-06 | **主题批次 H23**（三项合并，bump `2.10.89`→`2.10.90`）：① Article JSON-LD 作者 `@type` `Person`→`Organization` 且 `name` 写死 `'SINO FRESH'`（T1-b）② 页脚 8 条剂型链接改指 `/products/<slug>/`（原 `/<slug>/` 每次点击多一跳 301）③ formula 详情 Product JSON-LD `image` 与可见主图（帧①）对齐（H17 遗留） | dev + 生产 | 三项都动主题 ⇒ 合并为一次 bump/过门/pull；① 结构化数据自洽、不依赖 mu-plugin（插件一卸不再退回 `sfsam`）② 消除每点一次的一跳 ③ 此前 schema 指向用户看不到的剂型图 | 小宠（Sam 批准：T1-b / `large` / dev 先跑） | 生产 `/root/_h23_prod_rollback_20261006-090855/`（4 文件 + 353 文件 md5 快照）；dev `/root/_h23_dev_rollback_20261006-085816/`；版本号只能往前补。报告 `docs/h23-theme-batch-report-2026-10-06.md` |
+| 8 | 2026-10-06 | dev 清理 7 行 `sf_trust_*` 空串（`wp option delete`，**生产未动**）；顺手与生产同构 | dev | 空串＝「该行关闭」⇒ dev 配方页少渲染一条 Factory & Trust 信息带，且 h10 门在 dev 恒 1 红（长期噪声）；系 H15 修复前组盖章遗留 | 小宠（Sam 批准） | `/root/_h23_dev_sftrust_rollback_20261006-091034.txt`（回滚＝对每键 `wp option add <key> ""`） |
+| 9 | 2026-10-12 | **表单机器人防护（H24，走 mu-plugin，不动主题）**：新增 `zz-sf-aa-real-ip.php`（CF 官方网段内才采信 `CF-Connecting-IP`，直连伪造不生效）+ `zz-sf-form-guard.php`（评分制内容拦截 §S1–S7／真实 IP 限流 3 次/小时／审计表／后台人工复核／一键黑名单／当日 >50 条告警且每天最多 1 封）；建表 `wp_sf_form_spam_log`；form 8 存量 211 条标 `trashed`（**不 DELETE**，先导出 JSON 存证）；停用 form 8 自动回复（id=40 `enabled=false`）；A1 蜜罐 `on` + A3 拒绝空提交 `on` | dev + 生产 | 10-10 起 form 8 被同一机器人慢速滴灌刷入 **210 条垃圾**，连带向**被滥用的第三方邮箱**发出 **412 封**本域名邮件（含政府/机构域名），正在消耗发信域名信誉；且内置三层防护全不适用（FF `resolveIp()` 不信任代理 ⇒ 限流按 CF 边缘 IP 计数、30 秒滑窗型洪泛挡不住 5205 秒间隔、访客 nonce 是 12 小时常量） | 小宠（Sam 批准：**选 B** + 六条修订 + 三条补充） | 删两个 mu-plugin 即失效；改前全量 `/root/h24-backup/prod-mu-plugins-20261012T023810Z.tar.gz`；三个 restore 脚本（A1/A3、自动回复、存量 status）**均已实测 byte-identical 或幂等**；报告 `docs/h24-execution-report-2026-10-12.md` |
+
+**待执行（等 Sam 面板操作）**：CF WAF 4 条规则由 Sam 在 CF 面板手配（清单见 `docs/h21-cloudflare-waf-rules-2026-10-06.md`），配完回执 → 跑 `tools/h21_waf_accept.sh` 验收。
+
+**变更 6 补充**：主题文件**零改动**（不需要 bump 2.10.90、不触发 6 项 gate），故用 mu-plugin 而非改 `functions.php`。注意 `/?author=1` 与 `/author/<nicename>/` 现返回 **301**，会被浏览器长期缓存 ⇒ 回滚后需清缓存验证。
+
+**变更 6 的残留项已闭环（H23，2026-10-06）**：JSON-LD 作者 `@type` 仍是 `Person` 的遗留已随**主题批次 H23** 修复——改 `Organization` 并把 `name` 写死 `'SINO FRESH'`（选 **T1-b**：不依赖 mu-plugin，插件一卸也不会退回 `sfsam`）。详见变更 7；登记处 `docs/theme-batch-backlog.md` 的 T1 已置「✅ 已完成」。
+
+**变更 4 补充说明**：`display_name` 与 `nickname` 一并改为同一自定义名（Sam 追加确认）。副作用：改名前签发的登录 cookie 内含旧用户名 ⇒ 全部会话失效（已 `wp user session destroy 1 --all` 清空），需用新用户名 + 原密码重新登录一次。
